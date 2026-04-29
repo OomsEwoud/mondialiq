@@ -43,4 +43,29 @@ class Team extends Model
     {
         return $this->hasMany(Fixture::class, 'away_team_id');
     }
+
+    public function fixturePlayers()
+    {
+        return $this->hasMany(FixturePlayer::class);
+    }
+
+    public function fixtureEvents()
+    {
+        return $this->hasMany(FixtureEvent::class);
+    }
+
+    public function fixtureStats()
+    {
+        return $this->hasMany(FixtureStat::class);
+    }
+
+    public function lineups()
+    {
+        return $this->belongsToMany(Fixture::class, 'fixture_lineups')->withPivot('formation')->withTimestamps();
+    }
+
+    public function predictions()
+    {
+        return $this->hasMany(Prediction::class, 'winner_id');
+    }
 }

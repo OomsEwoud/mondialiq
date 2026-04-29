@@ -66,4 +66,48 @@ class Fixture extends Model
     {
         return $this->belongsTo(Referee::class);
     }
+
+    public function weatherLog()
+    {
+        return $this->hasOne(WeatherLog::class);
+    }
+
+    public function missingPlayers()
+    {
+        return $this->belongsToMany(Player::class, 'missing_players')->withTimestamps();
+    }
+
+    public function fixturePlayers()
+    {
+        return $this->hasMany(FixturePlayer::class);
+    }
+
+    public function fixtureEvents()
+    {
+        return $this->hasMany(FixtureEvent::class);
+    }
+
+    public function fixtureStats()
+    {
+        return $this->hasMany(FixtureStat::class);
+    }
+
+    public function lineups()
+    {
+        return $this->belongsToMany(Team::class, 'fixture_lineups')->withPivot('formation')->withTimestamps();
+    }
+
+    public function playerFixtureStats()
+    {
+        return $this->hasMany(PlayerFixtureStat::class);
+    }
+    public function predictions()
+    {
+        return $this->hasMany(Prediction::class);
+    }
+
+    public function fixtureOdds()
+    {
+        return $this->hasMany(FixtureOdd::class);
+    }
 }

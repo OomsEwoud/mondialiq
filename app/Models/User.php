@@ -31,4 +31,14 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    public function predictions()
+    {
+        return $this->hasMany(Prediction::class);
+    }
+
+    public function scoreBoards()
+    {
+        return $this->belongsToMany(ScoreBoard::class, 'users_has_scoreboards');
+    }
 }
