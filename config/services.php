@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'api_football' => [
+        'base_url' => env('API_FOOTBALL_BASE_URL'),
+        'api_key' => env('API_FOOTBALL_KEY'),
+        'league_id' => env('WORLD_CUP_LEAGUE_ID', 1),
+        'season' => env('WORLD_CUP_SEASON_YEAR', 2026),
+    ],
+
 ];

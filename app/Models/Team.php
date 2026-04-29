@@ -68,4 +68,9 @@ class Team extends Model
     {
         return $this->hasMany(Prediction::class, 'winner_id');
     }
+    
+    public function players()
+    {
+        return $this->belongsToMany(Player::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
+    }
 }

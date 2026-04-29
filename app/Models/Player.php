@@ -52,4 +52,9 @@ class Player extends Model
     {
         return $this->hasMany(PlayerFixtureStat::class);
     }
+    
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
+    }
 }

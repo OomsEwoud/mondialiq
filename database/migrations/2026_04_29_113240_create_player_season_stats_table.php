@@ -52,7 +52,7 @@ return new class extends Migration
             $table->integer('penalties_scored')->default(0);
             $table->integer('penalties_missed')->default(0);
             $table->integer('penalties_saved')->default(0); 
-            $table->unique(['player_id', 'league_id']);
+            $table->unique(['player_id', 'league_id', 'season']);
             $table->timestamps();
         });
     }
