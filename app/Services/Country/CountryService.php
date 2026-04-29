@@ -10,7 +10,6 @@ class CountryService
     {
         foreach ($countriesData as $countryData) {
             Country::updateOrCreate(
-                ['external_id' => $countryData['id']],
                 [
                     'fifa_code' => $countryData['code'] ?? 'WORLD',
                     'name' => $countryData['name'],

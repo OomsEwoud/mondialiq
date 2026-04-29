@@ -12,8 +12,8 @@ use Exception;
 class FootballApiService
 {
     use FixtureEndpoints, MetadataEndpoints, PlayersStatsEndpoints, TeamEndpoints; 
-    protected $baseUrl;
-    protected $apiKey;
+    protected string $baseUrl;
+    protected string $apiKey;
 
     public function __construct()
     {

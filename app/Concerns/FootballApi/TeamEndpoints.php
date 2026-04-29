@@ -34,4 +34,10 @@ trait TeamEndpoints
         return $this->call('/players/squads', ['team' => $teamId]);
     }
 
+    public function getplayersByLeagueSeason(int $leagueId, int $season)
+    {
+        //1 call per tournament with pagination
+        return $this->call('/players', ['league' => $leagueId, 'season' => $season]);
+    } 
+
 }

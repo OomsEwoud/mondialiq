@@ -26,12 +26,17 @@ class Addplayers extends Command
     {
         $teams = Team::all();
 
-        foreach($teams as $team){
-            $players = $this->api->getPlayers($team->external_id);
+        $allPlayersData = $this->api->getplayersByLeagueSeason(config('services.api_football.league_id'), config('services.api_football.season'));
+        $this->service->storePlayers($allPlayersData);
+        
+        foreach ($teams as $team) {
+            $this->line("Bezig met syncen van selectie: {$team->name}...");
+            $teamPlayerData = $this->api->getPlayers($team->external_id);
 
-            $this->service->storePlayers($players);
+            $this->service->storeTeamPlayers($team->id, $teamPlayerData);
+            $this->info("✅ Selectie van {$team->name} bijgewerkt.");
 
-            sleep(10);
+            sleep(6);
         }
     }
 }

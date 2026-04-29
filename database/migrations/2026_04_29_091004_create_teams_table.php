@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('code');
             $table->string('logo_url');
             $table->integer('founded_at')->nullable();
-            $table->foreignId('country_id')->constrained()->onDelete('cascade');
+            $table->foreignId('country_id')->nullable()->constrained()->onDelete('cascade');
             $table->index('name');
             $table->timestamps();
         });

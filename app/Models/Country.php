@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Country extends Model
 {
     protected $fillable = [
-        'external_id',
         'name',
         'fifa_code',
         'flag_url',
