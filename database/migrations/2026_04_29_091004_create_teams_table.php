@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('external_id')->nullable()->unique();
             $table->string('name');
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->string('logo_url');
             $table->integer('founded_at')->nullable();
             $table->foreignId('country_id')->nullable()->constrained()->onDelete('cascade');

@@ -24,10 +24,10 @@ return new class extends Migration
             $table->dateTime('match_date');
             $table->string('status_long');
             $table->integer('elapsed_time')->nullable();
-            $table->integer('halftime_home_goals')->default(0);
-            $table->integer('halftime_away_goals')->default(0);
-            $table->integer('fulltime_home_goals')->default(0);
-            $table->integer('fulltime_away_goals')->default(0);
+            $table->integer('halftime_home_goals')->default(0)->nullable();
+            $table->integer('halftime_away_goals')->default(0)->nullable();
+            $table->integer('fulltime_home_goals')->default(0)->nullable();
+            $table->integer('fulltime_away_goals')->default(0)->nullable();
             $table->integer('extratime_home_goals')->default(0)->nullable();
             $table->integer('extratime_away_goals')->default(0)->nullable();
             $table->integer('penalty_home_goals')->default(0)->nullable();

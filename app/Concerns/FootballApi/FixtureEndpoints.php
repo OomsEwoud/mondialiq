@@ -4,12 +4,6 @@ namespace App\Concerns\FootballApi;
 
 trait FixtureEndpoints
 {
-    public function getRounds(int $idLeague, int $season)
-    {
-        //1 call per day 
-        return $this->call('/fixtures/rounds', ['league' => $idLeague, 'season' => $season]);
-    }
-
     public function getFixtures(int $leagueId, int $season)
     {
         //1 call per hour

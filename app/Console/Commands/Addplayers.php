@@ -25,9 +25,6 @@ class Addplayers extends Command
     public function handle()
     {
         $teams = Team::all();
-
-        $allPlayersData = $this->api->getplayersByLeagueSeason(config('services.api_football.league_id'), config('services.api_football.season'));
-        $this->service->storePlayers($allPlayersData);
         
         foreach ($teams as $team) {
             $this->line("Bezig met syncen van selectie: {$team->name}...");

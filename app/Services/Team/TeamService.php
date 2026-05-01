@@ -7,7 +7,7 @@ use App\Models\Country;
 
 class TeamService
 {
-    public function storeTeams(array $teamsData, int $leagueId)
+    public function storeTeams(array $teamsData)
     {
         foreach ($teamsData as $teamData) {
             $team = Team::updateOrCreate(
@@ -17,7 +17,7 @@ class TeamService
                     'code' => $teamData['team']['code'],
                     'logo_url' => $teamData['team']['logo'],
                     'founded_at' => $teamData['team']['founded'],
-                    'country_id' => Country::where('name', $teamData['team']['country'])->first()->id
+                    'country_id' => Country::where('name', $teamData['team']['country'])->first()?->id ?? null
                 ]
             );
         }

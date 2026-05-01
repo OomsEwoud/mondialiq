@@ -25,6 +25,6 @@ class AddTeams extends Command
     public function handle()
     {
         $teams = $this->serviceApi->getTeams(config('services.api_football.league_id'), config('services.api_football.season'));
-        $this->teamService->storeTeams($teams, config('services.api_football.league_id'));
+        $this->teamService->storeTeams($teams);
     }
 }
