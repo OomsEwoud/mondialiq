@@ -12,9 +12,7 @@ class PlayerService
     public function storePlayers(array $players)
     {
         //with getplayerswithleageuseason functions
-        $countries = Country::all()->mapWithKeys(function ($country) {
-            return [$this->normalizeName($country->name) => $country->id];
-        })->all();
+        $countries = Country::all()->mapWithKeys(fn ($country) => [$this->normalizeName($country->name) => $country->id])->all();
 
         foreach ($players as $player) {
             $this->updateOrCreatePlayer($player['player'], $countries);
