@@ -10,30 +10,26 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:addplayers')]
-#[Description('Command description')]
+#[Description('Sync all players and team squads from the Football API')]
 class Addplayers extends Command
 {
-    protected FootballApiService $api;
-    protected PlayerService $service;
-
-    public function __construct(FootballApiService $api, PlayerService $service)
-    {
+    public function __construct(
+        private FootballApiService $api,
+        private PlayerService $service,
+    ) {
         parent::__construct();
-        $this->api = $api;
-        $this->service = $service;
     }
-    public function handle()
+
+    public function handle(): void
     {
+        $players = $this->api->getPlayersByLeagueSeason(config('services.api_football.league_id'), config('services.api_football.season'));
+        $this->service->storePlayers($players);
+
         $teams = Team::all();
-        
+
         foreach ($teams as $team) {
-            $this->line("Bezig met syncen van selectie: {$team->name}...");
             $teamPlayerData = $this->api->getPlayers($team->external_id);
-
             $this->service->storeTeamPlayers($team->id, $teamPlayerData);
-            $this->info("✅ Selectie van {$team->name} bijgewerkt.");
-
-            sleep(6);
         }
     }
 }
