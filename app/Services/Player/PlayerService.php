@@ -67,9 +67,9 @@ class PlayerService
             $attributes['birth_date'] = $data['birth']['date'];
         }
 
-        if (isset($data['birth']['country'])) {
+        if (isset($data['nationality'])) {
             $this->loadCountryCache();
-            $apiName = $this->countryService->normalizeName($data['birth']['country']);
+            $apiName = $this->countryService->normalizeName($data['nationality']);
             $attributes['country_id'] = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
         }
 

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('external_id')->nullable()->unique();
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
-            $table->foreignId('country_id')->constrained()->onDelete('cascade');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->foreignId('country_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('display_name');
             $table->date('birth_date')->nullable();
             $table->string('photo_url')->nullable();
