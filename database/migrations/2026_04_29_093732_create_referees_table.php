@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('referees', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('external_id')->nullable()->unique();
             $table->string('name');
             $table->timestamps();
         });

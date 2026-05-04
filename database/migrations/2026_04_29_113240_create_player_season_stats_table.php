@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('appearances')->default(0);
             $table->integer('total_minutes')->default(0);
             $table->string('position')->nullable();
-            $table->decimal('rating', 8, 2)->default(0);
+            $table->decimal('rating', 8, 2)->default(0)->nullable();
             $table->boolean('is_captain')->default(false);
             $table->integer('substitutes_in')->default(0);
             $table->integer('substitutes_out')->default(0);
