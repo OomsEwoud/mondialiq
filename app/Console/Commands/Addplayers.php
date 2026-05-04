@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Player\PlayerService;
 use Illuminate\Console\Attributes\Description;
@@ -22,12 +21,6 @@ class Addplayers extends Command
     {
         $players = $this->api->getPlayersByLeagueSeason(config('services.api_football.league_id'), config('services.api_football.season'));
         $this->service->storePlayers($players);
-
-        $teams = Team::all();
-
-        foreach ($teams as $team) {
-            $teamPlayerData = $this->api->getPlayers($team->external_id);
-            $this->service->storeTeamPlayers($team->id, $teamPlayerData);
-        }
+        $this->service->syncTeamPlayers();
     }
 }

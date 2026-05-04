@@ -5,16 +5,15 @@ namespace App\Services\Player;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\Country;
+use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
 use Illuminate\Support\Facades\DB;
 
 class PlayerService
 {
-    private array $countriesCache = [];
+    protected array $countriesCache = [];
 
-    public function __construct(private CountryService $countryService)
-    {
-    }
+    public function __construct(protected CountryService $countryService, protected FootballApiService $api) {}
 
     private function loadCountryCache(): void
     {
@@ -22,6 +21,7 @@ class PlayerService
             $this->countriesCache = Country::pluck('id', 'name')->toArray();
         }
     }
+
     public function storePlayers(array $players): void
     {
         foreach ($players as $player) {
@@ -29,10 +29,8 @@ class PlayerService
         }
     }
 
-    public function storeTeamPlayers(int $teamId, array $players): void
+    public function storeTeamPlayers(Team $team, array $players): void
     {
-        $team = Team::findOrFail($teamId);
-
         DB::transaction(function () use ($team, $players) {
             $team->players()->update(['is_active' => false]);
             $data = [];
@@ -50,28 +48,19 @@ class PlayerService
     {
         $attributes = [];
 
-        if (isset($data['name'])) {
-            $attributes['display_name'] = $data['name'];
-        }
+        $fieldMap = [
+            'name'      => 'display_name',
+            'firstname' => 'first_name',
+            'lastname'  => 'last_name',
+            'position'  => 'position',
+            'number'    => 'number',
+            'photo'     => 'photo_url',
+        ];
 
-        if (isset($data['firstname'])) {
-            $attributes['first_name'] = $data['firstname'];
-        }
-
-        if (isset($data['lastname'])) {
-            $attributes['last_name'] = $data['lastname'];
-        }
-
-        if (isset($data['position'])) {
-            $attributes['position'] = $data['position'];
-        }
-
-        if (isset($data['number'])) {
-            $attributes['number'] = $data['number'];
-        }
-
-        if (isset($data['photo'])) {
-            $attributes['photo_url'] = $data['photo'];
+        foreach ($fieldMap as $apiKey => $dbKey) {
+            if (isset($data[$apiKey])) {
+                $attributes[$dbKey] = $data[$apiKey];
+            }
         }
 
         if (isset($data['birth']['date'])) {
@@ -88,5 +77,15 @@ class PlayerService
             ['external_id' => $data['id']],
             $attributes
         );
+    }
+
+    public function syncTeamPlayers(): void
+    {
+        Team::chunk(100, function ($teams) {
+            foreach ($teams as $team) {
+                $teamPlayerData = $this->api->getPlayers($team->external_id);
+                $this->storeTeamPlayers($team, $teamPlayerData);
+            }
+        });
     }
 }

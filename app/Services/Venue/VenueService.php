@@ -4,14 +4,18 @@ namespace App\Services\Venue;
 
 use App\Models\Country;
 use App\Models\Venue;
+use App\Services\Apis\FootballApiService;
+use Illuminate\Support\Collection;
 
 class VenueService
 {
-    public function storeVenues(array $venuesData): void
-    {
-        $countries = Country::pluck('id', 'name');
+    public function __construct(protected FootballApiService $footballApiService){}
 
-        foreach($venuesData as $venueData){
+    public function storeVenues(array $venuesData, ?Collection $countries = null): void
+    {
+        $countries ??= Country::pluck('id', 'name');
+
+        foreach ($venuesData as $venueData) {
             Venue::updateOrCreate(
                 ['external_id' => $venueData['id']],
                 [
@@ -23,5 +27,17 @@ class VenueService
                 ]
             );
         }
+    }
+
+    public function syncVenues(): void
+    {
+        $countries = Country::pluck('id', 'name');
+
+        Venue::whereNotNull('external_id')->chunk(100, function ($venues) use ($countries) {
+            foreach ($venues as $venue) {
+                $venueData = $this->footballApiService->getVenue($venue->external_id);
+                $this->storeVenues($venueData, $countries);
+            }
+        });
     }
 }
