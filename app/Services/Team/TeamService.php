@@ -7,10 +7,10 @@ use App\Models\Country;
 
 class TeamService
 {
-    public function storeTeams(array $teamsData)
+    public function storeTeams(array $teamsData): void
     {
         foreach ($teamsData as $teamData) {
-            $team = Team::updateOrCreate(
+            Team::updateOrCreate(
                 ['external_id' => $teamData['team']['id']],
                 [
                     'name' => $teamData['team']['name'],

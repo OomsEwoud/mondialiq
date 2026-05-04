@@ -12,16 +12,12 @@ use Illuminate\Console\Command;
 #[Description('Command description')]
 class AddLeagues extends Command
 {
-    protected LeagueService $leagueService;
-    protected FootballApiService $serviceFootball;
-    public function __construct(LeagueService $leagueService, FootballApiService $serviceFootball)
+    public function __construct(protected LeagueService $leagueService, protected FootballApiService $serviceFootball)
     {
         parent::__construct();
-        $this->leagueService = $leagueService;
-        $this->serviceFootball = $serviceFootball;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $leagues = $this->serviceFootball->getLeagues();
         $this->leagueService->storeLeagues($leagues);

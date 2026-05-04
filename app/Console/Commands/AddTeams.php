@@ -12,17 +12,12 @@ use Illuminate\Console\Command;
 #[Description('Command description')]
 class AddTeams extends Command
 {
-    protected TeamService $teamService;
-    protected FootballApiService $serviceApi;
-
-    public function __construct(TeamService $teamService, FootballApiService $serviceApi)
+    public function __construct(protected TeamService $teamService, protected FootballApiService $serviceApi)
     {
         parent::__construct();
-        $this->teamService = $teamService;
-        $this->serviceApi = $serviceApi;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $teams = $this->serviceApi->getTeams(config('services.api_football.league_id'), config('services.api_football.season'));
         $this->teamService->storeTeams($teams);

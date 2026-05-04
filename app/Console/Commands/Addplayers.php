@@ -13,10 +13,8 @@ use Illuminate\Console\Command;
 #[Description('Sync all players and team squads from the Football API')]
 class Addplayers extends Command
 {
-    public function __construct(
-        private FootballApiService $api,
-        private PlayerService $service,
-    ) {
+    public function __construct(protected FootballApiService $api, protected PlayerService $service) 
+    {
         parent::__construct();
     }
 

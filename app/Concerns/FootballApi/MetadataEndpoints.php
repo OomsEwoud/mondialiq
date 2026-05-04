@@ -15,10 +15,4 @@ trait MetadataEndpoints
         //1 call per day
         return $this->call('/leagues');
     }
-
-    public function getSeasons()
-    {
-        //1 call per day
-        return $this->call('/leagues/seasons');
-    }
 }

@@ -7,8 +7,10 @@ use App\Models\Venue;
 
 class VenueService
 {
-    public function storeVenues(array $venuesData)
+    public function storeVenues(array $venuesData): void
     {
+        $countries = Country::pluck('id', 'name');
+
         foreach($venuesData as $venueData){
             Venue::updateOrCreate(
                 ['external_id' => $venueData['id']],
@@ -17,7 +19,7 @@ class VenueService
                     'city' => $venueData['city'],
                     'capacity' => $venueData['capacity'],
                     'photo_url' => $venueData['image'],
-                    'country_id' => Country::where('name', $venueData['country'])->first()->id
+                    'country_id' => $countries[$venueData['country']] ?? null
                 ]
             );
         }

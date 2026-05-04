@@ -13,20 +13,14 @@ use Illuminate\Console\Command;
 #[Description('Command description')]
 class AddCountries extends Command
 {
-    protected CountryService $countriesService;
-    protected FootballApiService $serviceFootball;
-
-    public function __construct(CountryService $countriesService, FootballApiService $serviceFootball)
+    public function __construct(protected CountryService $countriesService, protected FootballApiService $serviceFootball)
     {
         parent::__construct();
-        $this->countriesService = $countriesService;
-        $this->serviceFootball = $serviceFootball;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $countries = $this->serviceFootball->getCountries();
-        
         $this->countriesService->storeAllCountries($countries);
     }
 }

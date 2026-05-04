@@ -12,17 +12,12 @@ use Illuminate\Console\Command;
 #[Description('Command description')]
 class AddFixtures extends Command
 {
-    protected FootballApiService $api;
-    protected FixtureService $service;
-
-    public function __construct(FootballApiService $api, FixtureService $service)
+    public function __construct(protected FootballApiService $api, protected FixtureService $service)
     {
         parent::__construct();
-        $this->api = $api;
-        $this->service = $service;
     }
     
-    public function handle()
+    public function handle(): void
     {
         $fixtures = $this->api->getFixtures(config('services.api_football.league_id'), config('services.api_football.season'));
         $this->service->storeFixtures($fixtures);
