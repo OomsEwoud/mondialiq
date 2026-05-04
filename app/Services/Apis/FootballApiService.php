@@ -4,13 +4,14 @@ namespace App\Services\Apis;
 
 use App\Concerns\FootballApi\FixtureEndpoints;
 use App\Concerns\FootballApi\MetadataEndpoints;
+use App\Concerns\FootballApi\OddsEndpoint;
 use App\Concerns\FootballApi\TeamEndpoints;
 use Illuminate\Support\Facades\Http;
 use Exception;
 
 class FootballApiService
 {
-    use FixtureEndpoints, MetadataEndpoints, TeamEndpoints;
+    use FixtureEndpoints, MetadataEndpoints, TeamEndpoints, OddsEndpoint;
 
     private readonly string $baseUrl;
     private readonly string $apiKey;
