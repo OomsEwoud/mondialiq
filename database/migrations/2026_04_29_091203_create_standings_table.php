@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('standings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('external_id')->nullable()->unique();
             $table->string('group_name');
             $table->integer('points')->default(0);
             $table->integer('rank')->default(1);

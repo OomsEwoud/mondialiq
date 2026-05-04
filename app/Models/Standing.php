@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Standing extends Model
 {
     protected $fillable = [
-        'external_id',
+        'team_id',
         'group_name',
         'points',
         'rank',
@@ -23,7 +23,6 @@ class Standing extends Model
         'defensive_form',
         'goals_scored_last_5',
         'goals_conceded_last_5',
-        'team_id',
         'league_id',
         'season',
     ];
