@@ -25,15 +25,16 @@ class AddPredictions extends Command
         $this->info('Starten met ophalen van voorspellingen');
         $fixtures = Fixture::all();
 
-        $this->withProgressBar($fixtures, function ($fixture){
+        $this->withProgressBar($fixtures, function (Fixture $fixture){
             try {
                 $predictionData = $this->api->getFixturePrediction($fixture->external_id);
                 $this->service->storeApiPrediction($predictionData, $fixture->id);
             } catch (Exception $e) {
-                $this->info("Fout bij ophalen voorspelling voor fixture {$fixture->id}: " . $e->getMessage());
+                $this->newLine();
+                $this->error("Fout bij ophalen voorspelling voor fixture {$fixture->id}: " . $e->getMessage());
             }
         });
-        
+
         $this->newLine();
         $this->info('Alle voorspellingen zijn geupdate');
     }
