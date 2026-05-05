@@ -20,6 +20,12 @@ class AddVenues extends Command
 
     public function handle(): void
     {
-        $this->venueService->syncVenues();
+        $this->info('Ophalen van stadions');
+
+        $this->components->task('Opslaan van coaches in database', function () {
+            $this->venueService->syncVenues();
+        });
+        
+        $this->info('Stadions klaar');
     }
 }

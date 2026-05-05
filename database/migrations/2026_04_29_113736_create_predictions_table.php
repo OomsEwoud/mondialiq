@@ -17,10 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('winner_id')->nullable()->constrained('teams')->onDelete('set null');
             $table->string('source')->default('user');
-            $table->string('winner_comment')->nullable();
-            $table->integer('total_goals')->nullable();
-            $table->integer('home_goals')->nullable();
-            $table->integer('away_goals')->nullable();
+            $table->decimal('total_goals')->nullable();
+            $table->decimal('home_goals')->nullable();
+            $table->decimal('away_goals')->nullable();
             $table->string('advice')->nullable();
             $table->decimal('home_chance', 5, 2)->nullable();
             $table->decimal('draw_chance', 5, 2)->nullable();

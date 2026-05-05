@@ -12,7 +12,6 @@ class Prediction extends Model
         'user_id',
         'winner_id',
         'source',
-        'winner_comment',
         'total_goals',
         'home_goals',
         'away_goals',
@@ -25,9 +24,9 @@ class Prediction extends Model
 
     protected $casts = [
         'source' => PredictionTypes::class,
-        'total_goals' => 'integer',
-        'home_goals' => 'integer',
-        'away_goals' => 'integer',
+        'total_goals' => 'float',
+        'home_goals' => 'float',
+        'away_goals' => 'float',
         'home_chance' => 'float',
         'draw_chance' => 'float',
         'away_chance' => 'float',

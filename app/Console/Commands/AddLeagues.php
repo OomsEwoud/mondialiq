@@ -19,7 +19,19 @@ class AddLeagues extends Command
 
     public function handle(): void
     {
-        $leagues = $this->serviceFootball->getLeagues();
-        $this->leagueService->storeLeagues($leagues);
+        $this->info('Ophalen van leagues');
+        $leagues = [];
+
+        $this->components->task('Data uit API ophalen', function () use (&$leagues) {
+            $leagues = $this->serviceFootball->getLeagues();
+        });
+
+        $this->components->task('Data van leagues opslaan in database', function () use ($leagues) {
+            if (!empty($leagues)) {
+                $this->leagueService->storeLeagues($leagues);
+            }
+        });
+
+        $this->info('Leagues klaar');
     }
 }

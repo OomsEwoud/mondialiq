@@ -18,6 +18,12 @@ class AddCoaches extends Command
 
     public function handle()
     {
-        $this->coachService->syncCoaches();
+        $this->info('Ophalen van coaches');
+
+        $this->components->task('Opslaan van coaches in database', function () {
+            $this->coachService->syncCoaches();
+        });
+        
+        $this->info('Coaches klaar');
     }
 }

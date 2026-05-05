@@ -20,7 +20,19 @@ class AddCountries extends Command
 
     public function handle(): void
     {
-        $countries = $this->serviceFootball->getCountries();
-        $this->countriesService->storeAllCountries($countries);
+        $this->info('Ophalen van countries');
+        $countries = [];
+
+        $this->components->task('Data uit API ophalen', function () use (&$countries) {
+            $countries = $this->serviceFootball->getCountries();
+        });
+
+        $this->components->task('Data van countries opslaan in database', function () use ($countries) {
+            if (!empty($countries)) {
+                $this->countriesService->storeAllCountries($countries);
+            }
+        });
+
+        $this->info('Countries klaar');
     }
 }

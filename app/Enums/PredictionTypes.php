@@ -6,7 +6,7 @@ enum PredictionTypes : string
 {
     case User = 'user';
     case Ai = 'ai';
-    case Api = 'archived';
+    case Api = 'api';
 
     public function label(): string
     {

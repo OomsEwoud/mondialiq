@@ -19,7 +19,22 @@ class AddFixtures extends Command
     
     public function handle(): void
     {
-        $fixtures = $this->api->getFixtures(config('services.api_football.league_id'), config('services.api_football.season'));
-        $this->service->storeFixtures($fixtures);
+        $this->info('Ophalen van fixtures');
+        $fixtures = [];
+
+        $this->components->task('Data uit API ophalen', function () use (&$fixtures) {
+            $fixtures = $this->api->getFixtures(
+                config('services.api_football.league_id'),
+                config('services.api_football.season')
+            );
+        });
+
+        $this->components->task('Data van fixtures opslaan in database', function () use ($fixtures) {
+            if (!empty($fixtures)) {
+                $this->service->storeFixtures($fixtures);
+            }
+        });
+
+        $this->info('Fixtures klaar');
     }
 }
