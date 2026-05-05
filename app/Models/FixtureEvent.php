@@ -12,6 +12,7 @@ class FixtureEvent extends Model
         'player_id',
         'assist_id',
         'time_elapsed',
+        'extra_time',
         'type',
         'detail'
     ];

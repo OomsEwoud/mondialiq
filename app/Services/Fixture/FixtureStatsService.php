@@ -30,8 +30,8 @@ class FixtureStatsService
                     'name' => $matchStat['type'],
                 ],
                 [
-                    'value' => (float) rtrim($matchStat['value'], '%'),
-                ],
+                    'value' => $matchStat['value'] ? (float) rtrim($matchStat['value'], '%') : 0
+                ]
             );
         }
     }

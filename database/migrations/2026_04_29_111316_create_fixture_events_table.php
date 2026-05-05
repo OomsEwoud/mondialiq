@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fixture_id')->constrained()->onDelete('cascade');
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
-            $table->foreignId('player_id')->constrained()->onDelete('cascade');
+            $table->foreignId('player_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('assist_id')->nullable()->constrained('players')->onDelete('set null');
             $table->integer('time_elapsed');
             $table->integer('extra_time')->nullable();
