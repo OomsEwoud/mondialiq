@@ -21,9 +21,11 @@ class HomeController extends Controller
                 return [
                     'id' => $match->id,
                     'homeTeam' => $match->homeTeam->name,
+                    'homeTeamLogo' => $match->homeTeam->logo_url,
                     'awayTeam' => $match->awayTeam->name,
-                    'displayDay' => $match->match_date->format('d M'),
-                    'displayTime' => $match->match_date->format('H:i'),
+                    'awayTeamLogo' => $match->awayTeam->logo_url,
+                    'day' => $match->match_date->format('d M'),
+                    'time' => $match->match_date->format('H:i'),
                     'round'       => $match->round_name,
                 ];
             });
