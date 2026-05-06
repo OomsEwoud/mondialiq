@@ -8,18 +8,22 @@ const navItems = [
     { label: 'Predictions', href: '/predictions' },
 ];
 
-export default function NavApp() {
+interface Props {
+    onNavigate?: () => void;
+}
+
+export default function NavApp({ onNavigate }: Props) {
     const { url } = usePage();
 
     return (
-        <nav className="flex items-center gap-8">
+        <nav className="flex w-full flex-col items-start gap-2 md:w-auto md:flex-row md:items-center md:gap-8">
             {navItems.map(({ label, href }) => {
                 const isActive = url === href;
 
                 return isActive ? (
                     <Badge
                         key={href}
-                        className="cursor-pointer rounded-full bg-rose-600 px-6 py-2 text-white hover:bg-rose-700"
+                        className="cursor-pointer rounded-full bg-cyan-400 px-6 py-2 text-blue-950 font-bold hover:bg-cyan-300 w-full md:w-auto justify-center"
                     >
                         {label}
                     </Badge>
@@ -27,7 +31,8 @@ export default function NavApp() {
                     <Link
                         key={href}
                         href={href}
-                        className="cursor-pointer font-medium text-slate-500 transition-colors hover:text-rose-600"
+                        onClick={onNavigate}
+                        className="cursor-pointer font-medium text-blue-200 transition-colors hover:text-cyan-400 w-full md:w-auto py-1"
                     >
                         {label}
                     </Link>
