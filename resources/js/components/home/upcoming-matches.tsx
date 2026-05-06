@@ -1,12 +1,5 @@
 import { Link } from '@inertiajs/react';
-
-interface Match {
-    id: number;
-    home: string;
-    away: string;
-    date: string;
-    time: string;
-}
+import type { Match } from '@/types/match';
 
 interface Props {
     matches: Match[];
@@ -27,15 +20,15 @@ export default function UpcomingMatches({ matches }: Props) {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium">
-                                    {match.home}
+                                    {match.homeTeam}
                                 </span>
                                 <span className="text-xs text-slate-400">vs</span>
                                 <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium">
-                                    {match.away}
+                                    {match.awayTeam}
                                 </span>
                             </div>
                             <span className="text-xs font-medium text-red-500">
-                                {match.date} · {match.time}
+                                {match.displayDay} · {match.displayTime}
                             </span>
                         </div>
                         <Link
