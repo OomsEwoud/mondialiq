@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import Footer from '@/components/footer/footer';
 import NavApp from '@/components/navigation/nav-app';
 import {
     Avatar,
@@ -46,6 +47,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 )}
             </header>
             <main>{children}</main>
+            <Footer/>
         </div>
     );
 }
