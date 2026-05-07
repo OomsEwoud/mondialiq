@@ -11,6 +11,11 @@ export default function MatchCard({ match }: Props) {
         <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
+                    <img
+                        src={match.homeTeamLogo}
+                        alt={match.homeTeam}
+                        className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
+                    />
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
                         {match.homeTeamShort}
                     </span>
@@ -18,6 +23,11 @@ export default function MatchCard({ match }: Props) {
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
                         {match.awayTeamShort}
                     </span>
+                    <img
+                        src={match.awayTeamLogo}
+                        alt={match.awayTeam}
+                        className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
+                    />
                 </div>
                 <div className="text-right">
                     <p className="text-xs text-slate-400">{match.round}</p>

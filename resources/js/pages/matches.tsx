@@ -1,7 +1,7 @@
-import { Link } from '@inertiajs/react';
 import { useState, useMemo } from 'react';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
+import Pagination from '@/components/navigation/pagination';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -61,23 +61,7 @@ export default function Matches({ fixtures }: Props) {
             />
 
             <MatchList matches={filtered} />
-
-            <div className="mt-8 flex flex-wrap justify-center gap-1">
-                {fixtures.links.map((link, index) => (
-                    <Link
-                        key={index}
-                        href={link.url || '#'}
-                        className={`rounded-lg border px-4 py-2 text-sm ${
-                            link.active
-                                ? 'border-rose-600 bg-rose-600 text-white'
-                                : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                        } ${!link.url ? 'cursor-not-allowed opacity-50' : ''}`}
-                        // Gebruik dangerouslySetInnerHTML omdat Laravel '&laquo; Previous' als label stuurt
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                        preserveScroll // Belangrijk: voorkomt dat de pagina naar boven springt bij klikken
-                    />
-                ))}
-            </div>
+            <Pagination links={fixtures.links} />
         </>
     );
 }
