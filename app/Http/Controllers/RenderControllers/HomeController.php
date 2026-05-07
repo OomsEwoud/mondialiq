@@ -20,9 +20,9 @@ class HomeController extends Controller
             ->map(function (Fixture $match) {
                 return [
                     'id' => $match->id,
-                    'homeTeam' => $match->homeTeam->name,
+                    'homeTeam' => $match->homeTeam->code,
                     'homeTeamLogo' => $match->homeTeam->logo_url,
-                    'awayTeam' => $match->awayTeam->name,
+                    'awayTeam' => $match->awayTeam->code,
                     'awayTeamLogo' => $match->awayTeam->logo_url,
                     'day' => $match->match_date->format('d M'),
                     'time' => $match->match_date->format('H:i'),

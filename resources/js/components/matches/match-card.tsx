@@ -6,18 +6,17 @@ interface Props {
     match: Match;
 }
 
-
 export default function MatchCard({ match }: Props) {
     return (
         <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
-                        {match.home}
+                        {match.homeTeam}
                     </span>
                     <span className="text-xs text-slate-400">vs</span>
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
-                        {match.away}
+                        {match.awayTeam}
                     </span>
                 </div>
                 <div className="text-right">
@@ -28,11 +27,17 @@ export default function MatchCard({ match }: Props) {
                 </div>
             </div>
 
-            <Chances
-                homeWin={match.prediction.homeWin}
-                draw={match.prediction.draw}
-                awayWin={match.prediction.awayWin}
-            />
+            {match.prediction ? (
+                <Chances
+                    homeWin={match.prediction.homeWin}
+                    draw={match.prediction.draw}
+                    awayWin={match.prediction.awayWin}
+                />
+            ) : (
+                <div className="mt-3 border-t border-slate-100 pt-3 text-center text-xs text-slate-400 italic">
+                    Predictions are not yet available for this match.
+                </div>
+            )}
 
             <div className="mt-3 text-center">
                 <Link

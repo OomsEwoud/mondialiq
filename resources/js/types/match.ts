@@ -11,12 +11,12 @@ export interface UpcomingMatch {
 
 export interface Match {
     id: number;
-    home: string;
-    away: string;
+    homeTeam: string;
+    awayTeam: string;
     round: string;
     date: string;
     time: string;
-    prediction: {
+    prediction? : {
         homeWin: number;
         draw: number;
         awayWin: number;
