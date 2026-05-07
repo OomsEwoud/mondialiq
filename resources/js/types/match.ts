@@ -1,8 +1,10 @@
 export interface UpcomingMatch {
     id: number;
     homeTeam: string;
+    homeTeamShort: string;
     homeTeamLogo: string;
     awayTeam: string;
+    awayTeamShort: string;
     awayTeamLogo: string;
     day: string;
     time: string;
@@ -12,7 +14,11 @@ export interface UpcomingMatch {
 export interface Match {
     id: number;
     homeTeam: string;
+    homeTeamShort: string;
+    homeTeamLogo: string;
     awayTeam: string;
+    awayTeamShort: string;
+    awayTeamLogo: string;
     round: string;
     date: string;
     time: string;

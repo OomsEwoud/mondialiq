@@ -12,11 +12,11 @@ export default function MatchCard({ match }: Props) {
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
-                        {match.homeTeam}
+                        {match.homeTeamShort}
                     </span>
                     <span className="text-xs text-slate-400">vs</span>
                     <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
-                        {match.awayTeam}
+                        {match.awayTeamShort}
                     </span>
                 </div>
                 <div className="text-right">

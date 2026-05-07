@@ -18,7 +18,8 @@ export default function NavApp({ onNavigate }: Props) {
     return (
         <nav className="flex w-full flex-col items-start gap-2 md:w-auto md:flex-row md:items-center md:gap-8">
             {navItems.map(({ label, href }) => {
-                const isActive = url === href;
+
+                const isActive = href === '/' ? url === '/' : url.startsWith(href);
 
                 return isActive ? (
                     <Badge

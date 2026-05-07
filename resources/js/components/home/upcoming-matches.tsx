@@ -30,7 +30,7 @@ export default function UpcomingMatches({ matches }: Props) {
                                     className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
                                 />
                                 <span className="block truncate rounded-md border border-slate-100 bg-slate-50 px-2 py-1 text-[10px] font-medium text-slate-700 sm:text-xs">
-                                    {match.homeTeam}
+                                    {match.homeTeamShort}
                                 </span>
                             </div>
                             <span className="shrink-0 text-[10px] font-bold text-slate-300">vs</span>
@@ -41,7 +41,7 @@ export default function UpcomingMatches({ matches }: Props) {
                                     className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
                                 />
                                 <span className="block truncate rounded-md border border-slate-100 bg-slate-50 px-2 py-1 text-[10px] font-medium text-slate-700 sm:text-xs">
-                                    {match.awayTeam}
+                                    {match.awayTeamShort}
                                 </span>
                             </div>
                         </div>

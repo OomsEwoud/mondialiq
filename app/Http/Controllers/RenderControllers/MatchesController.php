@@ -17,13 +17,15 @@ class MatchesController extends Controller
         $fixtures = Fixture::where('league_id', $localLeagueId)
             ->where('season', config('services.api_football.season'))
             ->orderBy('match_date', 'asc')
-            ->get()
-            ->map(function (Fixture $match) {
+            ->paginate(10)
+            ->through(function (Fixture $match) {
                 return [
                     'id' => $match->id,
-                    'homeTeam' => $match->homeTeam->code,
+                    'homeTeam' => $match->homeTeam->name,
+                    'homeTeamShort' => $match->homeTeam->code,
                     'homeTeamLogo' => $match->homeTeam->logo_url,
-                    'awayTeam' => $match->awayTeam->code,
+                    'awayTeam' => $match->awayTeam->name,
+                    'awayTeamShort' => $match->awayTeam->code,
                     'awayTeamLogo' => $match->awayTeam->logo_url,
                     'date' => $match->match_date->format('d M'),
                     'time' => $match->match_date->format('H:i'),
