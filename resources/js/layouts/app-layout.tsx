@@ -15,7 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="light min-h-screen bg-slate-50 font-sans text-slate-900">
             <header className="sticky top-0 z-50 border-b border-blue-900 bg-[#1a237e]">
-                <div className="flex items-center justify-between px-6 py-4">
+                <div className="mx-auto max-w-5xl px-6 flex h-16 items-center justify-between">
                     <Link href="/" className="group flex items-center">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900 transition-transform group-hover:scale-105">
                             MI
@@ -24,7 +24,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             Mondial<span className="text-cyan-400">IQ</span>
                         </span>
                     </Link>
-                    <div className="hidden md:flex">
+                    <div className="hidden md:flex items-center gap-6">
                         <NavApp />
                     </div>
                     <div className="flex items-center gap-3">
@@ -46,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 )}
             </header>
-            <main>{children}</main>
+            <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
             <Footer/>
         </div>
     );

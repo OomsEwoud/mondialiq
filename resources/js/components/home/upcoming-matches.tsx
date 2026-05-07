@@ -1,8 +1,8 @@
 import { Link } from '@inertiajs/react';
-import type { Match } from '@/types/match';
+import type { UpcomingMatch } from '@/types/match';
 
 interface Props {
-    matches: Match[];
+    matches: UpcomingMatch[];
 }
 
 export default function UpcomingMatches({ matches }: Props) {

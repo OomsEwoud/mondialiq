@@ -1,10 +1,10 @@
 import HeroSection from "@/components/home/hero-section";
 import LiveMatches from "@/components/home/live-matches";
 import UpcomingMatches from "@/components/home/upcoming-matches";
-import type { Match } from "@/types/match";
+import type { UpcomingMatch } from "@/types/match";
 
 interface Props {
-    upcomingFixtures : Match[];
+    upcomingFixtures : UpcomingMatch[];
 }
 
 const mockLive = [
@@ -13,14 +13,14 @@ const mockLive = [
     { id: 3, home: 'NED', away: 'ENG', homeScore: 0, awayScore: 0, minute: 14 },
 ];
 
-export default function home({upcomingFixtures}: Props) {
+export default function Home({upcomingFixtures}: Props) {
     return (
-        <div className="mx-auto max-w-5xl px-6 py-8">
+        <>
             <HeroSection />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <UpcomingMatches matches={upcomingFixtures} />
                 <LiveMatches matches={mockLive} />
             </div>
-        </div>
+        </>
     );
 }
