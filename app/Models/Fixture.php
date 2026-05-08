@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Enums\PredictionTypes;
 
 class Fixture extends Model
 {
@@ -104,6 +106,13 @@ class Fixture extends Model
     public function predictions()
     {
         return $this->hasMany(Prediction::class);
+    }
+
+    public function apiPrediction(): HasOne
+    {
+        return $this->hasOne(Prediction::class)
+            ->whereNull('user_id')
+            ->where('source', PredictionTypes::Api->value);
     }
 
     public function fixtureOdds()
