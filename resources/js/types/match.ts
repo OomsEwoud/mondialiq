@@ -21,8 +21,9 @@ export interface Match {
     awayTeamLogo: string;
     round: string;
     date: string;
+    dateValue: string;
     time: string;
-    prediction? : {
+    prediction?: {
         homeWin: number;
         draw: number;
         awayWin: number;

@@ -3,44 +3,61 @@
 namespace App\Http\Controllers\RenderControllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Fixture;
+use App\Http\Resources\FixtureResource;
 use App\Models\League;
+use App\Queries\Fixture\FixtureQuery;
+use App\Services\Helper\HelperService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class MatchesController extends Controller
 {
-    public function __invoke()
+    private int $leagueId;
+    private int $season;
+
+    public function __construct(private readonly HelperService $service)
     {
-        $leagueId = config('services.api_football.league_id');
-        $localLeagueId = League::where('external_id', $leagueId)->value('id');
+        $this->leagueId = League::where(
+            'external_id', 
+            config('services.api_football.league_id')
+        )->value('id');
 
-        $fixtures = Fixture::with(['homeTeam', 'awayTeam', 'apiPrediction'])
-            ->where('league_id', $localLeagueId)
-            ->where('season', config('services.api_football.season'))
-            ->orderBy('match_date', 'asc')
+        $this->season = config('services.api_football.season');
+    }
+
+    public function __invoke(Request $request)
+    {
+        $filters = $this->parseFilters($request);
+
+        $query = new FixtureQuery($this->leagueId, $this->season);
+        $baseQuery = $query->build(array_fill_keys(['round', 'date', 'team'], ''));
+
+        $filterOptions = $this->service->filterOptions($baseQuery);
+
+        $queryFilters = $filters;
+        $queryFilters['round'] = $this->service->roundNameFromSlug(
+            $filterOptions['rounds']->all(),
+            $filters['round'],
+        );
+
+        $fixtures = $query->build($queryFilters)
             ->paginate(10)
-            ->through(function (Fixture $match) {
-                $prediction = $match->apiPrediction;
+            ->withQueryString()
+            ->through(fn ($fixture) => FixtureResource::make($fixture)->resolve());
 
-                return [
-                    'id' => $match->id,
-                    'homeTeam' => $match->homeTeam->name,
-                    'homeTeamShort' => $match->homeTeam->code,
-                    'homeTeamLogo' => $match->homeTeam->logo_url,
-                    'awayTeam' => $match->awayTeam->name,
-                    'awayTeamShort' => $match->awayTeam->code,
-                    'awayTeamLogo' => $match->awayTeam->logo_url,
-                    'date' => $match->match_date->format('d M'),
-                    'time' => $match->match_date->format('H:i'),
-                    'round' => $match->round_name,
-                    'prediction' => $prediction ? [
-                        'homeWin' => $prediction->home_chance,
-                        'draw' => $prediction->draw_chance,
-                        'awayWin' => $prediction->away_chance,
-                    ] : null,
-                ];
-            });
+        return Inertia::render('matches', [
+            'fixtures'      => $fixtures,
+            'filterOptions' => $filterOptions,
+            'filters'       => $filters,
+        ]);
+    }
 
-        return Inertia::render('matches', ['fixtures' => $fixtures]);
+    private function parseFilters(Request $request): array
+    {
+        return [
+            'round' => $request->string('round')->toString(),
+            'date'  => $request->date('date')?->format('Y-m-d') ?? '',
+            'team'  => $request->string('team')->toString(),
+        ];
     }
 }

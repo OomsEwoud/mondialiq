@@ -32,7 +32,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/overlays/tooltip';
-import { UserMenuContent } from '@/components/users/user-menu-content';
+import { UserMenuContent } from '@/components/user/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';

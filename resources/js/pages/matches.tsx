@@ -1,49 +1,19 @@
-import { useState, useMemo } from 'react';
+import { router } from '@inertiajs/react';
+import MatchesController from '@/actions/App/Http/Controllers/RenderControllers/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
-import type { Match } from '@/types/match';
+import { emptyFilters } from '@/const/match';
+import type { Filters, MatchPageProps as Props} from '@/types/match-page';
 
-interface Props {
-    fixtures: {
-        data: Match[];
-        links: Array<{ url: string | null; label: string; active: boolean }>;
-    };
-}
-
-export default function Matches({ fixtures }: Props) {
-    const safeMatches = fixtures.data;
-    const rounds = [...new Set(safeMatches.map((m) => m.round))];
-    const dates = [...new Set(safeMatches.map((m) => m.date))];
-    const teams = [
-        ...new Set(safeMatches.flatMap((m) => [m.homeTeam, m.awayTeam])),
-    ].sort();
-    const [filters, setFilters] = useState({ round: '', date: '', team: '' });
-
-    const filtered = useMemo(() => {
-        return safeMatches.filter((m) => {
-            if (filters.round && m.round !== filters.round) {
-                return false;
-            }
-
-            if (filters.date && m.date !== filters.date) {
-                return false;
-            }
-
-            if (
-                filters.team &&
-                m.homeTeam !== filters.team &&
-                m.awayTeam !== filters.team
-            ) {
-                return false;
-            }
-
-            return true;
+export default function Matches({ fixtures, filterOptions, filters } : Props) {
+    const visit = (nextFilters: Filters) => {
+        router.visit(MatchesController.url({ query: nextFilters }), {
+            method: 'get',
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
         });
-    }, [filters, safeMatches]);
-
-    const handleChange = (key: 'round' | 'date' | 'team', value: string) => {
-        setFilters((prev) => ({ ...prev, [key]: value }));
     };
 
     return (
@@ -53,14 +23,15 @@ export default function Matches({ fixtures }: Props) {
             </h1>
 
             <MatchFilters
-                rounds={rounds}
-                dates={dates}
-                teams={teams}
+                rounds={filterOptions.rounds}
+                dates={filterOptions.dates}
+                teams={filterOptions.teams}
                 selected={filters}
-                onChange={handleChange}
-            />
+                onChange={(key, value) => visit({ ...filters, [key]: value })}
+                onClear={() => visit(emptyFilters)}
+                />
 
-            <MatchList matches={filtered} />
+            <MatchList matches={fixtures.data} />
             <Pagination links={fixtures.links} />
         </>
     );

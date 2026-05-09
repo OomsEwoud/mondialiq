@@ -1,71 +1,56 @@
+import { X } from 'lucide-react';
+import DateFilter from './filters/date-filter';
+import RoundFilter from './filters/round-filter';
+import TeamFilter from './filters/team-filter';
+
 interface Props {
-    rounds: string[];
-    dates: string[];
+    rounds: Array<{ label: string; value: string }>;
+    dates: Array<{ label: string; value: string }>;
     teams: string[];
-    selected: {
-        round: string;
-        date: string;
-        team: string;
-    };
+    selected: { round: string; date: string; team: string };
     onChange: (key: 'round' | 'date' | 'team', value: string) => void;
+    onClear: () => void;
 }
 
-export default function MatchFilters({ rounds, dates, teams, selected, onChange }: Props) {
-    const selectClass = "w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600";
-    
+export default function MatchFilters({ rounds, dates, teams, selected, onChange, onClear }: Props) {
+    const hasActiveFilters = selected.round || selected.date || selected.team;
+
     return (
-        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-                <label className="mb-1 block text-xs font-medium text-slate-500">
-                    Round
-                </label>
-                <select
-                    className={selectClass}
-                    value={selected.round}
-                    onChange={(e) => onChange('round', e.target.value)}
-                >
-                    <option value="">All Rounds</option>
-                    {rounds.map((r) => (
-                        <option key={r} value={r}>
-                            {r}
-                        </option>
-                    ))}
-                </select>
+        <section className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 className="text-sm font-bold text-blue-950">Filters</h2>
+                    <p className="text-xs text-slate-500">Find matches by round, date or team.</p>
+                </div>
+                {hasActiveFilters && (
+                    <button
+                        type="button"
+                        onClick={onClear}
+                        className="inline-flex h-9 items-center gap-2 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-700"
+                    >
+                        <X size={15} />
+                        Clear
+                    </button>
+                )}
             </div>
-            <div>
-                <label className="mb-1 block text-xs font-medium text-slate-500">
-                    Date
-                </label>
-                <select
-                    className={selectClass}
-                    value={selected.date}
-                    onChange={(e) => onChange('date', e.target.value)}
-                >
-                    <option value="">All Dates</option>
-                    {dates.map((d) => (
-                        <option key={d} value={d}>
-                            {d}
-                        </option>
-                    ))}
-                </select>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <RoundFilter
+                    rounds={rounds}
+                    selected={selected.round}
+                    onChange={(value) => onChange('round', value)}
+                />
+                <DateFilter
+                    dates={dates}
+                    selected={selected.date}
+                    onChange={(value) => onChange('date', value)}
+                />
+                <TeamFilter
+                    teams={teams}
+                    selected={selected.team}
+                    onChange={(value) => onChange('team', value)}
+                />
             </div>
-            <div>
-                <label className="mb-1 block text-xs font-medium text-slate-500">
-                    Team
-                </label>
-                <select
-                    className={selectClass}
-                    value={selected.team}
-                    onChange={(e) => onChange('team', e.target.value)}
-                >
-                    <option value="">All Teams</option>
-                    {teams.map((t) => (
-                        <option key={t} value={t}>
-                            {t}
-                        </option>
-                    ))}
-                </select>
-            </div>
-        </div>
+        </section>
     );
 }
