@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RenderControllers\HomeController;
+use App\Http\Controllers\RenderControllers\GroupsController;
 use App\Http\Controllers\RenderControllers\MatchesController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -15,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/matches', MatchesController::class)->name('matches');
+Route::get('/groups', GroupsController::class)->name('groups');
 
 
 
