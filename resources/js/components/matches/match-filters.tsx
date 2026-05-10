@@ -12,7 +12,14 @@ interface Props {
     onClear: () => void;
 }
 
-export default function MatchFilters({ rounds, dates, teams, selected, onChange, onClear }: Props) {
+export default function MatchFilters({
+    rounds,
+    dates,
+    teams,
+    selected,
+    onChange,
+    onClear,
+}: Props) {
     const hasActiveFilters = selected.round || selected.date || selected.team;
 
     return (
@@ -20,7 +27,9 @@ export default function MatchFilters({ rounds, dates, teams, selected, onChange,
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 className="text-sm font-bold text-blue-950">Filters</h2>
-                    <p className="text-xs text-slate-500">Find matches by round, date or team.</p>
+                    <p className="text-xs text-slate-500">
+                        Find matches by round, date or team.
+                    </p>
                 </div>
                 {hasActiveFilters && (
                     <button

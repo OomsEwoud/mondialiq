@@ -4,11 +4,22 @@ import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
 import { emptyFilters } from '@/const/match';
-import type { Filters, MatchPageProps as Props} from '@/types/match-page';
+import type { Filters, MatchPageProps as Props } from '@/types/match-page';
 
-export default function Matches({ fixtures, filterOptions, filters } : Props) {
+function filledFilters(filters: Filters) {
+    return Object.fromEntries(
+        Object.entries(filters).filter(([, value]) => value.trim() !== ''),
+    ) as Partial<Filters>;
+}
+
+export default function Matches({ fixtures, filterOptions, filters }: Props) {
     const visit = (nextFilters: Filters) => {
-        router.visit(MatchesController.url({ query: nextFilters }), {
+        const query = filledFilters(nextFilters);
+        const url = Object.keys(query).length
+            ? MatchesController.url({ query })
+            : MatchesController.url();
+
+        router.visit(url, {
             method: 'get',
             preserveScroll: true,
             preserveState: true,
@@ -29,7 +40,7 @@ export default function Matches({ fixtures, filterOptions, filters } : Props) {
                 selected={filters}
                 onChange={(key, value) => visit({ ...filters, [key]: value })}
                 onClear={() => visit(emptyFilters)}
-                />
+            />
 
             <MatchList matches={fixtures.data} />
             <Pagination links={fixtures.links} />

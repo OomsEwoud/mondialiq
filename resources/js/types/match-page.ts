@@ -1,12 +1,11 @@
-import type { Match } from "@/types/match";
-
+import type { Match } from '@/types/match';
 
 export interface Filters {
     round: string;
     date: string;
     team: string;
     [key: string]: string;
-};
+}
 
 export interface MatchPageProps {
     fixtures: {
