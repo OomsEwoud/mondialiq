@@ -13,9 +13,11 @@ export interface UpcomingMatch {
 
 export interface Match {
     id: number;
+    homeTeamId: number;
     homeTeam: string;
     homeTeamShort: string;
     homeTeamLogo: string;
+    awayTeamId: number;
     awayTeam: string;
     awayTeamShort: string;
     awayTeamLogo: string;

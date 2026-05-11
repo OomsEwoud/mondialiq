@@ -1,4 +1,8 @@
+import { Link } from '@inertiajs/react';
+import { show as showTeam } from '@/routes/teams';
+
 interface Props {
+    id: number;
     label: string;
     logo: string;
     name: string;
@@ -6,6 +10,7 @@ interface Props {
 }
 
 export default function MatchDetailTeam({
+    id,
     label,
     logo,
     name,
@@ -14,8 +19,9 @@ export default function MatchDetailTeam({
     const isRightAligned = align === 'right';
 
     return (
-        <div
-            className={`flex items-center gap-3 ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
+        <Link
+            href={showTeam.url(id)}
+            className={`flex items-center gap-3 rounded-lg transition-colors hover:bg-blue-50 ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
         >
             <img
                 src={logo}
@@ -26,6 +32,6 @@ export default function MatchDetailTeam({
                 <p className="text-xs font-medium text-slate-400">{label}</p>
                 <p className="font-bold text-slate-800">{name}</p>
             </div>
-        </div>
+        </Link>
     );
 }

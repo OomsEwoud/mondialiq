@@ -1,3 +1,5 @@
+import { Link } from '@inertiajs/react';
+import { show as showTeam } from '@/routes/teams';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
@@ -16,6 +18,7 @@ export default function MatchDetailsHero({ match }: Props) {
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
                 <TeamBlock
+                    id={match.homeTeam.id}
                     logo={match.homeTeam.logo}
                     name={match.homeTeam.name}
                     code={match.homeTeam.code}
@@ -29,6 +32,7 @@ export default function MatchDetailsHero({ match }: Props) {
                     </p>
                 </div>
                 <TeamBlock
+                    id={match.awayTeam.id}
                     logo={match.awayTeam.logo}
                     name={match.awayTeam.name}
                     code={match.awayTeam.code}
@@ -40,18 +44,20 @@ export default function MatchDetailsHero({ match }: Props) {
 }
 
 interface TeamBlockProps {
+    id: number;
     logo: string;
     name: string;
     code: string;
     align?: 'left' | 'right';
 }
 
-function TeamBlock({ logo, name, code, align = 'left' }: TeamBlockProps) {
+function TeamBlock({ id, logo, name, code, align = 'left' }: TeamBlockProps) {
     const isRightAligned = align === 'right';
 
     return (
-        <div
-            className={`flex min-w-0 items-center gap-3 ${isRightAligned ? 'flex-row-reverse text-right' : ''}`}
+        <Link
+            href={showTeam.url(id)}
+            className={`flex min-w-0 items-center gap-3 rounded-lg p-2 transition-colors hover:bg-blue-50 ${isRightAligned ? 'flex-row-reverse text-right' : ''}`}
         >
             <img src={logo} alt={name} className="h-12 w-12 object-contain" />
             <div className="min-w-0">
@@ -60,6 +66,6 @@ function TeamBlock({ logo, name, code, align = 'left' }: TeamBlockProps) {
                 </p>
                 <p className="text-xs font-bold text-slate-400">{code}</p>
             </div>
-        </div>
+        </Link>
     );
 }

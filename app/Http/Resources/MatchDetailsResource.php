@@ -12,11 +12,13 @@ class MatchDetailsResource extends JsonResource
         return [
             'id' => $this->id,
             'homeTeam' => [
+                'id' => $this->homeTeam->id,
                 'name' => $this->homeTeam->name,
                 'code' => $this->homeTeam->code,
                 'logo' => $this->homeTeam->logo_url,
             ],
             'awayTeam' => [
+                'id' => $this->awayTeam->id,
                 'name' => $this->awayTeam->name,
                 'code' => $this->awayTeam->code,
                 'logo' => $this->awayTeam->logo_url,

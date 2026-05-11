@@ -31,7 +31,7 @@ class Team extends Model
 
     public function coach()
     {
-        return $this->belongsTo(Coach::class);
+        return $this->hasOne(Coach::class);
     }
 
     public function fixturesAsHomeTeam()

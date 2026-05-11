@@ -13,9 +13,11 @@ class FixtureResource extends JsonResource
 
         return [
             'id'              => $this->id,
+            'homeTeamId'      => $this->homeTeam->id,
             'homeTeam'        => $this->homeTeam->name,
             'homeTeamShort'   => $this->homeTeam->code,
             'homeTeamLogo'    => $this->homeTeam->logo_url,
+            'awayTeamId'      => $this->awayTeam->id,
             'awayTeam'        => $this->awayTeam->name,
             'awayTeamShort'   => $this->awayTeam->code,
             'awayTeamLogo'    => $this->awayTeam->logo_url,

@@ -14,6 +14,7 @@ export default function MatchDetailsPanel({ match }: Props) {
         <div className="mt-4 rounded-lg border border-slate-100 bg-slate-50 p-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                 <MatchDetailTeam
+                    id={match.homeTeamId}
                     label="Home team"
                     logo={match.homeTeamLogo}
                     name={match.homeTeam}
@@ -24,6 +25,7 @@ export default function MatchDetailsPanel({ match }: Props) {
                 </span>
 
                 <MatchDetailTeam
+                    id={match.awayTeamId}
                     label="Away team"
                     logo={match.awayTeamLogo}
                     name={match.awayTeam}
