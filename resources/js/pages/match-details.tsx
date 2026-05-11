@@ -1,11 +1,10 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { Head } from '@inertiajs/react';
 import MatchDetailsHero from '@/components/matches/details/match-details-hero';
 import MatchEventsCard from '@/components/matches/details/match-events-card';
 import MatchInfoCard from '@/components/matches/details/match-info-card';
 import MatchScoreCard from '@/components/matches/details/match-score-card';
 import MatchStatsCard from '@/components/matches/details/match-stats-card';
-import { matches } from '@/routes';
+import BackButton from '@/components/navigation/back-button';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
 
 interface Props {
@@ -18,13 +17,7 @@ export default function MatchDetails({ match }: Props) {
             <Head title={`${match.homeTeam.name} vs ${match.awayTeam.name}`} />
 
             <div className="mb-5">
-                <Link
-                    href={matches.url()}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 transition-colors hover:text-blue-800"
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to matches
-                </Link>
+                <BackButton />
             </div>
 
             <div className="flex flex-col gap-5">
