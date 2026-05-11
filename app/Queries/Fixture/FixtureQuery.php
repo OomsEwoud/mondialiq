@@ -3,7 +3,6 @@
 namespace App\Queries\Fixture;
 
 use App\Models\Fixture;
-use Illuminate\Database\Eloquent\Builder;
 
 class FixtureQuery
 {

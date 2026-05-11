@@ -1,5 +1,8 @@
+import { Link } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 import MatchDetailMeta from '@/components/matches/match-detail-meta';
 import MatchDetailTeam from '@/components/matches/match-detail-team';
+import { show } from '@/routes/matches';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -29,6 +32,16 @@ export default function MatchDetailsPanel({ match }: Props) {
             </div>
 
             <MatchDetailMeta match={match} />
+
+            <div className="mt-4 border-t border-slate-200 pt-4 text-center">
+                <Link
+                    href={show.url(match.id)}
+                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700"
+                >
+                    More match info
+                    <ArrowRight className="h-4 w-4" />
+                </Link>
+            </div>
         </div>
     );
 }
