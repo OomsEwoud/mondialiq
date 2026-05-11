@@ -12,10 +12,10 @@ use Inertia\Inertia;
 
 class MatchesController extends Controller
 {
-    private int $leagueId;
-    private int $season;
+    protected int $leagueId;
+    protected int $season;
 
-    public function __construct(private readonly HelperService $service)
+    public function __construct(protected HelperService $service)
     {
         $this->leagueId = League::where(
             'external_id', 
