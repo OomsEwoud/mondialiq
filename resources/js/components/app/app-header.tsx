@@ -232,7 +232,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-56"
+                                    className="w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-xl shadow-blue-950/10"
                                     align="end"
                                 >
                                     <UserMenuContent user={auth.user} />

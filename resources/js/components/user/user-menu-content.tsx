@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOut, Trophy, UserRound } from 'lucide-react';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -27,34 +27,47 @@ export function UserMenuContent({ user }: Props) {
     return (
         <>
             <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <div className="rounded-lg bg-slate-50 px-3 py-3 text-left text-sm">
                     <UserInfo user={user} showEmail={true} />
                 </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="my-2 bg-slate-200" />
             <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
+                >
                     <Link
-                        className="block w-full cursor-pointer"
+                        className="flex w-full cursor-pointer items-center gap-2"
                         href={edit()}
                         prefetch
                         onClick={cleanup}
                     >
-                        <Settings className="mr-2" />
-                        Settings
+                        <UserRound className="size-4 text-cyan-500" />
+                        Profile settings
                     </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                    disabled
+                    className="rounded-lg px-3 py-2 font-semibold text-slate-400"
+                >
+                    <Trophy className="size-4 text-slate-300" />
+                    My predictions
+                </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuSeparator className="my-2 bg-slate-200" />
+            <DropdownMenuItem
+                asChild
+                className="rounded-lg px-3 py-2 font-semibold text-slate-600 transition-colors focus:bg-red-50 focus:text-red-600"
+            >
                 <Link
-                    className="block w-full cursor-pointer"
+                    className="flex w-full cursor-pointer items-center gap-2"
                     href={logout()}
                     as="button"
                     onClick={handleLogout}
                     data-test="logout-button"
                 >
-                    <LogOut className="mr-2" />
+                    <LogOut className="size-4" />
                     Log out
                 </Link>
             </DropdownMenuItem>

@@ -9,6 +9,12 @@ import {
     AvatarFallback,
     AvatarImage,
 } from '@/components/ui/display/avatar';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from '@/components/ui/forms/dropdown-menu';
+import { UserMenuContent } from '@/components/user/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { login } from '@/routes';
 
@@ -32,15 +38,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     <div className="flex items-center gap-3">
                         {auth.user ? (
-                            <Avatar className="h-10 w-10 border-2 border-slate-200">
-                                <AvatarImage
-                                    src={auth.user.avatar}
-                                    alt={auth.user.name}
-                                />
-                                <AvatarFallback className="bg-slate-100 text-slate-600">
-                                    {getInitials(auth.user.name)}
-                                </AvatarFallback>
-                            </Avatar>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <button
+                                        type="button"
+                                        className="rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none"
+                                        aria-label="Open user menu"
+                                    >
+                                        <Avatar className="h-10 w-10 border-2 border-slate-200">
+                                            <AvatarImage
+                                                src={auth.user.avatar}
+                                                alt={auth.user.name}
+                                            />
+                                            <AvatarFallback className="bg-slate-100 text-slate-600">
+                                                {getInitials(auth.user.name)}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    className="w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-xl shadow-blue-950/10"
+                                    align="end"
+                                >
+                                    <UserMenuContent user={auth.user} />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         ) : (
                             <Link
                                 href={login()}
