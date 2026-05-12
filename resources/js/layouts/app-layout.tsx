@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import AppLogo from '@/components/app/app-logo';
 import Footer from '@/components/footer/footer';
 import NavApp from '@/components/navigation/nav-app';
 import {
@@ -15,39 +16,42 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="light min-h-screen bg-slate-50 font-sans text-slate-900">
             <header className="sticky top-0 z-50 border-b border-blue-900 bg-[#1a237e]">
-                <div className="mx-auto max-w-5xl px-6 flex h-16 items-center justify-between">
+                <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
                     <Link href="/" className="group flex items-center">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900 transition-transform group-hover:scale-105">
-                            MI
-                        </div>
-                        <span className="ml-3 text-xl font-black tracking-tight text-white hidden sm:inline">
-                            Mondial<span className="text-cyan-400">IQ</span>
-                        </span>
+                        <AppLogo
+                            textClassName="hidden text-white sm:inline"
+                            markClassName="transition-transform group-hover:scale-105"
+                        />
                     </Link>
-                    <div className="hidden md:flex items-center gap-6">
+                    <div className="hidden items-center gap-6 md:flex">
                         <NavApp />
                     </div>
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10 border-2 border-slate-200">
-                            <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                            <AvatarFallback className="bg-slate-100 text-slate-600">EK</AvatarFallback>
+                            <AvatarImage
+                                src="https://github.com/shadcn.png"
+                                alt="User"
+                            />
+                            <AvatarFallback className="bg-slate-100 text-slate-600">
+                                EK
+                            </AvatarFallback>
                         </Avatar>
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="md:hidden text-blue-200 hover:text-cyan-400 transition-colors"
+                            className="text-blue-200 transition-colors hover:text-cyan-400 md:hidden"
                         >
                             {menuOpen ? <X size={22} /> : <Menu size={22} />}
                         </button>
                     </div>
                 </div>
                 {menuOpen && (
-                    <div className="md:hidden border-t border-blue-800 bg-[#1a237e] px-6 py-3">
+                    <div className="border-t border-blue-800 bg-[#1a237e] px-6 py-3 md:hidden">
                         <NavApp onNavigate={() => setMenuOpen(false)} />
                     </div>
                 )}
             </header>
             <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

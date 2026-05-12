@@ -1,16 +1,38 @@
-import AppLogoIcon from '@/components/app/app-logo-icon';
+import { cn } from '@/lib/utils';
 
-export default function AppLogo() {
+type Props = {
+    className?: string;
+    markClassName?: string;
+    textClassName?: string;
+    showText?: boolean;
+};
+
+export default function AppLogo({
+    className,
+    markClassName,
+    textClassName,
+    showText = true,
+}: Props) {
     return (
-        <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
+        <div className={cn('flex items-center gap-3', className)}>
+            <div
+                className={cn(
+                    'flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900/20',
+                    markClassName,
+                )}
+            >
+                MI
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-tight font-semibold">
-                    Laravel Starter Kit
+            {showText && (
+                <span
+                    className={cn(
+                        'text-xl font-black tracking-tight text-slate-900',
+                        textClassName,
+                    )}
+                >
+                    Mondial<span className="text-cyan-400">IQ</span>
                 </span>
-            </div>
-        </>
+            )}
+        </div>
     );
 }

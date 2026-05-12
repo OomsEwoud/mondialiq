@@ -1,8 +1,7 @@
-// Components
 import { Form, Head } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
 import InputError from '@/components/forms/input-error';
 import TextLink from '@/components/typography/text-link';
+import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
@@ -15,7 +14,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Forgot password" />
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mb-4 rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-blue-950">
                     {status}
                 </div>
             )}
@@ -25,14 +24,20 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     {({ processing, errors }) => (
                         <>
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                >
+                                    Email address
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
                                     name="email"
                                     autoComplete="off"
                                     autoFocus
-                                    placeholder="email@example.com"
+                                    placeholder="you@example.com"
+                                    className="h-11 rounded-lg border-slate-200 bg-slate-50 text-blue-950 shadow-none placeholder:text-slate-400 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
 
                                 <InputError message={errors.email} />
@@ -40,13 +45,11 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
                             <div className="my-6 flex items-center justify-start">
                                 <Button
-                                    className="w-full"
+                                    className="h-12 w-full rounded-lg bg-blue-950 font-black text-white shadow-lg shadow-blue-950/15 hover:bg-cyan-500 hover:text-blue-950"
                                     disabled={processing}
                                     data-test="email-password-reset-link-button"
                                 >
-                                    {processing && (
-                                        <LoaderCircle className="h-4 w-4 animate-spin" />
-                                    )}
+                                    {processing && <Spinner />}
                                     Email password reset link
                                 </Button>
                             </div>
@@ -54,9 +57,14 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     )}
                 </Form>
 
-                <div className="space-x-1 text-center text-sm text-muted-foreground">
+                <div className="rounded-lg bg-slate-50 px-4 py-3 text-center text-sm text-slate-600">
                     <span>Or, return to</span>
-                    <TextLink href={login()}>log in</TextLink>
+                    <TextLink
+                        href={login()}
+                        className="ml-1 font-black text-blue-950 decoration-cyan-300 hover:text-cyan-600"
+                    >
+                        log in
+                    </TextLink>
                 </div>
             </div>
         </>
@@ -65,5 +73,5 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
 ForgotPassword.layout = {
     title: 'Forgot password',
-    description: 'Enter your email to receive a password reset link',
+    description: 'Enter your email and we will send a reset link.',
 };
