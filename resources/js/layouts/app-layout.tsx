@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import AppLogo from '@/components/app/app-logo';
@@ -6,12 +6,16 @@ import Footer from '@/components/footer/footer';
 import NavApp from '@/components/navigation/nav-app';
 import {
     Avatar,
-    AvatarImage,
     AvatarFallback,
+    AvatarImage,
 } from '@/components/ui/display/avatar';
+import { useInitials } from '@/hooks/use-initials';
+import { login } from '@/routes';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { auth } = usePage().props;
+    const getInitials = useInitials();
 
     return (
         <div className="light min-h-screen bg-slate-50 font-sans text-slate-900">
@@ -27,15 +31,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         <NavApp />
                     </div>
                     <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 border-2 border-slate-200">
-                            <AvatarImage
-                                src="https://github.com/shadcn.png"
-                                alt="User"
-                            />
-                            <AvatarFallback className="bg-slate-100 text-slate-600">
-                                EK
-                            </AvatarFallback>
-                        </Avatar>
+                        {auth.user ? (
+                            <Avatar className="h-10 w-10 border-2 border-slate-200">
+                                <AvatarImage
+                                    src={auth.user.avatar}
+                                    alt={auth.user.name}
+                                />
+                                <AvatarFallback className="bg-slate-100 text-slate-600">
+                                    {getInitials(auth.user.name)}
+                                </AvatarFallback>
+                            </Avatar>
+                        ) : (
+                            <Link
+                                href={login()}
+                                className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-blue-950 transition-colors hover:bg-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none"
+                            >
+                                Inloggen
+                            </Link>
+                        )}
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
                             className="text-blue-200 transition-colors hover:text-cyan-400 md:hidden"
