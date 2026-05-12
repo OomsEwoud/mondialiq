@@ -141,3 +141,42 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .auth-input {
+        border-color: oklch(0.869 0.022 252.894) !important;
+        background-color: white !important;
+        color: oklch(0.208 0.042 265.755) !important;
+        caret-color: oklch(0.208 0.042 265.755) !important;
+        -webkit-text-fill-color: oklch(0.208 0.042 265.755) !important;
+    }
+
+    .auth-input::placeholder {
+        color: oklch(0.554 0.046 257.417) !important;
+        -webkit-text-fill-color: oklch(0.554 0.046 257.417) !important;
+        opacity: 1;
+    }
+
+    .auth-input:disabled,
+    .auth-input:read-only {
+        background-color: white !important;
+        color: oklch(0.208 0.042 265.755) !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: oklch(0.208 0.042 265.755) !important;
+    }
+
+    .auth-input:-webkit-autofill,
+    .auth-input:-webkit-autofill:hover,
+    .auth-input:-webkit-autofill:focus {
+        border-color: oklch(0.869 0.022 252.894) !important;
+        box-shadow: 0 0 0 1000px white inset !important;
+        caret-color: oklch(0.208 0.042 265.755) !important;
+        -webkit-text-fill-color: oklch(0.208 0.042 265.755) !important;
+    }
+
+    .auth-input::selection {
+        background: oklch(0.917 0.08 205.041) !important;
+        color: oklch(0.129 0.042 264.695) !important;
+        -webkit-text-fill-color: oklch(0.129 0.042 264.695) !important;
+    }
+}

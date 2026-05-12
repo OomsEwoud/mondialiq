@@ -16,7 +16,6 @@ export default function Register() {
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
-                disableWhileProcessing
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
@@ -32,13 +31,12 @@ export default function Register() {
                                 <Input
                                     id="name"
                                     type="text"
-                                    required
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Full name"
-                                    className="h-11 rounded-lg border-slate-200 bg-slate-50 text-blue-950 shadow-none placeholder:text-slate-400 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError message={errors.name} />
                             </div>
@@ -53,12 +51,11 @@ export default function Register() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    required
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
-                                    className="h-11 rounded-lg border-slate-200 bg-slate-50 text-blue-950 shadow-none placeholder:text-slate-400 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -72,12 +69,11 @@ export default function Register() {
                                 </Label>
                                 <PasswordInput
                                     id="password"
-                                    required
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
-                                    className="h-11 rounded-lg border-slate-200 bg-slate-50 text-blue-950 shadow-none placeholder:text-slate-400 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -91,12 +87,11 @@ export default function Register() {
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
-                                    required
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Confirm password"
-                                    className="h-11 rounded-lg border-slate-200 bg-slate-50 text-blue-950 shadow-none placeholder:text-slate-400 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}

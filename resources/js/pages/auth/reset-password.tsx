@@ -1,10 +1,10 @@
 import { Form, Head } from '@inertiajs/react';
-import InputError from '@/components/forms/input-error';
 import PasswordInput from '@/components/auth/password/password-input';
+import InputError from '@/components/forms/input-error';
+import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { Spinner } from '@/components/ui/feedback/spinner';
 import { update } from '@/routes/password';
 
 type Props = {
@@ -32,7 +32,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 name="email"
                                 autoComplete="email"
                                 value={email}
-                                className="mt-1 block w-full"
+                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 readOnly
                             />
                             <InputError
@@ -47,7 +47,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
-                                className="mt-1 block w-full"
+                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 autoFocus
                                 placeholder="Password"
                             />
@@ -62,7 +62,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
-                                className="mt-1 block w-full"
+                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 placeholder="Confirm password"
                             />
                             <InputError
