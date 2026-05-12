@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import MatchesController from '@/actions/App/Http/Controllers/RenderControllers/MatchesController';
+import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';

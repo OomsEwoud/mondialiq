@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\RenderControllers;
+namespace App\Http\Controllers\Pages;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Fixture;
 use Carbon\Carbon;

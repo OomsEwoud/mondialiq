@@ -54,7 +54,7 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="you@example.com"
+                                    placeholder="name@example.com"
                                     className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError message={errors.email} />
@@ -83,7 +83,7 @@ export default function Login({
                                     name="password"
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder="********"
                                     className="auth-input h-12 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 />
                                 <InputError message={errors.password} />

@@ -2,9 +2,15 @@ import { Form } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { Check, Copy, ScanLine } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import AlertError from '@/components/shared/alert-error';
 import InputError from '@/components/forms/input-error';
+import AlertError from '@/components/shared/alert-error';
+import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
+import {
+    InputOTP,
+    InputOTPGroup,
+    InputOTPSlot,
+} from '@/components/ui/forms/input-otp';
 import {
     Dialog,
     DialogContent,
@@ -12,13 +18,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/overlays/dialog';
-import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSlot,
-} from '@/components/ui/forms/input-otp';
-import { Spinner } from '@/components/ui/feedback/spinner';
-import { useAppearance } from '@/hooks/use-appearance';
 import { useClipboard } from '@/hooks/use-clipboard';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
 import { confirm } from '@/routes/two-factor';
@@ -62,7 +61,6 @@ function TwoFactorSetupStep({
     onNextStep: () => void;
     errors: string[];
 }) {
-    const { resolvedAppearance } = useAppearance();
     const [copiedText, copy] = useClipboard();
     const IconComponent = copiedText === manualSetupKey ? Check : Copy;
 
@@ -80,12 +78,6 @@ function TwoFactorSetupStep({
                                         className="aspect-square w-full rounded-lg bg-white p-2 [&_svg]:size-full"
                                         dangerouslySetInnerHTML={{
                                             __html: qrCodeSvg,
-                                        }}
-                                        style={{
-                                            filter:
-                                                resolvedAppearance === 'dark'
-                                                    ? 'invert(1) brightness(1.5)'
-                                                    : undefined,
                                         }}
                                     />
                                 ) : (

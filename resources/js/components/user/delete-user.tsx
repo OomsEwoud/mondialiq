@@ -1,10 +1,11 @@
 import { Form } from '@inertiajs/react';
+import { AlertTriangle } from 'lucide-react';
 import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import Heading from '@/components/typography/heading';
-import InputError from '@/components/forms/input-error';
 import PasswordInput from '@/components/auth/password/password-input';
+import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
+import { Label } from '@/components/ui/forms/label';
 import {
     Dialog,
     DialogClose,
@@ -14,31 +15,40 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
-import { Label } from '@/components/ui/forms/label';
 
 export default function DeleteUser() {
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="space-y-6">
-            <Heading
-                variant="small"
-                title="Delete account"
-                description="Delete your account and all of its resources"
-            />
-            <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
-                <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
-                    <p className="font-medium">Warning</p>
-                    <p className="text-sm">
-                        Please proceed with caution, this cannot be undone.
+        <section className="rounded-xl border border-red-200 bg-white p-5 shadow-sm">
+            <div className="mb-5 flex gap-4">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-700">
+                    <AlertTriangle className="size-5" />
+                </span>
+                <div>
+                    <p className="mb-1 text-xs font-black tracking-widest text-red-500 uppercase">
+                        Danger zone
+                    </p>
+                    <h2 className="text-xl font-black tracking-tight text-blue-950">
+                        Delete account
+                    </h2>
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                        Permanently delete your account and all related data.
+                        This cannot be undone.
                     </p>
                 </div>
+            </div>
 
+            <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm font-semibold text-red-700">
+                    Only continue if you are completely sure.
+                </p>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
+                            className="rounded-lg font-black"
                         >
                             Delete account
                         </Button>
@@ -77,6 +87,7 @@ export default function DeleteUser() {
                                             id="password"
                                             name="password"
                                             ref={passwordInput}
+                                            className="h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                             placeholder="Password"
                                             autoComplete="current-password"
                                         />
@@ -91,6 +102,7 @@ export default function DeleteUser() {
                                                 onClick={() =>
                                                     resetAndClearErrors()
                                                 }
+                                                className="rounded-lg font-black"
                                             >
                                                 Cancel
                                             </Button>
@@ -100,6 +112,7 @@ export default function DeleteUser() {
                                             variant="destructive"
                                             disabled={processing}
                                             asChild
+                                            className="rounded-lg font-black"
                                         >
                                             <button
                                                 type="submit"
@@ -115,6 +128,6 @@ export default function DeleteUser() {
                     </DialogContent>
                 </Dialog>
             </div>
-        </div>
+        </section>
     );
 }

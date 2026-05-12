@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\RenderControllers;
+namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\League;
 use App\Models\Standing;
-use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use App\Services\Standing\GroupStandingService;
 

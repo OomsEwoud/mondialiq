@@ -1,30 +1,17 @@
 import { Link } from '@inertiajs/react';
+import { UserRound } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
-import Heading from '@/components/typography/heading';
 import { Button } from '@/components/ui/forms/button';
-import { Separator } from '@/components/ui/layout/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
-import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
-import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
         href: edit(),
-        icon: null,
-    },
-    {
-        title: 'Security',
-        href: editSecurity(),
-        icon: null,
-    },
-    {
-        title: 'Appearance',
-        href: editAppearance(),
-        icon: null,
+        icon: UserRound,
     },
 ];
 
@@ -32,17 +19,24 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <div className="px-4 py-6">
-            <Heading
-                title="Settings"
-                description="Manage your profile and account settings"
-            />
+        <div className="space-y-6">
+            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                    <div>
+                        <p className="mb-2 text-xs font-black tracking-widest text-cyan-500 uppercase">
+                            Account
+                        </p>
+                        <h1 className="text-3xl font-black tracking-tight text-blue-950">
+                            Settings
+                        </h1>
+                        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                            Manage your profile and sign-in settings.
+                        </p>
+                    </div>
 
-            <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <aside className="w-full max-w-xl lg:w-48">
                     <nav
-                        className="flex flex-col space-y-1 space-x-0"
-                        aria-label="Settings"
+                        className="flex flex-wrap gap-2"
+                        aria-label="Settings sections"
                     >
                         {sidebarNavItems.map((item, index) => (
                             <Button
@@ -50,11 +44,15 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                 size="sm"
                                 variant="ghost"
                                 asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': isCurrentOrParentUrl(item.href),
-                                })}
+                                className={cn(
+                                    'h-9 rounded-lg px-3 font-black text-slate-600 hover:bg-cyan-50 hover:text-blue-950',
+                                    {
+                                        'bg-blue-950 text-white hover:bg-blue-950 hover:text-white':
+                                            isCurrentOrParentUrl(item.href),
+                                    },
+                                )}
                             >
-                                <Link href={item.href}>
+                                <Link href={item.href} className="gap-2">
                                     {item.icon && (
                                         <item.icon className="h-4 w-4" />
                                     )}
@@ -63,16 +61,10 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                             </Button>
                         ))}
                     </nav>
-                </aside>
-
-                <Separator className="my-6 lg:hidden" />
-
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">
-                        {children}
-                    </section>
                 </div>
             </div>
+
+            <section className="space-y-6">{children}</section>
         </div>
     );
 }

@@ -49,7 +49,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 autoComplete="new-password"
                                 className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
                                 autoFocus
-                                placeholder="Password"
+                                placeholder="Min. 8 characters"
                             />
                             <InputError message={errors.password} />
                         </div>
@@ -63,7 +63,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 name="password_confirmation"
                                 autoComplete="new-password"
                                 className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
-                                placeholder="Confirm password"
+                                placeholder="Repeat new password"
                             />
                             <InputError
                                 message={errors.password_confirmation}

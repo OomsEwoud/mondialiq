@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\RenderControllers\HomeController;
-use App\Http\Controllers\RenderControllers\GroupsController;
-use App\Http\Controllers\RenderControllers\MatchDetailsController;
-use App\Http\Controllers\RenderControllers\MatchesController;
-use App\Http\Controllers\RenderControllers\TeamDetailsController;
+use App\Http\Controllers\Pages\HomeController;
+use App\Http\Controllers\Pages\GroupsController;
+use App\Http\Controllers\Pages\MatchDetailsController;
+use App\Http\Controllers\Pages\MatchesController;
+use App\Http\Controllers\Pages\TeamDetailsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');

@@ -67,7 +67,7 @@ export default function TwoFactorChallenge() {
                                     <Input
                                         name="recovery_code"
                                         type="text"
-                                        placeholder="Enter recovery code"
+                                        placeholder="ABCD-1234-EFGH"
                                         autoFocus={showRecoveryInput}
                                         required
                                     />

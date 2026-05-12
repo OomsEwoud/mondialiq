@@ -19,7 +19,7 @@ export default function ConfirmPassword() {
                             <PasswordInput
                                 id="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder="Your account password"
                                 autoComplete="current-password"
                                 autoFocus
                                 className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"

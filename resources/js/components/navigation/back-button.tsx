@@ -6,6 +6,7 @@ export default function BackButton() {
     const goBack = () => {
         if (window.history.length > 1) {
             window.history.back();
+
             return;
         }
 
