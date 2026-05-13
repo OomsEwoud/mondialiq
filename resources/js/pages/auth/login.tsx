@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/forms/checkbox';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { register } from '@/routes';
+import { redirect as authRedirect } from '@/routes/auth';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -16,6 +17,23 @@ type Props = {
     canResetPassword: boolean;
     canRegister: boolean;
 };
+
+const socialProviders = [
+    {
+        name: 'Google',
+        provider: 'google',
+        mark: 'G',
+        className:
+            'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-blue-950',
+    },
+    {
+        name: 'Facebook',
+        provider: 'facebook',
+        mark: 'f',
+        className:
+            'border-blue-200 bg-blue-50 text-blue-950 hover:border-blue-300 hover:bg-blue-100',
+    },
+];
 
 export default function Login({
     status,
@@ -114,6 +132,39 @@ export default function Login({
                                 {processing && <Spinner />}
                                 Log in
                             </Button>
+                        </div>
+
+                        <div className="grid gap-4">
+                            <div className="flex items-center gap-3">
+                                <div className="h-px flex-1 bg-slate-200" />
+                                <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
+                                    Or continue with
+                                </span>
+                                <div className="h-px flex-1 bg-slate-200" />
+                            </div>
+
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                {socialProviders.map((provider) => (
+                                    <Button
+                                        key={provider.provider}
+                                        asChild
+                                        variant="outline"
+                                        className={`h-12 rounded-lg font-black shadow-none ${provider.className}`}
+                                    >
+                                        <a
+                                            href={authRedirect.url(
+                                                provider.provider,
+                                            )}
+                                            aria-label={`Log in with ${provider.name}`}
+                                        >
+                                            <span className="flex size-6 items-center justify-center rounded-full bg-white text-sm font-black shadow-sm ring-1 ring-slate-200">
+                                                {provider.mark}
+                                            </span>
+                                            {provider.name}
+                                        </a>
+                                    </Button>
+                                ))}
+                            </div>
                         </div>
 
                         {canRegister && (
