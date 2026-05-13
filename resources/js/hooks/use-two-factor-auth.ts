@@ -1,3 +1,4 @@
+import { HttpResponseError } from '@inertiajs/core';
 import { useHttp } from '@inertiajs/react';
 import { useCallback, useState } from 'react';
 import { qrCode, recoveryCodes, secretKey } from '@/routes/two-factor';
@@ -78,7 +79,15 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
             setErrors([]);
             const codes = (await submit(recoveryCodes())) as string[];
             setRecoveryCodesList(codes);
-        } catch {
+        } catch (error) {
+            if (error instanceof HttpResponseError && error.response.status === 423) {
+                setErrors([
+                    'Confirm your password before viewing recovery codes.',
+                ]);
+
+                return;
+            }
+
             setErrors((prev) => [...prev, 'Failed to fetch recovery codes']);
             setRecoveryCodesList([]);
         }

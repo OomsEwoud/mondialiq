@@ -1,8 +1,10 @@
-import { Form } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import AlertError from '@/components/shared/alert-error';
 import { Button } from '@/components/ui/forms/button';
+import { confirm as confirmPassword } from '@/routes/password';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
 
 type Props = {
@@ -19,6 +21,9 @@ export default function TwoFactorRecoveryCodes({
     const [codesAreVisible, setCodesAreVisible] = useState<boolean>(false);
     const codesSectionRef = useRef<HTMLDivElement | null>(null);
     const canRegenerateCodes = recoveryCodesList.length > 0 && codesAreVisible;
+    const needsPasswordConfirmation = errors.includes(
+        'Confirm your password before viewing recovery codes.',
+    );
 
     const toggleCodesVisibility = useCallback(async () => {
         if (!codesAreVisible && !recoveryCodesList.length) {
@@ -36,12 +41,6 @@ export default function TwoFactorRecoveryCodes({
             });
         }
     }, [codesAreVisible, recoveryCodesList.length, fetchRecoveryCodes]);
-
-    useEffect(() => {
-        if (!recoveryCodesList.length) {
-            fetchRecoveryCodes();
-        }
-    }, [recoveryCodesList.length, fetchRecoveryCodes]);
 
     const RecoveryCodeIconComponent = codesAreVisible ? EyeOff : Eye;
 
@@ -103,7 +102,27 @@ export default function TwoFactorRecoveryCodes({
             >
                 <div className="mt-3 space-y-3">
                     {errors?.length ? (
-                        <AlertError errors={errors} />
+                        <div className="space-y-3">
+                            <AlertError errors={errors} />
+
+                            {needsPasswordConfirmation && (
+                                <Button
+                                    asChild
+                                    className="rounded-lg bg-blue-950 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                >
+                                    <Link
+                                        href={confirmPassword({
+                                            query: {
+                                                intended:
+                                                    EditAccountController.url(),
+                                            },
+                                        })}
+                                    >
+                                        Confirm password
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
                     ) : (
                         <>
                             <div
