@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Socialite;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Socialite\Concerns\HandlesSocialiteProviders;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -11,12 +12,16 @@ use Laravel\Socialite\Socialite;
 
 class CallbackController extends Controller
 {
+    use HandlesSocialiteProviders;
+
     public function __invoke(string $provider)
     {
-        abort_unless(in_array($provider, ['google', 'facebook'], true), 404);
+        $this->ensureSupportedProvider($provider);
 
         /** @var SocialiteUser $newUser */
-        $newUser = Socialite::driver($provider)->user();
+        $newUser = Socialite::driver($provider)
+            ->redirectUrl($this->callbackUrl($provider))
+            ->user();
         $email = $newUser->getEmail();
 
         abort_if(blank($email), 422, 'No email address was returned by the social provider.');
