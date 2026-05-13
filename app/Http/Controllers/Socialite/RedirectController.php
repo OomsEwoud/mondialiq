@@ -11,18 +11,10 @@ class RedirectController extends Controller
 {
     use HandlesSocialiteProviders;
 
-    public function __invoke(Request $request, string $provider)
+    public function __invoke(string $provider)
     {
         $this->ensureSupportedProvider($provider);
-        $callbackUrl = $this->callbackUrl($provider);
 
-        $request->session()->put(
-            $this->callbackUrlSessionKey($provider),
-            $callbackUrl,
-        );
-
-        return Socialite::driver($provider)
-            ->redirectUrl($callbackUrl)
-            ->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 }
