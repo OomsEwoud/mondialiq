@@ -1,18 +1,20 @@
 import { Form, Head } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
+import BackButton from '@/components/navigation/back-button';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { login } from '@/routes';
+import { home, login } from '@/routes';
 import { store } from '@/routes/register';
 
 export default function Register() {
     return (
         <>
             <Head title="Register" />
+
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -122,6 +124,10 @@ export default function Register() {
                     </>
                 )}
             </Form>
+
+            <div className="mt-6 flex justify-center border-t border-slate-100 pt-5">
+                <BackButton fallbackHref={home.url()} />
+            </div>
         </>
     );
 }

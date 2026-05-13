@@ -1,13 +1,14 @@
 import { Form, Head } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
+import BackButton from '@/components/navigation/back-button';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Checkbox } from '@/components/ui/forms/checkbox';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { register } from '@/routes';
+import { home, register } from '@/routes';
 import { redirect as authRedirect } from '@/routes/auth';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -182,6 +183,10 @@ export default function Login({
                     </>
                 )}
             </Form>
+
+            <div className="mt-6 flex justify-center border-t border-slate-100 pt-5">
+                <BackButton fallbackHref={home.url()} />
+            </div>
         </>
     );
 }
