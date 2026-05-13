@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Socialite\Concerns;
 
 trait HandlesSocialiteProviders
 {
+    private function callbackUrlSessionKey(string $provider): string
+    {
+        return "socialite.{$provider}.redirect_url";
+    }
+
     private function ensureSupportedProvider(string $provider): void
     {
         abort_unless(in_array($provider, ['google', 'facebook'], true), 404);
