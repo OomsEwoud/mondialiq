@@ -1,4 +1,5 @@
 import { useFlashToast } from '@/hooks/use-flash-toast';
+import { CircleCheck } from 'lucide-react';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 function Toaster({ ...props }: ToasterProps) {
@@ -8,7 +9,24 @@ function Toaster({ ...props }: ToasterProps) {
         <Sonner
             theme="light"
             className="toaster group"
-            position="bottom-right"
+            position="top-right"
+            richColors
+            icons={{
+                success: (
+                    <span className="flex size-6 items-center justify-center rounded-full bg-lime-100 text-green-800 ring-1 ring-white/70">
+                        <CircleCheck className="size-4 stroke-[3]" />
+                    </span>
+                ),
+            }}
+            toastOptions={{
+                classNames: {
+                    toast: 'rounded-lg border shadow-lg',
+                    success:
+                        'border-green-700 bg-green-600 text-white shadow-xl shadow-green-950/30',
+                    title: 'font-black',
+                    icon: 'size-6',
+                },
+            }}
             style={
                 {
                     '--normal-bg': 'var(--popover)',
