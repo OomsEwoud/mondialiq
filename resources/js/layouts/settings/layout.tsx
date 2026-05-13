@@ -1,16 +1,16 @@
 import { Link } from '@inertiajs/react';
 import { UserRound } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
+import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import { Button } from '@/components/ui/forms/button';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
-import { edit } from '@/routes/profile';
 import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
-        href: edit(),
+        href: EditAccountController(),
         icon: UserRound,
     },
 ];

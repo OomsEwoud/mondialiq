@@ -1,5 +1,6 @@
 import { Link, router } from '@inertiajs/react';
 import { LogOut, Trophy, UserRound } from 'lucide-react';
+import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -9,7 +10,6 @@ import {
 import { UserInfo } from '@/components/user/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
 import type { User } from '@/types';
 
 type Props = {
@@ -39,7 +39,7 @@ export function UserMenuContent({ user }: Props) {
                 >
                     <Link
                         className="flex w-full cursor-pointer items-center gap-2"
-                        href={edit()}
+                        href={EditAccountController()}
                         prefetch
                         onClick={cleanup}
                     >

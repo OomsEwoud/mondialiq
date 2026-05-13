@@ -8,7 +8,9 @@ import {
     UserRound,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
+import UpdateAccountController from '@/actions/App/Http/Controllers/Settings/UpdateAccountController';
+import UpdatePasswordController from '@/actions/App/Http/Controllers/Settings/UpdatePasswordController';
 import PasswordInput from '@/components/auth/password/password-input';
 import TwoFactorRecoveryCodes from '@/components/auth/two-factor/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/auth/two-factor/two-factor-setup-modal';
@@ -19,9 +21,7 @@ import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import DeleteUser from '@/components/user/delete-user';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
-import { edit } from '@/routes/profile';
 import { disable, enable } from '@/routes/two-factor';
-import { update as updatePassword } from '@/routes/user-password';
 import { send } from '@/routes/verification';
 
 type Props = {
@@ -129,7 +129,7 @@ export default function Profile({
                     description="Keep your name and email address up to date."
                 >
                     <Form
-                        {...ProfileController.update.form()}
+                        {...UpdateAccountController.form()}
                         options={{ preserveScroll: true }}
                         className="space-y-5"
                     >
@@ -240,7 +240,7 @@ export default function Profile({
                     description="Use a strong password that you do not reuse anywhere else."
                 >
                     <Form
-                        {...updatePassword.form()}
+                        {...UpdatePasswordController.form()}
                         options={{ preserveScroll: true }}
                         resetOnError={[
                             'password',
@@ -464,7 +464,7 @@ Profile.layout = {
     breadcrumbs: [
         {
             title: 'Profile settings',
-            href: edit(),
+            href: EditAccountController(),
         },
     ],
 };
