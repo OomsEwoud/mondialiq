@@ -4,6 +4,7 @@ import {
     KeyRound,
     LockKeyhole,
     MailWarning,
+    Shield,
     ShieldCheck,
     UserRound,
 } from 'lucide-react';
@@ -114,6 +115,7 @@ export default function Profile({
     }
 
     const user = auth.user;
+    const isSsoOnly = user.is_sso_only;
 
     return (
         <>
@@ -233,123 +235,154 @@ export default function Profile({
                     </Form>
                 </SettingsSection>
 
-                <SettingsSection
-                    icon={KeyRound}
-                    eyebrow="Password"
-                    title="Update password"
-                    description="Use a strong password that you do not reuse anywhere else."
-                >
-                    <Form
-                        {...UpdatePasswordController.form()}
-                        options={{ preserveScroll: true }}
-                        resetOnError={[
-                            'password',
-                            'password_confirmation',
-                            'current_password',
-                        ]}
-                        resetOnSuccess
-                        onError={(errors) => {
-                            if (errors.password) {
-                                passwordInput.current?.focus();
-                            }
-
-                            if (errors.current_password) {
-                                currentPasswordInput.current?.focus();
-                            }
-                        }}
-                        className="space-y-5"
+                {isSsoOnly ? (
+                    <SettingsSection
+                        icon={Shield}
+                        eyebrow="Security"
+                        title="External sign-in"
+                        description="Your account uses Google or Facebook for authentication."
                     >
-                        {({ errors, processing }) => (
-                            <>
-                                <div className="grid items-start gap-5 lg:grid-cols-3">
-                                    <div className="flex min-w-0 flex-col gap-2">
-                                        <Label
-                                            htmlFor="current_password"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
-                                        >
-                                            Current password
-                                        </Label>
-                                        <PasswordInput
-                                            id="current_password"
-                                            ref={currentPasswordInput}
-                                            name="current_password"
-                                            className={fieldClassName}
-                                            autoComplete="current-password"
-                                            placeholder="••••••••••••"
-                                        />
-                                        <div className="min-h-10">
-                                            <InputError
-                                                message={
-                                                    errors.current_password
-                                                }
-                                                className="leading-5"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="flex min-w-0 flex-col gap-2">
-                                        <Label
-                                            htmlFor="password"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
-                                        >
-                                            New password
-                                        </Label>
-                                        <PasswordInput
-                                            id="password"
-                                            ref={passwordInput}
-                                            name="password"
-                                            className={fieldClassName}
-                                            autoComplete="new-password"
-                                            placeholder="Min. 8 characters"
-                                        />
-                                        <div className="min-h-10">
-                                            <InputError
-                                                message={errors.password}
-                                                className="leading-5"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="flex min-w-0 flex-col gap-2">
-                                        <Label
-                                            htmlFor="password_confirmation"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
-                                        >
-                                            Confirm password
-                                        </Label>
-                                        <PasswordInput
-                                            id="password_confirmation"
-                                            name="password_confirmation"
-                                            className={fieldClassName}
-                                            autoComplete="new-password"
-                                            placeholder="Repeat new password"
-                                        />
-                                        <div className="min-h-10">
-                                            <InputError
-                                                message={
-                                                    errors.password_confirmation
-                                                }
-                                                className="leading-5"
-                                            />
-                                        </div>
-                                    </div>
+                        <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <p className="text-sm font-black text-blue-950">
+                                        Protected by your sign-in provider
+                                    </p>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                                        MondialIQ does not store a local
+                                        password for this account. Password and
+                                        two-factor settings are managed through
+                                        Google or Facebook.
+                                    </p>
                                 </div>
+                                <Badge
+                                    className="border-cyan-200 bg-white text-cyan-700"
+                                    variant="outline"
+                                >
+                                    SSO only
+                                </Badge>
+                            </div>
+                        </div>
+                    </SettingsSection>
+                ) : (
+                    <SettingsSection
+                        icon={KeyRound}
+                        eyebrow="Password"
+                        title="Update password"
+                        description="Use a strong password that you do not reuse anywhere else."
+                    >
+                        <Form
+                            {...UpdatePasswordController.form()}
+                            options={{ preserveScroll: true }}
+                            resetOnError={[
+                                'password',
+                                'password_confirmation',
+                                'current_password',
+                            ]}
+                            resetOnSuccess
+                            onError={(errors) => {
+                                if (errors.password) {
+                                    passwordInput.current?.focus();
+                                }
 
-                                <div className="flex justify-end">
-                                    <Button
-                                        disabled={processing}
-                                        data-test="update-password-button"
-                                        className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
-                                    >
-                                        Save password
-                                    </Button>
-                                </div>
-                            </>
-                        )}
-                    </Form>
-                </SettingsSection>
+                                if (errors.current_password) {
+                                    currentPasswordInput.current?.focus();
+                                }
+                            }}
+                            className="space-y-5"
+                        >
+                            {({ errors, processing }) => (
+                                <>
+                                    <div className="grid items-start gap-5 lg:grid-cols-3">
+                                        <div className="flex min-w-0 flex-col gap-2">
+                                            <Label
+                                                htmlFor="current_password"
+                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            >
+                                                Current password
+                                            </Label>
+                                            <PasswordInput
+                                                id="current_password"
+                                                ref={currentPasswordInput}
+                                                name="current_password"
+                                                className={fieldClassName}
+                                                autoComplete="current-password"
+                                                placeholder="••••••••••••"
+                                            />
+                                            <div className="min-h-10">
+                                                <InputError
+                                                    message={
+                                                        errors.current_password
+                                                    }
+                                                    className="leading-5"
+                                                />
+                                            </div>
+                                        </div>
 
-                {canManageTwoFactor && (
+                                        <div className="flex min-w-0 flex-col gap-2">
+                                            <Label
+                                                htmlFor="password"
+                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            >
+                                                New password
+                                            </Label>
+                                            <PasswordInput
+                                                id="password"
+                                                ref={passwordInput}
+                                                name="password"
+                                                className={fieldClassName}
+                                                autoComplete="new-password"
+                                                placeholder="Min. 8 characters"
+                                            />
+                                            <div className="min-h-10">
+                                                <InputError
+                                                    message={errors.password}
+                                                    className="leading-5"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex min-w-0 flex-col gap-2">
+                                            <Label
+                                                htmlFor="password_confirmation"
+                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            >
+                                                Confirm password
+                                            </Label>
+                                            <PasswordInput
+                                                id="password_confirmation"
+                                                name="password_confirmation"
+                                                className={fieldClassName}
+                                                autoComplete="new-password"
+                                                placeholder="Repeat new password"
+                                            />
+                                            <div className="min-h-10">
+                                                <InputError
+                                                    message={
+                                                        errors.password_confirmation
+                                                    }
+                                                    className="leading-5"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex justify-end">
+                                        <Button
+                                            disabled={processing}
+                                            data-test="update-password-button"
+                                            className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                        >
+                                            Save password
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
+                        </Form>
+                    </SettingsSection>
+                )}
+
+                {canManageTwoFactor && !isSsoOnly && (
                     <SettingsSection
                         icon={ShieldCheck}
                         eyebrow="Sign-in"
