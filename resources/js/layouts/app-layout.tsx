@@ -52,6 +52,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                                     undefined
                                                 }
                                                 alt={auth.user.name}
+                                                className="object-cover"
                                             />
                                             <AvatarFallback className="bg-slate-100 text-slate-600">
                                                 {getInitials(auth.user.name)}

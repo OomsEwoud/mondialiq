@@ -16,17 +16,14 @@ import PasswordInput from '@/components/auth/password/password-input';
 import TwoFactorRecoveryCodes from '@/components/auth/two-factor/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/auth/two-factor/two-factor-setup-modal';
 import InputError from '@/components/forms/input-error';
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
+import AvatarCropper from '@/components/user/avatar-cropper';
 import DeleteUser from '@/components/user/delete-user';
-import { useInitials } from '@/hooks/use-initials';
+import ProfileAvatarField from '@/components/user/profile-avatar-field';
+import { useAvatarUpload } from '@/hooks/use-avatar-upload';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { disable, enable } from '@/routes/two-factor';
 import { send } from '@/routes/verification';
@@ -90,7 +87,6 @@ export default function Profile({
     twoFactorEnabled = false,
 }: Props) {
     const { auth } = usePage().props;
-    const getInitials = useInitials();
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
@@ -105,6 +101,7 @@ export default function Profile({
         fetchRecoveryCodes,
         errors,
     } = useTwoFactorAuth();
+    const avatarUpload = useAvatarUpload();
 
     const [showSetupModal, setShowSetupModal] = useState<boolean>(false);
     const prevTwoFactorEnabled = useRef(twoFactorEnabled);
@@ -149,48 +146,17 @@ export default function Profile({
                     >
                         {({ processing, errors }) => (
                             <>
-                                <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <Avatar className="size-16 border-2 border-white shadow-sm ring-1 ring-slate-200">
-                                            <AvatarImage
-                                                src={user.avatar ?? undefined}
-                                                alt={user.name}
-                                            />
-                                            <AvatarFallback className="bg-cyan-100 text-lg font-black text-blue-950">
-                                                {getInitials(user.name)}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="text-sm font-black text-blue-950">
-                                                Profile photo
-                                            </p>
-                                            <p className="mt-1 text-sm leading-6 text-slate-600">
-                                                Upload a square image. SSO
-                                                avatars are used until you add
-                                                your own photo.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="min-w-0 sm:w-64">
-                                        <Label
-                                            htmlFor="avatar"
-                                            className="sr-only"
-                                        >
-                                            Profile photo
-                                        </Label>
-                                        <Input
-                                            id="avatar"
-                                            type="file"
-                                            name="avatar"
-                                            accept="image/*"
-                                            className="h-11 cursor-pointer rounded-lg border-slate-300 bg-white text-slate-900 shadow-none file:mr-3 file:cursor-pointer file:rounded-md file:bg-cyan-100 file:px-3 file:py-1 file:text-xs file:font-black file:text-blue-950 hover:file:bg-cyan-200 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
-                                        />
-                                        <InputError
-                                            message={errors.avatar}
-                                            className="mt-2 leading-5"
-                                        />
-                                    </div>
-                                </div>
+                                <ProfileAvatarField
+                                    avatarInputRef={
+                                        avatarUpload.croppedAvatarInput
+                                    }
+                                    error={errors.avatar}
+                                    onAvatarChange={
+                                        avatarUpload.handleAvatarChange
+                                    }
+                                    previewUrl={avatarUpload.avatarPreview}
+                                    user={user}
+                                />
 
                                 <div
                                     className={
@@ -581,6 +547,14 @@ export default function Profile({
 
                 <DeleteUser user={user} />
             </div>
+
+            <AvatarCropper
+                fileName={avatarUpload.selectedAvatarName}
+                imageSrc={avatarUpload.cropperImage}
+                open={avatarUpload.cropperOpen}
+                onApply={avatarUpload.handleCroppedAvatar}
+                onOpenChange={avatarUpload.setCropperOpen}
+            />
         </>
     );
 }
