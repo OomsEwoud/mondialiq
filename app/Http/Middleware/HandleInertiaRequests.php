@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                             'name',
                             'email',
                             'email_verified_at',
+                            'social_provider',
                             'created_at',
                             'updated_at',
                         ]),
@@ -54,7 +55,7 @@ class HandleInertiaRequests extends Middleware
                         ),
                         'is_sso_only' => blank(
                             $request->user()->getAttribute('password'),
-                        ),
+                        ) && filled($request->user()->getAttribute('social_provider')),
                     ]
                     : null,
             ],

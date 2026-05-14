@@ -128,7 +128,11 @@ export default function Profile({
                     icon={UserRound}
                     eyebrow="Profile"
                     title="Profile information"
-                    description="Keep your name and email address up to date."
+                    description={
+                        isSsoOnly
+                            ? 'Keep your display name up to date.'
+                            : 'Keep your name and email address up to date.'
+                    }
                 >
                     <Form
                         {...UpdateAccountController.form()}
@@ -137,7 +141,13 @@ export default function Profile({
                     >
                         {({ processing, errors }) => (
                             <>
-                                <div className="grid items-start gap-5 md:grid-cols-2">
+                                <div
+                                    className={
+                                        isSsoOnly
+                                            ? 'grid items-start gap-5'
+                                            : 'grid items-start gap-5 md:grid-cols-2'
+                                    }
+                                >
                                     <div className="flex min-w-0 flex-col gap-2">
                                         <Label
                                             htmlFor="name"
@@ -161,30 +171,61 @@ export default function Profile({
                                         </div>
                                     </div>
 
-                                    <div className="flex min-w-0 flex-col gap-2">
-                                        <Label
-                                            htmlFor="email"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
-                                        >
-                                            Email address
-                                        </Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            className={fieldClassName}
-                                            defaultValue={user.email}
-                                            name="email"
-                                            autoComplete="username"
-                                            placeholder="name@example.com"
-                                        />
-                                        <div className="min-h-10">
-                                            <InputError
-                                                message={errors.email}
-                                                className="leading-5"
+                                    {!isSsoOnly && (
+                                        <div className="flex min-w-0 flex-col gap-2">
+                                            <Label
+                                                htmlFor="email"
+                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            >
+                                                Email address
+                                            </Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                className={fieldClassName}
+                                                defaultValue={user.email}
+                                                name="email"
+                                                autoComplete="username"
+                                                placeholder="name@example.com"
                                             />
+                                            <div className="min-h-10">
+                                                <InputError
+                                                    message={errors.email}
+                                                    className="leading-5"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
+
+                                {isSsoOnly && (
+                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                            <div>
+                                                <p className="text-xs font-black tracking-widest text-slate-500 uppercase">
+                                                    Email address
+                                                </p>
+                                                <p className="mt-1 text-sm font-black text-blue-950">
+                                                    {user.email}
+                                                </p>
+                                            </div>
+                                            <Badge
+                                                className="border-cyan-200 bg-white text-cyan-700"
+                                                variant="outline"
+                                            >
+                                                Managed by{' '}
+                                                {user.social_provider ??
+                                                    'provider'}
+                                            </Badge>
+                                        </div>
+                                        <p className="mt-3 text-sm leading-6 text-slate-600">
+                                            Your email address is managed by
+                                            your sign-in provider. Change it in
+                                            Google or Facebook to keep your SSO
+                                            account linked correctly.
+                                        </p>
+                                    </div>
+                                )}
 
                                 {mustVerifyEmail &&
                                     user.email_verified_at === null && (

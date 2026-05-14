@@ -17,6 +17,15 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        if (
+            blank($this->user()->getAttribute('password')) &&
+            filled($this->user()->getAttribute('social_provider'))
+        ) {
+            return [
+                'name' => $this->nameRules(),
+            ];
+        }
+
         return $this->profileRules($this->user()->id);
     }
 }

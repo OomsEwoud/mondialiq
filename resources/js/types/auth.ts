@@ -6,6 +6,7 @@ export type User = {
     email_verified_at: string | null;
     has_password: boolean;
     is_sso_only: boolean;
+    social_provider: string | null;
     two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
