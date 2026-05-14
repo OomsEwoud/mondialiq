@@ -133,6 +133,18 @@
 }
 
 @layer base {
+    html,
+    body,
+    #app {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    #app {
+        min-height: 100vh;
+    }
+
     * {
         @apply border-border;
     }

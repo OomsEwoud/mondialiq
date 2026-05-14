@@ -24,9 +24,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const getInitials = useInitials();
 
     return (
-        <div className="light min-h-screen bg-slate-50 font-sans text-slate-900">
+        <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
             <header className="sticky top-0 z-50 border-b border-blue-900 bg-[#1a237e]">
-                <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
+                <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6">
                     <Link href="/" className="group flex items-center">
                         <AppLogo
                             textClassName="hidden text-white sm:inline"
@@ -89,7 +89,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 )}
             </header>
-            <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
+            <main className="mx-auto w-full max-w-5xl min-w-0 px-6 py-8">
+                {children}
+            </main>
             <Footer />
         </div>
     );

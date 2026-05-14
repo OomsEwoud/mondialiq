@@ -24,6 +24,7 @@ type Props = {
 export default function DeleteUser({ user }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const requiresPassword = user?.has_password ?? true;
+    const providerName = formatProviderName(user?.social_provider);
 
     return (
         <section className="rounded-xl border border-red-200 bg-white p-5 shadow-sm">
@@ -68,7 +69,7 @@ export default function DeleteUser({ user }: Props) {
                             and data will also be permanently deleted.
                             {requiresPassword
                                 ? ' Please enter your password to confirm you would like to permanently delete your account.'
-                                : ' This SSO-only account does not have a local password, so confirm only if you are completely sure.'}
+                                : ' Only continue if you are completely sure.'}
                         </DialogDescription>
 
                         <Form
@@ -106,12 +107,11 @@ export default function DeleteUser({ user }: Props) {
                                         </div>
                                     ) : (
                                         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
-                                            Your sign-in is managed by{' '}
-                                            {user?.social_provider ??
-                                                'your provider'}
-                                            . Deleting this account removes it
-                                            from MondialIQ, but does not change
-                                            your Google or Facebook account.
+                                            This only deletes your MondialIQ
+                                            account. It will not delete your
+                                            {providerName
+                                                ? ` ${providerName} account.`
+                                                : ' login account.'}
                                         </div>
                                     )}
 
@@ -150,4 +150,12 @@ export default function DeleteUser({ user }: Props) {
             </div>
         </section>
     );
+}
+
+function formatProviderName(provider?: string | null) {
+    if (!provider) {
+        return null;
+    }
+
+    return provider.charAt(0).toUpperCase() + provider.slice(1);
 }

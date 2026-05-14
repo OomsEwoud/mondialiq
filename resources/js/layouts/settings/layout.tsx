@@ -19,7 +19,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
             <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div>
@@ -64,7 +64,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                 </div>
             </div>
 
-            <section className="space-y-6">{children}</section>
+            <section className="min-w-0 space-y-6">{children}</section>
         </div>
     );
 }

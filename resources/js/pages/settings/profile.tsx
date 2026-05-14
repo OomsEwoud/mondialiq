@@ -4,7 +4,6 @@ import {
     KeyRound,
     LockKeyhole,
     MailWarning,
-    Shield,
     ShieldCheck,
     UserRound,
 } from 'lucide-react';
@@ -55,7 +54,7 @@ function SettingsSection({
     children,
 }: SettingsSectionProps) {
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex gap-4">
                     <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-blue-950">
@@ -127,7 +126,7 @@ export default function Profile({
 
             <h1 className="sr-only">Profile settings</h1>
 
-            <div className="space-y-6">
+            <div className="min-w-0 space-y-6">
                 <SettingsSection
                     icon={UserRound}
                     eyebrow="Profile"
@@ -218,35 +217,6 @@ export default function Profile({
                                     )}
                                 </div>
 
-                                {isSsoOnly && (
-                                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                            <div>
-                                                <p className="text-xs font-black tracking-widest text-slate-500 uppercase">
-                                                    Email address
-                                                </p>
-                                                <p className="mt-1 text-sm font-black text-blue-950">
-                                                    {user.email}
-                                                </p>
-                                            </div>
-                                            <Badge
-                                                className="border-cyan-200 bg-white text-cyan-700"
-                                                variant="outline"
-                                            >
-                                                Managed by{' '}
-                                                {user.social_provider ??
-                                                    'provider'}
-                                            </Badge>
-                                        </div>
-                                        <p className="mt-3 text-sm leading-6 text-slate-600">
-                                            Your email address is managed by
-                                            your sign-in provider. Change it in
-                                            Google or Facebook to keep your SSO
-                                            account linked correctly.
-                                        </p>
-                                    </div>
-                                )}
-
                                 {mustVerifyEmail &&
                                     user.email_verified_at === null && (
                                         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
@@ -296,36 +266,7 @@ export default function Profile({
                     </Form>
                 </SettingsSection>
 
-                {isSsoOnly ? (
-                    <SettingsSection
-                        icon={Shield}
-                        eyebrow="Security"
-                        title="External sign-in"
-                        description="Your account uses Google or Facebook for authentication."
-                    >
-                        <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4">
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <p className="text-sm font-black text-blue-950">
-                                        Protected by your sign-in provider
-                                    </p>
-                                    <p className="mt-1 text-sm leading-6 text-slate-600">
-                                        MondialIQ does not store a local
-                                        password for this account. Password and
-                                        two-factor settings are managed through
-                                        Google or Facebook.
-                                    </p>
-                                </div>
-                                <Badge
-                                    className="border-cyan-200 bg-white text-cyan-700"
-                                    variant="outline"
-                                >
-                                    SSO only
-                                </Badge>
-                            </div>
-                        </div>
-                    </SettingsSection>
-                ) : (
+                {!isSsoOnly && (
                     <SettingsSection
                         icon={KeyRound}
                         eyebrow="Password"
