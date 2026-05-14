@@ -155,6 +155,9 @@ export default function Profile({
                                         avatarUpload.handleAvatarChange
                                     }
                                     previewUrl={avatarUpload.avatarPreview}
+                                    selectedFileName={
+                                        avatarUpload.selectedAvatarName
+                                    }
                                     user={user}
                                 />
 

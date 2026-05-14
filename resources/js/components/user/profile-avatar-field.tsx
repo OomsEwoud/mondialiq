@@ -1,4 +1,5 @@
 import type { ChangeEvent, RefObject } from 'react';
+import { CheckCircle2, ImagePlus } from 'lucide-react';
 import InputError from '@/components/forms/input-error';
 import {
     Avatar,
@@ -15,6 +16,7 @@ type ProfileAvatarFieldProps = {
     error?: string;
     onAvatarChange: (event: ChangeEvent<HTMLInputElement>) => void;
     previewUrl: string | null;
+    selectedFileName: string;
     user: User;
 };
 
@@ -23,10 +25,12 @@ export default function ProfileAvatarField({
     error,
     onAvatarChange,
     previewUrl,
+    selectedFileName,
     user,
 }: ProfileAvatarFieldProps) {
     const getInitials = useInitials();
     const avatarSrc = previewUrl ?? user.avatar ?? undefined;
+    const hasSelectedAvatar = Boolean(previewUrl);
 
     return (
         <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 lg:flex-row lg:items-start lg:justify-between">
@@ -60,9 +64,32 @@ export default function ProfileAvatarField({
                     id="avatar"
                     type="file"
                     accept="image/*"
-                    className="h-11 cursor-pointer rounded-lg border-slate-300 bg-white text-slate-900 shadow-none file:mr-3 file:cursor-pointer file:rounded-md file:bg-cyan-100 file:px-3 file:py-1 file:text-xs file:font-black file:text-blue-950 hover:file:bg-cyan-200 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                    className="sr-only"
                     onChange={onAvatarChange}
                 />
+                <label
+                    htmlFor="avatar"
+                    className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 shadow-sm transition-colors focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-200 hover:border-cyan-300 hover:bg-cyan-50"
+                >
+                    <span className="flex min-w-0 items-center gap-3">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-blue-950">
+                            <ImagePlus className="size-5" />
+                        </span>
+                        <span className="min-w-0">
+                            <span className="block text-sm font-black text-blue-950">
+                                Choose image
+                            </span>
+                            <span className="block truncate text-xs font-semibold text-slate-500">
+                                {hasSelectedAvatar
+                                    ? selectedFileName
+                                    : 'No image selected'}
+                            </span>
+                        </span>
+                    </span>
+                    {hasSelectedAvatar && (
+                        <CheckCircle2 className="size-5 shrink-0 text-green-600" />
+                    )}
+                </label>
                 <input
                     ref={avatarInputRef}
                     type="file"
