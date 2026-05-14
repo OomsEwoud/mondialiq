@@ -6,6 +6,7 @@ import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Label } from '@/components/ui/forms/label';
+import type { User } from '@/types';
 import {
     Dialog,
     DialogClose,
@@ -16,8 +17,13 @@ import {
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
 
-export default function DeleteUser() {
+type Props = {
+    user?: User;
+};
+
+export default function DeleteUser({ user }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
+    const requiresPassword = user?.has_password ?? true;
 
     return (
         <section className="rounded-xl border border-red-200 bg-white p-5 shadow-sm">
@@ -59,9 +65,10 @@ export default function DeleteUser() {
                         </DialogTitle>
                         <DialogDescription>
                             Once your account is deleted, all of its resources
-                            and data will also be permanently deleted. Please
-                            enter your password to confirm you would like to
-                            permanently delete your account.
+                            and data will also be permanently deleted.
+                            {requiresPassword
+                                ? ' Please enter your password to confirm you would like to permanently delete your account.'
+                                : ' This SSO-only account does not have a local password, so confirm only if you are completely sure.'}
                         </DialogDescription>
 
                         <Form
@@ -75,25 +82,38 @@ export default function DeleteUser() {
                         >
                             {({ resetAndClearErrors, processing, errors }) => (
                                 <>
-                                    <div className="grid gap-2">
-                                        <Label
-                                            htmlFor="password"
-                                            className="sr-only"
-                                        >
-                                            Password
-                                        </Label>
+                                    {requiresPassword ? (
+                                        <div className="grid gap-2">
+                                            <Label
+                                                htmlFor="password"
+                                                className="sr-only"
+                                            >
+                                                Password
+                                            </Label>
 
-                                        <PasswordInput
-                                            id="password"
-                                            name="password"
-                                            ref={passwordInput}
-                                            className="h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
-                                            placeholder="Password"
-                                            autoComplete="current-password"
-                                        />
+                                            <PasswordInput
+                                                id="password"
+                                                name="password"
+                                                ref={passwordInput}
+                                                className="h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                                placeholder="Password"
+                                                autoComplete="current-password"
+                                            />
 
-                                        <InputError message={errors.password} />
-                                    </div>
+                                            <InputError
+                                                message={errors.password}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+                                            Your sign-in is managed by{' '}
+                                            {user?.social_provider ??
+                                                'your provider'}
+                                            . Deleting this account removes it
+                                            from MondialIQ, but does not change
+                                            your Google or Facebook account.
+                                        </div>
+                                    )}
 
                                     <DialogFooter className="gap-2">
                                         <DialogClose asChild>

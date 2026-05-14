@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -35,27 +37,36 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $avatar = $user?->getAttribute('avatar');
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user()
+                'user' => $user
                     ? [
-                        ...$request->user()->only([
+                        ...$user->only([
                             'id',
                             'name',
                             'email',
                             'email_verified_at',
                             'social_provider',
+                            'avatar_type',
                             'created_at',
                             'updated_at',
                         ]),
+                        'avatar' => $avatar
+                            ? (Str::startsWith($avatar, ['http://', 'https://'])
+                                ? $avatar
+                                : Storage::url($avatar))
+                            : null,
                         'has_password' => filled(
-                            $request->user()->getAttribute('password'),
+                            $user->getAttribute('password'),
                         ),
                         'is_sso_only' => blank(
-                            $request->user()->getAttribute('password'),
-                        ) && filled($request->user()->getAttribute('social_provider')),
+                            $user->getAttribute('password'),
+                        ) && filled($user->getAttribute('social_provider')),
                     ]
                     : null,
             ],

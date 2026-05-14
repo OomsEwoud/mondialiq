@@ -23,6 +23,7 @@ class ProfileUpdateRequest extends FormRequest
         ) {
             return [
                 'name' => $this->nameRules(),
+                'avatar' => $this->avatarRules(),
             ];
         }
 

@@ -47,7 +47,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                     >
                                         <Avatar className="h-10 w-10 border-2 border-slate-200">
                                             <AvatarImage
-                                                src={auth.user.avatar}
+                                                src={
+                                                    auth.user.avatar ??
+                                                    undefined
+                                                }
                                                 alt={auth.user.name}
                                             />
                                             <AvatarFallback className="bg-slate-100 text-slate-600">

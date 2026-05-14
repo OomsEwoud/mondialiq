@@ -36,13 +36,20 @@ class CallbackController extends Controller
             $user->password = null;
         }
 
-        $user->forceFill([
+        $attributes = [
             'email' => $email,
             'name' => $newUser->getName() ?: $newUser->getNickname() ?: $user->getAttribute('name') ?: $email,
             'email_verified_at' => $user->getAttribute('email_verified_at') ?? now(),
             'social_provider' => $provider,
             'social_provider_id' => $providerId,
-        ])->save();
+        ];
+
+        if (blank($user->getAttribute('avatar')) && filled($newUser->getAvatar())) {
+            $attributes['avatar'] = $newUser->getAvatar();
+            $attributes['avatar_type'] = $provider;
+        }
+
+        $user->forceFill($attributes)->save();
 
         Auth::login($user);
 
