@@ -3,14 +3,15 @@
 namespace App\Queries\Fixture;
 
 use App\Models\Fixture;
+use Illuminate\Database\Eloquent\Builder;
 
 class FixtureQuery
 {
     public function __construct(protected int $leagueId, protected int $season)
     {
     }
-    
-    public function build(array $filters)
+
+    public function build(array $filters): Builder
     {
         return Fixture::query()
             ->where('league_id', $this->leagueId)
