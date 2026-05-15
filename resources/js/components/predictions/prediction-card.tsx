@@ -1,9 +1,9 @@
 import PredictionMatchSummary from '@/components/predictions/prediction-match-summary';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
-import type { PredictionMatch } from '@/types/prediction';
+import type { Match } from '@/types/match';
 
 interface Props {
-    match: PredictionMatch;
+    match: Match;
 }
 
 export default function PredictionCard({ match }: Props) {
@@ -11,7 +11,7 @@ export default function PredictionCard({ match }: Props) {
         <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <PredictionMatchSummary match={match} />
-                <PredictionStatusAction available={match.available} />
+                <PredictionStatusAction available={Boolean(match.prediction)} />
             </div>
         </div>
     );

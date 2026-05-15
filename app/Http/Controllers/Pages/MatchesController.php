@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\FixtureResource;
 use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
+use App\Services\Fixture\FixturePaginationService;
 use App\Services\Helper\HelperService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,10 +15,12 @@ class MatchesController extends Controller
     protected int $leagueId;
     protected int $season;
 
-    public function __construct(protected HelperService $service)
-    {
+    public function __construct(
+        protected HelperService $service,
+        protected FixturePaginationService $paginationService,
+    ) {
         $this->leagueId = League::where(
-            'external_id', 
+            'external_id',
             config('services.api_football.league_id')
         )->value('id');
 
@@ -40,10 +42,9 @@ class MatchesController extends Controller
             $filters['round'],
         );
 
-        $fixtures = $query->build($queryFilters)
-            ->paginate(10)
-            ->withQueryString()
-            ->through(fn ($fixture) => FixtureResource::make($fixture)->resolve());
+        $fixtures = $this->paginationService->paginate(
+            $query->build($queryFilters)
+        );
 
         return Inertia::render('matches', [
             'fixtures'      => $fixtures,

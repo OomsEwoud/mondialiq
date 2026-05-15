@@ -1,9 +1,8 @@
-export interface PredictionMatch {
-    id: number;
-    homeCode: string;
-    awayCode: string;
-    round: string;
-    date: string;
-    time: string;
-    available: boolean;
+import type { Match } from '@/types/match';
+
+export interface PredictionPageProps {
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
 }

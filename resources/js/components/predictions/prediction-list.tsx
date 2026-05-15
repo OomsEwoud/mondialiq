@@ -1,8 +1,8 @@
 import PredictionCard from '@/components/predictions/prediction-card';
-import type { PredictionMatch } from '@/types/prediction';
+import type { Match } from '@/types/match';
 
 interface Props {
-    matches: PredictionMatch[];
+    matches: Match[];
     emptyMessage: string;
 }
 
