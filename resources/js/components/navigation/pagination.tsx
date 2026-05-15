@@ -9,6 +9,15 @@ interface Props {
 }
 
 export default function Pagination({ links }: Props) {
+    const pageLinks = links.filter(
+        (link) =>
+            !link.label.includes('Previous') && !link.label.includes('Next'),
+    );
+
+    if (pageLinks.length <= 1) {
+        return null;
+    }
+
     return (
         <div className="mt-8 flex flex-wrap justify-center gap-1">
             {links.map((link, index) => (

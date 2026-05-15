@@ -9,7 +9,7 @@ class FixtureResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $prediction = $this->apiPrediction;
+        $prediction = $this->predictionForResponse();
 
         return [
             'id'              => $this->id,
@@ -31,5 +31,18 @@ class FixtureResource extends JsonResource
                 'awayWin' => $prediction->away_chance,
             ] : null,
         ];
+    }
+
+    private function predictionForResponse()
+    {
+        if ($this->relationLoaded('aiPrediction')) {
+            return $this->aiPrediction;
+        }
+
+        if ($this->relationLoaded('userPredictions')) {
+            return $this->userPredictions->first();
+        }
+
+        return $this->apiPrediction;
     }
 }

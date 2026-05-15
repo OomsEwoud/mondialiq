@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Enums\PredictionTypes;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
@@ -103,9 +104,11 @@ class Fixture extends Model
     {
         return $this->hasMany(PlayerFixtureStat::class);
     }
-    public function predictions()
+    
+    public function userPredictions(): HasMany
     {
-        return $this->hasMany(Prediction::class);
+        return $this->hasMany(Prediction::class)
+            ->where('source', PredictionTypes::User->value);
     }
 
     public function apiPrediction(): HasOne
@@ -115,8 +118,20 @@ class Fixture extends Model
             ->where('source', PredictionTypes::Api->value);
     }
 
+    public function aiPrediction(): HasOne
+    {
+        return $this->hasOne(Prediction::class)
+            ->whereNull('user_id')
+            ->where('source', PredictionTypes::Ai->value);
+    }
+
     public function fixtureOdds()
     {
         return $this->hasMany(FixtureOdd::class);
+    }
+
+    public function aiPredictions(): HasOne
+    {
+        return $this->aiPrediction();
     }
 }

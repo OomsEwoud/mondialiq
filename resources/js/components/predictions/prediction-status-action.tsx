@@ -5,9 +5,10 @@ import { show } from '@/routes/matches';
 
 interface Props {
     matchId: number;
+    label: string;
 }
 
-export default function PredictionStatusAction({ matchId }: Props) {
+export default function PredictionStatusAction({ matchId, label }: Props) {
     return (
         <Button
             asChild
@@ -15,7 +16,7 @@ export default function PredictionStatusAction({ matchId }: Props) {
         >
             <Link href={show.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
-                View insights
+                {label}
                 <ArrowRight className="h-4 w-4" />
             </Link>
         </Button>

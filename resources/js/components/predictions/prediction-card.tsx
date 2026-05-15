@@ -4,14 +4,18 @@ import type { Match } from '@/types/match';
 
 interface Props {
     match: Match;
+    actionLabel: string;
 }
 
-export default function PredictionCard({ match }: Props) {
+export default function PredictionCard({ match, actionLabel }: Props) {
     return (
         <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <PredictionMatchSummary match={match} />
-                <PredictionStatusAction matchId={match.id} />
+                <PredictionStatusAction
+                    matchId={match.id}
+                    label={actionLabel}
+                />
             </div>
         </div>
     );

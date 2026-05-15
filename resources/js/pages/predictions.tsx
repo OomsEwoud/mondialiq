@@ -13,8 +13,11 @@ export default function Predictions({ fixtures, mode }: Props) {
                 matches={fixtures.data}
                 emptyMessage={
                     mode === 'mine'
-                        ? 'You do not have any AI predictions yet.'
+                        ? 'You have not predicted any matches yet.'
                         : 'No AI predictions available yet.'
+                }
+                actionLabel={
+                    mode === 'mine' ? 'View prediction' : 'View insights'
                 }
             />
             <Pagination links={fixtures.links} />

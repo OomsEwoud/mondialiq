@@ -13,16 +13,30 @@ class FixtureQuery
 
     public function build(array $filters): Builder
     {
-        return Fixture::query()
+        $query = Fixture::query();
+
+        $query
             ->where('league_id', $this->leagueId)
             ->where('season', $this->season)
-            ->with(['homeTeam', 'awayTeam', 'apiPrediction'])
-            ->when($filters['round'], fn($q) => $q->where('round_name', $filters['round']))
-            ->when($filters['date'], fn($q) => $q->whereDate('match_date', $filters['date']))
-            ->when($filters['team'], fn($q) => $q->where(function ($q) use ($filters) {
+            ->with(['homeTeam', 'awayTeam', 'apiPrediction']);
+
+        if ($filters['round']) {
+            $query->where('round_name', $filters['round']);
+        }
+
+        if ($filters['date']) {
+            $query->whereDate('match_date', $filters['date']);
+        }
+
+        if ($filters['team']) {
+            $query->where(function (Builder $q) use ($filters) {
                 $q->whereHas('homeTeam', fn($q) => $q->where('name', 'like', "%{$filters['team']}%"))
                     ->orWhereHas('awayTeam', fn($q) => $q->where('name', 'like', "%{$filters['team']}%"));
-            }))
-            ->orderBy('match_date');
+            });
+        }
+
+        $query->orderBy('match_date');
+
+        return $query;
     }
 }

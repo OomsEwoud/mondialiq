@@ -4,9 +4,14 @@ import type { Match } from '@/types/match';
 interface Props {
     matches: Match[];
     emptyMessage: string;
+    actionLabel: string;
 }
 
-export default function PredictionList({ matches, emptyMessage }: Props) {
+export default function PredictionList({
+    matches,
+    emptyMessage,
+    actionLabel,
+}: Props) {
     if (matches.length === 0) {
         return (
             <div className="py-12 text-center text-sm text-slate-400">
@@ -18,7 +23,11 @@ export default function PredictionList({ matches, emptyMessage }: Props) {
     return (
         <div className="flex flex-col gap-4">
             {matches.map((match) => (
-                <PredictionCard key={match.id} match={match} />
+                <PredictionCard
+                    key={match.id}
+                    match={match}
+                    actionLabel={actionLabel}
+                />
             ))}
         </div>
     );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
+use App\Queries\Fixture\PredictionFixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,8 +15,10 @@ class PredictionsController extends Controller
     protected int $leagueId;
     protected int $season;
 
-    public function __construct(protected FixturePaginationService $paginationService)
-    {
+    public function __construct(
+        protected FixturePaginationService $paginationService,
+        protected PredictionFixtureQuery $predictionFixtureQuery,
+    ) {
         $this->leagueId = League::where(
             'external_id',
             config('services.api_football.league_id')
@@ -32,7 +35,13 @@ class PredictionsController extends Controller
             'round' => '',
             'date' => '',
             'team' => '',
-        ])->whereHas('apiPrediction');
+        ]);
+
+        $this->predictionFixtureQuery->applyMode(
+            $fixtureQuery,
+            $mode,
+            $request->user(),
+        );
 
         $fixtures = $this->paginationService->paginate($fixtureQuery);
 
