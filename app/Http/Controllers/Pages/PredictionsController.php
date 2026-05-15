@@ -32,11 +32,7 @@ class PredictionsController extends Controller
             'round' => '',
             'date' => '',
             'team' => '',
-        ]);
-
-        if ($mode === 'mine') {
-            $fixtureQuery->whereHas('apiPrediction');
-        }
+        ])->whereHas('apiPrediction');
 
         $fixtures = $this->paginationService->paginate($fixtureQuery);
 

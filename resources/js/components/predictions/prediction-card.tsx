@@ -11,7 +11,7 @@ export default function PredictionCard({ match }: Props) {
         <div className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <PredictionMatchSummary match={match} />
-                <PredictionStatusAction available={Boolean(match.prediction)} />
+                <PredictionStatusAction matchId={match.id} />
             </div>
         </div>
     );

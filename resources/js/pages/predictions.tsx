@@ -14,7 +14,7 @@ export default function Predictions({ fixtures, mode }: Props) {
                 emptyMessage={
                     mode === 'mine'
                         ? 'You do not have any AI predictions yet.'
-                        : 'No AI predictions found.'
+                        : 'No AI predictions available yet.'
                 }
             />
             <Pagination links={fixtures.links} />
