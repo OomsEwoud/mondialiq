@@ -1,6 +1,9 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, BarChart3, PencilLine, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { BarChart3, Sparkles } from 'lucide-react';
 import PredictionsController from '@/actions/App/Http/Controllers/Pages/PredictionsController';
+import UserPredictionButton from '@/components/matches/user-prediction-button';
+import UserPredictionModal from '@/components/matches/user-prediction-modal';
 import { Button } from '@/components/ui/forms/button';
 import { show } from '@/routes/matches';
 import type { Match } from '@/types/match';
@@ -10,9 +13,7 @@ interface Props {
 }
 
 export default function MatchPredictionActions({ match }: Props) {
-    const userPredictionLabel = match.userPrediction
-        ? 'Edit Prediction'
-        : 'Make Prediction';
+    const [predictionOpen, setPredictionOpen] = useState(false);
 
     return (
         <div className="mt-4 border-t border-slate-200 pt-4">
@@ -70,22 +71,18 @@ export default function MatchPredictionActions({ match }: Props) {
                         </span>
                     )}
 
-                    <Button
-                        asChild
-                        className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
-                    >
-                        <Link
-                            href={PredictionsController.url({
-                                query: { mode: 'mine' },
-                            })}
-                        >
-                            <PencilLine className="h-4 w-4" />
-                            {userPredictionLabel}
-                            <ArrowRight className="h-4 w-4" />
-                        </Link>
-                    </Button>
+                    <UserPredictionButton
+                        match={match}
+                        onClick={() => setPredictionOpen(true)}
+                    />
                 </div>
             </div>
+
+            <UserPredictionModal
+                match={match}
+                open={predictionOpen}
+                onOpenChange={setPredictionOpen}
+            />
         </div>
     );
 }
