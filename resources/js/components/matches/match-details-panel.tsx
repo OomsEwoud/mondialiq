@@ -1,8 +1,6 @@
-import { Link } from '@inertiajs/react';
-import { ArrowRight } from 'lucide-react';
 import MatchDetailMeta from '@/components/matches/match-detail-meta';
 import MatchDetailTeam from '@/components/matches/match-detail-team';
-import { show } from '@/routes/matches';
+import MatchPredictionActions from '@/components/matches/match-prediction-actions';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -12,6 +10,17 @@ interface Props {
 export default function MatchDetailsPanel({ match }: Props) {
     return (
         <div className="mt-4 rounded-lg border border-slate-100 bg-slate-50 p-4">
+            <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                    <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
+                        Match details
+                    </p>
+                    <h3 className="text-sm font-bold text-slate-900">
+                        {match.homeTeamShort} vs {match.awayTeamShort}
+                    </h3>
+                </div>
+            </div>
+
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                 <MatchDetailTeam
                     id={match.homeTeamId}
@@ -34,16 +43,7 @@ export default function MatchDetailsPanel({ match }: Props) {
             </div>
 
             <MatchDetailMeta match={match} />
-
-            <div className="mt-4 border-t border-slate-200 pt-4 text-center">
-                <Link
-                    href={show.url(match.id)}
-                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-700"
-                >
-                    More match info
-                    <ArrowRight className="h-4 w-4" />
-                </Link>
-            </div>
+            <MatchPredictionActions match={match} />
         </div>
     );
 }
