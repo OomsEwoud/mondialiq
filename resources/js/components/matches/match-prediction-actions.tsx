@@ -39,13 +39,12 @@ export default function MatchPredictionActions({ match }: Props) {
                         </Link>
                     </Button>
 
-                    <Button
-                        asChild={match.hasAiPrediction}
-                        disabled={!match.hasAiPrediction}
-                        variant="outline"
-                        className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900 disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-400"
-                    >
-                        {match.hasAiPrediction ? (
+                    {match.hasAiPrediction ? (
+                        <Button
+                            asChild
+                            variant="outline"
+                            className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900"
+                        >
                             <Link
                                 href={PredictionsController.url({
                                     query: { mode: 'ai' },
@@ -54,13 +53,22 @@ export default function MatchPredictionActions({ match }: Props) {
                                 <Sparkles className="h-4 w-4" />
                                 View AI Prediction
                             </Link>
-                        ) : (
-                            <>
+                        </Button>
+                    ) : (
+                        <span
+                            className="cursor-not-allowed"
+                            title="AI prediction is not available yet"
+                        >
+                            <Button
+                                disabled
+                                variant="outline"
+                                className="w-full justify-center border-slate-200 bg-slate-50 text-slate-400"
+                            >
                                 <Sparkles className="h-4 w-4" />
                                 AI Pending
-                            </>
-                        )}
-                    </Button>
+                            </Button>
+                        </span>
+                    )}
 
                     <Button
                         asChild
