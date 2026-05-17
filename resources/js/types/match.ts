@@ -29,5 +29,10 @@ export interface Match {
         homeWin: number;
         draw: number;
         awayWin: number;
-    };
+    } | null;
+    hasAiPrediction?: boolean;
+    userPrediction?: {
+        winnerId: number | null;
+        label: string;
+    } | null;
 }

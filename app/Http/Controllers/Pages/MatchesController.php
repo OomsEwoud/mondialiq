@@ -44,6 +44,16 @@ class MatchesController extends Controller
 
         $fixtures = $this->paginationService->paginate(
             $query->build($queryFilters)
+                ->with([
+                    'aiPrediction',
+                    'userPredictions' => fn ($query) => $query
+                        ->when(
+                            $request->user(),
+                            fn ($query, $user) => $query->whereBelongsTo($user),
+                            fn ($query) => $query->whereRaw('1 = 0'),
+                        )
+                        ->with('winner'),
+                ])
         );
 
         return Inertia::render('matches', [
