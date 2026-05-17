@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Prediction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -35,12 +36,16 @@ class FixtureResource extends JsonResource
             'hasAiPrediction' => (bool) $aiPrediction,
             'userPrediction'  => $userPrediction ? [
                 'winnerId' => $userPrediction->winner_id,
+                'outcome'  => $this->userPredictionOutcome($userPrediction),
                 'label'    => $this->userPredictionLabel($userPrediction),
+                'homeScore' => $userPrediction->home_goals,
+                'awayScore' => $userPrediction->away_goals,
+                'confidence' => $userPrediction->confidence,
             ] : null,
         ];
     }
 
-    private function predictionForResponse()
+    private function predictionForResponse(): ?Prediction
     {
         if ($this->relationLoaded('aiPrediction')) {
             return $this->aiPrediction;
@@ -53,7 +58,7 @@ class FixtureResource extends JsonResource
         return $this->apiPrediction;
     }
 
-    private function aiPredictionForResponse()
+    private function aiPredictionForResponse(): ?Prediction
     {
         if ($this->relationLoaded('aiPrediction')) {
             return $this->aiPrediction;
@@ -62,7 +67,7 @@ class FixtureResource extends JsonResource
         return null;
     }
 
-    private function userPredictionForResponse()
+    private function userPredictionForResponse(): ?Prediction
     {
         if ($this->relationLoaded('userPredictions')) {
             return $this->userPredictions->first();
@@ -71,7 +76,7 @@ class FixtureResource extends JsonResource
         return null;
     }
 
-    private function userPredictionLabel($prediction): string
+    private function userPredictionLabel(Prediction $prediction): string
     {
         if (! $prediction->winner_id) {
             return 'Draw';
@@ -85,6 +90,15 @@ class FixtureResource extends JsonResource
             $this->home_team_id => $this->homeTeam->name,
             $this->away_team_id => $this->awayTeam->name,
             default => 'Team pick',
+        };
+    }
+
+    private function userPredictionOutcome(Prediction $prediction): string
+    {
+        return match ($prediction->winner_id) {
+            $this->home_team_id => 'home',
+            $this->away_team_id => 'away',
+            default => 'draw',
         };
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\TeamDetailsController;
+use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
 use App\Http\Controllers\Socialite\RedirectController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::get('/matches', MatchesController::class)->name('matches');
 Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.show');
+Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::class)
+    ->middleware('auth')
+    ->name('matches.prediction.store');
 Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');

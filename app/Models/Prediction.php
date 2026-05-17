@@ -15,11 +15,12 @@ class Prediction extends Model
         'total_goals',
         'home_goals',
         'away_goals',
+        'confidence',
         'advice',
         'home_chance',
         'draw_chance',
         'away_chance',
-        'points'
+        'points',
     ];
 
     protected $casts = [
@@ -30,7 +31,7 @@ class Prediction extends Model
         'home_chance' => 'float',
         'draw_chance' => 'float',
         'away_chance' => 'float',
-        'points' => 'integer'
+        'points' => 'integer',
     ];
 
     public function fixture()

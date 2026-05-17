@@ -33,6 +33,10 @@ export interface Match {
     hasAiPrediction?: boolean;
     userPrediction?: {
         winnerId: number | null;
+        outcome: 'home' | 'draw' | 'away';
         label: string;
+        homeScore: number | null;
+        awayScore: number | null;
+        confidence: 'low' | 'medium' | 'high' | null;
     } | null;
 }

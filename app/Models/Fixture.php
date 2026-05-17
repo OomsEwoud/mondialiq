@@ -111,6 +111,12 @@ class Fixture extends Model
             ->where('source', PredictionTypes::User->value);
     }
 
+    public function userPrediction(): HasOne
+    {
+        return $this->hasOne(Prediction::class)
+            ->where('source', PredictionTypes::User->value);
+    }
+
     public function apiPrediction(): HasOne
     {
         return $this->hasOne(Prediction::class)
