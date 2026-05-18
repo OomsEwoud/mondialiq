@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Trophy, UserRound } from 'lucide-react';
+import { BarChart3, LogOut, Medal, UserRound } from 'lucide-react';
 import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import {
     DropdownMenuGroup,
@@ -57,7 +57,7 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <Trophy className="size-4 text-cyan-500" />
+                        <BarChart3 className="size-4 text-cyan-500" />
                         My predictions
                     </Link>
                 </DropdownMenuItem>
@@ -71,7 +71,7 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <Trophy className="size-4 text-cyan-500" />
+                        <Medal className="size-4 text-cyan-500" />
                         Leaderboards
                     </Link>
                 </DropdownMenuItem>

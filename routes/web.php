@@ -20,7 +20,9 @@ Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::cla
     ->name('matches.prediction.store');
 Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
-Route::get('/leaderboards', LeaderboardsController::class)->name('leaderboards');
+Route::get('/leaderboards', LeaderboardsController::class)
+    ->middleware('auth')
+    ->name('leaderboards');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)
