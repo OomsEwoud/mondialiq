@@ -23,8 +23,8 @@ export default function PredictionOutcomeField({
             <Label>Match outcome</Label>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 <PredictionOptionCard
-                    label={match.homeTeamShort}
-                    description={`${match.homeTeam} wins`}
+                    label={match.homeTeam}
+                    description="Home team wins"
                     selected={value === 'home'}
                     disabled={disabled}
                     onSelect={() => onChange('home')}
@@ -37,8 +37,8 @@ export default function PredictionOutcomeField({
                     onSelect={() => onChange('draw')}
                 />
                 <PredictionOptionCard
-                    label={match.awayTeamShort}
-                    description={`${match.awayTeam} wins`}
+                    label={match.awayTeam}
+                    description="Away team wins"
                     selected={value === 'away'}
                     disabled={disabled}
                     onSelect={() => onChange('away')}

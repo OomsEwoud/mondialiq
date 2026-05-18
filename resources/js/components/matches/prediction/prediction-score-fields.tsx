@@ -27,7 +27,7 @@ export default function PredictionScoreFields({
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <PredictionScoreInput
                 id={`home-score-${match.id}`}
-                label={`Predicted ${match.homeTeamShort} score`}
+                label={`Predicted ${match.homeTeam} score`}
                 value={homeScore}
                 disabled={disabled}
                 error={homeError}
@@ -35,7 +35,7 @@ export default function PredictionScoreFields({
             />
             <PredictionScoreInput
                 id={`away-score-${match.id}`}
-                label={`Predicted ${match.awayTeamShort} score`}
+                label={`Predicted ${match.awayTeam} score`}
                 value={awayScore}
                 disabled={disabled}
                 error={awayError}
