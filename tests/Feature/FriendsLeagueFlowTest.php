@@ -1,0 +1,156 @@
+<?php
+
+use App\Enums\PredictionTypes;
+use App\Models\Fixture;
+use App\Models\League;
+use App\Models\Prediction;
+use App\Models\Scoreboard;
+use App\Models\Team;
+use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
+
+function createFriendsLeagueFixture(): Fixture
+{
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    return Fixture::create([
+        'external_id' => 10,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => '2026-06-12 20:00:00',
+        'status_long' => 'Finished',
+    ]);
+}
+
+test('an authenticated user can view the create league page', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('leagues.create'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-create'),
+        );
+});
+
+test('an authenticated user can create a friends league and joins it immediately', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->post(route('leagues.store'), [
+            'name' => 'MondialIQ Crew',
+        ]);
+
+    $league = Scoreboard::query()->first();
+
+    $response->assertRedirect(route('leagues.show', $league));
+
+    $this->assertDatabaseHas('scoreboards', [
+        'name' => 'MondialIQ Crew',
+    ]);
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $user->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
+test('a league name is required to create a friends league', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('leagues.store'), [
+            'name' => '',
+        ])
+        ->assertSessionHasErrors('name');
+
+    expect(Scoreboard::query()->count())->toBe(0);
+});
+
+test('a league member can view the league detail page with rankings', function () {
+    $fixture = createFriendsLeagueFixture();
+
+    $currentUser = User::factory()->create(['name' => 'Current Player']);
+    $leader = User::factory()->create(['name' => 'League Captain']);
+    $thirdMember = User::factory()->create(['name' => 'Third Member']);
+
+    $league = Scoreboard::create([
+        'name' => 'Friends League',
+        'code' => 'FRIENDS1',
+    ]);
+
+    $league->users()->attach([
+        $currentUser->id,
+        $leader->id,
+        $thirdMember->id,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $leader->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 30,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $currentUser->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 20,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $thirdMember->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 10,
+    ]);
+
+    $this->actingAs($currentUser)
+        ->get(route('leagues.show', $league))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-show')
+            ->where('league.name', 'Friends League')
+            ->where('league.code', 'FRIENDS1')
+            ->where('league.membersCount', 3)
+            ->where('league.currentLeader', 'League Captain')
+            ->where('league.currentUserRank', 2)
+            ->has('league.members', 3)
+            ->where('league.members.0.name', 'League Captain')
+            ->where('league.members.1.name', 'Current Player')
+            ->where('league.members.1.isCurrentUser', true),
+        );
+});
+
+test('a non member cannot view a private league detail page', function () {
+    $user = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Private League',
+        'code' => 'PRIVATE1',
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('leagues.show', $league))
+        ->assertForbidden();
+});

@@ -7,6 +7,9 @@ use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\TeamDetailsController;
+use App\Http\Controllers\Leagues\CreateLeaguePageController;
+use App\Http\Controllers\Leagues\ShowLeagueController;
+use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
 use App\Http\Controllers\Socialite\RedirectController;
@@ -23,6 +26,15 @@ Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/leaderboards', LeaderboardsController::class)
     ->middleware('auth')
     ->name('leaderboards');
+Route::get('/leagues/create', CreateLeaguePageController::class)
+    ->middleware('auth')
+    ->name('leagues.create');
+Route::post('/leagues', StoreLeagueController::class)
+    ->middleware('auth')
+    ->name('leagues.store');
+Route::get('/leagues/{scoreboard}', ShowLeagueController::class)
+    ->middleware('auth')
+    ->name('leagues.show');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)

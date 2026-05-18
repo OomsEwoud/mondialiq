@@ -135,6 +135,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.leader_name', 'League Leader')
             ->where('joinedLeagues.0.points', 18)
             ->where('joinedLeagues.0.predictions_count', 1)
-            ->where('createLeagueHref', null),
+            ->where('joinedLeagues.0.href', route('leagues.show', $friendsLeague))
+            ->where('createLeagueHref', route('leagues.create')),
         );
 });

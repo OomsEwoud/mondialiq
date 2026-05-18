@@ -39,7 +39,7 @@ class LeaderboardsController extends Controller
             'currentUserStanding' => $currentUserStanding,
             'totalPlayers' => $leaders->count(),
             'joinedLeagues' => $this->joinedLeagues($request->user()),
-            'createLeagueHref' => null,
+            'createLeagueHref' => route('leagues.create'),
         ]);
     }
 
@@ -80,7 +80,7 @@ class LeaderboardsController extends Controller
             'leader_name' => $leader?->name,
             'points' => $currentUserEntry?->predictions_sum_points ?? 0,
             'predictions_count' => $currentUserEntry?->predictions_count ?? 0,
-            'href' => null,
+            'href' => route('leagues.show', $scoreboard),
         ];
     }
 }
