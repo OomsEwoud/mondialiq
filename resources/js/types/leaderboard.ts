@@ -7,8 +7,34 @@ export interface LeaderboardEntry {
     totalPoints: number;
 }
 
+export interface JoinedLeague {
+    id: number | string;
+    name: string;
+    membersCount: number;
+    userRank: number | null;
+    leaderName: string | null;
+    points?: number | null;
+    predictionsCount?: number | null;
+    href?: string | null;
+}
+
+export interface JoinedLeaguePayload {
+    id: number | string;
+    name: string;
+    members_count: number;
+    user_rank: number | null;
+    leader_name: string | null;
+    points?: number | null;
+    predictions_count?: number | null;
+    href?: string | null;
+}
+
 export interface LeaderboardsPageProps {
-    globalLeaders: LeaderboardEntry[];
-    currentUserStanding: LeaderboardEntry | null;
-    totalPlayers: number;
+    globalLeaderboard?: LeaderboardEntry[];
+    currentUserPosition?: LeaderboardEntry | null;
+    joinedLeagues?: Array<JoinedLeague | JoinedLeaguePayload>;
+    createLeagueHref?: string | null;
+    globalLeaders?: LeaderboardEntry[];
+    currentUserStanding?: LeaderboardEntry | null;
+    totalPlayers?: number;
 }
