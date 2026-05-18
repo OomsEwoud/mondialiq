@@ -1,7 +1,5 @@
-import type {
-    MatchDetails,
-    MatchDetailsScoreLine,
-} from '@/types/match-details';
+import MatchScoreRow from '@/components/matches/details/match-score-row';
+import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
     match: MatchDetails;
@@ -22,7 +20,7 @@ export default function MatchScoreCard({ match }: Props) {
             </h2>
             <div className="flex flex-col gap-2">
                 {scoreRows.map(([label, key]) => (
-                    <ScoreRow
+                    <MatchScoreRow
                         key={key}
                         label={label}
                         score={match.score[key]}
@@ -30,24 +28,5 @@ export default function MatchScoreCard({ match }: Props) {
                 ))}
             </div>
         </section>
-    );
-}
-
-interface ScoreRowProps {
-    label: string;
-    score: MatchDetailsScoreLine;
-}
-
-function ScoreRow({ label, score }: ScoreRowProps) {
-    const value =
-        score.home === null || score.away === null
-            ? 'Not available'
-            : `${score.home} - ${score.away}`;
-
-    return (
-        <div className="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-3">
-            <span className="text-sm font-medium text-slate-500">{label}</span>
-            <span className="font-black text-blue-950">{value}</span>
-        </div>
     );
 }
