@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\PredictionTypes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -45,66 +47,66 @@ class Fixture extends Model
         'penalty_away_goals' => 'integer',
     ];
 
-    public function league()
+    public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
     }
 
-    public function homeTeam()
+    public function homeTeam(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'home_team_id');
     }
 
-    public function awayTeam()
+    public function awayTeam(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'away_team_id');
     }
 
-    public function venue()
+    public function venue(): BelongsTo
     {
         return $this->belongsTo(Venue::class);
     }
 
-    public function referee()
+    public function referee(): BelongsTo
     {
         return $this->belongsTo(Referee::class);
     }
 
-    public function weatherLog()
+    public function weatherLog(): HasOne
     {
         return $this->hasOne(WeatherLog::class);
     }
 
-    public function missingPlayers()
+    public function missingPlayers(): BelongsToMany
     {
         return $this->belongsToMany(Player::class, 'missing_players')->withTimestamps();
     }
 
-    public function fixturePlayers()
+    public function fixturePlayers(): HasMany
     {
         return $this->hasMany(FixturePlayer::class);
     }
 
-    public function fixtureEvents()
+    public function fixtureEvents(): HasMany
     {
         return $this->hasMany(FixtureEvent::class);
     }
 
-    public function fixtureStats()
+    public function fixtureStats(): HasMany
     {
         return $this->hasMany(FixtureStat::class);
     }
 
-    public function lineups()
+    public function lineups(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'fixture_lineups')->withPivot('formation')->withTimestamps();
     }
 
-    public function playerFixtureStats()
+    public function playerFixtureStats(): HasMany
     {
         return $this->hasMany(PlayerFixtureStat::class);
     }
-    
+
     public function userPredictions(): HasMany
     {
         return $this->hasMany(Prediction::class)
@@ -131,7 +133,7 @@ class Fixture extends Model
             ->where('source', PredictionTypes::Ai->value);
     }
 
-    public function fixtureOdds()
+    public function fixtureOdds(): HasMany
     {
         return $this->hasMany(FixtureOdd::class);
     }

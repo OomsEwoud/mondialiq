@@ -9,6 +9,7 @@ use App\Queries\Fixture\PredictionFixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PredictionsController extends Controller
 {
@@ -27,7 +28,7 @@ class PredictionsController extends Controller
         $this->season = config('services.api_football.season');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $mode = $this->predictionMode($request);
         $query = new FixtureQuery($this->leagueId, $this->season);

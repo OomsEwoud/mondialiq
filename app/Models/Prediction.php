@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PredictionTypes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Prediction extends Model
 {
@@ -34,17 +35,17 @@ class Prediction extends Model
         'points' => 'integer',
     ];
 
-    public function fixture()
+    public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function winner()
+    public function winner(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'winner_id');
     }

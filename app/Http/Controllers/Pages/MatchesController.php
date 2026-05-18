@@ -10,6 +10,7 @@ use App\Services\Helper\HelperService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class MatchesController extends Controller
 {
@@ -28,7 +29,7 @@ class MatchesController extends Controller
         $this->season = config('services.api_football.season');
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $filters = $this->parseFilters($request);
 
