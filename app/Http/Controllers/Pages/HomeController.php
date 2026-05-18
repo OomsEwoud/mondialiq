@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Fixture;
 use Carbon\Carbon;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function __invoke()
+    public function __invoke(): Response
     {
         $now = Carbon::now();
-        $upcomingFixtures = Fixture::where('match_date', '>=', $now)
+        $upcomingFixtures = Fixture::query()
+            ->where('match_date', '>=', $now)
             ->orderBy('match_date', 'asc')
             ->take(5)
             ->get()
@@ -27,10 +29,10 @@ class HomeController extends Controller
                     'awayTeamLogo' => $match->awayTeam->logo_url,
                     'day' => $match->match_date->format('d M'),
                     'time' => $match->match_date->format('H:i'),
-                    'round'       => $match->round_name,
+                    'round' => $match->round_name,
                 ];
             });
-            
+
         return Inertia::render('home', [
             'upcomingFixtures' => $upcomingFixtures,
         ]);

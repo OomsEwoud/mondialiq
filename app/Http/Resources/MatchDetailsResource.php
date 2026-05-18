@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 class MatchDetailsResource extends JsonResource
 {
@@ -71,7 +72,7 @@ class MatchDetailsResource extends JsonResource
                 ]),
             'stats' => $this->fixtureStats
                 ->groupBy('name')
-                ->map(fn ($stats, $name) => [
+                ->map(fn (Collection $stats, string $name) => [
                     'name' => $name,
                     'home' => $stats->firstWhere('team_id', $this->home_team_id)?->value,
                     'away' => $stats->firstWhere('team_id', $this->away_team_id)?->value,

@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Socialite;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Socialite\Concerns\HandlesSocialiteProviders;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Socialite;
 
 class CallbackController extends Controller
 {
     use HandlesSocialiteProviders;
 
-    public function __invoke(string $provider)
+    public function __invoke(string $provider): RedirectResponse
     {
         $this->ensureSupportedProvider($provider);
-        
+
         $newUser = Socialite::driver($provider)->user();
         $email = $newUser->getEmail();
 
@@ -53,6 +53,6 @@ class CallbackController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        return to_route('home');
     }
 }

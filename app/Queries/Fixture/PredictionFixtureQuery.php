@@ -31,7 +31,7 @@ class PredictionFixtureQuery
 
         return $query
             ->with([
-                'userPredictions' => fn (Builder $query) => $query
+                'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
                     ->with('winner'),
             ])

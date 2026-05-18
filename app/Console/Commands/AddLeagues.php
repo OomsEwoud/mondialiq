@@ -19,7 +19,7 @@ class AddLeagues extends Command
         parent::__construct();
     }
 
-    public function handle(): void
+    public function handle(): int
     {
         $this->info('Ophalen van leagues');
         $leagues = [];

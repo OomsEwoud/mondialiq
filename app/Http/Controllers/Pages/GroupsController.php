@@ -5,15 +5,21 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Models\League;
 use App\Models\Standing;
-use Inertia\Inertia;
 use App\Services\Standing\GroupStandingService;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class GroupsController extends Controller
 {
-    public function __construct(protected GroupStandingService $service) {}
-    public function __invoke()
+    public function __construct(protected GroupStandingService $service)
     {
-        $leagueId = League::where('external_id', config('services.api_football.league_id'))->value('id');
+    }
+
+    public function __invoke(): Response
+    {
+        $leagueId = League::query()
+            ->where('external_id', config('services.api_football.league_id'))
+            ->value('id');
         $season = config('services.api_football.season');
 
         $standings = Standing::query()
@@ -28,5 +34,4 @@ class GroupsController extends Controller
             'groups' => $this->service->groupStandings($standings),
         ]);
     }
-
 }

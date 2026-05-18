@@ -7,7 +7,6 @@ use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use App\Services\Helper\HelperService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -48,7 +47,7 @@ class MatchesController extends Controller
 
         if ($user = $request->user()) {
             $fixturesQuery->with([
-                'userPredictions' => fn (Builder $query) => $query
+                'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
                     ->with('winner'),
             ]);
