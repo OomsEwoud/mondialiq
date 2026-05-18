@@ -1,8 +1,8 @@
-import { Minus, Plus } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import Cropper, { type Area, type Point } from 'react-easy-crop';
 import 'react-easy-crop/react-easy-crop.css';
 import { Button } from '@/components/ui/forms/button';
+import AvatarZoomControl from '@/components/user/avatar-zoom-control';
 import {
     Dialog,
     DialogContent,
@@ -148,59 +148,7 @@ function CropperBody({
                 )}
             </div>
 
-            <ZoomControl zoom={zoom} onZoomChange={onZoomChange} />
-        </div>
-    );
-}
-
-function ZoomControl({
-    onZoomChange,
-    zoom,
-}: {
-    onZoomChange: (zoom: number) => void;
-    zoom: number;
-}) {
-    return (
-        <div className="space-y-3">
-            <div className="flex items-center justify-between">
-                <p className="text-xs font-black tracking-widest text-slate-500 uppercase">
-                    Zoom
-                </p>
-                <span className="text-sm font-black text-blue-950">
-                    {Math.round(zoom * 100)}%
-                </span>
-            </div>
-            <div className="flex items-center gap-3">
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="size-9 shrink-0 rounded-lg"
-                    onClick={() => onZoomChange(Math.max(1, zoom - 0.1))}
-                >
-                    <Minus className="size-4" />
-                </Button>
-                <input
-                    type="range"
-                    min="1"
-                    max="3"
-                    step="0.01"
-                    value={zoom}
-                    className="h-2 w-full cursor-pointer accent-cyan-500"
-                    onChange={(event) =>
-                        onZoomChange(Number(event.target.value))
-                    }
-                />
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="size-9 shrink-0 rounded-lg"
-                    onClick={() => onZoomChange(Math.min(3, zoom + 0.1))}
-                >
-                    <Plus className="size-4" />
-                </Button>
-            </div>
+            <AvatarZoomControl zoom={zoom} onZoomChange={onZoomChange} />
         </div>
     );
 }
