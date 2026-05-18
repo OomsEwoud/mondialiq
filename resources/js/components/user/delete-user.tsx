@@ -7,6 +7,7 @@ import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Label } from '@/components/ui/forms/label';
 import type { User } from '@/types';
+import { formatProviderName } from '@/utils/social-provider';
 import {
     Dialog,
     DialogClose,
@@ -150,12 +151,4 @@ export default function DeleteUser({ user }: Props) {
             </div>
         </section>
     );
-}
-
-function formatProviderName(provider?: string | null) {
-    if (!provider) {
-        return null;
-    }
-
-    return provider.charAt(0).toUpperCase() + provider.slice(1);
 }
