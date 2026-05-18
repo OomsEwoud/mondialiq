@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Plus } from 'lucide-react';
+import { LogIn, Plus } from 'lucide-react';
 import FriendsLeagueCard from '@/components/leaderboards/friends-league-card';
 import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import { Button } from '@/components/ui/forms/button';
@@ -15,11 +15,13 @@ import type { JoinedLeague } from '@/types/leaderboard';
 type Props = {
     leagues: JoinedLeague[];
     createLeagueHref?: string | null;
+    joinLeagueHref?: string | null;
 };
 
 export default function FriendsLeaguesSection({
     leagues,
     createLeagueHref,
+    joinLeagueHref,
 }: Props) {
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -34,26 +36,50 @@ export default function FriendsLeaguesSection({
                             you stand against your friends.
                         </CardDescription>
                     </div>
-                    {createLeagueHref ? (
-                        <Button
-                            asChild
-                            className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
-                        >
-                            <Link href={createLeagueHref}>
+                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+                        {joinLeagueHref ? (
+                            <Button
+                                asChild
+                                variant="outline"
+                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                            >
+                                <Link href={joinLeagueHref}>
+                                    <LogIn className="size-4" />
+                                    Join League
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Button
+                                type="button"
+                                disabled
+                                variant="outline"
+                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                            >
+                                <LogIn className="size-4" />
+                                Join League
+                            </Button>
+                        )}
+                        {createLeagueHref ? (
+                            <Button
+                                asChild
+                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                            >
+                                <Link href={createLeagueHref}>
+                                    <Plus className="size-4" />
+                                    Create League
+                                </Link>
+                            </Button>
+                        ) : (
+                            <Button
+                                type="button"
+                                disabled
+                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                            >
                                 <Plus className="size-4" />
                                 Create League
-                            </Link>
-                        </Button>
-                    ) : (
-                        <Button
-                            type="button"
-                            disabled
-                            className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
-                        >
-                            <Plus className="size-4" />
-                            Create League
-                        </Button>
-                    )}
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="px-4 py-5 sm:px-6">

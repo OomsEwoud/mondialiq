@@ -34,6 +34,7 @@ export interface LeaderboardsPageProps {
     currentUserPosition?: LeaderboardEntry | null;
     joinedLeagues?: Array<JoinedLeague | JoinedLeaguePayload>;
     createLeagueHref?: string | null;
+    joinLeagueHref?: string | null;
     globalLeaders?: LeaderboardEntry[];
     currentUserStanding?: LeaderboardEntry | null;
     totalPlayers?: number;

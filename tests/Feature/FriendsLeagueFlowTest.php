@@ -52,6 +52,17 @@ test('an authenticated user can view the create league page', function () {
         );
 });
 
+test('an authenticated user can view the join league page', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('leagues.join'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-join'),
+        );
+});
+
 test('an authenticated user can create a friends league and joins it immediately', function () {
     $user = User::factory()->create();
 
@@ -84,6 +95,54 @@ test('a league name is required to create a friends league', function () {
         ->assertSessionHasErrors('name');
 
     expect(Scoreboard::query()->count())->toBe(0);
+});
+
+test('an authenticated user can join a friends league with a valid code', function () {
+    $user = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Joinable League',
+        'code' => 'JOIN2026',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->post(route('leagues.join.store'), [
+            'code' => 'join2026',
+        ]);
+
+    $response->assertRedirect(route('leagues.show', $league));
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $user->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
+test('an invite code must exist to join a friends league', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->post(route('leagues.join.store'), [
+            'code' => 'INVALID1',
+        ])
+        ->assertSessionHasErrors('code');
+});
+
+test('a user cannot join the same friends league twice', function () {
+    $user = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Already Joined League',
+        'code' => 'ALREADY1',
+    ]);
+
+    $league->users()->attach($user->id);
+
+    $this->actingAs($user)
+        ->post(route('leagues.join.store'), [
+            'code' => 'ALREADY1',
+        ])
+        ->assertSessionHasErrors('code');
 });
 
 test('a league member can view the league detail page with rankings', function () {

@@ -8,6 +8,8 @@ use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
+use App\Http\Controllers\Leagues\JoinLeagueController;
+use App\Http\Controllers\Leagues\JoinLeaguePageController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
@@ -29,9 +31,15 @@ Route::get('/leaderboards', LeaderboardsController::class)
 Route::get('/leagues/create', CreateLeaguePageController::class)
     ->middleware('auth')
     ->name('leagues.create');
+Route::get('/leagues/join', JoinLeaguePageController::class)
+    ->middleware('auth')
+    ->name('leagues.join');
 Route::post('/leagues', StoreLeagueController::class)
     ->middleware('auth')
     ->name('leagues.store');
+Route::post('/leagues/join', JoinLeagueController::class)
+    ->middleware('auth')
+    ->name('leagues.join.store');
 Route::get('/leagues/{scoreboard}', ShowLeagueController::class)
     ->middleware('auth')
     ->name('leagues.show');

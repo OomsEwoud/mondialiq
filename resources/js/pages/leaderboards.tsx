@@ -43,6 +43,7 @@ export default function Leaderboards(props: Props) {
                 <FriendsLeaguesSection
                     leagues={joinedLeagues}
                     createLeagueHref={props.createLeagueHref}
+                    joinLeagueHref={props.joinLeagueHref}
                 />
             </div>
         </>

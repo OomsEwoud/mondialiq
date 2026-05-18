@@ -40,6 +40,7 @@ class LeaderboardsController extends Controller
             'totalPlayers' => $leaders->count(),
             'joinedLeagues' => $this->joinedLeagues($request->user()),
             'createLeagueHref' => route('leagues.create'),
+            'joinLeagueHref' => route('leagues.join'),
         ]);
     }
 
