@@ -73,7 +73,12 @@ test('an authenticated user can create a friends league and joins it immediately
 
     $league = Scoreboard::query()->first();
 
-    $response->assertRedirect(route('leagues.show', $league));
+    $response
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'League created.',
+        ]);
 
     $this->assertDatabaseHas('scoreboards', [
         'name' => 'MondialIQ Crew',
@@ -110,7 +115,12 @@ test('an authenticated user can join a friends league with a valid code', functi
             'code' => 'join2026',
         ]);
 
-    $response->assertRedirect(route('leagues.show', $league));
+    $response
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'You joined Joinable League.',
+        ]);
 
     $this->assertDatabaseHas('users_has_scoreboards', [
         'user_id' => $user->id,

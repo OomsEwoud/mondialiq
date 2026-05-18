@@ -7,6 +7,7 @@ use App\Http\Requests\Leagues\StoreLeagueRequest;
 use App\Models\Scoreboard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class StoreLeagueController extends Controller
 {
@@ -18,6 +19,11 @@ class StoreLeagueController extends Controller
         ]);
 
         $league->users()->attach($request->user()->id);
+
+        Inertia::flash('toast', [
+            'type' => 'success',
+            'message' => __('League created.'),
+        ]);
 
         return to_route('leagues.show', $league);
     }
