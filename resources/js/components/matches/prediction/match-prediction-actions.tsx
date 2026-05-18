@@ -1,9 +1,9 @@
 import { Link } from '@inertiajs/react';
-import { useState } from 'react';
 import { BarChart3, Sparkles } from 'lucide-react';
+import { useState } from 'react';
 import PredictionsController from '@/actions/App/Http/Controllers/Pages/PredictionsController';
-import UserPredictionButton from '@/components/matches/user-prediction-button';
-import UserPredictionModal from '@/components/matches/user-prediction-modal';
+import UserPredictionButton from '@/components/matches/prediction/user-prediction-button';
+import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import { Button } from '@/components/ui/forms/button';
 import { show } from '@/routes/matches';
 import type { Match } from '@/types/match';

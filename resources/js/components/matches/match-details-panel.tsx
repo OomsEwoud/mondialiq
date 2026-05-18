@@ -1,6 +1,6 @@
 import MatchDetailMeta from '@/components/matches/match-detail-meta';
 import MatchDetailTeam from '@/components/matches/match-detail-team';
-import MatchPredictionActions from '@/components/matches/match-prediction-actions';
+import MatchPredictionActions from '@/components/matches/prediction/match-prediction-actions';
 import type { Match } from '@/types/match';
 
 interface Props {
