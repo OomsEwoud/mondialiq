@@ -72,6 +72,12 @@ Create the database and run migrations:
 php artisan migrate
 ```
 
+Create the public storage symlink:
+
+```bash
+php artisan storage:link
+```
+
 For SQLite, create the database file first if needed:
 
 ```bash
@@ -232,6 +238,12 @@ Clear caches:
 
 ```bash
 php artisan optimize:clear
+```
+
+Create the public storage symlink:
+
+```bash
+php artisan storage:link
 ```
 
 ## Testing
