@@ -38,7 +38,7 @@ export function UserMenuContent({ user }: Props) {
                 >
                     <Link
                         className="flex w-full cursor-pointer items-center gap-2"
-                        href={editAccount()}
+                        href={editAccount.url()}
                         prefetch
                         onClick={cleanup}
                     >
@@ -66,7 +66,7 @@ export function UserMenuContent({ user }: Props) {
                 >
                     <Link
                         className="flex w-full cursor-pointer items-center gap-2"
-                        href={leaderboards()}
+                        href={leaderboards.url()}
                         prefetch
                         onClick={cleanup}
                     >
