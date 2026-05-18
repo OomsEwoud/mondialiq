@@ -1,3 +1,4 @@
+import MatchEventRow from '@/components/matches/details/match-event-row';
 import type { MatchDetailsEvent } from '@/types/match-details';
 
 interface Props {
@@ -13,7 +14,7 @@ export default function MatchEventsCard({ events }: Props) {
             {events.length > 0 ? (
                 <div className="flex flex-col gap-3">
                     {events.map((event) => (
-                        <EventRow key={event.id} event={event} />
+                        <MatchEventRow key={event.id} event={event} />
                     ))}
                 </div>
             ) : (
@@ -22,41 +23,5 @@ export default function MatchEventsCard({ events }: Props) {
                 </p>
             )}
         </section>
-    );
-}
-
-interface EventRowProps {
-    event: MatchDetailsEvent;
-}
-
-function EventRow({ event }: EventRowProps) {
-    const minute = event.extraTime
-        ? `${event.minute}+${event.extraTime}'`
-        : `${event.minute}'`;
-
-    return (
-        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
-            <span className="w-12 shrink-0 text-sm font-black text-blue-600">
-                {minute}
-            </span>
-            <img
-                src={event.teamLogo}
-                alt={event.team}
-                className="h-7 w-7 shrink-0 object-contain"
-            />
-            <div className="min-w-0">
-                <p className="text-sm font-bold text-slate-800">
-                    {event.detail}
-                </p>
-                <p className="truncate text-xs text-slate-500">
-                    {[
-                        event.player,
-                        event.assist ? `Assist: ${event.assist}` : null,
-                    ]
-                        .filter(Boolean)
-                        .join(' · ') || event.team}
-                </p>
-            </div>
-        </div>
     );
 }
