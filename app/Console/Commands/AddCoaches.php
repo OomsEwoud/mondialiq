@@ -8,22 +8,24 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:add-coaches')]
-#[Description('Command description')]
+#[Description('Synchroniseer coaches vanuit de Football API')]
 class AddCoaches extends Command
 {
-    public function __construct(protected CoachService $coachService) 
+    public function __construct(protected CoachService $coachService)
     {
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): int
     {
         $this->info('Ophalen van coaches');
 
         $this->components->task('Opslaan van coaches in database', function () {
             $this->coachService->syncCoaches();
         });
-        
+
         $this->info('Coaches klaar');
+
+        return self::SUCCESS;
     }
 }

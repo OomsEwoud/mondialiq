@@ -7,10 +7,10 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:sync-all-data')]
-#[Description('Command description')]
+#[Description('Synchroniseer alle basisdata uit de Football API')]
 class SyncAllData extends Command
 {
-    public function handle()
+    public function handle(): int
     {
         $this->info('Bezig met ophalen van alle data');
 
@@ -27,5 +27,7 @@ class SyncAllData extends Command
         $this->call('app:add-fixture-data');
 
         $this->info('Alle data is geupdate');
+
+        return self::SUCCESS;
     }
 }

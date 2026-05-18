@@ -2,34 +2,39 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Fixture;
+use App\Services\Apis\FootballApiService;
+use App\Services\Fixture\FixtureEventsService;
+use App\Services\Fixture\FixtureLineupService;
+use App\Services\Fixture\FixtureStatsService;
+use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Services\Fixture\FixtureStatsService;
-use App\Services\Apis\FootballApiService;
-use App\Models\Fixture;
-use App\Services\Fixture\FixtureEventsService;
-use App\Services\Fixture\FixtureLineupService;
-use Exception;
 
 #[Signature('app:add-fixture-data')]
-#[Description('Command description')]
+#[Description('Haal lineups, stats en events op voor alle fixtures')]
 class AddFixtureData extends Command
 {
-    public function __construct(protected FootballApiService $api, protected FixtureStatsService $statsService, protected FixtureEventsService $eventsService, protected FixtureLineupService $lineupService)
-    {
+    public function __construct(
+        protected FootballApiService $api,
+        protected FixtureStatsService $statsService,
+        protected FixtureEventsService $eventsService,
+        protected FixtureLineupService $lineupService,
+    ) {
         parent::__construct();
     }
-    public function handle()
+
+    public function handle(): int
     {
-        $fixtures = Fixture::all();
+        $fixtures = Fixture::query()->get();
         $this->info('Ophalen van fixture data');
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) {
             try {
                 $lineups = $this->api->getFixtureLineups($fixture->external_id);
                 $this->lineupService->storeLineups($lineups, $fixture->id);
-                
+
                 $stats = $this->api->getFixtureStats($fixture->external_id);
                 $this->statsService->storeFixtureStats($stats, $fixture->id);
 
@@ -38,11 +43,13 @@ class AddFixtureData extends Command
                 sleep(1);
             } catch (Exception $e) {
                 $this->newLine();
-                $this->error("Fout bij ophalen fixture {$fixture->id}: " . $e->getMessage());
+                $this->error("Fout bij ophalen fixture {$fixture->id}: {$e->getMessage()}");
             }
         });
 
         $this->newLine();
         $this->info('Alle fixture data is geupdate');
+
+        return self::SUCCESS;
     }
 }

@@ -9,11 +9,13 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:add-leagues')]
-#[Description('Command description')]
+#[Description('Haal leagues op uit de Football API en sla ze op')]
 class AddLeagues extends Command
 {
-    public function __construct(protected LeagueService $leagueService, protected FootballApiService $serviceFootball)
-    {
+    public function __construct(
+        protected LeagueService $leagueService,
+        protected FootballApiService $serviceFootball,
+    ) {
         parent::__construct();
     }
 
@@ -27,11 +29,13 @@ class AddLeagues extends Command
         });
 
         $this->components->task('Data van leagues opslaan in database', function () use ($leagues) {
-            if (!empty($leagues)) {
+            if (! empty($leagues)) {
                 $this->leagueService->storeLeagues($leagues);
             }
         });
 
         $this->info('Leagues klaar');
+
+        return self::SUCCESS;
     }
 }
