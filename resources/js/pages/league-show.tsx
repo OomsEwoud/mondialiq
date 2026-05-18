@@ -1,8 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Crown, Hash, Users } from 'lucide-react';
+import { ArrowLeft, Crown, Users, type LucideIcon } from 'lucide-react';
+import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import { Badge } from '@/components/ui/feedback/badge';
-import { Button } from '@/components/ui/forms/button';
 import {
     Card,
     CardContent,
@@ -84,34 +84,13 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     label="Members"
                                     value={`${league.membersCount}`}
                                 />
-                                <SnapshotMetric
-                                    icon={Hash}
-                                    label="Invite code"
-                                    value={league.code}
-                                />
                             </CardContent>
                         </Card>
 
-                        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
-                            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                                <CardTitle className="text-xl font-black text-blue-950">
-                                    Next step
-                                </CardTitle>
-                                <CardDescription className="text-sm leading-6 text-slate-500">
-                                    Share the invite code with friends so they
-                                    can join this private league later.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="px-4 pb-5 sm:px-6">
-                                <Button
-                                    type="button"
-                                    disabled
-                                    className="h-10 w-full rounded-lg px-4 font-black"
-                                >
-                                    Join flow coming soon
-                                </Button>
-                            </CardContent>
-                        </Card>
+                        <InviteCodeCard
+                            code={league.code}
+                            joinHref="/leagues/join"
+                        />
                     </div>
                 </div>
             </div>
@@ -120,7 +99,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 }
 
 type SnapshotMetricProps = {
-    icon: typeof Users;
+    icon: LucideIcon;
     label: string;
     value: string;
 };
