@@ -11,6 +11,7 @@ export default function Predictions({ fixtures, mode }: Props) {
             <PredictionTabs activeTab={mode} />
             <PredictionList
                 matches={fixtures.data}
+                mode={mode}
                 emptyMessage={
                     mode === 'mine'
                         ? 'You have not predicted any matches yet.'
