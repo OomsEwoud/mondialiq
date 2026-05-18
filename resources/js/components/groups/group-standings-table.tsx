@@ -1,13 +1,10 @@
 import TeamCodeBadge from '@/components/groups/team-code-badge';
 import { stats } from '@/const/standing';
 import type { GroupTeam } from '@/types/group';
+import { formatGoalDifference } from '@/utils/standings';
 
 interface Props {
     teams: GroupTeam[];
-}
-
-function formatGoalDifference(goalDifference: number) {
-    return goalDifference > 0 ? `+${goalDifference}` : String(goalDifference);
 }
 
 export default function GroupStandingsTable({ teams }: Props) {
