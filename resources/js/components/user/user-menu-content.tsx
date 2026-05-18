@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/forms/dropdown-menu';
 import { UserInfo } from '@/components/user/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { logout } from '@/routes';
+import { logout, predictions } from '@/routes';
 import type { User } from '@/types';
 
 type Props = {
@@ -48,11 +48,18 @@ export function UserMenuContent({ user }: Props) {
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    disabled
-                    className="rounded-lg px-3 py-2 font-semibold text-slate-400"
+                    asChild
+                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
                 >
-                    <Trophy className="size-4 text-slate-300" />
-                    My predictions
+                    <Link
+                        className="flex w-full cursor-pointer items-center gap-2"
+                        href={predictions.url({ query: { mode: 'mine' } })}
+                        prefetch
+                        onClick={cleanup}
+                    >
+                        <Trophy className="size-4 text-cyan-500" />
+                        My predictions
+                    </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="my-2 bg-slate-200" />

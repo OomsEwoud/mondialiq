@@ -118,3 +118,13 @@ test('a prediction cannot be saved after the match starts', function () {
 
     expect(Prediction::query()->count())->toBe(0);
 });
+
+test('the match prediction endpoint is rate limited', function () {
+    $middleware = app('router')
+        ->getRoutes()
+        ->getByName('matches.prediction.store')
+        ->gatherMiddleware();
+
+    expect($middleware)->toContain('auth')
+        ->and($middleware)->toContain('throttle:prediction-store');
+});

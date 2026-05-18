@@ -15,13 +15,17 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/matches', MatchesController::class)->name('matches');
 Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.show');
 Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::class)
-    ->middleware('auth')
+    ->middleware(['auth', 'throttle:prediction-store'])
     ->name('matches.prediction.store');
 Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
-Route::get('/auth/{provider}/redirect', RedirectController::class)->name('auth.redirect');
-Route::get('/auth/{provider}/callback', CallbackController::class)->name('auth.callback');
+Route::get('/auth/{provider}/redirect', RedirectController::class)
+    ->middleware('throttle:social-auth')
+    ->name('auth.redirect');
+Route::get('/auth/{provider}/callback', CallbackController::class)
+    ->middleware('throttle:social-auth')
+    ->name('auth.callback');
 
 require __DIR__.'/settings.php';
