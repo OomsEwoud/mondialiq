@@ -1,11 +1,8 @@
-import { Link } from '@inertiajs/react';
-import { BarChart3, Sparkles } from 'lucide-react';
 import { useState } from 'react';
-import PredictionsController from '@/actions/App/Http/Controllers/Pages/PredictionsController';
+import AiPredictionButton from '@/components/matches/prediction/ai-prediction-button';
+import MatchDetailsActionButton from '@/components/matches/prediction/match-details-action-button';
 import UserPredictionButton from '@/components/matches/prediction/user-prediction-button';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
-import { Button } from '@/components/ui/forms/button';
-import { show } from '@/routes/matches';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -29,48 +26,8 @@ export default function MatchPredictionActions({ match }: Props) {
                 </div>
 
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-                    <Button
-                        asChild
-                        variant="outline"
-                        className="justify-center border-slate-200 bg-white text-slate-700 hover:bg-slate-100 hover:text-blue-950"
-                    >
-                        <Link href={show.url(match.id)}>
-                            <BarChart3 className="h-4 w-4" />
-                            Match Details
-                        </Link>
-                    </Button>
-
-                    {match.hasAiPrediction ? (
-                        <Button
-                            asChild
-                            variant="outline"
-                            className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900"
-                        >
-                            <Link
-                                href={PredictionsController.url({
-                                    query: { mode: 'ai' },
-                                })}
-                            >
-                                <Sparkles className="h-4 w-4" />
-                                View AI Prediction
-                            </Link>
-                        </Button>
-                    ) : (
-                        <span
-                            className="cursor-not-allowed"
-                            title="AI prediction is not available yet"
-                        >
-                            <Button
-                                disabled
-                                variant="outline"
-                                className="w-full justify-center border-slate-200 bg-slate-50 text-slate-400"
-                            >
-                                <Sparkles className="h-4 w-4" />
-                                AI Pending
-                            </Button>
-                        </span>
-                    )}
-
+                    <MatchDetailsActionButton matchId={match.id} />
+                    <AiPredictionButton available={Boolean(match.hasAiPrediction)} />
                     <UserPredictionButton
                         match={match}
                         onClick={() => setPredictionOpen(true)}
