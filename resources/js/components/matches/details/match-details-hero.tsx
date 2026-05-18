@@ -1,5 +1,4 @@
-import { Link } from '@inertiajs/react';
-import { show as showTeam } from '@/routes/teams';
+import MatchDetailsTeamBlock from '@/components/matches/details/match-details-team-block';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
@@ -17,7 +16,7 @@ export default function MatchDetailsHero({ match }: Props) {
             </p>
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                <TeamBlock
+                <MatchDetailsTeamBlock
                     id={match.homeTeam.id}
                     logo={match.homeTeam.logo}
                     name={match.homeTeam.name}
@@ -31,7 +30,7 @@ export default function MatchDetailsHero({ match }: Props) {
                         {match.status}
                     </p>
                 </div>
-                <TeamBlock
+                <MatchDetailsTeamBlock
                     id={match.awayTeam.id}
                     logo={match.awayTeam.logo}
                     name={match.awayTeam.name}
@@ -40,32 +39,5 @@ export default function MatchDetailsHero({ match }: Props) {
                 />
             </div>
         </section>
-    );
-}
-
-interface TeamBlockProps {
-    id: number;
-    logo: string;
-    name: string;
-    code: string;
-    align?: 'left' | 'right';
-}
-
-function TeamBlock({ id, logo, name, code, align = 'left' }: TeamBlockProps) {
-    const isRightAligned = align === 'right';
-
-    return (
-        <Link
-            href={showTeam.url(id)}
-            className={`flex min-w-0 items-center gap-3 rounded-lg p-2 transition-colors hover:bg-blue-50 ${isRightAligned ? 'flex-row-reverse text-right' : ''}`}
-        >
-            <img src={logo} alt={name} className="h-12 w-12 object-contain" />
-            <div className="min-w-0">
-                <p className="truncate text-lg font-black text-blue-950">
-                    {name}
-                </p>
-                <p className="text-xs font-bold text-slate-400">{code}</p>
-            </div>
-        </Link>
     );
 }
