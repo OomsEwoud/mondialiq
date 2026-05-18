@@ -25,9 +25,7 @@ export default function PredictionConfidenceField({
                     <Button
                         key={confidence}
                         type="button"
-                        variant={
-                            value === confidence ? 'default' : 'outline'
-                        }
+                        variant={value === confidence ? 'default' : 'outline'}
                         disabled={disabled}
                         onClick={() => onChange(confidence)}
                         className="capitalize"

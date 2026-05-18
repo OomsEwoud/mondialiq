@@ -99,9 +99,7 @@ export default function UserPredictionForm({
                 </Button>
                 <Button
                     type="submit"
-                    disabled={
-                        processing || matchStarted || data.outcome === ''
-                    }
+                    disabled={processing || matchStarted || data.outcome === ''}
                 >
                     {processing
                         ? 'Saving...'

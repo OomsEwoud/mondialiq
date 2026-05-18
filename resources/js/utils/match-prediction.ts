@@ -1,7 +1,9 @@
 import type { Match } from '@/types/match';
 import type { UserPredictionFormData } from '@/types/match-prediction';
 
-export function initialPredictionFormData(match: Match): UserPredictionFormData {
+export function initialPredictionFormData(
+    match: Match,
+): UserPredictionFormData {
     return {
         outcome: match.userPrediction?.outcome ?? '',
         home_score: predictionScoreValue(match.userPrediction?.homeScore),

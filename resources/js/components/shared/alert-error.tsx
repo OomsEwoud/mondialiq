@@ -1,5 +1,9 @@
 import { AlertCircleIcon } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/feedback/alert';
+import {
+    Alert,
+    AlertDescription,
+    AlertTitle,
+} from '@/components/ui/feedback/alert';
 
 export default function AlertError({
     errors,

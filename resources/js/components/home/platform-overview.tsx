@@ -1,10 +1,6 @@
 import { Link } from '@inertiajs/react';
-import {
-    ArrowRight,
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { products } from '@/const/products';
-
-
 
 export default function PlatformOverview() {
     return (
@@ -38,7 +34,7 @@ export default function PlatformOverview() {
                         <div>
                             <div className="mb-8 flex items-start justify-between gap-4">
                                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-950 text-white">
-                                    <product.icon className="h-6 w-6" /> 
+                                    <product.icon className="h-6 w-6" />
                                 </span>
                                 <span
                                     className={[

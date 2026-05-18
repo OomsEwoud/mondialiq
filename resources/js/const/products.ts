@@ -15,7 +15,8 @@ export type ProductCard = {
 export const products: ProductCard[] = [
     {
         title: 'AI Match Predictions',
-        description: 'Every match modeled with win, draw and loss probabilities plus a short model insight.',
+        description:
+            'Every match modeled with win, draw and loss probabilities plus a short model insight.',
         badge: 'Public',
         cta: 'Browse predictions',
         href: matches.url(),
@@ -23,7 +24,8 @@ export const products: ProductCard[] = [
     },
     {
         title: 'Group Qualification Chances',
-        description: 'Live standings with model-based qualification percentages for the knockout stage.',
+        description:
+            'Live standings with model-based qualification percentages for the knockout stage.',
         badge: 'Public',
         cta: 'View groups',
         href: groups.url(),
@@ -32,7 +34,8 @@ export const products: ProductCard[] = [
     },
     {
         title: 'Personal Prediction League',
-        description: 'Lock in your scores, build your bracket and compete in a private leaderboard with friends.',
+        description:
+            'Lock in your scores, build your bracket and compete in a private leaderboard with friends.',
         badge: 'Login required',
         cta: 'Start playing',
         href: login.url(),

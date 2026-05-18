@@ -37,7 +37,10 @@ export default function CalendarGrid({
                     <ChevronLeft size={16} />
                 </button>
                 <span className="text-sm font-bold text-blue-950">
-                    {new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric' }).format(visibleMonth)}
+                    {new Intl.DateTimeFormat('en-GB', {
+                        month: 'long',
+                        year: 'numeric',
+                    }).format(visibleMonth)}
                 </span>
                 <button
                     type="button"
@@ -50,13 +53,20 @@ export default function CalendarGrid({
             </div>
 
             <div className="mb-2 grid grid-cols-7 text-center text-[11px] font-bold tracking-wide text-slate-400 uppercase">
-                {weekDays.map((day) => <span key={day}>{day}</span>)}
+                {weekDays.map((day) => (
+                    <span key={day}>{day}</span>
+                ))}
             </div>
 
             <div className="grid grid-cols-7 gap-1">
                 {days.map((date, index) => {
                     if (!date) {
-                        return <span key={`empty-${index}`} className="aspect-square" />;
+                        return (
+                            <span
+                                key={`empty-${index}`}
+                                className="aspect-square"
+                            />
+                        );
                     }
 
                     const dateKey = toDateKey(date);
@@ -74,8 +84,8 @@ export default function CalendarGrid({
                                 isActive
                                     ? 'bg-blue-600 text-white shadow-sm'
                                     : isAvailable
-                                        ? 'text-slate-800 hover:bg-blue-50 hover:text-blue-700'
-                                        : 'cursor-not-allowed text-slate-300',
+                                      ? 'text-slate-800 hover:bg-blue-50 hover:text-blue-700'
+                                      : 'cursor-not-allowed text-slate-300',
                             ].join(' ')}
                         >
                             {date.getDate()}

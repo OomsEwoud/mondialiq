@@ -21,10 +21,16 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
         if (event.key === 'ArrowDown') {
             event.preventDefault();
             setOpen(true);
-            setActiveIndex((i) => matches.length === 0 ? 0 : (i + 1) % matches.length);
+            setActiveIndex((i) =>
+                matches.length === 0 ? 0 : (i + 1) % matches.length,
+            );
         } else if (event.key === 'ArrowUp') {
             event.preventDefault();
-            setActiveIndex((i) => matches.length === 0 ? 0 : (i - 1 + matches.length) % matches.length);
+            setActiveIndex((i) =>
+                matches.length === 0
+                    ? 0
+                    : (i - 1 + matches.length) % matches.length,
+            );
         } else if (event.key === 'Escape') {
             setOpen(false);
         } else if (event.key === 'Enter' && open) {
@@ -42,7 +48,10 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
         <div className="relative grid gap-1.5 text-xs font-bold text-slate-500 uppercase">
             Team
             <div className="relative">
-                <Search aria-hidden className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-blue-600" />
+                <Search
+                    aria-hidden
+                    className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-blue-600"
+                />
                 <input
                     ref={inputRef}
                     type="search"
@@ -50,8 +59,10 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                     placeholder="Search team"
                     onFocus={() => setOpen(true)}
                     onBlur={() => window.setTimeout(() => setOpen(false), 120)}
-                    onChange={(e) => { 
-                        onChange(e.target.value); setOpen(true); setActiveIndex(0); 
+                    onChange={(e) => {
+                        onChange(e.target.value);
+                        setOpen(true);
+                        setActiveIndex(0);
                     }}
                     onKeyDown={handleKeyDown}
                     className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 pr-10 pl-10 text-sm font-medium text-slate-800 normal-case transition-colors outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
@@ -67,7 +78,6 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                     </button>
                 )}
             </div>
-
             {open && matches.length > 0 && (
                 <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-md border border-slate-200 bg-white py-1 shadow-lg">
                     {matches.map((team, index) => (
@@ -76,8 +86,10 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                             type="button"
                             onMouseEnter={() => setActiveIndex(index)}
                             onMouseDown={(e) => {
-                                 e.preventDefault(); onChange(team); setOpen(false); 
-                                }}
+                                e.preventDefault();
+                                onChange(team);
+                                setOpen(false);
+                            }}
                             className={[
                                 'block w-full px-3 py-2 text-left text-sm font-medium normal-case transition-colors',
                                 index === safeIndex

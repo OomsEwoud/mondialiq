@@ -11,7 +11,7 @@ export function useTeamSearch(teams: string[], selectedTeam: string) {
         return teams
             .map((team) => {
                 const normalized = team.toLowerCase();
-                
+
                 if (!search) {
                     return { team, score: 3 };
                 }

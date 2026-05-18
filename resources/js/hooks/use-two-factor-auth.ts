@@ -80,7 +80,10 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
             const codes = (await submit(recoveryCodes())) as string[];
             setRecoveryCodesList(codes);
         } catch (error) {
-            if (error instanceof HttpResponseError && error.response.status === 423) {
+            if (
+                error instanceof HttpResponseError &&
+                error.response.status === 423
+            ) {
                 setErrors([
                     'Confirm your password before viewing recovery codes.',
                 ]);

@@ -16,10 +16,7 @@ interface Props {
     onBack: () => void;
 }
 
-export default function TwoFactorVerificationStep({
-    onClose,
-    onBack,
-}: Props) {
+export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
     const [code, setCode] = useState<string>('');
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +85,9 @@ export default function TwoFactorVerificationStep({
                         <Button
                             type="submit"
                             className="flex-1"
-                            disabled={processing || code.length < OTP_MAX_LENGTH}
+                            disabled={
+                                processing || code.length < OTP_MAX_LENGTH
+                            }
                         >
                             Confirm
                         </Button>

@@ -27,7 +27,9 @@ export default function MatchPredictionActions({ match }: Props) {
 
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <MatchDetailsActionButton matchId={match.id} />
-                    <AiPredictionButton available={Boolean(match.hasAiPrediction)} />
+                    <AiPredictionButton
+                        available={Boolean(match.hasAiPrediction)}
+                    />
                     <UserPredictionButton
                         match={match}
                         onClick={() => setPredictionOpen(true)}

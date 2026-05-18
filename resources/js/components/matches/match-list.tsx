@@ -6,14 +6,14 @@ interface Props {
 }
 
 export default function MatchList({ matches }: Props) {
-     if (matches.length === 0) {
+    if (matches.length === 0) {
         return (
             <div className="py-12 text-center text-sm text-slate-400">
                 No matches found for the selected filters.
             </div>
         );
     }
-    
+
     return (
         <div className="flex flex-col gap-4">
             {matches.map((match) => (

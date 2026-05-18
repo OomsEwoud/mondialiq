@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import type { RefObject } from 'react';
 
-export function useOutsideClick(ref: RefObject<HTMLElement | null>, onClose: () => void, enabled: boolean,) {
+export function useOutsideClick(
+    ref: RefObject<HTMLElement | null>,
+    onClose: () => void,
+    enabled: boolean,
+) {
     useEffect(() => {
         if (!enabled) {
             return;

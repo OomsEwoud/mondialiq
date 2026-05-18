@@ -16,9 +16,7 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="grid gap-3">
                     <PredictionMatchSummary match={match} />
-                    {mode === 'mine' && (
-                        <UserPredictionSummary match={match} />
-                    )}
+                    {mode === 'mine' && <UserPredictionSummary match={match} />}
                 </div>
                 <PredictionStatusAction
                     matchId={match.id}
