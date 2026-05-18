@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FixtureStat extends Model
 {
@@ -10,19 +11,19 @@ class FixtureStat extends Model
         'fixture_id',
         'team_id',
         'name',
-        'value'
+        'value',
     ];
 
     protected $casts = [
         'value' => 'float',
     ];
 
-    public function fixture()
+    public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
     }
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }

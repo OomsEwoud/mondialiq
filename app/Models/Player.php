@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Player extends Model
 {
@@ -15,7 +18,7 @@ class Player extends Model
         'birth_date',
         'photo_url',
         'position',
-        'number'
+        'number',
     ];
 
     protected $casts = [
@@ -23,37 +26,37 @@ class Player extends Model
         'number' => 'integer',
     ];
 
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function missingFixtures()
+    public function missingFixtures(): BelongsToMany
     {
         return $this->belongsToMany(Fixture::class, 'missing_players')->withTimestamps();
     }
 
-    public function fixturePlayers()
+    public function fixturePlayers(): HasMany
     {
         return $this->hasMany(FixturePlayer::class);
     }
 
-    public function fixtureEvents()
+    public function fixtureEvents(): HasMany
     {
         return $this->hasMany(FixtureEvent::class);
     }
 
-    public function assistFixtureEvents()
+    public function assistFixtureEvents(): HasMany
     {
         return $this->hasMany(FixtureEvent::class, 'assist_id');
     }
 
-    public function playerFixtureStats()
+    public function playerFixtureStats(): HasMany
     {
         return $this->hasMany(PlayerFixtureStat::class);
     }
-    
-    public function teams()
+
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(Team::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
     }

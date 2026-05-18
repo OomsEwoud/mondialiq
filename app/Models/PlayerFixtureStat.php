@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PlayerFixtureStat extends Model
 {
@@ -41,9 +42,8 @@ class PlayerFixtureStat extends Model
         'penalties_committed',
         'penalties_scored',
         'penalties_missed',
-        'penalties_saved'
+        'penalties_saved',
     ];
-
 
     protected $casts = [
         'fixture_id' => 'integer',
@@ -82,12 +82,12 @@ class PlayerFixtureStat extends Model
         'penalties_saved' => 'integer',
     ];
 
-    public function fixture()
+    public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
     }
 
-    public function player()
+    public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class);
     }

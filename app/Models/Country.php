@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Country extends Model
 {
@@ -12,27 +13,27 @@ class Country extends Model
         'flag_url',
     ];
 
-    public function leagues()
+    public function leagues(): HasMany
     {
         return $this->hasMany(League::class);
     }
 
-    public function teams()
+    public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
 
-    public function coaches()
+    public function coaches(): HasMany
     {
         return $this->hasMany(Coach::class);
     }
 
-    public function players()
+    public function players(): HasMany
     {
         return $this->hasMany(Player::class);
     }
 
-    public function venues()
+    public function venues(): HasMany
     {
         return $this->hasMany(Venue::class);
     }

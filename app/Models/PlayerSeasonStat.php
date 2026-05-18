@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PlayerSeasonStat extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'player_id',
         'league_id',
         'season',
@@ -85,12 +86,12 @@ class PlayerSeasonStat extends Model
         'penalties_saved' => 'integer',
     ];
 
-    public function player()
+    public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class);
     }
 
-    public function league()
+    public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
     }

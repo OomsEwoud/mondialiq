@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FixtureOdd extends Model
 {
@@ -11,24 +12,24 @@ class FixtureOdd extends Model
         'bookmaker_id',
         'bet_type_id',
         'value',
-        'odd'
+        'odd',
     ];
 
     protected $casts = [
-        'odd' => 'float'
+        'odd' => 'float',
     ];
 
-    public function betType()
+    public function betType(): BelongsTo
     {
         return $this->belongsTo(BetType::class);
     }
 
-    public function Bookmaker()
+    public function bookmaker(): BelongsTo
     {
         return $this->belongsTo(Bookmaker::class);
     }
 
-    public function fixture()
+    public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
     }

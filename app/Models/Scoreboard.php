@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Scoreboard extends Model
 {
     protected $fillable = [
         'name',
-        'code'
+        'code',
     ];
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'users_has_scoreboards');
     }

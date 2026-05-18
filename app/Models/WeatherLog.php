@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WeatherLog extends Model
 {
@@ -10,7 +11,7 @@ class WeatherLog extends Model
         'fixture_id',
         'temperature',
         'humidity',
-        'condition'
+        'condition',
     ];
 
     protected $casts = [
@@ -18,7 +19,7 @@ class WeatherLog extends Model
         'humidity' => 'integer',
     ];
 
-    public function fixture()
+    public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
     }

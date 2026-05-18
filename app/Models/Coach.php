@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Coach extends Model
 {
@@ -14,19 +15,19 @@ class Coach extends Model
         'last_name',
         'display_name',
         'birth_date',
-        'photo_url'
+        'photo_url',
     ];
 
     protected $casts = [
         'birth_date' => 'datetime',
     ];
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function country()
+    public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
     }

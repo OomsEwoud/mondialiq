@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Standing extends Model
 {
@@ -44,12 +45,12 @@ class Standing extends Model
         'goals_conceded_last_5' => 'integer',
     ];
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function league()
+    public function league(): BelongsTo
     {
         return $this->belongsTo(League::class);
     }
