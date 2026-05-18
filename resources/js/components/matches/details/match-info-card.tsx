@@ -6,7 +6,7 @@ import {
     Trophy,
     UserRound,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
+import MatchInfoItem from '@/components/matches/details/match-info-item';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
@@ -22,23 +22,27 @@ export default function MatchInfoCard({ match }: Props) {
                 Match info
             </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <InfoItem
+                <MatchInfoItem
                     icon={<CalendarDays />}
                     label="Date"
                     value={match.date}
                 />
-                <InfoItem icon={<Clock />} label="Kickoff" value={match.time} />
-                <InfoItem
+                <MatchInfoItem
+                    icon={<Clock />}
+                    label="Kickoff"
+                    value={match.time}
+                />
+                <MatchInfoItem
                     icon={<Trophy />}
                     label="Season"
                     value={String(match.season)}
                 />
-                <InfoItem
+                <MatchInfoItem
                     icon={<Shield />}
                     label="Status"
                     value={match.status}
                 />
-                <InfoItem
+                <MatchInfoItem
                     icon={<MapPin />}
                     label="Venue"
                     value={
@@ -49,34 +53,12 @@ export default function MatchInfoCard({ match }: Props) {
                             : 'TBC'
                     }
                 />
-                <InfoItem
+                <MatchInfoItem
                     icon={<UserRound />}
                     label="Referee"
                     value={match.referee ?? 'TBC'}
                 />
             </div>
         </section>
-    );
-}
-
-interface InfoItemProps {
-    icon: ReactNode;
-    label: string;
-    value: string;
-}
-
-function InfoItem({ icon, label, value }: InfoItemProps) {
-    return (
-        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 [&_svg]:h-4 [&_svg]:w-4">
-                {icon}
-            </span>
-            <div className="min-w-0">
-                <p className="text-xs font-medium text-slate-400">{label}</p>
-                <p className="truncate text-sm font-bold text-slate-700">
-                    {value}
-                </p>
-            </div>
-        </div>
     );
 }
