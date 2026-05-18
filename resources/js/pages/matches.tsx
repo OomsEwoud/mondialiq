@@ -5,16 +5,11 @@ import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
 import { emptyFilters } from '@/const/match';
 import type { Filters, MatchPageProps as Props } from '@/types/match-page';
-
-function filledFilters(filters: Filters) {
-    return Object.fromEntries(
-        Object.entries(filters).filter(([, value]) => value.trim() !== ''),
-    ) as Partial<Filters>;
-}
+import { filledMatchFilters } from '@/utils/match-filters';
 
 export default function Matches({ fixtures, filterOptions, filters }: Props) {
     const visit = (nextFilters: Filters) => {
-        const query = filledFilters(nextFilters);
+        const query = filledMatchFilters(nextFilters);
         const url = Object.keys(query).length
             ? MatchesController.url({ query })
             : MatchesController.url();
