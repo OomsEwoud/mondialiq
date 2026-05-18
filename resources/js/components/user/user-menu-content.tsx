@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/forms/dropdown-menu';
 import { UserInfo } from '@/components/user/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { logout, predictions } from '@/routes';
+import { leaderboards, logout, predictions } from '@/routes';
 import type { User } from '@/types';
 
 type Props = {
@@ -59,6 +59,20 @@ export function UserMenuContent({ user }: Props) {
                     >
                         <Trophy className="size-4 text-cyan-500" />
                         My predictions
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
+                >
+                    <Link
+                        className="flex w-full cursor-pointer items-center gap-2"
+                        href={leaderboards()}
+                        prefetch
+                        onClick={cleanup}
+                    >
+                        <Trophy className="size-4 text-cyan-500" />
+                        Leaderboards
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>

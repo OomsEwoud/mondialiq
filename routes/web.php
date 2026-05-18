@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\GroupsController;
+use App\Http\Controllers\Pages\LeaderboardsController;
 use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionsController;
@@ -19,6 +20,7 @@ Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::cla
     ->name('matches.prediction.store');
 Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
+Route::get('/leaderboards', LeaderboardsController::class)->name('leaderboards');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)
