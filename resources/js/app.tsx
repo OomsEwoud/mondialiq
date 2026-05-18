@@ -7,10 +7,10 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-if (window.location.hash === '#_=_') {
-    history.replaceState(
+if (typeof window !== 'undefined' && window.location.hash === '#_=_') {
+    window.history.replaceState(
         null,
-        document.title,
+        window.document.title,
         window.location.pathname + window.location.search,
     );
 }
