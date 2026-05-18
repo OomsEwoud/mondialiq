@@ -1,5 +1,4 @@
 import { Form, Head, Link, usePage } from '@inertiajs/react';
-import type { LucideIcon } from 'lucide-react';
 import {
     KeyRound,
     LockKeyhole,
@@ -15,6 +14,7 @@ import PasswordInput from '@/components/auth/password/password-input';
 import TwoFactorRecoveryCodes from '@/components/auth/two-factor/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/auth/two-factor/two-factor-setup-modal';
 import InputError from '@/components/forms/input-error';
+import SettingsSection from '@/components/settings/settings-section';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
@@ -35,48 +35,8 @@ type Props = {
     twoFactorEnabled?: boolean;
 };
 
-type SettingsSectionProps = {
-    icon: LucideIcon;
-    eyebrow: string;
-    title: string;
-    description: string;
-    children: React.ReactNode;
-};
-
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
-
-function SettingsSection({
-    icon: Icon,
-    eyebrow,
-    title,
-    description,
-    children,
-}: SettingsSectionProps) {
-    return (
-        <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex gap-4">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-blue-950">
-                        <Icon className="size-5" />
-                    </span>
-                    <div>
-                        <p className="mb-1 text-xs font-black tracking-widest text-cyan-500 uppercase">
-                            {eyebrow}
-                        </p>
-                        <h2 className="text-xl font-black tracking-tight text-blue-950">
-                            {title}
-                        </h2>
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                            {description}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            {children}
-        </section>
-    );
-}
 
 export default function Profile({
     mustVerifyEmail,
