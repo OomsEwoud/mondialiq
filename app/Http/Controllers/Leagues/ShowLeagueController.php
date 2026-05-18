@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
+use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\User;
+use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,6 +20,8 @@ class ShowLeagueController extends Controller
             $scoreboard->users()->whereKey($request->user()->id)->exists(),
             HttpResponse::HTTP_FORBIDDEN,
         );
+
+        $memberIds = $scoreboard->users()->pluck('users.id');
 
         $members = $scoreboard->users()
             ->select(['users.id', 'users.name', 'users.avatar'])
@@ -38,6 +42,13 @@ class ShowLeagueController extends Controller
                 'isCurrentUser' => $user->id === $request->user()->id,
             ]);
 
+        $leader = $members->first();
+        $currentUser = $members->firstWhere('isCurrentUser', true);
+        $lastActivity = Prediction::query()
+            ->whereIn('user_id', $memberIds)
+            ->latest('updated_at')
+            ->first(['updated_at']);
+
         return Inertia::render('league-show', [
             'league' => [
                 'id' => $scoreboard->id,
@@ -45,10 +56,46 @@ class ShowLeagueController extends Controller
                 'code' => $scoreboard->code,
                 'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
                 'membersCount' => $members->count(),
-                'currentLeader' => $members->first()['name'] ?? null,
+                'currentLeader' => $leader['name'] ?? null,
+                'leaderPoints' => $leader['totalPoints'] ?? 0,
+                'currentUserPoints' => $currentUser['totalPoints'] ?? 0,
+                'totalPredictions' => $members->sum('predictionsCount'),
+                'lastActivityLabel' => $lastActivity?->updated_at instanceof CarbonInterface
+                    ? $lastActivity->updated_at->diffForHumans()
+                    : null,
+                'gapToLeader' => $this->buildGapToLeader($leader, $currentUser),
                 'members' => $members,
-                'currentUserRank' => $members->firstWhere('isCurrentUser', true)['rank'] ?? null,
+                'currentUserRank' => $currentUser['rank'] ?? null,
             ],
         ]);
+    }
+
+    /**
+     * @param  array<string, mixed>|null  $leader
+     * @param  array<string, mixed>|null  $currentUser
+     * @return array{points:int, summary:string}
+     */
+    private function buildGapToLeader(?array $leader, ?array $currentUser): array
+    {
+        if (! $leader || ! $currentUser) {
+            return [
+                'points' => 0,
+                'summary' => 'No standings data yet.',
+            ];
+        }
+
+        $gap = max(($leader['totalPoints'] ?? 0) - ($currentUser['totalPoints'] ?? 0), 0);
+
+        if (($currentUser['rank'] ?? null) === 1) {
+            return [
+                'points' => 0,
+                'summary' => 'You are leading this league right now.',
+            ];
+        }
+
+        return [
+            'points' => $gap,
+            'summary' => "You are {$gap} pts behind {$leader['name']}.",
+        ];
     }
 }

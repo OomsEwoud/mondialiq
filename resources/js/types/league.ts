@@ -15,6 +15,14 @@ export interface LeagueDetails {
     joinHref: string;
     membersCount: number;
     currentLeader: string | null;
+    leaderPoints: number;
+    currentUserPoints: number;
+    totalPredictions: number;
+    lastActivityLabel: string | null;
+    gapToLeader: {
+        points: number;
+        summary: string;
+    };
     members: LeagueMember[];
     currentUserRank: number | null;
 }

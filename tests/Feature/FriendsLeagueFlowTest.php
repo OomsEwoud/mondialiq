@@ -190,6 +190,8 @@ test('a league member can view the league detail page with rankings', function (
         'user_id' => $leader->id,
         'source' => PredictionTypes::User->value,
         'points' => 30,
+        'updated_at' => now()->subHours(3),
+        'created_at' => now()->subHours(3),
     ]);
 
     Prediction::create([
@@ -197,6 +199,8 @@ test('a league member can view the league detail page with rankings', function (
         'user_id' => $currentUser->id,
         'source' => PredictionTypes::User->value,
         'points' => 20,
+        'updated_at' => now()->subHour(),
+        'created_at' => now()->subHour(),
     ]);
 
     Prediction::create([
@@ -204,6 +208,8 @@ test('a league member can view the league detail page with rankings', function (
         'user_id' => $thirdMember->id,
         'source' => PredictionTypes::User->value,
         'points' => 10,
+        'updated_at' => now()->subHours(5),
+        'created_at' => now()->subHours(5),
     ]);
 
     $this->actingAs($currentUser)
@@ -216,6 +222,12 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
+            ->where('league.leaderPoints', 30)
+            ->where('league.currentUserPoints', 20)
+            ->where('league.totalPredictions', 3)
+            ->where('league.lastActivityLabel', now()->subHour()->diffForHumans())
+            ->where('league.gapToLeader.points', 10)
+            ->where('league.gapToLeader.summary', 'You are 10 pts behind League Captain.')
             ->where('league.currentUserRank', 2)
             ->has('league.members', 3)
             ->where('league.members.0.name', 'League Captain')

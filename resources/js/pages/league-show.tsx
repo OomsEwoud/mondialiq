@@ -1,5 +1,13 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, Crown, Users, type LucideIcon } from 'lucide-react';
+import {
+    Activity,
+    ArrowLeft,
+    Crown,
+    Target,
+    TrendingUp,
+    Users,
+    type LucideIcon,
+} from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import { Badge } from '@/components/ui/feedback/badge';
@@ -78,12 +86,65 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     icon={Crown}
                                     label="Current leader"
                                     value={league.currentLeader ?? 'TBD'}
+                                    helper={`${league.leaderPoints} pts`}
                                 />
                                 <SnapshotMetric
                                     icon={Users}
                                     label="Members"
                                     value={`${league.membersCount}`}
                                 />
+                                <SnapshotMetric
+                                    icon={Target}
+                                    label="Total predictions"
+                                    value={`${league.totalPredictions}`}
+                                />
+                                <SnapshotMetric
+                                    icon={Activity}
+                                    label="Last activity"
+                                    value={
+                                        league.lastActivityLabel ??
+                                        'No predictions yet'
+                                    }
+                                />
+                            </CardContent>
+                        </Card>
+
+                        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
+                            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
+                                <CardTitle className="text-2xl font-black text-blue-950">
+                                    Your gap to the lead
+                                </CardTitle>
+                                <CardDescription className="text-sm leading-6 text-slate-500">
+                                    See how close you are to taking first place.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4 px-4 pb-5 sm:px-6">
+                                <div className="rounded-2xl border border-cyan-100 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-4 py-4">
+                                    <div className="flex items-center gap-2 text-cyan-700">
+                                        <TrendingUp className="size-4" />
+                                        <p className="text-xs font-black tracking-[0.16em] uppercase">
+                                            Race summary
+                                        </p>
+                                    </div>
+                                    <p className="mt-3 text-lg font-black text-blue-950">
+                                        {league.gapToLeader.summary}
+                                    </p>
+                                </div>
+
+                                <div className="grid gap-3 sm:grid-cols-2">
+                                    <SnapshotMetric
+                                        icon={Crown}
+                                        label="Leader points"
+                                        value={`${league.leaderPoints}`}
+                                        helper="pts"
+                                    />
+                                    <SnapshotMetric
+                                        icon={TrendingUp}
+                                        label="Your points"
+                                        value={`${league.currentUserPoints}`}
+                                        helper="pts"
+                                    />
+                                </div>
                             </CardContent>
                         </Card>
 
@@ -102,9 +163,10 @@ type SnapshotMetricProps = {
     icon: LucideIcon;
     label: string;
     value: string;
+    helper?: string;
 };
 
-function SnapshotMetric({ icon: Icon, label, value }: SnapshotMetricProps) {
+function SnapshotMetric({ icon: Icon, label, value, helper }: SnapshotMetricProps) {
     return (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
             <div className="flex items-center gap-2 text-slate-500">
@@ -114,6 +176,11 @@ function SnapshotMetric({ icon: Icon, label, value }: SnapshotMetricProps) {
                 </p>
             </div>
             <p className="mt-2 text-base font-black text-blue-950">{value}</p>
+            {helper && (
+                <p className="mt-1 text-xs font-semibold text-slate-500">
+                    {helper}
+                </p>
+            )}
         </div>
     );
 }
