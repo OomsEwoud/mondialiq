@@ -35,7 +35,35 @@ class StoreMatchPredictionRequest extends FormRequest
                         'Predictions are closed for matches that have already started.',
                     );
                 }
+
+                if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {
+                    $this->validateScoreMatchesOutcome($validator);
+                }
             },
         ];
+    }
+
+    private function validateScoreMatchesOutcome(Validator $validator): void
+    {
+        if (! $this->filled('home_score') || ! $this->filled('away_score')) {
+            return;
+        }
+
+        $homeScore = $this->integer('home_score');
+        $awayScore = $this->integer('away_score');
+        $outcome = $this->string('outcome')->toString();
+
+        $scoreOutcome = match (true) {
+            $homeScore > $awayScore => 'home',
+            $homeScore < $awayScore => 'away',
+            default => 'draw',
+        };
+
+        if ($outcome !== $scoreOutcome) {
+            $validator->errors()->add(
+                'outcome',
+                'The selected winner must match the predicted score.',
+            );
+        }
     }
 }

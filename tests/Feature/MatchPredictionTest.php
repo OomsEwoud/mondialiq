@@ -119,6 +119,31 @@ test('a prediction cannot be saved after the match starts', function () {
     expect(Prediction::query()->count())->toBe(0);
 });
 
+test('the predicted score must match the selected outcome', function (
+    string $outcome,
+    int $homeScore,
+    int $awayScore,
+) {
+    $user = User::factory()->create();
+    [$fixture] = createPredictionFixture();
+
+    $this
+        ->actingAs($user)
+        ->post(route('matches.prediction.store', $fixture), [
+            'outcome' => $outcome,
+            'home_score' => $homeScore,
+            'away_score' => $awayScore,
+        ])
+        ->assertSessionHasErrors('outcome');
+
+    expect(Prediction::query()->count())->toBe(0);
+})->with([
+    'home pick with away score win' => ['home', 0, 2],
+    'away pick with home score win' => ['away', 2, 0],
+    'draw pick with home score win' => ['draw', 2, 1],
+    'home pick with draw score' => ['home', 1, 1],
+]);
+
 test('the match prediction endpoint is rate limited', function () {
     $middleware = app('router')
         ->getRoutes()
