@@ -1,4 +1,5 @@
-import Cropper, { type Area, type Point } from 'react-easy-crop';
+import Cropper from 'react-easy-crop';
+import type { Area, Point } from 'react-easy-crop';
 import 'react-easy-crop/react-easy-crop.css';
 import AvatarZoomControl from '@/components/user/avatar-zoom-control';
 

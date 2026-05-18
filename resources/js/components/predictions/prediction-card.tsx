@@ -1,8 +1,8 @@
 import PredictionMatchSummary from '@/components/predictions/prediction-match-summary';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
+import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
 import type { Match } from '@/types/match';
-import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 
 interface Props {
     match: Match;

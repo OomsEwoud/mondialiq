@@ -6,8 +6,6 @@ import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Label } from '@/components/ui/forms/label';
-import type { User } from '@/types';
-import { formatProviderName } from '@/utils/social-provider';
 import {
     Dialog,
     DialogClose,
@@ -17,6 +15,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
+import type { User } from '@/types';
+import { formatProviderName } from '@/utils/social-provider';
 
 type Props = {
     user?: User;

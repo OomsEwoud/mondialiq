@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import type { Area, Point } from 'react-easy-crop';
 import { Button } from '@/components/ui/forms/button';
-import AvatarCropperBody from '@/components/user/avatar-cropper-body';
 import {
     Dialog,
     DialogContent,
@@ -10,6 +9,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/overlays/dialog';
+import AvatarCropperBody from '@/components/user/avatar-cropper-body';
 import {
     avatarMimeType,
     croppedAvatarFileName,

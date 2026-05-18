@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { LockKeyhole } from 'lucide-react';
-import { login } from '@/routes';
 import { Button } from '@/components/ui/forms/button';
+import { login } from '@/routes';
 
 export default function UserPredictionLoginPrompt() {
     return (

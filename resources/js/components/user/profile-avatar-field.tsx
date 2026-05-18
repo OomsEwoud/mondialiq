@@ -1,5 +1,5 @@
-import type { ChangeEvent, RefObject } from 'react';
 import { CheckCircle2, ImagePlus } from 'lucide-react';
+import type { ChangeEvent, RefObject } from 'react';
 import InputError from '@/components/forms/input-error';
 import {
     Avatar,
