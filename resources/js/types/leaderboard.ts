@@ -6,3 +6,9 @@ export interface LeaderboardEntry {
     predictionsCount: number;
     totalPoints: number;
 }
+
+export interface LeaderboardsPageProps {
+    globalLeaders: LeaderboardEntry[];
+    currentUserStanding: LeaderboardEntry | null;
+    totalPlayers: number;
+}

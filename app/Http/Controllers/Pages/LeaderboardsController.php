@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LeaderboardsController extends Controller
 {
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
         $leaders = User::query()
             ->select(['id', 'name', 'avatar'])
@@ -29,8 +30,12 @@ class LeaderboardsController extends Controller
                 'totalPoints' => $user->predictions_sum_points ?? 0,
             ]);
 
+        $currentUserStanding = $leaders->firstWhere('id', $request->user()?->id);
+
         return Inertia::render('leaderboards', [
-            'leaders' => $leaders,
+            'globalLeaders' => $leaders->take(10)->values(),
+            'currentUserStanding' => $currentUserStanding,
+            'totalPlayers' => $leaders->count(),
         ]);
     }
 }
