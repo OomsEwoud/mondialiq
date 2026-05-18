@@ -138,3 +138,21 @@ php artisan storage:link
 - Keep changes focused on the requested task.
 - Do not refactor unrelated code.
 - If a larger refactor seems useful, suggest it first instead of doing it immediately.
+
+## Refactoring Rules
+
+- Do not rewrite React components completely unless explicitly asked.
+- When asked to clean up React code, make small targeted improvements first:
+  - remove dead code
+  - simplify duplicated logic
+  - improve naming
+  - fix obvious TypeScript issues
+  - improve formatting
+  - extract only clearly reusable logic
+- Do not move logic into custom hooks unless:
+  - the logic is reused by multiple components, or
+  - the component becomes hard to read, or
+  - the user explicitly asks for hooks.
+- Do not extract components unless it clearly improves readability.
+- Avoid large file moves during cleanup tasks unless requested.
+- Keep the current UI and behavior unchanged unless the task explicitly asks for UX changes.

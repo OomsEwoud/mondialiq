@@ -1,5 +1,4 @@
-import { Input } from '@/components/ui/forms/input';
-import { Label } from '@/components/ui/forms/label';
+import PredictionScoreInput from '@/components/matches/prediction/prediction-score-input';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -41,43 +40,6 @@ export default function PredictionScoreFields({
                 error={awayError}
                 onChange={onAwayScoreChange}
             />
-        </div>
-    );
-}
-
-interface PredictionScoreInputProps {
-    id: string;
-    label: string;
-    value: string;
-    disabled: boolean;
-    error?: string;
-    onChange: (score: string) => void;
-}
-
-function PredictionScoreInput({
-    id,
-    label,
-    value,
-    disabled,
-    error,
-    onChange,
-}: PredictionScoreInputProps) {
-    return (
-        <div className="grid gap-2">
-            <Label htmlFor={id}>{label}</Label>
-            <Input
-                id={id}
-                type="number"
-                min="0"
-                max="99"
-                inputMode="numeric"
-                value={value}
-                disabled={disabled}
-                onChange={(event) => onChange(event.target.value)}
-            />
-            {error && (
-                <p className="text-sm font-medium text-red-600">{error}</p>
-            )}
         </div>
     );
 }

@@ -8,9 +8,10 @@ import PredictionScoreFields from '@/components/matches/prediction/prediction-sc
 import { Button } from '@/components/ui/forms/button';
 import { store as storePrediction } from '@/routes/matches/prediction';
 import type { Match } from '@/types/match';
+import type { UserPredictionFormData } from '@/types/match-prediction';
 import {
     hasMatchStarted,
-    predictionScoreValue,
+    initialPredictionFormData,
 } from '@/utils/match-prediction';
 
 interface Props {
@@ -27,24 +28,15 @@ export default function UserPredictionForm({
     onCancel,
 }: Props) {
     const matchStarted = hasMatchStarted(match);
-    const { data, setData, post, processing, errors, clearErrors } = useForm({
-        outcome: match.userPrediction?.outcome ?? '',
-        home_score: predictionScoreValue(match.userPrediction?.homeScore),
-        away_score: predictionScoreValue(match.userPrediction?.awayScore),
-        confidence: match.userPrediction?.confidence ?? '',
-    });
+    const { data, setData, post, processing, errors, clearErrors } =
+        useForm<UserPredictionFormData>(initialPredictionFormData(match));
 
     useEffect(() => {
         if (!open) {
             return;
         }
 
-        setData({
-            outcome: match.userPrediction?.outcome ?? '',
-            home_score: predictionScoreValue(match.userPrediction?.homeScore),
-            away_score: predictionScoreValue(match.userPrediction?.awayScore),
-            confidence: match.userPrediction?.confidence ?? '',
-        });
+        setData(initialPredictionFormData(match));
         clearErrors();
     }, [clearErrors, match, open, setData]);
 
