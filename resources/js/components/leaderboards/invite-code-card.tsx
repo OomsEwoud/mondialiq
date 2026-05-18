@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Copy, LogIn, Ticket } from 'lucide-react';
+import { Copy, Link2, LogIn, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
+import { useClipboard } from '@/hooks/use-clipboard';
 import { Button } from '@/components/ui/forms/button';
 import {
     Card,
@@ -16,24 +16,30 @@ type Props = {
 };
 
 export default function InviteCodeCard({ code, joinHref }: Props) {
-    const [copying, setCopying] = useState(false);
+    const [copiedText, copy] = useClipboard();
+    const isCopyingCode = copiedText === code;
+    const isCopyingJoinLink = copiedText === joinHref;
 
     const copyCode = async () => {
-        if (typeof navigator === 'undefined' || !navigator.clipboard) {
-            toast.error('Copy is not available on this device.');
+        const success = await copy(code);
 
+        if (!success) {
+            toast.error('Copy is not available on this device.');
             return;
         }
 
-        try {
-            setCopying(true);
-            await navigator.clipboard.writeText(code);
-            toast.success('Invite code copied.');
-        } catch {
-            toast.error('Could not copy the invite code.');
-        } finally {
-            setCopying(false);
+        toast.success('Invite code copied.');
+    };
+
+    const copyJoinLink = async () => {
+        const success = await copy(joinHref);
+
+        if (!success) {
+            toast.error('Could not copy the join link.');
+            return;
         }
+
+        toast.success('Join link copied.');
     };
 
     return (
@@ -65,11 +71,22 @@ export default function InviteCodeCard({ code, joinHref }: Props) {
                         type="button"
                         variant="outline"
                         className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
-                        disabled={copying}
+                        disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyCode}
                     >
                         <Copy className="size-4" />
-                        {copying ? 'Copying...' : 'Copy code'}
+                        {isCopyingCode ? 'Copied' : 'Copy code'}
+                    </Button>
+
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                        disabled={isCopyingCode || isCopyingJoinLink}
+                        onClick={copyJoinLink}
+                    >
+                        <Link2 className="size-4" />
+                        {isCopyingJoinLink ? 'Copied' : 'Copy join link'}
                     </Button>
 
                     <Button

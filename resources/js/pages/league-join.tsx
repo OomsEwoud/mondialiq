@@ -12,11 +12,12 @@ import {
     CardTitle,
 } from '@/components/ui/layout/card';
 import { leaderboards } from '@/routes';
+import type { LeagueJoinPageProps } from '@/types';
 
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
 
-export default function LeagueJoin() {
+export default function LeagueJoin({ initialCode }: LeagueJoinPageProps) {
     return (
         <>
             <Head title="Join League" />
@@ -78,6 +79,7 @@ export default function LeagueJoin() {
                                             name="code"
                                             className={fieldClassName}
                                             placeholder="ABCDEFGH"
+                                            defaultValue={initialCode}
                                             maxLength={8}
                                             autoCapitalize="characters"
                                             autoCorrect="off"

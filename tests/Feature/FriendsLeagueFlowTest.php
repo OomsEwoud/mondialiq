@@ -63,6 +63,18 @@ test('an authenticated user can view the join league page', function () {
         );
 });
 
+test('the join league page pre-fills the invite code from the query string', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('leagues.join', ['code' => 'join2026abc']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-join')
+            ->where('initialCode', 'JOIN2026'),
+        );
+});
+
 test('an authenticated user can create a friends league and joins it immediately', function () {
     $user = User::factory()->create();
 
@@ -201,6 +213,7 @@ test('a league member can view the league detail page with rankings', function (
             ->component('league-show')
             ->where('league.name', 'Friends League')
             ->where('league.code', 'FRIENDS1')
+            ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
             ->where('league.currentUserRank', 2)

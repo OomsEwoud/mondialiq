@@ -89,7 +89,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
                         <InviteCodeCard
                             code={league.code}
-                            joinHref="/leagues/join"
+                            joinHref={league.joinHref}
                         />
                     </div>
                 </div>

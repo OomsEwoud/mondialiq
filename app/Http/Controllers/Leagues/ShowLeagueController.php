@@ -43,6 +43,7 @@ class ShowLeagueController extends Controller
                 'id' => $scoreboard->id,
                 'name' => $scoreboard->name,
                 'code' => $scoreboard->code,
+                'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
                 'membersCount' => $members->count(),
                 'currentLeader' => $members->first()['name'] ?? null,
                 'members' => $members,
