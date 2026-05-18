@@ -5,41 +5,49 @@ namespace App\Services\Prediction;
 use App\Enums\PredictionTypes;
 use App\Models\Prediction;
 use App\Models\Team;
-use App\Models\Fixture;
 
 class PredictionService
 {
     public function storeApiPrediction(array $prediction, int $fixtureId): void
     {
-        $apiWinnerId = $prediction[0]['predictions']['winner']['id'] ?? null;
-        $localWinnerId = null;
+        $apiPrediction = data_get($prediction, '0.predictions', []);
 
-        if ($apiWinnerId) {
-            $localWinnerId = Team::where('external_id', $apiWinnerId)->value('id');
-        }
-
-        Prediction::updateOrCreate(
+        Prediction::query()->updateOrCreate(
             [
                 'fixture_id' => $fixtureId,
                 'user_id' => null,
                 'source' => PredictionTypes::Api->value,
             ],
             [
-                'winner_id' =>  $localWinnerId,
-                'total_goals' => $prediction[0]['predictions']['under_over'] ?? null,
-                'home_goals' => $prediction[0]['predictions']['goals']['home'] ?? null,
-                'away_goals' => $prediction[0]['predictions']['goals']['away'] ?? null,
-                'advice' => $prediction[0]['predictions']['advice'] ?? null,
-                'home_chance' => isset($prediction[0]['predictions']['percent']['home'])
-                    ? (float) rtrim($prediction[0]['predictions']['percent']['home'], '%')
-                    : null,
-                'draw_chance' => isset($prediction[0]['predictions']['percent']['draw'])
-                    ? (float) rtrim($prediction[0]['predictions']['percent']['draw'], '%')
-                    : null,
-                'away_chance' => isset($prediction[0]['predictions']['percent']['away'])
-                    ? (float) rtrim($prediction[0]['predictions']['percent']['away'], '%')
-                    : null,
-            ]
+                'winner_id' => $this->resolveWinnerId(data_get($apiPrediction, 'winner.id')),
+                'total_goals' => data_get($apiPrediction, 'under_over'),
+                'home_goals' => data_get($apiPrediction, 'goals.home'),
+                'away_goals' => data_get($apiPrediction, 'goals.away'),
+                'advice' => data_get($apiPrediction, 'advice'),
+                'home_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.home')),
+                'draw_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.draw')),
+                'away_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.away')),
+            ],
         );
+    }
+
+    private function resolveWinnerId(?int $apiWinnerId): ?int
+    {
+        if ($apiWinnerId === null) {
+            return null;
+        }
+
+        return Team::query()
+            ->where('external_id', $apiWinnerId)
+            ->value('id');
+    }
+
+    private function normalizePercentage(null|string $percentage): ?float
+    {
+        if ($percentage === null) {
+            return null;
+        }
+
+        return (float) rtrim($percentage, '%');
     }
 }

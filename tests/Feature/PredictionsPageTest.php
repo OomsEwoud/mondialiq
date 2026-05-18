@@ -120,3 +120,44 @@ test('a user prediction can be shown on the predictions page', function () {
             ->where('fixtures.data.0.userPrediction.label', 'Netherlands')
         );
 });
+
+test('guest users do not see mine predictions results', function () {
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    Fixture::create([
+        'external_id' => 10,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => '2026-06-12 20:00:00',
+        'status_long' => 'Not Started',
+    ]);
+
+    $response = $this->get(route('predictions', ['mode' => 'mine']));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('predictions')
+            ->where('mode', 'mine')
+            ->has('fixtures.data', 0),
+        );
+});

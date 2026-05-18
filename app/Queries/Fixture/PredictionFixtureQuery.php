@@ -25,13 +25,16 @@ class PredictionFixtureQuery
 
     private function withUserPredictions(Builder $query, ?User $user): Builder
     {
-        if (!$user) {
-            return $query->whereRaw('1 = 0');
+        if ($user === null) {
+            return $query->whereKey([]);
         }
 
         return $query
-            ->with(['userPredictions' => fn ($query) => $query
-                ->whereBelongsTo($user)])
+            ->with([
+                'userPredictions' => fn (Builder $query) => $query
+                    ->whereBelongsTo($user)
+                    ->with('winner'),
+            ])
             ->whereHas('userPredictions', fn (Builder $query) => $query
                 ->whereBelongsTo($user));
     }

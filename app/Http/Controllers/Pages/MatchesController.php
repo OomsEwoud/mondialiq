@@ -7,6 +7,7 @@ use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use App\Services\Helper\HelperService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -42,19 +43,17 @@ class MatchesController extends Controller
             $filters['round'],
         );
 
-        $fixtures = $this->paginationService->paginate(
-            $query->build($queryFilters)
-                ->with([
-                    'aiPrediction',
-                    'userPredictions' => fn ($query) => $query
-                        ->when(
-                            $request->user(),
-                            fn ($query, $user) => $query->whereBelongsTo($user),
-                            fn ($query) => $query->whereRaw('1 = 0'),
-                        )
-                        ->with('winner'),
-                ])
-        );
+        $fixturesQuery = $query->build($queryFilters)->with('aiPrediction');
+
+        if ($user = $request->user()) {
+            $fixturesQuery->with([
+                'userPredictions' => fn (Builder $query) => $query
+                    ->whereBelongsTo($user)
+                    ->with('winner'),
+            ]);
+        }
+
+        $fixtures = $this->paginationService->paginate($fixturesQuery);
 
         return Inertia::render('matches', [
             'fixtures'      => $fixtures,
