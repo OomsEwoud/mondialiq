@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Models\Scoreboard;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -36,6 +38,49 @@ class LeaderboardsController extends Controller
             'globalLeaders' => $leaders->take(10)->values(),
             'currentUserStanding' => $currentUserStanding,
             'totalPlayers' => $leaders->count(),
+            'joinedLeagues' => $this->joinedLeagues($request->user()),
+            'createLeagueHref' => null,
         ]);
+    }
+
+    private function joinedLeagues(?User $user): Collection
+    {
+        if (! $user) {
+            return collect();
+        }
+
+        return $user->scoreboards()
+            ->withCount('users')
+            ->get()
+            ->map(fn (Scoreboard $scoreboard) => $this->mapJoinedLeague($scoreboard, $user));
+    }
+
+    private function mapJoinedLeague(Scoreboard $scoreboard, User $user): array
+    {
+        $rankings = $scoreboard->users()
+            ->select(['users.id', 'users.name'])
+            ->withSum('predictions', 'points')
+            ->withCount('predictions')
+            ->orderByDesc('predictions_sum_points')
+            ->orderByDesc('predictions_count')
+            ->orderBy('users.name')
+            ->get()
+            ->values();
+
+        $currentUserEntry = $rankings->firstWhere('id', $user->id);
+        $leader = $rankings->first();
+
+        return [
+            'id' => $scoreboard->id,
+            'name' => $scoreboard->name,
+            'members_count' => $scoreboard->users_count,
+            'user_rank' => $currentUserEntry
+                ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1
+                : null,
+            'leader_name' => $leader?->name,
+            'points' => $currentUserEntry?->predictions_sum_points ?? 0,
+            'predictions_count' => $currentUserEntry?->predictions_count ?? 0,
+            'href' => null,
+        ];
     }
 }

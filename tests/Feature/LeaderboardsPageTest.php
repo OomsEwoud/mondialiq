@@ -4,6 +4,7 @@ use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Prediction;
+use App\Models\Scoreboard;
 use App\Models\Team;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -77,5 +78,63 @@ test('the leaderboards page shows the top 10 and current user standing', functio
             ->where('currentUserStanding.rank', 12)
             ->where('currentUserStanding.totalPoints', 10)
             ->where('totalPlayers', 12),
+        );
+});
+
+test('the leaderboards page shows joined friends leagues for the current user', function () {
+    $fixture = createLeaderboardFixture();
+
+    $currentUser = User::factory()->create(['name' => 'Current Player']);
+    $leagueLeader = User::factory()->create(['name' => 'League Leader']);
+    $thirdMember = User::factory()->create(['name' => 'Third Member']);
+
+    $friendsLeague = Scoreboard::create([
+        'name' => 'Friends League',
+        'code' => 'FRIENDS1',
+    ]);
+
+    $friendsLeague->users()->attach([
+        $currentUser->id,
+        $leagueLeader->id,
+        $thirdMember->id,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $leagueLeader->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 25,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $currentUser->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 18,
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $thirdMember->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 10,
+    ]);
+
+    $response = $this
+        ->actingAs($currentUser)
+        ->get(route('leaderboards'));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('leaderboards')
+            ->has('joinedLeagues', 1)
+            ->where('joinedLeagues.0.name', 'Friends League')
+            ->where('joinedLeagues.0.members_count', 3)
+            ->where('joinedLeagues.0.user_rank', 2)
+            ->where('joinedLeagues.0.leader_name', 'League Leader')
+            ->where('joinedLeagues.0.points', 18)
+            ->where('joinedLeagues.0.predictions_count', 1)
+            ->where('createLeagueHref', null),
         );
 });
