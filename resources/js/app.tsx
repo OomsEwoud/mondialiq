@@ -7,6 +7,14 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+if (window.location.hash === '#_=_') {
+    history.replaceState(
+        null,
+        document.title,
+        window.location.pathname + window.location.search,
+    );
+}
+
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
