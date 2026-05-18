@@ -13,11 +13,11 @@ class FixtureService
 {
     public function storeFixtures(array $fixtures): void
     {
-        $leagueIds = League::pluck('id', 'external_id');
-        $teamIds = Team::pluck('id', 'external_id');
+        $leagueIds = League::query()->pluck('id', 'external_id');
+        $teamIds = Team::query()->pluck('id', 'external_id');
 
         foreach ($fixtures as $fixture) {
-            Fixture::updateOrCreate(
+            Fixture::query()->updateOrCreate(
                 ['external_id' => $fixture['fixture']['id']],
                 [
                     'league_id' => $leagueIds[$fixture['league']['id']],
@@ -39,7 +39,7 @@ class FixtureService
                     'penalty_home_goals' => $fixture['score']['penalty']['home'],
                     'penalty_away_goals' => $fixture['score']['penalty']['away'],
                     'result' => $this->calculateResult($fixture['score']['fulltime']),
-                ]
+                ],
             );
         }
     }
@@ -50,7 +50,7 @@ class FixtureService
             return null;
         }
 
-        return Referee::firstOrCreate(['name' => $fixtureData['referee']])->id;
+        return Referee::query()->firstOrCreate(['name' => $fixtureData['referee']])->id;
     }
 
     private function resolveVenue(array $venueData): ?int
@@ -59,12 +59,12 @@ class FixtureService
             return null;
         }
 
-        $venue = !empty($venueData['id'])
-            ? Venue::where('external_id', $venueData['id'])->first()
-            : Venue::where('name', $venueData['name'])->first();
+        $venue = ! empty($venueData['id'])
+            ? Venue::query()->where('external_id', $venueData['id'])->first()
+            : Venue::query()->where('name', $venueData['name'])->first();
 
-        if (!$venue) {
-            $venue = Venue::create([
+        if (! $venue) {
+            $venue = Venue::query()->create([
                 'external_id' => $venueData['id'] ?? null,
                 'name' => $venueData['name'],
                 'city' => $venueData['city'] ?? null,

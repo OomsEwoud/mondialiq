@@ -2,9 +2,9 @@
 
 namespace App\Services\Player;
 
+use App\Models\Country;
 use App\Models\Player;
 use App\Models\Team;
-use App\Models\Country;
 use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +13,16 @@ class PlayerService
 {
     protected array $countriesCache = [];
 
-    public function __construct(protected CountryService $countryService, protected FootballApiService $api) {}
+    public function __construct(
+        protected CountryService $countryService,
+        protected FootballApiService $api,
+    ) {
+    }
 
     private function loadCountryCache(): void
     {
         if (empty($this->countriesCache)) {
-            $this->countriesCache = Country::pluck('id', 'name')->toArray();
+            $this->countriesCache = Country::query()->pluck('id', 'name')->toArray();
         }
     }
 
@@ -73,15 +77,15 @@ class PlayerService
             $attributes['country_id'] = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
         }
 
-        return Player::updateOrCreate(
+        return Player::query()->updateOrCreate(
             ['external_id' => $data['id']],
-            $attributes
+            $attributes,
         );
     }
 
     public function syncTeamPlayers(): void
     {
-        Team::chunk(100, function ($teams) {
+        Team::query()->chunk(100, function ($teams) {
             foreach ($teams as $team) {
                 $teamPlayerData = $this->api->getPlayers($team->external_id);
                 $this->storeTeamPlayers($team, $teamPlayerData);

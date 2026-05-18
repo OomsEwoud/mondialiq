@@ -2,9 +2,9 @@
 
 namespace App\Services\Player;
 
-use App\Models\PlayerSeasonStat;
-use App\Models\Player;
 use App\Models\League;
+use App\Models\Player;
+use App\Models\PlayerSeasonStat;
 use App\Models\Team;
 use Illuminate\Support\Collection;
 
@@ -16,19 +16,18 @@ class PlayerStatsService
 
     protected function getLeagues(): Collection
     {
-        return $this->leagues ??= League::pluck('id', 'external_id');
+        return $this->leagues ??= League::query()->pluck('id', 'external_id');
     }
 
     protected function getTeams(): Collection
     {
-        return $this->teams ??= Team::pluck('id', 'external_id');
+        return $this->teams ??= Team::query()->pluck('id', 'external_id');
     }
 
     protected function getPlayerIds(): Collection
     {
-        return $this->playerIds ??= Player::pluck('id', 'external_id');
+        return $this->playerIds ??= Player::query()->pluck('id', 'external_id');
     }
-
 
     public function storePlayerStats(array $stats): void
     {
@@ -39,24 +38,25 @@ class PlayerStatsService
 
     private function updateOrCreatePlayer(array $stat): void
     {
-        if (!isset($stat['player']['id']) || !isset($stat['statistics'])) {
+        if (! isset($stat['player']['id']) || ! isset($stat['statistics'])) {
             return;
         }
 
         $playerId = $this->getPlayerIds()[$stat['player']['id']] ?? null;
-        if (!$playerId) {
-            return; 
+
+        if (! $playerId) {
+            return;
         }
 
         foreach ($stat['statistics'] as $playerData) {
             $leagueId = $this->getLeagues()[$playerData['league']['id'] ?? null] ?? null;
-            $teamId   = $this->getTeams()[$playerData['team']['id'] ?? null] ?? null;
+            $teamId = $this->getTeams()[$playerData['team']['id'] ?? null] ?? null;
 
-            if (!$leagueId || !$teamId) {
+            if (! $leagueId || ! $teamId) {
                 continue;
             }
 
-            PlayerSeasonStat::updateOrCreate(
+            PlayerSeasonStat::query()->updateOrCreate(
                 [
                     'player_id' => $playerId,
                     'league_id' => $leagueId,
@@ -99,7 +99,7 @@ class PlayerStatsService
                     'penalties_scored'        => $playerData['penalty']['scored'] ?? 0,
                     'penalties_missed'        => $playerData['penalty']['missed'] ?? 0,
                     'penalties_saved'         => $playerData['penalty']['saved'] ?? 0,
-                ]
+                ],
             );
         }
     }

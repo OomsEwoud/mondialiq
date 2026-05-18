@@ -4,27 +4,28 @@ namespace App\Services\Standing;
 
 use App\Models\Standing;
 use Illuminate\Support\Collection;
-class GroupStandingService 
+
+class GroupStandingService
 {
     public function groupStandings(Collection $standings): Collection
     {
         return $standings
             ->groupBy('group_name')
             ->map(fn (Collection $groupStandings, string $groupName) => [
-                'id'    => $this->groupId($groupName),
-                'name'  => str_starts_with($groupName, 'Group ') ? $groupName : "Group {$groupName}",
+                'id' => $this->groupId($groupName),
+                'name' => str_starts_with($groupName, 'Group ') ? $groupName : "Group {$groupName}",
                 'teams' => $groupStandings->map(fn (Standing $standing) => [
-                    'id'                      => $standing->team->id,
-                    'name'                    => $standing->team->name,
-                    'code'                    => $standing->team->code,
-                    'logo'                    => $standing->team->logo_url,
-                    'rank'                    => $standing->rank,
-                    'played'                  => $standing->matches_played,
-                    'wins'                    => $standing->wins,
-                    'draws'                   => $standing->draws,
-                    'losses'                  => $standing->losses,
-                    'goalDifference'          => $standing->goal_difference,
-                    'points'                  => $standing->points,
+                    'id' => $standing->team->id,
+                    'name' => $standing->team->name,
+                    'code' => $standing->team->code,
+                    'logo' => $standing->team->logo_url,
+                    'rank' => $standing->rank,
+                    'played' => $standing->matches_played,
+                    'wins' => $standing->wins,
+                    'draws' => $standing->draws,
+                    'losses' => $standing->losses,
+                    'goalDifference' => $standing->goal_difference,
+                    'points' => $standing->points,
                     'qualificationProbability' => $this->qualificationProbability($standing),
                 ])->values(),
             ])

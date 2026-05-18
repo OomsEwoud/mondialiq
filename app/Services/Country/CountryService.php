@@ -11,14 +11,14 @@ class CountryService
     public function storeAllCountries(array $countriesData): void
     {
         foreach ($countriesData as $countryData) {
-            Country::updateOrCreate(
+            Country::query()->updateOrCreate(
                 [
                     'name' => $countryData['name'],
                 ],
                 [
                     'fifa_code' => $countryData['code'] ?? 'WORLD',
                     'flag_url' => $countryData['flag'],
-                ]
+                ],
             );
         }
     }
@@ -26,7 +26,7 @@ class CountryService
     public function getUnknownId(): ?int
     {
         if ($this->unknownCountryId === null) {
-            $this->unknownCountryId = Country::where('name', 'World')->first()?->id;
+            $this->unknownCountryId = Country::query()->where('name', 'World')->first()?->id;
         }
 
         return $this->unknownCountryId;
@@ -34,7 +34,7 @@ class CountryService
 
     public function normalizeName(?string $name): string
     {
-        if (!$name) {
+        if (! $name) {
             return 'World';
         }
 
@@ -50,7 +50,7 @@ class CountryService
             'Czechia' => 'Czech-Republic',
             'Trinidad and Tobago' => 'Trinidad-And-Tobago',
             'Korea Republic' => 'South-Korea',
-            "South Africa" => "South-Africa",
+            'South Africa' => 'South-Africa',
         ];
 
         return $map[$name] ?? $name;

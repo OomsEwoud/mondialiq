@@ -3,8 +3,8 @@
 namespace App\Services\Coach;
 
 use App\Models\Coach;
-use App\Models\Team;
 use App\Models\Country;
+use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
 
@@ -12,18 +12,22 @@ class CoachService
 {
     protected array $countriesCache = [];
 
-    public function __construct(protected FootballApiService $api, protected CountryService $countryService) {}
+    public function __construct(
+        protected FootballApiService $api,
+        protected CountryService $countryService,
+    ) {
+    }
 
     private function loadCountryCache(): void
     {
         if (empty($this->countriesCache)) {
-            $this->countriesCache = Country::pluck('id', 'name')->toArray();
+            $this->countriesCache = Country::query()->pluck('id', 'name')->toArray();
         }
     }
 
     public function syncCoaches(): void
     {
-        Team::chunk(100, function ($teams) {
+        Team::query()->chunk(100, function ($teams) {
             foreach ($teams as $team) {
                 $coaches = $this->api->getCoach($team->external_id);
 
@@ -34,7 +38,7 @@ class CoachService
 
                     if ($isCurrentCoach) {
                         $this->storeCoach($team, $coachData);
-                        break; //bc api gives whole staff only need the first coach
+                        break;
                     }
                 }
             }
@@ -49,7 +53,7 @@ class CoachService
             $countryId = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
         }
 
-        Coach::updateOrCreate(
+        Coach::query()->updateOrCreate(
             ['external_id' => $coachData['id']],
             [
                 'team_id' => $team->id,
@@ -59,7 +63,7 @@ class CoachService
                 'display_name' => $coachData['name'],
                 'photo_url' => $coachData['photo'],
                 'birth_date' => $coachData['birth']['date'],
-            ]
+            ],
         );
     }
 }

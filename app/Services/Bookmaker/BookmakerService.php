@@ -9,14 +9,13 @@ class BookmakerService
     public function storeBookmakers(array $bookmakers): void
     {
         foreach ($bookmakers as $bookmaker) {
-
             if (empty($bookmaker['name'])) {
                 continue;
             }
 
-            Bookmaker::updateOrCreate(
+            Bookmaker::query()->updateOrCreate(
                 ['name' => $bookmaker['name']],
-                ['name' => $bookmaker['name']]
+                ['name' => $bookmaker['name']],
             );
         }
     }

@@ -2,9 +2,8 @@
 
 namespace App\Services\Fixture;
 
-use App\Models\FixtureStat;
-use App\Models\Fixture;
 use App\Models\Team;
+use App\Models\FixtureStat;
 
 class FixtureStatsService
 {
@@ -17,21 +16,22 @@ class FixtureStatsService
 
     private function storeFixtureStatsPerTeam(array $stat, int $fixtureId): void
     {
-        $localTeamId = Team::where('external_id', $stat['team']['id'])->value('id');
+        $localTeamId = Team::query()->where('external_id', $stat['team']['id'])->value('id');
 
-        if (!$localTeamId) {
-            return; 
+        if (! $localTeamId) {
+            return;
         }
+
         foreach ($stat['statistics'] as $matchStat) {
-            FixtureStat::updateOrCreate(
+            FixtureStat::query()->updateOrCreate(
                 [
                     'fixture_id' => $fixtureId,
-                    'team_id'    => $localTeamId,
+                    'team_id' => $localTeamId,
                     'name' => $matchStat['type'],
                 ],
                 [
-                    'value' => $matchStat['value'] ? (float) rtrim($matchStat['value'], '%') : 0
-                ]
+                    'value' => $matchStat['value'] ? (float) rtrim($matchStat['value'], '%') : 0,
+                ],
             );
         }
     }
