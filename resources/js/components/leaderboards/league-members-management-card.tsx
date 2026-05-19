@@ -12,6 +12,15 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/overlays/dialog'
 import { useInitials } from '@/hooks/use-initials'
 import { cn } from '@/lib/utils'
 import type { LeagueMember } from '@/types/league'
@@ -90,26 +99,60 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
 
                         <div className="shrink-0">
                             {member.canBeManaged ? (
-                                <Form
-                                    {...RemoveLeagueMemberController.form({
-                                        scoreboard: leagueId,
-                                        member: member.id,
-                                    })}
-                                    options={{ preserveScroll: true }}
-                                >
-                                    {({ processing }) => (
+                                <Dialog>
+                                    <DialogTrigger asChild>
                                         <Button
-                                            type="submit"
+                                            type="button"
                                             variant="destructive"
-                                            disabled={processing}
                                             className="h-10 rounded-lg px-4 font-black"
                                         >
-                                            {processing && <Spinner />}
                                             <UserMinus className="size-4" />
-                                            {processing ? 'Removing...' : 'Remove member'}
+                                            Remove member
                                         </Button>
-                                    )}
-                                </Form>
+                                    </DialogTrigger>
+                                    <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                        <DialogTitle className="text-blue-950">
+                                            Remove {member.name} from this league?
+                                        </DialogTitle>
+                                        <DialogDescription className="text-sm leading-6 text-slate-600">
+                                            This removes their access to the league immediately. Existing predictions stay recorded, but they will no longer appear as an active member.
+                                        </DialogDescription>
+
+                                        <Form
+                                            {...RemoveLeagueMemberController.form({
+                                                scoreboard: leagueId,
+                                                member: member.id,
+                                            })}
+                                            options={{ preserveScroll: true }}
+                                            className="space-y-4"
+                                        >
+                                            {({ processing }) => (
+                                                <DialogFooter className="gap-2">
+                                                    <DialogClose asChild>
+                                                        <Button
+                                                            type="button"
+                                                            variant="secondary"
+                                                            className="rounded-lg font-black"
+                                                        >
+                                                            Cancel
+                                                        </Button>
+                                                    </DialogClose>
+
+                                                    <Button
+                                                        type="submit"
+                                                        variant="destructive"
+                                                        disabled={processing}
+                                                        className="rounded-lg font-black"
+                                                    >
+                                                        {processing && <Spinner />}
+                                                        <UserMinus className="size-4" />
+                                                        {processing ? 'Removing...' : 'Confirm remove'}
+                                                    </Button>
+                                                </DialogFooter>
+                                            )}
+                                        </Form>
+                                    </DialogContent>
+                                </Dialog>
                             ) : (
                                 <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-black text-amber-900">
                                     Protected role
