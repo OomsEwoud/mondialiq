@@ -12,11 +12,16 @@ import {
     CardTitle,
 } from '@/components/ui/layout/card';
 import { leaderboards } from '@/routes';
+import type { LeagueCreatePageProps } from '@/types';
 
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
 
-export default function LeagueCreate() {
+export default function LeagueCreate({
+    currentLeagueCount,
+    maxLeagueCount,
+    hasReachedLeagueLimit,
+}: LeagueCreatePageProps) {
     return (
         <>
             <Head title="Create League" />
@@ -47,6 +52,9 @@ export default function LeagueCreate() {
                                 compare every prediction matchday in one private
                                 table.
                             </p>
+                            <p className="mt-4 text-sm font-semibold text-slate-600">
+                                {currentLeagueCount}/{maxLeagueCount} leagues joined
+                            </p>
                         </div>
                     </div>
                 </section>
@@ -62,6 +70,17 @@ export default function LeagueCreate() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="px-4 pb-5 sm:px-6">
+                        <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                            <p className="text-sm font-black text-blue-950">
+                                You can join up to {maxLeagueCount} leagues.
+                            </p>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">
+                                {hasReachedLeagueLimit
+                                    ? 'You are already at the league limit. Leave one of your current leagues before creating a new one.'
+                                    : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`}
+                            </p>
+                        </div>
+
                         <Form
                             action="/leagues"
                             method="post"
@@ -103,7 +122,7 @@ export default function LeagueCreate() {
                                             </Link>
                                         </Button>
                                         <Button
-                                            disabled={processing}
+                                            disabled={processing || hasReachedLeagueLimit}
                                             className="h-11 rounded-lg px-5 font-black"
                                         >
                                             <Plus className="size-4" />

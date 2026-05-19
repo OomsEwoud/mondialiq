@@ -16,13 +16,19 @@ type Props = {
     leagues: JoinedLeague[];
     createLeagueHref?: string | null;
     joinLeagueHref?: string | null;
+    currentLeagueCount?: number;
+    maxLeagueCount?: number;
 };
 
 export default function FriendsLeaguesSection({
     leagues,
     createLeagueHref,
     joinLeagueHref,
+    currentLeagueCount = 0,
+    maxLeagueCount = 5,
 }: Props) {
+    const hasReachedLeagueLimit = currentLeagueCount >= maxLeagueCount;
+
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-4 border-b border-slate-200 px-4 py-5 sm:px-6">
@@ -35,9 +41,12 @@ export default function FriendsLeaguesSection({
                             Track the private leagues you joined and see where
                             you stand against your friends.
                         </CardDescription>
+                        <p className="mt-3 text-sm font-semibold text-slate-600">
+                            {currentLeagueCount}/{maxLeagueCount} leagues joined
+                        </p>
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                        {joinLeagueHref ? (
+                        {joinLeagueHref && !hasReachedLeagueLimit ? (
                             <Button
                                 asChild
                                 variant="outline"
@@ -59,7 +68,7 @@ export default function FriendsLeaguesSection({
                                 Join League
                             </Button>
                         )}
-                        {createLeagueHref ? (
+                        {createLeagueHref && !hasReachedLeagueLimit ? (
                             <Button
                                 asChild
                                 className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
@@ -81,6 +90,16 @@ export default function FriendsLeaguesSection({
                         )}
                     </div>
                 </div>
+                {hasReachedLeagueLimit && (
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
+                        <p className="text-sm font-black text-amber-900">
+                            You reached the league limit.
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-amber-800">
+                            Leave one of your current leagues before creating or joining another.
+                        </p>
+                    </div>
+                )}
             </CardHeader>
             <CardContent className="px-4 py-5 sm:px-6">
                 {leagues.length > 0 ? (

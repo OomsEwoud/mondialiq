@@ -48,7 +48,10 @@ test('an authenticated user can view the create league page', function () {
         ->get(route('leagues.create'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('league-create'),
+            ->component('league-create')
+            ->where('currentLeagueCount', 0)
+            ->where('maxLeagueCount', 5)
+            ->where('hasReachedLeagueLimit', false),
         );
 });
 
@@ -59,7 +62,10 @@ test('an authenticated user can view the join league page', function () {
         ->get(route('leagues.join'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('league-join'),
+            ->component('league-join')
+            ->where('currentLeagueCount', 0)
+            ->where('maxLeagueCount', 5)
+            ->where('hasReachedLeagueLimit', false),
         );
 });
 
@@ -72,6 +78,39 @@ test('the join league page pre-fills the invite code from the query string', fun
         ->assertInertia(fn (Assert $page) => $page
             ->component('league-join')
             ->where('initialCode', 'JOIN2026'),
+        );
+});
+
+test('the create and join pages show the reached limit state at five leagues', function () {
+    $user = User::factory()->create();
+
+    collect(range(1, 5))->each(function (int $index) use ($user) {
+        $league = Scoreboard::create([
+            'name' => "League {$index}",
+            'code' => sprintf('LIMIT%03d', $index),
+        ]);
+
+        $league->users()->attach($user->id);
+    });
+
+    $this->actingAs($user)
+        ->get(route('leagues.create'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-create')
+            ->where('currentLeagueCount', 5)
+            ->where('maxLeagueCount', 5)
+            ->where('hasReachedLeagueLimit', true),
+        );
+
+    $this->actingAs($user)
+        ->get(route('leagues.join'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-join')
+            ->where('currentLeagueCount', 5)
+            ->where('maxLeagueCount', 5)
+            ->where('hasReachedLeagueLimit', true),
         );
 });
 

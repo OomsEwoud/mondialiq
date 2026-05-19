@@ -59,6 +59,15 @@ export interface LeagueDetails {
 
 export interface LeagueJoinPageProps {
     initialCode: string;
+    currentLeagueCount: number;
+    maxLeagueCount: number;
+    hasReachedLeagueLimit: boolean;
+}
+
+export interface LeagueCreatePageProps {
+    currentLeagueCount: number;
+    maxLeagueCount: number;
+    hasReachedLeagueLimit: boolean;
 }
 
 export interface LeagueDetailsPageProps {

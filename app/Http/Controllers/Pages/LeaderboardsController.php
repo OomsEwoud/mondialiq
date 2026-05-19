@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
-use Illuminate\Support\Collection;
+use App\Support\Leagues\LeagueMembershipLimit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,6 +34,7 @@ class LeaderboardsController extends Controller
             ]);
 
         $currentUserStanding = $leaders->firstWhere('id', $request->user()?->id);
+        $currentLeagueCount = $request->user()?->scoreboards()->count() ?? 0;
 
         return Inertia::render('leaderboards', [
             'globalLeaders' => $leaders->take(10)->values(),
@@ -41,6 +43,8 @@ class LeaderboardsController extends Controller
             'joinedLeagues' => $this->joinedLeagues($request->user()),
             'createLeagueHref' => route('leagues.create'),
             'joinLeagueHref' => route('leagues.join'),
+            'currentLeagueCount' => $currentLeagueCount,
+            'maxLeagueCount' => LeagueMembershipLimit::MAX_LEAGUES_PER_USER,
         ]);
     }
 

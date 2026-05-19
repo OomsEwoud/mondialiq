@@ -44,6 +44,8 @@ export default function Leaderboards(props: Props) {
                     leagues={joinedLeagues}
                     createLeagueHref={props.createLeagueHref}
                     joinLeagueHref={props.joinLeagueHref}
+                    currentLeagueCount={props.currentLeagueCount}
+                    maxLeagueCount={props.maxLeagueCount}
                 />
             </div>
         </>

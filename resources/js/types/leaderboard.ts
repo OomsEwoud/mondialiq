@@ -54,4 +54,6 @@ export interface LeaderboardsPageProps {
     globalLeaders?: LeaderboardEntry[];
     currentUserStanding?: LeaderboardEntry | null;
     totalPlayers?: number;
+    currentLeagueCount?: number;
+    maxLeagueCount?: number;
 }
