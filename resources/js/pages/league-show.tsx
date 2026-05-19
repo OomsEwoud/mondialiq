@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
+import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -175,8 +176,16 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                         </Card>
 
                         <InviteCodeCard
+                            leagueName={league.name}
                             code={league.code}
                             joinHref={league.joinHref}
+                            membersCount={league.membersCount}
+                        />
+
+                        <LeagueOnboardingCard
+                            leagueName={league.name}
+                            membersCount={league.membersCount}
+                            currentUserPoints={league.currentUserPoints}
                         />
 
                     </div>
