@@ -1,6 +1,7 @@
 import { Form } from '@inertiajs/react'
-import { Crown, ShieldCheck, UserMinus } from 'lucide-react'
+import { Crown, ShieldCheck, ShieldPlus, UserMinus } from 'lucide-react'
 import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController'
+import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar'
 import { Badge } from '@/components/ui/feedback/badge'
 import { Spinner } from '@/components/ui/feedback/spinner'
@@ -99,60 +100,116 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
 
                         <div className="shrink-0">
                             {member.canBeManaged ? (
-                                <Dialog>
-                                    <DialogTrigger asChild>
-                                        <Button
-                                            type="button"
-                                            variant="destructive"
-                                            className="h-10 rounded-lg px-4 font-black"
-                                        >
-                                            <UserMinus className="size-4" />
-                                            Remove member
-                                        </Button>
-                                    </DialogTrigger>
-                                    <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                        <DialogTitle className="text-blue-950">
-                                            Remove {member.name} from this league?
-                                        </DialogTitle>
-                                        <DialogDescription className="text-sm leading-6 text-slate-600">
-                                            This removes their access to the league immediately. Existing predictions stay recorded, but they will no longer appear as an active member.
-                                        </DialogDescription>
+                                <div className="flex flex-col gap-2 sm:items-end">
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                className="h-10 rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
+                                            >
+                                                <ShieldPlus className="size-4" />
+                                                Make owner
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                            <DialogTitle className="text-blue-950">
+                                                Transfer ownership to {member.name}?
+                                            </DialogTitle>
+                                            <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                {member.name} will become the new league owner immediately. You will stay in the league as a member, but owner controls move to them.
+                                            </DialogDescription>
 
-                                        <Form
-                                            {...RemoveLeagueMemberController.form({
-                                                scoreboard: leagueId,
-                                                member: member.id,
-                                            })}
-                                            options={{ preserveScroll: true }}
-                                            className="space-y-4"
-                                        >
-                                            {({ processing }) => (
-                                                <DialogFooter className="gap-2">
-                                                    <DialogClose asChild>
+                                            <Form
+                                                {...TransferLeagueOwnershipController.form({
+                                                    scoreboard: leagueId,
+                                                    member: member.id,
+                                                })}
+                                                options={{ preserveScroll: true }}
+                                                className="space-y-4"
+                                            >
+                                                {({ processing }) => (
+                                                    <DialogFooter className="gap-2">
+                                                        <DialogClose asChild>
+                                                            <Button
+                                                                type="button"
+                                                                variant="secondary"
+                                                                className="rounded-lg font-black"
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                        </DialogClose>
+
                                                         <Button
-                                                            type="button"
-                                                            variant="secondary"
+                                                            type="submit"
+                                                            disabled={processing}
                                                             className="rounded-lg font-black"
                                                         >
-                                                            Cancel
+                                                            {processing && <Spinner />}
+                                                            <ShieldPlus className="size-4" />
+                                                            {processing ? 'Transferring...' : 'Confirm transfer'}
                                                         </Button>
-                                                    </DialogClose>
+                                                    </DialogFooter>
+                                                )}
+                                            </Form>
+                                        </DialogContent>
+                                    </Dialog>
 
-                                                    <Button
-                                                        type="submit"
-                                                        variant="destructive"
-                                                        disabled={processing}
-                                                        className="rounded-lg font-black"
-                                                    >
-                                                        {processing && <Spinner />}
-                                                        <UserMinus className="size-4" />
-                                                        {processing ? 'Removing...' : 'Confirm remove'}
-                                                    </Button>
-                                                </DialogFooter>
-                                            )}
-                                        </Form>
-                                    </DialogContent>
-                                </Dialog>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                className="h-10 rounded-lg px-4 font-black"
+                                            >
+                                                <UserMinus className="size-4" />
+                                                Remove member
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                            <DialogTitle className="text-blue-950">
+                                                Remove {member.name} from this league?
+                                            </DialogTitle>
+                                            <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                This removes their access to the league immediately. Existing predictions stay recorded, but they will no longer appear as an active member.
+                                            </DialogDescription>
+
+                                            <Form
+                                                {...RemoveLeagueMemberController.form({
+                                                    scoreboard: leagueId,
+                                                    member: member.id,
+                                                })}
+                                                options={{ preserveScroll: true }}
+                                                className="space-y-4"
+                                            >
+                                                {({ processing }) => (
+                                                    <DialogFooter className="gap-2">
+                                                        <DialogClose asChild>
+                                                            <Button
+                                                                type="button"
+                                                                variant="secondary"
+                                                                className="rounded-lg font-black"
+                                                            >
+                                                                Cancel
+                                                            </Button>
+                                                        </DialogClose>
+
+                                                        <Button
+                                                            type="submit"
+                                                            variant="destructive"
+                                                            disabled={processing}
+                                                            className="rounded-lg font-black"
+                                                        >
+                                                            {processing && <Spinner />}
+                                                            <UserMinus className="size-4" />
+                                                            {processing ? 'Removing...' : 'Confirm remove'}
+                                                        </Button>
+                                                    </DialogFooter>
+                                                )}
+                                            </Form>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
                             ) : (
                                 <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-black text-amber-900">
                                     Protected role
