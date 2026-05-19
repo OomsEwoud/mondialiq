@@ -1,0 +1,106 @@
+import { Crown, ShieldCheck, UserMinus } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar'
+import { Badge } from '@/components/ui/feedback/badge'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/layout/card'
+import { useInitials } from '@/hooks/use-initials'
+import { cn } from '@/lib/utils'
+import type { LeagueMember } from '@/types/league'
+
+type Props = {
+    members: LeagueMember[]
+}
+
+export default function LeagueMembersManagementCard({ members }: Props) {
+    const getInitials = useInitials()
+
+    return (
+        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
+            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
+                <div className="flex items-center gap-2 text-cyan-700">
+                    <ShieldCheck className="size-4" />
+                    <p className="text-xs font-black tracking-[0.16em] uppercase">
+                        Member management
+                    </p>
+                </div>
+                <CardTitle className="text-2xl font-black text-blue-950">
+                    Team access overview
+                </CardTitle>
+                <CardDescription className="text-sm leading-6 text-slate-500">
+                    Owners are marked clearly, and removable members are highlighted for a future management flow.
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
+                {members.map((member) => (
+                    <div
+                        key={member.id}
+                        className={cn(
+                            'flex items-center justify-between gap-3 rounded-2xl border px-4 py-4',
+                            member.isOwner
+                                ? 'border-amber-200 bg-amber-50'
+                                : 'border-slate-200 bg-slate-50',
+                        )}
+                    >
+                        <div className="flex min-w-0 items-center gap-3">
+                            <Avatar className="size-11 rounded-2xl ring-1 ring-slate-200">
+                                <AvatarImage
+                                    src={member.avatar ?? undefined}
+                                    alt={member.name}
+                                    className="object-cover"
+                                />
+                                <AvatarFallback className="bg-blue-950 text-xs font-black text-white">
+                                    {getInitials(member.name)}
+                                </AvatarFallback>
+                            </Avatar>
+
+                            <div className="min-w-0">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <p className="truncate text-sm font-black text-blue-950 sm:text-base">
+                                        {member.name}
+                                    </p>
+                                    {member.isOwner && (
+                                        <Badge className="rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-black text-amber-950">
+                                            <Crown className="size-3" />
+                                            Owner
+                                        </Badge>
+                                    )}
+                                    {member.isCurrentUser && (
+                                        <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-[11px] font-black text-blue-950">
+                                            You
+                                        </Badge>
+                                    )}
+                                </div>
+                                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                                    {member.canBeManaged
+                                        ? 'Can be removed in a future owner action.'
+                                        : 'Owner access cannot be removed from this screen later on.'}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="shrink-0">
+                            {member.canBeManaged ? (
+                                <Badge
+                                    variant="outline"
+                                    className="rounded-full border-slate-300 bg-white px-2.5 py-1 font-semibold text-slate-600"
+                                >
+                                    <UserMinus className="size-3.5" />
+                                    Removable later
+                                </Badge>
+                            ) : (
+                                <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-black text-amber-900">
+                                    Protected role
+                                </Badge>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    )
+}

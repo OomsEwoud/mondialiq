@@ -6,6 +6,8 @@ export interface LeagueMember {
     predictionsCount: number;
     totalPoints: number;
     isCurrentUser: boolean;
+    isOwner: boolean;
+    canBeManaged: boolean;
 }
 
 export interface LeagueDetails {

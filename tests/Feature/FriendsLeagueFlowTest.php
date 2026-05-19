@@ -239,6 +239,8 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.currentUserRank', 2)
             ->has('league.members', 3)
             ->where('league.members.0.name', 'League Captain')
+            ->where('league.members.0.isOwner', false)
+            ->where('league.members.0.canBeManaged', true)
             ->where('league.members.1.name', 'Current Player')
             ->where('league.members.1.isCurrentUser', true),
         );
@@ -273,8 +275,8 @@ test('a league owner can update the league name', function () {
 });
 
 test('a league owner sees manage controls on the league detail page', function () {
-    $owner = User::factory()->create(['name' => 'League Owner']);
-    $member = User::factory()->create(['name' => 'League Member']);
+    $owner = User::factory()->create(['name' => 'Alpha Owner']);
+    $member = User::factory()->create(['name' => 'Beta Member']);
 
     $league = Scoreboard::create([
         'name' => 'Managed League',
@@ -294,7 +296,12 @@ test('a league owner sees manage controls on the league detail page', function (
             ->where('league.code', 'MANAGED1')
             ->where('league.canManage', true)
             ->where('league.joinHref', route('leagues.join', ['code' => 'MANAGED1']))
-            ->where('league.membersCount', 2),
+            ->where('league.membersCount', 2)
+            ->where('league.members.0.name', 'Alpha Owner')
+            ->where('league.members.0.isOwner', true)
+            ->where('league.members.0.canBeManaged', false)
+            ->where('league.members.1.name', 'Beta Member')
+            ->where('league.members.1.canBeManaged', true),
         );
 });
 

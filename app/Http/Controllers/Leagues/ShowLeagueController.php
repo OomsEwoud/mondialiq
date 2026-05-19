@@ -36,6 +36,8 @@ class ShowLeagueController extends Controller
                 'predictionsCount' => $user->predictions_count,
                 'totalPoints' => $user->predictions_sum_points ?? 0,
                 'isCurrentUser' => $user->id === $request->user()->id,
+                'isOwner' => $user->id === $scoreboard->owner_id,
+                'canBeManaged' => $user->id !== $scoreboard->owner_id,
             ]);
 
         $leader = $members->first();
