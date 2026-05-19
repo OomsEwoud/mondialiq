@@ -329,6 +329,35 @@ test('a league owner can refresh the invite code', function () {
         ->toHaveLength(8);
 });
 
+test('a league owner can remove a member', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Removable League',
+        'code' => 'REMOVE01',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->delete(route('leagues.members.destroy', [
+            'scoreboard' => $league,
+            'member' => $member,
+        ]))
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'Member removed from the league.',
+        ]);
+
+    $this->assertDatabaseMissing('users_has_scoreboards', [
+        'user_id' => $member->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
 test('a non owner cannot update the league name', function () {
     $owner = User::factory()->create();
     $member = User::factory()->create();
@@ -371,6 +400,57 @@ test('a non owner cannot refresh the invite code', function () {
         ->assertForbidden();
 
     expect($league->fresh()->code)->toBe('SAFECODE');
+});
+
+test('a non owner cannot remove a league member', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+    $targetMember = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Protected Members League',
+        'code' => 'MEMBERS1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id, $targetMember->id]);
+
+    $this->actingAs($member)
+        ->delete(route('leagues.members.destroy', [
+            'scoreboard' => $league,
+            'member' => $targetMember,
+        ]))
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $targetMember->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
+test('a league owner cannot remove themselves', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Owner Protected League',
+        'code' => 'SELF0001',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->delete(route('leagues.members.destroy', [
+            'scoreboard' => $league,
+            'member' => $owner,
+        ]))
+        ->assertSessionHasErrors('member');
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $owner->id,
+        'scoreboard_id' => $league->id,
+    ]);
 });
 
 test('a non member cannot view a private league detail page', function () {

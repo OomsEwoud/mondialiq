@@ -10,6 +10,7 @@ use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
+use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
@@ -51,6 +52,9 @@ Route::patch('/leagues/{scoreboard}', UpdateLeagueController::class)
 Route::post('/leagues/{scoreboard}/refresh-code', RefreshLeagueCodeController::class)
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.refresh-code');
+Route::delete('/leagues/{scoreboard}/members/{member}', RemoveLeagueMemberController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.members.destroy');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)
