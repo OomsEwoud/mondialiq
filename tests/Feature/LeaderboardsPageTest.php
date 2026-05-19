@@ -175,6 +175,9 @@ test('the leaderboards page gives owners a settings action instead of leave', fu
             ->where('joinedLeagues.0.name', 'Owned League')
             ->where('joinedLeagues.0.canManage', true)
             ->where('joinedLeagues.0.canLeave', false)
-            ->where('joinedLeagues.0.settingsHref', route('leagues.settings', $ownedLeague)),
+            ->where(
+                'joinedLeagues.0.settingsHref',
+                route('leagues.settings', $ownedLeague)
+            ),
         );
 });

@@ -56,7 +56,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.name}
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm text-slate-500">
-                            Private competition with your friends.
+                            Private friends league standings.
                         </CardDescription>
                     </div>
                     <Badge

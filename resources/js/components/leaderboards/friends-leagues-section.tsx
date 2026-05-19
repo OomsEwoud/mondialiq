@@ -96,7 +96,8 @@ export default function FriendsLeaguesSection({
                             You reached the league limit.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-amber-800">
-                            Leave one of your current leagues before creating or joining another.
+                            Leave one of your current leagues before creating
+                            or joining another.
                         </p>
                     </div>
                 )}
