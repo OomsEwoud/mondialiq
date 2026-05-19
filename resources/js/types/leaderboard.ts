@@ -27,33 +27,13 @@ export interface JoinedLeague {
     leaveHref?: string | null;
 }
 
-export interface JoinedLeaguePayload {
-    id: number | string;
-    name: string;
-    icon: string;
-    accent_color: LeagueAccentColor;
-    cover_style: LeagueCoverStyle;
-    can_manage: boolean;
-    can_leave: boolean;
-    members_count: number;
-    user_rank: number | null;
-    leader_name: string | null;
-    points?: number | null;
-    predictions_count?: number | null;
-    href?: string | null;
-    settings_href?: string | null;
-    leave_href?: string | null;
-}
-
 export interface LeaderboardsPageProps {
-    globalLeaderboard?: LeaderboardEntry[];
-    currentUserPosition?: LeaderboardEntry | null;
-    joinedLeagues?: Array<JoinedLeague | JoinedLeaguePayload>;
-    createLeagueHref?: string | null;
-    joinLeagueHref?: string | null;
-    globalLeaders?: LeaderboardEntry[];
-    currentUserStanding?: LeaderboardEntry | null;
-    totalPlayers?: number;
-    currentLeagueCount?: number;
-    maxLeagueCount?: number;
+    globalLeaderboard: LeaderboardEntry[];
+    currentUserPosition: LeaderboardEntry | null;
+    joinedLeagues: JoinedLeague[];
+    createLeagueHref: string | null;
+    joinLeagueHref: string | null;
+    totalPlayers: number;
+    currentLeagueCount: number;
+    maxLeagueCount: number;
 }

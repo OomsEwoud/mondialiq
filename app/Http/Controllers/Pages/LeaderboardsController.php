@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
+use App\Support\Leagues\LeagueBranding;
 use App\Support\Leagues\LeagueMembershipLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -37,8 +38,8 @@ class LeaderboardsController extends Controller
         $currentLeagueCount = $request->user()?->scoreboards()->count() ?? 0;
 
         return Inertia::render('leaderboards', [
-            'globalLeaders' => $leaders->take(10)->values(),
-            'currentUserStanding' => $currentUserStanding,
+            'globalLeaderboard' => $leaders->take(10)->values(),
+            'currentUserPosition' => $currentUserStanding,
             'totalPlayers' => $leaders->count(),
             'joinedLeagues' => $this->joinedLeagues($request->user()),
             'createLeagueHref' => route('leagues.create'),
@@ -78,23 +79,23 @@ class LeaderboardsController extends Controller
         return [
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
-            'icon' => $scoreboard->icon,
-            'accent_color' => $scoreboard->accent_color,
-            'cover_style' => $scoreboard->cover_style,
-            'can_manage' => $scoreboard->owner_id === $user->id,
-            'can_leave' => $scoreboard->owner_id !== $user->id,
-            'members_count' => $scoreboard->users_count,
-            'user_rank' => $currentUserEntry
+            'icon' => $scoreboard->icon ?: LeagueBranding::DEFAULT_ICON,
+            'accentColor' => $scoreboard->accent_color ?: LeagueBranding::DEFAULT_ACCENT_COLOR,
+            'coverStyle' => $scoreboard->cover_style ?: LeagueBranding::DEFAULT_COVER_STYLE,
+            'canManage' => $scoreboard->owner_id === $user->id,
+            'canLeave' => $scoreboard->owner_id !== $user->id,
+            'membersCount' => $scoreboard->users_count,
+            'userRank' => $currentUserEntry
                 ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1
                 : null,
-            'leader_name' => $leader?->name,
+            'leaderName' => $leader?->name,
             'points' => $currentUserEntry?->predictions_sum_points ?? 0,
-            'predictions_count' => $currentUserEntry?->predictions_count ?? 0,
+            'predictionsCount' => $currentUserEntry?->predictions_count ?? 0,
             'href' => route('leagues.show', $scoreboard),
-            'settings_href' => $scoreboard->owner_id === $user->id
+            'settingsHref' => $scoreboard->owner_id === $user->id
                 ? route('leagues.settings', $scoreboard)
                 : null,
-            'leave_href' => $scoreboard->owner_id !== $user->id
+            'leaveHref' => $scoreboard->owner_id !== $user->id
                 ? route('leagues.leave', $scoreboard)
                 : null,
         ];
