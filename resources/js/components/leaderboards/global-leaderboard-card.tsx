@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
+import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import {
     Card,
     CardContent,
@@ -13,7 +14,7 @@ import type { LeaderboardEntry } from '@/types/leaderboard';
 
 type Props = {
     leaders: LeaderboardEntry[];
-    currentUserId?: number | null;
+    currentUserId: number | null;
 };
 
 const topRankStyles: Record<number, string> = {
@@ -113,10 +114,10 @@ export default function GlobalLeaderboardCard({
                     </div>
                 ) : (
                     <div className="px-4 py-10 sm:px-6">
-                        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-10 text-center text-sm text-slate-500">
-                            Once predictions are scoring, the global rankings
-                            will show here.
-                        </div>
+                        <LeaderboardEmptyState
+                            title="No leaderboard yet"
+                            description="Once predictions are scoring, the global rankings will show here."
+                        />
                     </div>
                 )}
             </CardContent>

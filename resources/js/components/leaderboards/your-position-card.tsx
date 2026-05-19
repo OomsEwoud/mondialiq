@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/feedback/badge';
+import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import {
     Card,
     CardContent,
@@ -73,10 +74,11 @@ export default function YourPositionCard({
                         </div>
                     </div>
                 ) : (
-                    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-sm leading-6 text-slate-500">
-                        Your personal ranking will show up here once your picks
-                        start scoring in the leaderboard.
-                    </div>
+                    <LeaderboardEmptyState
+                        title="No position yet"
+                        description="Your personal ranking will show up here once your picks start scoring in the leaderboard."
+                        className="px-4 py-6"
+                    />
                 )}
             </CardContent>
         </Card>

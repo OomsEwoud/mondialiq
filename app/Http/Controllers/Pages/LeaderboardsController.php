@@ -34,12 +34,12 @@ class LeaderboardsController extends Controller
                 'totalPoints' => $user->predictions_sum_points ?? 0,
             ]);
 
-        $currentUserStanding = $leaders->firstWhere('id', $request->user()?->id);
+        $currentUserPosition = $leaders->firstWhere('id', $request->user()?->id);
         $currentLeagueCount = $request->user()?->scoreboards()->count() ?? 0;
 
         return Inertia::render('leaderboards', [
             'globalLeaderboard' => $leaders->take(10)->values(),
-            'currentUserPosition' => $currentUserStanding,
+            'currentUserPosition' => $currentUserPosition,
             'totalPlayers' => $leaders->count(),
             'joinedLeagues' => $this->joinedLeagues($request->user()),
             'createLeagueHref' => route('leagues.create'),
@@ -58,7 +58,8 @@ class LeaderboardsController extends Controller
         return $user->scoreboards()
             ->withCount('users')
             ->get()
-            ->map(fn (Scoreboard $scoreboard) => $this->mapJoinedLeague($scoreboard, $user));
+            ->map(fn (Scoreboard $scoreboard) => $this->mapJoinedLeague($scoreboard, $user))
+            ->values();
     }
 
     private function mapJoinedLeague(Scoreboard $scoreboard, User $user): array
