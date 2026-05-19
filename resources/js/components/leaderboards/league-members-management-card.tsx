@@ -33,6 +33,8 @@ type Props = {
 
 export default function LeagueMembersManagementCard({ leagueId, members }: Props) {
     const getInitials = useInitials()
+    const manageableMembers = members.filter((member) => member.canBeManaged)
+    const manageableCount = manageableMembers.length
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -51,11 +53,33 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
+                {manageableCount === 0 && (
+                    <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-4">
+                        <p className="text-sm font-black text-cyan-900">
+                            You are the only active manager in this league right now.
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-cyan-800">
+                            Invite another member before you transfer ownership or start removing access.
+                        </p>
+                    </div>
+                )}
+
+                {manageableCount === 1 && (
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
+                        <p className="text-sm font-black text-amber-900">
+                            Only one member can currently be managed.
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-amber-800">
+                            Double-check ownership transfer or removal carefully so the league does not become harder to manage afterwards.
+                        </p>
+                    </div>
+                )}
+
                 {members.map((member) => (
                     <div
                         key={member.id}
                         className={cn(
-                            'flex items-center justify-between gap-3 rounded-2xl border px-4 py-4',
+                            'flex flex-col gap-4 rounded-2xl border px-4 py-4 sm:flex-row sm:items-center sm:justify-between',
                             member.isOwner
                                 ? 'border-amber-200 bg-amber-50'
                                 : 'border-slate-200 bg-slate-50',
@@ -98,15 +122,15 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                             </div>
                         </div>
 
-                        <div className="shrink-0">
+                        <div className="w-full shrink-0 sm:w-auto">
                             {member.canBeManaged ? (
-                                <div className="flex flex-col gap-2 sm:items-end">
+                                <div className="grid gap-2 sm:min-w-52">
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button
                                                 type="button"
                                                 variant="outline"
-                                                className="h-10 rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
+                                                className="h-10 w-full rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
                                             >
                                                 <ShieldPlus className="size-4" />
                                                 Make owner
@@ -119,6 +143,9 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                                             <DialogDescription className="text-sm leading-6 text-slate-600">
                                                 {member.name} will become the new league owner immediately. You will stay in the league as a member, but owner controls move to them.
                                             </DialogDescription>
+                                            <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
+                                                After this transfer, use the regular league page as a normal member. Only the new owner will keep access to this settings page.
+                                            </div>
 
                                             <Form
                                                 {...TransferLeagueOwnershipController.form({
@@ -160,7 +187,7 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                                             <Button
                                                 type="button"
                                                 variant="destructive"
-                                                className="h-10 rounded-lg px-4 font-black"
+                                                className="h-10 w-full rounded-lg px-4 font-black"
                                             >
                                                 <UserMinus className="size-4" />
                                                 Remove member
