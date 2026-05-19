@@ -1,8 +1,10 @@
 import { Form } from '@inertiajs/react'
 import { PencilLine, RefreshCcw, ShieldCheck } from 'lucide-react'
+import { useState } from 'react'
 import UpdateLeagueController from '@/actions/App/Http/Controllers/Leagues/UpdateLeagueController'
 import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/RefreshLeagueCodeController'
 import InputError from '@/components/forms/input-error'
+import { Spinner } from '@/components/ui/feedback/spinner'
 import { Button } from '@/components/ui/forms/button'
 import { Input } from '@/components/ui/forms/input'
 import { Label } from '@/components/ui/forms/label'
@@ -23,6 +25,11 @@ const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200'
 
 export default function LeagueSettingsCard({ leagueId, leagueName }: Props) {
+    const [name, setName] = useState(leagueName)
+    const normalizedName = name.trim()
+    const hasNameChanges = normalizedName !== leagueName.trim()
+    const canSubmitName = normalizedName.length > 0 && hasNameChanges
+
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-6">
@@ -57,19 +64,26 @@ export default function LeagueSettingsCard({ leagueId, leagueName }: Props) {
                                 <Input
                                     id="league-name"
                                     name="name"
-                                    defaultValue={leagueName}
+                                    value={name}
+                                    onChange={(event) => setName(event.target.value)}
                                     className={fieldClassName}
                                     placeholder="Your friends league"
                                 />
+                                <p className="text-xs text-slate-500">
+                                    {hasNameChanges
+                                        ? 'Your updated league name will be visible right away.'
+                                        : 'Change the league name here when you want to rename it.'}
+                                </p>
                                 <div className="min-h-5">
                                     <InputError message={errors.name} />
                                 </div>
                             </div>
 
                             <Button
-                                disabled={processing}
+                                disabled={processing || !canSubmitName}
                                 className="h-11 rounded-lg px-5 font-black"
                             >
+                                {processing && <Spinner />}
                                 <PencilLine className="size-4" />
                                 {processing ? 'Saving...' : 'Save league name'}
                             </Button>
@@ -84,6 +98,9 @@ export default function LeagueSettingsCard({ leagueId, leagueName }: Props) {
                     <p className="mt-1 text-sm leading-6 text-amber-800">
                         Existing members keep their access, but future joins must use the new code.
                     </p>
+                    <p className="mt-2 text-xs font-semibold tracking-[0.04em] text-amber-900">
+                        Use this when an old invite code has already been shared too widely.
+                    </p>
 
                     <Form
                         {...RefreshLeagueCodeController.form({ scoreboard: leagueId })}
@@ -95,8 +112,9 @@ export default function LeagueSettingsCard({ leagueId, leagueName }: Props) {
                                 type="submit"
                                 variant="outline"
                                 disabled={processing}
-                                className="h-11 rounded-lg border-amber-300 bg-white px-5 font-black text-amber-900 hover:bg-amber-100"
+                                className="h-11 w-full rounded-lg border-amber-300 bg-white px-5 font-black text-amber-900 hover:bg-amber-100 sm:w-auto"
                             >
+                                {processing && <Spinner />}
                                 <RefreshCcw className="size-4" />
                                 {processing ? 'Refreshing...' : 'Refresh invite code'}
                             </Button>
