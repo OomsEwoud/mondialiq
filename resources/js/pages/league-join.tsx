@@ -1,5 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { ArrowLeft, LogIn, Ticket } from 'lucide-react';
+import JoinLeagueController from '@/actions/App/Http/Controllers/Leagues/JoinLeagueController';
 import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
@@ -79,8 +80,7 @@ export default function LeagueJoin({
                         </div>
 
                         <Form
-                            action="/leagues/join"
-                            method="post"
+                            {...JoinLeagueController.form()}
                             options={{ preserveScroll: true }}
                             className="space-y-5"
                         >

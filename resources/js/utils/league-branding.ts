@@ -31,10 +31,26 @@ export const leagueCoverOptions: Array<{
     label: string;
     description: string;
 }> = [
-    { value: 'stadium', label: 'Stadium', description: 'Bright matchday energy' },
-    { value: 'spotlight', label: 'Spotlight', description: 'Premium broadcast feel' },
-    { value: 'pitch', label: 'Pitch', description: 'Fresh tournament greens' },
-    { value: 'night', label: 'Night', description: 'Big game under lights' },
+    {
+        value: 'stadium',
+        label: 'Stadium',
+        description: 'Bright matchday energy',
+    },
+    {
+        value: 'spotlight',
+        label: 'Spotlight',
+        description: 'Premium broadcast feel',
+    },
+    {
+        value: 'pitch',
+        label: 'Pitch',
+        description: 'Fresh tournament greens',
+    },
+    {
+        value: 'night',
+        label: 'Night',
+        description: 'Big game under lights',
+    },
 ] as const;
 
 const accentPalettes: Record<
@@ -117,6 +133,6 @@ export function getLeagueBrandBannerClass(
     return cn(
         'relative overflow-hidden rounded-2xl text-white shadow-sm ring-1',
         getLeagueCoverClass(coverStyle),
-        accentPalettes[accentColor].ring,
+        getLeagueBrandPalette(accentColor).ring,
     );
 }

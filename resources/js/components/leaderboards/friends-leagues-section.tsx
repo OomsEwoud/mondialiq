@@ -114,6 +114,7 @@ export default function FriendsLeaguesSection({
                         description="Create your first private league to invite friends, compare picks, and make every matchday more competitive."
                         actionLabel="Create League"
                         actionHref={createLeagueHref}
+                        actionDisabled={hasReachedLeagueLimit}
                     />
                 )}
             </CardContent>

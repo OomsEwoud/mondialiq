@@ -372,8 +372,6 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.currentUserPoints', 20)
             ->where('league.totalPredictions', 5)
             ->where('league.lastActivityLabel', now()->subHour()->diffForHumans())
-            ->where('league.gapToLeader.points', 28)
-            ->where('league.gapToLeader.summary', 'You are 28 pts behind League Captain.')
             ->where('league.currentUserRank', 2)
             ->has('league.members', 3)
             ->where('league.members.0.name', 'League Captain')
@@ -617,7 +615,7 @@ test('a league owner cannot leave their own league', function () {
 
     $this->actingAs($owner)
         ->delete(route('leagues.leave', $league))
-        ->assertSessionHasErrors('league');
+        ->assertForbidden();
 
     $this->assertDatabaseHas('users_has_scoreboards', [
         'user_id' => $owner->id,

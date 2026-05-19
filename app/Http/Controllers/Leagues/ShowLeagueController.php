@@ -8,8 +8,8 @@ use App\Models\Scoreboard;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
-use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -107,7 +107,6 @@ class ShowLeagueController extends Controller
                 'lastActivityLabel' => $lastActivity?->updated_at instanceof CarbonInterface
                     ? $lastActivity->updated_at->diffForHumans()
                     : null,
-                'gapToLeader' => $this->buildGapToLeader($leader, $currentUser),
                 'members' => $members,
                 'currentUserRank' => $currentUser['rank'] ?? null,
             ],
@@ -149,30 +148,6 @@ class ShowLeagueController extends Controller
         return [
             'label' => 'Looking for lift',
             'tone' => 'cold',
-        ];
-    }
-
-    private function buildGapToLeader(?array $leader, ?array $currentUser): array
-    {
-        if (! $leader || ! $currentUser) {
-            return [
-                'points' => 0,
-                'summary' => 'No standings data yet.',
-            ];
-        }
-
-        $gap = max(($leader['totalPoints'] ?? 0) - ($currentUser['totalPoints'] ?? 0), 0);
-
-        if (($currentUser['rank'] ?? null) === 1) {
-            return [
-                'points' => 0,
-                'summary' => 'You are leading this league right now.',
-            ];
-        }
-
-        return [
-            'points' => $gap,
-            'summary' => "You are {$gap} pts behind {$leader['name']}.",
         ];
     }
 }

@@ -1,5 +1,6 @@
 import { Form, Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Plus, Users } from 'lucide-react';
+import StoreLeagueController from '@/actions/App/Http/Controllers/Leagues/StoreLeagueController';
 import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
@@ -82,8 +83,7 @@ export default function LeagueCreate({
                         </div>
 
                         <Form
-                            action="/leagues"
-                            method="post"
+                            {...StoreLeagueController.form()}
                             options={{ preserveScroll: true }}
                             className="space-y-5"
                         >

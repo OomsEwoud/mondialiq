@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { Crown, LogOut, Medal, Settings2, Users, type LucideIcon } from 'lucide-react';
+import { Crown, Medal, Settings2, Users, type LucideIcon } from 'lucide-react';
+import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -135,17 +136,12 @@ export default function FriendsLeagueCard({ league }: Props) {
                             League settings
                         </Link>
                     </Button>
-                ) : league.canLeave && league.leaveHref ? (
-                    <Button
-                        asChild
-                        variant="outline"
+                ) : league.canLeave ? (
+                    <LeagueLeaveCard
+                        leagueId={Number(league.id)}
+                        leagueName={league.name}
                         className="h-10 w-full rounded-lg border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
-                    >
-                        <Link href={league.leaveHref} method="delete" as="button">
-                            <LogOut className="size-4" />
-                            Leave League
-                        </Link>
-                    </Button>
+                    />
                 ) : (
                     <Button
                         type="button"

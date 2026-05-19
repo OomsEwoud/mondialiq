@@ -8,6 +8,7 @@ type Props = {
     description: string;
     actionLabel?: string;
     actionHref?: string | null;
+    actionDisabled?: boolean;
     className?: string;
 };
 
@@ -16,6 +17,7 @@ export default function LeaderboardEmptyState({
     description,
     actionLabel,
     actionHref,
+    actionDisabled = false,
     className,
 }: Props) {
     return (
@@ -34,7 +36,7 @@ export default function LeaderboardEmptyState({
             </p>
             {actionLabel && (
                 <div className="mt-5 flex justify-center">
-                    {actionHref ? (
+                    {actionHref && !actionDisabled ? (
                         <Button asChild className="h-10 rounded-lg px-4 font-black">
                             <Link href={actionHref}>
                                 <Plus className="size-4" />

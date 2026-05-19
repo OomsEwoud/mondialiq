@@ -49,10 +49,6 @@ export interface LeagueDetails {
     currentUserPoints: number;
     totalPredictions: number;
     lastActivityLabel: string | null;
-    gapToLeader: {
-        points: number;
-        summary: string;
-    };
     members: LeagueMember[];
     currentUserRank: number | null;
 }
