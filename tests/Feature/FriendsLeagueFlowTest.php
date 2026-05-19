@@ -197,6 +197,26 @@ test('a league member can view the league detail page with rankings', function (
         'created_at' => now()->subHours(3),
     ])->saveQuietly();
 
+    $leaderSecondPrediction = Prediction::create([
+        'fixture_id' => Fixture::create([
+            'external_id' => 11,
+            'league_id' => $fixture->league_id,
+            'home_team_id' => $fixture->home_team_id,
+            'away_team_id' => $fixture->away_team_id,
+            'round_name' => 'Group Stage - Matchday 2',
+            'season' => config('services.api_football.season'),
+            'match_date' => '2026-06-15 20:00:00',
+            'status_long' => 'Finished',
+        ])->id,
+        'user_id' => $leader->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 18,
+    ]);
+    $leaderSecondPrediction->forceFill([
+        'updated_at' => now()->subHours(8),
+        'created_at' => now()->subHours(8),
+    ])->saveQuietly();
+
     $currentUserPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $currentUser->id,
@@ -219,6 +239,26 @@ test('a league member can view the league detail page with rankings', function (
         'created_at' => now()->subHours(5),
     ])->saveQuietly();
 
+    $thirdMemberSecondPrediction = Prediction::create([
+        'fixture_id' => Fixture::create([
+            'external_id' => 12,
+            'league_id' => $fixture->league_id,
+            'home_team_id' => $fixture->home_team_id,
+            'away_team_id' => $fixture->away_team_id,
+            'round_name' => 'Group Stage - Matchday 3',
+            'season' => config('services.api_football.season'),
+            'match_date' => '2026-06-18 20:00:00',
+            'status_long' => 'Finished',
+        ])->id,
+        'user_id' => $thirdMember->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 0,
+    ]);
+    $thirdMemberSecondPrediction->forceFill([
+        'updated_at' => now()->subHours(10),
+        'created_at' => now()->subHours(10),
+    ])->saveQuietly();
+
     $this->actingAs($currentUser)
         ->get(route('leagues.show', $league))
         ->assertOk()
@@ -231,19 +271,30 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.canManage', false)
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
-            ->where('league.leaderPoints', 30)
+            ->where('league.leaderPoints', 48)
             ->where('league.currentUserPoints', 20)
-            ->where('league.totalPredictions', 3)
+            ->where('league.totalPredictions', 5)
             ->where('league.lastActivityLabel', now()->subHour()->diffForHumans())
-            ->where('league.gapToLeader.points', 10)
-            ->where('league.gapToLeader.summary', 'You are 10 pts behind League Captain.')
+            ->where('league.gapToLeader.points', 28)
+            ->where('league.gapToLeader.summary', 'You are 28 pts behind League Captain.')
             ->where('league.currentUserRank', 2)
             ->has('league.members', 3)
             ->where('league.members.0.name', 'League Captain')
+            ->where('league.members.0.scoringPredictionsCount', 2)
+            ->where('league.members.0.lastPredictionLabel', now()->subHours(3)->diffForHumans())
+            ->where('league.members.0.gapToAbove', null)
+            ->where('league.members.0.form.label', 'Hot streak')
             ->where('league.members.0.isOwner', false)
             ->where('league.members.0.canBeManaged', true)
             ->where('league.members.1.name', 'Current Player')
-            ->where('league.members.1.isCurrentUser', true),
+            ->where('league.members.1.isCurrentUser', true)
+            ->where('league.members.1.scoringPredictionsCount', 1)
+            ->where('league.members.1.lastPredictionLabel', now()->subHour()->diffForHumans())
+            ->where('league.members.1.gapToAbove', 28)
+            ->where('league.members.1.form.label', 'Hot streak')
+            ->where('league.members.2.scoringPredictionsCount', 1)
+            ->where('league.members.2.gapToAbove', 10)
+            ->where('league.members.2.form.label', 'Chasing momentum'),
         );
 });
 

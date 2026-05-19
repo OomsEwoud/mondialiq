@@ -22,6 +22,14 @@ const topRankStyles: Record<number, string> = {
     3: 'border-orange-200 bg-orange-50 text-orange-700',
 };
 
+const formToneStyles: Record<LeagueMember['form']['tone'], string> = {
+    hot: 'bg-emerald-100 text-emerald-800',
+    steady: 'bg-cyan-100 text-cyan-800',
+    chasing: 'bg-amber-100 text-amber-800',
+    cold: 'bg-rose-100 text-rose-800',
+    neutral: 'bg-slate-100 text-slate-700',
+};
+
 export default function LeagueMembersCard({ members }: Props) {
     const getInitials = useInitials();
 
@@ -41,14 +49,14 @@ export default function LeagueMembersCard({ members }: Props) {
                         <div
                             key={member.id}
                             className={cn(
-                                'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 sm:px-6',
+                                'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 px-4 py-4 sm:px-6',
                                 member.isCurrentUser &&
                                     'bg-cyan-50/70 ring-1 ring-inset ring-cyan-100',
                             )}
                         >
                             <div
                                 className={cn(
-                                    'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black',
+                                    'mt-1 flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black',
                                     topRankStyles[member.rank] ??
                                         'border-slate-200 bg-slate-50 text-blue-950',
                                 )}
@@ -84,8 +92,35 @@ export default function LeagueMembersCard({ members }: Props) {
                                                 You
                                             </Badge>
                                         )}
+                                        <Badge
+                                            className={cn(
+                                                'rounded-full px-2 py-0.5 text-[11px] font-black',
+                                                formToneStyles[member.form.tone],
+                                            )}
+                                        >
+                                            {member.form.label}
+                                        </Badge>
                                     </div>
-                                    <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        <StatPill
+                                            label={
+                                                member.gapToAbove === null
+                                                    ? 'Leading'
+                                                    : `${member.gapToAbove} pts to above`
+                                            }
+                                        />
+                                        <StatPill
+                                            label={`${member.scoringPredictionsCount} scored picks`}
+                                        />
+                                        <StatPill
+                                            label={
+                                                member.lastPredictionLabel
+                                                    ? `Last pick ${member.lastPredictionLabel}`
+                                                    : 'No picks yet'
+                                            }
+                                        />
+                                    </div>
+                                    <p className="mt-2 text-xs text-slate-500 sm:text-sm">
                                         {member.predictionsCount}{' '}
                                         {member.predictionsCount === 1
                                             ? 'prediction'
@@ -107,5 +142,17 @@ export default function LeagueMembersCard({ members }: Props) {
                 </div>
             </CardContent>
         </Card>
+    );
+}
+
+type StatPillProps = {
+    label: string;
+};
+
+function StatPill({ label }: StatPillProps) {
+    return (
+        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
+            {label}
+        </span>
     );
 }

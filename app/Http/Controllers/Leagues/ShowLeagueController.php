@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\User;
+use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,22 +25,57 @@ class ShowLeagueController extends Controller
             ->select(['users.id', 'users.name', 'users.avatar'])
             ->withSum('predictions', 'points')
             ->withCount('predictions')
+            ->withCount([
+                'predictions as scoring_predictions_count' => fn ($query) => $query
+                    ->where('points', '>', 0),
+            ])
+            ->withMax('predictions', 'updated_at')
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
             ->orderBy('users.name')
             ->get()
-            ->values()
+            ->values();
+
+        $recentPredictionsByUser = Prediction::query()
+            ->whereIn('user_id', $memberIds)
+            ->orderByDesc('updated_at')
+            ->get(['user_id', 'points', 'updated_at'])
+            ->groupBy('user_id')
+            ->map(fn (Collection $predictions) => $predictions->take(3)->values());
+
+        $members = $members
             ->map(fn (User $user, int $index) => [
                 'id' => $user->id,
                 'rank' => $index + 1,
                 'name' => $user->name,
                 'avatar' => $user->avatar,
                 'predictionsCount' => $user->predictions_count,
+                'scoringPredictionsCount' => $user->scoring_predictions_count,
                 'totalPoints' => $user->predictions_sum_points ?? 0,
                 'isCurrentUser' => $user->id === $request->user()->id,
                 'isOwner' => $user->id === $scoreboard->owner_id,
                 'canBeManaged' => $user->id !== $scoreboard->owner_id,
-            ]);
+                'lastPredictionLabel' => filled($user->predictions_max_updated_at)
+                    ? Carbon::parse($user->predictions_max_updated_at)->diffForHumans()
+                    : null,
+                'form' => $this->buildFormSummary(
+                    $recentPredictionsByUser->get($user->id, collect())
+                ),
+            ])
+            ->values();
+
+        $members = $members
+            ->map(function (array $member, int $index) use ($members): array {
+                $memberAbove = $index > 0 ? $members[$index - 1] : null;
+
+                return [
+                    ...$member,
+                    'gapToAbove' => $memberAbove
+                        ? max(($memberAbove['totalPoints'] ?? 0) - ($member['totalPoints'] ?? 0), 0)
+                        : null,
+                ];
+            })
+            ->values();
 
         $leader = $members->first();
         $currentUser = $members->firstWhere('isCurrentUser', true);
@@ -72,7 +109,45 @@ class ShowLeagueController extends Controller
             ],
         ]);
     }
-    
+
+    private function buildFormSummary(Collection $recentPredictions): array
+    {
+        if ($recentPredictions->isEmpty()) {
+            return [
+                'label' => 'No form yet',
+                'tone' => 'neutral',
+            ];
+        }
+
+        $averagePoints = (float) $recentPredictions->avg('points');
+
+        if ($averagePoints >= 20) {
+            return [
+                'label' => 'Hot streak',
+                'tone' => 'hot',
+            ];
+        }
+
+        if ($averagePoints >= 10) {
+            return [
+                'label' => 'Steady form',
+                'tone' => 'steady',
+            ];
+        }
+
+        if ($averagePoints > 0) {
+            return [
+                'label' => 'Chasing momentum',
+                'tone' => 'chasing',
+            ];
+        }
+
+        return [
+            'label' => 'Looking for lift',
+            'tone' => 'cold',
+        ];
+    }
+
     private function buildGapToLeader(?array $leader, ?array $currentUser): array
     {
         if (! $leader || ! $currentUser) {

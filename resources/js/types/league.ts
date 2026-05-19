@@ -4,10 +4,17 @@ export interface LeagueMember {
     name: string;
     avatar: string | null;
     predictionsCount: number;
+    scoringPredictionsCount: number;
     totalPoints: number;
     isCurrentUser: boolean;
     isOwner: boolean;
     canBeManaged: boolean;
+    lastPredictionLabel: string | null;
+    gapToAbove: number | null;
+    form: {
+        label: string;
+        tone: 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
+    };
 }
 
 export interface LeagueDetails {
