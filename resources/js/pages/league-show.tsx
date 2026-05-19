@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
+import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import { Badge } from '@/components/ui/feedback/badge';
 import {
     Card,
@@ -152,6 +153,13 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             code={league.code}
                             joinHref={league.joinHref}
                         />
+
+                        {league.canManage && (
+                            <LeagueSettingsCard
+                                leagueId={league.id}
+                                leagueName={league.name}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
