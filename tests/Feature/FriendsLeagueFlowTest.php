@@ -171,6 +171,54 @@ test('a user cannot join the same friends league twice', function () {
         ->assertSessionHasErrors('code');
 });
 
+test('a user cannot create more than 5 leagues', function () {
+    $user = User::factory()->create();
+
+    collect(range(1, 5))->each(function (int $index) use ($user) {
+        $league = Scoreboard::create([
+            'name' => "League {$index}",
+            'code' => sprintf('LIMIT%03d', $index),
+        ]);
+
+        $league->users()->attach($user->id);
+    });
+
+    $this->actingAs($user)
+        ->post(route('leagues.store'), [
+            'name' => 'One League Too Many',
+        ])
+        ->assertSessionHasErrors('name');
+});
+
+test('a user cannot join a 6th league', function () {
+    $user = User::factory()->create();
+
+    collect(range(1, 5))->each(function (int $index) use ($user) {
+        $league = Scoreboard::create([
+            'name' => "League {$index}",
+            'code' => sprintf('LIMIT%03d', $index),
+        ]);
+
+        $league->users()->attach($user->id);
+    });
+
+    $league = Scoreboard::create([
+        'name' => 'Overflow League',
+        'code' => 'OVERFL01',
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('leagues.join.store'), [
+            'code' => 'OVERFL01',
+        ])
+        ->assertSessionHasErrors('code');
+
+    $this->assertDatabaseMissing('users_has_scoreboards', [
+        'user_id' => $user->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
 test('a league member can view the league detail page with rankings', function () {
     $fixture = createFriendsLeagueFixture();
 
