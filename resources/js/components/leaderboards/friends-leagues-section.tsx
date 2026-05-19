@@ -14,8 +14,8 @@ import type { JoinedLeague } from '@/types/leaderboard';
 
 type Props = {
     leagues: JoinedLeague[];
-    createLeagueHref: string | null;
-    joinLeagueHref: string | null;
+    createLeagueHref: string;
+    joinLeagueHref: string;
     currentLeagueCount: number;
     maxLeagueCount: number;
 };
@@ -46,7 +46,7 @@ export default function FriendsLeaguesSection({
                         </p>
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                        {joinLeagueHref && !hasReachedLeagueLimit ? (
+                        {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
                                 variant="outline"
@@ -68,7 +68,7 @@ export default function FriendsLeaguesSection({
                                 Join League
                             </Button>
                         )}
-                        {createLeagueHref && !hasReachedLeagueLimit ? (
+                        {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
                                 className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"

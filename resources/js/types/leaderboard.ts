@@ -22,7 +22,7 @@ export interface JoinedLeague {
     leaderName: string | null;
     points: number | null;
     predictionsCount: number | null;
-    href: string | null;
+    href: string;
     settingsHref: string | null;
 }
 
@@ -30,8 +30,8 @@ export interface LeaderboardsPageProps {
     globalLeaderboard: LeaderboardEntry[];
     currentUserPosition: LeaderboardEntry | null;
     joinedLeagues: JoinedLeague[];
-    createLeagueHref: string | null;
-    joinLeagueHref: string | null;
+    createLeagueHref: string;
+    joinLeagueHref: string;
     totalPlayers: number;
     currentLeagueCount: number;
     maxLeagueCount: number;

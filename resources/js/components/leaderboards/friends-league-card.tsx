@@ -105,22 +105,12 @@ export default function FriendsLeagueCard({ league }: Props) {
                 </div>
             </CardContent>
             <CardFooter className="grid gap-3 px-4 pb-4 pt-0 sm:grid-cols-2 sm:px-5">
-                {league.href ? (
-                    <Button
-                        asChild
-                        className="h-10 w-full rounded-lg px-4 font-black"
-                    >
-                        <Link href={league.href}>View League</Link>
-                    </Button>
-                ) : (
-                    <Button
-                        type="button"
-                        disabled
-                        className="h-10 w-full rounded-lg px-4 font-black"
-                    >
-                        View League
-                    </Button>
-                )}
+                <Button
+                    asChild
+                    className="h-10 w-full rounded-lg px-4 font-black"
+                >
+                    <Link href={league.href}>View League</Link>
+                </Button>
 
                 {league.canManage && league.settingsHref ? (
                     <Button
@@ -138,7 +128,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </Button>
                 ) : league.canLeave ? (
                     <LeagueLeaveCard
-                        leagueId={Number(league.id)}
+                        leagueId={league.id}
                         leagueName={league.name}
                         className="h-10 w-full rounded-lg border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
                     />
