@@ -484,6 +484,112 @@ test('a league owner cannot remove a user who is not in the league', function ()
     ]);
 });
 
+test('a league owner can transfer ownership to another member', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Transfer League',
+        'code' => 'TRANSFER',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->post(route('leagues.owner.transfer', [
+            'scoreboard' => $league,
+            'member' => $member,
+        ]))
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'League ownership transferred.',
+        ]);
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'owner_id' => $member->id,
+    ]);
+});
+
+test('a non owner cannot transfer league ownership', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+    $targetMember = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Locked Transfer League',
+        'code' => 'LOCKTRNS',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id, $targetMember->id]);
+
+    $this->actingAs($member)
+        ->post(route('leagues.owner.transfer', [
+            'scoreboard' => $league,
+            'member' => $targetMember,
+        ]))
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'owner_id' => $owner->id,
+    ]);
+});
+
+test('a league owner cannot transfer ownership to a user outside the league', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+    $outsider = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Closed Transfer League',
+        'code' => 'OUTSIDE01',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->post(route('leagues.owner.transfer', [
+            'scoreboard' => $league,
+            'member' => $outsider,
+        ]))
+        ->assertSessionHasErrors('member');
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'owner_id' => $owner->id,
+    ]);
+});
+
+test('a league owner cannot transfer ownership to themselves', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Same Owner League',
+        'code' => 'SELFOWN1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->post(route('leagues.owner.transfer', [
+            'scoreboard' => $league,
+            'member' => $owner,
+        ]))
+        ->assertSessionHasErrors('member');
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'owner_id' => $owner->id,
+    ]);
+});
+
 test('a non member cannot view a private league detail page', function () {
     $user = User::factory()->create();
 

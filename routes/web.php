@@ -14,6 +14,7 @@ use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
+use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
@@ -55,6 +56,9 @@ Route::post('/leagues/{scoreboard}/refresh-code', RefreshLeagueCodeController::c
 Route::delete('/leagues/{scoreboard}/members/{member}', RemoveLeagueMemberController::class)
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.members.destroy');
+Route::post('/leagues/{scoreboard}/owner/{member}', TransferLeagueOwnershipController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.owner.transfer');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)
