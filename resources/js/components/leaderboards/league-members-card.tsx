@@ -1,3 +1,4 @@
+import { Crown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import {
@@ -72,6 +73,12 @@ export default function LeagueMembersCard({ members }: Props) {
                                         <p className="truncate text-sm font-black text-blue-950 sm:text-base">
                                             {member.name}
                                         </p>
+                                        {member.isOwner && (
+                                            <Badge className="rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-black text-amber-950">
+                                                <Crown className="size-3" />
+                                                Host
+                                            </Badge>
+                                        )}
                                         {member.isCurrentUser && (
                                             <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-[11px] font-black text-blue-950">
                                                 You

@@ -24,6 +24,8 @@ import { leaderboards } from '@/routes';
 import type { LeagueDetailsPageProps } from '@/types/league';
 
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
+    const host = league.members.find((member) => member.isOwner)
+
     return (
         <>
             <Head title={league.name} />
@@ -63,6 +65,15 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 {league.currentUserRank && (
                                     <Badge className="rounded-full bg-cyan-500 px-2.5 py-1 font-black text-blue-950">
                                         Your rank #{league.currentUserRank}
+                                    </Badge>
+                                )}
+                                {host && (
+                                    <Badge
+                                        variant="outline"
+                                        className="rounded-full border-amber-200 bg-amber-50 px-2.5 py-1 font-semibold text-amber-900"
+                                    >
+                                        <Crown className="size-3.5" />
+                                        Host: {host.name}
                                     </Badge>
                                 )}
                             </div>
