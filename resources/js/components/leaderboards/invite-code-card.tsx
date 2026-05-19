@@ -1,4 +1,4 @@
-import { Copy, Link2, LogIn, Share2, Sparkles, Ticket } from 'lucide-react';
+import { Copy, Link2, Share2, Sparkles, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
 import { useClipboard } from '@/hooks/use-clipboard';
 import { Button } from '@/components/ui/forms/button';
@@ -174,15 +174,6 @@ export default function InviteCodeCard({
                         Share invite
                     </Button>
 
-                    <Button
-                        asChild
-                        className="h-10 w-full rounded-lg px-4 font-black"
-                    >
-                        <a href={joinHref}>
-                            <LogIn className="size-4" />
-                            Join League
-                        </a>
-                    </Button>
                 </div>
             </CardContent>
         </Card>
