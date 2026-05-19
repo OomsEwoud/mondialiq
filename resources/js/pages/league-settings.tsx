@@ -13,13 +13,22 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
 
             <div className="space-y-6">
                 <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-                    <Link
-                        href={league.settingsHref ?? leaderboards.url()}
-                        className="inline-flex items-center gap-2 text-sm font-black text-slate-500 transition-colors hover:text-blue-950"
-                    >
-                        <ArrowLeft className="size-4" />
-                        Back
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <Link
+                            href={league.showHref ?? leaderboards.url()}
+                            className="inline-flex items-center gap-2 text-sm font-black text-slate-500 transition-colors hover:text-blue-950"
+                        >
+                            <ArrowLeft className="size-4" />
+                            Back to league
+                        </Link>
+
+                        <Badge
+                            variant="outline"
+                            className="rounded-full border-cyan-200 bg-cyan-50 px-2.5 py-1 font-semibold text-cyan-800"
+                        >
+                            Owner page
+                        </Badge>
+                    </div>
 
                     <div className="mt-6 max-w-3xl">
                         <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700">

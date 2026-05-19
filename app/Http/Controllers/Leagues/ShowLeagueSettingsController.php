@@ -41,6 +41,7 @@ class ShowLeagueSettingsController extends Controller
                 'id' => $scoreboard->id,
                 'name' => $scoreboard->name,
                 'code' => $scoreboard->code,
+                'showHref' => route('leagues.show', $scoreboard),
                 'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
                 'settingsHref' => route('leagues.settings', $scoreboard),
                 'canManage' => true,
