@@ -272,6 +272,32 @@ test('a league owner can update the league name', function () {
     ]);
 });
 
+test('a league owner sees manage controls on the league detail page', function () {
+    $owner = User::factory()->create(['name' => 'League Owner']);
+    $member = User::factory()->create(['name' => 'League Member']);
+
+    $league = Scoreboard::create([
+        'name' => 'Managed League',
+        'code' => 'MANAGED1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->get(route('leagues.show', $league))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-show')
+            ->where('league.id', $league->id)
+            ->where('league.name', 'Managed League')
+            ->where('league.code', 'MANAGED1')
+            ->where('league.canManage', true)
+            ->where('league.joinHref', route('leagues.join', ['code' => 'MANAGED1']))
+            ->where('league.membersCount', 2),
+        );
+});
+
 test('a league owner can refresh the invite code', function () {
     $owner = User::factory()->create();
 
