@@ -129,18 +129,6 @@ export default function InviteCodeCard({
                     </p>
                 </div>
 
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-                    <div className="flex items-center gap-2 text-slate-500">
-                        <Share2 className="size-4 text-cyan-600" />
-                        <p className="text-xs font-black tracking-[0.16em] uppercase">
-                            Share text
-                        </p>
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-slate-700">
-                        {shareMessage}
-                    </p>
-                </div>
-
                 <div className="grid gap-3 sm:grid-cols-2">
                     <Button
                         type="button"
