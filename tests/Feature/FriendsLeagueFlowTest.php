@@ -453,6 +453,37 @@ test('a league owner cannot remove themselves', function () {
     ]);
 });
 
+test('a league owner cannot remove a user who is not in the league', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+    $outsider = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Strict League',
+        'code' => 'STRICT01',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->delete(route('leagues.members.destroy', [
+            'scoreboard' => $league,
+            'member' => $outsider,
+        ]))
+        ->assertSessionHasErrors('member');
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $member->id,
+        'scoreboard_id' => $league->id,
+    ]);
+
+    $this->assertDatabaseMissing('users_has_scoreboards', [
+        'user_id' => $outsider->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
 test('a non member cannot view a private league detail page', function () {
     $user = User::factory()->create();
 
