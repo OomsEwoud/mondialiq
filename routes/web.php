@@ -10,8 +10,10 @@ use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
+use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
+use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
 use App\Http\Controllers\Socialite\RedirectController;
@@ -43,6 +45,12 @@ Route::post('/leagues/join', JoinLeagueController::class)
 Route::get('/leagues/{scoreboard}', ShowLeagueController::class)
     ->middleware('auth')
     ->name('leagues.show');
+Route::patch('/leagues/{scoreboard}', UpdateLeagueController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.update');
+Route::post('/leagues/{scoreboard}/refresh-code', RefreshLeagueCodeController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.refresh-code');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)

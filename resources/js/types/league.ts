@@ -13,6 +13,7 @@ export interface LeagueDetails {
     name: string;
     code: string;
     joinHref: string;
+    canManage: boolean;
     membersCount: number;
     currentLeader: string | null;
     leaderPoints: number;

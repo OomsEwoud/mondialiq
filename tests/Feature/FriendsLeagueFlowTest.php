@@ -94,6 +94,7 @@ test('an authenticated user can create a friends league and joins it immediately
 
     $this->assertDatabaseHas('scoreboards', [
         'name' => 'MondialIQ Crew',
+        'owner_id' => $user->id,
     ]);
 
     $this->assertDatabaseHas('users_has_scoreboards', [
@@ -185,32 +186,38 @@ test('a league member can view the league detail page with rankings', function (
         $thirdMember->id,
     ]);
 
-    Prediction::create([
+    $leaderPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $leader->id,
         'source' => PredictionTypes::User->value,
         'points' => 30,
+    ]);
+    $leaderPrediction->forceFill([
         'updated_at' => now()->subHours(3),
         'created_at' => now()->subHours(3),
-    ]);
+    ])->saveQuietly();
 
-    Prediction::create([
+    $currentUserPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $currentUser->id,
         'source' => PredictionTypes::User->value,
         'points' => 20,
+    ]);
+    $currentUserPrediction->forceFill([
         'updated_at' => now()->subHour(),
         'created_at' => now()->subHour(),
-    ]);
+    ])->saveQuietly();
 
-    Prediction::create([
+    $thirdMemberPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $thirdMember->id,
         'source' => PredictionTypes::User->value,
         'points' => 10,
+    ]);
+    $thirdMemberPrediction->forceFill([
         'updated_at' => now()->subHours(5),
         'created_at' => now()->subHours(5),
-    ]);
+    ])->saveQuietly();
 
     $this->actingAs($currentUser)
         ->get(route('leagues.show', $league))
@@ -220,6 +227,7 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.name', 'Friends League')
             ->where('league.code', 'FRIENDS1')
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
+            ->where('league.canManage', false)
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
             ->where('league.leaderPoints', 30)
@@ -234,6 +242,102 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.members.1.name', 'Current Player')
             ->where('league.members.1.isCurrentUser', true),
         );
+});
+
+test('a league owner can update the league name', function () {
+    $owner = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Original League',
+        'code' => 'ORIGINL1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach($owner->id);
+
+    $this->actingAs($owner)
+        ->patch(route('leagues.update', $league), [
+            'name' => 'Updated League',
+        ])
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'League updated.',
+        ]);
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'name' => 'Updated League',
+        'owner_id' => $owner->id,
+    ]);
+});
+
+test('a league owner can refresh the invite code', function () {
+    $owner = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Refreshable League',
+        'code' => 'REFRESH1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach($owner->id);
+
+    $this->actingAs($owner)
+        ->post(route('leagues.refresh-code', $league))
+        ->assertRedirect(route('leagues.show', $league))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'Invite code refreshed.',
+        ]);
+
+    expect($league->fresh()->code)
+        ->not->toBe('REFRESH1')
+        ->toHaveLength(8);
+});
+
+test('a non owner cannot update the league name', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Locked League',
+        'code' => 'LOCKED01',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->patch(route('leagues.update', $league), [
+            'name' => 'Hijacked League',
+        ])
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'name' => 'Locked League',
+        'owner_id' => $owner->id,
+    ]);
+});
+
+test('a non owner cannot refresh the invite code', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Protected League',
+        'code' => 'SAFECODE',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->post(route('leagues.refresh-code', $league))
+        ->assertForbidden();
+
+    expect($league->fresh()->code)->toBe('SAFECODE');
 });
 
 test('a non member cannot view a private league detail page', function () {

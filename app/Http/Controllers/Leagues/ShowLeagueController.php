@@ -10,16 +10,12 @@ use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ShowLeagueController extends Controller
 {
     public function __invoke(Request $request, Scoreboard $scoreboard): Response
     {
-        abort_unless(
-            $scoreboard->users()->whereKey($request->user()->id)->exists(),
-            HttpResponse::HTTP_FORBIDDEN,
-        );
+        $this->authorize('view', $scoreboard);
 
         $memberIds = $scoreboard->users()->pluck('users.id');
 
@@ -55,6 +51,7 @@ class ShowLeagueController extends Controller
                 'name' => $scoreboard->name,
                 'code' => $scoreboard->code,
                 'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
+                'canManage' => $request->user()->can('manage', $scoreboard),
                 'membersCount' => $members->count(),
                 'currentLeader' => $leader['name'] ?? null,
                 'leaderPoints' => $leader['totalPoints'] ?? 0,
@@ -69,12 +66,7 @@ class ShowLeagueController extends Controller
             ],
         ]);
     }
-
-    /**
-     * @param  array<string, mixed>|null  $leader
-     * @param  array<string, mixed>|null  $currentUser
-     * @return array{points:int, summary:string}
-     */
+    
     private function buildGapToLeader(?array $leader, ?array $currentUser): array
     {
         if (! $leader || ! $currentUser) {

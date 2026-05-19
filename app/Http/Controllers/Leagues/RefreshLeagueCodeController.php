@@ -3,30 +3,25 @@
 namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Leagues\StoreLeagueRequest;
 use App\Models\Scoreboard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
-class StoreLeagueController extends Controller
+class RefreshLeagueCodeController extends Controller
 {
-    public function __invoke(StoreLeagueRequest $request): RedirectResponse
+    public function __invoke(Scoreboard $scoreboard): RedirectResponse
     {
-        $league = Scoreboard::query()->create([
-            'name' => $request->validated('name'),
+        $scoreboard->update([
             'code' => $this->generateCode(),
-            'owner_id' => $request->user()->id,
         ]);
-
-        $league->users()->attach($request->user()->id);
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('League created.'),
+            'message' => __('Invite code refreshed.'),
         ]);
 
-        return to_route('leagues.show', $league);
+        return to_route('leagues.show', $scoreboard);
     }
 
     private function generateCode(): string

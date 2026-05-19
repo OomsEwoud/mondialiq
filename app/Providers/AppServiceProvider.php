@@ -68,5 +68,11 @@ class AppServiceProvider extends ServiceProvider
                 $request->route('provider').'|'.$request->ip(),
             );
         });
+
+        RateLimiter::for('league-manage', function (Request $request) {
+            return Limit::perMinute(12)->by(
+                $request->user()?->id ?: $request->ip(),
+            );
+        });
     }
 }
