@@ -24,7 +24,7 @@ class RefreshLeagueCodeController extends Controller
             'message' => __('Invite code refreshed.'),
         ]);
 
-        return to_route('leagues.show', $scoreboard);
+        return to_route('leagues.settings', $scoreboard);
     }
 
     private function generateCode(): string

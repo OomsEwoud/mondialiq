@@ -24,6 +24,6 @@ class UpdateLeagueController extends Controller
             'message' => __('League updated.'),
         ]);
 
-        return to_route('leagues.show', $scoreboard);
+        return to_route('leagues.settings', $scoreboard);
     }
 }
