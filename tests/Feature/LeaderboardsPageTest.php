@@ -136,13 +136,45 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.icon', '⚡')
             ->where('joinedLeagues.0.accent_color', 'blue')
             ->where('joinedLeagues.0.cover_style', 'night')
+            ->where('joinedLeagues.0.can_manage', false)
+            ->where('joinedLeagues.0.can_leave', true)
             ->where('joinedLeagues.0.members_count', 3)
             ->where('joinedLeagues.0.user_rank', 2)
             ->where('joinedLeagues.0.leader_name', 'League Leader')
             ->where('joinedLeagues.0.points', 18)
             ->where('joinedLeagues.0.predictions_count', 1)
             ->where('joinedLeagues.0.href', route('leagues.show', $friendsLeague))
+            ->where('joinedLeagues.0.settings_href', null)
+            ->where('joinedLeagues.0.leave_href', route('leagues.leave', $friendsLeague))
             ->where('createLeagueHref', route('leagues.create'))
             ->where('joinLeagueHref', route('leagues.join')),
+        );
+});
+
+test('the leaderboards page gives owners a settings action instead of leave', function () {
+    $currentUser = User::factory()->create(['name' => 'Owner Player']);
+
+    $ownedLeague = Scoreboard::create([
+        'name' => 'Owned League',
+        'icon' => '🏆',
+        'accent_color' => 'cyan',
+        'cover_style' => 'stadium',
+        'code' => 'OWNED001',
+        'owner_id' => $currentUser->id,
+    ]);
+
+    $ownedLeague->users()->attach($currentUser->id);
+
+    $this->actingAs($currentUser)
+        ->get(route('leaderboards'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('leaderboards')
+            ->has('joinedLeagues', 1)
+            ->where('joinedLeagues.0.name', 'Owned League')
+            ->where('joinedLeagues.0.can_manage', true)
+            ->where('joinedLeagues.0.can_leave', false)
+            ->where('joinedLeagues.0.settings_href', route('leagues.settings', $ownedLeague))
+            ->where('joinedLeagues.0.leave_href', null),
         );
 });

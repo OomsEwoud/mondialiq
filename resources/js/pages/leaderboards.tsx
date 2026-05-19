@@ -59,6 +59,10 @@ function normalizeLeague(
             icon: league.icon ?? '🏆',
             accentColor: league.accentColor ?? 'cyan',
             coverStyle: league.coverStyle ?? 'stadium',
+            canManage: league.canManage ?? false,
+            canLeave: league.canLeave ?? false,
+            settingsHref: league.settingsHref ?? null,
+            leaveHref: league.leaveHref ?? null,
         };
     }
 
@@ -68,11 +72,15 @@ function normalizeLeague(
         icon: league.icon ?? '🏆',
         accentColor: league.accent_color ?? 'cyan',
         coverStyle: league.cover_style ?? 'stadium',
+        canManage: league.can_manage ?? false,
+        canLeave: league.can_leave ?? false,
         membersCount: league.members_count,
         userRank: league.user_rank,
         leaderName: league.leader_name,
         points: league.points ?? null,
         predictionsCount: league.predictions_count ?? null,
         href: league.href ?? null,
+        settingsHref: league.settings_href ?? null,
+        leaveHref: league.leave_href ?? null,
     };
 }

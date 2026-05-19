@@ -9,6 +9,7 @@ import {
     type LucideIcon,
 } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
+import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
 import { Badge } from '@/components/ui/feedback/badge';
@@ -96,21 +97,30 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             </div>
                         </div>
 
-                        {league.canManage && league.settingsHref && (
-                            <Button
-                                asChild
-                                variant="outline"
-                                className={cn(
-                                    'h-11 rounded-lg bg-white/92 px-5 font-black shadow-sm backdrop-blur-sm',
-                                    palette.button,
-                                )}
-                            >
-                                <Link href={league.settingsHref}>
-                                    <Settings2 className="size-4" />
-                                    League settings
-                                </Link>
-                            </Button>
-                        )}
+                        <div className="flex flex-wrap items-center justify-end gap-3">
+                            {league.canLeave && (
+                                <LeagueLeaveCard
+                                    leagueId={league.id}
+                                    leagueName={league.name}
+                                />
+                            )}
+
+                            {league.canManage && league.settingsHref && (
+                                <Button
+                                    asChild
+                                    variant="outline"
+                                    className={cn(
+                                        'h-11 rounded-lg bg-white/92 px-5 font-black shadow-sm backdrop-blur-sm',
+                                        palette.button,
+                                    )}
+                                >
+                                    <Link href={league.settingsHref}>
+                                        <Settings2 className="size-4" />
+                                        League settings
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
                     </div>
                 </section>
 

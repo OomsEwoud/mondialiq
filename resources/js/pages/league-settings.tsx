@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Users } from 'lucide-react';
+import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
 import LeagueMembersManagementCard from '@/components/leaderboards/league-members-management-card';
 import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import { Badge } from '@/components/ui/feedback/badge';
@@ -89,6 +90,11 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                         leagueIcon={league.icon}
                         accentColor={league.accentColor}
                         coverStyle={league.coverStyle}
+                    />
+
+                    <LeagueDangerZoneCard
+                        leagueId={league.id}
+                        leagueName={league.name}
                     />
                 </div>
             </div>

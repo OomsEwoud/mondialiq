@@ -15,12 +15,16 @@ export interface JoinedLeague {
     icon: string;
     accentColor: LeagueAccentColor;
     coverStyle: LeagueCoverStyle;
+    canManage: boolean;
+    canLeave: boolean;
     membersCount: number;
     userRank: number | null;
     leaderName: string | null;
     points?: number | null;
     predictionsCount?: number | null;
     href?: string | null;
+    settingsHref?: string | null;
+    leaveHref?: string | null;
 }
 
 export interface JoinedLeaguePayload {
@@ -29,12 +33,16 @@ export interface JoinedLeaguePayload {
     icon: string;
     accent_color: LeagueAccentColor;
     cover_style: LeagueCoverStyle;
+    can_manage: boolean;
+    can_leave: boolean;
     members_count: number;
     user_rank: number | null;
     leader_name: string | null;
     points?: number | null;
     predictions_count?: number | null;
     href?: string | null;
+    settings_href?: string | null;
+    leave_href?: string | null;
 }
 
 export interface LeaderboardsPageProps {

@@ -86,7 +86,7 @@ test('an authenticated user can create a friends league and joins it immediately
     $league = Scoreboard::query()->first();
 
     $response
-        ->assertRedirect(route('leagues.settings', $league))
+        ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'League created.',
@@ -132,7 +132,7 @@ test('an authenticated user can join a friends league with a valid code', functi
         ]);
 
     $response
-        ->assertRedirect(route('leagues.settings', $league))
+        ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'You joined Joinable League.',
@@ -278,6 +278,7 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
             ->where('league.settingsHref', null)
             ->where('league.canManage', false)
+            ->where('league.canLeave', true)
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
             ->where('league.leaderPoints', 48)
@@ -328,7 +329,7 @@ test('a league owner can update the league name', function () {
             'accent_color' => 'violet',
             'cover_style' => 'spotlight',
         ])
-        ->assertRedirect(route('leagues.show', $league))
+        ->assertRedirect(route('leagues.settings', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'League updated.',
@@ -371,6 +372,7 @@ test('a league owner sees manage controls on the league detail page', function (
             ->where('league.coverStyle', 'pitch')
             ->where('league.code', 'MANAGED1')
             ->where('league.canManage', true)
+            ->where('league.canLeave', false)
             ->where('league.joinHref', route('leagues.join', ['code' => 'MANAGED1']))
             ->where('league.settingsHref', route('leagues.settings', $league))
             ->where('league.membersCount', 2)
@@ -478,7 +480,7 @@ test('a league owner can refresh the invite code', function () {
 
     $this->actingAs($owner)
         ->post(route('leagues.refresh-code', $league))
-        ->assertRedirect(route('leagues.show', $league))
+        ->assertRedirect(route('leagues.settings', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'Invite code refreshed.',
@@ -487,6 +489,99 @@ test('a league owner can refresh the invite code', function () {
     expect($league->fresh()->code)
         ->not->toBe('REFRESH1')
         ->toHaveLength(8);
+});
+
+test('a league member can leave a league', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Leavable League',
+        'code' => 'LEAVE001',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->delete(route('leagues.leave', $league))
+        ->assertRedirect(route('leaderboards'))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'You left Leavable League.',
+        ]);
+
+    $this->assertDatabaseMissing('users_has_scoreboards', [
+        'user_id' => $member->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
+test('a league owner cannot leave their own league', function () {
+    $owner = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Owner League',
+        'code' => 'OWNER001',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach($owner->id);
+
+    $this->actingAs($owner)
+        ->delete(route('leagues.leave', $league))
+        ->assertSessionHasErrors('league');
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $owner->id,
+        'scoreboard_id' => $league->id,
+    ]);
+});
+
+test('a league owner can delete their league', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Disposable League',
+        'code' => 'DELETE01',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->delete(route('leagues.destroy', $league))
+        ->assertRedirect(route('leaderboards'))
+        ->assertSessionHas('inertia.flash_data.toast', [
+            'type' => 'success',
+            'message' => 'League deleted: Disposable League.',
+        ]);
+
+    $this->assertDatabaseMissing('scoreboards', [
+        'id' => $league->id,
+    ]);
+});
+
+test('a non owner cannot delete a league', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Protected Delete League',
+        'code' => 'NODELETE',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->delete(route('leagues.destroy', $league))
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+    ]);
 });
 
 test('a league owner can remove a member', function () {

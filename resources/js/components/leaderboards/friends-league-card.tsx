@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Crown, Medal, Users, type LucideIcon } from 'lucide-react';
+import { Crown, LogOut, Medal, Settings2, Users, type LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -103,11 +103,11 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </p>
                 </div>
             </CardContent>
-            <CardFooter className="px-4 pb-4 pt-0 sm:px-5">
+            <CardFooter className="grid gap-3 px-4 pb-4 pt-0 sm:grid-cols-2 sm:px-5">
                 {league.href ? (
                     <Button
                         asChild
-                        className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                        className="h-10 w-full rounded-lg px-4 font-black"
                     >
                         <Link href={league.href}>View League</Link>
                     </Button>
@@ -115,9 +115,45 @@ export default function FriendsLeagueCard({ league }: Props) {
                     <Button
                         type="button"
                         disabled
-                        className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                        className="h-10 w-full rounded-lg px-4 font-black"
                     >
                         View League
+                    </Button>
+                )}
+
+                {league.canManage && league.settingsHref ? (
+                    <Button
+                        asChild
+                        variant="outline"
+                        className={cn(
+                            'h-10 w-full rounded-lg px-4 font-black',
+                            palette.button,
+                        )}
+                    >
+                        <Link href={league.settingsHref}>
+                            <Settings2 className="size-4" />
+                            League settings
+                        </Link>
+                    </Button>
+                ) : league.canLeave && league.leaveHref ? (
+                    <Button
+                        asChild
+                        variant="outline"
+                        className="h-10 w-full rounded-lg border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
+                    >
+                        <Link href={league.leaveHref} method="delete" as="button">
+                            <LogOut className="size-4" />
+                            Leave League
+                        </Link>
+                    </Button>
+                ) : (
+                    <Button
+                        type="button"
+                        disabled
+                        variant="outline"
+                        className="h-10 w-full rounded-lg px-4 font-black"
+                    >
+                        League action
                     </Button>
                 )}
             </CardFooter>

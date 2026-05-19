@@ -16,4 +16,15 @@ class ScoreboardPolicy
     {
         return $scoreboard->owner_id === $user->id;
     }
+
+    public function leave(User $user, Scoreboard $scoreboard): bool
+    {
+        return $scoreboard->owner_id !== $user->id
+            && $scoreboard->users()->whereKey($user->id)->exists();
+    }
+
+    public function delete(User $user, Scoreboard $scoreboard): bool
+    {
+        return $scoreboard->owner_id === $user->id;
+    }
 }

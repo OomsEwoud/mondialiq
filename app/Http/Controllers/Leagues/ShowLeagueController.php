@@ -98,6 +98,7 @@ class ShowLeagueController extends Controller
                     ? route('leagues.settings', $scoreboard)
                     : null,
                 'canManage' => $request->user()->can('manage', $scoreboard),
+                'canLeave' => $request->user()->can('leave', $scoreboard),
                 'membersCount' => $members->count(),
                 'currentLeader' => $leader['name'] ?? null,
                 'leaderPoints' => $leader['totalPoints'] ?? 0,

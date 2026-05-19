@@ -77,6 +77,8 @@ class LeaderboardsController extends Controller
             'icon' => $scoreboard->icon,
             'accent_color' => $scoreboard->accent_color,
             'cover_style' => $scoreboard->cover_style,
+            'can_manage' => $scoreboard->owner_id === $user->id,
+            'can_leave' => $scoreboard->owner_id !== $user->id,
             'members_count' => $scoreboard->users_count,
             'user_rank' => $currentUserEntry
                 ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1
@@ -85,6 +87,12 @@ class LeaderboardsController extends Controller
             'points' => $currentUserEntry?->predictions_sum_points ?? 0,
             'predictions_count' => $currentUserEntry?->predictions_count ?? 0,
             'href' => route('leagues.show', $scoreboard),
+            'settings_href' => $scoreboard->owner_id === $user->id
+                ? route('leagues.settings', $scoreboard)
+                : null,
+            'leave_href' => $scoreboard->owner_id !== $user->id
+                ? route('leagues.leave', $scoreboard)
+                : null,
         ];
     }
 }

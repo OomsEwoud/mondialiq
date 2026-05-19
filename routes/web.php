@@ -8,8 +8,10 @@ use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
+use App\Http\Controllers\Leagues\DeleteLeagueController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
+use App\Http\Controllers\Leagues\LeaveLeagueController;
 use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
@@ -54,6 +56,12 @@ Route::get('/leagues/{scoreboard}/settings', ShowLeagueSettingsController::class
 Route::patch('/leagues/{scoreboard}', UpdateLeagueController::class)
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.update');
+Route::delete('/leagues/{scoreboard}/leave', LeaveLeagueController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.leave');
+Route::delete('/leagues/{scoreboard}', DeleteLeagueController::class)
+    ->middleware(['auth', 'throttle:league-manage'])
+    ->name('leagues.destroy');
 Route::post('/leagues/{scoreboard}/refresh-code', RefreshLeagueCodeController::class)
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.refresh-code');

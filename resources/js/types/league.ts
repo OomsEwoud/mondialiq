@@ -42,6 +42,7 @@ export interface LeagueDetails {
     joinHref: string;
     settingsHref?: string | null;
     canManage: boolean;
+    canLeave: boolean;
     membersCount: number;
     currentLeader: string | null;
     leaderPoints: number;
