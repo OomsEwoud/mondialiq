@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 #[Fillable(['name', 'email', 'password', 'avatar', 'avatar_type', 'social_provider', 'social_provider_id'])]
@@ -42,5 +44,18 @@ class User extends Authenticatable
     public function scoreboards(): BelongsToMany
     {
         return $this->belongsToMany(Scoreboard::class, 'users_has_scoreboards');
+    }
+
+    public function avatarUrl(): ?string
+    {
+        $avatar = $this->getAttribute('avatar');
+
+        if (blank($avatar)) {
+            return null;
+        }
+
+        return Str::startsWith($avatar, ['http://', 'https://'])
+            ? $avatar
+            : Storage::url($avatar);
     }
 }

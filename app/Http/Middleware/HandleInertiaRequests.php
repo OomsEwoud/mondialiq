@@ -3,8 +3,6 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,7 +36,6 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = $request->user();
-        $avatar = $user?->getAttribute('avatar');
 
         return [
             ...parent::share($request),
@@ -56,11 +53,7 @@ class HandleInertiaRequests extends Middleware
                             'created_at',
                             'updated_at',
                         ]),
-                        'avatar' => $avatar
-                            ? (Str::startsWith($avatar, ['http://', 'https://'])
-                                ? $avatar
-                                : Storage::url($avatar))
-                            : null,
+                        'avatar' => $user->avatarUrl(),
                         'has_password' => filled(
                             $user->getAttribute('password'),
                         ),

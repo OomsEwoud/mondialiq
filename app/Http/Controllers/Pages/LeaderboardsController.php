@@ -29,7 +29,7 @@ class LeaderboardsController extends Controller
                 'id' => $user->id,
                 'rank' => $index + 1,
                 'name' => $user->name,
-                'avatar' => $user->avatar,
+                'avatar' => $user->avatarUrl(),
                 'predictionsCount' => $user->predictions_count,
                 'totalPoints' => $user->predictions_sum_points ?? 0,
             ]);
@@ -73,6 +73,17 @@ class LeaderboardsController extends Controller
             ->orderBy('users.name')
             ->get()
             ->values();
+        $memberAvatars = $scoreboard->users()
+            ->select(['users.id', 'users.name', 'users.avatar'])
+            ->orderBy('users.name')
+            ->limit(3)
+            ->get()
+            ->map(fn (User $member) => [
+                'id' => $member->id,
+                'name' => $member->name,
+                'avatar' => $member->avatarUrl(),
+            ])
+            ->values();
 
         $currentUserEntry = $rankings->firstWhere('id', $user->id);
         $leader = $rankings->first();
@@ -81,6 +92,7 @@ class LeaderboardsController extends Controller
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
             'icon' => $scoreboard->icon ?: LeagueBranding::DEFAULT_ICON,
+            'memberAvatars' => $memberAvatars,
             'accentColor' => $scoreboard->accent_color ?: LeagueBranding::DEFAULT_ACCENT_COLOR,
             'coverStyle' => $scoreboard->cover_style ?: LeagueBranding::DEFAULT_COVER_STYLE,
             'canManage' => $scoreboard->owner_id === $user->id,

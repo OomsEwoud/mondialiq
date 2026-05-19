@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Crown, Medal, Settings2, Users, type LucideIcon } from 'lucide-react';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -11,6 +12,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { JoinedLeague } from '@/types/leaderboard';
 import {
@@ -23,6 +25,7 @@ type Props = {
 };
 
 export default function FriendsLeagueCard({ league }: Props) {
+    const getInitials = useInitials();
     const performanceLabel =
         league.points !== null && league.points !== undefined
             ? `${league.points} pts`
@@ -59,17 +62,36 @@ export default function FriendsLeagueCard({ league }: Props) {
                             Private friends league standings.
                         </CardDescription>
                     </div>
-                    <Badge
-                        variant="outline"
-                        className={cn(
-                            'rounded-full px-2.5 py-1 font-semibold',
-                            palette.badge,
-                        )}
-                    >
-                        <Users className="size-3.5" />
-                        {league.membersCount}{' '}
-                        {league.membersCount === 1 ? 'member' : 'members'}
-                    </Badge>
+                    <div className="flex items-center gap-3">
+                        <div className="flex -space-x-2">
+                            {league.memberAvatars.map((member) => (
+                                <Avatar
+                                    key={member.id}
+                                    className="size-8 rounded-full ring-2 ring-white"
+                                >
+                                    <AvatarImage
+                                        src={member.avatar ?? undefined}
+                                        alt={member.name}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-blue-950 text-[10px] font-black text-white">
+                                        {getInitials(member.name)}
+                                    </AvatarFallback>
+                                </Avatar>
+                            ))}
+                        </div>
+                        <Badge
+                            variant="outline"
+                            className={cn(
+                                'rounded-full px-2.5 py-1 font-semibold',
+                                palette.badge,
+                            )}
+                        >
+                            <Users className="size-3.5" />
+                            {league.membersCount}{' '}
+                            {league.membersCount === 1 ? 'member' : 'members'}
+                        </Badge>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="grid gap-3 px-4 py-4 sm:px-5">

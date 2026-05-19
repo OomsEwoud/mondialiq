@@ -7,6 +7,7 @@ use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
 function createLeaderboardFixture(): Fixture
@@ -82,9 +83,14 @@ test('the leaderboards page shows the top 10 and current user standing', functio
 });
 
 test('the leaderboards page shows joined friends leagues for the current user', function () {
+    Storage::fake('public');
+
     $fixture = createLeaderboardFixture();
 
-    $currentUser = User::factory()->create(['name' => 'Current Player']);
+    $currentUser = User::factory()->create([
+        'name' => 'Current Player',
+        'avatar' => 'avatars/current-player.jpg',
+    ]);
     $leagueLeader = User::factory()->create(['name' => 'League Leader']);
     $thirdMember = User::factory()->create(['name' => 'Third Member']);
 
@@ -139,6 +145,12 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.canManage', false)
             ->where('joinedLeagues.0.canLeave', true)
             ->where('joinedLeagues.0.membersCount', 3)
+            ->has('joinedLeagues.0.memberAvatars', 3)
+            ->where('joinedLeagues.0.memberAvatars.0.name', 'Current Player')
+            ->where(
+                'joinedLeagues.0.memberAvatars.0.avatar',
+                Storage::url('avatars/current-player.jpg')
+            )
             ->where('joinedLeagues.0.userRank', 2)
             ->where('joinedLeagues.0.leaderName', 'League Leader')
             ->where('joinedLeagues.0.points', 18)
@@ -173,6 +185,7 @@ test('the leaderboards page gives owners a settings action instead of leave', fu
             ->component('leaderboards')
             ->has('joinedLeagues', 1)
             ->where('joinedLeagues.0.name', 'Owned League')
+            ->has('joinedLeagues.0.memberAvatars', 1)
             ->where('joinedLeagues.0.canManage', true)
             ->where('joinedLeagues.0.canLeave', false)
             ->where(

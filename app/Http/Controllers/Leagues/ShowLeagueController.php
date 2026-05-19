@@ -48,7 +48,7 @@ class ShowLeagueController extends Controller
                 'id' => $user->id,
                 'rank' => $index + 1,
                 'name' => $user->name,
-                'avatar' => $user->avatar,
+                'avatar' => $user->avatarUrl(),
                 'predictionsCount' => $user->predictions_count,
                 'scoringPredictionsCount' => $user->scoring_predictions_count,
                 'totalPoints' => $user->predictions_sum_points ?? 0,

@@ -13,6 +13,11 @@ export interface JoinedLeague {
     id: number;
     name: string;
     icon: string;
+    memberAvatars: Array<{
+        id: number;
+        name: string;
+        avatar: string | null;
+    }>;
     accentColor: LeagueAccentColor;
     coverStyle: LeagueCoverStyle;
     canManage: boolean;
