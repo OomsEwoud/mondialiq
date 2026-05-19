@@ -17,9 +17,26 @@ export interface LeagueMember {
     };
 }
 
+export type LeagueAccentColor =
+    | 'cyan'
+    | 'emerald'
+    | 'amber'
+    | 'rose'
+    | 'violet'
+    | 'blue';
+
+export type LeagueCoverStyle =
+    | 'stadium'
+    | 'spotlight'
+    | 'pitch'
+    | 'night';
+
 export interface LeagueDetails {
     id: number;
     name: string;
+    icon: string;
+    accentColor: LeagueAccentColor;
+    coverStyle: LeagueCoverStyle;
     code: string;
     showHref?: string | null;
     joinHref: string;
@@ -50,6 +67,6 @@ export interface LeagueDetailsPageProps {
 export interface LeagueSettingsPageProps {
     league: Pick<
         LeagueDetails,
-        'id' | 'name' | 'code' | 'showHref' | 'joinHref' | 'settingsHref' | 'canManage' | 'membersCount' | 'members'
+        'id' | 'name' | 'icon' | 'accentColor' | 'coverStyle' | 'code' | 'showHref' | 'joinHref' | 'settingsHref' | 'canManage' | 'membersCount' | 'members'
     >;
 }

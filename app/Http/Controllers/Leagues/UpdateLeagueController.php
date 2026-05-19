@@ -12,9 +12,12 @@ class UpdateLeagueController extends Controller
 {
     public function __invoke(UpdateLeagueRequest $request, Scoreboard $scoreboard): RedirectResponse
     {
-        $scoreboard->update([
-            'name' => $request->validated('name'),
-        ]);
+        $scoreboard->update($request->safe()->only([
+            'name',
+            'icon',
+            'accent_color',
+            'cover_style',
+        ]));
 
         Inertia::flash('toast', [
             'type' => 'success',

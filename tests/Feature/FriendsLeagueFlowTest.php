@@ -95,6 +95,9 @@ test('an authenticated user can create a friends league and joins it immediately
     $this->assertDatabaseHas('scoreboards', [
         'name' => 'MondialIQ Crew',
         'owner_id' => $user->id,
+        'icon' => '🏆',
+        'accent_color' => 'cyan',
+        'cover_style' => 'stadium',
     ]);
 
     $this->assertDatabaseHas('users_has_scoreboards', [
@@ -177,6 +180,9 @@ test('a league member can view the league detail page with rankings', function (
 
     $league = Scoreboard::create([
         'name' => 'Friends League',
+        'icon' => '🔥',
+        'accent_color' => 'amber',
+        'cover_style' => 'night',
         'code' => 'FRIENDS1',
     ]);
 
@@ -265,6 +271,9 @@ test('a league member can view the league detail page with rankings', function (
         ->assertInertia(fn (Assert $page) => $page
             ->component('league-show')
             ->where('league.name', 'Friends League')
+            ->where('league.icon', '🔥')
+            ->where('league.accentColor', 'amber')
+            ->where('league.coverStyle', 'night')
             ->where('league.code', 'FRIENDS1')
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
             ->where('league.settingsHref', null)
@@ -303,6 +312,9 @@ test('a league owner can update the league name', function () {
 
     $league = Scoreboard::create([
         'name' => 'Original League',
+        'icon' => '🏆',
+        'accent_color' => 'cyan',
+        'cover_style' => 'stadium',
         'code' => 'ORIGINL1',
         'owner_id' => $owner->id,
     ]);
@@ -312,6 +324,9 @@ test('a league owner can update the league name', function () {
     $this->actingAs($owner)
         ->patch(route('leagues.update', $league), [
             'name' => 'Updated League',
+            'icon' => '⭐',
+            'accent_color' => 'violet',
+            'cover_style' => 'spotlight',
         ])
         ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
@@ -322,6 +337,9 @@ test('a league owner can update the league name', function () {
     $this->assertDatabaseHas('scoreboards', [
         'id' => $league->id,
         'name' => 'Updated League',
+        'icon' => '⭐',
+        'accent_color' => 'violet',
+        'cover_style' => 'spotlight',
         'owner_id' => $owner->id,
     ]);
 });
@@ -332,6 +350,9 @@ test('a league owner sees manage controls on the league detail page', function (
 
     $league = Scoreboard::create([
         'name' => 'Managed League',
+        'icon' => '🌍',
+        'accent_color' => 'emerald',
+        'cover_style' => 'pitch',
         'code' => 'MANAGED1',
         'owner_id' => $owner->id,
     ]);
@@ -345,6 +366,9 @@ test('a league owner sees manage controls on the league detail page', function (
             ->component('league-show')
             ->where('league.id', $league->id)
             ->where('league.name', 'Managed League')
+            ->where('league.icon', '🌍')
+            ->where('league.accentColor', 'emerald')
+            ->where('league.coverStyle', 'pitch')
             ->where('league.code', 'MANAGED1')
             ->where('league.canManage', true)
             ->where('league.joinHref', route('leagues.join', ['code' => 'MANAGED1']))
@@ -364,6 +388,9 @@ test('a league owner can view the dedicated league settings page', function () {
 
     $league = Scoreboard::create([
         'name' => 'Settings League',
+        'icon' => '🎯',
+        'accent_color' => 'rose',
+        'cover_style' => 'spotlight',
         'code' => 'SETTINGS',
         'owner_id' => $owner->id,
     ]);
@@ -377,15 +404,48 @@ test('a league owner can view the dedicated league settings page', function () {
             ->component('league-settings')
             ->where('league.id', $league->id)
             ->where('league.name', 'Settings League')
+            ->where('league.icon', '🎯')
+            ->where('league.accentColor', 'rose')
+            ->where('league.coverStyle', 'spotlight')
             ->where('league.code', 'SETTINGS')
             ->where('league.canManage', true)
             ->where('league.settingsHref', route('leagues.settings', $league))
             ->where('league.membersCount', 2)
-            ->where('league.members.0.name', 'Owner Settings')
-            ->where('league.members.0.isOwner', true)
-            ->where('league.members.1.name', 'Managed Member')
-            ->where('league.members.1.canBeManaged', true),
+            ->has('league.members', 2)
+            ->where('league.members', fn ($members) => collect($members)->contains(
+                fn (array $leagueMember) => $leagueMember['name'] === 'Owner Settings'
+                    && $leagueMember['isOwner'] === true
+                    && $leagueMember['canBeManaged'] === false
+            ))
+            ->where('league.members', fn ($members) => collect($members)->contains(
+                fn (array $leagueMember) => $leagueMember['name'] === 'Managed Member'
+                    && $leagueMember['canBeManaged'] === true
+            )),
         );
+});
+
+test('a league owner cannot update branding with invalid options', function () {
+    $owner = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Validation League',
+        'icon' => '🏆',
+        'accent_color' => 'cyan',
+        'cover_style' => 'stadium',
+        'code' => 'VALID001',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach($owner->id);
+
+    $this->actingAs($owner)
+        ->patch(route('leagues.update', $league), [
+            'name' => 'Validation League',
+            'icon' => '💥',
+            'accent_color' => 'pink',
+            'cover_style' => 'galaxy',
+        ])
+        ->assertSessionHasErrors(['icon', 'accent_color', 'cover_style']);
 });
 
 test('a non owner cannot view the dedicated league settings page', function () {

@@ -90,6 +90,9 @@ test('the leaderboards page shows joined friends leagues for the current user', 
 
     $friendsLeague = Scoreboard::create([
         'name' => 'Friends League',
+        'icon' => '⚡',
+        'accent_color' => 'blue',
+        'cover_style' => 'night',
         'code' => 'FRIENDS1',
     ]);
 
@@ -130,6 +133,9 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->component('leaderboards')
             ->has('joinedLeagues', 1)
             ->where('joinedLeagues.0.name', 'Friends League')
+            ->where('joinedLeagues.0.icon', '⚡')
+            ->where('joinedLeagues.0.accent_color', 'blue')
+            ->where('joinedLeagues.0.cover_style', 'night')
             ->where('joinedLeagues.0.members_count', 3)
             ->where('joinedLeagues.0.user_rank', 2)
             ->where('joinedLeagues.0.leader_name', 'League Leader')

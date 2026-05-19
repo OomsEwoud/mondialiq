@@ -21,21 +21,35 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { cn } from '@/lib/utils';
 import { leaderboards } from '@/routes';
 import type { LeagueDetailsPageProps } from '@/types/league';
+import {
+    getLeagueBrandBannerClass,
+    getLeagueBrandPalette,
+} from '@/utils/league-branding';
 
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
-    const host = league.members.find((member) => member.isOwner)
+    const host = league.members.find((member) => member.isOwner);
+    const palette = getLeagueBrandPalette(league.accentColor);
 
     return (
         <>
             <Head title={league.name} />
 
             <div className="space-y-6">
-                <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+                <section
+                    className={cn(
+                        'rounded-2xl p-5 shadow-sm sm:p-8',
+                        getLeagueBrandBannerClass(
+                            league.accentColor,
+                            league.coverStyle,
+                        ),
+                    )}
+                >
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex items-center gap-2 text-sm font-black text-slate-500 transition-colors hover:text-blue-950"
+                        className="inline-flex items-center gap-2 text-sm font-black text-white/78 transition-colors hover:text-white"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
@@ -43,19 +57,19 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
                     <div className="mt-6 flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
                         <div className="max-w-3xl">
-                            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700">
-                                <Users className="size-6" />
+                            <div className="mb-3 flex size-14 items-center justify-center rounded-2xl bg-white/18 text-3xl shadow-sm backdrop-blur-sm">
+                                <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className="text-xs font-black tracking-[0.22em] text-cyan-600 uppercase">
+                            <p className="text-xs font-black tracking-[0.22em] text-white/72 uppercase">
                                 Friends League
                             </p>
-                            <h1 className="mt-2 text-3xl font-black text-blue-950 sm:text-4xl">
+                            <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
                                 {league.name}
                             </h1>
                             <div className="mt-4 flex flex-wrap gap-2">
                                 <Badge
                                     variant="outline"
-                                    className="rounded-full border-slate-200 bg-slate-50 px-2.5 py-1 font-semibold text-slate-600"
+                                    className="rounded-full border-white/20 bg-white/14 px-2.5 py-1 font-semibold text-white"
                                 >
                                     <Users className="size-3.5" />
                                     {league.membersCount}{' '}
@@ -64,14 +78,17 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                         : 'members'}
                                 </Badge>
                                 {league.currentUserRank && (
-                                    <Badge className="rounded-full bg-cyan-500 px-2.5 py-1 font-black text-blue-950">
+                                    <Badge className="rounded-full bg-white px-2.5 py-1 font-black text-blue-950">
                                         Your rank #{league.currentUserRank}
                                     </Badge>
                                 )}
                                 {host && (
                                     <Badge
                                         variant="outline"
-                                        className="rounded-full border-amber-200 bg-amber-50 px-2.5 py-1 font-semibold text-amber-900"
+                                        className={cn(
+                                            'rounded-full px-2.5 py-1 font-semibold',
+                                            palette.badge,
+                                        )}
                                     >
                                         <Crown className="size-3.5" />
                                         Host: {host.name}
@@ -84,7 +101,10 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-11 rounded-lg border-cyan-200 bg-white px-5 font-black text-cyan-900 hover:bg-cyan-50"
+                                className={cn(
+                                    'h-11 rounded-lg bg-white/92 px-5 font-black shadow-sm backdrop-blur-sm',
+                                    palette.button,
+                                )}
                             >
                                 <Link href={league.settingsHref}>
                                     <Settings2 className="size-4" />
@@ -177,6 +197,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
                         <InviteCodeCard
                             leagueName={league.name}
+                            leagueIcon={league.icon}
                             code={league.code}
                             joinHref={league.joinHref}
                             membersCount={league.membersCount}
@@ -187,7 +208,6 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             membersCount={league.membersCount}
                             currentUserPoints={league.currentUserPoints}
                         />
-
                     </div>
                 </div>
             </div>
@@ -202,7 +222,12 @@ type SnapshotMetricProps = {
     helper?: string;
 };
 
-function SnapshotMetric({ icon: Icon, label, value, helper }: SnapshotMetricProps) {
+function SnapshotMetric({
+    icon: Icon,
+    label,
+    value,
+    helper,
+}: SnapshotMetricProps) {
     return (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
             <div className="flex items-center gap-2 text-slate-500">

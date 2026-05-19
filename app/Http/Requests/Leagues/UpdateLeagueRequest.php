@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Leagues;
 
 use App\Models\Scoreboard;
+use App\Support\Leagues\LeagueBranding;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateLeagueRequest extends FormRequest
 {
@@ -22,6 +24,9 @@ class UpdateLeagueRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:80'],
+            'icon' => ['required', 'string', Rule::in(LeagueBranding::icons())],
+            'accent_color' => ['required', 'string', Rule::in(LeagueBranding::accentColors())],
+            'cover_style' => ['required', 'string', Rule::in(LeagueBranding::coverStyles())],
         ];
     }
 }

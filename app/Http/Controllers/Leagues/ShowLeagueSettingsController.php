@@ -40,6 +40,9 @@ class ShowLeagueSettingsController extends Controller
             'league' => [
                 'id' => $scoreboard->id,
                 'name' => $scoreboard->name,
+                'icon' => $scoreboard->icon,
+                'accentColor' => $scoreboard->accent_color,
+                'coverStyle' => $scoreboard->cover_style,
                 'code' => $scoreboard->code,
                 'showHref' => route('leagues.show', $scoreboard),
                 'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),

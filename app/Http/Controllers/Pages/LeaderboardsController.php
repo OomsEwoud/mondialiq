@@ -74,6 +74,9 @@ class LeaderboardsController extends Controller
         return [
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
+            'icon' => $scoreboard->icon,
+            'accent_color' => $scoreboard->accent_color,
+            'cover_style' => $scoreboard->cover_style,
             'members_count' => $scoreboard->users_count,
             'user_rank' => $currentUserEntry
                 ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1

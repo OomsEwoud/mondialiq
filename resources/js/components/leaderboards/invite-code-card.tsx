@@ -12,6 +12,7 @@ import {
 
 type Props = {
     leagueName: string;
+    leagueIcon: string;
     code: string;
     joinHref: string;
     membersCount: number;
@@ -19,6 +20,7 @@ type Props = {
 
 export default function InviteCodeCard({
     leagueName,
+    leagueIcon,
     code,
     joinHref,
     membersCount,
@@ -29,7 +31,7 @@ export default function InviteCodeCard({
     const isSmallLeague = membersCount <= 3;
 
     const shareMessage = [
-        `Join my MondialIQ friends league "${leagueName}".`,
+        `Join my MondialIQ friends league ${leagueIcon} "${leagueName}".`,
         `Use code: ${code}`,
         `Join here: ${joinHref}`,
     ].join(' ');
@@ -61,7 +63,7 @@ export default function InviteCodeCard({
             try {
                 await navigator.share({
                     title: `${leagueName} on MondialIQ`,
-                    text: `Join my MondialIQ friends league "${leagueName}" with code ${code}.`,
+                    text: `Join my MondialIQ friends league ${leagueIcon} "${leagueName}" with code ${code}.`,
                     url: joinHref,
                 });
                 return;

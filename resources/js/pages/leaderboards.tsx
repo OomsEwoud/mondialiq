@@ -54,12 +54,20 @@ function normalizeLeague(
     league: JoinedLeague | JoinedLeaguePayload,
 ): JoinedLeague {
     if ('membersCount' in league) {
-        return league;
+        return {
+            ...league,
+            icon: league.icon ?? '🏆',
+            accentColor: league.accentColor ?? 'cyan',
+            coverStyle: league.coverStyle ?? 'stadium',
+        };
     }
 
     return {
         id: league.id,
         name: league.name,
+        icon: league.icon ?? '🏆',
+        accentColor: league.accent_color ?? 'cyan',
+        coverStyle: league.cover_style ?? 'stadium',
         membersCount: league.members_count,
         userRank: league.user_rank,
         leaderName: league.leader_name,

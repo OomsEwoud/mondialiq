@@ -1,3 +1,5 @@
+import type { LeagueAccentColor, LeagueCoverStyle } from '@/types/league';
+
 export interface LeaderboardEntry {
     id: number;
     rank: number;
@@ -10,6 +12,9 @@ export interface LeaderboardEntry {
 export interface JoinedLeague {
     id: number | string;
     name: string;
+    icon: string;
+    accentColor: LeagueAccentColor;
+    coverStyle: LeagueCoverStyle;
     membersCount: number;
     userRank: number | null;
     leaderName: string | null;
@@ -21,6 +26,9 @@ export interface JoinedLeague {
 export interface JoinedLeaguePayload {
     id: number | string;
     name: string;
+    icon: string;
+    accent_color: LeagueAccentColor;
+    cover_style: LeagueCoverStyle;
     members_count: number;
     user_rank: number | null;
     leader_name: string | null;

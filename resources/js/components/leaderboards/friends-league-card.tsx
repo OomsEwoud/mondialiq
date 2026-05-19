@@ -12,6 +12,10 @@ import {
 } from '@/components/ui/layout/card';
 import { cn } from '@/lib/utils';
 import type { JoinedLeague } from '@/types/leaderboard';
+import {
+    getLeagueBrandBannerClass,
+    getLeagueBrandPalette,
+} from '@/utils/league-branding';
 
 type Props = {
     league: JoinedLeague;
@@ -25,9 +29,25 @@ export default function FriendsLeagueCard({ league }: Props) {
                 league.predictionsCount !== undefined
               ? `${league.predictionsCount} predictions`
               : null;
+    const palette = getLeagueBrandPalette(league.accentColor);
 
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+            <div className={getLeagueBrandBannerClass(league.accentColor, league.coverStyle)}>
+                <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/18 text-2xl shadow-sm backdrop-blur-sm">
+                        <span aria-hidden="true">{league.icon}</span>
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-xs font-black tracking-[0.18em] uppercase text-white/80">
+                            Friends league
+                        </p>
+                        <p className="truncate text-lg font-black text-white">
+                            {league.name}
+                        </p>
+                    </div>
+                </div>
+            </div>
             <CardHeader className="gap-3 border-b border-slate-200 px-4 py-4 sm:px-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -40,7 +60,10 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </div>
                     <Badge
                         variant="outline"
-                        className="rounded-full border-slate-200 bg-slate-50 px-2.5 py-1 font-semibold text-slate-600"
+                        className={cn(
+                            'rounded-full px-2.5 py-1 font-semibold',
+                            palette.badge,
+                        )}
                     >
                         <Users className="size-3.5" />
                         {league.membersCount}{' '}

@@ -10,6 +10,9 @@ class Scoreboard extends Model
 {
     protected $fillable = [
         'name',
+        'icon',
+        'accent_color',
+        'cover_style',
         'code',
         'owner_id',
     ];
