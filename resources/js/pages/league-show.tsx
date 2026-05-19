@@ -3,6 +3,7 @@ import {
     Activity,
     ArrowLeft,
     Crown,
+    Settings2,
     Target,
     TrendingUp,
     Users,
@@ -10,9 +11,8 @@ import {
 } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
-import LeagueMembersManagementCard from '@/components/leaderboards/league-members-management-card';
-import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import { Badge } from '@/components/ui/feedback/badge';
+import { Button } from '@/components/ui/forms/button';
 import {
     Card,
     CardContent,
@@ -155,17 +155,25 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             joinHref={league.joinHref}
                         />
 
-                        {league.canManage && (
-                            <>
-                                <LeagueMembersManagementCard
-                                    leagueId={league.id}
-                                    members={league.members}
-                                />
-                                <LeagueSettingsCard
-                                    leagueId={league.id}
-                                    leagueName={league.name}
-                                />
-                            </>
+                        {league.canManage && league.settingsHref && (
+                            <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
+                                <CardHeader className="gap-2 px-4 py-5 sm:px-6">
+                                    <CardTitle className="text-2xl font-black text-blue-950">
+                                        Owner controls
+                                    </CardTitle>
+                                    <CardDescription className="text-sm leading-6 text-slate-500">
+                                        Open the dedicated settings page to manage members, transfer ownership, or update league details.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="px-4 pb-5 sm:px-6">
+                                    <Button asChild className="h-11 rounded-lg px-5 font-black">
+                                        <Link href={league.settingsHref}>
+                                            <Settings2 className="size-4" />
+                                            Open league settings
+                                        </Link>
+                                    </Button>
+                                </CardContent>
+                            </Card>
                         )}
                     </div>
                 </div>

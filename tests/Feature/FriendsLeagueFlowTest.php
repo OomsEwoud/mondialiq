@@ -227,6 +227,7 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.name', 'Friends League')
             ->where('league.code', 'FRIENDS1')
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
+            ->where('league.settingsHref', null)
             ->where('league.canManage', false)
             ->where('league.membersCount', 3)
             ->where('league.currentLeader', 'League Captain')
@@ -296,6 +297,7 @@ test('a league owner sees manage controls on the league detail page', function (
             ->where('league.code', 'MANAGED1')
             ->where('league.canManage', true)
             ->where('league.joinHref', route('leagues.join', ['code' => 'MANAGED1']))
+            ->where('league.settingsHref', route('leagues.settings', $league))
             ->where('league.membersCount', 2)
             ->where('league.members.0.name', 'Alpha Owner')
             ->where('league.members.0.isOwner', true)
@@ -303,6 +305,53 @@ test('a league owner sees manage controls on the league detail page', function (
             ->where('league.members.1.name', 'Beta Member')
             ->where('league.members.1.canBeManaged', true),
         );
+});
+
+test('a league owner can view the dedicated league settings page', function () {
+    $owner = User::factory()->create(['name' => 'Owner Settings']);
+    $member = User::factory()->create(['name' => 'Managed Member']);
+
+    $league = Scoreboard::create([
+        'name' => 'Settings League',
+        'code' => 'SETTINGS',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->get(route('leagues.settings', $league))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-settings')
+            ->where('league.id', $league->id)
+            ->where('league.name', 'Settings League')
+            ->where('league.code', 'SETTINGS')
+            ->where('league.canManage', true)
+            ->where('league.settingsHref', route('leagues.settings', $league))
+            ->where('league.membersCount', 2)
+            ->where('league.members.0.name', 'Owner Settings')
+            ->where('league.members.0.isOwner', true)
+            ->where('league.members.1.name', 'Managed Member')
+            ->where('league.members.1.canBeManaged', true),
+        );
+});
+
+test('a non owner cannot view the dedicated league settings page', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Private Settings League',
+        'code' => 'PRIVSET1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->get(route('leagues.settings', $league))
+        ->assertForbidden();
 });
 
 test('a league owner can refresh the invite code', function () {

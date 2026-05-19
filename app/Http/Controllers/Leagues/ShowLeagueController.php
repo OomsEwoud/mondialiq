@@ -53,6 +53,9 @@ class ShowLeagueController extends Controller
                 'name' => $scoreboard->name,
                 'code' => $scoreboard->code,
                 'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
+                'settingsHref' => $request->user()->can('manage', $scoreboard)
+                    ? route('leagues.settings', $scoreboard)
+                    : null,
                 'canManage' => $request->user()->can('manage', $scoreboard),
                 'membersCount' => $members->count(),
                 'currentLeader' => $leader['name'] ?? null,

@@ -15,6 +15,7 @@ export interface LeagueDetails {
     name: string;
     code: string;
     joinHref: string;
+    settingsHref?: string | null;
     canManage: boolean;
     membersCount: number;
     currentLeader: string | null;
@@ -36,4 +37,11 @@ export interface LeagueJoinPageProps {
 
 export interface LeagueDetailsPageProps {
     league: LeagueDetails;
+}
+
+export interface LeagueSettingsPageProps {
+    league: Pick<
+        LeagueDetails,
+        'id' | 'name' | 'code' | 'joinHref' | 'settingsHref' | 'canManage' | 'membersCount' | 'members'
+    >;
 }

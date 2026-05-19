@@ -13,6 +13,7 @@ use App\Http\Controllers\Leagues\JoinLeaguePageController;
 use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
+use App\Http\Controllers\Leagues\ShowLeagueSettingsController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
@@ -47,6 +48,9 @@ Route::post('/leagues/join', JoinLeagueController::class)
 Route::get('/leagues/{scoreboard}', ShowLeagueController::class)
     ->middleware('auth')
     ->name('leagues.show');
+Route::get('/leagues/{scoreboard}/settings', ShowLeagueSettingsController::class)
+    ->middleware('auth')
+    ->name('leagues.settings');
 Route::patch('/leagues/{scoreboard}', UpdateLeagueController::class)
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.update');
