@@ -158,6 +158,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                         {league.canManage && (
                             <>
                                 <LeagueMembersManagementCard
+                                    leagueId={league.id}
                                     members={league.members}
                                 />
                                 <LeagueSettingsCard

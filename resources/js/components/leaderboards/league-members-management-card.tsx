@@ -1,6 +1,10 @@
+import { Form } from '@inertiajs/react'
 import { Crown, ShieldCheck, UserMinus } from 'lucide-react'
+import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar'
 import { Badge } from '@/components/ui/feedback/badge'
+import { Spinner } from '@/components/ui/feedback/spinner'
+import { Button } from '@/components/ui/forms/button'
 import {
     Card,
     CardContent,
@@ -13,10 +17,11 @@ import { cn } from '@/lib/utils'
 import type { LeagueMember } from '@/types/league'
 
 type Props = {
+    leagueId: number
     members: LeagueMember[]
 }
 
-export default function LeagueMembersManagementCard({ members }: Props) {
+export default function LeagueMembersManagementCard({ leagueId, members }: Props) {
     const getInitials = useInitials()
 
     return (
@@ -77,7 +82,7 @@ export default function LeagueMembersManagementCard({ members }: Props) {
                                 </div>
                                 <p className="mt-1 text-xs text-slate-500 sm:text-sm">
                                     {member.canBeManaged
-                                        ? 'Can be removed in a future owner action.'
+                                        ? 'You can remove this member from the league if needed.'
                                         : 'Owner access cannot be removed from this screen later on.'}
                                 </p>
                             </div>
@@ -85,13 +90,26 @@ export default function LeagueMembersManagementCard({ members }: Props) {
 
                         <div className="shrink-0">
                             {member.canBeManaged ? (
-                                <Badge
-                                    variant="outline"
-                                    className="rounded-full border-slate-300 bg-white px-2.5 py-1 font-semibold text-slate-600"
+                                <Form
+                                    {...RemoveLeagueMemberController.form({
+                                        scoreboard: leagueId,
+                                        member: member.id,
+                                    })}
+                                    options={{ preserveScroll: true }}
                                 >
-                                    <UserMinus className="size-3.5" />
-                                    Removable later
-                                </Badge>
+                                    {({ processing }) => (
+                                        <Button
+                                            type="submit"
+                                            variant="destructive"
+                                            disabled={processing}
+                                            className="h-10 rounded-lg px-4 font-black"
+                                        >
+                                            {processing && <Spinner />}
+                                            <UserMinus className="size-4" />
+                                            {processing ? 'Removing...' : 'Remove member'}
+                                        </Button>
+                                    )}
+                                </Form>
                             ) : (
                                 <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-black text-amber-900">
                                     Protected role
