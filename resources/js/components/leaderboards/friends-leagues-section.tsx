@@ -14,18 +14,18 @@ import type { JoinedLeague } from '@/types/leaderboard';
 
 type Props = {
     leagues: JoinedLeague[];
-    createLeagueHref?: string | null;
-    joinLeagueHref?: string | null;
-    currentLeagueCount?: number;
-    maxLeagueCount?: number;
+    createLeagueHref: string | null;
+    joinLeagueHref: string | null;
+    currentLeagueCount: number;
+    maxLeagueCount: number;
 };
 
 export default function FriendsLeaguesSection({
     leagues,
     createLeagueHref,
     joinLeagueHref,
-    currentLeagueCount = 0,
-    maxLeagueCount = 5,
+    currentLeagueCount,
+    maxLeagueCount,
 }: Props) {
     const hasReachedLeagueLimit = currentLeagueCount >= maxLeagueCount;
 

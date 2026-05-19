@@ -10,7 +10,7 @@ export interface LeaderboardEntry {
 }
 
 export interface JoinedLeague {
-    id: number | string;
+    id: number;
     name: string;
     icon: string;
     accentColor: LeagueAccentColor;
@@ -20,11 +20,10 @@ export interface JoinedLeague {
     membersCount: number;
     userRank: number | null;
     leaderName: string | null;
-    points?: number | null;
-    predictionsCount?: number | null;
-    href?: string | null;
-    settingsHref?: string | null;
-    leaveHref?: string | null;
+    points: number | null;
+    predictionsCount: number | null;
+    href: string | null;
+    settingsHref: string | null;
 }
 
 export interface LeaderboardsPageProps {

@@ -95,9 +95,6 @@ class LeaderboardsController extends Controller
             'settingsHref' => $scoreboard->owner_id === $user->id
                 ? route('leagues.settings', $scoreboard)
                 : null,
-            'leaveHref' => $scoreboard->owner_id !== $user->id
-                ? route('leagues.leave', $scoreboard)
-                : null,
         ];
     }
 }

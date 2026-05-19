@@ -145,7 +145,6 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.predictionsCount', 1)
             ->where('joinedLeagues.0.href', route('leagues.show', $friendsLeague))
             ->where('joinedLeagues.0.settingsHref', null)
-            ->where('joinedLeagues.0.leaveHref', route('leagues.leave', $friendsLeague))
             ->where('currentLeagueCount', 1)
             ->where('maxLeagueCount', 5)
             ->where('createLeagueHref', route('leagues.create'))
@@ -176,7 +175,6 @@ test('the leaderboards page gives owners a settings action instead of leave', fu
             ->where('joinedLeagues.0.name', 'Owned League')
             ->where('joinedLeagues.0.canManage', true)
             ->where('joinedLeagues.0.canLeave', false)
-            ->where('joinedLeagues.0.settingsHref', route('leagues.settings', $ownedLeague))
-            ->where('joinedLeagues.0.leaveHref', null),
+            ->where('joinedLeagues.0.settingsHref', route('leagues.settings', $ownedLeague)),
         );
 });
