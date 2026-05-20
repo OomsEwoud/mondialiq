@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Services\Apis\FootballApiService;
 use App\Services\Team\TeamService;
 use Illuminate\Console\Attributes\Description;
@@ -12,6 +13,8 @@ use Illuminate\Console\Command;
 #[Description('Haal teams op uit de Football API en sla ze op')]
 class AddTeams extends Command
 {
+    use InteractsWithFootballApiConfig;
+
     public function __construct(
         protected TeamService $teamService,
         protected FootballApiService $serviceApi,
@@ -21,14 +24,17 @@ class AddTeams extends Command
 
     public function handle(): int
     {
+        $config = $this->footballApiConfig();
+
+        if ($config === null) {
+            return self::FAILURE;
+        }
+
         $this->info('Ophalen van teams');
         $teams = [];
 
-        $this->components->task('Data uit API ophalen', function () use (&$teams) {
-            $teams = $this->serviceApi->getTeams(
-                config('services.api_football.league_id'),
-                config('services.api_football.season'),
-            );
+        $this->components->task('Data uit API ophalen', function () use (&$teams, $config) {
+            $teams = $this->serviceApi->getTeams($config['leagueId'], $config['season']);
         });
 
         $this->components->task('Data van teams opslaan in database', function () use ($teams) {

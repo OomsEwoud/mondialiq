@@ -13,17 +13,11 @@ $hasMatchToday = static fn (): bool => Fixture::query()
     ->whereDate('match_date', now()->toDateString())
     ->exists();
 
-Schedule::command('app:add-countries')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-countries')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-leagues')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-leagues')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-teams')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-teams')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-players')
     ->weekly()

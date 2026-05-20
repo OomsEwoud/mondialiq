@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Services\Apis\FootballApiService;
 use App\Services\Player\PlayerService;
 use App\Services\Player\PlayerStatsService;
@@ -13,6 +14,8 @@ use Illuminate\Console\Command;
 #[Description('Sync all players and team squads from the Football API')]
 class AddPlayers extends Command
 {
+    use InteractsWithFootballApiConfig;
+
     public function __construct(
         protected FootballApiService $api,
         protected PlayerService $service,
@@ -23,14 +26,17 @@ class AddPlayers extends Command
 
     public function handle(): int
     {
+        $config = $this->footballApiConfig();
+
+        if ($config === null) {
+            return self::FAILURE;
+        }
+
         $this->info('Ophalen van players');
         $players = [];
 
-        $this->components->task('Data uit API ophalen', function () use (&$players) {
-            $players = $this->api->getPlayersByLeagueSeason(
-                config('services.api_football.league_id'),
-                config('services.api_football.season'),
-            );
+        $this->components->task('Data uit API ophalen', function () use (&$players, $config) {
+            $players = $this->api->getPlayersByLeagueSeason($config['leagueId'], $config['season']);
         });
 
         $this->components->task('Data van players opslaan in database', function () use ($players) {

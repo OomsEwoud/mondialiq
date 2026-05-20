@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Services\Apis\FootballApiService;
 use App\Services\Standing\StandingService;
 use Illuminate\Console\Attributes\Description;
@@ -12,6 +13,8 @@ use Illuminate\Console\Command;
 #[Description('Haal standings op uit de Football API en sla ze op')]
 class AddStandings extends Command
 {
+    use InteractsWithFootballApiConfig;
+
     public function __construct(
         protected FootballApiService $api,
         protected StandingService $service,
@@ -21,14 +24,17 @@ class AddStandings extends Command
 
     public function handle(): int
     {
+        $config = $this->footballApiConfig();
+
+        if ($config === null) {
+            return self::FAILURE;
+        }
+
         $this->info('Ophalen van standings');
         $standings = [];
 
-        $this->components->task('Data uit API ophalen', function () use (&$standings) {
-            $standings = $this->api->getStandings(
-                config('services.api_football.league_id'),
-                config('services.api_football.season'),
-            );
+        $this->components->task('Data uit API ophalen', function () use (&$standings, $config) {
+            $standings = $this->api->getStandings($config['leagueId'], $config['season']);
         });
 
         $this->components->task('Data van standings opslaan in database', function () use ($standings) {

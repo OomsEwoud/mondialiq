@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureService;
 use Illuminate\Console\Attributes\Description;
@@ -12,6 +13,8 @@ use Illuminate\Console\Command;
 #[Description('Haal fixtures op uit de Football API en sla ze op')]
 class AddFixtures extends Command
 {
+    use InteractsWithFootballApiConfig;
+
     public function __construct(
         protected FootballApiService $api,
         protected FixtureService $service,
@@ -21,14 +24,17 @@ class AddFixtures extends Command
 
     public function handle(): int
     {
+        $config = $this->footballApiConfig();
+
+        if ($config === null) {
+            return self::FAILURE;
+        }
+
         $this->info('Ophalen van fixtures');
         $fixtures = [];
 
-        $this->components->task('Data uit API ophalen', function () use (&$fixtures) {
-            $fixtures = $this->api->getFixtures(
-                config('services.api_football.league_id'),
-                config('services.api_football.season'),
-            );
+        $this->components->task('Data uit API ophalen', function () use (&$fixtures, $config) {
+            $fixtures = $this->api->getFixtures($config['leagueId'], $config['season']);
         });
 
         $this->components->task('Data van fixtures opslaan in database', function () use ($fixtures) {
