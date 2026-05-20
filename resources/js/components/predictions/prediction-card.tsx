@@ -1,5 +1,6 @@
 import PredictionMatchSummary from '@/components/predictions/prediction-match-summary';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
+import PredictionUserActions from '@/components/predictions/prediction-user-actions';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
 import type { Match } from '@/types/match';
@@ -18,10 +19,17 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                     <PredictionMatchSummary match={match} />
                     {mode === 'mine' && <UserPredictionSummary match={match} />}
                 </div>
-                <PredictionStatusAction
-                    matchId={match.id}
-                    label={actionLabel}
-                />
+                {mode === 'mine' ? (
+                    <PredictionUserActions
+                        match={match}
+                        viewLabel={actionLabel}
+                    />
+                ) : (
+                    <PredictionStatusAction
+                        matchId={match.id}
+                        label={actionLabel}
+                    />
+                )}
             </div>
         </div>
     );

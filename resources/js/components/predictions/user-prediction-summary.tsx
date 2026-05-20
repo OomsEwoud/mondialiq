@@ -18,7 +18,7 @@ export default function UserPredictionSummary({ match }: Props) {
         <div className="flex flex-wrap items-center gap-2 text-sm">
             <Badge className="border-blue-200 bg-blue-50 text-blue-800">
                 <BadgeCheck className="h-3 w-3" />
-                Pick: {match.userPrediction.label}
+                Prediction: {match.userPrediction.label}
             </Badge>
 
             {score && (
