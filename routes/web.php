@@ -5,6 +5,7 @@ use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\LeaderboardsController;
 use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
+use App\Http\Controllers\Pages\PredictionDetailsController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
@@ -72,6 +73,9 @@ Route::post('/leagues/{scoreboard}/owner/{member}', TransferLeagueOwnershipContr
     ->middleware(['auth', 'throttle:league-manage'])
     ->name('leagues.owner.transfer');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
+Route::get('/predictions/{fixture}', PredictionDetailsController::class)
+    ->middleware('auth')
+    ->name('predictions.show');
 
 Route::get('/auth/{provider}/redirect', RedirectController::class)
     ->middleware('throttle:social-auth')

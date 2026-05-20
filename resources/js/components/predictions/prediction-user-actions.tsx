@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowRight, PencilLine, Sparkles } from 'lucide-react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import { Button } from '@/components/ui/forms/button';
-import { show } from '@/routes/matches';
+import { show } from '@/routes/predictions';
 import type { Match } from '@/types/match';
 
 interface Props {

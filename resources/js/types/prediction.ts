@@ -8,3 +8,7 @@ export interface PredictionPageProps {
     };
     mode: PredictionTab;
 }
+
+export interface PredictionShowPageProps {
+    match: Match;
+}
