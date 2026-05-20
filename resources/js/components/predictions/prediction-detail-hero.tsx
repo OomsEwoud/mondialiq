@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Gauge, PencilLine, Trophy } from 'lucide-react';
+import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import UserPredictionTeam from '@/components/matches/prediction/user-prediction-team';
 import { Button } from '@/components/ui/forms/button';
@@ -42,10 +42,6 @@ export default function PredictionDetailHero({ match }: Props) {
                 <div className="p-5 sm:p-6">
                     <div className="flex flex-col gap-4">
                         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                            <p className="mb-4 text-[11px] font-black tracking-[0.24em] text-cyan-600 uppercase">
-                                My prediction
-                            </p>
-
                             <div className="grid grid-cols-[1fr] gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                                 <UserPredictionTeam
                                     logo={match.homeTeamLogo}
@@ -53,9 +49,14 @@ export default function PredictionDetailHero({ match }: Props) {
                                     code={match.homeTeamShort}
                                 />
 
-                                <span className="text-center text-xl font-black text-slate-300">
-                                    -
-                                </span>
+                                <div className="text-center">
+                                    <p className="text-[11px] font-black tracking-[0.24em] text-slate-400 uppercase">
+                                        Predicted score
+                                    </p>
+                                    <p className="mt-2 text-3xl font-black text-blue-950">
+                                        {score ?? '-'}
+                                    </p>
+                                </div>
 
                                 <UserPredictionTeam
                                     logo={match.awayTeamLogo}
@@ -63,23 +64,6 @@ export default function PredictionDetailHero({ match }: Props) {
                                     code={match.awayTeamShort}
                                     align="right"
                                 />
-                            </div>
-                        </section>
-
-                        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                            <p className="text-[11px] font-black tracking-[0.24em] text-cyan-600 uppercase">
-                                Predicted score
-                            </p>
-                            <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                                <p className="text-left text-2xl font-black text-blue-950">
-                                    {match.homeTeamShort}
-                                </p>
-                                <p className="text-center text-3xl font-black text-blue-950">
-                                    {score ?? '-'}
-                                </p>
-                                <p className="text-right text-2xl font-black text-blue-950">
-                                    {match.awayTeamShort}
-                                </p>
                             </div>
                         </section>
 
