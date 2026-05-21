@@ -13,7 +13,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('app:add-fixture-data')]
-#[Description('Haal lineups, stats en events op voor alle fixtures')]
+#[Description('Haal lineups, stats en events op voor relevante fixtures')]
 class AddFixtureData extends Command
 {
     public function __construct(
@@ -27,8 +27,21 @@ class AddFixtureData extends Command
 
     public function handle(): int
     {
-        $fixtures = Fixture::query()->get();
-        $this->info('Ophalen van fixture data');
+        $this->info('Ophalen van fixture data voor relevante fixtures');
+
+        $fixtures = Fixture::query()
+            ->whereNotNull('external_id')
+            ->relevantForDataSync()
+            ->orderBy('match_date')
+            ->get(['id', 'external_id', 'match_date']);
+
+        if ($fixtures->isEmpty()) {
+            $this->info('Geen relevante fixtures gevonden voor fixture data sync.');
+
+            return self::SUCCESS;
+        }
+
+        $this->info("{$fixtures->count()} relevante fixtures gevonden.");
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) {
             try {
@@ -40,6 +53,8 @@ class AddFixtureData extends Command
 
                 $events = $this->api->getFixtureEvents($fixture->external_id);
                 $this->eventsService->storeFixtureEvents($events, $fixture->id);
+
+                // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
                 sleep(1);
             } catch (Exception $e) {
                 $this->newLine();
@@ -48,7 +63,7 @@ class AddFixtureData extends Command
         });
 
         $this->newLine();
-        $this->info('Alle fixture data is geupdate');
+        $this->info('Fixture data voor relevante fixtures is geupdate');
 
         return self::SUCCESS;
     }

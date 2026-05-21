@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PredictionTypes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +12,23 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
+    public static int $recentDataSyncWindowHours = 3;
+    public static int $upcomingDataSyncWindowMinutes = 45;
+
+    public static array $liveStatusLongs = [
+        'Kick Off',
+        'First Half',
+        'Halftime',
+        '2nd Half Started',
+        'Second Half',
+        'Extra Time',
+        'Break Time',
+        'Penalty In Progress',
+        'Match Suspended',
+        'Match Interrupted',
+        'In Progress',
+    ];
+
     protected $fillable = [
         'external_id',
         'league_id',
@@ -46,6 +64,27 @@ class Fixture extends Model
         'penalty_home_goals' => 'integer',
         'penalty_away_goals' => 'integer',
     ];
+
+    public function scopeInProgress(Builder $query): Builder
+    {
+        return $query->whereIn('status_long', self::$liveStatusLongs);
+    }
+
+    public function scopeRelevantForDataSync(Builder $query): Builder
+    {
+        $now = now('UTC');
+        $windowStart = $now->copy()->subHours(self::$recentDataSyncWindowHours);
+        $windowEnd = $now->copy()->addMinutes(self::$upcomingDataSyncWindowMinutes);
+
+        return $query->where(function (Builder $query) use ($windowStart, $windowEnd) {
+            $query
+                ->whereBetween('match_date', [
+                    $windowStart,
+                    $windowEnd,
+                ])
+                ->orWhere(fn (Builder $query) => $query->inProgress());
+        });
+    }
 
     public function league(): BelongsTo
     {
