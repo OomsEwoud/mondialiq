@@ -18,8 +18,15 @@ class FootballApiService
 
     public function __construct()
     {
-        $this->baseUrl = config('services.api_football.base_url');
-        $this->apiKey = config('services.api_football.api_key');
+        $baseUrl = config('services.api_football.base_url');
+        $apiKey = config('services.api_football.api_key');
+
+        if (! is_string($baseUrl) || $baseUrl === '' || ! is_string($apiKey) || $apiKey === '') {
+            throw new Exception('API Football configuratie ontbreekt of is ongeldig.');
+        }
+
+        $this->baseUrl = $baseUrl;
+        $this->apiKey = $apiKey;
     }
 
     private function rawCall(string $endpoint, array $params = []): array

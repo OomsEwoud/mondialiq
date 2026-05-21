@@ -9,8 +9,8 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-$hasMatchToday = static fn (): bool => Fixture::query()
-    ->whereDate('match_date', now()->toDateString())
+$hasFixtureInProgress = static fn (): bool => Fixture::query()
+    ->whereIn('status', ['1H', 'HT', '2H', 'ET', 'P', 'LIVE'])
     ->exists();
 
 Schedule::command('app:add-countries')->monthly()->withoutOverlapping();
@@ -19,44 +19,28 @@ Schedule::command('app:add-leagues')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-teams')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-players')
-    ->weekly()
-    ->withoutOverlapping();
+Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
-Schedule::command('app:add-fixtures')
-    ->hourly()
-    ->withoutOverlapping();
+Schedule::command('app:add-fixtures')->daily()->withoutOverlapping();
 
-Schedule::command('app:add-standings')
-    ->hourly()
-    ->withoutOverlapping();
+if (now()->between('2026-06-11', '2026-07-19')) {
+    Schedule::command('app:add-standings')->hourly()->withoutOverlapping();
+} else {
+    Schedule::command('app:add-standings')->daily()->withoutOverlapping();
+}
 
-Schedule::command('app:add-bookmakers')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-bookmakers')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-predictions')
-    ->hourly()
-    ->when($hasMatchToday)
-    ->withoutOverlapping();
+Schedule::command('app:add-predictions')->hourly()->when($hasFixtureInProgress)->withoutOverlapping();
 
-Schedule::command('app:add-predictions')
-    ->dailyAt('03:00')
-    ->skip($hasMatchToday)
-    ->withoutOverlapping();
+Schedule::command('app:add-predictions')->dailyAt('03:00')->skip($hasFixtureInProgress)->withoutOverlapping();
 
-Schedule::command('app:add-coaches')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-venues')
-    ->daily()
-    ->withoutOverlapping();
+Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-fixture-data')
     ->everyFifteenMinutes()
     ->withoutOverlapping();
 
-Schedule::command('app:assign-league-owners')
-    ->daily()
-    ->withoutOverlapping();
+
