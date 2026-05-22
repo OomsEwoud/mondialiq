@@ -77,4 +77,14 @@ class Team extends Model
     {
         return $this->belongsToMany(Player::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
     }
+
+    public function headToHeadsAsTeamA(): HasMany
+    {
+        return $this->hasMany(HeadToHead::class, 'team_a_id');
+    }
+
+    public function headToHeadsAsTeamB(): HasMany
+    {
+        return $this->hasMany(HeadToHead::class, 'team_b_id');
+    }
 }
