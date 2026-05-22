@@ -28,7 +28,7 @@ Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
 Schedule::command('app:add-fixtures')->daily()->withoutOverlapping();
 
-if (now()->between('2026-06-11', '2026-07-19')) {
+if (now()->between('2026-06-11', '2026-06-29')) {
     Schedule::command('app:add-standings')->hourly()->withoutOverlapping();
 } else {
     Schedule::command('app:add-standings')->daily()->withoutOverlapping();
@@ -44,12 +44,6 @@ Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-fixture-data')
-    ->everyFifteenMinutes()
-    ->when($hasActiveOrSoonFixture)
-    ->withoutOverlapping();
+Schedule::command('app:add-fixture-data')->everyFifteenMinutes()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
-Schedule::command('app:add-fixture-data')
-    ->daily()
-    ->skip($hasActiveOrSoonFixture)
-    ->withoutOverlapping();
+Schedule::command('app:add-fixture-data')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
