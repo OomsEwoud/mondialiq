@@ -30,4 +30,9 @@ class League extends Model
     {
         return $this->hasMany(Fixture::class);
     }
+
+    public function teamStatistics(): HasMany
+    {
+        return $this->hasMany(TeamStatistic::class);
+    }
 }

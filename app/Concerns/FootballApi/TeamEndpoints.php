@@ -13,7 +13,23 @@ trait TeamEndpoints
     public function getTeamsStats(int $teamId, int $season, int $leagueId): array
     {
         //1 call per day
-        return $this->call('/teams/statistics', ['team' => $teamId, 'season' => $season, 'league' => $leagueId]);
+        return $this->getTeamStatistics($teamId, $leagueId, $season);
+    }
+
+    public function getTeamStatistics(int $teamId, int $leagueId, int $season, ?string $date = null): array
+    {
+        $params = [
+            'team' => $teamId,
+            'league' => $leagueId,
+            'season' => $season,
+        ];
+
+        if ($date) {
+            $params['date'] = $date;
+        }
+
+        //1 call per day
+        return $this->call('/teams/statistics', $params);
     }
 
     public function getStandings(int $idLeague, int $season): array

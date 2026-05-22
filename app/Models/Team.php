@@ -87,4 +87,9 @@ class Team extends Model
     {
         return $this->hasMany(HeadToHead::class, 'team_b_id');
     }
+
+    public function teamStatistics(): HasMany
+    {
+        return $this->hasMany(TeamStatistic::class);
+    }
 }
