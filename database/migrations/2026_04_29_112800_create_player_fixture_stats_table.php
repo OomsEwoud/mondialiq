@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('fixture_id')->constrained()->onDelete('cascade');
             $table->foreignId('player_id')->constrained()->onDelete('cascade');
             $table->integer('game_minutes')->default(0);
-            $table->integer('number');
-            $table->string('position');
-            $table->decimal('rating', 3, 2)->nullable();
+            $table->integer('number')->nullable();
+            $table->string('position')->nullable();
+            $table->decimal('rating', 4, 2)->nullable();
             $table->boolean('is_captain')->default(false);
             $table->boolean('is_substitute')->default(false);
             $table->integer('offsides')->default(0);
