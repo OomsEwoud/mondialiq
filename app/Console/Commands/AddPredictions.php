@@ -24,7 +24,20 @@ class AddPredictions extends Command
     public function handle(): int
     {
         $this->info('Starten met ophalen van voorspellingen');
-        $fixtures = Fixture::query()->get();
+
+        $fixtures = Fixture::query()
+            ->whereNotNull('external_id')
+            ->relevantForDataSync()
+            ->orderBy('match_date')
+            ->get(['id', 'external_id', 'match_date']);
+
+        if ($fixtures->isEmpty()) {
+            $this->info('Geen relevante fixtures gevonden voor voorspellingen sync.');
+
+            return self::SUCCESS;
+        }
+
+        $this->info("{$fixtures->count()} relevante fixtures gevonden.");
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) {
             try {

@@ -11,29 +11,39 @@ class FixtureLineupService
 {
     public function storeLineups(array $lineupData, int $fixtureId): void
     {
-        foreach ($lineupData as $data) {
-            $teamId = Team::query()->where('external_id', $data['team']['id'])->value('id');
+        $fixture = Fixture::query()->find($fixtureId);
 
-            if (! $teamId) {
+        if (! $fixture) {
+            return;
+        }
+
+        foreach ($lineupData as $data) {
+            $teamId = Team::query()->where('external_id', data_get($data, 'team.id'))->value('id');
+            $formation = data_get($data, 'formation');
+
+            if (! $teamId || ! is_string($formation) || $formation === '') {
                 continue;
             }
 
-            $fixture = Fixture::query()->find($fixtureId);
             $fixture->lineups()->syncWithoutDetaching([
-                $teamId => ['formation' => $data['formation']],
+                $teamId => ['formation' => $formation],
             ]);
 
-            $this->storePlayers($data['startXI'], $fixtureId, $teamId, true);
-            $this->storePlayers($data['substitutes'], $fixtureId, $teamId, false);
+            $this->storePlayers(data_get($data, 'startXI', []), $fixtureId, $teamId, true);
+            $this->storePlayers(data_get($data, 'substitutes', []), $fixtureId, $teamId, false);
         }
     }
 
     private function storePlayers(array $players, int $fixtureId, int $teamId, bool $isStarting): void
     {
         foreach ($players as $entry) {
-            $playerData = $entry['player'];
+            $playerData = data_get($entry, 'player', []);
 
-            $playerId = Player::query()->where('external_id', $playerData['id'])->value('id');
+            if (! is_array($playerData)) {
+                continue;
+            }
+
+            $playerId = Player::query()->where('external_id', data_get($playerData, 'id'))->value('id');
 
             if (! $playerId) {
                 continue;
@@ -47,8 +57,8 @@ class FixtureLineupService
                 [
                     'team_id' => $teamId,
                     'is_starting' => $isStarting,
-                    'jersey_number' => $playerData['number'],
-                    'position' => $playerData['pos'],
+                    'jersey_number' => data_get($playerData, 'number'),
+                    'position' => data_get($playerData, 'pos'),
                 ],
             );
         }

@@ -33,13 +33,23 @@ class FootballApiService
     {
         $response = Http::withHeaders([
             'x-apisports-key' => $this->apiKey,
-        ])->get("{$this->baseUrl}{$endpoint}", $params);
+        ])
+            ->connectTimeout(5)
+            ->timeout(20)
+            ->retry(2, 500)
+            ->get("{$this->baseUrl}{$endpoint}", $params);
 
         if ($response->failed()) {
-            throw new Exception("API Call to {$endpoint} failed.");
+            $message = $response->json('message')
+                ?? $response->json('errors')
+                ?? $response->reason();
+
+            throw new Exception("API call to {$endpoint} failed with status {$response->status()}: ".json_encode($message));
         }
 
-        return $response->json();
+        $json = $response->json();
+
+        return is_array($json) ? $json : [];
     }
 
     private function call(string $endpoint, array $params = []): array

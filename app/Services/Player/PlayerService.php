@@ -3,6 +3,7 @@
 namespace App\Services\Player;
 
 use App\Models\Country;
+use App\Models\Fixture;
 use App\Models\Player;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
@@ -35,11 +36,17 @@ class PlayerService
 
     public function storeTeamPlayers(Team $team, array $players): void
     {
-        DB::transaction(function () use ($team, $players) {
+        $squad = data_get($players, '0.players', []);
+
+        if (! is_array($squad)) {
+            return;
+        }
+
+        DB::transaction(function () use ($team, $squad) {
             $team->players()->update(['is_active' => false]);
             $data = [];
 
-            foreach ($players[0]['players'] as $playerData) {
+            foreach ($squad as $playerData) {
                 $playerModel = $this->updateOrCreatePlayer($playerData);
                 $data[$playerModel->id] = ['is_active' => true];
             }
@@ -83,13 +90,24 @@ class PlayerService
         );
     }
 
-    public function syncTeamPlayers(): void
+    public function syncTeamPlayers(int $leagueId, int $season): void
     {
-        Team::query()->chunk(100, function ($teams) {
-            foreach ($teams as $team) {
-                $teamPlayerData = $this->api->getPlayers($team->external_id);
-                $this->storeTeamPlayers($team, $teamPlayerData);
-            }
-        });
+        $teamIds = Fixture::query()
+            ->whereHas('league', fn ($query) => $query->where('external_id', $leagueId))
+            ->where('season', $season)
+            ->get(['home_team_id', 'away_team_id'])
+            ->flatMap(fn (Fixture $fixture): array => [$fixture->home_team_id, $fixture->away_team_id])
+            ->unique()
+            ->values();
+
+        Team::query()
+            ->whereIn('id', $teamIds)
+            ->whereNotNull('external_id')
+            ->chunk(100, function ($teams) {
+                foreach ($teams as $team) {
+                    $teamPlayerData = $this->api->getPlayers($team->external_id);
+                    $this->storeTeamPlayers($team, $teamPlayerData);
+                }
+            });
     }
 }

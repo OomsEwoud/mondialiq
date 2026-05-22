@@ -17,28 +17,37 @@ class FixtureService
         $teamIds = Team::query()->pluck('id', 'external_id');
 
         foreach ($fixtures as $fixture) {
+            $externalId = data_get($fixture, 'fixture.id');
+            $leagueId = $leagueIds[data_get($fixture, 'league.id')] ?? null;
+            $homeTeamId = $teamIds[data_get($fixture, 'teams.home.id')] ?? null;
+            $awayTeamId = $teamIds[data_get($fixture, 'teams.away.id')] ?? null;
+
+            if ($externalId === null || $leagueId === null || $homeTeamId === null || $awayTeamId === null) {
+                continue;
+            }
+
             Fixture::query()->updateOrCreate(
-                ['external_id' => $fixture['fixture']['id']],
+                ['external_id' => $externalId],
                 [
-                    'league_id' => $leagueIds[$fixture['league']['id']],
-                    'home_team_id' => $teamIds[$fixture['teams']['home']['id']],
-                    'away_team_id' => $teamIds[$fixture['teams']['away']['id']],
-                    'venue_id' => $this->resolveVenue($fixture['fixture']['venue']),
-                    'referee_id' => $this->resolveReferee($fixture['fixture']),
-                    'round_name' => $fixture['league']['round'],
-                    'season' => $fixture['league']['season'],
-                    'match_date' => Carbon::parse($fixture['fixture']['date']),
-                    'status_long' => $fixture['fixture']['status']['long'],
-                    'elapsed_time' => $fixture['fixture']['status']['elapsed'],
-                    'halftime_home_goals' => $fixture['score']['halftime']['home'],
-                    'halftime_away_goals' => $fixture['score']['halftime']['away'],
-                    'fulltime_home_goals' => $fixture['score']['fulltime']['home'],
-                    'fulltime_away_goals' => $fixture['score']['fulltime']['away'],
-                    'extratime_home_goals' => $fixture['score']['extratime']['home'],
-                    'extratime_away_goals' => $fixture['score']['extratime']['away'],
-                    'penalty_home_goals' => $fixture['score']['penalty']['home'],
-                    'penalty_away_goals' => $fixture['score']['penalty']['away'],
-                    'result' => $this->calculateResult($fixture['score']['fulltime']),
+                    'league_id' => $leagueId,
+                    'home_team_id' => $homeTeamId,
+                    'away_team_id' => $awayTeamId,
+                    'venue_id' => $this->resolveVenue(data_get($fixture, 'fixture.venue', [])),
+                    'referee_id' => $this->resolveReferee(data_get($fixture, 'fixture', [])),
+                    'round_name' => data_get($fixture, 'league.round'),
+                    'season' => data_get($fixture, 'league.season'),
+                    'match_date' => Carbon::parse(data_get($fixture, 'fixture.date')),
+                    'status_long' => data_get($fixture, 'fixture.status.long'),
+                    'elapsed_time' => data_get($fixture, 'fixture.status.elapsed'),
+                    'halftime_home_goals' => data_get($fixture, 'score.halftime.home'),
+                    'halftime_away_goals' => data_get($fixture, 'score.halftime.away'),
+                    'fulltime_home_goals' => data_get($fixture, 'score.fulltime.home'),
+                    'fulltime_away_goals' => data_get($fixture, 'score.fulltime.away'),
+                    'extratime_home_goals' => data_get($fixture, 'score.extratime.home'),
+                    'extratime_away_goals' => data_get($fixture, 'score.extratime.away'),
+                    'penalty_home_goals' => data_get($fixture, 'score.penalty.home'),
+                    'penalty_away_goals' => data_get($fixture, 'score.penalty.away'),
+                    'result' => $this->calculateResult(data_get($fixture, 'score.fulltime', [])),
                 ],
             );
         }
@@ -76,15 +85,18 @@ class FixtureService
 
     private function calculateResult(array $fulltime): ?string
     {
-        if ($fulltime['home'] === null || $fulltime['away'] === null) {
+        $homeGoals = $fulltime['home'] ?? null;
+        $awayGoals = $fulltime['away'] ?? null;
+
+        if ($homeGoals === null || $awayGoals === null) {
             return null;
         }
 
-        if ($fulltime['home'] > $fulltime['away']) {
+        if ($homeGoals > $awayGoals) {
             return 'H';
         }
 
-        if ($fulltime['home'] < $fulltime['away']) {
+        if ($homeGoals < $awayGoals) {
             return 'A';
         }
 

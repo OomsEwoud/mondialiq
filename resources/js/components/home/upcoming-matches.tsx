@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { show as showMatch } from '@/routes/matches';
 import type { UpcomingMatch } from '@/types/match';
 
 interface Props {
@@ -49,7 +50,7 @@ export default function UpcomingMatches({ matches }: Props) {
                         </div>
                         <div className="mt-4 border-t border-slate-50 pt-2">
                             <Link
-                                href={`/matches/${match.id}`}
+                                href={showMatch.url(match.id)}
                                 className="inline-flex items-center gap-1 text-[11px] font-medium text-blue-600 transition-colors hover:text-blue-800"
                             >
                                 View match details →

@@ -16,23 +16,38 @@ class FixtureStatsService
 
     private function storeFixtureStatsPerTeam(array $stat, int $fixtureId): void
     {
-        $localTeamId = Team::query()->where('external_id', $stat['team']['id'])->value('id');
+        $localTeamId = Team::query()->where('external_id', data_get($stat, 'team.id'))->value('id');
 
         if (! $localTeamId) {
             return;
         }
 
-        foreach ($stat['statistics'] as $matchStat) {
+        foreach (data_get($stat, 'statistics', []) as $matchStat) {
+            $name = data_get($matchStat, 'type');
+
+            if (! is_string($name) || $name === '') {
+                continue;
+            }
+
             FixtureStat::query()->updateOrCreate(
                 [
                     'fixture_id' => $fixtureId,
                     'team_id' => $localTeamId,
-                    'name' => $matchStat['type'],
+                    'name' => $name,
                 ],
                 [
-                    'value' => $matchStat['value'] ? (float) rtrim($matchStat['value'], '%') : 0,
+                    'value' => $this->normalizeValue(data_get($matchStat, 'value')),
                 ],
             );
         }
+    }
+
+    private function normalizeValue(mixed $value): float
+    {
+        if (is_string($value)) {
+            $value = rtrim($value, '%');
+        }
+
+        return is_numeric($value) ? (float) $value : 0.0;
     }
 }
