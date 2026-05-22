@@ -6,7 +6,6 @@ use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
-use App\Services\Fixture\FixturePlayerStatsService;
 use App\Services\Fixture\FixtureStatsService;
 use Exception;
 use Illuminate\Console\Attributes\Description;
@@ -22,7 +21,6 @@ class AddFixtureData extends Command
         protected FixtureStatsService $statsService,
         protected FixtureEventsService $eventsService,
         protected FixtureLineupService $lineupService,
-        protected FixturePlayerStatsService $playerStatsService,
     ) {
         parent::__construct();
     }
@@ -55,9 +53,6 @@ class AddFixtureData extends Command
 
                 $events = $this->api->getFixtureEvents($fixture->external_id);
                 $this->eventsService->storeFixtureEvents($events, $fixture->id);
-
-                $playerStats = $this->api->getFixturePlayersStats($fixture->external_id);
-                $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
 
                 // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
                 sleep(1);

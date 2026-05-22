@@ -6,7 +6,6 @@ use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
-use App\Services\Fixture\FixturePlayerStatsService;
 use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Support\Carbon;
 use Mockery\MockInterface;
@@ -164,12 +163,10 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         $mock->shouldReceive('getFixtureLineups')->once()->with($liveFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureStats')->once()->with($liveFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureEvents')->once()->with($liveFixture->external_id)->andReturn([]);
-        $mock->shouldReceive('getFixturePlayersStats')->once()->with($liveFixture->external_id)->andReturn([]);
 
         $mock->shouldReceive('getFixtureLineups')->once()->with($soonFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureStats')->once()->with($soonFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureEvents')->once()->with($soonFixture->external_id)->andReturn([]);
-        $mock->shouldReceive('getFixturePlayersStats')->once()->with($soonFixture->external_id)->andReturn([]);
     });
 
     $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture) {
@@ -185,11 +182,6 @@ test('the add fixture data command only syncs relevant fixtures', function () {
     $this->mock(FixtureEventsService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture) {
         $mock->shouldReceive('storeFixtureEvents')->once()->with([], $liveFixture->id);
         $mock->shouldReceive('storeFixtureEvents')->once()->with([], $soonFixture->id);
-    });
-
-    $this->mock(FixturePlayerStatsService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture) {
-        $mock->shouldReceive('storeFixturePlayerStats')->once()->with([], $liveFixture->id);
-        $mock->shouldReceive('storeFixturePlayerStats')->once()->with([], $soonFixture->id);
     });
 
     $this->artisan('app:add-fixture-data')
@@ -237,13 +229,11 @@ test('the add fixture data command returns early when no relevant fixtures are f
         $mock->shouldNotReceive('getFixtureLineups');
         $mock->shouldNotReceive('getFixtureStats');
         $mock->shouldNotReceive('getFixtureEvents');
-        $mock->shouldNotReceive('getFixturePlayersStats');
     });
 
     $this->mock(FixtureLineupService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeLineups'));
     $this->mock(FixtureStatsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureStats'));
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureEvents'));
-    $this->mock(FixturePlayerStatsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixturePlayerStats'));
 
     $this->artisan('app:add-fixture-data')
         ->expectsOutput('Ophalen van fixture data voor relevante fixtures')

@@ -10,6 +10,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 $hasFixtureInProgress = static fn (): bool => Fixture::query()
+    ->whereNotNull('external_id')
     ->inProgress()
     ->exists();
 
@@ -49,3 +50,7 @@ Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 Schedule::command('app:add-fixture-data')->everyFifteenMinutes()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-data')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
+
+Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasFixtureInProgress)->withoutOverlapping();
+
+Schedule::command('app:add-fixture-player-stats')->dailyAt('04:30')->skip($hasFixtureInProgress)->withoutOverlapping();
