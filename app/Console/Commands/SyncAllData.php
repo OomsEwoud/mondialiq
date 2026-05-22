@@ -24,6 +24,9 @@ class SyncAllData extends Command
         $this->call('app:add-predictions');
         $this->call('app:add-coaches');
         $this->call('app:add-venues');
+        $this->call('app:add-missing-players');
+        $this->call('app:import-head-to-head');
+        $this->call('app:import-team-statistics');
         $this->call('app:add-fixture-data');
         $this->call('app:add-fixture-player-stats');
 
