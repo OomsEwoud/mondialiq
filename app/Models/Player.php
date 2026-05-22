@@ -33,7 +33,9 @@ class Player extends Model
 
     public function missingFixtures(): BelongsToMany
     {
-        return $this->belongsToMany(Fixture::class, 'missing_players')->withTimestamps();
+        return $this->belongsToMany(Fixture::class, 'missing_players')
+            ->withPivot(['type', 'reason'])
+            ->withTimestamps();
     }
 
     public function fixturePlayers(): HasMany

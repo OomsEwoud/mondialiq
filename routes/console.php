@@ -28,6 +28,8 @@ Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
 Schedule::command('app:add-fixtures')->daily()->withoutOverlapping();
 
+Schedule::command('app:add-missing-players')->daily()->withoutOverlapping();
+
 if (now()->between('2026-06-11', '2026-06-29')) {
     Schedule::command('app:add-standings')->hourly()->withoutOverlapping();
 } else {
