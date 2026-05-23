@@ -90,14 +90,16 @@ function LineupPlayerGroup({
     players: MatchDetailsLineupPlayer[];
     isStarting?: boolean;
 }) {
+    const sortedPlayers = sortPlayersByPosition(players);
+
     return (
         <div>
             <h4 className="mb-2 text-[11px] font-black tracking-wide text-slate-400 uppercase">
                 {title}
             </h4>
-            {players.length > 0 ? (
+            {sortedPlayers.length > 0 ? (
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                    {players.map((player) => (
+                    {sortedPlayers.map((player) => (
                         <LineupPlayerItem
                             key={player.id}
                             player={player}
@@ -200,4 +202,38 @@ function hasLineupData(lineup: MatchDetailsLineupTeam): boolean {
 
 function formatPositionLabel(position: string | null): string {
     return position ?? 'Position unknown';
+}
+
+function sortPlayersByPosition(
+    players: MatchDetailsLineupPlayer[],
+): MatchDetailsLineupPlayer[] {
+    return [...players].sort((first, second) => {
+        const positionDifference =
+            positionSortOrder(first.position) -
+            positionSortOrder(second.position);
+
+        if (positionDifference !== 0) {
+            return positionDifference;
+        }
+
+        const firstNumber = first.number ?? 999;
+        const secondNumber = second.number ?? 999;
+
+        if (firstNumber !== secondNumber) {
+            return firstNumber - secondNumber;
+        }
+
+        return first.name.localeCompare(second.name);
+    });
+}
+
+function positionSortOrder(position: string | null): number {
+    return (
+        {
+            G: 10,
+            D: 20,
+            M: 30,
+            F: 40,
+        }[position ?? ''] ?? 50
+    );
 }

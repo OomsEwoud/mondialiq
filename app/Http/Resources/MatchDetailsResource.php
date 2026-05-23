@@ -90,17 +90,16 @@ class MatchDetailsResource extends JsonResource
         $lineup = $this->lineups->firstWhere('id', $teamId);
         $players = $this->fixturePlayers
             ->where('team_id', $teamId)
-            ->sortBy([
-                ['is_starting', 'desc'],
-                ['jersey_number', 'asc'],
-                ['player.display_name', 'asc'],
-            ])
             ->values();
 
         return [
             'formation' => $lineup?->pivot?->formation,
-            'starters' => $this->lineupPlayers($players->where('is_starting', true)),
-            'substitutes' => $this->lineupPlayers($players->where('is_starting', false)),
+            'starters' => $this->lineupPlayers(
+                $this->sortLineupPlayers($players->where('is_starting', true)),
+            ),
+            'substitutes' => $this->lineupPlayers(
+                $this->sortLineupPlayers($players->where('is_starting', false)),
+            ),
         ];
     }
 
@@ -121,5 +120,27 @@ class MatchDetailsResource extends JsonResource
                 'photo' => $fixturePlayer->player?->photo_url,
                 'isCaptain' => $captainPlayerIds->contains($fixturePlayer->player_id),
             ]);
+    }
+
+    private function sortLineupPlayers(Collection $players): Collection
+    {
+        return $players
+            ->sortBy([
+                fn ($player) => $this->positionSortOrder($player->position),
+                fn ($player) => $player->jersey_number ?? 999,
+                fn ($player) => $player->player?->display_name ?? '',
+            ])
+            ->values();
+    }
+
+    private function positionSortOrder(?string $position): int
+    {
+        return match ($position) {
+            'G' => 10,
+            'D' => 20,
+            'M' => 30,
+            'F' => 40,
+            default => 50,
+        };
     }
 }
