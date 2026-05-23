@@ -1,9 +1,8 @@
 import { Head } from '@inertiajs/react';
+import MatchDataTabs from '@/components/matches/details/match-data-tabs';
 import MatchDetailsHero from '@/components/matches/details/match-details-hero';
-import MatchEventsCard from '@/components/matches/details/match-events-card';
 import MatchInfoCard from '@/components/matches/details/match-info-card';
 import MatchScoreCard from '@/components/matches/details/match-score-card';
-import MatchStatsCard from '@/components/matches/details/match-stats-card';
 import BackButton from '@/components/navigation/back-button';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
 
@@ -26,8 +25,7 @@ export default function MatchDetails({ match }: Props) {
                     <MatchInfoCard match={match} />
                     <MatchScoreCard match={match} />
                 </div>
-                <MatchEventsCard events={match.events} />
-                <MatchStatsCard match={match} />
+                <MatchDataTabs match={match} />
             </div>
         </>
     );
