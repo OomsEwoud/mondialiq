@@ -43,6 +43,7 @@ export interface MatchDetailsLineupPlayer {
     number: number | null;
     position: string | null;
     photo: string | null;
+    isCaptain: boolean;
 }
 
 export interface MatchDetailsLineupTeam {

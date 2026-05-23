@@ -106,6 +106,10 @@ class MatchDetailsResource extends JsonResource
 
     private function lineupPlayers(Collection $players): Collection
     {
+        $captainPlayerIds = $this->playerFixtureStats
+            ->where('is_captain', true)
+            ->pluck('player_id');
+
         return $players
             ->values()
             ->map(fn ($fixturePlayer) => [
@@ -115,6 +119,7 @@ class MatchDetailsResource extends JsonResource
                 'number' => $fixturePlayer->jersey_number,
                 'position' => $fixturePlayer->position,
                 'photo' => $fixturePlayer->player?->photo_url,
+                'isCaptain' => $captainPlayerIds->contains($fixturePlayer->player_id),
             ]);
     }
 }

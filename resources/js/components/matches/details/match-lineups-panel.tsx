@@ -127,7 +127,9 @@ function LineupPlayerItem({
         <div
             className={cn(
                 'flex min-w-0 items-center gap-2.5 rounded-md border bg-white px-2.5 shadow-xs',
-                isStarting ? 'border-blue-100 py-2.5' : 'border-slate-100 py-2',
+                isStarting
+                    ? 'border-blue-100 py-2.5'
+                    : 'border-slate-100 bg-white/80 py-1.5 shadow-none',
             )}
         >
             <div className="relative shrink-0">
@@ -140,7 +142,7 @@ function LineupPlayerItem({
                     {player.photo ? (
                         <AvatarImage
                             src={player.photo}
-                            alt={player.name}
+                            alt={`${player.name} photo`}
                             className="object-cover"
                         />
                     ) : null}
@@ -155,11 +157,30 @@ function LineupPlayerItem({
 
             <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2">
-                    <p className="min-w-0 truncate text-sm font-bold text-slate-800">
+                    <p
+                        className="min-w-0 truncate text-sm font-bold text-slate-800"
+                        title={player.name}
+                    >
                         {player.name}
                     </p>
+                    {player.isCaptain ? (
+                        <span
+                            className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-950 text-[10px] font-black text-white"
+                            title="Captain"
+                            aria-label="Captain"
+                        >
+                            C
+                        </span>
+                    ) : null}
                 </div>
-                <span className="mt-1 inline-flex max-w-full rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-500">
+                <span
+                    className={cn(
+                        'mt-1 inline-flex max-w-full rounded-full px-2 py-0.5 text-[11px] font-bold',
+                        isStarting
+                            ? 'bg-slate-100 text-slate-500'
+                            : 'bg-slate-50 text-slate-400',
+                    )}
+                >
                     <span className="truncate">
                         {formatPositionLabel(player.position)}
                     </span>
