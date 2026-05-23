@@ -9,6 +9,8 @@ class LeagueService
 {
     public function storeLeagues(array $leaguesData): void
     {
+        $countries = Country::query()->pluck('id', 'name');
+
         foreach ($leaguesData as $leagueData) {
             League::query()->updateOrCreate(
                 ['external_id' => $leagueData['league']['id']],
@@ -16,7 +18,7 @@ class LeagueService
                     'name' => $leagueData['league']['name'],
                     'type' => $leagueData['league']['type'],
                     'logo_url' => $leagueData['league']['logo'],
-                    'country_id' => Country::query()->where('name', $leagueData['country']['name'])->first()?->id,
+                    'country_id' => $countries[$leagueData['country']['name']] ?? null,
                 ],
             );
         }

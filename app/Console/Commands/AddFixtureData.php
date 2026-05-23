@@ -29,11 +29,7 @@ class AddFixtureData extends Command
     {
         $this->info('Ophalen van fixture data voor relevante fixtures');
 
-        $fixtures = Fixture::query()
-            ->whereNotNull('external_id')
-            ->relevantForDataSync()
-            ->orderBy('match_date')
-            ->get(['id', 'external_id', 'match_date']);
+        $fixtures = Fixture::all();
 
         if ($fixtures->isEmpty()) {
             $this->info('Geen relevante fixtures gevonden voor fixture data sync.');
@@ -54,7 +50,6 @@ class AddFixtureData extends Command
                 $events = $this->api->getFixtureEvents($fixture->external_id);
                 $this->eventsService->storeFixtureEvents($events, $fixture->id);
 
-                // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
                 sleep(1);
             } catch (Exception $e) {
                 $this->newLine();

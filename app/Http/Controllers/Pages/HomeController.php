@@ -14,6 +14,7 @@ class HomeController extends Controller
     {
         $now = Carbon::now();
         $upcomingFixtures = Fixture::query()
+            ->with(['homeTeam:id,name,code,logo_url', 'awayTeam:id,name,code,logo_url'])
             ->where('match_date', '>=', $now)
             ->orderBy('match_date', 'asc')
             ->take(5)
