@@ -1,4 +1,4 @@
-import MatchEventRow from '@/components/matches/details/match-event-row';
+import MatchEventsTimeline from '@/components/matches/details/match-events-timeline';
 import type { MatchDetailsEvent } from '@/types/match-details';
 
 interface Props {
@@ -12,15 +12,11 @@ export default function MatchEventsCard({ events }: Props) {
                 Match events
             </h2>
             {events.length > 0 ? (
-                <div className="flex flex-col gap-3">
-                    {events.map((event) => (
-                        <MatchEventRow key={event.id} event={event} />
-                    ))}
-                </div>
+                <MatchEventsTimeline events={events} />
             ) : (
-                <p className="rounded-lg bg-slate-50 p-4 text-sm text-slate-500">
+                <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm font-medium text-slate-500">
                     No match events available yet.
-                </p>
+                </div>
             )}
         </section>
     );
