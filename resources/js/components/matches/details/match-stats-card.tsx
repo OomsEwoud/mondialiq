@@ -1,4 +1,4 @@
-import MatchStatRow from '@/components/matches/details/match-stat-row';
+import MatchStatsPanel from '@/components/matches/details/match-stats-panel';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
@@ -12,19 +12,10 @@ export default function MatchStatsCard({ match }: Props) {
                 Team stats
             </h2>
             {match.stats.length > 0 ? (
-                <div className="flex flex-col gap-2">
-                    {match.stats.map((stat) => (
-                        <MatchStatRow
-                            key={stat.name}
-                            stat={stat}
-                            homeCode={match.homeTeam.code}
-                            awayCode={match.awayTeam.code}
-                        />
-                    ))}
-                </div>
+                <MatchStatsPanel match={match} />
             ) : (
                 <p className="rounded-lg bg-slate-50 p-4 text-sm text-slate-500">
-                    No team stats available yet.
+                    No match statistics available yet.
                 </p>
             )}
         </section>

@@ -2,7 +2,7 @@ import { BarChart3, ListTree, UsersRound } from 'lucide-react';
 import { useState } from 'react';
 
 import MatchEventsTimeline from '@/components/matches/details/match-events-timeline';
-import MatchStatRow from '@/components/matches/details/match-stat-row';
+import MatchStatsPanel from '@/components/matches/details/match-stats-panel';
 import { cn } from '@/lib/utils';
 import type { MatchDetails } from '@/types/match-details';
 
@@ -81,18 +81,9 @@ function renderTabPanel(activeTab: MatchDataTab, match: MatchDetails) {
 
     if (activeTab === 'stats') {
         return match.stats.length > 0 ? (
-            <div className="flex flex-col gap-2">
-                {match.stats.map((stat) => (
-                    <MatchStatRow
-                        key={stat.name}
-                        stat={stat}
-                        homeCode={match.homeTeam.code}
-                        awayCode={match.awayTeam.code}
-                    />
-                ))}
-            </div>
+            <MatchStatsPanel match={match} />
         ) : (
-            <MatchDataEmptyState message="No match stats available yet." />
+            <MatchDataEmptyState message="No match statistics available yet." />
         );
     }
 
