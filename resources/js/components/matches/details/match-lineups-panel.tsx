@@ -1,5 +1,9 @@
-import { Shirt } from 'lucide-react';
-
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/display/avatar';
+import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type {
     MatchDetails,
@@ -117,30 +121,49 @@ function LineupPlayerItem({
     player: MatchDetailsLineupPlayer;
     isStarting: boolean;
 }) {
+    const getInitials = useInitials();
+
     return (
         <div
             className={cn(
-                'flex min-w-0 items-center gap-2 rounded-md border bg-white px-2.5 py-2 shadow-xs',
-                isStarting ? 'border-blue-100' : 'border-slate-100',
+                'flex min-w-0 items-center gap-2.5 rounded-md border bg-white px-2.5 shadow-xs',
+                isStarting ? 'border-blue-100 py-2.5' : 'border-slate-100 py-2',
             )}
         >
-            <span
-                className={cn(
-                    'flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-black',
-                    isStarting
-                        ? 'bg-blue-950 text-white'
-                        : 'bg-slate-100 text-slate-500',
-                )}
-            >
-                {player.number ?? <Shirt className="size-3.5" />}
-            </span>
-            <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-slate-800">
-                    {player.name}
-                </p>
-                <p className="text-xs font-medium text-slate-400">
-                    {player.position ?? 'Position unknown'}
-                </p>
+            <div className="relative shrink-0">
+                <Avatar
+                    className={cn(
+                        'border border-white shadow-sm ring-1 ring-slate-200',
+                        isStarting ? 'size-10' : 'size-9',
+                    )}
+                >
+                    {player.photo ? (
+                        <AvatarImage
+                            src={player.photo}
+                            alt={player.name}
+                            className="object-cover"
+                        />
+                    ) : null}
+                    <AvatarFallback className="bg-blue-950 text-[11px] font-black text-white">
+                        {getInitials(player.name)}
+                    </AvatarFallback>
+                </Avatar>
+                <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-white bg-slate-900 px-1 text-[10px] font-black text-white shadow-sm">
+                    {player.number ?? '-'}
+                </span>
+            </div>
+
+            <div className="min-w-0 flex-1">
+                <div className="flex min-w-0 items-center gap-2">
+                    <p className="min-w-0 truncate text-sm font-bold text-slate-800">
+                        {player.name}
+                    </p>
+                </div>
+                <span className="mt-1 inline-flex max-w-full rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-500">
+                    <span className="truncate">
+                        {formatPositionLabel(player.position)}
+                    </span>
+                </span>
             </div>
         </div>
     );
@@ -152,4 +175,8 @@ function hasLineupData(lineup: MatchDetailsLineupTeam): boolean {
         lineup.starters.length > 0 ||
         lineup.substitutes.length > 0
     );
+}
+
+function formatPositionLabel(position: string | null): string {
+    return position ?? 'Position unknown';
 }

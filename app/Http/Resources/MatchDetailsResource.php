@@ -114,6 +114,7 @@ class MatchDetailsResource extends JsonResource
                 'name' => $fixturePlayer->player?->display_name ?? 'Unknown player',
                 'number' => $fixturePlayer->jersey_number,
                 'position' => $fixturePlayer->position,
+                'photo' => $fixturePlayer->player?->photo_url,
             ]);
     }
 }

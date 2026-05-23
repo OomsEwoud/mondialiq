@@ -42,6 +42,7 @@ export interface MatchDetailsLineupPlayer {
     name: string;
     number: number | null;
     position: string | null;
+    photo: string | null;
 }
 
 export interface MatchDetailsLineupTeam {
