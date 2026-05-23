@@ -78,6 +78,42 @@ class MatchDetailsResource extends JsonResource
                     'away' => $stats->firstWhere('team_id', $this->away_team_id)?->value,
                 ])
                 ->values(),
+            'lineups' => [
+                'home' => $this->lineupForTeam($this->home_team_id),
+                'away' => $this->lineupForTeam($this->away_team_id),
+            ],
         ];
+    }
+
+    private function lineupForTeam(int $teamId): array
+    {
+        $lineup = $this->lineups->firstWhere('id', $teamId);
+        $players = $this->fixturePlayers
+            ->where('team_id', $teamId)
+            ->sortBy([
+                ['is_starting', 'desc'],
+                ['jersey_number', 'asc'],
+                ['player.display_name', 'asc'],
+            ])
+            ->values();
+
+        return [
+            'formation' => $lineup?->pivot?->formation,
+            'starters' => $this->lineupPlayers($players->where('is_starting', true)),
+            'substitutes' => $this->lineupPlayers($players->where('is_starting', false)),
+        ];
+    }
+
+    private function lineupPlayers(Collection $players): Collection
+    {
+        return $players
+            ->values()
+            ->map(fn ($fixturePlayer) => [
+                'id' => $fixturePlayer->id,
+                'playerId' => $fixturePlayer->player_id,
+                'name' => $fixturePlayer->player?->display_name ?? 'Unknown player',
+                'number' => $fixturePlayer->jersey_number,
+                'position' => $fixturePlayer->position,
+            ]);
     }
 }

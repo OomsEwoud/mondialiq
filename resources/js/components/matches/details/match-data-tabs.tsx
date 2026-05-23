@@ -2,6 +2,7 @@ import { BarChart3, ListTree, UsersRound } from 'lucide-react';
 import { useState } from 'react';
 
 import MatchEventsTimeline from '@/components/matches/details/match-events-timeline';
+import MatchLineupsPanel from '@/components/matches/details/match-lineups-panel';
 import MatchStatsPanel from '@/components/matches/details/match-stats-panel';
 import { cn } from '@/lib/utils';
 import type { MatchDetails } from '@/types/match-details';
@@ -87,9 +88,7 @@ function renderTabPanel(activeTab: MatchDataTab, match: MatchDetails) {
         );
     }
 
-    return (
-        <MatchDataEmptyState message="No lineups available yet for this match." />
-    );
+    return <MatchLineupsPanel match={match} />;
 }
 
 function MatchDataEmptyState({ message }: { message: string }) {

@@ -36,6 +36,20 @@ export interface MatchDetailsStat {
     away: number | null;
 }
 
+export interface MatchDetailsLineupPlayer {
+    id: number;
+    playerId: number;
+    name: string;
+    number: number | null;
+    position: string | null;
+}
+
+export interface MatchDetailsLineupTeam {
+    formation: string | null;
+    starters: MatchDetailsLineupPlayer[];
+    substitutes: MatchDetailsLineupPlayer[];
+}
+
 export interface MatchDetails {
     id: number;
     homeTeam: MatchDetailsTeam;
@@ -56,4 +70,8 @@ export interface MatchDetails {
     referee: string | null;
     events: MatchDetailsEvent[];
     stats: MatchDetailsStat[];
+    lineups: {
+        home: MatchDetailsLineupTeam;
+        away: MatchDetailsLineupTeam;
+    };
 }
