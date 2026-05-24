@@ -4,8 +4,11 @@ export interface Filters {
     round: string;
     date: string;
     team: string;
+    status: MatchStatusFilter;
     [key: string]: string;
 }
+
+export type MatchStatusFilter = 'all' | 'upcoming' | 'played';
 
 export interface MatchPageProps {
     fixtures: {

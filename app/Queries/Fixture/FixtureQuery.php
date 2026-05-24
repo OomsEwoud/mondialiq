@@ -33,6 +33,19 @@ class FixtureQuery
             });
         }
 
+        if (($filters['status'] ?? 'all') === 'played') {
+            $query->where('status_long', 'like', '%Finished%');
+        }
+
+        if (($filters['status'] ?? 'all') === 'upcoming') {
+            $query
+                ->where('status_long', 'not like', '%Finished%')
+                ->where('status_long', 'not like', '%Postpon%')
+                ->where('status_long', 'not like', '%Cancel%')
+                ->where('status_long', 'not like', '%Abandon%')
+                ->where('status_long', 'not like', '%Forfeit%');
+        }
+
         return $query->orderBy('match_date');
     }
 }

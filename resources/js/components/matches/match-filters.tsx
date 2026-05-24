@@ -1,5 +1,7 @@
 import { X } from 'lucide-react';
+import type { Filters, MatchStatusFilter } from '@/types/match-page';
 import DateFilter from './filters/date-filter';
+import MatchStatusTabs from './filters/match-status-tabs';
 import RoundFilter from './filters/round-filter';
 import TeamFilter from './filters/team-filter';
 
@@ -7,8 +9,11 @@ interface Props {
     rounds: Array<{ label: string; value: string }>;
     dates: Array<{ label: string; value: string }>;
     teams: string[];
-    selected: { round: string; date: string; team: string };
-    onChange: (key: 'round' | 'date' | 'team', value: string) => void;
+    selected: Filters;
+    onChange: (
+        key: 'round' | 'date' | 'team' | 'status',
+        value: string | MatchStatusFilter,
+    ) => void;
     onClear: () => void;
 }
 
@@ -20,7 +25,11 @@ export default function MatchFilters({
     onChange,
     onClear,
 }: Props) {
-    const hasActiveFilters = selected.round || selected.date || selected.team;
+    const hasActiveFilters =
+        selected.round ||
+        selected.date ||
+        selected.team ||
+        selected.status !== 'all';
 
     return (
         <section className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -41,6 +50,13 @@ export default function MatchFilters({
                         Clear
                     </button>
                 )}
+            </div>
+
+            <div className="mb-4 border-b border-slate-100 pb-4">
+                <MatchStatusTabs
+                    selected={selected.status}
+                    onChange={(value) => onChange('status', value)}
+                />
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

@@ -33,7 +33,9 @@ class MatchesController extends Controller
         $filters = $this->parseFilters($request);
 
         $query = new FixtureQuery($this->leagueId, $this->season);
-        $baseQuery = $query->build(array_fill_keys(['round', 'date', 'team'], ''));
+        $baseQuery = $query->build(
+            array_fill_keys(['round', 'date', 'team', 'status'], ''),
+        );
 
         $filterOptions = $this->service->filterOptions($baseQuery);
 
@@ -66,8 +68,9 @@ class MatchesController extends Controller
     {
         return [
             'round' => $request->string('round')->toString(),
-            'date'  => $request->date('date')?->format('Y-m-d') ?? '',
-            'team'  => $request->string('team')->toString(),
+            'date' => $request->date('date')?->format('Y-m-d') ?? '',
+            'team' => $request->string('team')->toString(),
+            'status' => $request->string('status')->toString() ?: 'all',
         ];
     }
 }
