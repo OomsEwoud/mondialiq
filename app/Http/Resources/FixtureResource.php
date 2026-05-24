@@ -28,6 +28,22 @@ class FixtureResource extends JsonResource
             'dateValue'       => $this->match_date->format('Y-m-d'),
             'time'            => $this->match_date->format('H:i'),
             'round'           => $this->round_name,
+            'status'          => $this->status_long,
+            'elapsedTime'     => $this->elapsed_time,
+            'score'           => [
+                'fulltime' => [
+                    'home' => $this->fulltime_home_goals,
+                    'away' => $this->fulltime_away_goals,
+                ],
+                'extratime' => [
+                    'home' => $this->extratime_home_goals,
+                    'away' => $this->extratime_away_goals,
+                ],
+                'penalties' => [
+                    'home' => $this->penalty_home_goals,
+                    'away' => $this->penalty_away_goals,
+                ],
+            ],
             'prediction'      => $prediction ? [
                 'homeWin' => $prediction->home_chance,
                 'draw'    => $prediction->draw_chance,

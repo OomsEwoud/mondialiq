@@ -25,6 +25,13 @@ export interface Match {
     date: string;
     dateValue: string;
     time: string;
+    status: string;
+    elapsedTime: number | null;
+    score: {
+        fulltime: MatchScore;
+        extratime: MatchScore;
+        penalties: MatchScore;
+    };
     prediction?: {
         homeWin: number;
         draw: number;
@@ -39,4 +46,9 @@ export interface Match {
         awayScore: number | null;
         confidence: 'low' | 'medium' | 'high' | null;
     } | null;
+}
+
+export interface MatchScore {
+    home: number | null;
+    away: number | null;
 }

@@ -8,8 +8,13 @@ interface Props {
 export default function MatchList({ matches }: Props) {
     if (matches.length === 0) {
         return (
-            <div className="py-12 text-center text-sm text-slate-400">
-                No matches found for the selected filters.
+            <div className="rounded-xl border border-dashed border-slate-200 bg-white py-12 text-center">
+                <p className="text-sm font-black text-blue-950">
+                    No matches found.
+                </p>
+                <p className="mt-1 text-sm text-slate-500">
+                    Try changing your filters.
+                </p>
             </div>
         );
     }
