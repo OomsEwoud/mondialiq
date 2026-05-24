@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Socialite\Concerns\HandlesSocialiteProviders;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Socialite;
 
@@ -13,9 +14,21 @@ class CallbackController extends Controller
 {
     use HandlesSocialiteProviders;
 
-    public function __invoke(string $provider): RedirectResponse
+    public function __invoke(Request $request, string $provider): RedirectResponse
     {
         $this->ensureSupportedProvider($provider);
+
+        if ($request->has('error')) {
+            return to_route('login')->withErrors([
+                'socialite' => 'Login met '.ucfirst($provider).' werd geannuleerd.',
+            ]);
+        }
+
+        if (! $request->filled('code')) {
+            return to_route('login')->withErrors([
+                'socialite' => 'Social login kon niet worden voltooid. Probeer opnieuw.',
+            ]);
+        }
 
         $newUser = Socialite::driver($provider)->user();
         $email = $newUser->getEmail();

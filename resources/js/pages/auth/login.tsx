@@ -58,6 +58,8 @@ export default function Login({
                             </div>
                         )}
 
+                        <InputError message={errors.socialite} />
+
                         <div className="grid gap-5">
                             <div className="grid gap-2">
                                 <Label
