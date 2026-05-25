@@ -136,3 +136,46 @@ test('the import head to head command skips fresh data and avoids duplicate pair
         ->expectsOutput("Geimporteerd {$secondPairKey}")
         ->assertSuccessful();
 });
+
+test('the import head to head command force option imports all fixture pairs', function () {
+    Fixture::create([
+        'external_id' => 3004,
+        'league_id' => $this->fixture->league_id,
+        'home_team_id' => $this->otherHomeTeam->id,
+        'away_team_id' => $this->otherAwayTeam->id,
+        'round_name' => 'Group Stage - Matchday 4',
+        'season' => config('services.api_football.season'),
+        'match_date' => now()->addMonth(),
+        'status_long' => 'Not Started',
+    ]);
+
+    $firstPairKey = "{$this->homeTeam->id}-{$this->awayTeam->id}";
+    $secondPairKey = "{$this->otherHomeTeam->id}-{$this->otherAwayTeam->id}";
+
+    $this->mock(HeadToHeadService::class, function (MockInterface $mock) use ($firstPairKey, $secondPairKey) {
+        $mock->shouldReceive('makePairKey')
+            ->once()
+            ->with($this->homeTeam->id, $this->awayTeam->id)
+            ->andReturn($firstPairKey);
+        $mock->shouldReceive('importForTeams')
+            ->once()
+            ->with($this->homeTeam->id, $this->awayTeam->id, true)
+            ->andReturn(new HeadToHead(['pair_key' => $firstPairKey]));
+
+        $mock->shouldReceive('makePairKey')
+            ->once()
+            ->with($this->otherHomeTeam->id, $this->otherAwayTeam->id)
+            ->andReturn($secondPairKey);
+        $mock->shouldReceive('importForTeams')
+            ->once()
+            ->with($this->otherHomeTeam->id, $this->otherAwayTeam->id, true)
+            ->andReturn(new HeadToHead(['pair_key' => $secondPairKey]));
+
+        $mock->shouldNotReceive('hasFreshData');
+    });
+
+    $this->artisan('app:import-head-to-head --force')
+        ->expectsOutput("Geimporteerd {$firstPairKey}")
+        ->expectsOutput("Geimporteerd {$secondPairKey}")
+        ->assertSuccessful();
+});

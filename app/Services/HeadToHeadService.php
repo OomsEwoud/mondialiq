@@ -11,6 +11,8 @@ use InvalidArgumentException;
 
 class HeadToHeadService
 {
+    public const REFRESH_AFTER_DAYS = 90;
+
     public function __construct(
         protected FootballApiService $api,
     ) {
@@ -27,7 +29,7 @@ class HeadToHeadService
     {
         return HeadToHead::query()
             ->where('pair_key', $this->makePairKey($homeTeamId, $awayTeamId))
-            ->where('fetched_at', '>=', now()->subDay())
+            ->where('fetched_at', '>=', now()->subDays(self::REFRESH_AFTER_DAYS))
             ->exists();
     }
 
@@ -38,18 +40,18 @@ class HeadToHeadService
 
         $existingHeadToHead = HeadToHead::query()->where('pair_key', $pairKey)->first();
 
-        if (! $force && $existingHeadToHead?->fetched_at?->gte(now()->subDay())) {
+        if (! $force && $existingHeadToHead?->fetched_at?->gte(now()->subDays(self::REFRESH_AFTER_DAYS))) {
             return $existingHeadToHead;
         }
 
         $teamAExternalId = Team::query()->whereKey($teamAId)->value('external_id');
         $teamBExternalId = Team::query()->whereKey($teamBId)->value('external_id');
 
-        if (! is_int($teamAExternalId) || ! is_int($teamBExternalId)) {
+        if (! is_numeric($teamAExternalId) || ! is_numeric($teamBExternalId)) {
             throw new InvalidArgumentException('Teams missen een geldige external_id voor head-to-head import.');
         }
 
-        $response = $this->api->getHeadToHead($teamAExternalId, $teamBExternalId);
+        $response = $this->api->getHeadToHead((int) $teamAExternalId, (int) $teamBExternalId);
         $summary = $this->calculateSummary($response, $teamAId, $teamBId);
 
         return HeadToHead::query()->updateOrCreate(

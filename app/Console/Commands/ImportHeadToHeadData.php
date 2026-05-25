@@ -49,16 +49,22 @@ class ImportHeadToHeadData extends Command
 
     private function importForRelevantFixtures(bool $force): int
     {
-        $fixtures = Fixture::query()
+        $query = Fixture::query()
             ->whereNotNull('external_id')
             ->whereNotNull('home_team_id')
             ->whereNotNull('away_team_id')
-            ->relevantForDataSync()
-            ->orderBy('match_date')
-            ->get(['id', 'home_team_id', 'away_team_id']);
+            ->orderBy('match_date');
+
+        if (! $force) {
+            $query->relevantForDataSync();
+        }
+
+        $fixtures = $query->get(['id', 'home_team_id', 'away_team_id']);
 
         if ($fixtures->isEmpty()) {
-            $this->info('Geen relevante fixtures gevonden voor head-to-head import.');
+            $this->info($force
+                ? 'Geen fixtures gevonden voor geforceerde head-to-head import.'
+                : 'Geen relevante fixtures gevonden voor head-to-head import.');
 
             return self::SUCCESS;
         }
@@ -74,11 +80,14 @@ class ImportHeadToHeadData extends Command
         $seenPairs = [];
 
         foreach ($fixtures as $fixture) {
-            if (! is_int($fixture->home_team_id) || ! is_int($fixture->away_team_id)) {
+            if (! is_numeric($fixture->home_team_id) || ! is_numeric($fixture->away_team_id)) {
                 continue;
             }
 
-            $pairKey = $this->headToHeadService->makePairKey($fixture->home_team_id, $fixture->away_team_id);
+            $homeTeamId = (int) $fixture->home_team_id;
+            $awayTeamId = (int) $fixture->away_team_id;
+
+            $pairKey = $this->headToHeadService->makePairKey($homeTeamId, $awayTeamId);
 
             if (isset($seenPairs[$pairKey])) {
                 continue;
@@ -87,15 +96,15 @@ class ImportHeadToHeadData extends Command
             $seenPairs[$pairKey] = true;
 
             try {
-                if (! $force && $this->headToHeadService->hasFreshData($fixture->home_team_id, $fixture->away_team_id)) {
+                if (! $force && $this->headToHeadService->hasFreshData($homeTeamId, $awayTeamId)) {
                     $this->line("Overgeslagen {$pairKey}, data is nog recent genoeg.");
 
                     continue;
                 }
 
                 $headToHead = $this->headToHeadService->importForTeams(
-                    $fixture->home_team_id,
-                    $fixture->away_team_id,
+                    $homeTeamId,
+                    $awayTeamId,
                     $force,
                 );
 

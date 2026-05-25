@@ -4,6 +4,7 @@ use App\Models\HeadToHead;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\HeadToHeadService;
+use Illuminate\Support\Facades\Http;
 use Mockery\MockInterface;
 
 beforeEach(function () {
@@ -186,4 +187,91 @@ test('import for teams reuses fresh data unless forced', function () {
     $headToHead = app(HeadToHeadService::class)->importForTeams($this->teamA->id, $this->teamB->id);
 
     expect($headToHead->total_matches)->toBe(5);
+});
+
+test('import for teams reuses recently fetched data for the configured rare refresh window', function () {
+    HeadToHead::create([
+        'team_a_id' => $this->teamA->id,
+        'team_b_id' => $this->teamB->id,
+        'pair_key' => "{$this->teamA->id}-{$this->teamB->id}",
+        'total_matches' => 7,
+        'team_a_wins' => 3,
+        'team_b_wins' => 2,
+        'draws' => 2,
+        'team_a_goals' => 9,
+        'team_b_goals' => 8,
+        'fetched_at' => now()->subDays(HeadToHeadService::REFRESH_AFTER_DAYS - 1),
+    ]);
+
+    $this->mock(FootballApiService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('getHeadToHead'));
+
+    $headToHead = app(HeadToHeadService::class)->importForTeams($this->teamA->id, $this->teamB->id);
+
+    expect($headToHead->total_matches)->toBe(7);
+});
+
+test('import for teams refreshes stale head to head data', function () {
+    HeadToHead::create([
+        'team_a_id' => $this->teamA->id,
+        'team_b_id' => $this->teamB->id,
+        'pair_key' => "{$this->teamA->id}-{$this->teamB->id}",
+        'total_matches' => 1,
+        'team_a_wins' => 1,
+        'team_b_wins' => 0,
+        'draws' => 0,
+        'team_a_goals' => 2,
+        'team_b_goals' => 1,
+        'fetched_at' => now()->subDays(HeadToHeadService::REFRESH_AFTER_DAYS + 1),
+    ]);
+
+    $this->mock(FootballApiService::class, function (MockInterface $mock) {
+        $mock->shouldReceive('getHeadToHead')
+            ->once()
+            ->with($this->teamA->external_id, $this->teamB->external_id)
+            ->andReturn([
+                [
+                    'fixture' => [
+                        'date' => '2026-06-12T20:00:00+00:00',
+                        'status' => ['short' => 'FT'],
+                    ],
+                    'teams' => [
+                        'home' => ['id' => $this->teamA->external_id],
+                        'away' => ['id' => $this->teamB->external_id],
+                    ],
+                    'goals' => [
+                        'home' => 1,
+                        'away' => 1,
+                    ],
+                ],
+            ]);
+    });
+
+    $headToHead = app(HeadToHeadService::class)->importForTeams($this->teamA->id, $this->teamB->id);
+
+    expect($headToHead->total_matches)->toBe(1)
+        ->and($headToHead->draws)->toBe(1)
+        ->and($headToHead->team_a_wins)->toBe(0);
+});
+
+test('football api head to head endpoint sends required h2h parameter', function () {
+    config([
+        'services.api_football.base_url' => 'https://api-football.test',
+        'services.api_football.api_key' => 'test-key',
+    ]);
+
+    Http::fake([
+        '*' => Http::response([
+            'response' => [
+                ['fixture' => ['id' => 123]],
+            ],
+        ]),
+    ]);
+
+    $response = app(FootballApiService::class)->getHeadToHead(101, 202);
+
+    expect($response)->toBe([
+        ['fixture' => ['id' => 123]],
+    ]);
+
+    Http::assertSent(fn ($request): bool => $request->url() === 'https://api-football.test/fixtures/headtohead?h2h=101-202');
 });
