@@ -37,6 +37,11 @@ test('fixture odds summary calculates normalized market probabilities', function
             ['score' => '1-0', 'probability' => 37.41],
             ['score' => '1-1', 'probability' => 34.53],
             ['score' => '2-1', 'probability' => 28.06],
+        ])
+        ->and($summary['top_likely_scores'])->toBe([
+            ['score' => '1-0', 'probability' => 37.41],
+            ['score' => '1-1', 'probability' => 34.53],
+            ['score' => '2-1', 'probability' => 28.06],
         ]);
 });
 
@@ -94,7 +99,50 @@ test('fixture odds summary returns null probabilities when odds are missing', fu
         'btts_no_probability' => null,
         'most_likely_score' => null,
         'top_scores' => [],
+        'top_likely_scores' => [],
     ]);
+});
+
+test('fixture odds summary ignores incomplete required markets', function () {
+    $fixture = createOddsSummaryFixture();
+
+    createSummaryOdd($fixture, 'Match Winner', 'Home', 2.00);
+    createSummaryOdd($fixture, 'Match Winner', 'Draw', 3.50);
+    createSummaryOdd($fixture, 'Goals Over/Under', 'Over 2.5', 1.80);
+
+    $summary = app(FixtureOddsSummaryService::class)->summarize($fixture);
+
+    expect($summary['home_win_probability'])->toBeNull()
+        ->and($summary['draw_probability'])->toBeNull()
+        ->and($summary['away_win_probability'])->toBeNull()
+        ->and($summary['over_2_5_probability'])->toBeNull()
+        ->and($summary['under_2_5_probability'])->toBeNull();
+});
+
+test('fixture odds summary formats a prompt block', function () {
+    $fixture = createOddsSummaryFixture();
+
+    createSummaryOdd($fixture, 'Match Winner', 'Home', 1.20);
+    createSummaryOdd($fixture, 'Match Winner', 'Draw', 10.00);
+    createSummaryOdd($fixture, 'Match Winner', 'Away', 12.50);
+    createSummaryOdd($fixture, 'Goals Over/Under', 'Over 2.5', 1.56);
+    createSummaryOdd($fixture, 'Goals Over/Under', 'Under 2.5', 2.78);
+    createSummaryOdd($fixture, 'Both Teams Score', 'Yes', 2.50);
+    createSummaryOdd($fixture, 'Both Teams Score', 'No', 1.72);
+    createSummaryOdd($fixture, 'Exact Score', '2-0', 6.00);
+    createSummaryOdd($fixture, 'Exact Score', '1-0', 7.00);
+
+    $promptBlock = app(FixtureOddsSummaryService::class)->promptBlock($fixture);
+
+    expect($promptBlock)->toBe(implode(PHP_EOL, [
+        'Market odds summary:',
+        '- Home win probability: 82%',
+        '- Draw probability: 10%',
+        '- Away win probability: 8%',
+        '- Over 2.5 goals probability: 64%',
+        '- BTTS yes probability: 41%',
+        '- Most likely score according to market: 2-0',
+    ]));
 });
 
 function createSummaryOdd(

@@ -16,6 +16,8 @@ class FixtureOddsSummaryService
     private const MARKET_EXACT_SCORE = 'Exact Score';
     private const MARKET_TOTAL_HOME = 'Total - Home';
     private const MARKET_TOTAL_AWAY = 'Total - Away';
+    private const MARKET_HOME_EXACT_GOALS = 'Home Team Exact Goals Number';
+    private const MARKET_AWAY_EXACT_GOALS = 'Away Team Exact Goals Number';
 
     private const IMPORTANT_MARKETS = [
         self::MARKET_MATCH_WINNER,
@@ -24,6 +26,8 @@ class FixtureOddsSummaryService
         self::MARKET_EXACT_SCORE,
         self::MARKET_TOTAL_HOME,
         self::MARKET_TOTAL_AWAY,
+        self::MARKET_HOME_EXACT_GOALS,
+        self::MARKET_AWAY_EXACT_GOALS,
     ];
 
     public function summarize(Fixture|int $fixture): array
@@ -31,9 +35,9 @@ class FixtureOddsSummaryService
         $fixtureId = $fixture instanceof Fixture ? $fixture->id : $fixture;
         $odds = $this->oddsForFixture($fixtureId);
 
-        $matchWinnerProbabilities = $this->marketProbabilities($odds, self::MARKET_MATCH_WINNER);
-        $goalsProbabilities = $this->marketProbabilities($odds, self::MARKET_GOALS_OVER_UNDER);
-        $bttsProbabilities = $this->marketProbabilities($odds, self::MARKET_BOTH_TEAMS_SCORE);
+        $matchWinnerProbabilities = $this->marketProbabilities($odds, self::MARKET_MATCH_WINNER, ['Home', 'Draw', 'Away']);
+        $goalsProbabilities = $this->marketProbabilities($odds, self::MARKET_GOALS_OVER_UNDER, ['Over 2.5', 'Under 2.5']);
+        $bttsProbabilities = $this->marketProbabilities($odds, self::MARKET_BOTH_TEAMS_SCORE, ['Yes', 'No']);
         $scoreProbabilities = $this->marketProbabilities($odds, self::MARKET_EXACT_SCORE);
         $topScores = $this->topScores($scoreProbabilities);
 
@@ -47,7 +51,23 @@ class FixtureOddsSummaryService
             'btts_no_probability' => $this->probability($bttsProbabilities, 'No'),
             'most_likely_score' => $topScores[0]['score'] ?? null,
             'top_scores' => $topScores,
+            'top_likely_scores' => $topScores,
         ];
+    }
+
+    public function promptBlock(Fixture|int $fixture): string
+    {
+        $summary = $this->summarize($fixture);
+
+        return implode(PHP_EOL, [
+            'Market odds summary:',
+            '- Home win probability: '.$this->formatPercentage($summary['home_win_probability']),
+            '- Draw probability: '.$this->formatPercentage($summary['draw_probability']),
+            '- Away win probability: '.$this->formatPercentage($summary['away_win_probability']),
+            '- Over 2.5 goals probability: '.$this->formatPercentage($summary['over_2_5_probability']),
+            '- BTTS yes probability: '.$this->formatPercentage($summary['btts_yes_probability']),
+            '- Most likely score according to market: '.$this->formatValue($summary['most_likely_score']),
+        ]);
     }
 
     private function oddsForFixture(int $fixtureId): EloquentCollection
@@ -72,19 +92,19 @@ class FixtureOddsSummaryService
             ]);
     }
 
-    private function marketProbabilities(EloquentCollection $odds, string $market): Collection
+    private function marketProbabilities(EloquentCollection $odds, string $market, ?array $requiredValues = null): Collection
     {
         return $odds
             ->filter(fn (FixtureOdd $odd): bool => $this->marketName($odd) === $market)
             ->groupBy(fn (FixtureOdd $odd): string => $this->bookmakerKey($odd))
-            ->map(fn (Collection $bookmakerOdds): Collection => $this->normalizeBookmakerProbabilities($bookmakerOdds))
+            ->map(fn (Collection $bookmakerOdds): Collection => $this->normalizeBookmakerProbabilities($bookmakerOdds, $requiredValues))
             ->filter(fn (Collection $probabilities): bool => $probabilities->isNotEmpty())
             ->flatMap(fn (Collection $probabilities): array => $probabilities->all())
             ->groupBy('value')
             ->map(fn (Collection $probabilities): float => round($probabilities->avg('probability'), 2));
     }
 
-    private function normalizeBookmakerProbabilities(Collection $odds): Collection
+    private function normalizeBookmakerProbabilities(Collection $odds, ?array $requiredValues): Collection
     {
         $impliedProbabilities = $odds
             ->filter(fn (FixtureOdd $odd): bool => $odd->odd > 0)
@@ -92,6 +112,20 @@ class FixtureOddsSummaryService
                 'value' => $this->normalizeValue($odd->value),
                 'probability' => 100 / $odd->odd,
             ]);
+
+        if ($requiredValues !== null) {
+            $requiredValues = collect($requiredValues)
+                ->map(fn (string $value): string => $this->normalizeValue($value))
+                ->all();
+
+            $impliedProbabilities = $impliedProbabilities
+                ->whereIn('value', $requiredValues)
+                ->values();
+
+            if ($impliedProbabilities->pluck('value')->unique()->count() !== count($requiredValues)) {
+                return collect();
+            }
+        }
 
         $totalProbability = $impliedProbabilities->sum('probability');
 
@@ -136,5 +170,19 @@ class FixtureOddsSummaryService
     private function normalizeValue(string $value): string
     {
         return trim($value);
+    }
+
+    private function formatPercentage(?float $probability): string
+    {
+        if ($probability === null) {
+            return 'not available';
+        }
+
+        return round($probability).'%';
+    }
+
+    private function formatValue(?string $value): string
+    {
+        return $value ?? 'not available';
     }
 }
