@@ -27,7 +27,6 @@ class AddPredictions extends Command
 
         $fixtures = Fixture::query()
             ->whereNotNull('external_id')
-            ->relevantForDataSync()
             ->orderBy('match_date')
             ->get(['id', 'external_id', 'match_date']);
 
