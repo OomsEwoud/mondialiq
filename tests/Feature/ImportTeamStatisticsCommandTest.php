@@ -81,25 +81,27 @@ test('the import team statistics command skips fresh statistics', function () {
 });
 
 test('the import team statistics command imports relevant teams from fixtures', function () {
+    $season = (int) config('services.api_football.season');
+
     Fixture::create([
         'external_id' => 8001,
         'league_id' => $this->league->id,
         'home_team_id' => $this->homeTeam->id,
         'away_team_id' => $this->awayTeam->id,
         'round_name' => 'Group Stage',
-        'season' => 2026,
+        'season' => $season,
         'match_date' => now('UTC')->addHours(3),
         'status_long' => 'Not Started',
     ]);
 
-    $this->mock(TeamStatisticsService::class, function (MockInterface $mock) {
+    $this->mock(TeamStatisticsService::class, function (MockInterface $mock) use ($season) {
         $mock->shouldReceive('findExisting')
             ->once()
-            ->with($this->homeTeam->external_id, $this->league->external_id, 2026, null)
+            ->with($this->homeTeam->external_id, $this->league->external_id, $season, null)
             ->andReturn(null);
         $mock->shouldReceive('teamHasFixtureToday')
             ->once()
-            ->with($this->homeTeam->external_id, $this->league->external_id, 2026)
+            ->with($this->homeTeam->external_id, $this->league->external_id, $season)
             ->andReturn(true);
         $mock->shouldReceive('shouldRefresh')
             ->once()
@@ -107,16 +109,16 @@ test('the import team statistics command imports relevant teams from fixtures', 
             ->andReturn(true);
         $mock->shouldReceive('importForTeam')
             ->once()
-            ->with($this->homeTeam->external_id, $this->league->external_id, 2026, null, false)
-            ->andReturn(new TeamStatistic(['statistics_key' => "{$this->homeTeam->external_id}-{$this->league->external_id}-2026-season"]));
+            ->with($this->homeTeam->external_id, $this->league->external_id, $season, null, false)
+            ->andReturn(new TeamStatistic(['statistics_key' => "{$this->homeTeam->external_id}-{$this->league->external_id}-{$season}-season"]));
 
         $mock->shouldReceive('findExisting')
             ->once()
-            ->with($this->awayTeam->external_id, $this->league->external_id, 2026, null)
+            ->with($this->awayTeam->external_id, $this->league->external_id, $season, null)
             ->andReturn(null);
         $mock->shouldReceive('teamHasFixtureToday')
             ->once()
-            ->with($this->awayTeam->external_id, $this->league->external_id, 2026)
+            ->with($this->awayTeam->external_id, $this->league->external_id, $season)
             ->andReturn(true);
         $mock->shouldReceive('shouldRefresh')
             ->once()
@@ -124,12 +126,12 @@ test('the import team statistics command imports relevant teams from fixtures', 
             ->andReturn(true);
         $mock->shouldReceive('importForTeam')
             ->once()
-            ->with($this->awayTeam->external_id, $this->league->external_id, 2026, null, false)
-            ->andReturn(new TeamStatistic(['statistics_key' => "{$this->awayTeam->external_id}-{$this->league->external_id}-2026-season"]));
+            ->with($this->awayTeam->external_id, $this->league->external_id, $season, null, false)
+            ->andReturn(new TeamStatistic(['statistics_key' => "{$this->awayTeam->external_id}-{$this->league->external_id}-{$season}-season"]));
     });
 
     $this->artisan('app:import-team-statistics')
-        ->expectsOutput("Imported {$this->homeTeam->external_id}-{$this->league->external_id}-2026-season")
-        ->expectsOutput("Imported {$this->awayTeam->external_id}-{$this->league->external_id}-2026-season")
+        ->expectsOutput("Imported {$this->homeTeam->external_id}-{$this->league->external_id}-{$season}-season")
+        ->expectsOutput("Imported {$this->awayTeam->external_id}-{$this->league->external_id}-{$season}-season")
         ->assertSuccessful();
 });

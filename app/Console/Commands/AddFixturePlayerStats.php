@@ -25,7 +25,11 @@ class AddFixturePlayerStats extends Command
     {
         $this->info('Ophalen van spelerstatistieken voor relevante fixtures');
 
-        $fixtures = Fixture::all();
+        $fixtures = Fixture::query()
+            ->whereNotNull('external_id')
+            ->relevantForDataSync()
+            ->orderBy('match_date')
+            ->get(['id', 'external_id', 'match_date']);
 
         if ($fixtures->isEmpty()) {
             $this->info('Geen relevante fixtures gevonden voor spelerstatistieken sync.');

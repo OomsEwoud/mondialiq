@@ -29,7 +29,11 @@ class AddFixtureData extends Command
     {
         $this->info('Ophalen van fixture data voor relevante fixtures');
 
-        $fixtures = Fixture::all();
+        $fixtures = Fixture::query()
+            ->whereNotNull('external_id')
+            ->relevantForDataSync()
+            ->orderBy('match_date')
+            ->get(['id', 'external_id', 'match_date']);
 
         if ($fixtures->isEmpty()) {
             $this->info('Geen relevante fixtures gevonden voor fixture data sync.');
