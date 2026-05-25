@@ -9,14 +9,20 @@ class FixtureOdd extends Model
 {
     protected $fillable = [
         'fixture_id',
+        'external_bookmaker_id',
+        'bookmaker_name',
+        'external_bet_id',
+        'bet_name',
         'bookmaker_id',
         'bet_type_id',
         'value',
         'odd',
+        'api_updated_at',
     ];
 
     protected $casts = [
         'odd' => 'float',
+        'api_updated_at' => 'datetime',
     ];
 
     public function betType(): BelongsTo

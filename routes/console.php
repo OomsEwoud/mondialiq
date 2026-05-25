@@ -39,6 +39,8 @@ if (now()->between('2026-06-11', '2026-06-29')) {
 
 Schedule::command('app:add-bookmakers')->monthly()->withoutOverlapping();
 
+Schedule::command('app:add-odds')->everyThreeHours()->withoutOverlapping();
+
 Schedule::command('app:add-predictions')->hourly()->when($hasFixtureInProgress)->withoutOverlapping();
 
 Schedule::command('app:add-predictions')->dailyAt('03:00')->skip($hasFixtureInProgress)->withoutOverlapping();
