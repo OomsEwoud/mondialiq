@@ -54,6 +54,9 @@ test('it handles null fields safely', function () {
         'api_predicted_outcome' => null,
         'api_goal_trend' => null,
         'api_confidence' => null,
+        'api_total_goals_line' => null,
+        'api_home_goals_line' => null,
+        'api_away_goals_line' => null,
         'api_goal_line' => null,
         'api_home_goal_line' => null,
         'api_away_goal_line' => null,
@@ -93,10 +96,13 @@ test('it includes api goal lines in the summary and prompt block', function () {
     $service = app(ApiPredictionSummaryService::class);
     $summary = $service->summarize($prediction);
 
-    expect($summary['api_goal_line'])->toBe(2.5)
+    expect($summary['api_total_goals_line'])->toBe(2.5)
+        ->and($summary['api_home_goals_line'])->toBe(1.5)
+        ->and($summary['api_away_goals_line'])->toBe(0.5)
+        ->and($summary['api_goal_line'])->toBe(2.5)
         ->and($summary['api_home_goal_line'])->toBe(1.5)
         ->and($summary['api_away_goal_line'])->toBe(0.5)
-        ->and($service->promptBlock($prediction))->toContain('- API goal line: 2.5')
-        ->and($service->promptBlock($prediction))->toContain('- API home goal line: 1.5')
-        ->and($service->promptBlock($prediction))->toContain('- API away goal line: 0.5');
+        ->and($service->promptBlock($prediction))->toContain('- API total goals line: 2.5')
+        ->and($service->promptBlock($prediction))->toContain('- API home goals line: 1.5')
+        ->and($service->promptBlock($prediction))->toContain('- API away goals line: 0.5');
 });

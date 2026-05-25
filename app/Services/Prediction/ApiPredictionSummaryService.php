@@ -18,6 +18,9 @@ class ApiPredictionSummaryService
             'api_predicted_outcome' => $adviceSummary['predicted_outcome'],
             'api_goal_trend' => $adviceSummary['goal_trend'],
             'api_confidence' => $prediction->confidence,
+            'api_total_goals_line' => $prediction->total_goals,
+            'api_home_goals_line' => $prediction->home_goals,
+            'api_away_goals_line' => $prediction->away_goals,
             'api_goal_line' => $prediction->total_goals,
             'api_home_goal_line' => $prediction->home_goals,
             'api_away_goal_line' => $prediction->away_goals,
@@ -38,16 +41,16 @@ class ApiPredictionSummaryService
             '- API confidence: '.$this->formatPromptValue($summary['api_confidence']),
         ];
 
-        if ($summary['api_goal_line'] !== null) {
-            $lines[] = '- API goal line: '.$this->formatNumber($summary['api_goal_line']);
+        if ($summary['api_total_goals_line'] !== null) {
+            $lines[] = '- API total goals line: '.$this->formatNumber($summary['api_total_goals_line']);
         }
 
-        if ($summary['api_home_goal_line'] !== null) {
-            $lines[] = '- API home goal line: '.$this->formatNumber($summary['api_home_goal_line']);
+        if ($summary['api_home_goals_line'] !== null) {
+            $lines[] = '- API home goals line: '.$this->formatNumber($summary['api_home_goals_line']);
         }
 
-        if ($summary['api_away_goal_line'] !== null) {
-            $lines[] = '- API away goal line: '.$this->formatNumber($summary['api_away_goal_line']);
+        if ($summary['api_away_goals_line'] !== null) {
+            $lines[] = '- API away goals line: '.$this->formatNumber($summary['api_away_goals_line']);
         }
 
         return implode(PHP_EOL, $lines);
