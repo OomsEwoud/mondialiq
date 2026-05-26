@@ -25,13 +25,25 @@ class AiPredictionPromptBuilder
     public function build(Fixture $fixture): string
     {
         return implode(PHP_EOL.PHP_EOL, [
+            $this->instructions(),
+            'Context:',
+            $this->context($fixture),
+        ]);
+    }
+
+    public function instructions(): string
+    {
+        return implode(PHP_EOL.PHP_EOL, [
             'You are an AI football prediction analyst for MondialIQ.',
-            'Use the following context to predict the match outcome.',
+            'Use the provided context to predict the match outcome.',
             $this->guidanceBlock(),
             $this->expectedJsonFormatBlock(),
-            'Context:',
-            $this->predictionContextService->promptBlock($fixture),
         ]);
+    }
+
+    public function context(Fixture $fixture): string
+    {
+        return $this->predictionContextService->promptBlock($fixture);
     }
 
     private function guidanceBlock(): string

@@ -41,6 +41,19 @@ test('it builds a prompt with all prediction context sections', function () {
         ->and($prompt)->toContain('Missing players summary:');
 });
 
+test('it separates instructions from fixture context', function () {
+    $fixture = createAiPredictionPromptFixture();
+
+    mockPredictionPromptContext($this, $fixture, 'Prediction context:');
+
+    $builder = app(AiPredictionPromptBuilder::class);
+
+    expect($builder->instructions())->toContain('You are an AI football prediction analyst for MondialIQ.')
+        ->and($builder->instructions())->toContain('Expected JSON format:')
+        ->and($builder->instructions())->not->toContain('Prediction context:')
+        ->and($builder->context($fixture))->toBe('Prediction context:');
+});
+
 test('it contains stable json output instructions', function () {
     $fixture = createAiPredictionPromptFixture();
 
