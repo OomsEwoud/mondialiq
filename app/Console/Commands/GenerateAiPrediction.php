@@ -34,7 +34,11 @@ class GenerateAiPrediction extends Command
         }
 
         if ($this->option('dry-run')) {
-            $this->line($this->promptBuilder->build($fixture));
+            $this->line('OpenAI instructions:');
+            $this->line($this->promptBuilder->instructions());
+            $this->newLine();
+            $this->line('OpenAI input:');
+            $this->line($this->promptBuilder->context($fixture));
 
             return self::SUCCESS;
         }

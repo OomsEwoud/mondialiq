@@ -46,18 +46,20 @@ test('it can dry run the ai prediction prompt without calling openai', function 
     });
 
     $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) use ($fixture) {
-        $mock->shouldReceive('build')
+        $mock->shouldReceive('instructions')
+            ->once()
+            ->andReturn('You are an AI football prediction analyst for MondialIQ.');
+        $mock->shouldReceive('context')
             ->once()
             ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
-            ->andReturn(implode(PHP_EOL, [
-                'You are an AI football prediction analyst for MondialIQ.',
-                'Context:',
-            ]));
+            ->andReturn('Prediction context:');
     });
 
     $this->artisan("app:generate-ai-prediction {$fixture->id} --dry-run")
+        ->expectsOutput('OpenAI instructions:')
         ->expectsOutput('You are an AI football prediction analyst for MondialIQ.')
-        ->expectsOutput('Context:')
+        ->expectsOutput('OpenAI input:')
+        ->expectsOutput('Prediction context:')
         ->assertSuccessful();
 });
 
