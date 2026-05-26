@@ -68,19 +68,35 @@ class FixtureService
             return null;
         }
 
-        $venue = ! empty($venueData['id'])
-            ? Venue::query()->where('external_id', $venueData['id'])->first()
-            : Venue::query()->where('name', $venueData['name'])->first();
+        $externalId = $this->venueExternalId($venueData);
+
+        $venue = $externalId !== null
+            ? Venue::query()->where('external_id', $externalId)->first()
+            : Venue::query()
+                ->where('name', $venueData['name'])
+                ->where('city', $venueData['city'] ?? null)
+                ->first();
 
         if (! $venue) {
             $venue = Venue::query()->create([
-                'external_id' => $venueData['id'] ?? null,
+                'external_id' => $externalId,
                 'name' => $venueData['name'],
                 'city' => $venueData['city'] ?? null,
             ]);
         }
 
         return $venue->id;
+    }
+
+    private function venueExternalId(array $venueData): ?int
+    {
+        $externalId = $venueData['id'] ?? null;
+
+        if (! is_numeric($externalId) || (int) $externalId <= 0) {
+            return null;
+        }
+
+        return (int) $externalId;
     }
 
     private function calculateResult(array $fulltime): ?string
