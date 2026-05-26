@@ -1,0 +1,158 @@
+<?php
+
+namespace App\Services\Prediction;
+
+use App\Models\Fixture;
+use App\Models\Prediction;
+
+class PredictionContextService
+{
+    public function __construct(
+        private readonly FixtureOddsSummaryService $oddsSummaryService,
+        private readonly ApiPredictionSummaryService $apiPredictionSummaryService,
+        private readonly TeamStatsSummaryService $teamStatsSummaryService,
+        private readonly StandingsSummaryService $standingsSummaryService,
+        private readonly HeadToHeadSummaryService $headToHeadSummaryService,
+        private readonly MissingPlayersSummaryService $missingPlayersSummaryService,
+    ) {
+    }
+
+    public function summarize(Fixture $fixture): array
+    {
+        $fixture->loadMissing([
+            'homeTeam:id,name',
+            'awayTeam:id,name',
+            'league:id,name',
+            'venue:id,name,city',
+            'apiPrediction',
+        ]);
+
+        return [
+            'fixture' => $this->fixtureSummary($fixture),
+            'market_odds' => $this->oddsSummaryService->summarize($fixture),
+            'api_prediction' => $this->apiPredictionSummary($fixture->apiPrediction),
+            'team_statistics' => $this->teamStatsSummaryService->summarize($fixture),
+            'standings' => $this->standingsSummaryService->summarize($fixture),
+            'head_to_head' => $this->headToHeadSummaryService->summarize($fixture),
+            'missing_players' => $this->missingPlayersSummaryService->summarize($fixture),
+            'guidance' => [
+                'Market odds are the strongest external signal.',
+                'API predictions are a secondary signal.',
+                'Team stats, standings, head-to-head and missing players provide context.',
+                'If sources disagree, explain the disagreement.',
+            ],
+        ];
+    }
+
+    public function promptBlock(Fixture $fixture): string
+    {
+        $fixture->loadMissing(['apiPrediction']);
+
+        return implode(PHP_EOL.PHP_EOL, [
+            'Prediction context:',
+            $this->fixturePromptBlock($fixture),
+            $this->oddsSummaryService->promptBlock($fixture),
+            $this->apiPredictionPromptBlock($fixture->apiPrediction),
+            $this->teamStatsSummaryService->promptBlock($fixture),
+            $this->standingsSummaryService->promptBlock($fixture),
+            $this->headToHeadSummaryService->promptBlock($fixture),
+            $this->missingPlayersSummaryService->promptBlock($fixture),
+            $this->guidancePromptBlock(),
+        ]);
+    }
+
+    private function fixtureSummary(Fixture $fixture): array
+    {
+        return [
+            'home_team' => $fixture->homeTeam?->name,
+            'away_team' => $fixture->awayTeam?->name,
+            'date' => $fixture->match_date?->toIso8601String(),
+            'league' => $fixture->league?->name,
+            'season' => $fixture->season,
+            'round' => $fixture->round_name,
+            'venue' => $fixture->venue?->name,
+            'venue_city' => $fixture->venue?->city,
+        ];
+    }
+
+    private function fixturePromptBlock(Fixture $fixture): string
+    {
+        $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name', 'league:id,name', 'venue:id,name,city']);
+
+        $lines = [
+            'Fixture:',
+            '- '.$this->fixtureTeamsLine($fixture),
+            '- '.$this->fixtureLeagueLine($fixture),
+            '- '.($fixture->round_name ?? 'Round not available'),
+            '- '.$this->fixtureDateLine($fixture),
+        ];
+
+        if ($fixture->venue?->name !== null) {
+            $lines[] = '- Venue: '.$this->fixtureVenueLine($fixture);
+        }
+
+        return implode(PHP_EOL, $lines);
+    }
+
+    private function apiPredictionSummary(?Prediction $prediction): ?array
+    {
+        if ($prediction === null) {
+            return null;
+        }
+
+        return $this->apiPredictionSummaryService->summarize($prediction);
+    }
+
+    private function apiPredictionPromptBlock(?Prediction $prediction): string
+    {
+        if ($prediction === null) {
+            return implode(PHP_EOL, [
+                'API prediction summary:',
+                '- API prediction data not available.',
+            ]);
+        }
+
+        return $this->apiPredictionSummaryService->promptBlock($prediction);
+    }
+
+    private function guidancePromptBlock(): string
+    {
+        return implode(PHP_EOL, [
+            'Guidance:',
+            '- Market odds are the strongest external signal.',
+            '- API predictions are a secondary signal.',
+            '- Team stats, standings, head-to-head and missing players provide context.',
+            '- If sources disagree, explain the disagreement.',
+        ]);
+    }
+
+    private function fixtureTeamsLine(Fixture $fixture): string
+    {
+        return ($fixture->homeTeam?->name ?? 'Home team').' vs '.($fixture->awayTeam?->name ?? 'Away team');
+    }
+
+    private function fixtureLeagueLine(Fixture $fixture): string
+    {
+        return trim(($fixture->league?->name ?? 'League not available').' '.($fixture->season ?? ''));
+    }
+
+    private function fixtureDateLine(Fixture $fixture): string
+    {
+        if ($fixture->match_date === null) {
+            return 'Date not available';
+        }
+
+        return $fixture->match_date
+            ->timezone(config('app.timezone'))
+            ->format('d M H:i');
+    }
+
+    private function fixtureVenueLine(Fixture $fixture): string
+    {
+        if ($fixture->venue?->city === null) {
+            return $fixture->venue->name;
+        }
+
+        return "{$fixture->venue->name}, {$fixture->venue->city}";
+    }
+}
