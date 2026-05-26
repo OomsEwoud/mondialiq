@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import BackButton from '@/components/navigation/back-button';
 import AiPredictionReport from '@/components/predictions/ai-prediction-report';
-import PredictionDetailHero from '@/components/predictions/prediction-detail-hero';
+import UserPredictionDetail from '@/components/predictions/user-prediction-detail';
 import { predictions } from '@/routes';
 import type { PredictionShowPageProps as Props } from '@/types/prediction';
 
@@ -21,7 +21,7 @@ export default function PredictionShow({ match, mode, aiContext }: Props) {
             {mode === 'ai' ? (
                 <AiPredictionReport match={match} aiContext={aiContext} />
             ) : (
-                <PredictionDetailHero match={match} mode={mode} />
+                <UserPredictionDetail match={match} />
             )}
         </>
     );
