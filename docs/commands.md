@@ -24,10 +24,16 @@ Bekijk de volledige AI prompt preview:
 php artisan app:preview-ai-prediction-prompt FIXTURE_ID
 ```
 
-Bekijk exact wat naar OpenAI zou gaan, zonder OpenAI-call:
+Bekijk de match-context die als OpenAI `input` meegaat, zonder OpenAI-call:
 
 ```bash
 php artisan app:generate-ai-prediction FIXTURE_ID --dry-run
+```
+
+Bekijk de volledige OpenAI payload-preview, inclusief vaste `instructions`:
+
+```bash
+php artisan app:generate-ai-prediction FIXTURE_ID --dry-run --show-instructions
 ```
 
 Genereer een echte AI prediction via OpenAI en sla die op als `source = ai`:
@@ -228,7 +234,7 @@ php artisan test
 php artisan app:show-prediction-context FIXTURE_ID
 ```
 
-2. Controleer OpenAI payload zonder call:
+2. Controleer OpenAI input zonder call:
 
 ```bash
 php artisan app:generate-ai-prediction FIXTURE_ID --dry-run

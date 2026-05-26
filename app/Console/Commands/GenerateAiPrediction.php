@@ -10,7 +10,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Throwable;
 
-#[Signature('app:generate-ai-prediction {fixture} {--dry-run}')]
+#[Signature('app:generate-ai-prediction {fixture} {--dry-run} {--show-instructions}')]
 #[Description('Genereer een AI prediction voor een fixture via OpenAI')]
 class GenerateAiPrediction extends Command
 {
@@ -34,9 +34,12 @@ class GenerateAiPrediction extends Command
         }
 
         if ($this->option('dry-run')) {
-            $this->line('OpenAI instructions:');
-            $this->line($this->promptBuilder->instructions());
-            $this->newLine();
+            if ($this->option('show-instructions')) {
+                $this->line('OpenAI instructions:');
+                $this->line($this->promptBuilder->instructions());
+                $this->newLine();
+            }
+
             $this->line('OpenAI input:');
             $this->line($this->promptBuilder->context($fixture));
 

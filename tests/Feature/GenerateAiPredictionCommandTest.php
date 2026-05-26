@@ -46,6 +46,27 @@ test('it can dry run the ai prediction prompt without calling openai', function 
     });
 
     $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) use ($fixture) {
+        $mock->shouldNotReceive('instructions');
+        $mock->shouldReceive('context')
+            ->once()
+            ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
+            ->andReturn('Prediction context:');
+    });
+
+    $this->artisan("app:generate-ai-prediction {$fixture->id} --dry-run")
+        ->expectsOutput('OpenAI input:')
+        ->expectsOutput('Prediction context:')
+        ->assertSuccessful();
+});
+
+test('it can dry run the full openai payload with instructions', function () {
+    $fixture = createGenerateAiPredictionFixture();
+
+    $this->mock(AiPredictionService::class, function (MockInterface $mock) {
+        $mock->shouldNotReceive('predict');
+    });
+
+    $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) use ($fixture) {
         $mock->shouldReceive('instructions')
             ->once()
             ->andReturn('You are an AI football prediction analyst for MondialIQ.');
@@ -55,7 +76,7 @@ test('it can dry run the ai prediction prompt without calling openai', function 
             ->andReturn('Prediction context:');
     });
 
-    $this->artisan("app:generate-ai-prediction {$fixture->id} --dry-run")
+    $this->artisan("app:generate-ai-prediction {$fixture->id} --dry-run --show-instructions")
         ->expectsOutput('OpenAI instructions:')
         ->expectsOutput('You are an AI football prediction analyst for MondialIQ.')
         ->expectsOutput('OpenAI input:')
