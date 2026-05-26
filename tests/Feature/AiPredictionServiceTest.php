@@ -56,7 +56,7 @@ test('it sends the built prompt to openai and stores the ai prediction', functio
         ->and($prediction->advice)->toContain('AI outcome: home.');
 });
 
-test('it keeps stored advice within the database string limit', function () {
+test('it stores the full ai advice text', function () {
     $fixture = createAiPredictionServiceFixture();
 
     $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) {
@@ -81,8 +81,8 @@ test('it keeps stored advice within the database string limit', function () {
 
     $prediction = app(AiPredictionService::class)->predict($fixture);
 
-    expect(strlen($prediction->advice))->toBeLessThanOrEqual(255)
-        ->and($prediction->advice)->toEndWith('...');
+    expect($prediction->advice)->toContain(str_repeat('The market and API prediction both lean toward the home team avoiding defeat. ', 10))
+        ->and(strlen($prediction->advice))->toBeGreaterThan(255);
 });
 
 test('it maps double chance outcomes to the primary team and accepts colon scores', function () {

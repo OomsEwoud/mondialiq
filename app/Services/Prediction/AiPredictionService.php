@@ -6,15 +6,12 @@ use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use JsonException;
 use OpenAI\Laravel\Facades\OpenAI;
 use RuntimeException;
 
 class AiPredictionService
 {
-    private const ADVICE_MAX_LENGTH = 255;
-
     public function __construct(
         private readonly AiPredictionPromptBuilder $promptBuilder,
     ) {
@@ -152,6 +149,6 @@ class AiPredictionService
         $outcome = Arr::get($prediction, 'predicted_outcome', 'unknown');
         $explanation = Arr::get($prediction, 'explanation', 'No explanation provided.');
 
-        return Str::limit("AI outcome: {$outcome}. {$explanation}", self::ADVICE_MAX_LENGTH - 3);
+        return "AI outcome: {$outcome}. {$explanation}";
     }
 }
