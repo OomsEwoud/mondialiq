@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -82,7 +83,30 @@ class MatchDetailsResource extends JsonResource
                 'home' => $this->lineupForTeam($this->home_team_id),
                 'away' => $this->lineupForTeam($this->away_team_id),
             ],
+            'availability' => [
+                'home' => $this->availabilityForTeam($this->home_team_id),
+                'away' => $this->availabilityForTeam($this->away_team_id),
+            ],
         ];
+    }
+
+    private function availabilityForTeam(int $teamId): array
+    {
+        return $this->missingPlayers
+            ->filter(fn ($player): bool => $player->teams->contains('id', $teamId))
+            ->sortBy(fn ($player): string => $this->playerName($player))
+            ->values()
+            ->map(fn ($player) => [
+                'id' => $player->id,
+                'name' => $this->playerName($player),
+                'photo' => $player->photo_url,
+                'number' => $player->number,
+                'position' => $player->position,
+                'country' => $player->country?->name,
+                'type' => $player->pivot?->type,
+                'reason' => $player->pivot?->reason,
+            ])
+            ->all();
     }
 
     private function lineupForTeam(int $teamId): array
@@ -142,5 +166,13 @@ class MatchDetailsResource extends JsonResource
             'F' => 40,
             default => 50,
         };
+    }
+
+    private function playerName(Player $player): string
+    {
+        $name = $player->display_name
+            ?? trim("{$player->first_name} {$player->last_name}");
+
+        return $name !== '' ? $name : 'Unknown player';
     }
 }

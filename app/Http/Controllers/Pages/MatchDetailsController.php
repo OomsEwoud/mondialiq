@@ -24,6 +24,8 @@ class MatchDetailsController extends Controller
             'lineups',
             'fixturePlayers.player',
             'playerFixtureStats',
+            'missingPlayers.country',
+            'missingPlayers.teams',
         ]);
 
         return Inertia::render('match-details', [

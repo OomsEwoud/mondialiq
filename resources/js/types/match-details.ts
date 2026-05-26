@@ -52,6 +52,17 @@ export interface MatchDetailsLineupTeam {
     substitutes: MatchDetailsLineupPlayer[];
 }
 
+export interface MatchDetailsMissingPlayer {
+    id: number;
+    name: string;
+    photo: string | null;
+    number: number | null;
+    position: string | null;
+    country: string | null;
+    type: string | null;
+    reason: string | null;
+}
+
 export interface MatchDetails {
     id: number;
     homeTeam: MatchDetailsTeam;
@@ -75,5 +86,9 @@ export interface MatchDetails {
     lineups: {
         home: MatchDetailsLineupTeam;
         away: MatchDetailsLineupTeam;
+    };
+    availability: {
+        home: MatchDetailsMissingPlayer[];
+        away: MatchDetailsMissingPlayer[];
     };
 }

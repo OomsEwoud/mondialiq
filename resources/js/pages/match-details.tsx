@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import MatchAvailabilitySection from '@/components/matches/details/match-availability-section';
 import MatchDataTabs from '@/components/matches/details/match-data-tabs';
 import MatchDetailsHero from '@/components/matches/details/match-details-hero';
 import MatchInfoCard from '@/components/matches/details/match-info-card';
@@ -26,6 +27,7 @@ export default function MatchDetails({ match }: Props) {
                     <MatchScoreCard match={match} />
                 </div>
                 <MatchDataTabs match={match} />
+                <MatchAvailabilitySection match={match} />
             </div>
         </>
     );
