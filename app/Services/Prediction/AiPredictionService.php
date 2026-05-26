@@ -13,6 +13,8 @@ use RuntimeException;
 
 class AiPredictionService
 {
+    private const ADVICE_MAX_LENGTH = 255;
+
     public function __construct(
         private readonly AiPredictionPromptBuilder $promptBuilder,
     ) {
@@ -23,7 +25,7 @@ class AiPredictionService
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
 
         $response = OpenAI::responses()->create([
-            'model' => 'gpt-5',
+            'model' => 'gpt-5.4-mini',
             'instructions' => $this->promptBuilder->instructions(),
             'input' => $this->promptBuilder->context($fixture),
         ]);
@@ -150,6 +152,6 @@ class AiPredictionService
         $outcome = Arr::get($prediction, 'predicted_outcome', 'unknown');
         $explanation = Arr::get($prediction, 'explanation', 'No explanation provided.');
 
-        return Str::limit("AI outcome: {$outcome}. {$explanation}", 255);
+        return Str::limit("AI outcome: {$outcome}. {$explanation}", self::ADVICE_MAX_LENGTH - 3);
     }
 }

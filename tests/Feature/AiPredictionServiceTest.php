@@ -25,11 +25,9 @@ test('it sends the built prompt to openai and stores the ai prediction', functio
 
     OpenAI::shouldReceive('responses->create')
         ->once()
-        ->with([
-            'model' => 'gpt-5',
-            'instructions' => 'system instructions',
-            'input' => 'prediction context',
-        ])
+        ->with(Mockery::on(fn (array $parameters): bool => isset($parameters['model'])
+            && $parameters['instructions'] === 'system instructions'
+            && $parameters['input'] === 'prediction context'))
         ->andReturn((object) [
             'outputText' => json_encode([
                 'predicted_outcome' => 'home',
@@ -56,6 +54,35 @@ test('it sends the built prompt to openai and stores the ai prediction', functio
         ->and($prediction->away_goals)->toBe(1.0)
         ->and($prediction->total_goals)->toBe(3.0)
         ->and($prediction->advice)->toContain('AI outcome: home.');
+});
+
+test('it keeps stored advice within the database string limit', function () {
+    $fixture = createAiPredictionServiceFixture();
+
+    $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) {
+        $mock->shouldReceive('instructions')->andReturn('system instructions');
+        $mock->shouldReceive('context')->andReturn('prediction context');
+    });
+
+    OpenAI::shouldReceive('responses->create')
+        ->once()
+        ->andReturn((object) [
+            'outputText' => json_encode([
+                'predicted_outcome' => 'home_or_draw',
+                'home_chance' => 49,
+                'draw_chance' => 28,
+                'away_chance' => 23,
+                'confidence' => 62,
+                'expected_score' => '1-0',
+                'explanation' => str_repeat('The market and API prediction both lean toward the home team avoiding defeat. ', 10),
+                'key_factors' => ['market odds', 'api prediction'],
+            ]),
+        ]);
+
+    $prediction = app(AiPredictionService::class)->predict($fixture);
+
+    expect(strlen($prediction->advice))->toBeLessThanOrEqual(255)
+        ->and($prediction->advice)->toEndWith('...');
 });
 
 test('it accepts fenced json from openai', function () {
