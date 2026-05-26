@@ -46,13 +46,13 @@ trait TeamEndpoints
 
     public function getPlayers(int $teamId): array
     {
-        //1 call per week
+        // Authoritative squad/call-up list for a team.
         return $this->call('/players/squads', ['team' => $teamId]);
     }
 
     public function getPlayersByLeagueSeason(int $leagueId, int $season): array
     {
-        //1 call per tournament with pagination
+        // Player details and season statistics, not the authoritative squad list.
         return $this->callAllPages('/players', ['league' => $leagueId, 'season' => $season]);
     }
 

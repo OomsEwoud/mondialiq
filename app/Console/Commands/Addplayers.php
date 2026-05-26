@@ -42,9 +42,10 @@ class AddPlayers extends Command
         $this->components->task('Data van players opslaan in database', function () use ($players, $config) {
             if (! empty($players)) {
                 $this->service->storePlayers($players);
-                $this->service->syncTeamPlayers($config['leagueId'], $config['season']);
                 $this->statsService->storePlayerStats($players);
             }
+
+            $this->service->syncTeamPlayers($config['leagueId'], $config['season']);
         });
 
         $this->info('Players klaar');
