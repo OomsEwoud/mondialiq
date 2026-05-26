@@ -1,10 +1,11 @@
 import { Head } from '@inertiajs/react';
 import BackButton from '@/components/navigation/back-button';
+import AiPredictionReport from '@/components/predictions/ai-prediction-report';
 import PredictionDetailHero from '@/components/predictions/prediction-detail-hero';
 import { predictions } from '@/routes';
 import type { PredictionShowPageProps as Props } from '@/types/prediction';
 
-export default function PredictionShow({ match, mode }: Props) {
+export default function PredictionShow({ match, mode, aiContext }: Props) {
     const fallbackHref = predictions.url({
         query: { mode },
     });
@@ -17,7 +18,11 @@ export default function PredictionShow({ match, mode }: Props) {
                 <BackButton fallbackHref={fallbackHref} />
             </div>
 
-            <PredictionDetailHero match={match} mode={mode} />
+            {mode === 'ai' ? (
+                <AiPredictionReport match={match} aiContext={aiContext} />
+            ) : (
+                <PredictionDetailHero match={match} mode={mode} />
+            )}
         </>
     );
 }

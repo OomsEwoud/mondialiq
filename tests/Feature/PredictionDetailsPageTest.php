@@ -106,7 +106,9 @@ test('a user can view a dedicated ai prediction page', function () {
             ->where('match.aiPrediction.homeScore', 1)
             ->where('match.aiPrediction.awayScore', 0)
             ->where('match.aiPrediction.confidence', '63')
-            ->where('match.aiPrediction.advice', 'AI outcome: home_or_draw. The market leans home.'));
+            ->where('match.aiPrediction.advice', 'AI outcome: home_or_draw. The market leans home.')
+            ->where('aiContext.marketOdds.home_win_probability', null)
+            ->where('aiContext.apiPrediction', null));
 });
 
 test('a dedicated prediction page defaults to ai mode when only an ai prediction exists', function () {
