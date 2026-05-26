@@ -43,7 +43,7 @@ class AiPredictionPromptBuilder
 
     public function context(Fixture $fixture): string
     {
-        return $this->predictionContextService->promptBlock($fixture);
+        return $this->predictionContextService->promptBlock($fixture, includeGuidance: false);
     }
 
     private function guidanceBlock(): string

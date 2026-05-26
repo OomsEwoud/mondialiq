@@ -44,11 +44,11 @@ class PredictionContextService
         ];
     }
 
-    public function promptBlock(Fixture $fixture): string
+    public function promptBlock(Fixture $fixture, bool $includeGuidance = true): string
     {
         $fixture->loadMissing(['apiPrediction']);
 
-        return implode(PHP_EOL.PHP_EOL, [
+        $sections = [
             'Prediction context:',
             $this->fixturePromptBlock($fixture),
             $this->oddsSummaryService->promptBlock($fixture),
@@ -57,8 +57,13 @@ class PredictionContextService
             $this->standingsSummaryService->promptBlock($fixture),
             $this->headToHeadSummaryService->promptBlock($fixture),
             $this->missingPlayersSummaryService->promptBlock($fixture),
-            $this->guidancePromptBlock(),
-        ]);
+        ];
+
+        if ($includeGuidance) {
+            $sections[] = $this->guidancePromptBlock();
+        }
+
+        return implode(PHP_EOL.PHP_EOL, $sections);
     }
 
     private function fixtureSummary(Fixture $fixture): array

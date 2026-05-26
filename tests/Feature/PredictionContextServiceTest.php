@@ -99,6 +99,19 @@ test('prompt block contains all available sections', function () {
         ->and($promptBlock)->toContain('If sources disagree, explain the disagreement.');
 });
 
+test('prompt block can omit guidance for ai input', function () {
+    $fixture = createPredictionContextFixture();
+
+    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+
+    $promptBlock = app(PredictionContextService::class)->promptBlock($fixture, includeGuidance: false);
+
+    expect($promptBlock)->toContain('Prediction context:')
+        ->and($promptBlock)->toContain('Market odds summary:')
+        ->and($promptBlock)->not->toContain('Guidance:')
+        ->and($promptBlock)->not->toContain('If sources disagree, explain the disagreement.');
+});
+
 function mockPredictionContextSummaryServices(object $testCase, bool $expectApiPrediction = true): void
 {
     $testCase->mock(FixtureOddsSummaryService::class, function (MockInterface $mock) {

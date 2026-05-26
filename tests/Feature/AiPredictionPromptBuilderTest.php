@@ -138,7 +138,10 @@ function mockPredictionPromptContext(object $testCase, Fixture $fixture, string 
     $testCase->mock(PredictionContextService::class, function (MockInterface $mock) use ($fixture, $contextBlock) {
         $mock->shouldReceive('promptBlock')
             ->once()
-            ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
+            ->with(
+                Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)),
+                false,
+            )
             ->andReturn($contextBlock);
     });
 }
