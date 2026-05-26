@@ -85,6 +85,37 @@ test('it keeps stored advice within the database string limit', function () {
         ->and($prediction->advice)->toEndWith('...');
 });
 
+test('it maps double chance outcomes to the primary team and accepts colon scores', function () {
+    $fixture = createAiPredictionServiceFixture();
+
+    $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) {
+        $mock->shouldReceive('instructions')->andReturn('system instructions');
+        $mock->shouldReceive('context')->andReturn('prediction context');
+    });
+
+    OpenAI::shouldReceive('responses->create')
+        ->once()
+        ->andReturn((object) [
+            'outputText' => json_encode([
+                'predicted_outcome' => 'home_or_draw',
+                'home_chance' => 49,
+                'draw_chance' => 28,
+                'away_chance' => 23,
+                'confidence' => 63,
+                'expected_score' => '1:0',
+                'explanation' => 'The market leans home or draw with a low score.',
+                'key_factors' => ['market odds'],
+            ]),
+        ]);
+
+    $prediction = app(AiPredictionService::class)->predict($fixture);
+
+    expect($prediction->winner_id)->toBe($fixture->home_team_id)
+        ->and($prediction->home_goals)->toBe(1.0)
+        ->and($prediction->away_goals)->toBe(0.0)
+        ->and($prediction->total_goals)->toBe(1.0);
+});
+
 test('it accepts fenced json from openai', function () {
     $fixture = createAiPredictionServiceFixture();
 

@@ -101,8 +101,8 @@ class AiPredictionService
     private function winnerId(Fixture $fixture, mixed $predictedOutcome): ?int
     {
         return match ($predictedOutcome) {
-            'home' => $fixture->home_team_id,
-            'away' => $fixture->away_team_id,
+            'home', 'home_or_draw' => $fixture->home_team_id,
+            'away', 'away_or_draw' => $fixture->away_team_id,
             default => null,
         };
     }
@@ -121,7 +121,7 @@ class AiPredictionService
      */
     private function scoreFromPrediction(mixed $score): array
     {
-        if (is_string($score) && preg_match('/^(?<home>\d+(?:\.\d+)?)\s*-\s*(?<away>\d+(?:\.\d+)?)$/', $score, $matches)) {
+        if (is_string($score) && preg_match('/^(?<home>\d+(?:\.\d+)?)\s*[-:]\s*(?<away>\d+(?:\.\d+)?)$/', $score, $matches)) {
             return [(float) $matches['home'], (float) $matches['away']];
         }
 

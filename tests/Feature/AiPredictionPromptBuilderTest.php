@@ -68,7 +68,7 @@ test('it contains stable json output instructions', function () {
         ->and($prompt)->toContain('"draw_chance": 0')
         ->and($prompt)->toContain('"away_chance": 0')
         ->and($prompt)->toContain('"confidence": 0')
-        ->and($prompt)->toContain('"expected_score": null')
+        ->and($prompt)->toContain('"expected_score": "home-away|null"')
         ->and($prompt)->toContain('"explanation": ""')
         ->and($prompt)->toContain('"key_factors": []')
         ->and(AiPredictionPromptBuilder::EXPECTED_JSON_FORMAT)->toHaveKeys([
@@ -95,7 +95,8 @@ test('it includes prediction guidance', function () {
         ->and($prompt)->toContain('Use team stats, standings, head-to-head and missing players as supporting context.')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
         ->and($prompt)->toContain('Do not claim certainty.')
-        ->and($prompt)->toContain('Explain uncertainty where relevant.');
+        ->and($prompt)->toContain('Explain uncertainty where relevant.')
+        ->and($prompt)->toContain('Include expected_score as "home-away" when the context contains a market most likely score or enough goal data.');
 });
 
 test('it handles missing context safely', function () {

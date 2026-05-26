@@ -12,7 +12,7 @@ class AiPredictionPromptBuilder
         'draw_chance' => 0,
         'away_chance' => 0,
         'confidence' => 0,
-        'expected_score' => null,
+        'expected_score' => 'home-away|null',
         'explanation' => '',
         'key_factors' => [],
     ];
@@ -56,6 +56,8 @@ class AiPredictionPromptBuilder
             '- If market odds and API prediction disagree, mention the disagreement.',
             '- Do not claim certainty.',
             '- Explain uncertainty where relevant.',
+            '- Include expected_score as "home-away" when the context contains a market most likely score or enough goal data.',
+            '- Use expected_score null only when there is not enough score-related data.',
             '- Return a JSON object only.',
         ]);
     }
@@ -70,7 +72,7 @@ class AiPredictionPromptBuilder
             '  "draw_chance": 0,',
             '  "away_chance": 0,',
             '  "confidence": 0,',
-            '  "expected_score": null,',
+            '  "expected_score": "home-away|null",',
             '  "explanation": "",',
             '  "key_factors": []',
             '}',
