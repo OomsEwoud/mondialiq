@@ -1,13 +1,14 @@
 import { Link } from '@inertiajs/react';
 import { Sparkles } from 'lucide-react';
-import PredictionsController from '@/actions/App/Http/Controllers/Pages/PredictionsController';
 import { Button } from '@/components/ui/forms/button';
+import { ai } from '@/routes/predictions';
 
 interface Props {
     available: boolean;
+    matchId: number;
 }
 
-export default function AiPredictionButton({ available }: Props) {
+export default function AiPredictionButton({ available, matchId }: Props) {
     if (!available) {
         return (
             <span
@@ -32,11 +33,7 @@ export default function AiPredictionButton({ available }: Props) {
             variant="outline"
             className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900"
         >
-            <Link
-                href={PredictionsController.url({
-                    query: { mode: 'ai' },
-                })}
-            >
+            <Link href={ai.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
                 View AI Prediction
             </Link>

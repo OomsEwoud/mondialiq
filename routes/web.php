@@ -37,7 +37,8 @@ Route::get('/leagues/join', JoinLeaguePageController::class)->middleware('auth')
 Route::get('/leagues/{scoreboard}', ShowLeagueController::class)->middleware('auth')->name('leagues.show');
 Route::get('/leagues/{scoreboard}/settings', ShowLeagueSettingsController::class)->middleware('auth')->name('leagues.settings');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
-Route::get('/predictions/{fixture}', PredictionDetailsController::class)->middleware('auth')->name('predictions.show');
+Route::get('/predictions/{fixture}/ai', PredictionDetailsController::class)->middleware('auth')->defaults('predictionMode', 'ai')->name('predictions.ai.show');
+Route::get('/predictions/{fixture}/my-prediction', PredictionDetailsController::class)->middleware('auth')->defaults('predictionMode', 'mine')->name('predictions.mine.show');
 Route::get('/auth/{provider}/redirect', RedirectController::class)->middleware('throttle:social-auth')->name('auth.redirect');
 Route::get('/auth/{provider}/callback', CallbackController::class)->middleware('throttle:social-auth')->name('auth.callback');
 

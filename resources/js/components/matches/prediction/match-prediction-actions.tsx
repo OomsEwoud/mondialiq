@@ -29,6 +29,7 @@ export default function MatchPredictionActions({ match }: Props) {
                     <MatchDetailsActionButton matchId={match.id} />
                     <AiPredictionButton
                         available={Boolean(match.hasAiPrediction)}
+                        matchId={match.id}
                     />
                     <UserPredictionButton
                         match={match}

@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { ArrowRight, PencilLine, Sparkles } from 'lucide-react';
+import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import { Button } from '@/components/ui/forms/button';
-import { show } from '@/routes/predictions';
+import { myPrediction } from '@/routes/predictions';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -31,7 +31,7 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                     asChild
                     className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
                 >
-                    <Link href={show.url(match.id)}>
+                    <Link href={myPrediction.url(match.id)}>
                         <Sparkles className="h-4 w-4" />
                         {viewLabel}
                         <ArrowRight className="h-4 w-4" />

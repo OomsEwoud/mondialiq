@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/forms/button';
-import { show } from '@/routes/predictions';
+import { ai } from '@/routes/predictions';
 
 interface Props {
     matchId: number;
@@ -14,7 +14,7 @@ export default function PredictionStatusAction({ matchId, label }: Props) {
             asChild
             className="w-fit bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
         >
-            <Link href={show.url(matchId, { query: { mode: 'ai' } })}>
+            <Link href={ai.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
                 {label}
                 <ArrowRight className="h-4 w-4" />

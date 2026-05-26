@@ -35,11 +35,19 @@ class PredictionDetailsController extends Controller
                 ->with('winner'),
         ]);
 
-        abort_unless($fixture->userPredictions->isNotEmpty() || $fixture->aiPrediction !== null, 404);
+        $mode = $this->predictionMode($request);
+
+        if ($mode === 'ai') {
+            abort_unless($fixture->aiPrediction !== null, 404);
+        }
+
+        if ($mode === 'mine') {
+            abort_unless($fixture->userPredictions->isNotEmpty(), 404);
+        }
 
         return Inertia::render('prediction-show', [
             'match' => FixtureResource::make($fixture)->resolve(),
-            'mode' => $this->predictionMode($request, $fixture),
+            'mode' => $mode,
             'aiContext' => [
                 'marketOdds' => $this->oddsSummaryService->summarize($fixture),
                 'apiPrediction' => $fixture->apiPrediction !== null
@@ -49,12 +57,8 @@ class PredictionDetailsController extends Controller
         ]);
     }
 
-    private function predictionMode(Request $request, Fixture $fixture): string
+    private function predictionMode(Request $request): string
     {
-        if ($request->string('mode')->toString() === 'ai') {
-            return 'ai';
-        }
-
-        return $fixture->userPredictions->isNotEmpty() ? 'mine' : 'ai';
+        return $request->route('predictionMode') === 'ai' ? 'ai' : 'mine';
     }
 }

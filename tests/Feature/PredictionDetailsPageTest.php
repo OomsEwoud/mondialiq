@@ -59,7 +59,7 @@ test('a user can view a dedicated prediction page', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get(route('predictions.show', $fixture));
+        ->get(route('predictions.mine.show', $fixture));
 
     $response
         ->assertOk()
@@ -94,7 +94,7 @@ test('a user can view a dedicated ai prediction page', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get(route('predictions.show', ['fixture' => $fixture, 'mode' => 'ai']));
+        ->get(route('predictions.ai.show', $fixture));
 
     $response
         ->assertOk()
@@ -111,7 +111,7 @@ test('a user can view a dedicated ai prediction page', function () {
             ->where('aiContext.apiPrediction', null));
 });
 
-test('a dedicated prediction page defaults to ai mode when only an ai prediction exists', function () {
+test('a dedicated ai prediction page shows ai mode when only an ai prediction exists', function () {
     $user = User::factory()->create();
     [$fixture, $homeTeam] = createFixtureForPredictionDetails();
 
@@ -126,7 +126,7 @@ test('a dedicated prediction page defaults to ai mode when only an ai prediction
 
     $this
         ->actingAs($user)
-        ->get(route('predictions.show', $fixture))
+        ->get(route('predictions.ai.show', $fixture))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('prediction-show')
@@ -136,7 +136,7 @@ test('a dedicated prediction page defaults to ai mode when only an ai prediction
 test('the dedicated prediction page requires authentication', function () {
     [$fixture] = createFixtureForPredictionDetails();
 
-    $this->get(route('predictions.show', $fixture))
+    $this->get(route('predictions.mine.show', $fixture))
         ->assertRedirect(route('login'));
 });
 
@@ -145,6 +145,6 @@ test('a user cannot view a dedicated prediction page for a fixture without any p
     [$fixture] = createFixtureForPredictionDetails();
 
     $this->actingAs($user)
-        ->get(route('predictions.show', $fixture))
+        ->get(route('predictions.mine.show', $fixture))
         ->assertNotFound();
 });
