@@ -14,7 +14,7 @@ import UserPredictionModal from '@/components/matches/prediction/user-prediction
 import UserPredictionTeam from '@/components/matches/prediction/user-prediction-team';
 import { Button } from '@/components/ui/forms/button';
 import { cn } from '@/lib/utils';
-import { ai } from '@/routes/predictions';
+import { show as showAiPrediction } from '@/routes/predictions/ai';
 import type { Match } from '@/types/match';
 import {
     hasMatchStarted,
@@ -64,7 +64,7 @@ export default function UserPredictionDetail({ match }: Props) {
                                 asChild
                                 className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
                             >
-                                <Link href={ai.url(match.id)}>
+                                <Link href={showAiPrediction.url(match.id)}>
                                     View AI report
                                     <ArrowRight className="size-4" />
                                 </Link>

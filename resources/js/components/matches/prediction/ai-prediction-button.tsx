@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/forms/button';
-import { ai } from '@/routes/predictions';
+import { show as showAiPrediction } from '@/routes/predictions/ai';
 
 interface Props {
     available: boolean;
@@ -33,7 +33,7 @@ export default function AiPredictionButton({ available, matchId }: Props) {
             variant="outline"
             className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900"
         >
-            <Link href={ai.url(matchId)}>
+            <Link href={showAiPrediction.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
                 View AI Prediction
             </Link>
