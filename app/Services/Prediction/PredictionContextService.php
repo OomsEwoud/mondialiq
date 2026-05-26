@@ -96,6 +96,12 @@ class PredictionContextService
             $lines[] = '- Venue: '.$this->fixtureVenueLine($fixture);
         }
 
+        $venueContextLine = $this->venueContextLine($fixture);
+
+        if ($venueContextLine !== null) {
+            $lines[] = '- Venue context: '.$venueContextLine;
+        }
+
         return implode(PHP_EOL, $lines);
     }
 
@@ -159,5 +165,21 @@ class PredictionContextService
         }
 
         return "{$fixture->venue->name}, {$fixture->venue->city}";
+    }
+
+    private function venueContextLine(Fixture $fixture): ?string
+    {
+        $round = mb_strtolower($fixture->round_name ?? '');
+        $league = mb_strtolower($fixture->league?->name ?? '');
+
+        if (str_contains($round, 'final')) {
+            return 'Likely neutral venue; do not treat the listed home team as having home advantage.';
+        }
+
+        if (str_contains($league, 'world cup')) {
+            return 'Home advantage should only apply to host nations, not automatically to the listed home team.';
+        }
+
+        return null;
     }
 }

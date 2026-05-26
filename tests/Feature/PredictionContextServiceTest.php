@@ -112,6 +112,16 @@ test('prompt block can omit guidance for ai input', function () {
         ->and($promptBlock)->not->toContain('If sources disagree, explain the disagreement.');
 });
 
+test('prompt block marks finals as likely neutral venue context', function () {
+    $fixture = createPredictionContextFixture(['round_name' => 'Final']);
+
+    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+
+    $promptBlock = app(PredictionContextService::class)->promptBlock($fixture, includeGuidance: false);
+
+    expect($promptBlock)->toContain('Venue context: Likely neutral venue; do not treat the listed home team as having home advantage.');
+});
+
 function mockPredictionContextSummaryServices(object $testCase, bool $expectApiPrediction = true): void
 {
     $testCase->mock(FixtureOddsSummaryService::class, function (MockInterface $mock) {

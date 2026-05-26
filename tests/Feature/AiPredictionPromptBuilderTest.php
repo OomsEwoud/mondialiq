@@ -93,6 +93,8 @@ test('it includes prediction guidance', function () {
     expect($prompt)->toContain('Treat market odds as the strongest external signal.')
         ->and($prompt)->toContain('Treat API predictions as a secondary signal.')
         ->and($prompt)->toContain('Use team stats, standings, head-to-head and missing players as supporting context.')
+        ->and($prompt)->toContain('Do not assume the listed home team has home advantage.')
+        ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage.')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
         ->and($prompt)->toContain('Do not claim certainty.')
         ->and($prompt)->toContain('Explain uncertainty where relevant.')
