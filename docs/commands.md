@@ -44,6 +44,12 @@ php artisan app:generate-ai-prediction FIXTURE_ID
 
 ## Basis Data Sync
 
+Synchroniseer World Cup data en prediction context voor server/bootstrap:
+
+```bash
+php artisan app:sync-world-cup-data
+```
+
 Synchroniseer alles in de bestaande volgorde:
 
 ```bash
@@ -124,6 +130,12 @@ Haal odds op voor relevante fixtures:
 
 ```bash
 php artisan app:add-odds
+```
+
+Haal odds op voor een groter toekomstvenster:
+
+```bash
+php artisan app:add-odds --days=90
 ```
 
 Haal odds op inclusief recente fixtures voor development checks:

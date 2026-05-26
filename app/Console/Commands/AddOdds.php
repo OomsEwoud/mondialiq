@@ -10,7 +10,9 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Throwable;
 
-#[Signature('app:add-odds {--include-recent : Include fixtures from the last 7 days for development checks}')]
+#[Signature('app:add-odds
+    {--include-recent : Include fixtures from the last 7 days for development checks}
+    {--days=14 : Number of future days to include}')]
 #[Description('Haal odds op voor relevante aankomende fixtures en sla ze op')]
 class AddOdds extends Command
 {
@@ -28,7 +30,7 @@ class AddOdds extends Command
         $windowStart = $this->option('include-recent')
             ? now('UTC')->subDays(7)
             : now('UTC');
-        $windowEnd = now('UTC')->addDays(14);
+        $windowEnd = now('UTC')->addDays(max(1, (int) $this->option('days')));
 
         $fixtures = Fixture::query()
             ->whereNotNull('external_id')

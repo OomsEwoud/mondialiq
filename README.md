@@ -163,6 +163,12 @@ Sync all football data:
 php artisan app:sync-all-data
 ```
 
+Sync World Cup data and prediction context for a server/bootstrap run:
+
+```bash
+php artisan app:sync-world-cup-data
+```
+
 Available import commands include:
 
 ```bash
