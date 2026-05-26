@@ -11,4 +11,5 @@ export interface PredictionPageProps {
 
 export interface PredictionShowPageProps {
     match: Match;
+    mode: PredictionTab;
 }

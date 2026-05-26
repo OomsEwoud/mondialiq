@@ -1,18 +1,26 @@
-import { Gauge, PencilLine, Trophy } from 'lucide-react';
+import { Gauge, PencilLine, Sparkles, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import UserPredictionTeam from '@/components/matches/prediction/user-prediction-team';
+import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import { Button } from '@/components/ui/forms/button';
 import type { Match } from '@/types/match';
 import { predictionScoreLabel } from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
+    mode: PredictionTab;
 }
 
-export default function PredictionDetailHero({ match }: Props) {
+export default function PredictionDetailHero({ match, mode }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
-    const score = predictionScoreLabel(match);
+    const isAiPrediction = mode === 'ai';
+    const activePrediction = isAiPrediction
+        ? match.aiPrediction
+        : (match.userPrediction ?? match.aiPrediction);
+    const score = !isAiPrediction && match.userPrediction
+        ? predictionScoreLabel(match)
+        : aiPredictionScoreLabel(match);
 
     return (
         <>
@@ -21,7 +29,7 @@ export default function PredictionDetailHero({ match }: Props) {
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p className="text-xs font-black tracking-[0.24em] text-cyan-600 uppercase">
-                                My prediction
+                                {isAiPrediction ? 'AI prediction' : 'My prediction'}
                             </p>
                             <h1 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
                                 {match.homeTeam} vs {match.awayTeam}
@@ -78,12 +86,12 @@ export default function PredictionDetailHero({ match }: Props) {
                                             Predicted winner
                                         </p>
                                         <p className="mt-1 text-base font-bold text-blue-950">
-                                            {match.userPrediction?.label}
+                                            {activePrediction?.label}
                                         </p>
                                     </div>
                                 </div>
 
-                                {match.userPrediction?.confidence && (
+                                {activePrediction?.confidence && (
                                     <div className="flex items-start gap-3 text-left">
                                         <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">
                                             <Gauge className="size-4" />
@@ -93,7 +101,23 @@ export default function PredictionDetailHero({ match }: Props) {
                                                 Chance
                                             </p>
                                             <p className="mt-1 text-base font-bold text-blue-950 capitalize">
-                                                {match.userPrediction.confidence} confidence
+                                                {activePrediction.confidence} confidence
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isAiPrediction && match.aiPrediction?.advice && (
+                                    <div className="flex items-start gap-3 text-left">
+                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
+                                            <Sparkles className="size-4" />
+                                        </span>
+                                        <div>
+                                            <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                                AI insight
+                                            </p>
+                                            <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
+                                                {match.aiPrediction.advice}
                                             </p>
                                         </div>
                                     </div>
@@ -102,24 +126,41 @@ export default function PredictionDetailHero({ match }: Props) {
                         </section>
                     </div>
 
-                    <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
-                        <Button
-                            type="button"
-                            className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
-                            onClick={() => setPredictionOpen(true)}
-                        >
-                            <PencilLine className="h-4 w-4" />
-                            Edit prediction
-                        </Button>
-                    </div>
+                    {!isAiPrediction && match.userPrediction && (
+                        <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
+                            <Button
+                                type="button"
+                                className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
+                                onClick={() => setPredictionOpen(true)}
+                            >
+                                <PencilLine className="h-4 w-4" />
+                                Edit prediction
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </section>
 
-            <UserPredictionModal
-                match={match}
-                open={predictionOpen}
-                onOpenChange={setPredictionOpen}
-            />
+            {!isAiPrediction && match.userPrediction && (
+                <UserPredictionModal
+                    match={match}
+                    open={predictionOpen}
+                    onOpenChange={setPredictionOpen}
+                />
+            )}
         </>
     );
+}
+
+function aiPredictionScoreLabel(match: Match): string | null {
+    if (
+        match.aiPrediction?.homeScore === null ||
+        match.aiPrediction?.homeScore === undefined ||
+        match.aiPrediction.awayScore === null ||
+        match.aiPrediction.awayScore === undefined
+    ) {
+        return null;
+    }
+
+    return `${match.aiPrediction.homeScore} - ${match.aiPrediction.awayScore}`;
 }

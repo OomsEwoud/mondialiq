@@ -50,10 +50,19 @@ class FixtureResource extends JsonResource
                 'awayWin' => $prediction->away_chance,
             ] : null,
             'hasAiPrediction' => (bool) $aiPrediction,
+            'aiPrediction' => $aiPrediction ? [
+                'winnerId' => $aiPrediction->winner_id,
+                'outcome' => $this->predictionOutcome($aiPrediction),
+                'label' => $this->predictionLabel($aiPrediction),
+                'homeScore' => $aiPrediction->home_goals,
+                'awayScore' => $aiPrediction->away_goals,
+                'confidence' => $aiPrediction->confidence,
+                'advice' => $aiPrediction->advice,
+            ] : null,
             'userPrediction'  => $userPrediction ? [
                 'winnerId' => $userPrediction->winner_id,
-                'outcome'  => $this->userPredictionOutcome($userPrediction),
-                'label'    => $this->userPredictionLabel($userPrediction),
+                'outcome'  => $this->predictionOutcome($userPrediction),
+                'label'    => $this->predictionLabel($userPrediction),
                 'homeScore' => $userPrediction->home_goals,
                 'awayScore' => $userPrediction->away_goals,
                 'confidence' => $userPrediction->confidence,
@@ -92,7 +101,7 @@ class FixtureResource extends JsonResource
         return null;
     }
 
-    private function userPredictionLabel(Prediction $prediction): string
+    private function predictionLabel(Prediction $prediction): string
     {
         if (! $prediction->winner_id) {
             return 'Draw';
@@ -109,7 +118,7 @@ class FixtureResource extends JsonResource
         };
     }
 
-    private function userPredictionOutcome(Prediction $prediction): string
+    private function predictionOutcome(Prediction $prediction): string
     {
         return match ($prediction->winner_id) {
             $this->home_team_id => 'home',

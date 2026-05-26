@@ -20,15 +20,26 @@ class PredictionDetailsController extends Controller
         $fixture->load([
             'homeTeam',
             'awayTeam',
+            'aiPrediction.winner',
             'userPredictions' => fn ($query) => $query
                 ->whereBelongsTo($user)
                 ->with('winner'),
         ]);
 
-        abort_unless($fixture->userPredictions->isNotEmpty(), 404);
+        abort_unless($fixture->userPredictions->isNotEmpty() || $fixture->aiPrediction !== null, 404);
 
         return Inertia::render('prediction-show', [
             'match' => FixtureResource::make($fixture)->resolve(),
+            'mode' => $this->predictionMode($request, $fixture),
         ]);
+    }
+
+    private function predictionMode(Request $request, Fixture $fixture): string
+    {
+        if ($request->string('mode')->toString() === 'ai') {
+            return 'ai';
+        }
+
+        return $fixture->userPredictions->isNotEmpty() ? 'mine' : 'ai';
     }
 }

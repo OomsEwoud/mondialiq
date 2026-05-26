@@ -38,6 +38,15 @@ export interface Match {
         awayWin: number;
     } | null;
     hasAiPrediction?: boolean;
+    aiPrediction?: {
+        winnerId: number | null;
+        outcome: 'home' | 'draw' | 'away';
+        label: string;
+        homeScore: number | null;
+        awayScore: number | null;
+        confidence: string | null;
+        advice: string | null;
+    } | null;
     userPrediction?: {
         winnerId: number | null;
         outcome: 'home' | 'draw' | 'away';

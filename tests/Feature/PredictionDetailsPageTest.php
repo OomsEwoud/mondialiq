@@ -65,6 +65,7 @@ test('a user can view a dedicated prediction page', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('prediction-show')
+            ->where('mode', 'mine')
             ->where('match.id', $fixture->id)
             ->where('match.homeTeam', 'Mexico')
             ->where('match.awayTeam', 'South Africa')
@@ -74,6 +75,62 @@ test('a user can view a dedicated prediction page', function () {
             ->where('match.userPrediction.confidence', 'low'));
 });
 
+test('a user can view a dedicated ai prediction page', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam] = createFixtureForPredictionDetails();
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::Ai->value,
+        'home_chance' => 49,
+        'draw_chance' => 28,
+        'away_chance' => 23,
+        'home_goals' => 1,
+        'away_goals' => 0,
+        'confidence' => 63,
+        'advice' => 'AI outcome: home_or_draw. The market leans home.',
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->get(route('predictions.show', ['fixture' => $fixture, 'mode' => 'ai']));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('prediction-show')
+            ->where('mode', 'ai')
+            ->where('match.id', $fixture->id)
+            ->where('match.aiPrediction.label', 'Mexico')
+            ->where('match.aiPrediction.homeScore', 1)
+            ->where('match.aiPrediction.awayScore', 0)
+            ->where('match.aiPrediction.confidence', '63')
+            ->where('match.aiPrediction.advice', 'AI outcome: home_or_draw. The market leans home.'));
+});
+
+test('a dedicated prediction page defaults to ai mode when only an ai prediction exists', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam] = createFixtureForPredictionDetails();
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::Ai->value,
+        'home_chance' => 49,
+        'draw_chance' => 28,
+        'away_chance' => 23,
+    ]);
+
+    $this
+        ->actingAs($user)
+        ->get(route('predictions.show', $fixture))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('prediction-show')
+            ->where('mode', 'ai'));
+});
+
 test('the dedicated prediction page requires authentication', function () {
     [$fixture] = createFixtureForPredictionDetails();
 
@@ -81,7 +138,7 @@ test('the dedicated prediction page requires authentication', function () {
         ->assertRedirect(route('login'));
 });
 
-test('a user cannot view a dedicated prediction page for a fixture without their prediction', function () {
+test('a user cannot view a dedicated prediction page for a fixture without any prediction', function () {
     $user = User::factory()->create();
     [$fixture] = createFixtureForPredictionDetails();
 
