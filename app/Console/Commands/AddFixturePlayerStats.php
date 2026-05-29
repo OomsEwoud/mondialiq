@@ -6,10 +6,10 @@ use App\Console\Commands\Concerns\InteractsWithRelevantFixtures;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixturePlayerStatsService;
-use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Throwable;
 
 #[Signature('app:add-fixture-player-stats')]
 #[Description('Haal spelerstatistieken op voor relevante fixtures')]
@@ -40,12 +40,8 @@ class AddFixturePlayerStats extends Command
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) {
             try {
-                $playerStats = $this->api->getFixturePlayersStats($fixture->external_id);
-                $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
-
-                // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
-                sleep(1);
-            } catch (Exception $e) {
+                $this->syncFixturePlayerStats($fixture);
+            } catch (Throwable $e) {
                 $this->newLine();
                 $this->error("Fout bij ophalen spelerstatistieken voor fixture {$fixture->id}: {$e->getMessage()}");
             }
@@ -55,5 +51,15 @@ class AddFixturePlayerStats extends Command
         $this->info('Spelerstatistieken voor relevante fixtures zijn geupdate');
 
         return self::SUCCESS;
+    }
+
+    private function syncFixturePlayerStats(Fixture $fixture): void
+    {
+        $playerStats = $this->api->getFixturePlayersStats((int) $fixture->external_id);
+
+        $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
+
+        // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
+        sleep(1);
     }
 }
