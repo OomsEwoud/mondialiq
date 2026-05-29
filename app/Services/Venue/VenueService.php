@@ -9,8 +9,9 @@ use Illuminate\Support\Collection;
 
 class VenueService
 {
-    public function __construct(protected FootballApiService $footballApiService)
-    {
+    public function __construct(
+        private readonly FootballApiService $footballApiService,
+    ) {
     }
 
     public function storeVenues(array $venuesData, ?Collection $countries = null): void

@@ -11,8 +11,9 @@ use Inertia\Response;
 
 class GroupsController extends Controller
 {
-    public function __construct(protected GroupStandingService $service)
-    {
+    public function __construct(
+        private readonly GroupStandingService $groupStandingService,
+    ) {
     }
 
     public function __invoke(): Response
@@ -31,7 +32,7 @@ class GroupsController extends Controller
             ->get();
 
         return Inertia::render('groups', [
-            'groups' => $this->service->groupStandings($standings),
+            'groups' => $this->groupStandingService->groupStandings($standings),
         ]);
     }
 }
