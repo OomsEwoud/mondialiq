@@ -28,9 +28,7 @@ class MatchesController extends Controller
             $this->worldCupContext->leagueId(),
             $this->worldCupContext->season(),
         );
-        $baseQuery = $query->build(
-            array_fill_keys(['round', 'date', 'team', 'status'], ''),
-        );
+        $baseQuery = $query->build();
 
         $filterOptions = $this->helperService->filterOptions($baseQuery);
 
@@ -68,5 +66,4 @@ class MatchesController extends Controller
             'status' => $request->string('status')->toString() ?: 'all',
         ];
     }
-
 }

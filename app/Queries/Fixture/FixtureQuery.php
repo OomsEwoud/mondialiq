@@ -13,7 +13,7 @@ class FixtureQuery
     ) {
     }
 
-    public function build(array $filters): Builder
+    public function build(array $filters = []): Builder
     {
         return Fixture::query()
             ->where('league_id', $this->leagueId)

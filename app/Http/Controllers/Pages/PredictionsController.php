@@ -27,11 +27,7 @@ class PredictionsController extends Controller
             $this->worldCupContext->leagueId(),
             $this->worldCupContext->season(),
         );
-        $fixtureQuery = $query->build([
-            'round' => '',
-            'date' => '',
-            'team' => '',
-        ]);
+        $fixtureQuery = $query->build();
 
         $this->predictionFixtureQuery->applyMode(
             $fixtureQuery,
@@ -53,5 +49,4 @@ class PredictionsController extends Controller
             ? 'mine'
             : 'ai';
     }
-
 }
