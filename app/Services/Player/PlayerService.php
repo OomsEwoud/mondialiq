@@ -59,22 +59,18 @@ class PlayerService
 
     private function updateOrCreatePlayer(array $data): Player
     {
-        $attributes = [];
+        return Player::query()->updateOrCreate(
+            ['external_id' => $data['id']],
+            $this->playerAttributes($data),
+        );
+    }
 
-        $fieldMap = [
-            'name'      => 'display_name',
-            'firstname' => 'first_name',
-            'lastname'  => 'last_name',
-            'position'  => 'position',
-            'number'    => 'number',
-            'photo'     => 'photo_url',
-        ];
-
-        foreach ($fieldMap as $apiKey => $dbKey) {
-            if (isset($data[$apiKey])) {
-                $attributes[$dbKey] = $data[$apiKey];
-            }
-        }
+    /**
+     * @return array<string, int|string|null>
+     */
+    private function playerAttributes(array $data): array
+    {
+        $attributes = $this->mappedPlayerFields($data);
 
         if (isset($data['birth']['date'])) {
             $attributes['birth_date'] = $data['birth']['date'];
@@ -86,10 +82,38 @@ class PlayerService
             $attributes['country_id'] = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
         }
 
-        return Player::query()->updateOrCreate(
-            ['external_id' => $data['id']],
-            $attributes,
-        );
+        return $attributes;
+    }
+
+    /**
+     * @return array<string, int|string|null>
+     */
+    private function mappedPlayerFields(array $data): array
+    {
+        $attributes = [];
+
+        foreach ($this->playerFieldMap() as $apiKey => $dbKey) {
+            if (isset($data[$apiKey])) {
+                $attributes[$dbKey] = $data[$apiKey];
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function playerFieldMap(): array
+    {
+        return [
+            'name' => 'display_name',
+            'firstname' => 'first_name',
+            'lastname' => 'last_name',
+            'position' => 'position',
+            'number' => 'number',
+            'photo' => 'photo_url',
+        ];
     }
 
     public function syncTeamPlayers(int $leagueId, int $season): void

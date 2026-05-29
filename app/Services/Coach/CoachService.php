@@ -48,23 +48,37 @@ class CoachService
 
     public function storeCoach(Team $team, array $coachData): void
     {
-        if (isset($coachData['nationality'])) {
-            $this->loadCountryCache();
-            $apiName = $this->countryService->normalizeName($coachData['nationality']);
-            $countryId = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
-        }
-
         Coach::query()->updateOrCreate(
             ['external_id' => $coachData['id']],
-            [
-                'team_id' => $team->id,
-                'country_id' => $countryId ?? null,
-                'first_name' => $coachData['firstname'] ?? null,
-                'last_name' => $coachData['lastname'] ?? null,
-                'display_name' => $coachData['name'],
-                'photo_url' => $coachData['photo'],
-                'birth_date' => $coachData['birth']['date'],
-            ],
+            $this->coachAttributes($team, $coachData),
         );
+    }
+
+    /**
+     * @return array{team_id: int, country_id: int|null, first_name: string|null, last_name: string|null, display_name: string, photo_url: string|null, birth_date: string|null}
+     */
+    private function coachAttributes(Team $team, array $coachData): array
+    {
+        return [
+            'team_id' => $team->id,
+            'country_id' => $this->countryId($coachData['nationality'] ?? null),
+            'first_name' => $coachData['firstname'] ?? null,
+            'last_name' => $coachData['lastname'] ?? null,
+            'display_name' => $coachData['name'],
+            'photo_url' => $coachData['photo'],
+            'birth_date' => $coachData['birth']['date'],
+        ];
+    }
+
+    private function countryId(?string $nationality): ?int
+    {
+        if ($nationality === null) {
+            return null;
+        }
+
+        $this->loadCountryCache();
+        $apiName = $this->countryService->normalizeName($nationality);
+
+        return $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
     }
 }
