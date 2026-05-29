@@ -24,29 +24,30 @@ class RemoveLeagueMemberRequest extends FormRequest
 
     public function after(): array
     {
-        return [
-            function (Validator $validator) {
-                /** @var Scoreboard $scoreboard */
-                $scoreboard = $this->route('scoreboard');
-                /** @var User $member */
-                $member = $this->route('member');
+        return [$this->validateMemberRemoval(...)];
+    }
 
-                if (! $scoreboard->users()->whereKey($member->id)->exists()) {
-                    $validator->errors()->add('member', 'This user is not part of the league.');
+    private function validateMemberRemoval(Validator $validator): void
+    {
+        /** @var Scoreboard $scoreboard */
+        $scoreboard = $this->route('scoreboard');
+        /** @var User $member */
+        $member = $this->route('member');
 
-                    return;
-                }
+        if (! $scoreboard->users()->whereKey($member->id)->exists()) {
+            $validator->errors()->add('member', 'This user is not part of the league.');
 
-                if ($member->id === $this->user()->id) {
-                    $validator->errors()->add('member', 'You cannot remove yourself from your league.');
+            return;
+        }
 
-                    return;
-                }
+        if ($member->id === $this->user()->id) {
+            $validator->errors()->add('member', 'You cannot remove yourself from your league.');
 
-                if ($member->id === $scoreboard->owner_id) {
-                    $validator->errors()->add('member', 'The league owner cannot be removed.');
-                }
-            },
-        ];
+            return;
+        }
+
+        if ($member->id === $scoreboard->owner_id) {
+            $validator->errors()->add('member', 'The league owner cannot be removed.');
+        }
     }
 }

@@ -24,23 +24,24 @@ class TransferLeagueOwnershipRequest extends FormRequest
 
     public function after(): array
     {
-        return [
-            function (Validator $validator) {
-                /** @var Scoreboard $scoreboard */
-                $scoreboard = $this->route('scoreboard');
-                /** @var User $member */
-                $member = $this->route('member');
+        return [$this->validateOwnershipTransfer(...)];
+    }
 
-                if (! $scoreboard->users()->whereKey($member->id)->exists()) {
-                    $validator->errors()->add('member', 'This user is not part of the league.');
+    private function validateOwnershipTransfer(Validator $validator): void
+    {
+        /** @var Scoreboard $scoreboard */
+        $scoreboard = $this->route('scoreboard');
+        /** @var User $member */
+        $member = $this->route('member');
 
-                    return;
-                }
+        if (! $scoreboard->users()->whereKey($member->id)->exists()) {
+            $validator->errors()->add('member', 'This user is not part of the league.');
 
-                if ($member->id === $this->user()->id) {
-                    $validator->errors()->add('member', 'You already own this league.');
-                }
-            },
-        ];
+            return;
+        }
+
+        if ($member->id === $this->user()->id) {
+            $validator->errors()->add('member', 'You already own this league.');
+        }
     }
 }

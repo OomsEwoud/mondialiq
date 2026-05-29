@@ -33,32 +33,33 @@ class JoinLeagueRequest extends FormRequest
 
     public function after(): array
     {
-        return [
-            function (Validator $validator) {
-                if ($validator->errors()->has('code')) {
-                    return;
-                }
+        return [$this->validateLeagueCode(...)];
+    }
 
-                $league = Scoreboard::query()
-                    ->where('code', $this->string('code')->toString())
-                    ->first();
+    private function validateLeagueCode(Validator $validator): void
+    {
+        if ($validator->errors()->has('code')) {
+            return;
+        }
 
-                if (! $league) {
-                    $validator->errors()->add('code', 'This invite code is invalid.');
+        $league = Scoreboard::query()
+            ->where('code', $this->string('code')->toString())
+            ->first();
 
-                    return;
-                }
+        if (! $league) {
+            $validator->errors()->add('code', 'This invite code is invalid.');
 
-                if ($this->user()->scoreboards()->count() >= LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
-                    $validator->errors()->add('code', 'You can join up to 5 leagues.');
+            return;
+        }
 
-                    return;
-                }
+        if ($this->user()->scoreboards()->count() >= LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
+            $validator->errors()->add('code', 'You can join up to 5 leagues.');
 
-                if ($league->users()->whereKey($this->user()->id)->exists()) {
-                    $validator->errors()->add('code', 'You already joined this league.');
-                }
-            },
-        ];
+            return;
+        }
+
+        if ($league->users()->whereKey($this->user()->id)->exists()) {
+            $validator->errors()->add('code', 'You already joined this league.');
+        }
     }
 }
