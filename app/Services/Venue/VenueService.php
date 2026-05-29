@@ -22,13 +22,7 @@ class VenueService
         foreach ($venuesData as $venueData) {
             Venue::query()->updateOrCreate(
                 ['external_id' => $venueData['id']],
-                [
-                    'name' => $venueData['name'],
-                    'city' => $venueData['city'],
-                    'capacity' => $venueData['capacity'],
-                    'photo_url' => $venueData['image'],
-                    'country_id' => $countries[$venueData['country']] ?? null,
-                ],
+                $this->venueAttributes($venueData, $countries),
             );
         }
     }
@@ -45,5 +39,19 @@ class VenueService
                     $this->storeVenues($venueData, $countries);
                 }
             });
+    }
+
+    /**
+     * @return array{name: string, city: string|null, capacity: int|null, photo_url: string|null, country_id: int|null}
+     */
+    private function venueAttributes(array $venueData, Collection $countries): array
+    {
+        return [
+            'name' => $venueData['name'],
+            'city' => $venueData['city'],
+            'capacity' => $venueData['capacity'],
+            'photo_url' => $venueData['image'],
+            'country_id' => $countries[$venueData['country']] ?? null,
+        ];
     }
 }

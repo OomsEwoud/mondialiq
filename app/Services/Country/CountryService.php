@@ -12,13 +12,8 @@ class CountryService
     {
         foreach ($countriesData as $countryData) {
             Country::query()->updateOrCreate(
-                [
-                    'name' => $countryData['name'],
-                ],
-                [
-                    'fifa_code' => $countryData['code'] ?? 'WORLD',
-                    'flag_url' => $countryData['flag'],
-                ],
+                ['name' => $countryData['name']],
+                $this->countryAttributes($countryData),
             );
         }
     }
@@ -54,5 +49,16 @@ class CountryService
         ];
 
         return $map[$name] ?? $name;
+    }
+
+    /**
+     * @return array{fifa_code: string, flag_url: string|null}
+     */
+    private function countryAttributes(array $countryData): array
+    {
+        return [
+            'fifa_code' => $countryData['code'] ?? 'WORLD',
+            'flag_url' => $countryData['flag'],
+        ];
     }
 }
