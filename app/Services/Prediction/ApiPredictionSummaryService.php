@@ -67,16 +67,16 @@ class ApiPredictionSummaryService
 
         $advice = trim($advice);
 
-        if (str_starts_with($advice, 'Combo Winner :')) {
-            return $this->parseComboAdvice(substr($advice, strlen('Combo Winner :')), true);
+        if (($comboWinnerAdvice = $this->afterPrefix($advice, 'Combo Winner :')) !== null) {
+            return $this->parseComboAdvice($comboWinnerAdvice, true);
         }
 
-        if (str_starts_with($advice, 'Combo Double chance :')) {
-            return $this->parseComboAdvice(substr($advice, strlen('Combo Double chance :')), false);
+        if (($comboDoubleChanceAdvice = $this->afterPrefix($advice, 'Combo Double chance :')) !== null) {
+            return $this->parseComboAdvice($comboDoubleChanceAdvice, false);
         }
 
-        if (str_starts_with($advice, 'Winner :')) {
-            $winner = trim(substr($advice, strlen('Winner :')));
+        if (($winner = $this->afterPrefix($advice, 'Winner :')) !== null) {
+            $winner = trim($winner);
 
             return [
                 'predicted_outcome' => $winner === '' ? null : "{$winner} win",
@@ -84,8 +84,8 @@ class ApiPredictionSummaryService
             ];
         }
 
-        if (str_starts_with($advice, 'Double chance :')) {
-            $doubleChance = trim(substr($advice, strlen('Double chance :')));
+        if (($doubleChance = $this->afterPrefix($advice, 'Double chance :')) !== null) {
+            $doubleChance = trim($doubleChance);
 
             return [
                 'predicted_outcome' => $doubleChance === '' ? null : $doubleChance,
@@ -97,6 +97,15 @@ class ApiPredictionSummaryService
             'predicted_outcome' => null,
             'goal_trend' => null,
         ];
+    }
+
+    private function afterPrefix(string $value, string $prefix): ?string
+    {
+        if (! str_starts_with($value, $prefix)) {
+            return null;
+        }
+
+        return substr($value, strlen($prefix));
     }
 
     private function parseComboAdvice(string $advice, bool $isWinner): array
