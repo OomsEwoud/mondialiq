@@ -38,21 +38,18 @@ class PlayerStatsService
 
     private function updateOrCreatePlayer(array $stat): void
     {
-        if (! isset($stat['player']['id']) || ! isset($stat['statistics'])) {
+        $playerId = $this->localPlayerId($stat);
+        $statistics = data_get($stat, 'statistics', []);
+
+        if ($playerId === null || ! is_iterable($statistics)) {
             return;
         }
 
-        $playerId = $this->getPlayerIds()[$stat['player']['id']] ?? null;
+        foreach ($statistics as $playerData) {
+            $leagueId = $this->localLeagueId($playerData);
+            $teamId = $this->localTeamId($playerData);
 
-        if (! $playerId) {
-            return;
-        }
-
-        foreach ($stat['statistics'] as $playerData) {
-            $leagueId = $this->getLeagues()[$playerData['league']['id'] ?? null] ?? null;
-            $teamId = $this->getTeams()[$playerData['team']['id'] ?? null] ?? null;
-
-            if (! $leagueId || ! $teamId) {
+            if ($leagueId === null || $teamId === null) {
                 continue;
             }
 
@@ -61,6 +58,45 @@ class PlayerStatsService
                 $this->seasonStatAttributes($teamId, $playerData),
             );
         }
+    }
+
+    private function localPlayerId(array $stat): ?int
+    {
+        $externalPlayerId = data_get($stat, 'player.id');
+
+        if (! is_numeric($externalPlayerId)) {
+            return null;
+        }
+
+        $playerId = $this->getPlayerIds()[(int) $externalPlayerId] ?? null;
+
+        return is_numeric($playerId) ? (int) $playerId : null;
+    }
+
+    private function localLeagueId(array $playerData): ?int
+    {
+        $externalLeagueId = data_get($playerData, 'league.id');
+
+        if (! is_numeric($externalLeagueId)) {
+            return null;
+        }
+
+        $leagueId = $this->getLeagues()[(int) $externalLeagueId] ?? null;
+
+        return is_numeric($leagueId) ? (int) $leagueId : null;
+    }
+
+    private function localTeamId(array $playerData): ?int
+    {
+        $externalTeamId = data_get($playerData, 'team.id');
+
+        if (! is_numeric($externalTeamId)) {
+            return null;
+        }
+
+        $teamId = $this->getTeams()[(int) $externalTeamId] ?? null;
+
+        return is_numeric($teamId) ? (int) $teamId : null;
     }
 
     /**
@@ -82,36 +118,126 @@ class PlayerStatsService
     {
         return [
             'team_id' => $teamId,
+            ...$this->gameAttributes($playerData),
+            ...$this->substituteAttributes($playerData),
+            ...$this->shotAttributes($playerData),
+            ...$this->goalAttributes($playerData),
+            ...$this->passingAttributes($playerData),
+            ...$this->defensiveAttributes($playerData),
+            ...$this->duelAttributes($playerData),
+            ...$this->disciplineAttributes($playerData),
+            ...$this->penaltyAttributes($playerData),
+        ];
+    }
+
+    /**
+     * @return array{appearances: mixed, total_minutes: mixed, position: mixed, rating: mixed, is_captain: mixed}
+     */
+    private function gameAttributes(array $playerData): array
+    {
+        return [
             'appearances' => $playerData['games']['appearences'] ?? 0,
             'total_minutes' => $playerData['games']['minutes'] ?? 0,
             'position' => $playerData['games']['position'] ?? null,
             'rating' => $playerData['games']['rating'] ?? null,
             'is_captain' => $playerData['games']['captain'] ?? false,
+        ];
+    }
+
+    /**
+     * @return array{substitutes_in: mixed, substitutes_out: mixed, bench: mixed}
+     */
+    private function substituteAttributes(array $playerData): array
+    {
+        return [
             'substitutes_in' => $playerData['substitutes']['in'] ?? 0,
             'substitutes_out' => $playerData['substitutes']['out'] ?? 0,
             'bench' => $playerData['substitutes']['bench'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{total_shots: mixed, shots_on_target: mixed}
+     */
+    private function shotAttributes(array $playerData): array
+    {
+        return [
             'total_shots' => $playerData['shots']['total'] ?? 0,
             'shots_on_target' => $playerData['shots']['on'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{total_goals: mixed, total_goals_conceded: mixed, total_assists: mixed, total_saves: mixed}
+     */
+    private function goalAttributes(array $playerData): array
+    {
+        return [
             'total_goals' => $playerData['goals']['total'] ?? 0,
             'total_goals_conceded' => $playerData['goals']['conceded'] ?? 0,
             'total_assists' => $playerData['goals']['assists'] ?? 0,
             'total_saves' => $playerData['goals']['saves'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{total_passes: mixed, key_passes: mixed, pass_accuracy: mixed}
+     */
+    private function passingAttributes(array $playerData): array
+    {
+        return [
             'total_passes' => $playerData['passes']['total'] ?? 0,
             'key_passes' => $playerData['passes']['key'] ?? 0,
             'pass_accuracy' => $playerData['passes']['accuracy'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{total_tackles: mixed, total_blocks: mixed, total_interceptions: mixed}
+     */
+    private function defensiveAttributes(array $playerData): array
+    {
+        return [
             'total_tackles' => $playerData['tackles']['total'] ?? 0,
             'total_blocks' => $playerData['tackles']['blocks'] ?? 0,
             'total_interceptions' => $playerData['tackles']['interceptions'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{total_duels: mixed, duels_won: mixed, total_dribbles_attempts: mixed, dribbles_success: mixed, dribbles_past: mixed}
+     */
+    private function duelAttributes(array $playerData): array
+    {
+        return [
             'total_duels' => $playerData['duels']['total'] ?? 0,
             'duels_won' => $playerData['duels']['won'] ?? 0,
             'total_dribbles_attempts' => $playerData['dribbles']['attempts'] ?? 0,
             'dribbles_success' => $playerData['dribbles']['success'] ?? 0,
             'dribbles_past' => $playerData['dribbles']['past'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{fouls_drawn: mixed, fouls_committed: mixed, yellow_cards: mixed, yellow_red_cards: mixed, red_cards: mixed}
+     */
+    private function disciplineAttributes(array $playerData): array
+    {
+        return [
             'fouls_drawn' => $playerData['fouls']['drawn'] ?? 0,
             'fouls_committed' => $playerData['fouls']['committed'] ?? 0,
             'yellow_cards' => $playerData['cards']['yellow'] ?? 0,
             'yellow_red_cards' => $playerData['cards']['yellowred'] ?? 0,
             'red_cards' => $playerData['cards']['red'] ?? 0,
+        ];
+    }
+
+    /**
+     * @return array{penalties_won: mixed, penalties_committed: mixed, penalties_scored: mixed, penalties_missed: mixed, penalties_saved: mixed}
+     */
+    private function penaltyAttributes(array $playerData): array
+    {
+        return [
             'penalties_won' => $playerData['penalty']['won'] ?? 0,
             'penalties_committed' => $playerData['penalty']['commited'] ?? 0,
             'penalties_scored' => $playerData['penalty']['scored'] ?? 0,

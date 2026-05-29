@@ -28,20 +28,9 @@ class CoachService
 
     public function syncCoaches(): void
     {
-        Team::query()->chunk(100, function (Collection $teams) {
+        Team::query()->whereNotNull('external_id')->chunk(100, function (Collection $teams) {
             foreach ($teams as $team) {
-                $coaches = $this->api->getCoach($team->external_id);
-
-                foreach ($coaches as $coachData) {
-                    $isCurrentCoach = collect($coachData['career'])->contains(function (array $career) use ($team) {
-                        return $career['team']['id'] === $team->external_id && $career['end'] === null;
-                    });
-
-                    if ($isCurrentCoach) {
-                        $this->storeCoach($team, $coachData);
-                        break;
-                    }
-                }
+                $this->syncTeamCoach($team);
             }
         });
     }
@@ -49,9 +38,49 @@ class CoachService
     public function storeCoach(Team $team, array $coachData): void
     {
         Coach::query()->updateOrCreate(
-            ['external_id' => $coachData['id']],
+            $this->coachIdentity($coachData),
             $this->coachAttributes($team, $coachData),
         );
+    }
+
+    private function syncTeamCoach(Team $team): void
+    {
+        $coachData = $this->currentCoachData($team);
+
+        if ($coachData === null) {
+            return;
+        }
+
+        $this->storeCoach($team, $coachData);
+    }
+
+    private function currentCoachData(Team $team): ?array
+    {
+        foreach ($this->api->getCoach((int) $team->external_id) as $coachData) {
+            if ($this->isCurrentTeamCoach($coachData, $team)) {
+                return $coachData;
+            }
+        }
+
+        return null;
+    }
+
+    private function isCurrentTeamCoach(array $coachData, Team $team): bool
+    {
+        return collect($coachData['career'] ?? [])->contains(
+            fn (array $career): bool => data_get($career, 'team.id') === $team->external_id
+                && data_get($career, 'end') === null,
+        );
+    }
+
+    /**
+     * @return array{external_id: int}
+     */
+    private function coachIdentity(array $coachData): array
+    {
+        return [
+            'external_id' => (int) $coachData['id'],
+        ];
     }
 
     /**

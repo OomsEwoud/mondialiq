@@ -32,37 +32,68 @@ class PlayerService
     public function storePlayers(array $players): void
     {
         foreach ($players as $player) {
-            $this->updateOrCreatePlayer($player['player']);
+            $playerData = data_get($player, 'player');
+
+            if (is_array($playerData)) {
+                $this->updateOrCreatePlayer($playerData);
+            }
         }
     }
 
     public function storeTeamPlayers(Team $team, array $players): void
     {
-        $squad = data_get($players, '0.players', []);
+        $squad = $this->squadPlayers($players);
 
-        if (! is_array($squad)) {
+        if ($squad === []) {
             return;
         }
 
         DB::transaction(function () use ($team, $squad) {
             $team->players()->update(['is_active' => false]);
-            $data = [];
 
-            foreach ($squad as $playerData) {
-                $playerModel = $this->updateOrCreatePlayer($playerData);
-                $data[$playerModel->id] = ['is_active' => true];
+            $team->players()->syncWithoutDetaching($this->activeSquadSyncData($squad));
+        });
+    }
+
+    private function squadPlayers(array $players): array
+    {
+        $squad = data_get($players, '0.players', []);
+
+        return is_array($squad) ? $squad : [];
+    }
+
+    private function activeSquadSyncData(array $squad): array
+    {
+        $data = [];
+
+        foreach ($squad as $playerData) {
+            if (! is_array($playerData)) {
+                continue;
             }
 
-            $team->players()->syncWithoutDetaching($data);
-        });
+            $playerModel = $this->updateOrCreatePlayer($playerData);
+            $data[$playerModel->id] = ['is_active' => true];
+        }
+
+        return $data;
     }
 
     private function updateOrCreatePlayer(array $data): Player
     {
         return Player::query()->updateOrCreate(
-            ['external_id' => $data['id']],
+            $this->playerIdentity($data),
             $this->playerAttributes($data),
         );
+    }
+
+    /**
+     * @return array{external_id: int}
+     */
+    private function playerIdentity(array $data): array
+    {
+        return [
+            'external_id' => (int) $data['id'],
+        ];
     }
 
     /**
@@ -76,13 +107,20 @@ class PlayerService
             $attributes['birth_date'] = $data['birth']['date'];
         }
 
-        if (isset($data['nationality'])) {
-            $this->loadCountryCache();
-            $apiName = $this->countryService->normalizeName($data['nationality']);
-            $attributes['country_id'] = $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
+        if (isset($data['nationality']) && is_string($data['nationality'])) {
+            $attributes['country_id'] = $this->countryId($data['nationality']);
         }
 
         return $attributes;
+    }
+
+    private function countryId(string $nationality): ?int
+    {
+        $this->loadCountryCache();
+
+        $apiName = $this->countryService->normalizeName($nationality);
+
+        return $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
     }
 
     /**
@@ -131,9 +169,15 @@ class PlayerService
             ->whereNotNull('external_id')
             ->chunk(100, function (Collection $teams) {
                 foreach ($teams as $team) {
-                    $teamPlayerData = $this->api->getPlayers($team->external_id);
-                    $this->storeTeamPlayers($team, $teamPlayerData);
+                    $this->syncTeamPlayerSquad($team);
                 }
             });
+    }
+
+    private function syncTeamPlayerSquad(Team $team): void
+    {
+        $teamPlayerData = $this->api->getPlayers((int) $team->external_id);
+
+        $this->storeTeamPlayers($team, $teamPlayerData);
     }
 }
