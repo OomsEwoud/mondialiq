@@ -17,16 +17,7 @@ class MissingPlayersSummaryService
         $hasType = Schema::hasColumn('missing_players', 'type');
         $hasReason = Schema::hasColumn('missing_players', 'reason');
 
-        $summary = [
-            'home_team_name' => $fixture->homeTeam?->name,
-            'away_team_name' => $fixture->awayTeam?->name,
-            'home_missing_count' => 0,
-            'away_missing_count' => 0,
-            'home_questionable_count' => $hasType ? 0 : null,
-            'away_questionable_count' => $hasType ? 0 : null,
-            'home_missing_players' => [],
-            'away_missing_players' => [],
-        ];
+        $summary = $this->emptySummary($fixture, $hasType);
 
         $missingPlayers = MissingPlayer::query()
             ->with(['player.teams:id,name'])
@@ -59,16 +50,24 @@ class MissingPlayersSummaryService
 
         $lines = [
             'Missing players summary:',
-            '- '.$this->countLine($summary['home_team_name'], $summary['home_missing_count']),
-            '- '.$this->countLine($summary['away_team_name'], $summary['away_missing_count']),
+            $this->promptLine(
+                $this->countLine($summary['home_team_name'], $summary['home_missing_count']),
+            ),
+            $this->promptLine(
+                $this->countLine($summary['away_team_name'], $summary['away_missing_count']),
+            ),
         ];
 
         if ($summary['home_missing_players'] !== []) {
-            $lines[] = '- '.$this->playersLine($summary['home_team_name'], $summary['home_missing_players']);
+            $lines[] = $this->promptLine(
+                $this->playersLine($summary['home_team_name'], $summary['home_missing_players']),
+            );
         }
 
         if ($summary['away_missing_players'] !== []) {
-            $lines[] = '- '.$this->playersLine($summary['away_team_name'], $summary['away_missing_players']);
+            $lines[] = $this->promptLine(
+                $this->playersLine($summary['away_team_name'], $summary['away_missing_players']),
+            );
         }
 
         return implode(PHP_EOL, $lines);
@@ -91,6 +90,32 @@ class MissingPlayersSummaryService
         }
 
         return null;
+    }
+
+    /**
+     * @return array{
+     *     home_team_name: string|null,
+     *     away_team_name: string|null,
+     *     home_missing_count: int,
+     *     away_missing_count: int,
+     *     home_questionable_count: int|null,
+     *     away_questionable_count: int|null,
+     *     home_missing_players: array<int, array{name: string, type: string|null, reason: string|null}>,
+     *     away_missing_players: array<int, array{name: string, type: string|null, reason: string|null}>
+     * }
+     */
+    private function emptySummary(Fixture $fixture, bool $hasType): array
+    {
+        return [
+            'home_team_name' => $fixture->homeTeam?->name,
+            'away_team_name' => $fixture->awayTeam?->name,
+            'home_missing_count' => 0,
+            'away_missing_count' => 0,
+            'home_questionable_count' => $hasType ? 0 : null,
+            'away_questionable_count' => $hasType ? 0 : null,
+            'home_missing_players' => [],
+            'away_missing_players' => [],
+        ];
     }
 
     private function addMissingPlayerToSummary(
@@ -139,7 +164,7 @@ class MissingPlayersSummaryService
 
     private function countLine(?string $teamName, int $count): string
     {
-        $teamName ??= 'Unknown team';
+        $teamName = $this->teamName($teamName);
         $label = $count === 1 ? 'missing player' : 'missing players';
 
         return "{$teamName}: {$count} {$label}";
@@ -147,11 +172,21 @@ class MissingPlayersSummaryService
 
     private function playersLine(?string $teamName, array $players): string
     {
-        $teamName ??= 'Unknown team';
+        $teamName = $this->teamName($teamName);
         $names = collect($players)
             ->pluck('name')
             ->implode(', ');
 
         return "{$teamName} missing players include: {$names}";
+    }
+
+    private function teamName(?string $teamName): string
+    {
+        return $teamName ?? 'Unknown team';
+    }
+
+    private function promptLine(string $line): string
+    {
+        return "- {$line}";
     }
 }

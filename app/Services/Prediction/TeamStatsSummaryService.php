@@ -64,21 +64,7 @@ class TeamStatsSummaryService
     private function summarizeTeam(?Team $team, ?TeamStatistic $statistic): array
     {
         if ($statistic === null) {
-            return [
-                'team_name' => $team?->name,
-                'form' => null,
-                'recent_form_score' => null,
-                'fixtures_played' => null,
-                'wins' => null,
-                'draws' => null,
-                'losses' => null,
-                'win_percentage' => null,
-                'goals_for' => null,
-                'goals_against' => null,
-                'goal_difference' => null,
-                'average_goals_for' => null,
-                'average_goals_against' => null,
-            ];
+            return $this->emptyTeamSummary($team);
         }
 
         $fixturesPlayed = $statistic->fixtures_played_total;
@@ -100,6 +86,42 @@ class TeamStatsSummaryService
             'goal_difference' => $this->goalDifference($goalsFor, $goalsAgainst),
             'average_goals_for' => $statistic->goals_for_avg_total ?? $this->average($goalsFor, $fixturesPlayed),
             'average_goals_against' => $statistic->goals_against_avg_total ?? $this->average($goalsAgainst, $fixturesPlayed),
+        ];
+    }
+
+    /**
+     * @return array{
+     *     team_name: string|null,
+     *     form: null,
+     *     recent_form_score: null,
+     *     fixtures_played: null,
+     *     wins: null,
+     *     draws: null,
+     *     losses: null,
+     *     win_percentage: null,
+     *     goals_for: null,
+     *     goals_against: null,
+     *     goal_difference: null,
+     *     average_goals_for: null,
+     *     average_goals_against: null
+     * }
+     */
+    private function emptyTeamSummary(?Team $team): array
+    {
+        return [
+            'team_name' => $team?->name,
+            'form' => null,
+            'recent_form_score' => null,
+            'fixtures_played' => null,
+            'wins' => null,
+            'draws' => null,
+            'losses' => null,
+            'win_percentage' => null,
+            'goals_for' => null,
+            'goals_against' => null,
+            'goal_difference' => null,
+            'average_goals_for' => null,
+            'average_goals_against' => null,
         ];
     }
 
@@ -146,7 +168,7 @@ class TeamStatsSummaryService
 
     private function formatFormLine(array $teamSummary): string
     {
-        $teamName = $teamSummary['team_name'] ?? 'Unknown team';
+        $teamName = $this->teamName($teamSummary);
 
         if ($teamSummary['form'] === null) {
             return "{$teamName} form: not available";
@@ -160,7 +182,7 @@ class TeamStatsSummaryService
 
     private function formatRecordLine(array $teamSummary): string
     {
-        $teamName = $teamSummary['team_name'] ?? 'Unknown team';
+        $teamName = $this->teamName($teamSummary);
 
         if (
             $teamSummary['wins'] === null
@@ -171,5 +193,10 @@ class TeamStatsSummaryService
         }
 
         return "{$teamName} record: {$teamSummary['wins']}W {$teamSummary['draws']}D {$teamSummary['losses']}L";
+    }
+
+    private function teamName(array $teamSummary): string
+    {
+        return $teamSummary['team_name'] ?? 'Unknown team';
     }
 }
