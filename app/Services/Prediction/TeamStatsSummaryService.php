@@ -5,6 +5,7 @@ namespace App\Services\Prediction;
 use App\Models\Fixture;
 use App\Models\Team;
 use App\Models\TeamStatistic;
+use Illuminate\Database\Eloquent\Builder;
 
 class TeamStatsSummaryService
 {
@@ -49,7 +50,7 @@ class TeamStatsSummaryService
             ->where('team_id', $teamId)
             ->where('league_id', $fixture->league_id)
             ->where('season', $fixture->season)
-            ->where(function ($query) use ($fixture) {
+            ->where(function (Builder $query) use ($fixture) {
                 $query
                     ->whereNull('statistics_date')
                     ->orWhereDate('statistics_date', '<=', $fixture->match_date);

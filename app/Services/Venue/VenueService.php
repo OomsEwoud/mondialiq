@@ -5,6 +5,7 @@ namespace App\Services\Venue;
 use App\Models\Country;
 use App\Models\Venue;
 use App\Services\Apis\FootballApiService;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
 class VenueService
@@ -36,11 +37,13 @@ class VenueService
     {
         $countries = Country::query()->pluck('id', 'name');
 
-        Venue::query()->whereNotNull('external_id')->chunk(100, function ($venues) use ($countries) {
-            foreach ($venues as $venue) {
-                $venueData = $this->footballApiService->getVenue($venue->external_id);
-                $this->storeVenues($venueData, $countries);
-            }
-        });
+        Venue::query()
+            ->whereNotNull('external_id')
+            ->chunk(100, function (EloquentCollection $venues) use ($countries) {
+                foreach ($venues as $venue) {
+                    $venueData = $this->footballApiService->getVenue($venue->external_id);
+                    $this->storeVenues($venueData, $countries);
+                }
+            });
     }
 }

@@ -33,7 +33,7 @@ class CoachService
                 $coaches = $this->api->getCoach($team->external_id);
 
                 foreach ($coaches as $coachData) {
-                    $isCurrentCoach = collect($coachData['career'])->contains(function ($career) use ($team) {
+                    $isCurrentCoach = collect($coachData['career'])->contains(function (array $career) use ($team) {
                         return $career['team']['id'] === $team->external_id && $career['end'] === null;
                     });
 

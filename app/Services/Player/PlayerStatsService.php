@@ -10,21 +10,21 @@ use Illuminate\Support\Collection;
 
 class PlayerStatsService
 {
-    protected ?Collection $leagues = null;
-    protected ?Collection $teams = null;
-    protected ?Collection $playerIds = null;
+    private ?Collection $leagues = null;
+    private ?Collection $teams = null;
+    private ?Collection $playerIds = null;
 
-    protected function getLeagues(): Collection
+    private function getLeagues(): Collection
     {
         return $this->leagues ??= League::query()->pluck('id', 'external_id');
     }
 
-    protected function getTeams(): Collection
+    private function getTeams(): Collection
     {
         return $this->teams ??= Team::query()->pluck('id', 'external_id');
     }
 
-    protected function getPlayerIds(): Collection
+    private function getPlayerIds(): Collection
     {
         return $this->playerIds ??= Player::query()->pluck('id', 'external_id');
     }

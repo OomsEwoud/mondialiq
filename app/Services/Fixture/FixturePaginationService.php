@@ -3,6 +3,7 @@
 namespace App\Services\Fixture;
 
 use App\Http\Resources\FixtureResource;
+use App\Models\Fixture;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -13,6 +14,6 @@ class FixturePaginationService
         return $query
             ->paginate($perPage)
             ->withQueryString()
-            ->through(fn ($fixture) => FixtureResource::make($fixture)->resolve());
+            ->through(fn (Fixture $fixture) => FixtureResource::make($fixture)->resolve());
     }
 }
