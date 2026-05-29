@@ -10,6 +10,9 @@ use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 
 #[Signature('app:import-team-statistics
     {--team_id=}
@@ -30,20 +33,22 @@ class ImportTeamStatistics extends Command
 
     public function handle(): int
     {
-        $teamId = $this->option('team_id');
-        $leagueId = $this->option('league_id');
-        $season = $this->option('season');
-        $date = $this->option('date');
-        $force = (bool) $this->option('force');
+        $options = $this->importOptions();
 
-        if ($teamId !== null || $leagueId !== null || $season !== null) {
-            if ($teamId === null || $leagueId === null || $season === null) {
+        if ($this->hasTargetedImportOptions($options)) {
+            if (! $this->hasCompleteTargetedImportOptions($options)) {
                 $this->error('Gebruik samen --team_id, --league_id en --season voor een gerichte import.');
 
                 return self::FAILURE;
             }
 
-            return $this->importSingleCombination((int) $teamId, (int) $leagueId, (int) $season, $date, $force);
+            return $this->importSingleCombination(
+                (int) $options['teamId'],
+                (int) $options['leagueId'],
+                (int) $options['season'],
+                $options['date'],
+                $options['force'],
+            );
         }
 
         $config = $this->footballApiConfig();
@@ -52,7 +57,39 @@ class ImportTeamStatistics extends Command
             return self::FAILURE;
         }
 
-        return $this->importRelevantTeams($config['leagueId'], $config['season'], $date, $force);
+        return $this->importRelevantTeams($config['leagueId'], $config['season'], $options['date'], $options['force']);
+    }
+
+    /**
+     * @return array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}
+     */
+    private function importOptions(): array
+    {
+        $date = $this->option('date');
+
+        return [
+            'teamId' => $this->option('team_id'),
+            'leagueId' => $this->option('league_id'),
+            'season' => $this->option('season'),
+            'date' => is_string($date) && $date !== '' ? $date : null,
+            'force' => (bool) $this->option('force'),
+        ];
+    }
+
+    /**
+     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
+     */
+    private function hasTargetedImportOptions(array $options): bool
+    {
+        return $options['teamId'] !== null || $options['leagueId'] !== null || $options['season'] !== null;
+    }
+
+    /**
+     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
+     */
+    private function hasCompleteTargetedImportOptions(array $options): bool
+    {
+        return $options['teamId'] !== null && $options['leagueId'] !== null && $options['season'] !== null;
     }
 
     private function importSingleCombination(
@@ -63,17 +100,7 @@ class ImportTeamStatistics extends Command
         bool $force,
     ): int {
         try {
-            $existing = $this->service->findExisting($teamId, $leagueId, $season, $date);
-            $hasFixtureToday = $this->service->teamHasFixtureToday($teamId, $leagueId, $season);
-
-            if (! $this->service->shouldRefresh($existing, $hasFixtureToday, $force)) {
-                $this->line("Skipped {$teamId}/{$leagueId}/{$season}, statistics zijn nog vers.");
-
-                return self::SUCCESS;
-            }
-
-            $statistic = $this->service->importForTeam($teamId, $leagueId, $season, $date, $force);
-            $this->line("Imported {$statistic->statistics_key}");
+            $this->importTeamStatistic($teamId, $leagueId, $season, $date, $force);
 
             return self::SUCCESS;
         } catch (Exception $exception) {
@@ -85,50 +112,15 @@ class ImportTeamStatistics extends Command
 
     private function importRelevantTeams(int $apiLeagueId, int $season, ?string $date, bool $force): int
     {
-        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
+        $localLeagueId = $this->localLeagueId($apiLeagueId);
 
-        if (! is_numeric($leagueId)) {
+        if ($localLeagueId === null) {
             $this->error("League {$apiLeagueId} is niet lokaal gevonden.");
 
             return self::FAILURE;
         }
 
-        $leagueId = (int) $leagueId;
-
-        $fixtures = Fixture::query()
-            ->with([
-                'homeTeam:id,external_id',
-                'awayTeam:id,external_id',
-            ])
-            ->whereNotNull('external_id')
-            ->whereNotNull('home_team_id')
-            ->whereNotNull('away_team_id')
-            ->where('league_id', $leagueId)
-            ->where('season', $season)
-            ->relevantForDataSync()
-            ->orderBy('match_date')
-            ->get(['id', 'home_team_id', 'away_team_id']);
-
-        if ($fixtures->isEmpty()) {
-            $fixtures = Fixture::query()
-                ->with([
-                    'homeTeam:id,external_id',
-                    'awayTeam:id,external_id',
-                ])
-                ->where('league_id', $leagueId)
-                ->where('season', $season)
-                ->get(['id', 'home_team_id', 'away_team_id']);
-        }
-
-        $apiTeamIds = $fixtures
-            ->flatMap(fn (Fixture $fixture): array => [
-                $fixture->homeTeam?->external_id,
-                $fixture->awayTeam?->external_id,
-            ])
-            ->filter(fn (mixed $teamId): bool => is_numeric($teamId))
-            ->map(fn (mixed $teamId): int => (int) $teamId)
-            ->unique()
-            ->values();
+        $apiTeamIds = $this->apiTeamIdsForLeague($localLeagueId, $season);
 
         if ($apiTeamIds->isEmpty()) {
             $this->info('Geen relevante teams gevonden voor team statistics import.');
@@ -138,17 +130,7 @@ class ImportTeamStatistics extends Command
 
         foreach ($apiTeamIds as $apiTeamId) {
             try {
-                $existing = $this->service->findExisting($apiTeamId, $apiLeagueId, $season, $date);
-                $hasFixtureToday = $this->service->teamHasFixtureToday($apiTeamId, $apiLeagueId, $season);
-
-                if (! $this->service->shouldRefresh($existing, $hasFixtureToday, $force)) {
-                    $this->line("Skipped {$apiTeamId}/{$apiLeagueId}/{$season}, statistics zijn nog vers.");
-
-                    continue;
-                }
-
-                $statistic = $this->service->importForTeam($apiTeamId, $apiLeagueId, $season, $date, $force);
-                $this->line("Imported {$statistic->statistics_key}");
+                $this->importTeamStatistic($apiTeamId, $apiLeagueId, $season, $date, $force);
             } catch (Exception $exception) {
                 if ($this->laravel->runningUnitTests()) {
                     throw $exception;
@@ -159,5 +141,97 @@ class ImportTeamStatistics extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private function localLeagueId(int $apiLeagueId): ?int
+    {
+        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
+
+        return is_numeric($leagueId) ? (int) $leagueId : null;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function apiTeamIdsForLeague(int $leagueId, int $season): Collection
+    {
+        $fixtures = $this->relevantFixturesForTeamStatistics($leagueId, $season);
+
+        if ($fixtures->isEmpty()) {
+            $fixtures = $this->allFixturesForTeamStatistics($leagueId, $season);
+        }
+
+        return $this->apiTeamIds($fixtures);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
+     */
+    private function relevantFixturesForTeamStatistics(int $leagueId, int $season): EloquentCollection
+    {
+        return $this->teamStatisticsFixtureQuery($leagueId, $season)
+            ->whereNotNull('external_id')
+            ->relevantForDataSync()
+            ->orderBy('match_date')
+            ->get(['id', 'home_team_id', 'away_team_id']);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
+     */
+    private function allFixturesForTeamStatistics(int $leagueId, int $season): EloquentCollection
+    {
+        return $this->teamStatisticsFixtureQuery($leagueId, $season)
+            ->get(['id', 'home_team_id', 'away_team_id']);
+    }
+
+    private function teamStatisticsFixtureQuery(int $leagueId, int $season): Builder
+    {
+        return Fixture::query()
+            ->with([
+                'homeTeam:id,external_id',
+                'awayTeam:id,external_id',
+            ])
+            ->whereNotNull('home_team_id')
+            ->whereNotNull('away_team_id')
+            ->where('league_id', $leagueId)
+            ->where('season', $season);
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>  $fixtures
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function apiTeamIds(EloquentCollection $fixtures): Collection
+    {
+        return $fixtures
+            ->flatMap(fn (Fixture $fixture): array => [
+                $fixture->homeTeam?->external_id,
+                $fixture->awayTeam?->external_id,
+            ])
+            ->filter(fn (mixed $teamId): bool => is_numeric($teamId))
+            ->map(fn (mixed $teamId): int => (int) $teamId)
+            ->unique()
+            ->values();
+    }
+
+    private function importTeamStatistic(
+        int $teamId,
+        int $leagueId,
+        int $season,
+        ?string $date,
+        bool $force,
+    ): void {
+        $existing = $this->service->findExisting($teamId, $leagueId, $season, $date);
+        $hasFixtureToday = $this->service->teamHasFixtureToday($teamId, $leagueId, $season);
+
+        if (! $this->service->shouldRefresh($existing, $hasFixtureToday, $force)) {
+            $this->line("Skipped {$teamId}/{$leagueId}/{$season}, statistics zijn nog vers.");
+
+            return;
+        }
+
+        $statistic = $this->service->importForTeam($teamId, $leagueId, $season, $date, $force);
+        $this->line("Imported {$statistic->statistics_key}");
     }
 }

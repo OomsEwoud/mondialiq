@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithRelevantFixtures;
 use App\Models\Fixture;
 use App\Services\HeadToHeadService;
 use Exception;
@@ -14,6 +15,8 @@ use Illuminate\Support\Collection;
 #[Description('Importeer head-to-head data voor fixtures')]
 class ImportHeadToHeadData extends Command
 {
+    use InteractsWithRelevantFixtures;
+
     public function __construct(
         private readonly HeadToHeadService $headToHeadService,
     ) {
@@ -49,17 +52,7 @@ class ImportHeadToHeadData extends Command
 
     private function importForRelevantFixtures(bool $force): int
     {
-        $query = Fixture::query()
-            ->whereNotNull('external_id')
-            ->whereNotNull('home_team_id')
-            ->whereNotNull('away_team_id')
-            ->orderBy('match_date');
-
-        if (! $force) {
-            $query->relevantForDataSync();
-        }
-
-        $fixtures = $query->get(['id', 'home_team_id', 'away_team_id']);
+        $fixtures = $this->fixturesForHeadToHeadImport($force);
 
         if ($fixtures->isEmpty()) {
             $this->info($force

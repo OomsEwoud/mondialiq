@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\MissingPlayerService;
 use Illuminate\Console\Attributes\Description;
@@ -14,6 +15,7 @@ use Illuminate\Console\Command;
 class AddMissingPlayers extends Command
 {
     use InteractsWithFootballApiConfig;
+    use RunsFootballApiImportTasks;
 
     public function __construct(
         private readonly FootballApiService $api,
@@ -30,23 +32,18 @@ class AddMissingPlayers extends Command
             return self::FAILURE;
         }
 
-        $this->info('Ophalen van ontbrekende spelers');
+        $summary = $this->emptySummary();
 
-        $missingPlayers = [];
-        $summary = [
-            'processed' => 0,
-            'created' => 0,
-            'updated' => 0,
-            'skipped' => 0,
-        ];
-
-        $this->components->task('Data uit API ophalen', function () use (&$missingPlayers, $config) {
-            $missingPlayers = $this->api->getInjuries($config['leagueId'], $config['season']);
-        });
-
-        $this->components->task('Data van ontbrekende spelers opslaan in database', function () use (&$summary, $missingPlayers) {
-            $summary = $this->service->storeMissingPlayers($missingPlayers);
-        });
+        $this->runFootballApiImport(
+            'Ophalen van ontbrekende spelers',
+            'Data van ontbrekende spelers opslaan in database',
+            fn (): array => $this->api->getInjuries($config['leagueId'], $config['season']),
+            function (array $missingPlayers) use (&$summary): void {
+                $summary = $this->service->storeMissingPlayers($missingPlayers);
+            },
+            'Ontbrekende spelers sync klaar',
+            storeWhenEmpty: true,
+        );
 
         if ($summary['processed'] === 0) {
             $this->info('Geen ontbrekende spelers ontvangen van de API.');
@@ -60,5 +57,18 @@ class AddMissingPlayers extends Command
         $this->info("Overgeslagen records: {$summary['skipped']}");
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @return array{processed: int, created: int, updated: int, skipped: int}
+     */
+    private function emptySummary(): array
+    {
+        return [
+            'processed' => 0,
+            'created' => 0,
+            'updated' => 0,
+            'skipped' => 0,
+        ];
     }
 }
