@@ -13,8 +13,8 @@ use Illuminate\Console\Command;
 class AddLeagues extends Command
 {
     public function __construct(
-        protected LeagueService $leagueService,
-        protected FootballApiService $serviceFootball,
+        private readonly LeagueService $leagueService,
+        private readonly FootballApiService $api,
     ) {
         parent::__construct();
     }
@@ -25,7 +25,7 @@ class AddLeagues extends Command
         $leagues = [];
 
         $this->components->task('Data uit API ophalen', function () use (&$leagues) {
-            $leagues = $this->serviceFootball->getLeagues();
+            $leagues = $this->api->getLeagues();
         });
 
         $this->components->task('Data van leagues opslaan in database', function () use ($leagues) {

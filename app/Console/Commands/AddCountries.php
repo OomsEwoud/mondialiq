@@ -13,8 +13,8 @@ use Illuminate\Console\Command;
 class AddCountries extends Command
 {
     public function __construct(
-        protected CountryService $countriesService,
-        protected FootballApiService $serviceFootball,
+        private readonly CountryService $countriesService,
+        private readonly FootballApiService $api,
     ) {
         parent::__construct();
     }
@@ -25,7 +25,7 @@ class AddCountries extends Command
         $countries = [];
 
         $this->components->task('Data uit API ophalen', function () use (&$countries) {
-            $countries = $this->serviceFootball->getCountries();
+            $countries = $this->api->getCountries();
         });
 
         $this->components->task('Data van countries opslaan in database', function () use ($countries) {
