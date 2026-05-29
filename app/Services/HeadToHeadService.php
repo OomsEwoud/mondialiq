@@ -23,7 +23,7 @@ class HeadToHeadService
     {
         [$normalizedTeamAId, $normalizedTeamBId] = $this->normalizeTeamIds($teamAId, $teamBId);
 
-        return "{$normalizedTeamAId}-{$normalizedTeamBId}";
+        return $this->pairKeyForNormalizedTeams($normalizedTeamAId, $normalizedTeamBId);
     }
 
     public function hasFreshData(int $homeTeamId, int $awayTeamId): bool
@@ -37,28 +37,65 @@ class HeadToHeadService
     public function importForTeams(int $homeTeamId, int $awayTeamId, bool $force = false): HeadToHead
     {
         [$teamAId, $teamBId] = $this->normalizeTeamIds($homeTeamId, $awayTeamId);
-        $pairKey = $this->makePairKey($homeTeamId, $awayTeamId);
+        $pairKey = $this->pairKeyForNormalizedTeams($teamAId, $teamBId);
 
-        $existingHeadToHead = HeadToHead::query()->where('pair_key', $pairKey)->first();
+        $existingHeadToHead = $this->headToHeadForPair($pairKey);
 
-        if (! $force && $existingHeadToHead?->fetched_at?->gte(now()->subDays(self::REFRESH_AFTER_DAYS))) {
+        if (! $force && $this->isFresh($existingHeadToHead)) {
             return $existingHeadToHead;
         }
 
-        $teamAExternalId = Team::query()->whereKey($teamAId)->value('external_id');
-        $teamBExternalId = Team::query()->whereKey($teamBId)->value('external_id');
+        [$teamAExternalId, $teamBExternalId] = $this->externalTeamIdsForPair($teamAId, $teamBId);
+
+        $summary = $this->calculateSummary(
+            $this->api->getHeadToHead($teamAExternalId, $teamBExternalId),
+            $teamAId,
+            $teamBId,
+        );
+
+        return HeadToHead::query()->updateOrCreate(
+            $this->headToHeadIdentity($pairKey),
+            $this->headToHeadAttributes($summary, $teamAId, $teamBId),
+        );
+    }
+
+    private function headToHeadForPair(string $pairKey): ?HeadToHead
+    {
+        return HeadToHead::query()->where('pair_key', $pairKey)->first();
+    }
+
+    private function isFresh(?HeadToHead $headToHead): bool
+    {
+        return (bool) $headToHead?->fetched_at?->gte(now()->subDays(self::REFRESH_AFTER_DAYS));
+    }
+
+    /**
+     * @return array{0: int, 1: int}
+     */
+    private function externalTeamIdsForPair(int $teamAId, int $teamBId): array
+    {
+        $externalIds = Team::query()
+            ->whereKey([$teamAId, $teamBId])
+            ->pluck('external_id', 'id');
+
+        $teamAExternalId = $externalIds[$teamAId] ?? null;
+        $teamBExternalId = $externalIds[$teamBId] ?? null;
 
         if (! is_numeric($teamAExternalId) || ! is_numeric($teamBExternalId)) {
             throw new InvalidArgumentException('Teams missen een geldige external_id voor head-to-head import.');
         }
 
-        $response = $this->api->getHeadToHead((int) $teamAExternalId, (int) $teamBExternalId);
-        $summary = $this->calculateSummary($response, $teamAId, $teamBId);
+        return [(int) $teamAExternalId, (int) $teamBExternalId];
+    }
 
-        return HeadToHead::query()->updateOrCreate(
-            ['pair_key' => $pairKey],
-            $this->headToHeadAttributes($summary, $teamAId, $teamBId),
-        );
+    /**
+     * @return array{pair_key: string}
+     */
+    private function headToHeadIdentity(string $pairKey): array
+    {
+        return [
+            'pair_key' => $pairKey,
+        ];
     }
 
     /**
@@ -110,53 +147,104 @@ class HeadToHeadService
         $finishedMatchDates = [];
 
         foreach ($response as $fixtureData) {
-            if (data_get($fixtureData, 'fixture.status.short') !== 'FT') {
+            $matchSummary = $this->finishedMatchSummary($fixtureData, $teamIdsByExternalId, $teamAId);
+
+            if ($matchSummary === null) {
                 continue;
             }
 
-            $homeTeamIdForMatch = $teamIdsByExternalId[(int) data_get($fixtureData, 'teams.home.id')] ?? null;
-            $awayTeamIdForMatch = $teamIdsByExternalId[(int) data_get($fixtureData, 'teams.away.id')] ?? null;
-
-            if (! is_int($homeTeamIdForMatch) || ! is_int($awayTeamIdForMatch)) {
-                continue;
-            }
-
-            $homeGoals = $this->normalizeGoals(data_get($fixtureData, 'goals.home'));
-            $awayGoals = $this->normalizeGoals(data_get($fixtureData, 'goals.away'));
-
-            if ($homeGoals === null || $awayGoals === null) {
-                continue;
-            }
-
-            $scoreForTeamA = $this->scoreForTeamA(
-                $teamAId,
-                $homeTeamIdForMatch,
-                $awayTeamIdForMatch,
-                $homeGoals,
-                $awayGoals,
-            );
-
-            if ($scoreForTeamA === null) {
-                continue;
-            }
-
-            [$teamAGoals, $teamBGoals] = $scoreForTeamA;
+            [$teamAGoals, $teamBGoals, $fixtureDate] = $matchSummary;
             $summary['total_matches']++;
             $summary['team_a_goals'] += $teamAGoals;
             $summary['team_b_goals'] += $teamBGoals;
 
             $summary = $this->recordResult($summary, $teamAGoals, $teamBGoals);
 
-            $fixtureDate = data_get($fixtureData, 'fixture.date');
-
-            if (is_string($fixtureDate) && $fixtureDate !== '') {
-                $finishedMatchDates[] = CarbonImmutable::parse($fixtureDate);
+            if ($fixtureDate !== null) {
+                $finishedMatchDates[] = $fixtureDate;
             }
         }
 
         $summary['last_meeting_at'] = $this->lastMeetingAt($finishedMatchDates);
 
         return $summary;
+    }
+
+    /**
+     * @return array{0: int, 1: int, 2: \Carbon\CarbonImmutable|null}|null
+     */
+    private function finishedMatchSummary(array $fixtureData, Collection $teamIdsByExternalId, int $teamAId): ?array
+    {
+        if (data_get($fixtureData, 'fixture.status.short') !== 'FT') {
+            return null;
+        }
+
+        $teamIdsForMatch = $this->teamIdsForMatch($fixtureData, $teamIdsByExternalId);
+
+        if ($teamIdsForMatch === null) {
+            return null;
+        }
+
+        [$homeTeamId, $awayTeamId] = $teamIdsForMatch;
+        $goalsForMatch = $this->goalsForMatch($fixtureData);
+
+        if ($goalsForMatch === null) {
+            return null;
+        }
+
+        [$homeGoals, $awayGoals] = $goalsForMatch;
+        $scoreForTeamA = $this->scoreForTeamA($teamAId, $homeTeamId, $awayTeamId, $homeGoals, $awayGoals);
+
+        if ($scoreForTeamA === null) {
+            return null;
+        }
+
+        return [
+            $scoreForTeamA[0],
+            $scoreForTeamA[1],
+            $this->fixtureDate($fixtureData),
+        ];
+    }
+
+    /**
+     * @return array{0: int, 1: int}|null
+     */
+    private function teamIdsForMatch(array $fixtureData, Collection $teamIdsByExternalId): ?array
+    {
+        $homeTeamId = $teamIdsByExternalId[(int) data_get($fixtureData, 'teams.home.id')] ?? null;
+        $awayTeamId = $teamIdsByExternalId[(int) data_get($fixtureData, 'teams.away.id')] ?? null;
+
+        if (! is_int($homeTeamId) || ! is_int($awayTeamId)) {
+            return null;
+        }
+
+        return [$homeTeamId, $awayTeamId];
+    }
+
+    /**
+     * @return array{0: int, 1: int}|null
+     */
+    private function goalsForMatch(array $fixtureData): ?array
+    {
+        $homeGoals = $this->normalizeGoals(data_get($fixtureData, 'goals.home'));
+        $awayGoals = $this->normalizeGoals(data_get($fixtureData, 'goals.away'));
+
+        if ($homeGoals === null || $awayGoals === null) {
+            return null;
+        }
+
+        return [$homeGoals, $awayGoals];
+    }
+
+    private function fixtureDate(array $fixtureData): ?CarbonImmutable
+    {
+        $fixtureDate = data_get($fixtureData, 'fixture.date');
+
+        if (! is_string($fixtureDate) || $fixtureDate === '') {
+            return null;
+        }
+
+        return CarbonImmutable::parse($fixtureDate);
     }
 
     /**
@@ -284,6 +372,11 @@ class HeadToHeadService
         return $teamAId < $teamBId
             ? [$teamAId, $teamBId]
             : [$teamBId, $teamAId];
+    }
+
+    private function pairKeyForNormalizedTeams(int $teamAId, int $teamBId): string
+    {
+        return "{$teamAId}-{$teamBId}";
     }
 
     private function normalizeGoals(mixed $goals): ?int
