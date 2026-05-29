@@ -4,14 +4,17 @@ namespace App\Services\Fixture;
 
 use App\Models\FixtureStat;
 use App\Models\Team;
+use App\Services\Fixture\Concerns\ExtractsApiPayloadIds;
 use Illuminate\Support\Collection;
 
 class FixtureStatsService
 {
+    use ExtractsApiPayloadIds;
+
     public function storeFixtureStats(array $stats, int $fixtureId): void
     {
         $teamIds = Team::query()
-            ->whereIn('external_id', $this->extractTeamIds($stats))
+            ->whereIn('external_id', $this->extractNumericIds($stats, 'team.id'))
             ->pluck('id', 'external_id');
 
         foreach ($stats as $teamStat) {
@@ -35,16 +38,32 @@ class FixtureStatsService
             }
 
             FixtureStat::query()->updateOrCreate(
-                [
-                    'fixture_id' => $fixtureId,
-                    'team_id' => $localTeamId,
-                    'name' => $name,
-                ],
-                [
-                    'value' => $this->normalizeValue(data_get($matchStat, 'value')),
-                ],
+                $this->statIdentity($fixtureId, $localTeamId, $name),
+                $this->statAttributes($matchStat),
             );
         }
+    }
+
+    /**
+     * @return array{fixture_id: int, team_id: int, name: string}
+     */
+    private function statIdentity(int $fixtureId, int $teamId, string $name): array
+    {
+        return [
+            'fixture_id' => $fixtureId,
+            'team_id' => $teamId,
+            'name' => $name,
+        ];
+    }
+
+    /**
+     * @return array{value: float}
+     */
+    private function statAttributes(array $matchStat): array
+    {
+        return [
+            'value' => $this->normalizeValue(data_get($matchStat, 'value')),
+        ];
     }
 
     private function normalizeValue(mixed $value): float
@@ -54,15 +73,5 @@ class FixtureStatsService
         }
 
         return is_numeric($value) ? (float) $value : 0.0;
-    }
-
-    private function extractTeamIds(array $stats): Collection
-    {
-        return collect($stats)
-            ->pluck('team.id')
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
     }
 }

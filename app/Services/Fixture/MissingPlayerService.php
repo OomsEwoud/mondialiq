@@ -5,10 +5,12 @@ namespace App\Services\Fixture;
 use App\Models\Fixture;
 use App\Models\MissingPlayer;
 use App\Models\Player;
-use Illuminate\Support\Collection;
+use App\Services\Fixture\Concerns\ExtractsApiPayloadIds;
 
 class MissingPlayerService
 {
+    use ExtractsApiPayloadIds;
+
     /**
      * @return array{processed: int, created: int, updated: int, skipped: int}
      */
@@ -19,11 +21,11 @@ class MissingPlayerService
         }
 
         $fixtureIds = Fixture::query()
-            ->whereIn('external_id', $this->extractIds($missingPlayers, 'fixture.id'))
+            ->whereIn('external_id', $this->extractNumericIds($missingPlayers, 'fixture.id'))
             ->pluck('id', 'external_id');
 
         $playerIds = Player::query()
-            ->whereIn('external_id', $this->extractIds($missingPlayers, 'player.id'))
+            ->whereIn('external_id', $this->extractNumericIds($missingPlayers, 'player.id'))
             ->pluck('id', 'external_id');
 
         $summary = $this->emptySummary(count($missingPlayers));
@@ -39,20 +41,36 @@ class MissingPlayerService
             }
 
             $missingPlayer = MissingPlayer::query()->updateOrCreate(
-                [
-                    'fixture_id' => $fixtureId,
-                    'player_id' => $playerId,
-                ],
-                [
-                    'type' => data_get($missingPlayerData, 'player.type'),
-                    'reason' => data_get($missingPlayerData, 'player.reason'),
-                ],
+                $this->missingPlayerIdentity($fixtureId, $playerId),
+                $this->missingPlayerAttributes($missingPlayerData),
             );
 
             $summary = $this->recordStoredModel($summary, $missingPlayer);
         }
 
         return $summary;
+    }
+
+    /**
+     * @return array{fixture_id: int, player_id: int}
+     */
+    private function missingPlayerIdentity(int $fixtureId, int $playerId): array
+    {
+        return [
+            'fixture_id' => $fixtureId,
+            'player_id' => $playerId,
+        ];
+    }
+
+    /**
+     * @return array{type: mixed, reason: mixed}
+     */
+    private function missingPlayerAttributes(array $missingPlayerData): array
+    {
+        return [
+            'type' => data_get($missingPlayerData, 'player.type'),
+            'reason' => data_get($missingPlayerData, 'player.reason'),
+        ];
     }
 
     /**
@@ -85,18 +103,5 @@ class MissingPlayerService
         }
 
         return $summary;
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
-    private function extractIds(array $items, string $path): Collection
-    {
-        return collect($items)
-            ->pluck($path)
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
     }
 }

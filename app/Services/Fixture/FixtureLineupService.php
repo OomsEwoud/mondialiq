@@ -6,10 +6,13 @@ use App\Models\Fixture;
 use App\Models\FixturePlayer;
 use App\Models\Player;
 use App\Models\Team;
+use App\Services\Fixture\Concerns\ExtractsApiPayloadIds;
 use Illuminate\Support\Collection;
 
 class FixtureLineupService
 {
+    use ExtractsApiPayloadIds;
+
     public function storeLineups(array $lineupData, int $fixtureId): void
     {
         $fixture = Fixture::query()->find($fixtureId);
@@ -19,7 +22,7 @@ class FixtureLineupService
         }
 
         $teamIds = Team::query()
-            ->whereIn('external_id', $this->extractTeamIds($lineupData))
+            ->whereIn('external_id', $this->extractNumericIds($lineupData, 'team.id'))
             ->pluck('id', 'external_id');
         $playerIds = Player::query()
             ->whereIn('external_id', $this->extractPlayerIds($lineupData))
@@ -75,41 +78,45 @@ class FixtureLineupService
             }
 
             FixturePlayer::query()->updateOrCreate(
-                [
-                    'fixture_id' => $fixtureId,
-                    'player_id' => $playerId,
-                ],
-                [
-                    'team_id' => $teamId,
-                    'is_starting' => $isStarting,
-                    'jersey_number' => data_get($playerData, 'number'),
-                    'position' => data_get($playerData, 'pos'),
-                ],
+                $this->playerIdentity($fixtureId, $playerId),
+                $this->playerAttributes($playerData, $teamId, $isStarting),
             );
         }
     }
 
-    private function extractTeamIds(array $lineupData): Collection
+    /**
+     * @return array{fixture_id: int, player_id: int}
+     */
+    private function playerIdentity(int $fixtureId, int $playerId): array
     {
-        return collect($lineupData)
-            ->pluck('team.id')
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
+        return [
+            'fixture_id' => $fixtureId,
+            'player_id' => $playerId,
+        ];
+    }
+
+    /**
+     * @return array{team_id: int, is_starting: bool, jersey_number: mixed, position: mixed}
+     */
+    private function playerAttributes(array $playerData, int $teamId, bool $isStarting): array
+    {
+        return [
+            'team_id' => $teamId,
+            'is_starting' => $isStarting,
+            'jersey_number' => data_get($playerData, 'number'),
+            'position' => data_get($playerData, 'pos'),
+        ];
     }
 
     private function extractPlayerIds(array $lineupData): Collection
     {
-        return collect($lineupData)
+        $players = collect($lineupData)
             ->flatMap(fn (array $teamData): array => [
                 ...data_get($teamData, 'startXI', []),
                 ...data_get($teamData, 'substitutes', []),
             ])
-            ->pluck('player.id')
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
+            ->pluck('player.id');
+
+        return $this->normalizeNumericIds($players);
     }
 }

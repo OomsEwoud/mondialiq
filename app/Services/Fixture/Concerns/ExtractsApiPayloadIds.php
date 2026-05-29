@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Services\Fixture\Concerns;
+
+use Illuminate\Support\Collection;
+
+trait ExtractsApiPayloadIds
+{
+    /**
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function extractNumericIds(array $items, string $path): Collection
+    {
+        return $this->normalizeNumericIds(collect($items)->pluck($path));
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection<int, mixed>  $values
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function normalizeNumericIds(Collection $values): Collection
+    {
+        return $values
+            ->filter(fn (mixed $value): bool => is_numeric($value))
+            ->map(fn (mixed $value): int => (int) $value)
+            ->unique()
+            ->values();
+    }
+}

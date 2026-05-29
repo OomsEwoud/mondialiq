@@ -5,21 +5,25 @@ namespace App\Services\Fixture;
 use App\Models\FixtureEvent;
 use App\Models\Player;
 use App\Models\Team;
-use Illuminate\Support\Collection;
+use App\Services\Fixture\Concerns\ExtractsApiPayloadIds;
 
 class FixtureEventsService
 {
+    use ExtractsApiPayloadIds;
+
     public function storeFixtureEvents(array $events, int $fixtureId): void
     {
-        $playerExternalIds = $this->extractIds($events, 'player.id')
-            ->merge($this->extractIds($events, 'assist.id'));
+        $playerExternalIds = $this->extractNumericIds($events, 'player.id')
+            ->merge($this->extractNumericIds($events, 'assist.id'))
+            ->unique()
+            ->values();
 
         $playerIds = Player::query()
             ->whereIn('external_id', $playerExternalIds)
             ->pluck('id', 'external_id');
 
         $teamIds = Team::query()
-            ->whereIn('external_id', $this->extractIds($events, 'team.id'))
+            ->whereIn('external_id', $this->extractNumericIds($events, 'team.id'))
             ->pluck('id', 'external_id');
 
         foreach ($events as $event) {
@@ -35,29 +39,41 @@ class FixtureEventsService
             }
 
             FixtureEvent::query()->updateOrCreate(
-                [
-                    'fixture_id' => $fixtureId,
-                    'team_id' => $teamId,
-                    'time_elapsed' => (int) $timeElapsed,
-                    'extra_time' => data_get($event, 'time.extra'),
-                    'type' => $type,
-                    'player_id' => $playerId,
-                ],
-                [
-                    'assist_id' => $assistId,
-                    'detail' => $detail,
-                ],
+                $this->eventIdentity($fixtureId, $event, $teamId, (int) $timeElapsed, $type, $playerId),
+                $this->eventAttributes($assistId, $detail),
             );
         }
     }
 
-    private function extractIds(array $items, string $path): Collection
+    /**
+     * @return array{fixture_id: int, team_id: int, time_elapsed: int, extra_time: mixed, type: string, player_id: int|null}
+     */
+    private function eventIdentity(
+        int $fixtureId,
+        array $event,
+        int $teamId,
+        int $timeElapsed,
+        string $type,
+        ?int $playerId,
+    ): array {
+        return [
+            'fixture_id' => $fixtureId,
+            'team_id' => $teamId,
+            'time_elapsed' => $timeElapsed,
+            'extra_time' => data_get($event, 'time.extra'),
+            'type' => $type,
+            'player_id' => $playerId,
+        ];
+    }
+
+    /**
+     * @return array{assist_id: int|null, detail: string}
+     */
+    private function eventAttributes(?int $assistId, string $detail): array
     {
-        return collect($items)
-            ->pluck($path)
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
+        return [
+            'assist_id' => $assistId,
+            'detail' => $detail,
+        ];
     }
 }
