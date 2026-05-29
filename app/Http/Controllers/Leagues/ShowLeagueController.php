@@ -8,6 +8,7 @@ use App\Models\Scoreboard;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -26,7 +27,7 @@ class ShowLeagueController extends Controller
             ->withSum('predictions', 'points')
             ->withCount('predictions')
             ->withCount([
-                'predictions as scoring_predictions_count' => fn ($query) => $query
+                'predictions as scoring_predictions_count' => fn (Builder $query) => $query
                     ->where('points', '>', 0),
             ])
             ->withMax('predictions', 'updated_at')
