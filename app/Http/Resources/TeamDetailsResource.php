@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +31,7 @@ class TeamDetailsResource extends JsonResource
             ] : null,
             'activePlayers' => $this->players
                 ->values()
-                ->map(fn ($player) => [
+                ->map(fn (Player $player) => [
                     'id' => $player->id,
                     'name' => $player->display_name,
                     'firstName' => $player->first_name,

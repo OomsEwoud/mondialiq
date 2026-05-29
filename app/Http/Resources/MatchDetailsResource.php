@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\FixtureEvent;
+use App\Models\FixturePlayer;
 use App\Models\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -60,7 +62,7 @@ class MatchDetailsResource extends JsonResource
             'events' => $this->fixtureEvents
                 ->sortBy('time_elapsed')
                 ->values()
-                ->map(fn ($event) => [
+                ->map(fn (FixtureEvent $event) => [
                     'id' => $event->id,
                     'minute' => $event->time_elapsed,
                     'extraTime' => $event->extra_time,
@@ -93,10 +95,10 @@ class MatchDetailsResource extends JsonResource
     private function availabilityForTeam(int $teamId): array
     {
         return $this->missingPlayers
-            ->filter(fn ($player): bool => $player->teams->contains('id', $teamId))
-            ->sortBy(fn ($player): string => $this->playerName($player))
+            ->filter(fn (Player $player): bool => $player->teams->contains('id', $teamId))
+            ->sortBy(fn (Player $player): string => $this->playerName($player))
             ->values()
-            ->map(fn ($player) => [
+            ->map(fn (Player $player) => [
                 'id' => $player->id,
                 'name' => $this->playerName($player),
                 'photo' => $player->photo_url,
@@ -135,7 +137,7 @@ class MatchDetailsResource extends JsonResource
 
         return $players
             ->values()
-            ->map(fn ($fixturePlayer) => [
+            ->map(fn (FixturePlayer $fixturePlayer) => [
                 'id' => $fixturePlayer->id,
                 'playerId' => $fixturePlayer->player_id,
                 'name' => $fixturePlayer->player?->display_name ?? 'Unknown player',
@@ -150,9 +152,9 @@ class MatchDetailsResource extends JsonResource
     {
         return $players
             ->sortBy([
-                fn ($player) => $this->positionSortOrder($player->position),
-                fn ($player) => $player->jersey_number ?? 999,
-                fn ($player) => $player->player?->display_name ?? '',
+                fn (FixturePlayer $player) => $this->positionSortOrder($player->position),
+                fn (FixturePlayer $player) => $player->jersey_number ?? 999,
+                fn (FixturePlayer $player) => $player->player?->display_name ?? '',
             ])
             ->values();
     }
