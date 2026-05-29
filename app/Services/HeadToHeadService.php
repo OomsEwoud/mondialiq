@@ -7,6 +7,7 @@ use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class HeadToHeadService
@@ -56,20 +57,38 @@ class HeadToHeadService
 
         return HeadToHead::query()->updateOrCreate(
             ['pair_key' => $pairKey],
-            [
-                'team_a_id' => $teamAId,
-                'team_b_id' => $teamBId,
-                'total_matches' => $summary['total_matches'],
-                'team_a_wins' => $summary['team_a_wins'],
-                'team_b_wins' => $summary['team_b_wins'],
-                'draws' => $summary['draws'],
-                'team_a_goals' => $summary['team_a_goals'],
-                'team_b_goals' => $summary['team_b_goals'],
-                'last_meeting_at' => $summary['last_meeting_at'],
-                'raw_data' => $summary['raw_data'],
-                'fetched_at' => now(),
-            ],
+            $this->headToHeadAttributes($summary, $teamAId, $teamBId),
         );
+    }
+
+    /**
+     * @param  array{
+     *     total_matches: int,
+     *     team_a_wins: int,
+     *     team_b_wins: int,
+     *     draws: int,
+     *     team_a_goals: int,
+     *     team_b_goals: int,
+     *     last_meeting_at: \Illuminate\Support\Carbon|null,
+     *     raw_data: array
+     * }  $summary
+     * @return array<string, mixed>
+     */
+    private function headToHeadAttributes(array $summary, int $teamAId, int $teamBId): array
+    {
+        return [
+            'team_a_id' => $teamAId,
+            'team_b_id' => $teamBId,
+            'total_matches' => $summary['total_matches'],
+            'team_a_wins' => $summary['team_a_wins'],
+            'team_b_wins' => $summary['team_b_wins'],
+            'draws' => $summary['draws'],
+            'team_a_goals' => $summary['team_a_goals'],
+            'team_b_goals' => $summary['team_b_goals'],
+            'last_meeting_at' => $summary['last_meeting_at'],
+            'raw_data' => $summary['raw_data'],
+            'fetched_at' => now(),
+        ];
     }
 
     /**
@@ -86,29 +105,8 @@ class HeadToHeadService
      */
     public function calculateSummary(array $response, int $teamAId, int $teamBId): array
     {
-        $teamIdsByExternalId = Team::query()
-            ->whereIn('external_id', collect($response)
-                ->flatMap(fn (array $fixtureData): array => [
-                    data_get($fixtureData, 'teams.home.id'),
-                    data_get($fixtureData, 'teams.away.id'),
-                ])
-                ->filter(fn (mixed $value): bool => is_numeric($value))
-                ->map(fn (mixed $value): int => (int) $value)
-                ->unique()
-                ->values())
-            ->pluck('id', 'external_id');
-
-        $summary = [
-            'total_matches' => 0,
-            'team_a_wins' => 0,
-            'team_b_wins' => 0,
-            'draws' => 0,
-            'team_a_goals' => 0,
-            'team_b_goals' => 0,
-            'last_meeting_at' => null,
-            'raw_data' => $response,
-        ];
-
+        $teamIdsByExternalId = $this->teamIdsByExternalId($response);
+        $summary = $this->emptySummary($response);
         $finishedMatchDates = [];
 
         foreach ($response as $fixtureData) {
@@ -130,29 +128,24 @@ class HeadToHeadService
                 continue;
             }
 
-            if ($homeTeamIdForMatch === $teamAId) {
-                $summary['team_a_goals'] += $homeGoals;
-                $summary['team_b_goals'] += $awayGoals;
-                $teamAGoals = $homeGoals;
-                $teamBGoals = $awayGoals;
-            } elseif ($awayTeamIdForMatch === $teamAId) {
-                $summary['team_a_goals'] += $awayGoals;
-                $summary['team_b_goals'] += $homeGoals;
-                $teamAGoals = $awayGoals;
-                $teamBGoals = $homeGoals;
-            } else {
+            $scoreForTeamA = $this->scoreForTeamA(
+                $teamAId,
+                $homeTeamIdForMatch,
+                $awayTeamIdForMatch,
+                $homeGoals,
+                $awayGoals,
+            );
+
+            if ($scoreForTeamA === null) {
                 continue;
             }
 
+            [$teamAGoals, $teamBGoals] = $scoreForTeamA;
             $summary['total_matches']++;
+            $summary['team_a_goals'] += $teamAGoals;
+            $summary['team_b_goals'] += $teamBGoals;
 
-            if ($teamAGoals === $teamBGoals) {
-                $summary['draws']++;
-            } elseif ($teamAGoals > $teamBGoals) {
-                $summary['team_a_wins']++;
-            } else {
-                $summary['team_b_wins']++;
-            }
+            $summary = $this->recordResult($summary, $teamAGoals, $teamBGoals);
 
             $fixtureDate = data_get($fixtureData, 'fixture.date');
 
@@ -161,16 +154,122 @@ class HeadToHeadService
             }
         }
 
-        if ($finishedMatchDates !== []) {
-            $summary['last_meeting_at'] = Carbon::instance(
-                collect($finishedMatchDates)
-                    ->sortDesc()
-                    ->first()
-                    ->toMutable(),
-            );
-        }
+        $summary['last_meeting_at'] = $this->lastMeetingAt($finishedMatchDates);
 
         return $summary;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function teamIdsByExternalId(array $response): Collection
+    {
+        return Team::query()
+            ->whereIn('external_id', $this->externalTeamIds($response))
+            ->pluck('id', 'external_id');
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function externalTeamIds(array $response): Collection
+    {
+        return collect($response)
+            ->flatMap(fn (array $fixtureData): array => [
+                data_get($fixtureData, 'teams.home.id'),
+                data_get($fixtureData, 'teams.away.id'),
+            ])
+            ->filter(fn (mixed $value): bool => is_numeric($value))
+            ->map(fn (mixed $value): int => (int) $value)
+            ->unique()
+            ->values();
+    }
+
+    /**
+     * @return array{
+     *     total_matches: int,
+     *     team_a_wins: int,
+     *     team_b_wins: int,
+     *     draws: int,
+     *     team_a_goals: int,
+     *     team_b_goals: int,
+     *     last_meeting_at: \Illuminate\Support\Carbon|null,
+     *     raw_data: array
+     * }
+     */
+    private function emptySummary(array $response): array
+    {
+        return [
+            'total_matches' => 0,
+            'team_a_wins' => 0,
+            'team_b_wins' => 0,
+            'draws' => 0,
+            'team_a_goals' => 0,
+            'team_b_goals' => 0,
+            'last_meeting_at' => null,
+            'raw_data' => $response,
+        ];
+    }
+
+    /**
+     * @return array{0: int, 1: int}|null
+     */
+    private function scoreForTeamA(
+        int $teamAId,
+        int $homeTeamId,
+        int $awayTeamId,
+        int $homeGoals,
+        int $awayGoals,
+    ): ?array {
+        if ($homeTeamId === $teamAId) {
+            return [$homeGoals, $awayGoals];
+        }
+
+        if ($awayTeamId === $teamAId) {
+            return [$awayGoals, $homeGoals];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  array<string, mixed>  $summary
+     * @return array<string, mixed>
+     */
+    private function recordResult(array $summary, int $teamAGoals, int $teamBGoals): array
+    {
+        if ($teamAGoals === $teamBGoals) {
+            $summary['draws']++;
+
+            return $summary;
+        }
+
+        if ($teamAGoals > $teamBGoals) {
+            $summary['team_a_wins']++;
+
+            return $summary;
+        }
+
+        $summary['team_b_wins']++;
+
+        return $summary;
+    }
+
+    /**
+     * @param  array<int, \Carbon\CarbonImmutable>  $finishedMatchDates
+     */
+    private function lastMeetingAt(array $finishedMatchDates): ?Carbon
+    {
+        if ($finishedMatchDates === []) {
+            return null;
+        }
+
+        return Carbon::instance(
+            collect($finishedMatchDates)
+                ->sortDesc()
+                ->first()
+                ->toMutable(),
+        );
     }
 
     /**
