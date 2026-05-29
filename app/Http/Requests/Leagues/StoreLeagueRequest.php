@@ -25,15 +25,18 @@ class StoreLeagueRequest extends FormRequest
 
     public function after(): array
     {
-        return [
-            function (Validator $validator) {
-                if ($this->user()?->scoreboards()->count() >= LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
-                    $validator->errors()->add(
-                        'name',
-                        'You can join up to 5 leagues.'
-                    );
-                }
-            },
-        ];
+        return [$this->validateLeagueLimit(...)];
+    }
+
+    private function validateLeagueLimit(Validator $validator): void
+    {
+        if ($this->user()?->scoreboards()->count() < LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
+            return;
+        }
+
+        $validator->errors()->add(
+            'name',
+            'You can join up to 5 leagues.',
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Predictions;
 
+use App\Models\Fixture;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -25,22 +26,24 @@ class StoreMatchPredictionRequest extends FormRequest
 
     public function after(): array
     {
-        return [
-            function (Validator $validator) {
-                $fixture = $this->route('fixture');
+        return [$this->validatePredictionRules(...)];
+    }
 
-                if ($fixture && $fixture->match_date->isPast()) {
-                    $validator->errors()->add(
-                        'outcome',
-                        'Predictions are closed for matches that have already started.',
-                    );
-                }
+    private function validatePredictionRules(Validator $validator): void
+    {
+        /** @var Fixture|null $fixture */
+        $fixture = $this->route('fixture');
 
-                if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {
-                    $this->validateScoreMatchesOutcome($validator);
-                }
-            },
-        ];
+        if ($fixture?->match_date->isPast()) {
+            $validator->errors()->add(
+                'outcome',
+                'Predictions are closed for matches that have already started.',
+            );
+        }
+
+        if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {
+            $this->validateScoreMatchesOutcome($validator);
+        }
     }
 
     private function validateScoreMatchesOutcome(Validator $validator): void
