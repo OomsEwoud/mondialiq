@@ -13,8 +13,8 @@ use Illuminate\Console\Command;
 class AddBookmakers extends Command
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected BookmakerService $service,
+        private readonly FootballApiService $api,
+        private readonly BookmakerService $service,
     ) {
         parent::__construct();
     }

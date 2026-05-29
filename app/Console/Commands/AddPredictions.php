@@ -15,8 +15,8 @@ use Illuminate\Console\Command;
 class AddPredictions extends Command
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected PredictionService $service,
+        private readonly FootballApiService $api,
+        private readonly PredictionService $service,
     ) {
         parent::__construct();
     }

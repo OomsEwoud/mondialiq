@@ -16,8 +16,8 @@ class AddStandings extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected FootballApiService $api,
-        protected StandingService $service,
+        private readonly FootballApiService $api,
+        private readonly StandingService $service,
     ) {
         parent::__construct();
     }
