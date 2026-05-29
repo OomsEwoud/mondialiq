@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use App\Services\Helper\HelperService;
+use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,6 +16,7 @@ class MatchesController extends Controller
     public function __construct(
         private readonly HelperService $helperService,
         private readonly FixturePaginationService $paginationService,
+        private readonly WorldCupContext $worldCupContext,
     ) {
     }
 
@@ -23,7 +24,10 @@ class MatchesController extends Controller
     {
         $filters = $this->parseFilters($request);
 
-        $query = new FixtureQuery($this->leagueId(), $this->season());
+        $query = new FixtureQuery(
+            $this->worldCupContext->leagueId(),
+            $this->worldCupContext->season(),
+        );
         $baseQuery = $query->build(
             array_fill_keys(['round', 'date', 'team', 'status'], ''),
         );
@@ -65,15 +69,4 @@ class MatchesController extends Controller
         ];
     }
 
-    private function leagueId(): int
-    {
-        return League::query()
-            ->where('external_id', config('services.api_football.league_id'))
-            ->value('id');
-    }
-
-    private function season(): int
-    {
-        return config('services.api_football.season');
-    }
 }
