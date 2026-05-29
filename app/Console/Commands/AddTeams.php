@@ -16,8 +16,8 @@ class AddTeams extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected TeamService $teamService,
-        protected FootballApiService $serviceApi,
+        private readonly TeamService $teamService,
+        private readonly FootballApiService $api,
     ) {
         parent::__construct();
     }
@@ -34,7 +34,7 @@ class AddTeams extends Command
         $teams = [];
 
         $this->components->task('Data uit API ophalen', function () use (&$teams, $config) {
-            $teams = $this->serviceApi->getTeams($config['leagueId'], $config['season']);
+            $teams = $this->api->getTeams($config['leagueId'], $config['season']);
         });
 
         $this->components->task('Data van teams opslaan in database', function () use ($teams) {

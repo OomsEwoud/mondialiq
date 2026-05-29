@@ -17,9 +17,9 @@ class AddPlayers extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected FootballApiService $api,
-        protected PlayerService $service,
-        protected PlayerStatsService $statsService,
+        private readonly FootballApiService $api,
+        private readonly PlayerService $service,
+        private readonly PlayerStatsService $statsService,
     ) {
         parent::__construct();
     }
