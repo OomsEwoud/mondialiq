@@ -16,8 +16,8 @@ class AddMissingPlayers extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected FootballApiService $api,
-        protected MissingPlayerService $service,
+        private readonly FootballApiService $api,
+        private readonly MissingPlayerService $service,
     ) {
         parent::__construct();
     }

@@ -16,8 +16,8 @@ class AddFixtures extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected FootballApiService $api,
-        protected FixtureService $service,
+        private readonly FootballApiService $api,
+        private readonly FixtureService $service,
     ) {
         parent::__construct();
     }
