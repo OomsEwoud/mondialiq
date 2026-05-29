@@ -15,8 +15,8 @@ use Illuminate\Console\Command;
 class AddFixturePlayerStats extends Command
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected FixturePlayerStatsService $playerStatsService,
+        private readonly FootballApiService $api,
+        private readonly FixturePlayerStatsService $playerStatsService,
     ) {
         parent::__construct();
     }

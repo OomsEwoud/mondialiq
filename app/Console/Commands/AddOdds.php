@@ -17,8 +17,8 @@ use Throwable;
 class AddOdds extends Command
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected FixtureOddsService $service,
+        private readonly FootballApiService $api,
+        private readonly FixtureOddsService $service,
     ) {
         parent::__construct();
     }
