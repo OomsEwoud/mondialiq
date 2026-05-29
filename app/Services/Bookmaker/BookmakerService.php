@@ -9,14 +9,45 @@ class BookmakerService
     public function storeBookmakers(array $bookmakers): void
     {
         foreach ($bookmakers as $bookmaker) {
-            if (empty($bookmaker['name'])) {
+            $name = $this->bookmakerName($bookmaker);
+
+            if ($name === null) {
                 continue;
             }
 
             Bookmaker::query()->updateOrCreate(
-                ['name' => $bookmaker['name']],
-                ['name' => $bookmaker['name']],
+                $this->bookmakerIdentity($name),
+                $this->bookmakerAttributes($name),
             );
         }
+    }
+
+    private function bookmakerName(array $bookmaker): ?string
+    {
+        if (empty($bookmaker['name'])) {
+            return null;
+        }
+
+        return $bookmaker['name'];
+    }
+
+    /**
+     * @return array{name: string}
+     */
+    private function bookmakerIdentity(string $name): array
+    {
+        return [
+            'name' => $name,
+        ];
+    }
+
+    /**
+     * @return array{name: string}
+     */
+    private function bookmakerAttributes(string $name): array
+    {
+        return [
+            'name' => $name,
+        ];
     }
 }

@@ -6,13 +6,15 @@ use App\Models\Country;
 
 class CountryService
 {
+    private const UNKNOWN_COUNTRY_NAME = 'World';
+
     private ?int $unknownCountryId = null;
 
     public function storeAllCountries(array $countriesData): void
     {
         foreach ($countriesData as $countryData) {
             Country::query()->updateOrCreate(
-                ['name' => $countryData['name']],
+                $this->countryIdentity($countryData),
                 $this->countryAttributes($countryData),
             );
         }
@@ -21,7 +23,7 @@ class CountryService
     public function getUnknownId(): ?int
     {
         if ($this->unknownCountryId === null) {
-            $this->unknownCountryId = Country::query()->where('name', 'World')->first()?->id;
+            $this->unknownCountryId = Country::query()->where('name', self::UNKNOWN_COUNTRY_NAME)->first()?->id;
         }
 
         return $this->unknownCountryId;
@@ -30,7 +32,7 @@ class CountryService
     public function normalizeName(?string $name): string
     {
         if (! $name) {
-            return 'World';
+            return self::UNKNOWN_COUNTRY_NAME;
         }
 
         $map = [
@@ -49,6 +51,16 @@ class CountryService
         ];
 
         return $map[$name] ?? $name;
+    }
+
+    /**
+     * @return array{name: string}
+     */
+    private function countryIdentity(array $countryData): array
+    {
+        return [
+            'name' => $countryData['name'],
+        ];
     }
 
     /**

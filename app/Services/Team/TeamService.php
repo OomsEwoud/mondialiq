@@ -4,28 +4,30 @@ namespace App\Services\Team;
 
 use App\Models\Country;
 use App\Models\Team;
-use App\Services\Apis\FootballApiService;
-use App\Services\Player\PlayerService;
 use Illuminate\Support\Collection;
 
 class TeamService
 {
-    public function __construct(
-        private readonly FootballApiService $api,
-        private readonly PlayerService $service,
-    ) {
-    }
-
     public function storeTeams(array $teamsData): void
     {
         $countries = Country::query()->pluck('id', 'name');
 
         foreach ($teamsData as $teamData) {
             Team::query()->updateOrCreate(
-                ['external_id' => $teamData['team']['id']],
+                $this->teamIdentity($teamData),
                 $this->teamAttributes($teamData, $countries),
             );
         }
+    }
+
+    /**
+     * @return array{external_id: int}
+     */
+    private function teamIdentity(array $teamData): array
+    {
+        return [
+            'external_id' => $teamData['team']['id'],
+        ];
     }
 
     /**
@@ -38,7 +40,12 @@ class TeamService
             'code' => $teamData['team']['code'],
             'logo_url' => $teamData['team']['logo'],
             'founded_at' => $teamData['team']['founded'],
-            'country_id' => $countries[$teamData['team']['country']] ?? null,
+            'country_id' => $this->countryId($teamData, $countries),
         ];
+    }
+
+    private function countryId(array $teamData, Collection $countries): ?int
+    {
+        return $countries[$teamData['team']['country']] ?? null;
     }
 }

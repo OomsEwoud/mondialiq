@@ -14,10 +14,20 @@ class LeagueService
 
         foreach ($leaguesData as $leagueData) {
             League::query()->updateOrCreate(
-                ['external_id' => $leagueData['league']['id']],
+                $this->leagueIdentity($leagueData),
                 $this->leagueAttributes($leagueData, $countries),
             );
         }
+    }
+
+    /**
+     * @return array{external_id: int}
+     */
+    private function leagueIdentity(array $leagueData): array
+    {
+        return [
+            'external_id' => $leagueData['league']['id'],
+        ];
     }
 
     /**
@@ -29,7 +39,12 @@ class LeagueService
             'name' => $leagueData['league']['name'],
             'type' => $leagueData['league']['type'],
             'logo_url' => $leagueData['league']['logo'],
-            'country_id' => $countries[$leagueData['country']['name']] ?? null,
+            'country_id' => $this->countryId($leagueData, $countries),
         ];
+    }
+
+    private function countryId(array $leagueData, Collection $countries): ?int
+    {
+        return $countries[$leagueData['country']['name']] ?? null;
     }
 }

@@ -21,7 +21,7 @@ class VenueService
 
         foreach ($venuesData as $venueData) {
             Venue::query()->updateOrCreate(
-                ['external_id' => $venueData['id']],
+                $this->venueIdentity($venueData),
                 $this->venueAttributes($venueData, $countries),
             );
         }
@@ -35,10 +35,26 @@ class VenueService
             ->whereNotNull('external_id')
             ->chunk(100, function (EloquentCollection $venues) use ($countries) {
                 foreach ($venues as $venue) {
-                    $venueData = $this->footballApiService->getVenue($venue->external_id);
-                    $this->storeVenues($venueData, $countries);
+                    $this->syncVenue($venue, $countries);
                 }
             });
+    }
+
+    private function syncVenue(Venue $venue, Collection $countries): void
+    {
+        $venueData = $this->footballApiService->getVenue((int) $venue->external_id);
+
+        $this->storeVenues($venueData, $countries);
+    }
+
+    /**
+     * @return array{external_id: int}
+     */
+    private function venueIdentity(array $venueData): array
+    {
+        return [
+            'external_id' => $venueData['id'],
+        ];
     }
 
     /**
@@ -51,7 +67,12 @@ class VenueService
             'city' => $venueData['city'],
             'capacity' => $venueData['capacity'],
             'photo_url' => $venueData['image'],
-            'country_id' => $countries[$venueData['country']] ?? null,
+            'country_id' => $this->countryId($venueData, $countries),
         ];
+    }
+
+    private function countryId(array $venueData, Collection $countries): ?int
+    {
+        return $countries[$venueData['country']] ?? null;
     }
 }
