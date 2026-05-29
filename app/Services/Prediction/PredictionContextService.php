@@ -7,6 +7,13 @@ use App\Models\Prediction;
 
 class PredictionContextService
 {
+    private const GUIDANCE_LINES = [
+        'Market odds are the strongest external signal.',
+        'API predictions are a secondary signal.',
+        'Team stats, standings, head-to-head and missing players provide context.',
+        'If sources disagree, explain the disagreement.',
+    ];
+
     public function __construct(
         private readonly FixtureOddsSummaryService $oddsSummaryService,
         private readonly ApiPredictionSummaryService $apiPredictionSummaryService,
@@ -35,12 +42,7 @@ class PredictionContextService
             'standings' => $this->standingsSummaryService->summarize($fixture),
             'head_to_head' => $this->headToHeadSummaryService->summarize($fixture),
             'missing_players' => $this->missingPlayersSummaryService->summarize($fixture),
-            'guidance' => [
-                'Market odds are the strongest external signal.',
-                'API predictions are a secondary signal.',
-                'Team stats, standings, head-to-head and missing players provide context.',
-                'If sources disagree, explain the disagreement.',
-            ],
+            'guidance' => self::GUIDANCE_LINES,
         ];
     }
 
@@ -130,10 +132,10 @@ class PredictionContextService
     {
         return implode(PHP_EOL, [
             'Guidance:',
-            '- Market odds are the strongest external signal.',
-            '- API predictions are a secondary signal.',
-            '- Team stats, standings, head-to-head and missing players provide context.',
-            '- If sources disagree, explain the disagreement.',
+            ...array_map(
+                fn (string $guidanceLine): string => "- {$guidanceLine}",
+                self::GUIDANCE_LINES,
+            ),
         ]);
     }
 
