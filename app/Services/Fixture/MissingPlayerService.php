@@ -15,12 +15,7 @@ class MissingPlayerService
     public function storeMissingPlayers(array $missingPlayers): array
     {
         if ($missingPlayers === []) {
-            return [
-                'processed' => 0,
-                'created' => 0,
-                'updated' => 0,
-                'skipped' => 0,
-            ];
+            return $this->emptySummary();
         }
 
         $fixtureIds = Fixture::query()
@@ -31,12 +26,7 @@ class MissingPlayerService
             ->whereIn('external_id', $this->extractIds($missingPlayers, 'player.id'))
             ->pluck('id', 'external_id');
 
-        $summary = [
-            'processed' => count($missingPlayers),
-            'created' => 0,
-            'updated' => 0,
-            'skipped' => 0,
-        ];
+        $summary = $this->emptySummary(count($missingPlayers));
 
         foreach ($missingPlayers as $missingPlayerData) {
             $fixtureId = $fixtureIds[data_get($missingPlayerData, 'fixture.id')] ?? null;
@@ -59,15 +49,39 @@ class MissingPlayerService
                 ],
             );
 
-            if ($missingPlayer->wasRecentlyCreated) {
-                $summary['created']++;
+            $summary = $this->recordStoredModel($summary, $missingPlayer);
+        }
 
-                continue;
-            }
+        return $summary;
+    }
 
-            if ($missingPlayer->wasChanged()) {
-                $summary['updated']++;
-            }
+    /**
+     * @return array{processed: int, created: int, updated: int, skipped: int}
+     */
+    private function emptySummary(int $processed = 0): array
+    {
+        return [
+            'processed' => $processed,
+            'created' => 0,
+            'updated' => 0,
+            'skipped' => 0,
+        ];
+    }
+
+    /**
+     * @param  array{processed: int, created: int, updated: int, skipped: int}  $summary
+     * @return array{processed: int, created: int, updated: int, skipped: int}
+     */
+    private function recordStoredModel(array $summary, MissingPlayer $missingPlayer): array
+    {
+        if ($missingPlayer->wasRecentlyCreated) {
+            $summary['created']++;
+
+            return $summary;
+        }
+
+        if ($missingPlayer->wasChanged()) {
+            $summary['updated']++;
         }
 
         return $summary;

@@ -4,6 +4,7 @@ namespace App\Services\Fixture;
 
 use App\Models\Player;
 use App\Models\PlayerFixtureStat;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class FixturePlayerStatsService
@@ -14,24 +15,14 @@ class FixturePlayerStatsService
     public function storeFixturePlayerStats(array $teamPlayerStats, int $fixtureId): array
     {
         if ($teamPlayerStats === []) {
-            return [
-                'processed' => 0,
-                'created' => 0,
-                'updated' => 0,
-                'skipped' => 0,
-            ];
+            return $this->emptySummary();
         }
 
         $playerIds = Player::query()
             ->whereIn('external_id', $this->extractPlayerIds($teamPlayerStats))
             ->pluck('id', 'external_id');
 
-        $summary = [
-            'processed' => 0,
-            'created' => 0,
-            'updated' => 0,
-            'skipped' => 0,
-        ];
+        $summary = $this->emptySummary();
 
         foreach ($teamPlayerStats as $teamData) {
             foreach (data_get($teamData, 'players', []) as $playerData) {
@@ -55,16 +46,40 @@ class FixturePlayerStatsService
                     $attributes,
                 );
 
-                if ($playerFixtureStat->wasRecentlyCreated) {
-                    $summary['created']++;
-
-                    continue;
-                }
-
-                if ($playerFixtureStat->wasChanged()) {
-                    $summary['updated']++;
-                }
+                $summary = $this->recordStoredModel($summary, $playerFixtureStat);
             }
+        }
+
+        return $summary;
+    }
+
+    /**
+     * @return array{processed: int, created: int, updated: int, skipped: int}
+     */
+    private function emptySummary(): array
+    {
+        return [
+            'processed' => 0,
+            'created' => 0,
+            'updated' => 0,
+            'skipped' => 0,
+        ];
+    }
+
+    /**
+     * @param  array{processed: int, created: int, updated: int, skipped: int}  $summary
+     * @return array{processed: int, created: int, updated: int, skipped: int}
+     */
+    private function recordStoredModel(array $summary, Model $model): array
+    {
+        if ($model->wasRecentlyCreated) {
+            $summary['created']++;
+
+            return $summary;
+        }
+
+        if ($model->wasChanged()) {
+            $summary['updated']++;
         }
 
         return $summary;
