@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Apis\FootballApiService;
 use App\Services\Standing\StandingService;
 use Illuminate\Console\Attributes\Description;
@@ -14,6 +15,7 @@ use Illuminate\Console\Command;
 class AddStandings extends Command
 {
     use InteractsWithFootballApiConfig;
+    use RunsFootballApiImportTasks;
 
     public function __construct(
         private readonly FootballApiService $api,
@@ -30,21 +32,14 @@ class AddStandings extends Command
             return self::FAILURE;
         }
 
-        $this->info('Ophalen van standings');
-        $standings = [];
-
-        $this->components->task('Data uit API ophalen', function () use (&$standings, $config) {
-            $standings = $this->api->getStandings($config['leagueId'], $config['season']);
-        });
-
-        $this->components->task('Data van standings opslaan in database', function () use ($standings) {
-            if (! empty($standings)) {
+        return $this->runFootballApiImport(
+            'Ophalen van standings',
+            'Data van standings opslaan in database',
+            fn (): array => $this->api->getStandings($config['leagueId'], $config['season']),
+            function (array $standings): void {
                 $this->service->storeStandings($standings);
-            }
-        });
-
-        $this->info('Standings klaar');
-
-        return self::SUCCESS;
+            },
+            'Standings klaar',
+        );
     }
 }

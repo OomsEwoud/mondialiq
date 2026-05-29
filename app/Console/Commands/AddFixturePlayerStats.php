@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\InteractsWithRelevantFixtures;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixturePlayerStatsService;
@@ -14,6 +15,8 @@ use Illuminate\Console\Command;
 #[Description('Haal spelerstatistieken op voor relevante fixtures')]
 class AddFixturePlayerStats extends Command
 {
+    use InteractsWithRelevantFixtures;
+
     public function __construct(
         private readonly FootballApiService $api,
         private readonly FixturePlayerStatsService $playerStatsService,
@@ -25,11 +28,7 @@ class AddFixturePlayerStats extends Command
     {
         $this->info('Ophalen van spelerstatistieken voor relevante fixtures');
 
-        $fixtures = Fixture::query()
-            ->whereNotNull('external_id')
-            ->relevantForDataSync()
-            ->orderBy('match_date')
-            ->get(['id', 'external_id', 'match_date']);
+        $fixtures = $this->relevantFixturesForDataSync();
 
         if ($fixtures->isEmpty()) {
             $this->info('Geen relevante fixtures gevonden voor spelerstatistieken sync.');

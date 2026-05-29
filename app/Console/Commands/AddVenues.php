@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Venue\VenueService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -11,6 +12,8 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer venues in de database')]
 class AddVenues extends Command
 {
+    use RunsFootballApiImportTasks;
+
     public function __construct(
         private readonly VenueService $venueService,
     ) {
@@ -19,14 +22,13 @@ class AddVenues extends Command
 
     public function handle(): int
     {
-        $this->info('Ophalen van stadions');
-
-        $this->components->task('Opslaan van stadions in database', function () {
-            $this->venueService->syncVenues();
-        });
-
-        $this->info('Stadions klaar');
-
-        return self::SUCCESS;
+        return $this->runDatabaseSyncTask(
+            'Ophalen van stadions',
+            'Opslaan van stadions in database',
+            function (): void {
+                $this->venueService->syncVenues();
+            },
+            'Stadions klaar',
+        );
     }
 }

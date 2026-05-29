@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Apis\FootballApiService;
 use App\Services\Team\TeamService;
 use Illuminate\Console\Attributes\Description;
@@ -14,6 +15,7 @@ use Illuminate\Console\Command;
 class AddTeams extends Command
 {
     use InteractsWithFootballApiConfig;
+    use RunsFootballApiImportTasks;
 
     public function __construct(
         private readonly TeamService $teamService,
@@ -30,21 +32,14 @@ class AddTeams extends Command
             return self::FAILURE;
         }
 
-        $this->info('Ophalen van teams');
-        $teams = [];
-
-        $this->components->task('Data uit API ophalen', function () use (&$teams, $config) {
-            $teams = $this->api->getTeams($config['leagueId'], $config['season']);
-        });
-
-        $this->components->task('Data van teams opslaan in database', function () use ($teams) {
-            if (! empty($teams)) {
+        return $this->runFootballApiImport(
+            'Ophalen van teams',
+            'Data van teams opslaan in database',
+            fn (): array => $this->api->getTeams($config['leagueId'], $config['season']),
+            function (array $teams): void {
                 $this->teamService->storeTeams($teams);
-            }
-        });
-
-        $this->info('Teams klaar');
-
-        return self::SUCCESS;
+            },
+            'Teams klaar',
+        );
     }
 }

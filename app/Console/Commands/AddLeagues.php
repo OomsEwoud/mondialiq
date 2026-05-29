@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Apis\FootballApiService;
 use App\Services\League\LeagueService;
 use Illuminate\Console\Attributes\Description;
@@ -12,6 +13,8 @@ use Illuminate\Console\Command;
 #[Description('Haal leagues op uit de Football API en sla ze op')]
 class AddLeagues extends Command
 {
+    use RunsFootballApiImportTasks;
+
     public function __construct(
         private readonly LeagueService $leagueService,
         private readonly FootballApiService $api,
@@ -21,21 +24,14 @@ class AddLeagues extends Command
 
     public function handle(): int
     {
-        $this->info('Ophalen van leagues');
-        $leagues = [];
-
-        $this->components->task('Data uit API ophalen', function () use (&$leagues) {
-            $leagues = $this->api->getLeagues();
-        });
-
-        $this->components->task('Data van leagues opslaan in database', function () use ($leagues) {
-            if (! empty($leagues)) {
+        return $this->runFootballApiImport(
+            'Ophalen van leagues',
+            'Data van leagues opslaan in database',
+            fn (): array => $this->api->getLeagues(),
+            function (array $leagues): void {
                 $this->leagueService->storeLeagues($leagues);
-            }
-        });
-
-        $this->info('Leagues klaar');
-
-        return self::SUCCESS;
+            },
+            'Leagues klaar',
+        );
     }
 }

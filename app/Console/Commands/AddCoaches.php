@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
 use App\Services\Coach\CoachService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -11,6 +12,8 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer coaches vanuit de Football API')]
 class AddCoaches extends Command
 {
+    use RunsFootballApiImportTasks;
+
     public function __construct(
         private readonly CoachService $coachService,
     ) {
@@ -19,14 +22,13 @@ class AddCoaches extends Command
 
     public function handle(): int
     {
-        $this->info('Ophalen van coaches');
-
-        $this->components->task('Opslaan van coaches in database', function () {
-            $this->coachService->syncCoaches();
-        });
-
-        $this->info('Coaches klaar');
-
-        return self::SUCCESS;
+        return $this->runDatabaseSyncTask(
+            'Ophalen van coaches',
+            'Opslaan van coaches in database',
+            function (): void {
+                $this->coachService->syncCoaches();
+            },
+            'Coaches klaar',
+        );
     }
 }
