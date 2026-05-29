@@ -7,45 +7,63 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FixtureQuery
 {
-    public function __construct(protected int $leagueId, protected int $season)
-    {
+    public function __construct(
+        private readonly int $leagueId,
+        private readonly int $season,
+    ) {
     }
 
     public function build(array $filters): Builder
     {
-        $query = Fixture::query()
+        return Fixture::query()
             ->where('league_id', $this->leagueId)
             ->where('season', $this->season)
-            ->with(['homeTeam', 'awayTeam', 'apiPrediction']);
+            ->with(['homeTeam', 'awayTeam', 'apiPrediction'])
+            ->when($filters['round'] ?? null, $this->applyRoundFilter(...))
+            ->when($filters['date'] ?? null, $this->applyDateFilter(...))
+            ->when($filters['team'] ?? null, $this->applyTeamFilter(...))
+            ->when(
+                ($filters['status'] ?? 'all') !== 'all',
+                fn (Builder $query) => $this->applyStatusFilter($query, $filters['status']),
+            )
+            ->orderBy('match_date');
+    }
 
-        if ($filters['round']) {
-            $query->where('round_name', $filters['round']);
-        }
+    private function applyRoundFilter(Builder $query, string $round): Builder
+    {
+        return $query->where('round_name', $round);
+    }
 
-        if ($filters['date']) {
-            $query->whereDate('match_date', $filters['date']);
-        }
+    private function applyDateFilter(Builder $query, string $date): Builder
+    {
+        return $query->whereDate('match_date', $date);
+    }
 
-        if ($filters['team']) {
-            $query->where(function (Builder $q) use ($filters) {
-                $q->whereHas('homeTeam', fn (Builder $query) => $query->where('name', 'like', "%{$filters['team']}%"))
-                    ->orWhereHas('awayTeam', fn (Builder $query) => $query->where('name', 'like', "%{$filters['team']}%"));
-            });
-        }
-
-        if (($filters['status'] ?? 'all') === 'played') {
-            $query->where('status_long', 'like', '%Finished%');
-        }
-
-        if (($filters['status'] ?? 'all') === 'upcoming') {
+    private function applyTeamFilter(Builder $query, string $team): Builder
+    {
+        return $query->where(function (Builder $query) use ($team) {
             $query
+                ->whereHas('homeTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team))
+                ->orWhereHas('awayTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team));
+        });
+    }
+
+    private function applyTeamNameFilter(Builder $query, string $team): Builder
+    {
+        return $query->where('name', 'like', "%{$team}%");
+    }
+
+    private function applyStatusFilter(Builder $query, string $status): Builder
+    {
+        return match ($status) {
+            'played' => $query->where('status_long', 'like', '%Finished%'),
+            'upcoming' => $query
                 ->where('status_long', 'not like', '%Finished%')
                 ->where('status_long', 'not like', '%Postpon%')
                 ->where('status_long', 'not like', '%Cancel%')
                 ->where('status_long', 'not like', '%Abandon%')
-                ->where('status_long', 'not like', '%Forfeit%');
-        }
-
-        return $query->orderBy('match_date');
+                ->where('status_long', 'not like', '%Forfeit%'),
+            default => $query,
+        };
     }
 }
