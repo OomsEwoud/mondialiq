@@ -11,6 +11,11 @@ class MissingPlayersSummaryService
 {
     private const PLAYER_LIMIT = 5;
 
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
@@ -50,22 +55,22 @@ class MissingPlayersSummaryService
 
         $lines = [
             'Missing players summary:',
-            $this->promptLine(
+            $this->formatter->bullet(
                 $this->countLine($summary['home_team_name'], $summary['home_missing_count']),
             ),
-            $this->promptLine(
+            $this->formatter->bullet(
                 $this->countLine($summary['away_team_name'], $summary['away_missing_count']),
             ),
         ];
 
         if ($summary['home_missing_players'] !== []) {
-            $lines[] = $this->promptLine(
+            $lines[] = $this->formatter->bullet(
                 $this->playersLine($summary['home_team_name'], $summary['home_missing_players']),
             );
         }
 
         if ($summary['away_missing_players'] !== []) {
-            $lines[] = $this->promptLine(
+            $lines[] = $this->formatter->bullet(
                 $this->playersLine($summary['away_team_name'], $summary['away_missing_players']),
             );
         }
@@ -164,7 +169,7 @@ class MissingPlayersSummaryService
 
     private function countLine(?string $teamName, int $count): string
     {
-        $teamName = $this->teamName($teamName);
+        $teamName = $this->formatter->teamName($teamName);
         $label = $count === 1 ? 'missing player' : 'missing players';
 
         return "{$teamName}: {$count} {$label}";
@@ -172,21 +177,11 @@ class MissingPlayersSummaryService
 
     private function playersLine(?string $teamName, array $players): string
     {
-        $teamName = $this->teamName($teamName);
+        $teamName = $this->formatter->teamName($teamName);
         $names = collect($players)
             ->pluck('name')
             ->implode(', ');
 
         return "{$teamName} missing players include: {$names}";
-    }
-
-    private function teamName(?string $teamName): string
-    {
-        return $teamName ?? 'Unknown team';
-    }
-
-    private function promptLine(string $line): string
-    {
-        return "- {$line}";
     }
 }

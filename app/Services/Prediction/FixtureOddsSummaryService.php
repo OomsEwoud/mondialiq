@@ -30,6 +30,11 @@ class FixtureOddsSummaryService
         self::MARKET_AWAY_EXACT_GOALS,
     ];
 
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Fixture|int $fixture): array
     {
         $fixtureId = $fixture instanceof Fixture ? $fixture->id : $fixture;
@@ -61,12 +66,12 @@ class FixtureOddsSummaryService
 
         return implode(PHP_EOL, [
             'Market odds summary:',
-            '- Home win probability: '.$this->formatPercentage($summary['home_win_probability']),
-            '- Draw probability: '.$this->formatPercentage($summary['draw_probability']),
-            '- Away win probability: '.$this->formatPercentage($summary['away_win_probability']),
-            '- Over 2.5 goals probability: '.$this->formatPercentage($summary['over_2_5_probability']),
-            '- BTTS yes probability: '.$this->formatPercentage($summary['btts_yes_probability']),
-            '- Most likely score according to market: '.$this->formatValue($summary['most_likely_score']),
+            '- Home win probability: '.$this->formatter->percentage($summary['home_win_probability'], round: true),
+            '- Draw probability: '.$this->formatter->percentage($summary['draw_probability'], round: true),
+            '- Away win probability: '.$this->formatter->percentage($summary['away_win_probability'], round: true),
+            '- Over 2.5 goals probability: '.$this->formatter->percentage($summary['over_2_5_probability'], round: true),
+            '- BTTS yes probability: '.$this->formatter->percentage($summary['btts_yes_probability'], round: true),
+            '- Most likely score according to market: '.$this->formatter->value($summary['most_likely_score']),
         ]);
     }
 
@@ -172,17 +177,4 @@ class FixtureOddsSummaryService
         return trim($value);
     }
 
-    private function formatPercentage(?float $probability): string
-    {
-        if ($probability === null) {
-            return 'not available';
-        }
-
-        return round($probability).'%';
-    }
-
-    private function formatValue(?string $value): string
-    {
-        return $value ?? 'not available';
-    }
 }

@@ -9,6 +9,11 @@ use Illuminate\Support\Arr;
 
 class StandingsSummaryService
 {
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
@@ -30,7 +35,7 @@ class StandingsSummaryService
         $summary = $this->summarize($fixture);
         $lines = collect([$summary['home_team'], $summary['away_team']])
             ->filter(fn (array $teamSummary): bool => $teamSummary['rank'] !== null)
-            ->map(fn (array $teamSummary): string => '- '.$this->formatTeamLine($teamSummary))
+            ->map(fn (array $teamSummary): string => $this->formatter->bullet($this->formatTeamLine($teamSummary)))
             ->values();
 
         if ($lines->isEmpty()) {
@@ -112,7 +117,7 @@ class StandingsSummaryService
 
     private function formatTeamLine(array $teamSummary): string
     {
-        $teamName = $teamSummary['team_name'] ?? 'Unknown team';
+        $teamName = $this->formatter->teamName($teamSummary['team_name']);
         $rank = $this->ordinal($teamSummary['rank']);
         $goalDifference = $this->formatGoalDifference($teamSummary['goal_difference']);
 

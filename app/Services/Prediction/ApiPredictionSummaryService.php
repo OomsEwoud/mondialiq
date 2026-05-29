@@ -6,6 +6,11 @@ use App\Models\Prediction;
 
 class ApiPredictionSummaryService
 {
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Prediction $prediction): array
     {
         $adviceSummary = $this->parseAdvice($prediction->advice);
@@ -32,25 +37,25 @@ class ApiPredictionSummaryService
         $summary = $this->summarize($prediction);
         $lines = [
             'API prediction summary:',
-            '- API advice: '.$this->formatPromptValue($summary['api_advice']),
-            '- API home chance: '.$this->formatPercentage($summary['api_home_chance']),
-            '- API draw chance: '.$this->formatPercentage($summary['api_draw_chance']),
-            '- API away chance: '.$this->formatPercentage($summary['api_away_chance']),
-            '- API predicted outcome: '.$this->formatPromptValue($summary['api_predicted_outcome']),
-            '- API goal trend: '.$this->formatPromptValue($summary['api_goal_trend']),
-            '- API confidence: '.$this->formatPromptValue($summary['api_confidence']),
+            '- API advice: '.$this->formatter->value($summary['api_advice']),
+            '- API home chance: '.$this->formatter->percentage($summary['api_home_chance']),
+            '- API draw chance: '.$this->formatter->percentage($summary['api_draw_chance']),
+            '- API away chance: '.$this->formatter->percentage($summary['api_away_chance']),
+            '- API predicted outcome: '.$this->formatter->value($summary['api_predicted_outcome']),
+            '- API goal trend: '.$this->formatter->value($summary['api_goal_trend']),
+            '- API confidence: '.$this->formatter->value($summary['api_confidence']),
         ];
 
         if ($summary['api_total_goals_line'] !== null) {
-            $lines[] = '- API total goals line: '.$this->formatNumber($summary['api_total_goals_line']);
+            $lines[] = '- API total goals line: '.$this->formatter->number($summary['api_total_goals_line']);
         }
 
         if ($summary['api_home_goals_line'] !== null) {
-            $lines[] = '- API home goals line: '.$this->formatNumber($summary['api_home_goals_line']);
+            $lines[] = '- API home goals line: '.$this->formatter->number($summary['api_home_goals_line']);
         }
 
         if ($summary['api_away_goals_line'] !== null) {
-            $lines[] = '- API away goals line: '.$this->formatNumber($summary['api_away_goals_line']);
+            $lines[] = '- API away goals line: '.$this->formatter->number($summary['api_away_goals_line']);
         }
 
         return implode(PHP_EOL, $lines);
@@ -143,30 +148,5 @@ class ApiPredictionSummaryService
         }
 
         return preg_replace('/\s+:\s+/', ': ', trim($advice));
-    }
-
-    private function formatPromptValue(mixed $value): string
-    {
-        if ($value === null || $value === '') {
-            return 'not available';
-        }
-
-        return (string) $value;
-    }
-
-    private function formatPercentage(mixed $value): string
-    {
-        if ($value === null || $value === '') {
-            return 'not available';
-        }
-
-        return $this->formatNumber($value).'%';
-    }
-
-    private function formatNumber(mixed $value): string
-    {
-        $formatted = number_format((float) $value, 2, '.', '');
-
-        return rtrim(rtrim($formatted, '0'), '.');
     }
 }

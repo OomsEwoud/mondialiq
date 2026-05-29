@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TeamStatsSummaryService
 {
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
@@ -168,7 +173,7 @@ class TeamStatsSummaryService
 
     private function formatFormLine(array $teamSummary): string
     {
-        $teamName = $this->teamName($teamSummary);
+        $teamName = $this->formatter->teamName($teamSummary['team_name']);
 
         if ($teamSummary['form'] === null) {
             return "{$teamName} form: not available";
@@ -182,7 +187,7 @@ class TeamStatsSummaryService
 
     private function formatRecordLine(array $teamSummary): string
     {
-        $teamName = $this->teamName($teamSummary);
+        $teamName = $this->formatter->teamName($teamSummary['team_name']);
 
         if (
             $teamSummary['wins'] === null
@@ -193,10 +198,5 @@ class TeamStatsSummaryService
         }
 
         return "{$teamName} record: {$teamSummary['wins']}W {$teamSummary['draws']}D {$teamSummary['losses']}L";
-    }
-
-    private function teamName(array $teamSummary): string
-    {
-        return $teamSummary['team_name'] ?? 'Unknown team';
     }
 }

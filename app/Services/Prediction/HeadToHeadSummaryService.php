@@ -7,6 +7,11 @@ use App\Models\HeadToHead;
 
 class HeadToHeadSummaryService
 {
+    public function __construct(
+        private readonly PromptFormatter $formatter,
+    ) {
+    }
+
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
@@ -41,8 +46,8 @@ class HeadToHeadSummaryService
             ]);
         }
 
-        $homeTeamName = $fixture->homeTeam?->name ?? 'Home team';
-        $awayTeamName = $fixture->awayTeam?->name ?? 'Away team';
+        $homeTeamName = $this->formatter->teamName($fixture->homeTeam?->name, 'Home team');
+        $awayTeamName = $this->formatter->teamName($fixture->awayTeam?->name, 'Away team');
 
         return implode(PHP_EOL, [
             'Head-to-head summary:',
@@ -51,7 +56,7 @@ class HeadToHeadSummaryService
             "- {$awayTeamName} wins: {$summary['away_team_h2h_wins']}",
             '- Draws: '.$summary['draws'],
             "- Goals: {$homeTeamName} {$summary['home_team_h2h_goals']} - {$summary['away_team_h2h_goals']} {$awayTeamName}",
-            '- Last meeting: '.($summary['last_meeting_date'] ?? 'not available'),
+            '- Last meeting: '.$this->formatter->value($summary['last_meeting_date']),
         ]);
     }
 
@@ -116,8 +121,8 @@ class HeadToHeadSummaryService
 
     private function conclusion(Fixture $fixture, int $homeWins, int $awayWins): ?string
     {
-        $homeTeamName = $fixture->homeTeam?->name ?? 'Home team';
-        $awayTeamName = $fixture->awayTeam?->name ?? 'Away team';
+        $homeTeamName = $this->formatter->teamName($fixture->homeTeam?->name, 'Home team');
+        $awayTeamName = $this->formatter->teamName($fixture->awayTeam?->name, 'Away team');
 
         if ($homeWins > $awayWins) {
             return "{$homeTeamName} has the stronger head-to-head record.";

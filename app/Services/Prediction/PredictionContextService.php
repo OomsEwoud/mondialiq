@@ -21,6 +21,7 @@ class PredictionContextService
         private readonly StandingsSummaryService $standingsSummaryService,
         private readonly HeadToHeadSummaryService $headToHeadSummaryService,
         private readonly MissingPlayersSummaryService $missingPlayersSummaryService,
+        private readonly PromptFormatter $formatter,
     ) {
     }
 
@@ -141,7 +142,11 @@ class PredictionContextService
 
     private function fixtureTeamsLine(Fixture $fixture): string
     {
-        return ($fixture->homeTeam?->name ?? 'Home team').' vs '.($fixture->awayTeam?->name ?? 'Away team');
+        return sprintf(
+            '%s vs %s',
+            $this->formatter->teamName($fixture->homeTeam?->name, 'Home team'),
+            $this->formatter->teamName($fixture->awayTeam?->name, 'Away team'),
+        );
     }
 
     private function fixtureLeagueLine(Fixture $fixture): string
