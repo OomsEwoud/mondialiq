@@ -8,10 +8,10 @@ use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureStatsService;
-use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Throwable;
 
 #[Signature('app:add-fixture-data')]
 #[Description('Haal lineups, stats en events op voor relevante fixtures')]
@@ -44,17 +44,8 @@ class AddFixtureData extends Command
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) {
             try {
-                $lineups = $this->api->getFixtureLineups($fixture->external_id);
-                $this->lineupService->storeLineups($lineups, $fixture->id);
-
-                $stats = $this->api->getFixtureStats($fixture->external_id);
-                $this->statsService->storeFixtureStats($stats, $fixture->id);
-
-                $events = $this->api->getFixtureEvents($fixture->external_id);
-                $this->eventsService->storeFixtureEvents($events, $fixture->id);
-
-                sleep(1);
-            } catch (Exception $e) {
+                $this->syncFixtureData($fixture);
+            } catch (Throwable $e) {
                 $this->newLine();
                 $this->error("Fout bij ophalen fixture {$fixture->id}: {$e->getMessage()}");
             }
@@ -64,5 +55,27 @@ class AddFixtureData extends Command
         $this->info('Fixture data voor relevante fixtures is geupdate');
 
         return self::SUCCESS;
+    }
+
+    private function syncFixtureData(Fixture $fixture): void
+    {
+        $externalFixtureId = (int) $fixture->external_id;
+
+        $this->lineupService->storeLineups(
+            $this->api->getFixtureLineups($externalFixtureId),
+            $fixture->id,
+        );
+
+        $this->statsService->storeFixtureStats(
+            $this->api->getFixtureStats($externalFixtureId),
+            $fixture->id,
+        );
+
+        $this->eventsService->storeFixtureEvents(
+            $this->api->getFixtureEvents($externalFixtureId),
+            $fixture->id,
+        );
+
+        sleep(1);
     }
 }

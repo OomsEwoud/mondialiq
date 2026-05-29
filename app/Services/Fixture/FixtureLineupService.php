@@ -29,32 +29,54 @@ class FixtureLineupService
             ->pluck('id', 'external_id');
 
         foreach ($lineupData as $data) {
-            $teamId = $teamIds[data_get($data, 'team.id')] ?? null;
-            $formation = data_get($data, 'formation');
+            $lineupPayload = $this->lineupPayload($data, $teamIds);
 
-            if (! $teamId || ! is_string($formation) || $formation === '') {
+            if ($lineupPayload === null) {
                 continue;
             }
 
             $fixture->lineups()->syncWithoutDetaching([
-                $teamId => ['formation' => $formation],
+                $lineupPayload['team_id'] => ['formation' => $lineupPayload['formation']],
             ]);
 
             $this->storePlayers(
-                data_get($data, 'startXI', []),
+                $this->playerEntries(data_get($data, 'startXI', [])),
                 $fixtureId,
-                $teamId,
+                $lineupPayload['team_id'],
                 $playerIds,
                 true,
             );
             $this->storePlayers(
-                data_get($data, 'substitutes', []),
+                $this->playerEntries(data_get($data, 'substitutes', [])),
                 $fixtureId,
-                $teamId,
+                $lineupPayload['team_id'],
                 $playerIds,
                 false,
             );
         }
+    }
+
+    /**
+     * @return array{team_id: int, formation: string}|null
+     */
+    private function lineupPayload(array $data, Collection $teamIds): ?array
+    {
+        $teamId = $teamIds[data_get($data, 'team.id')] ?? null;
+        $formation = data_get($data, 'formation');
+
+        if (! is_numeric($teamId) || ! is_string($formation) || $formation === '') {
+            return null;
+        }
+
+        return [
+            'team_id' => (int) $teamId,
+            'formation' => $formation,
+        ];
+    }
+
+    private function playerEntries(mixed $players): array
+    {
+        return is_array($players) ? $players : [];
     }
 
     private function storePlayers(
@@ -71,9 +93,9 @@ class FixtureLineupService
                 continue;
             }
 
-            $playerId = $playerIds[data_get($playerData, 'id')] ?? null;
+            $playerId = $this->localPlayerId($playerData, $playerIds);
 
-            if (! $playerId) {
+            if ($playerId === null) {
                 continue;
             }
 
@@ -82,6 +104,13 @@ class FixtureLineupService
                 $this->playerAttributes($playerData, $teamId, $isStarting),
             );
         }
+    }
+
+    private function localPlayerId(array $playerData, Collection $playerIds): ?int
+    {
+        $playerId = $playerIds[data_get($playerData, 'id')] ?? null;
+
+        return is_numeric($playerId) ? (int) $playerId : null;
     }
 
     /**
