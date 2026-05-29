@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
-    public static int $recentDataSyncWindowHours = 3;
-    public static int $upcomingDataSyncWindowMinutes = 45;
+    private const RECENT_DATA_SYNC_WINDOW_HOURS = 3;
+    private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 45;
 
-    public static array $liveStatusLongs = [
+    private const LIVE_STATUS_LONGS = [
         'Kick Off',
         'First Half',
         'Halftime',
@@ -67,14 +67,14 @@ class Fixture extends Model
 
     public function scopeInProgress(Builder $query): Builder
     {
-        return $query->whereIn('status_long', self::$liveStatusLongs);
+        return $query->whereIn('status_long', self::LIVE_STATUS_LONGS);
     }
 
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
         $now = now('UTC');
-        $windowStart = $now->copy()->subHours(self::$recentDataSyncWindowHours);
-        $windowEnd = $now->copy()->addMinutes(self::$upcomingDataSyncWindowMinutes);
+        $windowStart = $now->copy()->subHours(self::RECENT_DATA_SYNC_WINDOW_HOURS);
+        $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
 
         return $query->where(function (Builder $query) use ($windowStart, $windowEnd) {
             $query
@@ -140,7 +140,9 @@ class Fixture extends Model
 
     public function lineups(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'fixture_lineups')->withPivot('formation')->withTimestamps();
+        return $this->belongsToMany(Team::class, 'fixture_lineups')
+            ->withPivot('formation')
+            ->withTimestamps();
     }
 
     public function playerFixtureStats(): HasMany
