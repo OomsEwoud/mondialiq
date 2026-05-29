@@ -11,8 +11,9 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer coaches vanuit de Football API')]
 class AddCoaches extends Command
 {
-    public function __construct(protected CoachService $coachService)
-    {
+    public function __construct(
+        private readonly CoachService $coachService,
+    ) {
         parent::__construct();
     }
 

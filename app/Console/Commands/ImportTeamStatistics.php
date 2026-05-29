@@ -23,7 +23,7 @@ class ImportTeamStatistics extends Command
     use InteractsWithFootballApiConfig;
 
     public function __construct(
-        protected TeamStatisticsService $service,
+        private readonly TeamStatisticsService $service,
     ) {
         parent::__construct();
     }

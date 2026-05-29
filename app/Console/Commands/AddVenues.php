@@ -11,8 +11,9 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer venues in de database')]
 class AddVenues extends Command
 {
-    public function __construct(protected VenueService $venueService)
-    {
+    public function __construct(
+        private readonly VenueService $venueService,
+    ) {
         parent::__construct();
     }
 

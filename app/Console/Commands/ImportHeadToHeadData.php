@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 class ImportHeadToHeadData extends Command
 {
     public function __construct(
-        protected HeadToHeadService $headToHeadService,
+        private readonly HeadToHeadService $headToHeadService,
     ) {
         parent::__construct();
     }
