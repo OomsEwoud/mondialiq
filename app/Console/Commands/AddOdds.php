@@ -8,6 +8,8 @@ use App\Services\Fixture\FixtureOddsService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Throwable;
 
 #[Signature('app:add-odds
@@ -27,16 +29,7 @@ class AddOdds extends Command
     {
         $this->info('Starten met ophalen van fixture odds');
 
-        $windowStart = $this->option('include-recent')
-            ? now('UTC')->subDays(7)
-            : now('UTC');
-        $windowEnd = now('UTC')->addDays(max(1, (int) $this->option('days')));
-
-        $fixtures = Fixture::query()
-            ->whereNotNull('external_id')
-            ->whereBetween('match_date', [$windowStart, $windowEnd])
-            ->orderBy('match_date')
-            ->get(['id', 'external_id', 'match_date']);
+        $fixtures = $this->fixturesForOddsSync();
 
         if ($fixtures->isEmpty()) {
             $this->info('Geen fixtures gevonden binnen het odds venster.');
@@ -46,20 +39,11 @@ class AddOdds extends Command
 
         $this->info("{$fixtures->count()} fixtures gevonden binnen het odds venster.");
 
-        $totals = [
-            'stored' => 0,
-            'skipped' => 0,
-        ];
+        $totals = $this->emptySummary();
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$totals) {
             try {
-                $odds = $this->api->getFixtureOdds($fixture->external_id);
-                $summary = $this->service->storeFixtureOdds($odds, $fixture->id);
-
-                $totals['stored'] += $summary['stored'];
-                $totals['skipped'] += $summary['skipped'];
-
-                usleep(250000);
+                $totals = $this->mergeSummary($totals, $this->syncFixtureOdds($fixture));
             } catch (Throwable $e) {
                 $this->newLine();
                 $this->error("Fout bij ophalen odds voor fixture {$fixture->id}: {$e->getMessage()}");
@@ -72,5 +56,68 @@ class AddOdds extends Command
         $this->info('Fixture odds sync klaar');
 
         return self::SUCCESS;
+    }
+
+    private function oddsWindowStart(): Carbon
+    {
+        if ($this->option('include-recent')) {
+            return now('UTC')->subDays(7);
+        }
+
+        return now('UTC');
+    }
+
+    private function oddsWindowEnd(): Carbon
+    {
+        return now('UTC')->addDays(max(1, (int) $this->option('days')));
+    }
+
+    /**
+     * @return Collection<int, Fixture>
+     */
+    private function fixturesForOddsSync(): Collection
+    {
+        return Fixture::query()
+            ->whereNotNull('external_id')
+            ->whereBetween('match_date', [$this->oddsWindowStart(), $this->oddsWindowEnd()])
+            ->orderBy('match_date')
+            ->get(['id', 'external_id', 'match_date']);
+    }
+
+    /**
+     * @return array{stored: int, skipped: int}
+     */
+    private function syncFixtureOdds(Fixture $fixture): array
+    {
+        $odds = $this->api->getFixtureOdds((int) $fixture->external_id);
+        $summary = $this->service->storeFixtureOdds($odds, $fixture->id);
+
+        usleep(250000);
+
+        return $summary;
+    }
+
+    /**
+     * @return array{stored: int, skipped: int}
+     */
+    private function emptySummary(): array
+    {
+        return [
+            'stored' => 0,
+            'skipped' => 0,
+        ];
+    }
+
+    /**
+     * @param  array{stored: int, skipped: int}  $summary
+     * @param  array{stored: int, skipped: int}  $addition
+     * @return array{stored: int, skipped: int}
+     */
+    private function mergeSummary(array $summary, array $addition): array
+    {
+        $summary['stored'] += $addition['stored'];
+        $summary['skipped'] += $addition['skipped'];
+
+        return $summary;
     }
 }
