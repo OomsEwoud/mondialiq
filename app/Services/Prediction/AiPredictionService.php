@@ -21,22 +21,38 @@ class AiPredictionService
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
 
-        $response = OpenAI::responses()->create([
-            'model' => 'gpt-5.4-mini',
-            'instructions' => $this->promptBuilder->instructions(),
-            'input' => $this->promptBuilder->context($fixture),
-        ]);
+        $response = OpenAI::responses()->create($this->openAiParameters($fixture));
 
         $prediction = $this->decodePrediction($response->outputText);
 
         return Prediction::query()->updateOrCreate(
-            [
-                'fixture_id' => $fixture->id,
-                'user_id' => null,
-                'source' => PredictionTypes::Ai->value,
-            ],
+            $this->predictionIdentity($fixture),
             $this->predictionAttributes($fixture, $prediction),
         );
+    }
+
+    /**
+     * @return array{model: string, instructions: string, input: string}
+     */
+    private function openAiParameters(Fixture $fixture): array
+    {
+        return [
+            'model' => 'gpt-5.4-mini',
+            'instructions' => $this->promptBuilder->instructions(),
+            'input' => $this->promptBuilder->context($fixture),
+        ];
+    }
+
+    /**
+     * @return array{fixture_id: int, user_id: null, source: string}
+     */
+    private function predictionIdentity(Fixture $fixture): array
+    {
+        return [
+            'fixture_id' => $fixture->id,
+            'user_id' => null,
+            'source' => PredictionTypes::Ai->value,
+        ];
     }
 
     /**
@@ -90,7 +106,7 @@ class AiPredictionService
             'confidence' => $this->percentage(Arr::get($prediction, 'confidence')),
             'home_goals' => $homeGoals,
             'away_goals' => $awayGoals,
-            'total_goals' => $homeGoals !== null && $awayGoals !== null ? $homeGoals + $awayGoals : null,
+            'total_goals' => $this->totalGoals($homeGoals, $awayGoals),
             'advice' => $this->advice($prediction),
         ];
     }
@@ -139,6 +155,15 @@ class AiPredictionService
         }
 
         return (float) $value;
+    }
+
+    private function totalGoals(?float $homeGoals, ?float $awayGoals): ?float
+    {
+        if ($homeGoals === null || $awayGoals === null) {
+            return null;
+        }
+
+        return $homeGoals + $awayGoals;
     }
 
     /**

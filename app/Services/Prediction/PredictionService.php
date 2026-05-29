@@ -13,22 +13,38 @@ class PredictionService
         $apiPrediction = data_get($prediction, '0.predictions', []);
 
         Prediction::query()->updateOrCreate(
-            [
-                'fixture_id' => $fixtureId,
-                'user_id' => null,
-                'source' => PredictionTypes::Api->value,
-            ],
-            [
-                'winner_id' => $this->resolveWinnerId(data_get($apiPrediction, 'winner.id')),
-                'total_goals' => data_get($apiPrediction, 'under_over'),
-                'home_goals' => data_get($apiPrediction, 'goals.home'),
-                'away_goals' => data_get($apiPrediction, 'goals.away'),
-                'advice' => data_get($apiPrediction, 'advice'),
-                'home_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.home')),
-                'draw_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.draw')),
-                'away_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.away')),
-            ],
+            $this->predictionIdentity($fixtureId),
+            $this->predictionAttributes($apiPrediction),
         );
+    }
+
+    /**
+     * @return array{fixture_id: int, user_id: null, source: string}
+     */
+    private function predictionIdentity(int $fixtureId): array
+    {
+        return [
+            'fixture_id' => $fixtureId,
+            'user_id' => null,
+            'source' => PredictionTypes::Api->value,
+        ];
+    }
+
+    /**
+     * @return array{winner_id: int|null, total_goals: mixed, home_goals: mixed, away_goals: mixed, advice: mixed, home_chance: float|null, draw_chance: float|null, away_chance: float|null}
+     */
+    private function predictionAttributes(array $apiPrediction): array
+    {
+        return [
+            'winner_id' => $this->resolveWinnerId(data_get($apiPrediction, 'winner.id')),
+            'total_goals' => data_get($apiPrediction, 'under_over'),
+            'home_goals' => data_get($apiPrediction, 'goals.home'),
+            'away_goals' => data_get($apiPrediction, 'goals.away'),
+            'advice' => data_get($apiPrediction, 'advice'),
+            'home_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.home')),
+            'draw_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.draw')),
+            'away_chance' => $this->normalizePercentage(data_get($apiPrediction, 'percent.away')),
+        ];
     }
 
     private function resolveWinnerId(?int $apiWinnerId): ?int

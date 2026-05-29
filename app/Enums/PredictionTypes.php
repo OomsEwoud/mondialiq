@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum PredictionTypes : string
+enum PredictionTypes: string
 {
     case User = 'user';
     case Ai = 'ai';
@@ -10,7 +10,7 @@ enum PredictionTypes : string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::User => 'Gebruiker',
             self::Ai => 'Ai',
             self::Api => 'Api',
