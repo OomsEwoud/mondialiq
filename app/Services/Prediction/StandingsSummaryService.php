@@ -5,6 +5,7 @@ namespace App\Services\Prediction;
 use App\Models\Fixture;
 use App\Models\Standing;
 use App\Models\Team;
+use Illuminate\Support\Arr;
 
 class StandingsSummaryService
 {
@@ -14,7 +15,7 @@ class StandingsSummaryService
         $standings = Standing::query()
             ->where('league_id', $fixture->league_id)
             ->where('season', $fixture->season)
-            ->whereIn('team_id', array_filter([$fixture->home_team_id, $fixture->away_team_id]))
+            ->whereIn('team_id', $this->teamIds($fixture))
             ->get()
             ->keyBy('team_id');
 
@@ -48,19 +49,7 @@ class StandingsSummaryService
     private function summarizeTeam(?Team $team, ?Standing $standing): array
     {
         if ($standing === null) {
-            return [
-                'team_name' => $team?->name,
-                'rank' => null,
-                'points' => null,
-                'played' => null,
-                'wins' => null,
-                'draws' => null,
-                'losses' => null,
-                'goals_for' => null,
-                'goals_against' => null,
-                'goal_difference' => null,
-                'group_name' => null,
-            ];
+            return $this->emptyTeamSummary($team);
         }
 
         return [
@@ -75,6 +64,49 @@ class StandingsSummaryService
             'goals_against' => $standing->goals_against,
             'goal_difference' => $standing->goal_difference,
             'group_name' => $standing->group_name,
+        ];
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function teamIds(Fixture $fixture): array
+    {
+        return Arr::whereNotNull([
+            $fixture->home_team_id,
+            $fixture->away_team_id,
+        ]);
+    }
+
+    /**
+     * @return array{
+     *     team_name: string|null,
+     *     rank: null,
+     *     points: null,
+     *     played: null,
+     *     wins: null,
+     *     draws: null,
+     *     losses: null,
+     *     goals_for: null,
+     *     goals_against: null,
+     *     goal_difference: null,
+     *     group_name: null
+     * }
+     */
+    private function emptyTeamSummary(?Team $team): array
+    {
+        return [
+            'team_name' => $team?->name,
+            'rank' => null,
+            'points' => null,
+            'played' => null,
+            'wins' => null,
+            'draws' => null,
+            'losses' => null,
+            'goals_for' => null,
+            'goals_against' => null,
+            'goal_difference' => null,
+            'group_name' => null,
         ];
     }
 
