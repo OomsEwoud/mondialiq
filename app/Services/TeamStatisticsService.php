@@ -33,20 +33,29 @@ class TeamStatisticsService
         }
 
         $response = $this->api->getTeamStatistics($apiTeamId, $apiLeagueId, $season, $normalizedDate);
-        $teamId = Team::query()->where('external_id', $apiTeamId)->value('id');
-        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
-
-        $attributes = [
-            'team_id' => $teamId,
-            'league_id' => $leagueId,
-            ...$this->parseStatistics($response, $apiTeamId, $apiLeagueId, $season, $normalizedDate),
-            'fetched_at' => now(),
-        ];
 
         return TeamStatistic::query()->updateOrCreate(
             ['statistics_key' => $this->makeStatisticsKey($apiTeamId, $apiLeagueId, $season, $normalizedDate)],
-            $attributes,
+            $this->teamStatisticAttributes($response, $apiTeamId, $apiLeagueId, $season, $normalizedDate),
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function teamStatisticAttributes(
+        array $response,
+        int $apiTeamId,
+        int $apiLeagueId,
+        int $season,
+        ?string $date,
+    ): array {
+        return [
+            'team_id' => $this->localTeamId($apiTeamId),
+            'league_id' => $this->localLeagueId($apiLeagueId),
+            ...$this->parseStatistics($response, $apiTeamId, $apiLeagueId, $season, $date),
+            'fetched_at' => now(),
+        ];
     }
 
     public function shouldRefresh(?TeamStatistic $existing, bool $hasFixtureToday, bool $force = false): bool
@@ -73,45 +82,86 @@ class TeamStatisticsService
         ?string $date = null,
     ): array {
         return [
+            ...$this->baseStatisticAttributes($apiTeamId, $apiLeagueId, $season, $date),
+            'form' => $this->nullableString(data_get($response, 'form')),
+            ...$this->fixtureResultAttributes($response),
+            ...$this->goalAttributes($response),
+            ...$this->cleanSheetAttributes($response),
+            ...$this->streakAttributes($response),
+            ...$this->contextAttributes($response),
+            'raw_data' => $response,
+        ];
+    }
+
+    /**
+     * @return array{api_team_id: int, api_league_id: int, season: int, statistics_date: string|null, statistics_key: string}
+     */
+    private function baseStatisticAttributes(int $apiTeamId, int $apiLeagueId, int $season, ?string $date): array
+    {
+        return [
             'api_team_id' => $apiTeamId,
             'api_league_id' => $apiLeagueId,
             'season' => $season,
             'statistics_date' => $date,
             'statistics_key' => $this->makeStatisticsKey($apiTeamId, $apiLeagueId, $season, $date),
-            'form' => $this->nullableString(data_get($response, 'form')),
-            'fixtures_played_home' => $this->toInt(data_get($response, 'fixtures.played.home')),
-            'fixtures_played_away' => $this->toInt(data_get($response, 'fixtures.played.away')),
-            'fixtures_played_total' => $this->toInt(data_get($response, 'fixtures.played.total')),
-            'wins_home' => $this->toInt(data_get($response, 'fixtures.wins.home')),
-            'wins_away' => $this->toInt(data_get($response, 'fixtures.wins.away')),
-            'wins_total' => $this->toInt(data_get($response, 'fixtures.wins.total')),
-            'draws_home' => $this->toInt(data_get($response, 'fixtures.draws.home')),
-            'draws_away' => $this->toInt(data_get($response, 'fixtures.draws.away')),
-            'draws_total' => $this->toInt(data_get($response, 'fixtures.draws.total')),
-            'losses_home' => $this->toInt(data_get($response, 'fixtures.loses.home')),
-            'losses_away' => $this->toInt(data_get($response, 'fixtures.loses.away')),
-            'losses_total' => $this->toInt(data_get($response, 'fixtures.loses.total')),
-            'goals_for_home' => $this->toInt(data_get($response, 'goals.for.total.home')),
-            'goals_for_away' => $this->toInt(data_get($response, 'goals.for.total.away')),
-            'goals_for_total' => $this->toInt(data_get($response, 'goals.for.total.total')),
-            'goals_for_avg_home' => $this->toNullableFloat(data_get($response, 'goals.for.average.home')),
-            'goals_for_avg_away' => $this->toNullableFloat(data_get($response, 'goals.for.average.away')),
-            'goals_for_avg_total' => $this->toNullableFloat(data_get($response, 'goals.for.average.total')),
-            'goals_against_home' => $this->toInt(data_get($response, 'goals.against.total.home')),
-            'goals_against_away' => $this->toInt(data_get($response, 'goals.against.total.away')),
-            'goals_against_total' => $this->toInt(data_get($response, 'goals.against.total.total')),
-            'goals_against_avg_home' => $this->toNullableFloat(data_get($response, 'goals.against.average.home')),
-            'goals_against_avg_away' => $this->toNullableFloat(data_get($response, 'goals.against.average.away')),
-            'goals_against_avg_total' => $this->toNullableFloat(data_get($response, 'goals.against.average.total')),
-            'clean_sheets_home' => $this->toInt(data_get($response, 'clean_sheet.home')),
-            'clean_sheets_away' => $this->toInt(data_get($response, 'clean_sheet.away')),
-            'clean_sheets_total' => $this->toInt(data_get($response, 'clean_sheet.total')),
-            'failed_to_score_home' => $this->toInt(data_get($response, 'failed_to_score.home')),
-            'failed_to_score_away' => $this->toInt(data_get($response, 'failed_to_score.away')),
-            'failed_to_score_total' => $this->toInt(data_get($response, 'failed_to_score.total')),
+        ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function fixtureResultAttributes(array $response): array
+    {
+        return [
+            ...$this->splitIntAttributes($response, 'fixtures_played', 'fixtures.played'),
+            ...$this->splitIntAttributes($response, 'wins', 'fixtures.wins'),
+            ...$this->splitIntAttributes($response, 'draws', 'fixtures.draws'),
+            ...$this->splitIntAttributes($response, 'losses', 'fixtures.loses'),
+        ];
+    }
+
+    /**
+     * @return array<string, float|int|null>
+     */
+    private function goalAttributes(array $response): array
+    {
+        return [
+            ...$this->splitIntAttributes($response, 'goals_for', 'goals.for.total'),
+            ...$this->splitNullableFloatAttributes($response, 'goals_for_avg', 'goals.for.average'),
+            ...$this->splitIntAttributes($response, 'goals_against', 'goals.against.total'),
+            ...$this->splitNullableFloatAttributes($response, 'goals_against_avg', 'goals.against.average'),
+        ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function cleanSheetAttributes(array $response): array
+    {
+        return [
+            ...$this->splitIntAttributes($response, 'clean_sheets', 'clean_sheet'),
+            ...$this->splitIntAttributes($response, 'failed_to_score', 'failed_to_score'),
+        ];
+    }
+
+    /**
+     * @return array{biggest_wins_streak: int, biggest_draws_streak: int, biggest_losses_streak: int}
+     */
+    private function streakAttributes(array $response): array
+    {
+        return [
             'biggest_wins_streak' => $this->toInt(data_get($response, 'biggest.streak.wins')),
             'biggest_draws_streak' => $this->toInt(data_get($response, 'biggest.streak.draws')),
             'biggest_losses_streak' => $this->toInt(data_get($response, 'biggest.streak.loses')),
+        ];
+    }
+
+    /**
+     * @return array{most_used_formation: string|null, lineups: array<mixed>|null, cards: array<mixed>|null, goals_by_minute: array{for: array<mixed>|null, against: array<mixed>|null}}
+     */
+    private function contextAttributes(array $response): array
+    {
+        return [
             'most_used_formation' => $this->getMostUsedFormation(data_get($response, 'lineups', [])),
             'lineups' => $this->normalizeArray(data_get($response, 'lineups')),
             'cards' => $this->normalizeArray(data_get($response, 'cards')),
@@ -119,7 +169,30 @@ class TeamStatisticsService
                 'for' => $this->normalizeArray(data_get($response, 'goals.for.minute')),
                 'against' => $this->normalizeArray(data_get($response, 'goals.against.minute')),
             ],
-            'raw_data' => $response,
+        ];
+    }
+
+    /**
+     * @return array<string, int>
+     */
+    private function splitIntAttributes(array $response, string $prefix, string $path): array
+    {
+        return [
+            "{$prefix}_home" => $this->toInt(data_get($response, "{$path}.home")),
+            "{$prefix}_away" => $this->toInt(data_get($response, "{$path}.away")),
+            "{$prefix}_total" => $this->toInt(data_get($response, "{$path}.total")),
+        ];
+    }
+
+    /**
+     * @return array<string, float|null>
+     */
+    private function splitNullableFloatAttributes(array $response, string $prefix, string $path): array
+    {
+        return [
+            "{$prefix}_home" => $this->toNullableFloat(data_get($response, "{$path}.home")),
+            "{$prefix}_away" => $this->toNullableFloat(data_get($response, "{$path}.away")),
+            "{$prefix}_total" => $this->toNullableFloat(data_get($response, "{$path}.total")),
         ];
     }
 
@@ -147,10 +220,10 @@ class TeamStatisticsService
 
     public function teamHasFixtureToday(int $apiTeamId, int $apiLeagueId, int $season): bool
     {
-        $teamId = Team::query()->where('external_id', $apiTeamId)->value('id');
-        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
+        $teamId = $this->localTeamId($apiTeamId);
+        $leagueId = $this->localLeagueId($apiLeagueId);
 
-        if (! is_int($teamId) || ! is_int($leagueId)) {
+        if ($teamId === null || $leagueId === null) {
             return false;
         }
 
@@ -164,6 +237,20 @@ class TeamStatisticsService
                     ->orWhere('away_team_id', $teamId);
             })
             ->exists();
+    }
+
+    private function localTeamId(int $apiTeamId): ?int
+    {
+        $teamId = Team::query()->where('external_id', $apiTeamId)->value('id');
+
+        return is_numeric($teamId) ? (int) $teamId : null;
+    }
+
+    private function localLeagueId(int $apiLeagueId): ?int
+    {
+        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
+
+        return is_numeric($leagueId) ? (int) $leagueId : null;
     }
 
     public function makeStatisticsKey(int $apiTeamId, int $apiLeagueId, int $season, ?string $date = null): string
