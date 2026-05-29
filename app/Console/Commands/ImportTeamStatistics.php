@@ -6,13 +6,13 @@ use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Services\TeamStatisticsService;
-use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
+use Throwable;
 
 #[Signature('app:import-team-statistics
     {--team_id=}
@@ -36,19 +36,7 @@ class ImportTeamStatistics extends Command
         $options = $this->importOptions();
 
         if ($this->hasTargetedImportOptions($options)) {
-            if (! $this->hasCompleteTargetedImportOptions($options)) {
-                $this->error('Gebruik samen --team_id, --league_id en --season voor een gerichte import.');
-
-                return self::FAILURE;
-            }
-
-            return $this->importSingleCombination(
-                (int) $options['teamId'],
-                (int) $options['leagueId'],
-                (int) $options['season'],
-                $options['date'],
-                $options['force'],
-            );
+            return $this->handleTargetedImport($options);
         }
 
         $config = $this->footballApiConfig();
@@ -58,6 +46,26 @@ class ImportTeamStatistics extends Command
         }
 
         return $this->importRelevantTeams($config['leagueId'], $config['season'], $options['date'], $options['force']);
+    }
+
+    /**
+     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
+     */
+    private function handleTargetedImport(array $options): int
+    {
+        if (! $this->hasCompleteTargetedImportOptions($options)) {
+            $this->error('Gebruik samen --team_id, --league_id en --season voor een gerichte import.');
+
+            return self::FAILURE;
+        }
+
+        return $this->importSingleCombination(
+            (int) $options['teamId'],
+            (int) $options['leagueId'],
+            (int) $options['season'],
+            $options['date'],
+            $options['force'],
+        );
     }
 
     /**
@@ -103,7 +111,7 @@ class ImportTeamStatistics extends Command
             $this->importTeamStatistic($teamId, $leagueId, $season, $date, $force);
 
             return self::SUCCESS;
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $this->error("Failed {$teamId}/{$leagueId}/{$season}: {$exception->getMessage()}");
 
             return self::FAILURE;
@@ -129,18 +137,28 @@ class ImportTeamStatistics extends Command
         }
 
         foreach ($apiTeamIds as $apiTeamId) {
-            try {
-                $this->importTeamStatistic($apiTeamId, $apiLeagueId, $season, $date, $force);
-            } catch (Exception $exception) {
-                if ($this->laravel->runningUnitTests()) {
-                    throw $exception;
-                }
-
-                $this->error("Failed {$apiTeamId}/{$apiLeagueId}/{$season}: {$exception->getMessage()}");
-            }
+            $this->importRelevantTeamStatistic($apiTeamId, $apiLeagueId, $season, $date, $force);
         }
 
         return self::SUCCESS;
+    }
+
+    private function importRelevantTeamStatistic(
+        int $teamId,
+        int $leagueId,
+        int $season,
+        ?string $date,
+        bool $force,
+    ): void {
+        try {
+            $this->importTeamStatistic($teamId, $leagueId, $season, $date, $force);
+        } catch (Throwable $exception) {
+            if ($this->laravel->runningUnitTests()) {
+                throw $exception;
+            }
+
+            $this->error("Failed {$teamId}/{$leagueId}/{$season}: {$exception->getMessage()}");
+        }
     }
 
     private function localLeagueId(int $apiLeagueId): ?int

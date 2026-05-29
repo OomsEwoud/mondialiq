@@ -9,6 +9,7 @@ use App\Models\TeamStatistic;
 use App\Services\Apis\FootballApiService;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class TeamStatisticsService
 {
@@ -32,12 +33,31 @@ class TeamStatisticsService
             return $existing;
         }
 
-        $response = $this->api->getTeamStatistics($apiTeamId, $apiLeagueId, $season, $normalizedDate);
-
         return TeamStatistic::query()->updateOrCreate(
-            ['statistics_key' => $this->makeStatisticsKey($apiTeamId, $apiLeagueId, $season, $normalizedDate)],
-            $this->teamStatisticAttributes($response, $apiTeamId, $apiLeagueId, $season, $normalizedDate),
+            $this->teamStatisticIdentity($apiTeamId, $apiLeagueId, $season, $normalizedDate),
+            $this->teamStatisticAttributes(
+                $this->fetchTeamStatistics($apiTeamId, $apiLeagueId, $season, $normalizedDate),
+                $apiTeamId,
+                $apiLeagueId,
+                $season,
+                $normalizedDate,
+            ),
         );
+    }
+
+    /**
+     * @return array{statistics_key: string}
+     */
+    private function teamStatisticIdentity(int $apiTeamId, int $apiLeagueId, int $season, ?string $date): array
+    {
+        return [
+            'statistics_key' => $this->makeStatisticsKey($apiTeamId, $apiLeagueId, $season, $date),
+        ];
+    }
+
+    private function fetchTeamStatistics(int $apiTeamId, int $apiLeagueId, int $season, ?string $date): array
+    {
+        return $this->api->getTeamStatistics($apiTeamId, $apiLeagueId, $season, $date);
     }
 
     /**
@@ -64,11 +84,12 @@ class TeamStatisticsService
             return true;
         }
 
-        $threshold = $hasFixtureToday
-            ? now()->subDay()
-            : now()->subDays(7);
+        return $existing->fetched_at->lt($this->refreshThreshold($hasFixtureToday));
+    }
 
-        return $existing->fetched_at->lt($threshold);
+    private function refreshThreshold(bool $hasFixtureToday): Carbon
+    {
+        return $hasFixtureToday ? now()->subDay() : now()->subDays(7);
     }
 
     /**
@@ -84,9 +105,9 @@ class TeamStatisticsService
         return [
             ...$this->baseStatisticAttributes($apiTeamId, $apiLeagueId, $season, $date),
             'form' => $this->nullableString(data_get($response, 'form')),
-            ...$this->fixtureResultAttributes($response),
-            ...$this->goalAttributes($response),
-            ...$this->cleanSheetAttributes($response),
+            ...$this->matchResultAttributes($response),
+            ...$this->scoringAttributes($response),
+            ...$this->availabilityAttributes($response),
             ...$this->streakAttributes($response),
             ...$this->contextAttributes($response),
             'raw_data' => $response,
@@ -110,7 +131,7 @@ class TeamStatisticsService
     /**
      * @return array<string, int>
      */
-    private function fixtureResultAttributes(array $response): array
+    private function matchResultAttributes(array $response): array
     {
         return [
             ...$this->splitIntAttributes($response, 'fixtures_played', 'fixtures.played'),
@@ -123,7 +144,7 @@ class TeamStatisticsService
     /**
      * @return array<string, float|int|null>
      */
-    private function goalAttributes(array $response): array
+    private function scoringAttributes(array $response): array
     {
         return [
             ...$this->splitIntAttributes($response, 'goals_for', 'goals.for.total'),
@@ -136,7 +157,7 @@ class TeamStatisticsService
     /**
      * @return array<string, int>
      */
-    private function cleanSheetAttributes(array $response): array
+    private function availabilityAttributes(array $response): array
     {
         return [
             ...$this->splitIntAttributes($response, 'clean_sheets', 'clean_sheet'),
