@@ -2,21 +2,26 @@
 
 namespace App\Services\Fixture;
 
-use App\Models\Team;
 use App\Models\FixtureStat;
+use App\Models\Team;
+use Illuminate\Support\Collection;
 
 class FixtureStatsService
 {
     public function storeFixtureStats(array $stats, int $fixtureId): void
     {
+        $teamIds = Team::query()
+            ->whereIn('external_id', $this->extractTeamIds($stats))
+            ->pluck('id', 'external_id');
+
         foreach ($stats as $teamStat) {
-            $this->storeFixtureStatsPerTeam($teamStat, $fixtureId);
+            $this->storeFixtureStatsPerTeam($teamStat, $fixtureId, $teamIds);
         }
     }
 
-    private function storeFixtureStatsPerTeam(array $stat, int $fixtureId): void
+    private function storeFixtureStatsPerTeam(array $stat, int $fixtureId, Collection $teamIds): void
     {
-        $localTeamId = Team::query()->where('external_id', data_get($stat, 'team.id'))->value('id');
+        $localTeamId = $teamIds[data_get($stat, 'team.id')] ?? null;
 
         if (! $localTeamId) {
             return;
@@ -49,5 +54,15 @@ class FixtureStatsService
         }
 
         return is_numeric($value) ? (float) $value : 0.0;
+    }
+
+    private function extractTeamIds(array $stats): Collection
+    {
+        return collect($stats)
+            ->pluck('team.id')
+            ->filter(fn (mixed $value): bool => is_numeric($value))
+            ->map(fn (mixed $value): int => (int) $value)
+            ->unique()
+            ->values();
     }
 }
