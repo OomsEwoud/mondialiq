@@ -13,33 +13,20 @@ class HeadToHeadSummaryService
         $headToHead = $this->headToHeadForFixture($fixture);
 
         if ($headToHead === null) {
-            return [
-                'total_meetings' => null,
-                'home_team_h2h_wins' => null,
-                'away_team_h2h_wins' => null,
-                'draws' => null,
-                'home_team_h2h_goals' => null,
-                'away_team_h2h_goals' => null,
-                'last_meeting_date' => null,
-                'conclusion' => null,
-            ];
+            return $this->emptySummary();
         }
 
-        $homeTeamIsTeamA = $headToHead->team_a_id === $fixture->home_team_id;
-        $homeWins = $homeTeamIsTeamA ? $headToHead->team_a_wins : $headToHead->team_b_wins;
-        $awayWins = $homeTeamIsTeamA ? $headToHead->team_b_wins : $headToHead->team_a_wins;
-        $homeGoals = $homeTeamIsTeamA ? $headToHead->team_a_goals : $headToHead->team_b_goals;
-        $awayGoals = $homeTeamIsTeamA ? $headToHead->team_b_goals : $headToHead->team_a_goals;
+        $summary = $this->homeAwaySummary($fixture, $headToHead);
 
         return [
             'total_meetings' => $headToHead->total_matches,
-            'home_team_h2h_wins' => $homeWins,
-            'away_team_h2h_wins' => $awayWins,
+            'home_team_h2h_wins' => $summary['home_wins'],
+            'away_team_h2h_wins' => $summary['away_wins'],
             'draws' => $headToHead->draws,
-            'home_team_h2h_goals' => $homeGoals,
-            'away_team_h2h_goals' => $awayGoals,
+            'home_team_h2h_goals' => $summary['home_goals'],
+            'away_team_h2h_goals' => $summary['away_goals'],
             'last_meeting_date' => $headToHead->last_meeting_at?->toDateString(),
-            'conclusion' => $this->conclusion($fixture, $homeWins, $awayWins),
+            'conclusion' => $this->conclusion($fixture, $summary['home_wins'], $summary['away_wins']),
         ];
     }
 
@@ -84,6 +71,47 @@ class HeadToHeadSummaryService
         return $homeTeamId < $awayTeamId
             ? "{$homeTeamId}-{$awayTeamId}"
             : "{$awayTeamId}-{$homeTeamId}";
+    }
+
+    /**
+     * @return array{
+     *     total_meetings: null,
+     *     home_team_h2h_wins: null,
+     *     away_team_h2h_wins: null,
+     *     draws: null,
+     *     home_team_h2h_goals: null,
+     *     away_team_h2h_goals: null,
+     *     last_meeting_date: null,
+     *     conclusion: null
+     * }
+     */
+    private function emptySummary(): array
+    {
+        return [
+            'total_meetings' => null,
+            'home_team_h2h_wins' => null,
+            'away_team_h2h_wins' => null,
+            'draws' => null,
+            'home_team_h2h_goals' => null,
+            'away_team_h2h_goals' => null,
+            'last_meeting_date' => null,
+            'conclusion' => null,
+        ];
+    }
+
+    /**
+     * @return array{home_wins: int, away_wins: int, home_goals: int, away_goals: int}
+     */
+    private function homeAwaySummary(Fixture $fixture, HeadToHead $headToHead): array
+    {
+        $homeTeamIsTeamA = $headToHead->team_a_id === $fixture->home_team_id;
+
+        return [
+            'home_wins' => $homeTeamIsTeamA ? $headToHead->team_a_wins : $headToHead->team_b_wins,
+            'away_wins' => $homeTeamIsTeamA ? $headToHead->team_b_wins : $headToHead->team_a_wins,
+            'home_goals' => $homeTeamIsTeamA ? $headToHead->team_a_goals : $headToHead->team_b_goals,
+            'away_goals' => $homeTeamIsTeamA ? $headToHead->team_b_goals : $headToHead->team_a_goals,
+        ];
     }
 
     private function conclusion(Fixture $fixture, int $homeWins, int $awayWins): ?string
