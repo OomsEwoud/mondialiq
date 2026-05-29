@@ -1,9 +1,7 @@
 import { Form } from '@inertiajs/react';
 import { LogOut } from 'lucide-react';
-import LeaveLeagueController from '@/actions/App/Http/Controllers/Leagues/LeaveLeagueController';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
-import { cn } from '@/lib/utils';
 import {
     Dialog,
     DialogClose,
@@ -13,6 +11,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
+import { cn } from '@/lib/utils';
+import LeaveLeagueController from '@/actions/App/Http/Controllers/Leagues/LeaveLeagueController';
 
 type Props = {
     leagueId: number;

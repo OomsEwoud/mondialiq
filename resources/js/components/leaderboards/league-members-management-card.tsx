@@ -1,7 +1,5 @@
 import { Form } from '@inertiajs/react'
 import { Crown, ShieldCheck, ShieldPlus, UserMinus } from 'lucide-react'
-import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController'
-import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar'
 import { Badge } from '@/components/ui/feedback/badge'
 import { Spinner } from '@/components/ui/feedback/spinner'
@@ -25,6 +23,8 @@ import {
 import { useInitials } from '@/hooks/use-initials'
 import { cn } from '@/lib/utils'
 import type { LeagueMember } from '@/types/league'
+import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController'
+import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController'
 
 type Props = {
     leagueId: number

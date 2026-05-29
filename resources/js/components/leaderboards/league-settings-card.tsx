@@ -7,8 +7,6 @@ import {
     Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
-import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/RefreshLeagueCodeController';
-import UpdateLeagueController from '@/actions/App/Http/Controllers/Leagues/UpdateLeagueController';
 import InputError from '@/components/forms/input-error';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
@@ -25,11 +23,12 @@ import { cn } from '@/lib/utils';
 import type { LeagueAccentColor, LeagueCoverStyle } from '@/types/league';
 import {
     getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
     leagueAccentOptions,
     leagueCoverOptions,
     leagueIconOptions,
 } from '@/utils/league-branding';
+import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/RefreshLeagueCodeController';
+import UpdateLeagueController from '@/actions/App/Http/Controllers/Leagues/UpdateLeagueController';
 
 type Props = {
     leagueId: number;
@@ -61,6 +60,7 @@ export default function LeagueSettingsCard({
         accent !== accentColor ||
         cover !== coverStyle;
     const canSubmit = normalizedName.length > 0 && hasChanges;
+    
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-6">

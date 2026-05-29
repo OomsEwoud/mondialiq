@@ -1,6 +1,5 @@
 import { Copy, Link2, Share2, Sparkles, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
-import { useClipboard } from '@/hooks/use-clipboard';
 import { Button } from '@/components/ui/forms/button';
 import {
     Card,
@@ -9,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { useClipboard } from '@/hooks/use-clipboard';
 
 type Props = {
     leagueName: string;
@@ -41,6 +41,7 @@ export default function InviteCodeCard({
 
         if (!success) {
             toast.error('Copy is not available on this device.');
+
             return;
         }
 
@@ -52,6 +53,7 @@ export default function InviteCodeCard({
 
         if (!success) {
             toast.error('Could not copy the join link.');
+
             return;
         }
 
@@ -66,6 +68,7 @@ export default function InviteCodeCard({
                     text: `Join my MondialIQ friends league ${leagueIcon} "${leagueName}" with code ${code}.`,
                     url: joinHref,
                 });
+
                 return;
             } catch {
                 // Fall back to copying the share text below when native share is dismissed or unavailable.
@@ -76,6 +79,7 @@ export default function InviteCodeCard({
 
         if (!success) {
             toast.error('Could not share this invite on your device.');
+            
             return;
         }
 

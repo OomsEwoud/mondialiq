@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/feedback/badge';
 import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
+import { Badge } from '@/components/ui/feedback/badge';
 import {
     Card,
     CardContent,
@@ -8,6 +8,7 @@ import {
     CardTitle,
 } from '@/components/ui/layout/card';
 import type { LeaderboardEntry } from '@/types/leaderboard';
+import PositionMetric from './position-metric';
 
 type Props = {
     currentUserPosition: LeaderboardEntry | null;
@@ -82,27 +83,5 @@ export default function YourPositionCard({
                 )}
             </CardContent>
         </Card>
-    );
-}
-
-type PositionMetricProps = {
-    label: string;
-    value: string;
-    suffix: string;
-};
-
-function PositionMetric({ label, value, suffix }: PositionMetricProps) {
-    return (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-            <p className="text-xs font-black tracking-[0.18em] text-slate-500 uppercase">
-                {label}
-            </p>
-            <div className="mt-2 flex items-end gap-2">
-                <p className="text-2xl font-black text-blue-950">{value}</p>
-                <p className="pb-1 text-xs font-semibold text-slate-500">
-                    {suffix}
-                </p>
-            </div>
-        </div>
     );
 }

@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
-import { Crown, Medal, Settings2, Users, type LucideIcon } from 'lucide-react';
+import { Crown, Medal, Settings2, Users } from 'lucide-react';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
+import LeagueMetric from '@/components/leaderboards/league-metric';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
@@ -19,6 +20,7 @@ import {
     getLeagueBrandBannerClass,
     getLeagueBrandPalette,
 } from '@/utils/league-branding';
+
 
 type Props = {
     league: JoinedLeague;
@@ -166,27 +168,5 @@ export default function FriendsLeagueCard({ league }: Props) {
                 )}
             </CardFooter>
         </Card>
-    );
-}
-
-type LeagueMetricProps = {
-    icon: LucideIcon;
-    label: string;
-    value: string;
-};
-
-function LeagueMetric({ icon: Icon, label, value }: LeagueMetricProps) {
-    return (
-        <div className="rounded-xl border border-slate-200 bg-white px-3.5 py-3 shadow-xs">
-            <div className="flex items-center gap-2 text-slate-500">
-                <Icon className="size-4 text-cyan-600" />
-                <p className="text-xs font-black tracking-[0.16em] uppercase">
-                    {label}
-                </p>
-            </div>
-            <p className="mt-2 truncate text-sm font-bold text-blue-950">
-                {value}
-            </p>
-        </div>
     );
 }

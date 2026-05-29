@@ -1,6 +1,6 @@
+import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
-import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import {
     Card,
     CardContent,

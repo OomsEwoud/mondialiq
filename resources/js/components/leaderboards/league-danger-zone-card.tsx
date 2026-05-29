@@ -1,6 +1,5 @@
 import { Form } from '@inertiajs/react';
 import { AlertTriangle, Trash2 } from 'lucide-react';
-import DeleteLeagueController from '@/actions/App/Http/Controllers/Leagues/DeleteLeagueController';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -19,6 +18,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
+import DeleteLeagueController from '@/actions/App/Http/Controllers/Leagues/DeleteLeagueController';
 
 type Props = {
     leagueId: number;

@@ -11,6 +11,7 @@ import {
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { LeagueMember } from '@/types/league';
+import StatPill from './stat-pill';
 
 type Props = {
     members: LeagueMember[];
@@ -142,17 +143,5 @@ export default function LeagueMembersCard({ members }: Props) {
                 </div>
             </CardContent>
         </Card>
-    );
-}
-
-type StatPillProps = {
-    label: string;
-};
-
-function StatPill({ label }: StatPillProps) {
-    return (
-        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600">
-            {label}
-        </span>
     );
 }
