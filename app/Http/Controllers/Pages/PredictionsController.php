@@ -13,25 +13,16 @@ use Inertia\Response;
 
 class PredictionsController extends Controller
 {
-    protected int $leagueId;
-    protected int $season;
-
     public function __construct(
-        protected FixturePaginationService $paginationService,
-        protected PredictionFixtureQuery $predictionFixtureQuery,
+        private readonly FixturePaginationService $paginationService,
+        private readonly PredictionFixtureQuery $predictionFixtureQuery,
     ) {
-        $this->leagueId = League::where(
-            'external_id',
-            config('services.api_football.league_id')
-        )->value('id');
-
-        $this->season = config('services.api_football.season');
     }
 
     public function __invoke(Request $request): Response
     {
         $mode = $this->predictionMode($request);
-        $query = new FixtureQuery($this->leagueId, $this->season);
+        $query = new FixtureQuery($this->leagueId(), $this->season());
         $fixtureQuery = $query->build([
             'round' => '',
             'date' => '',
@@ -57,5 +48,17 @@ class PredictionsController extends Controller
         return $request->string('mode')->toString() === 'mine'
             ? 'mine'
             : 'ai';
+    }
+
+    private function leagueId(): int
+    {
+        return League::query()
+            ->where('external_id', config('services.api_football.league_id'))
+            ->value('id');
+    }
+
+    private function season(): int
+    {
+        return config('services.api_football.season');
     }
 }

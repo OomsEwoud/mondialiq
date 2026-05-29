@@ -13,34 +13,25 @@ use Inertia\Response;
 
 class MatchesController extends Controller
 {
-    protected int $leagueId;
-    protected int $season;
-
     public function __construct(
-        protected HelperService $service,
-        protected FixturePaginationService $paginationService,
+        private readonly HelperService $helperService,
+        private readonly FixturePaginationService $paginationService,
     ) {
-        $this->leagueId = League::where(
-            'external_id',
-            config('services.api_football.league_id')
-        )->value('id');
-
-        $this->season = config('services.api_football.season');
     }
 
     public function __invoke(Request $request): Response
     {
         $filters = $this->parseFilters($request);
 
-        $query = new FixtureQuery($this->leagueId, $this->season);
+        $query = new FixtureQuery($this->leagueId(), $this->season());
         $baseQuery = $query->build(
             array_fill_keys(['round', 'date', 'team', 'status'], ''),
         );
 
-        $filterOptions = $this->service->filterOptions($baseQuery);
+        $filterOptions = $this->helperService->filterOptions($baseQuery);
 
         $queryFilters = $filters;
-        $queryFilters['round'] = $this->service->roundNameFromSlug(
+        $queryFilters['round'] = $this->helperService->roundNameFromSlug(
             $filterOptions['rounds']->all(),
             $filters['round'],
         );
@@ -72,5 +63,17 @@ class MatchesController extends Controller
             'team' => $request->string('team')->toString(),
             'status' => $request->string('status')->toString() ?: 'all',
         ];
+    }
+
+    private function leagueId(): int
+    {
+        return League::query()
+            ->where('external_id', config('services.api_football.league_id'))
+            ->value('id');
+    }
+
+    private function season(): int
+    {
+        return config('services.api_football.season');
     }
 }
