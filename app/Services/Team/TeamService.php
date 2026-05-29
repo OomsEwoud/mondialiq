@@ -2,16 +2,16 @@
 
 namespace App\Services\Team;
 
-use App\Models\Team;
 use App\Models\Country;
+use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Player\PlayerService;
 
 class TeamService
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected PlayerService $service,
+        private readonly FootballApiService $api,
+        private readonly PlayerService $service,
     ) {
     }
 

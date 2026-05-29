@@ -8,11 +8,12 @@ use App\Models\Team;
 use App\Models\TeamStatistic;
 use App\Services\Apis\FootballApiService;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
 
 class TeamStatisticsService
 {
     public function __construct(
-        protected FootballApiService $api,
+        private readonly FootballApiService $api,
     ) {
     }
 
@@ -157,7 +158,7 @@ class TeamStatisticsService
             ->where('league_id', $leagueId)
             ->where('season', $season)
             ->whereDate('match_date', today('UTC'))
-            ->where(function ($query) use ($teamId) {
+            ->where(function (Builder $query) use ($teamId) {
                 $query
                     ->where('home_team_id', $teamId)
                     ->orWhere('away_team_id', $teamId);

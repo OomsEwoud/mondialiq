@@ -7,14 +7,15 @@ use App\Models\Country;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
+use Illuminate\Database\Eloquent\Collection;
 
 class CoachService
 {
-    protected array $countriesCache = [];
+    private array $countriesCache = [];
 
     public function __construct(
-        protected FootballApiService $api,
-        protected CountryService $countryService,
+        private readonly FootballApiService $api,
+        private readonly CountryService $countryService,
     ) {
     }
 
@@ -27,7 +28,7 @@ class CoachService
 
     public function syncCoaches(): void
     {
-        Team::query()->chunk(100, function ($teams) {
+        Team::query()->chunk(100, function (Collection $teams) {
             foreach ($teams as $team) {
                 $coaches = $this->api->getCoach($team->external_id);
 

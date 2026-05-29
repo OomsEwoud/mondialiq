@@ -17,10 +17,10 @@ use Illuminate\Console\Command;
 class AddFixtureData extends Command
 {
     public function __construct(
-        protected FootballApiService $api,
-        protected FixtureStatsService $statsService,
-        protected FixtureEventsService $eventsService,
-        protected FixtureLineupService $lineupService,
+        private readonly FootballApiService $api,
+        private readonly FixtureStatsService $statsService,
+        private readonly FixtureEventsService $eventsService,
+        private readonly FixtureLineupService $lineupService,
     ) {
         parent::__construct();
     }

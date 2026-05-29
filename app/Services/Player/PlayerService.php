@@ -8,15 +8,17 @@ use App\Models\Player;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PlayerService
 {
-    protected array $countriesCache = [];
+    private array $countriesCache = [];
 
     public function __construct(
-        protected CountryService $countryService,
-        protected FootballApiService $api,
+        private readonly CountryService $countryService,
+        private readonly FootballApiService $api,
     ) {
     }
 
@@ -93,7 +95,7 @@ class PlayerService
     public function syncTeamPlayers(int $leagueId, int $season): void
     {
         $teamIds = Fixture::query()
-            ->whereHas('league', fn ($query) => $query->where('external_id', $leagueId))
+            ->whereHas('league', fn (Builder $query) => $query->where('external_id', $leagueId))
             ->where('season', $season)
             ->get(['home_team_id', 'away_team_id'])
             ->flatMap(fn (Fixture $fixture): array => [$fixture->home_team_id, $fixture->away_team_id])
@@ -103,7 +105,7 @@ class PlayerService
         Team::query()
             ->whereIn('id', $teamIds)
             ->whereNotNull('external_id')
-            ->chunk(100, function ($teams) {
+            ->chunk(100, function (Collection $teams) {
                 foreach ($teams as $team) {
                     $teamPlayerData = $this->api->getPlayers($team->external_id);
                     $this->storeTeamPlayers($team, $teamPlayerData);

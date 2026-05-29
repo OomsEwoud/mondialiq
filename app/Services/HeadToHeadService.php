@@ -14,7 +14,7 @@ class HeadToHeadService
     public const REFRESH_AFTER_DAYS = 90;
 
     public function __construct(
-        protected FootballApiService $api,
+        private readonly FootballApiService $api,
     ) {
     }
 
