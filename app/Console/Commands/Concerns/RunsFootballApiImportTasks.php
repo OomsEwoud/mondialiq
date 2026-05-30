@@ -20,7 +20,7 @@ trait RunsFootballApiImportTasks
         });
 
         $this->components->task($storeTaskDescription, function () use ($data, $storeData, $storeWhenEmpty) {
-            if ($storeWhenEmpty || ! empty($data)) {
+            if ($this->shouldStoreImportData($data, $storeWhenEmpty)) {
                 $storeData($data);
             }
         });
@@ -43,5 +43,10 @@ trait RunsFootballApiImportTasks
         $this->info($doneMessage);
 
         return self::SUCCESS;
+    }
+
+    private function shouldStoreImportData(array $data, bool $storeWhenEmpty): bool
+    {
+        return $storeWhenEmpty || $data !== [];
     }
 }
