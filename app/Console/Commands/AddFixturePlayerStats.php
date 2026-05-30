@@ -9,7 +9,6 @@ use App\Services\Fixture\FixturePlayerStatsService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Throwable;
 
 #[Signature('app:add-fixture-player-stats')]
 #[Description('Haal spelerstatistieken op voor relevante fixtures')]
@@ -26,36 +25,18 @@ class AddFixturePlayerStats extends Command
 
     public function handle(): int
     {
-        $this->info('Ophalen van spelerstatistieken voor relevante fixtures');
-
-        $fixtures = $this->relevantFixturesForDataSync();
-
-        if ($fixtures->isEmpty()) {
-            $this->info('Geen relevante fixtures gevonden voor spelerstatistieken sync.');
-
-            return self::SUCCESS;
-        }
-
-        $this->info("{$fixtures->count()} relevante fixtures gevonden.");
-
-        $this->withProgressBar($fixtures, function (Fixture $fixture) {
-            try {
-                $this->syncFixturePlayerStats($fixture);
-            } catch (Throwable $e) {
-                $this->newLine();
-                $this->error("Fout bij ophalen spelerstatistieken voor fixture {$fixture->id}: {$e->getMessage()}");
-            }
-        });
-
-        $this->newLine();
-        $this->info('Spelerstatistieken voor relevante fixtures zijn geupdate');
-
-        return self::SUCCESS;
+        return $this->runRelevantFixtureDataSync(
+            'Ophalen van spelerstatistieken voor relevante fixtures',
+            'Geen relevante fixtures gevonden voor spelerstatistieken sync.',
+            'Spelerstatistieken voor relevante fixtures zijn geupdate',
+            'Fout bij ophalen spelerstatistieken voor fixture',
+            fn (Fixture $fixture): void => $this->syncFixturePlayerStats($fixture),
+        );
     }
 
     private function syncFixturePlayerStats(Fixture $fixture): void
     {
-        $playerStats = $this->api->getFixturePlayersStats((int) $fixture->external_id);
+        $playerStats = $this->api->getFixturePlayersStats($this->externalFixtureId($fixture));
 
         $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
 

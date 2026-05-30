@@ -18,6 +18,8 @@ use Throwable;
 #[Description('Haal odds op voor relevante aankomende fixtures en sla ze op')]
 class AddOdds extends Command
 {
+    private const REQUEST_DELAY_MICROSECONDS = 250000;
+
     public function __construct(
         private readonly FootballApiService $api,
         private readonly FixtureOddsService $service,
@@ -41,18 +43,17 @@ class AddOdds extends Command
 
         $totals = $this->emptySummary();
 
-        $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$totals) {
+        $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$totals): void {
             try {
                 $totals = $this->mergeSummary($totals, $this->syncFixtureOdds($fixture));
-            } catch (Throwable $e) {
+            } catch (Throwable $exception) {
                 $this->newLine();
-                $this->error("Fout bij ophalen odds voor fixture {$fixture->id}: {$e->getMessage()}");
+                $this->error("Fout bij ophalen odds voor fixture {$fixture->id}: {$exception->getMessage()}");
             }
         });
 
         $this->newLine();
-        $this->info("Odds opgeslagen/bijgewerkt: {$totals['stored']}");
-        $this->info("Odds overgeslagen: {$totals['skipped']}");
+        $this->reportSummary($totals);
         $this->info('Fixture odds sync klaar');
 
         return self::SUCCESS;
@@ -92,9 +93,18 @@ class AddOdds extends Command
         $odds = $this->api->getFixtureOdds((int) $fixture->external_id);
         $summary = $this->service->storeFixtureOdds($odds, $fixture->id);
 
-        usleep(250000);
+        usleep(self::REQUEST_DELAY_MICROSECONDS);
 
         return $summary;
+    }
+
+    /**
+     * @param  array{stored: int, skipped: int}  $summary
+     */
+    private function reportSummary(array $summary): void
+    {
+        $this->info("Odds opgeslagen/bijgewerkt: {$summary['stored']}");
+        $this->info("Odds overgeslagen: {$summary['skipped']}");
     }
 
     /**

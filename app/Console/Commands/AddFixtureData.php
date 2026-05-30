@@ -11,7 +11,6 @@ use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Throwable;
 
 #[Signature('app:add-fixture-data')]
 #[Description('Haal lineups, stats en events op voor relevante fixtures')]
@@ -30,36 +29,18 @@ class AddFixtureData extends Command
 
     public function handle(): int
     {
-        $this->info('Ophalen van fixture data voor relevante fixtures');
-
-        $fixtures = $this->relevantFixturesForDataSync();
-
-        if ($fixtures->isEmpty()) {
-            $this->info('Geen relevante fixtures gevonden voor fixture data sync.');
-
-            return self::SUCCESS;
-        }
-
-        $this->info("{$fixtures->count()} relevante fixtures gevonden.");
-
-        $this->withProgressBar($fixtures, function (Fixture $fixture) {
-            try {
-                $this->syncFixtureData($fixture);
-            } catch (Throwable $e) {
-                $this->newLine();
-                $this->error("Fout bij ophalen fixture {$fixture->id}: {$e->getMessage()}");
-            }
-        });
-
-        $this->newLine();
-        $this->info('Fixture data voor relevante fixtures is geupdate');
-
-        return self::SUCCESS;
+        return $this->runRelevantFixtureDataSync(
+            'Ophalen van fixture data voor relevante fixtures',
+            'Geen relevante fixtures gevonden voor fixture data sync.',
+            'Fixture data voor relevante fixtures is geupdate',
+            'Fout bij ophalen fixture',
+            fn (Fixture $fixture): void => $this->syncFixtureData($fixture),
+        );
     }
 
     private function syncFixtureData(Fixture $fixture): void
     {
-        $externalFixtureId = (int) $fixture->external_id;
+        $externalFixtureId = $this->externalFixtureId($fixture);
 
         $this->lineupService->storeLineups(
             $this->api->getFixtureLineups($externalFixtureId),

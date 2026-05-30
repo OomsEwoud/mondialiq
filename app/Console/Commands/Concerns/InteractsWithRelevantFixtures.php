@@ -5,6 +5,7 @@ namespace App\Console\Commands\Concerns;
 use App\Models\Fixture;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Throwable;
 
 trait InteractsWithRelevantFixtures
 {
@@ -16,6 +17,45 @@ trait InteractsWithRelevantFixtures
         return $this->dataSyncFixtureQuery()
             ->relevantForDataSync()
             ->get(['id', 'external_id', 'match_date']);
+    }
+
+    protected function runRelevantFixtureDataSync(
+        string $startMessage,
+        string $emptyMessage,
+        string $doneMessage,
+        string $errorMessage,
+        callable $syncFixture,
+    ): int {
+        $this->info($startMessage);
+
+        $fixtures = $this->relevantFixturesForDataSync();
+
+        if ($fixtures->isEmpty()) {
+            $this->info($emptyMessage);
+
+            return self::SUCCESS;
+        }
+
+        $this->info("{$fixtures->count()} relevante fixtures gevonden.");
+
+        $this->withProgressBar($fixtures, function (Fixture $fixture) use ($syncFixture, $errorMessage): void {
+            try {
+                $syncFixture($fixture);
+            } catch (Throwable $exception) {
+                $this->newLine();
+                $this->error("{$errorMessage} {$fixture->id}: {$exception->getMessage()}");
+            }
+        });
+
+        $this->newLine();
+        $this->info($doneMessage);
+
+        return self::SUCCESS;
+    }
+
+    protected function externalFixtureId(Fixture $fixture): int
+    {
+        return (int) $fixture->external_id;
     }
 
     /**
