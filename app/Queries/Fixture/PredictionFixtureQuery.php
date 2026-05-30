@@ -26,16 +26,29 @@ class PredictionFixtureQuery
     private function withUserPredictions(Builder $query, ?User $user): Builder
     {
         if ($user === null) {
-            return $query->whereKey([]);
+            return $this->withoutResults($query);
         }
 
         return $query
             ->with([
-                'userPredictions' => fn ($query) => $query
-                    ->whereBelongsTo($user)
-                    ->with('winner'),
+                'userPredictions' => fn (Builder $query) => $this->userPredictionEagerLoad($query, $user),
             ])
-            ->whereHas('userPredictions', fn (Builder $query) => $query
-                ->whereBelongsTo($user));
+            ->whereHas('userPredictions', fn (Builder $query) => $this->userPredictionConstraint($query, $user));
+    }
+
+    private function withoutResults(Builder $query): Builder
+    {
+        return $query->whereKey([]);
+    }
+
+    private function userPredictionEagerLoad(Builder $query, User $user): Builder
+    {
+        return $this->userPredictionConstraint($query, $user)
+            ->with('winner');
+    }
+
+    private function userPredictionConstraint(Builder $query, User $user): Builder
+    {
+        return $query->whereBelongsTo($user);
     }
 }

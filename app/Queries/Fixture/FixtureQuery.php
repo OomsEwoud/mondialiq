@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FixtureQuery
 {
+    private const STATUS_ALL = 'all';
+    private const STATUS_PLAYED = 'played';
+    private const STATUS_UPCOMING = 'upcoming';
+
+    private const FINISHED_STATUS_PATTERN = '%Finished%';
+    private const UNAVAILABLE_UPCOMING_STATUS_PATTERNS = [
+        '%Finished%',
+        '%Postpon%',
+        '%Cancel%',
+        '%Abandon%',
+        '%Forfeit%',
+    ];
+
     public function __construct(
         private readonly int $leagueId,
         private readonly int $season,
@@ -23,7 +36,7 @@ class FixtureQuery
             ->when($filters['date'] ?? null, $this->applyDateFilter(...))
             ->when($filters['team'] ?? null, $this->applyTeamFilter(...))
             ->when(
-                ($filters['status'] ?? 'all') !== 'all',
+                ($filters['status'] ?? self::STATUS_ALL) !== self::STATUS_ALL,
                 fn (Builder $query) => $this->applyStatusFilter($query, $filters['status']),
             )
             ->orderBy('match_date');
@@ -56,14 +69,23 @@ class FixtureQuery
     private function applyStatusFilter(Builder $query, string $status): Builder
     {
         return match ($status) {
-            'played' => $query->where('status_long', 'like', '%Finished%'),
-            'upcoming' => $query
-                ->where('status_long', 'not like', '%Finished%')
-                ->where('status_long', 'not like', '%Postpon%')
-                ->where('status_long', 'not like', '%Cancel%')
-                ->where('status_long', 'not like', '%Abandon%')
-                ->where('status_long', 'not like', '%Forfeit%'),
+            self::STATUS_PLAYED => $this->applyPlayedStatusFilter($query),
+            self::STATUS_UPCOMING => $this->applyUpcomingStatusFilter($query),
             default => $query,
         };
+    }
+
+    private function applyPlayedStatusFilter(Builder $query): Builder
+    {
+        return $query->where('status_long', 'like', self::FINISHED_STATUS_PATTERN);
+    }
+
+    private function applyUpcomingStatusFilter(Builder $query): Builder
+    {
+        foreach (self::UNAVAILABLE_UPCOMING_STATUS_PATTERNS as $statusPattern) {
+            $query->where('status_long', 'not like', $statusPattern);
+        }
+
+        return $query;
     }
 }

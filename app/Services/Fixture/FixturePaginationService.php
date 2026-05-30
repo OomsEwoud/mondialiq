@@ -9,11 +9,18 @@ use Illuminate\Database\Eloquent\Builder;
 
 class FixturePaginationService
 {
-    public function paginate(Builder $query, int $perPage = 10): LengthAwarePaginator
+    private const DEFAULT_PER_PAGE = 10;
+
+    public function paginate(Builder $query, int $perPage = self::DEFAULT_PER_PAGE): LengthAwarePaginator
     {
         return $query
             ->paginate($perPage)
             ->withQueryString()
-            ->through(fn (Fixture $fixture) => FixtureResource::make($fixture)->resolve());
+            ->through(fn (Fixture $fixture) => $this->resource($fixture));
+    }
+
+    private function resource(Fixture $fixture): array
+    {
+        return FixtureResource::make($fixture)->resolve();
     }
 }
