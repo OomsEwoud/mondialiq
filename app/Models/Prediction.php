@@ -24,16 +24,22 @@ class Prediction extends Model
         'points',
     ];
 
-    protected $casts = [
-        'source' => PredictionTypes::class,
-        'total_goals' => 'float',
-        'home_goals' => 'float',
-        'away_goals' => 'float',
-        'home_chance' => 'float',
-        'draw_chance' => 'float',
-        'away_chance' => 'float',
-        'points' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'source' => PredictionTypes::class,
+            'total_goals' => 'float',
+            'home_goals' => 'float',
+            'away_goals' => 'float',
+            'home_chance' => 'float',
+            'draw_chance' => 'float',
+            'away_chance' => 'float',
+            'points' => 'integer',
+        ];
+    }
 
     public function fixture(): BelongsTo
     {

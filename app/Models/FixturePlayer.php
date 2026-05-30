@@ -16,10 +16,16 @@ class FixturePlayer extends Model
         'position',
     ];
 
-    protected $casts = [
-        'is_starting' => 'boolean',
-        'jersey_number' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_starting' => 'boolean',
+            'jersey_number' => 'integer',
+        ];
+    }
 
     public function fixture(): BelongsTo
     {

@@ -52,18 +52,24 @@ class Fixture extends Model
         'result',
     ];
 
-    protected $casts = [
-        'season' => 'integer',
-        'match_date' => 'datetime',
-        'halftime_home_goals' => 'integer',
-        'halftime_away_goals' => 'integer',
-        'fulltime_home_goals' => 'integer',
-        'fulltime_away_goals' => 'integer',
-        'extratime_home_goals' => 'integer',
-        'extratime_away_goals' => 'integer',
-        'penalty_home_goals' => 'integer',
-        'penalty_away_goals' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'season' => 'integer',
+            'match_date' => 'datetime',
+            'halftime_home_goals' => 'integer',
+            'halftime_away_goals' => 'integer',
+            'fulltime_home_goals' => 'integer',
+            'fulltime_away_goals' => 'integer',
+            'extratime_home_goals' => 'integer',
+            'extratime_away_goals' => 'integer',
+            'penalty_home_goals' => 'integer',
+            'penalty_away_goals' => 'integer',
+        ];
+    }
 
     public function scopeInProgress(Builder $query): Builder
     {

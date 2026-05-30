@@ -19,9 +19,15 @@ class Team extends Model
         'country_id',
     ];
 
-    protected $casts = [
-        'founded_at' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'founded_at' => 'integer',
+        ];
+    }
 
     public function country(): BelongsTo
     {
@@ -65,7 +71,9 @@ class Team extends Model
 
     public function lineups(): BelongsToMany
     {
-        return $this->belongsToMany(Fixture::class, 'fixture_lineups')->withPivot('formation')->withTimestamps();
+        return $this->belongsToMany(Fixture::class, 'fixture_lineups')
+            ->withPivot('formation')
+            ->withTimestamps();
     }
 
     public function predictions(): HasMany
@@ -75,7 +83,9 @@ class Team extends Model
 
     public function players(): BelongsToMany
     {
-        return $this->belongsToMany(Player::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
+        return $this->belongsToMany(Player::class, 'teams_has_players')
+            ->withPivot('is_active')
+            ->withTimestamps();
     }
 
     public function headToHeadsAsTeamA(): HasMany

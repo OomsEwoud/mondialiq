@@ -21,10 +21,16 @@ class Player extends Model
         'number',
     ];
 
-    protected $casts = [
-        'birth_date' => 'datetime',
-        'number' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'birth_date' => 'datetime',
+            'number' => 'integer',
+        ];
+    }
 
     public function country(): BelongsTo
     {
@@ -60,6 +66,8 @@ class Player extends Model
 
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'teams_has_players')->withPivot('is_active')->withTimestamps();
+        return $this->belongsToMany(Team::class, 'teams_has_players')
+            ->withPivot('is_active')
+            ->withTimestamps();
     }
 }

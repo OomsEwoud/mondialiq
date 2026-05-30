@@ -29,21 +29,27 @@ class Standing extends Model
         'season',
     ];
 
-    protected $casts = [
-        'rank' => 'integer',
-        'points' => 'integer',
-        'matches_played' => 'integer',
-        'wins' => 'integer',
-        'draws' => 'integer',
-        'losses' => 'integer',
-        'goals_for' => 'integer',
-        'goals_against' => 'integer',
-        'goal_difference' => 'integer',
-        'qualification_chance' => 'float',
-        'season' => 'integer',
-        'goals_scored_last_5' => 'integer',
-        'goals_conceded_last_5' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'rank' => 'integer',
+            'points' => 'integer',
+            'matches_played' => 'integer',
+            'wins' => 'integer',
+            'draws' => 'integer',
+            'losses' => 'integer',
+            'goals_for' => 'integer',
+            'goals_against' => 'integer',
+            'goal_difference' => 'integer',
+            'qualification_chance' => 'float',
+            'season' => 'integer',
+            'goals_scored_last_5' => 'integer',
+            'goals_conceded_last_5' => 'integer',
+        ];
+    }
 
     public function team(): BelongsTo
     {

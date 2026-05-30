@@ -18,9 +18,15 @@ class FixtureEvent extends Model
         'detail',
     ];
 
-    protected $casts = [
-        'time_elapsed' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'time_elapsed' => 'integer',
+        ];
+    }
 
     public function fixture(): BelongsTo
     {

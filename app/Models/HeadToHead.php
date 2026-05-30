@@ -22,19 +22,25 @@ class HeadToHead extends Model
         'fetched_at',
     ];
 
-    protected $casts = [
-        'team_a_id' => 'integer',
-        'team_b_id' => 'integer',
-        'total_matches' => 'integer',
-        'team_a_wins' => 'integer',
-        'team_b_wins' => 'integer',
-        'draws' => 'integer',
-        'team_a_goals' => 'integer',
-        'team_b_goals' => 'integer',
-        'last_meeting_at' => 'datetime',
-        'raw_data' => 'array',
-        'fetched_at' => 'datetime',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'team_a_id' => 'integer',
+            'team_b_id' => 'integer',
+            'total_matches' => 'integer',
+            'team_a_wins' => 'integer',
+            'team_b_wins' => 'integer',
+            'draws' => 'integer',
+            'team_a_goals' => 'integer',
+            'team_b_goals' => 'integer',
+            'last_meeting_at' => 'datetime',
+            'raw_data' => 'array',
+            'fetched_at' => 'datetime',
+        ];
+    }
 
     public function teamA(): BelongsTo
     {

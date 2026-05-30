@@ -20,10 +20,16 @@ class FixtureOdd extends Model
         'api_updated_at',
     ];
 
-    protected $casts = [
-        'odd' => 'float',
-        'api_updated_at' => 'datetime',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'odd' => 'float',
+            'api_updated_at' => 'datetime',
+        ];
+    }
 
     public function betType(): BelongsTo
     {

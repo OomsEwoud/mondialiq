@@ -14,9 +14,15 @@ class FixtureStat extends Model
         'value',
     ];
 
-    protected $casts = [
-        'value' => 'float',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'value' => 'float',
+        ];
+    }
 
     public function fixture(): BelongsTo
     {

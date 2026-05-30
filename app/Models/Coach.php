@@ -18,9 +18,15 @@ class Coach extends Model
         'photo_url',
     ];
 
-    protected $casts = [
-        'birth_date' => 'datetime',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'birth_date' => 'datetime',
+        ];
+    }
 
     public function team(): BelongsTo
     {

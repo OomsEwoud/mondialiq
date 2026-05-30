@@ -17,9 +17,15 @@ class Venue extends Model
         'photo_url',
     ];
 
-    protected $casts = [
-        'capacity' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'capacity' => 'integer',
+        ];
+    }
 
     public function country(): BelongsTo
     {

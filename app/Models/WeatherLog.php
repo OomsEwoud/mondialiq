@@ -14,10 +14,16 @@ class WeatherLog extends Model
         'condition',
     ];
 
-    protected $casts = [
-        'temperature' => 'float',
-        'humidity' => 'integer',
-    ];
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'temperature' => 'float',
+            'humidity' => 'integer',
+        ];
+    }
 
     public function fixture(): BelongsTo
     {
