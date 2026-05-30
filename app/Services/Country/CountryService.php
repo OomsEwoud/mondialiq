@@ -13,8 +13,14 @@ class CountryService
     public function storeAllCountries(array $countriesData): void
     {
         foreach ($countriesData as $countryData) {
+            $countryName = data_get($countryData, 'name');
+
+            if (! is_string($countryName) || $countryName === '') {
+                continue;
+            }
+
             Country::query()->updateOrCreate(
-                $this->countryIdentity($countryData),
+                $this->countryIdentity($countryName),
                 $this->countryAttributes($countryData),
             );
         }
@@ -56,21 +62,21 @@ class CountryService
     /**
      * @return array{name: string}
      */
-    private function countryIdentity(array $countryData): array
+    private function countryIdentity(string $countryName): array
     {
         return [
-            'name' => $countryData['name'],
+            'name' => $countryName,
         ];
     }
 
     /**
-     * @return array{fifa_code: string, flag_url: string|null}
+     * @return array{fifa_code: mixed, flag_url: mixed}
      */
     private function countryAttributes(array $countryData): array
     {
         return [
-            'fifa_code' => $countryData['code'] ?? 'WORLD',
-            'flag_url' => $countryData['flag'],
+            'fifa_code' => data_get($countryData, 'code') ?? 'WORLD',
+            'flag_url' => data_get($countryData, 'flag'),
         ];
     }
 }

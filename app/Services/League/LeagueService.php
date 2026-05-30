@@ -13,11 +13,39 @@ class LeagueService
         $countries = Country::query()->pluck('id', 'name');
 
         foreach ($leaguesData as $leagueData) {
+            $leaguePayload = $this->leaguePayload($leagueData);
+
+            if ($leaguePayload === null) {
+                continue;
+            }
+
             League::query()->updateOrCreate(
-                $this->leagueIdentity($leagueData),
-                $this->leagueAttributes($leagueData, $countries),
+                $this->leagueIdentity($leaguePayload),
+                $this->leagueAttributes($leaguePayload, $countries),
             );
         }
+    }
+
+    /**
+     * @return array{external_id: int, name: string, type: string, logo_url: mixed, country: mixed}|null
+     */
+    private function leaguePayload(array $leagueData): ?array
+    {
+        $externalId = data_get($leagueData, 'league.id');
+        $name = data_get($leagueData, 'league.name');
+        $type = data_get($leagueData, 'league.type');
+
+        if (! is_numeric($externalId) || ! is_string($name) || $name === '' || ! is_string($type) || $type === '') {
+            return null;
+        }
+
+        return [
+            'external_id' => (int) $externalId,
+            'name' => $name,
+            'type' => $type,
+            'logo_url' => data_get($leagueData, 'league.logo'),
+            'country' => data_get($leagueData, 'country.name'),
+        ];
     }
 
     /**
@@ -26,7 +54,7 @@ class LeagueService
     private function leagueIdentity(array $leagueData): array
     {
         return [
-            'external_id' => $leagueData['league']['id'],
+            'external_id' => $leagueData['external_id'],
         ];
     }
 
@@ -36,15 +64,23 @@ class LeagueService
     private function leagueAttributes(array $leagueData, Collection $countries): array
     {
         return [
-            'name' => $leagueData['league']['name'],
-            'type' => $leagueData['league']['type'],
-            'logo_url' => $leagueData['league']['logo'],
+            'name' => $leagueData['name'],
+            'type' => $leagueData['type'],
+            'logo_url' => $leagueData['logo_url'],
             'country_id' => $this->countryId($leagueData, $countries),
         ];
     }
 
     private function countryId(array $leagueData, Collection $countries): ?int
     {
-        return $countries[$leagueData['country']['name']] ?? null;
+        $country = $leagueData['country'];
+
+        if (! is_string($country) || $country === '') {
+            return null;
+        }
+
+        $countryId = $countries[$country] ?? null;
+
+        return is_numeric($countryId) ? (int) $countryId : null;
     }
 }

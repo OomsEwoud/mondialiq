@@ -20,9 +20,15 @@ class VenueService
         $countries ??= Country::query()->pluck('id', 'name');
 
         foreach ($venuesData as $venueData) {
+            $venuePayload = $this->venuePayload($venueData);
+
+            if ($venuePayload === null) {
+                continue;
+            }
+
             Venue::query()->updateOrCreate(
-                $this->venueIdentity($venueData),
-                $this->venueAttributes($venueData, $countries),
+                $this->venueIdentity($venuePayload),
+                $this->venueAttributes($venuePayload, $countries),
             );
         }
     }
@@ -48,12 +54,34 @@ class VenueService
     }
 
     /**
+     * @return array{external_id: int, name: string, city: mixed, capacity: mixed, photo_url: mixed, country: mixed}|null
+     */
+    private function venuePayload(array $venueData): ?array
+    {
+        $externalId = data_get($venueData, 'id');
+        $name = data_get($venueData, 'name');
+
+        if (! is_numeric($externalId) || ! is_string($name) || $name === '') {
+            return null;
+        }
+
+        return [
+            'external_id' => (int) $externalId,
+            'name' => $name,
+            'city' => data_get($venueData, 'city'),
+            'capacity' => data_get($venueData, 'capacity'),
+            'photo_url' => data_get($venueData, 'image'),
+            'country' => data_get($venueData, 'country'),
+        ];
+    }
+
+    /**
      * @return array{external_id: int}
      */
     private function venueIdentity(array $venueData): array
     {
         return [
-            'external_id' => $venueData['id'],
+            'external_id' => $venueData['external_id'],
         ];
     }
 
@@ -66,13 +94,21 @@ class VenueService
             'name' => $venueData['name'],
             'city' => $venueData['city'],
             'capacity' => $venueData['capacity'],
-            'photo_url' => $venueData['image'],
+            'photo_url' => $venueData['photo_url'],
             'country_id' => $this->countryId($venueData, $countries),
         ];
     }
 
     private function countryId(array $venueData, Collection $countries): ?int
     {
-        return $countries[$venueData['country']] ?? null;
+        $country = $venueData['country'];
+
+        if (! is_string($country) || $country === '') {
+            return null;
+        }
+
+        $countryId = $countries[$country] ?? null;
+
+        return is_numeric($countryId) ? (int) $countryId : null;
     }
 }

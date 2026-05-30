@@ -37,9 +37,15 @@ class CoachService
 
     public function storeCoach(Team $team, array $coachData): void
     {
+        $coachPayload = $this->coachPayload($coachData);
+
+        if ($coachPayload === null) {
+            return;
+        }
+
         Coach::query()->updateOrCreate(
-            $this->coachIdentity($coachData),
-            $this->coachAttributes($team, $coachData),
+            $this->coachIdentity($coachPayload),
+            $this->coachAttributes($team, $coachPayload),
         );
     }
 
@@ -74,12 +80,35 @@ class CoachService
     }
 
     /**
+     * @return array{external_id: int, nationality: mixed, first_name: mixed, last_name: mixed, display_name: string, photo_url: mixed, birth_date: mixed}|null
+     */
+    private function coachPayload(array $coachData): ?array
+    {
+        $externalId = data_get($coachData, 'id');
+        $displayName = data_get($coachData, 'name');
+
+        if (! is_numeric($externalId) || ! is_string($displayName) || $displayName === '') {
+            return null;
+        }
+
+        return [
+            'external_id' => (int) $externalId,
+            'nationality' => data_get($coachData, 'nationality'),
+            'first_name' => data_get($coachData, 'firstname'),
+            'last_name' => data_get($coachData, 'lastname'),
+            'display_name' => $displayName,
+            'photo_url' => data_get($coachData, 'photo'),
+            'birth_date' => data_get($coachData, 'birth.date'),
+        ];
+    }
+
+    /**
      * @return array{external_id: int}
      */
     private function coachIdentity(array $coachData): array
     {
         return [
-            'external_id' => (int) $coachData['id'],
+            'external_id' => $coachData['external_id'],
         ];
     }
 
@@ -90,18 +119,18 @@ class CoachService
     {
         return [
             'team_id' => $team->id,
-            'country_id' => $this->countryId($coachData['nationality'] ?? null),
-            'first_name' => $coachData['firstname'] ?? null,
-            'last_name' => $coachData['lastname'] ?? null,
-            'display_name' => $coachData['name'],
-            'photo_url' => $coachData['photo'],
-            'birth_date' => $coachData['birth']['date'],
+            'country_id' => $this->countryId($coachData['nationality']),
+            'first_name' => $coachData['first_name'],
+            'last_name' => $coachData['last_name'],
+            'display_name' => $coachData['display_name'],
+            'photo_url' => $coachData['photo_url'],
+            'birth_date' => $coachData['birth_date'],
         ];
     }
 
-    private function countryId(?string $nationality): ?int
+    private function countryId(mixed $nationality): ?int
     {
-        if ($nationality === null) {
+        if (! is_string($nationality) || $nationality === '') {
             return null;
         }
 

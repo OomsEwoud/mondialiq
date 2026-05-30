@@ -16,6 +16,18 @@ class PlayerService
 {
     private array $countriesCache = [];
 
+    /**
+     * @var array<string, string>
+     */
+    private const PLAYER_FIELD_MAP = [
+        'name' => 'display_name',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'position' => 'position',
+        'number' => 'number',
+        'photo' => 'photo_url',
+    ];
+
     public function __construct(
         private readonly CountryService $countryService,
         private readonly FootballApiService $api,
@@ -32,11 +44,13 @@ class PlayerService
     public function storePlayers(array $players): void
     {
         foreach ($players as $player) {
-            $playerData = data_get($player, 'player');
+            $playerData = $this->playerData($player);
 
-            if (is_array($playerData)) {
-                $this->updateOrCreatePlayer($playerData);
+            if ($playerData === null) {
+                continue;
             }
+
+            $this->updateOrCreatePlayer($playerData);
         }
     }
 
@@ -67,15 +81,28 @@ class PlayerService
         $data = [];
 
         foreach ($squad as $playerData) {
-            if (! is_array($playerData)) {
+            $playerPayload = $this->playerData($playerData);
+
+            if ($playerPayload === null) {
                 continue;
             }
 
-            $playerModel = $this->updateOrCreatePlayer($playerData);
+            $playerModel = $this->updateOrCreatePlayer($playerPayload);
             $data[$playerModel->id] = ['is_active' => true];
         }
 
         return $data;
+    }
+
+    private function playerData(mixed $player): ?array
+    {
+        if (! is_array($player)) {
+            return null;
+        }
+
+        $playerData = data_get($player, 'player', $player);
+
+        return is_array($playerData) && is_numeric(data_get($playerData, 'id')) ? $playerData : null;
     }
 
     private function updateOrCreatePlayer(array $data): Player
@@ -92,7 +119,7 @@ class PlayerService
     private function playerIdentity(array $data): array
     {
         return [
-            'external_id' => (int) $data['id'],
+            'external_id' => (int) data_get($data, 'id'),
         ];
     }
 
@@ -103,12 +130,16 @@ class PlayerService
     {
         $attributes = $this->mappedPlayerFields($data);
 
-        if (isset($data['birth']['date'])) {
-            $attributes['birth_date'] = $data['birth']['date'];
+        $birthDate = data_get($data, 'birth.date');
+
+        if ($birthDate !== null) {
+            $attributes['birth_date'] = $birthDate;
         }
 
-        if (isset($data['nationality']) && is_string($data['nationality'])) {
-            $attributes['country_id'] = $this->countryId($data['nationality']);
+        $nationality = data_get($data, 'nationality');
+
+        if (is_string($nationality) && $nationality !== '') {
+            $attributes['country_id'] = $this->countryId($nationality);
         }
 
         return $attributes;
@@ -130,7 +161,7 @@ class PlayerService
     {
         $attributes = [];
 
-        foreach ($this->playerFieldMap() as $apiKey => $dbKey) {
+        foreach (self::PLAYER_FIELD_MAP as $apiKey => $dbKey) {
             if (isset($data[$apiKey])) {
                 $attributes[$dbKey] = $data[$apiKey];
             }
@@ -138,22 +169,6 @@ class PlayerService
 
         return $attributes;
     }
-
-    /**
-     * @return array<string, string>
-     */
-    private function playerFieldMap(): array
-    {
-        return [
-            'name' => 'display_name',
-            'firstname' => 'first_name',
-            'lastname' => 'last_name',
-            'position' => 'position',
-            'number' => 'number',
-            'photo' => 'photo_url',
-        ];
-    }
-
     public function syncTeamPlayers(int $leagueId, int $season): void
     {
         $teamIds = Fixture::query()
