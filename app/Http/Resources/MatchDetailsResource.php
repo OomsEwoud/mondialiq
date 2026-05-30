@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\FixtureEvent;
 use App\Models\FixturePlayer;
 use App\Models\Player;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
@@ -15,72 +16,19 @@ class MatchDetailsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'homeTeam' => [
-                'id' => $this->homeTeam->id,
-                'name' => $this->homeTeam->name,
-                'code' => $this->homeTeam->code,
-                'logo' => $this->homeTeam->logo_url,
-            ],
-            'awayTeam' => [
-                'id' => $this->awayTeam->id,
-                'name' => $this->awayTeam->name,
-                'code' => $this->awayTeam->code,
-                'logo' => $this->awayTeam->logo_url,
-            ],
+            'homeTeam' => $this->teamAttributes($this->homeTeam),
+            'awayTeam' => $this->teamAttributes($this->awayTeam),
             'round' => $this->round_name,
             'season' => $this->season,
             'date' => $this->match_date->format('d M Y'),
             'time' => $this->match_date->format('H:i'),
             'status' => $this->status_long,
             'elapsedTime' => $this->elapsed_time,
-            'score' => [
-                'halftime' => [
-                    'home' => $this->halftime_home_goals,
-                    'away' => $this->halftime_away_goals,
-                ],
-                'fulltime' => [
-                    'home' => $this->fulltime_home_goals,
-                    'away' => $this->fulltime_away_goals,
-                ],
-                'extratime' => [
-                    'home' => $this->extratime_home_goals,
-                    'away' => $this->extratime_away_goals,
-                ],
-                'penalties' => [
-                    'home' => $this->penalty_home_goals,
-                    'away' => $this->penalty_away_goals,
-                ],
-            ],
-            'venue' => $this->venue ? [
-                'name' => $this->venue->name,
-                'city' => $this->venue->city,
-                'country' => $this->venue->country?->name,
-                'capacity' => $this->venue->capacity,
-                'photo' => $this->venue->photo_url,
-            ] : null,
+            'score' => $this->scoreAttributes(),
+            'venue' => $this->venueAttributes(),
             'referee' => $this->referee?->name,
-            'events' => $this->fixtureEvents
-                ->sortBy('time_elapsed')
-                ->values()
-                ->map(fn (FixtureEvent $event) => [
-                    'id' => $event->id,
-                    'minute' => $event->time_elapsed,
-                    'extraTime' => $event->extra_time,
-                    'team' => $event->team->name,
-                    'teamLogo' => $event->team->logo_url,
-                    'player' => $event->player?->display_name,
-                    'assist' => $event->assist?->display_name,
-                    'type' => $event->type,
-                    'detail' => $event->detail,
-                ]),
-            'stats' => $this->fixtureStats
-                ->groupBy('name')
-                ->map(fn (Collection $stats, string $name) => [
-                    'name' => $name,
-                    'home' => $stats->firstWhere('team_id', $this->home_team_id)?->value,
-                    'away' => $stats->firstWhere('team_id', $this->away_team_id)?->value,
-                ])
-                ->values(),
+            'events' => $this->eventAttributes(),
+            'stats' => $this->statAttributes(),
             'lineups' => [
                 'home' => $this->lineupForTeam($this->home_team_id),
                 'away' => $this->lineupForTeam($this->away_team_id),
@@ -90,6 +38,83 @@ class MatchDetailsResource extends JsonResource
                 'away' => $this->availabilityForTeam($this->away_team_id),
             ],
         ];
+    }
+
+    private function teamAttributes(Team $team): array
+    {
+        return [
+            'id' => $team->id,
+            'name' => $team->name,
+            'code' => $team->code,
+            'logo' => $team->logo_url,
+        ];
+    }
+
+    private function scoreAttributes(): array
+    {
+        return [
+            'halftime' => [
+                'home' => $this->halftime_home_goals,
+                'away' => $this->halftime_away_goals,
+            ],
+            'fulltime' => [
+                'home' => $this->fulltime_home_goals,
+                'away' => $this->fulltime_away_goals,
+            ],
+            'extratime' => [
+                'home' => $this->extratime_home_goals,
+                'away' => $this->extratime_away_goals,
+            ],
+            'penalties' => [
+                'home' => $this->penalty_home_goals,
+                'away' => $this->penalty_away_goals,
+            ],
+        ];
+    }
+
+    private function venueAttributes(): ?array
+    {
+        if (! $this->venue) {
+            return null;
+        }
+
+        return [
+            'name' => $this->venue->name,
+            'city' => $this->venue->city,
+            'country' => $this->venue->country?->name,
+            'capacity' => $this->venue->capacity,
+            'photo' => $this->venue->photo_url,
+        ];
+    }
+
+    private function eventAttributes(): Collection
+    {
+        return $this->fixtureEvents
+            ->sortBy('time_elapsed')
+            ->values()
+            ->map(fn (FixtureEvent $event) => [
+                'id' => $event->id,
+                'minute' => $event->time_elapsed,
+                'extraTime' => $event->extra_time,
+                'team' => $event->team->name,
+                'teamLogo' => $event->team->logo_url,
+                'player' => $event->player?->display_name,
+                'assist' => $event->assist?->display_name,
+                'type' => $event->type,
+                'detail' => $event->detail,
+            ]);
+    }
+
+    private function statAttributes(): Collection
+    {
+        return $this->fixtureStats
+            ->groupBy('name')
+            ->map(fn (Collection $stats, string $name) => [
+                'name' => $name,
+                'home' => $stats->firstWhere('team_id', $this->home_team_id)?->value,
+                'away' => $stats->firstWhere('team_id', $this->away_team_id)?->value,
+            ])
+            ->values();
     }
 
     private function availabilityForTeam(int $teamId): array

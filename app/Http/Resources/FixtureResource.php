@@ -10,63 +10,103 @@ class FixtureResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $prediction = $this->predictionForResponse();
         $aiPrediction = $this->aiPredictionForResponse();
         $userPrediction = $this->userPredictionForResponse();
 
         return [
-            'id'              => $this->id,
-            'homeTeamId'      => $this->homeTeam->id,
-            'homeTeam'        => $this->homeTeam->name,
-            'homeTeamShort'   => $this->homeTeam->code,
-            'homeTeamLogo'    => $this->homeTeam->logo_url,
-            'awayTeamId'      => $this->awayTeam->id,
-            'awayTeam'        => $this->awayTeam->name,
-            'awayTeamShort'   => $this->awayTeam->code,
-            'awayTeamLogo'    => $this->awayTeam->logo_url,
-            'date'            => $this->match_date->format('d M'),
-            'dateValue'       => $this->match_date->format('Y-m-d'),
-            'time'            => $this->match_date->format('H:i'),
-            'round'           => $this->round_name,
-            'status'          => $this->status_long,
-            'elapsedTime'     => $this->elapsed_time,
-            'score'           => [
-                'fulltime' => [
-                    'home' => $this->fulltime_home_goals,
-                    'away' => $this->fulltime_away_goals,
-                ],
-                'extratime' => [
-                    'home' => $this->extratime_home_goals,
-                    'away' => $this->extratime_away_goals,
-                ],
-                'penalties' => [
-                    'home' => $this->penalty_home_goals,
-                    'away' => $this->penalty_away_goals,
-                ],
-            ],
-            'prediction'      => $prediction ? [
-                'homeWin' => $prediction->home_chance,
-                'draw'    => $prediction->draw_chance,
-                'awayWin' => $prediction->away_chance,
-            ] : null,
+            'id' => $this->id,
+            ...$this->teamAttributes(),
+            'date' => $this->match_date->format('d M'),
+            'dateValue' => $this->match_date->format('Y-m-d'),
+            'time' => $this->match_date->format('H:i'),
+            'round' => $this->round_name,
+            'status' => $this->status_long,
+            'elapsedTime' => $this->elapsed_time,
+            'score' => $this->scoreAttributes(),
+            'prediction' => $this->predictionChances(),
             'hasAiPrediction' => (bool) $aiPrediction,
-            'aiPrediction' => $aiPrediction ? [
-                'winnerId' => $aiPrediction->winner_id,
-                'outcome' => $this->predictionOutcome($aiPrediction),
-                'label' => $this->predictionLabel($aiPrediction),
-                'homeScore' => $aiPrediction->home_goals,
-                'awayScore' => $aiPrediction->away_goals,
-                'confidence' => $aiPrediction->confidence,
-                'advice' => $aiPrediction->advice,
-            ] : null,
-            'userPrediction'  => $userPrediction ? [
-                'winnerId' => $userPrediction->winner_id,
-                'outcome'  => $this->predictionOutcome($userPrediction),
-                'label'    => $this->predictionLabel($userPrediction),
-                'homeScore' => $userPrediction->home_goals,
-                'awayScore' => $userPrediction->away_goals,
-                'confidence' => $userPrediction->confidence,
-            ] : null,
+            'aiPrediction' => $this->aiPredictionAttributes($aiPrediction),
+            'userPrediction' => $this->userPredictionAttributes($userPrediction),
+        ];
+    }
+
+    private function teamAttributes(): array
+    {
+        return [
+            'homeTeamId' => $this->homeTeam->id,
+            'homeTeam' => $this->homeTeam->name,
+            'homeTeamShort' => $this->homeTeam->code,
+            'homeTeamLogo' => $this->homeTeam->logo_url,
+            'awayTeamId' => $this->awayTeam->id,
+            'awayTeam' => $this->awayTeam->name,
+            'awayTeamShort' => $this->awayTeam->code,
+            'awayTeamLogo' => $this->awayTeam->logo_url,
+        ];
+    }
+
+    private function scoreAttributes(): array
+    {
+        return [
+            'fulltime' => [
+                'home' => $this->fulltime_home_goals,
+                'away' => $this->fulltime_away_goals,
+            ],
+            'extratime' => [
+                'home' => $this->extratime_home_goals,
+                'away' => $this->extratime_away_goals,
+            ],
+            'penalties' => [
+                'home' => $this->penalty_home_goals,
+                'away' => $this->penalty_away_goals,
+            ],
+        ];
+    }
+
+    private function predictionChances(): ?array
+    {
+        $prediction = $this->predictionForResponse();
+
+        if (! $prediction) {
+            return null;
+        }
+
+        return [
+            'homeWin' => $prediction->home_chance,
+            'draw' => $prediction->draw_chance,
+            'awayWin' => $prediction->away_chance,
+        ];
+    }
+
+    private function aiPredictionAttributes(?Prediction $prediction): ?array
+    {
+        if (! $prediction) {
+            return null;
+        }
+
+        return [
+            ...$this->basePredictionAttributes($prediction),
+            'advice' => $prediction->advice,
+        ];
+    }
+
+    private function userPredictionAttributes(?Prediction $prediction): ?array
+    {
+        if (! $prediction) {
+            return null;
+        }
+
+        return $this->basePredictionAttributes($prediction);
+    }
+
+    private function basePredictionAttributes(Prediction $prediction): array
+    {
+        return [
+            'winnerId' => $prediction->winner_id,
+            'outcome' => $this->predictionOutcome($prediction),
+            'label' => $this->predictionLabel($prediction),
+            'homeScore' => $prediction->home_goals,
+            'awayScore' => $prediction->away_goals,
+            'confidence' => $prediction->confidence,
         ];
     }
 
