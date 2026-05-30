@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Leagues;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,42 +17,69 @@ class ShowLeagueSettingsController extends Controller
     {
         $this->authorize('manage', $scoreboard);
 
-        $members = $scoreboard->users()
+        /** @var User $user */
+        $user = $request->user();
+        $members = $this->members($scoreboard, $user);
+
+        return Inertia::render('league-settings', [
+            'league' => $this->leagueAttributes($scoreboard, $members),
+        ]);
+    }
+
+    private function rankedMemberQuery(Scoreboard $scoreboard): BelongsToMany
+    {
+        return $scoreboard->users()
             ->select(['users.id', 'users.name', 'users.avatar'])
             ->withSum('predictions', 'points')
             ->withCount('predictions')
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
-            ->orderBy('users.name')
+            ->orderBy('users.name');
+    }
+
+    private function members(Scoreboard $scoreboard, User $currentUser): Collection
+    {
+        return $this->rankedMemberQuery($scoreboard)
             ->get()
             ->values()
-            ->map(fn (User $user, int $index) => [
-                'id' => $user->id,
-                'rank' => $index + 1,
-                'name' => $user->name,
-                'avatar' => $user->avatarUrl(),
-                'predictionsCount' => $user->predictions_count,
-                'totalPoints' => $user->predictions_sum_points ?? 0,
-                'isCurrentUser' => $user->id === $request->user()->id,
-                'isOwner' => $user->id === $scoreboard->owner_id,
-                'canBeManaged' => $user->id !== $scoreboard->owner_id,
-            ]);
+            ->map(fn (User $user, int $index) => $this->memberAttributes(
+                user: $user,
+                currentUser: $currentUser,
+                scoreboard: $scoreboard,
+                index: $index,
+            ));
+    }
 
-        return Inertia::render('league-settings', [
-            'league' => [
-                'id' => $scoreboard->id,
-                'name' => $scoreboard->name,
-                'icon' => $scoreboard->icon,
-                'accentColor' => $scoreboard->accent_color,
-                'coverStyle' => $scoreboard->cover_style,
-                'code' => $scoreboard->code,
-                'showHref' => route('leagues.show', $scoreboard),
-                'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
-                'settingsHref' => route('leagues.settings', $scoreboard),
-                'canManage' => true,
-                'membersCount' => $members->count(),
-                'members' => $members,
-            ],
-        ]);
+    private function memberAttributes(User $user, User $currentUser, Scoreboard $scoreboard, int $index): array
+    {
+        return [
+            'id' => $user->id,
+            'rank' => $index + 1,
+            'name' => $user->name,
+            'avatar' => $user->avatarUrl(),
+            'predictionsCount' => $user->predictions_count,
+            'totalPoints' => $user->predictions_sum_points ?? 0,
+            'isCurrentUser' => $user->id === $currentUser->id,
+            'isOwner' => $user->id === $scoreboard->owner_id,
+            'canBeManaged' => $user->id !== $scoreboard->owner_id,
+        ];
+    }
+
+    private function leagueAttributes(Scoreboard $scoreboard, Collection $members): array
+    {
+        return [
+            'id' => $scoreboard->id,
+            'name' => $scoreboard->name,
+            'icon' => $scoreboard->icon,
+            'accentColor' => $scoreboard->accent_color,
+            'coverStyle' => $scoreboard->cover_style,
+            'code' => $scoreboard->code,
+            'showHref' => route('leagues.show', $scoreboard),
+            'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
+            'settingsHref' => route('leagues.settings', $scoreboard),
+            'canManage' => true,
+            'membersCount' => $members->count(),
+            'members' => $members,
+        ];
     }
 }

@@ -5,18 +5,23 @@ namespace App\Http\Controllers\Leagues;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Leagues\RefreshLeagueCodeRequest;
 use App\Models\Scoreboard;
+use App\Support\Leagues\LeagueCodeGenerator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class RefreshLeagueCodeController extends Controller
 {
+    public function __construct(
+        private readonly LeagueCodeGenerator $codeGenerator,
+    ) {
+    }
+
     public function __invoke(RefreshLeagueCodeRequest $request, Scoreboard $scoreboard): RedirectResponse
     {
         $this->authorize('manage', $scoreboard);
 
         $scoreboard->update([
-            'code' => $this->generateCode(),
+            'code' => $this->codeGenerator->generate(),
         ]);
 
         Inertia::flash('toast', [
@@ -25,14 +30,5 @@ class RefreshLeagueCodeController extends Controller
         ]);
 
         return to_route('leagues.settings', $scoreboard);
-    }
-
-    private function generateCode(): string
-    {
-        do {
-            $code = Str::upper(Str::random(8));
-        } while (Scoreboard::query()->where('code', $code)->exists());
-
-        return $code;
     }
 }

@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -20,9 +21,45 @@ class ShowLeagueController extends Controller
     {
         $this->authorize('view', $scoreboard);
 
-        $memberIds = $scoreboard->users()->pluck('users.id');
+        /** @var User $user */
+        $user = $request->user();
+        $memberIds = $this->memberIds($scoreboard);
+        $members = $this->members($scoreboard, $user, $memberIds);
 
-        $members = $scoreboard->users()
+        return Inertia::render('league-show', [
+            'league' => $this->leagueAttributes($scoreboard, $user, $members, $memberIds),
+        ]);
+    }
+
+    private function memberIds(Scoreboard $scoreboard): Collection
+    {
+        return $scoreboard->users()->pluck('users.id');
+    }
+
+    private function members(Scoreboard $scoreboard, User $currentUser, Collection $memberIds): Collection
+    {
+        $recentPredictionsByUser = $this->recentPredictionsByUser($memberIds);
+
+        $members = $this->rankedMemberQuery($scoreboard)
+            ->get()
+            ->values()
+            ->map(
+                fn (User $user, int $index) => $this->memberAttributes(
+                    user: $user,
+                    currentUser: $currentUser,
+                    scoreboard: $scoreboard,
+                    recentPredictions: $recentPredictionsByUser->get($user->id, collect()),
+                    index: $index,
+                ),
+            )
+            ->values();
+
+        return $this->withGapsToAbove($members);
+    }
+
+    private function rankedMemberQuery(Scoreboard $scoreboard): BelongsToMany
+    {
+        return $scoreboard->users()
             ->select(['users.id', 'users.name', 'users.avatar'])
             ->withSum('predictions', 'points')
             ->withCount('predictions')
@@ -33,39 +70,45 @@ class ShowLeagueController extends Controller
             ->withMax('predictions', 'updated_at')
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
-            ->orderBy('users.name')
-            ->get()
-            ->values();
+            ->orderBy('users.name');
+    }
 
-        $recentPredictionsByUser = Prediction::query()
+    private function recentPredictionsByUser(Collection $memberIds): Collection
+    {
+        return Prediction::query()
             ->whereIn('user_id', $memberIds)
             ->orderByDesc('updated_at')
             ->get(['user_id', 'points', 'updated_at'])
             ->groupBy('user_id')
             ->map(fn (Collection $predictions) => $predictions->take(3)->values());
+    }
 
-        $members = $members
-            ->map(fn (User $user, int $index) => [
-                'id' => $user->id,
-                'rank' => $index + 1,
-                'name' => $user->name,
-                'avatar' => $user->avatarUrl(),
-                'predictionsCount' => $user->predictions_count,
-                'scoringPredictionsCount' => $user->scoring_predictions_count,
-                'totalPoints' => $user->predictions_sum_points ?? 0,
-                'isCurrentUser' => $user->id === $request->user()->id,
-                'isOwner' => $user->id === $scoreboard->owner_id,
-                'canBeManaged' => $user->id !== $scoreboard->owner_id,
-                'lastPredictionLabel' => filled($user->predictions_max_updated_at)
-                    ? Carbon::parse($user->predictions_max_updated_at)->diffForHumans()
-                    : null,
-                'form' => $this->buildFormSummary(
-                    $recentPredictionsByUser->get($user->id, collect())
-                ),
-            ])
-            ->values();
+    private function memberAttributes(
+        User $user,
+        User $currentUser,
+        Scoreboard $scoreboard,
+        Collection $recentPredictions,
+        int $index,
+    ): array {
+        return [
+            'id' => $user->id,
+            'rank' => $index + 1,
+            'name' => $user->name,
+            'avatar' => $user->avatarUrl(),
+            'predictionsCount' => $user->predictions_count,
+            'scoringPredictionsCount' => $user->scoring_predictions_count,
+            'totalPoints' => $user->predictions_sum_points ?? 0,
+            'isCurrentUser' => $user->id === $currentUser->id,
+            'isOwner' => $user->id === $scoreboard->owner_id,
+            'canBeManaged' => $user->id !== $scoreboard->owner_id,
+            'lastPredictionLabel' => $this->lastPredictionLabel($user),
+            'form' => $this->buildFormSummary($recentPredictions),
+        ];
+    }
 
-        $members = $members
+    private function withGapsToAbove(Collection $members): Collection
+    {
+        return $members
             ->map(function (array $member, int $index) use ($members): array {
                 $memberAbove = $index > 0 ? $members[$index - 1] : null;
 
@@ -77,41 +120,60 @@ class ShowLeagueController extends Controller
                 ];
             })
             ->values();
+    }
 
+    private function lastPredictionLabel(User $user): ?string
+    {
+        if (! filled($user->predictions_max_updated_at)) {
+            return null;
+        }
+
+        return Carbon::parse($user->predictions_max_updated_at)->diffForHumans();
+    }
+
+    private function leagueAttributes(
+        Scoreboard $scoreboard,
+        User $user,
+        Collection $members,
+        Collection $memberIds,
+    ): array {
         $leader = $members->first();
         $currentUser = $members->firstWhere('isCurrentUser', true);
-        $lastActivity = Prediction::query()
+        $lastActivity = $this->lastActivity($memberIds);
+
+        return [
+            'id' => $scoreboard->id,
+            'name' => $scoreboard->name,
+            'icon' => $scoreboard->icon,
+            'accentColor' => $scoreboard->accent_color,
+            'coverStyle' => $scoreboard->cover_style,
+            'code' => $scoreboard->code,
+            'showHref' => route('leagues.show', $scoreboard),
+            'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
+            'settingsHref' => $user->can('manage', $scoreboard)
+                ? route('leagues.settings', $scoreboard)
+                : null,
+            'canManage' => $user->can('manage', $scoreboard),
+            'canLeave' => $user->can('leave', $scoreboard),
+            'membersCount' => $members->count(),
+            'currentLeader' => $leader['name'] ?? null,
+            'leaderPoints' => $leader['totalPoints'] ?? 0,
+            'currentUserPoints' => $currentUser['totalPoints'] ?? 0,
+            'totalPredictions' => $members->sum('predictionsCount'),
+            'lastActivityLabel' => $lastActivity?->updated_at instanceof CarbonInterface
+                ? $lastActivity->updated_at->diffForHumans()
+                : null,
+            'members' => $members,
+            'currentUserRank' => $currentUser['rank'] ?? null,
+        ];
+    }
+
+    private function lastActivity(Collection $memberIds): ?Prediction
+    {
+        return Prediction::query()
             ->whereIn('user_id', $memberIds)
             ->latest('updated_at')
             ->first(['updated_at']);
-
-        return Inertia::render('league-show', [
-            'league' => [
-                'id' => $scoreboard->id,
-                'name' => $scoreboard->name,
-                'icon' => $scoreboard->icon,
-                'accentColor' => $scoreboard->accent_color,
-                'coverStyle' => $scoreboard->cover_style,
-                'code' => $scoreboard->code,
-                'showHref' => route('leagues.show', $scoreboard),
-                'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
-                'settingsHref' => $request->user()->can('manage', $scoreboard)
-                    ? route('leagues.settings', $scoreboard)
-                    : null,
-                'canManage' => $request->user()->can('manage', $scoreboard),
-                'canLeave' => $request->user()->can('leave', $scoreboard),
-                'membersCount' => $members->count(),
-                'currentLeader' => $leader['name'] ?? null,
-                'leaderPoints' => $leader['totalPoints'] ?? 0,
-                'currentUserPoints' => $currentUser['totalPoints'] ?? 0,
-                'totalPredictions' => $members->sum('predictionsCount'),
-                'lastActivityLabel' => $lastActivity?->updated_at instanceof CarbonInterface
-                    ? $lastActivity->updated_at->diffForHumans()
-                    : null,
-                'members' => $members,
-                'currentUserRank' => $currentUser['rank'] ?? null,
-            ],
-        ]);
     }
 
     private function buildFormSummary(Collection $recentPredictions): array

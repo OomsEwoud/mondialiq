@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Leagues\StoreLeagueRequest;
 use App\Models\Scoreboard;
 use App\Support\Leagues\LeagueBranding;
+use App\Support\Leagues\LeagueCodeGenerator;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class StoreLeagueController extends Controller
 {
+    public function __construct(
+        private readonly LeagueCodeGenerator $codeGenerator,
+    ) {
+    }
+
     public function __invoke(StoreLeagueRequest $request): RedirectResponse
     {
         $league = Scoreboard::query()->create([
@@ -19,7 +24,7 @@ class StoreLeagueController extends Controller
             'icon' => LeagueBranding::DEFAULT_ICON,
             'accent_color' => LeagueBranding::DEFAULT_ACCENT_COLOR,
             'cover_style' => LeagueBranding::DEFAULT_COVER_STYLE,
-            'code' => $this->generateCode(),
+            'code' => $this->codeGenerator->generate(),
             'owner_id' => $request->user()->id,
         ]);
 
@@ -31,14 +36,5 @@ class StoreLeagueController extends Controller
         ]);
 
         return to_route('leagues.show', $league);
-    }
-
-    private function generateCode(): string
-    {
-        do {
-            $code = Str::upper(Str::random(8));
-        } while (Scoreboard::query()->where('code', $code)->exists());
-
-        return $code;
     }
 }
