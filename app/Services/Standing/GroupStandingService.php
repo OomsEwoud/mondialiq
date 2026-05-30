@@ -13,21 +13,8 @@ class GroupStandingService
             ->groupBy('group_name')
             ->map(fn (Collection $groupStandings, string $groupName) => [
                 'id' => $this->groupId($groupName),
-                'name' => str_starts_with($groupName, 'Group ') ? $groupName : "Group {$groupName}",
-                'teams' => $groupStandings->map(fn (Standing $standing) => [
-                    'id' => $standing->team->id,
-                    'name' => $standing->team->name,
-                    'code' => $standing->team->code,
-                    'logo' => $standing->team->logo_url,
-                    'rank' => $standing->rank,
-                    'played' => $standing->matches_played,
-                    'wins' => $standing->wins,
-                    'draws' => $standing->draws,
-                    'losses' => $standing->losses,
-                    'goalDifference' => $standing->goal_difference,
-                    'points' => $standing->points,
-                    'qualificationProbability' => $this->qualificationProbability($standing),
-                ])->values(),
+                'name' => $this->groupName($groupName),
+                'teams' => $this->teams($groupStandings),
             ])
             ->values();
     }
@@ -35,6 +22,36 @@ class GroupStandingService
     private function groupId(string $groupName): string
     {
         return str($groupName)->afterLast(' ')->upper()->toString();
+    }
+
+    private function groupName(string $groupName): string
+    {
+        return str_starts_with($groupName, 'Group ') ? $groupName : "Group {$groupName}";
+    }
+
+    private function teams(Collection $groupStandings): Collection
+    {
+        return $groupStandings
+            ->map(fn (Standing $standing) => $this->teamAttributes($standing))
+            ->values();
+    }
+
+    private function teamAttributes(Standing $standing): array
+    {
+        return [
+            'id' => $standing->team->id,
+            'name' => $standing->team->name,
+            'code' => $standing->team->code,
+            'logo' => $standing->team->logo_url,
+            'rank' => $standing->rank,
+            'played' => $standing->matches_played,
+            'wins' => $standing->wins,
+            'draws' => $standing->draws,
+            'losses' => $standing->losses,
+            'goalDifference' => $standing->goal_difference,
+            'points' => $standing->points,
+            'qualificationProbability' => $this->qualificationProbability($standing),
+        ];
     }
 
     private function qualificationProbability(Standing $standing): int

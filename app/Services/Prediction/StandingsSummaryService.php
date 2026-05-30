@@ -5,7 +5,7 @@ namespace App\Services\Prediction;
 use App\Models\Fixture;
 use App\Models\Standing;
 use App\Models\Team;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class StandingsSummaryService
 {
@@ -17,12 +17,7 @@ class StandingsSummaryService
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
-        $standings = Standing::query()
-            ->where('league_id', $fixture->league_id)
-            ->where('season', $fixture->season)
-            ->whereIn('team_id', $this->teamIds($fixture))
-            ->get()
-            ->keyBy('team_id');
+        $standings = $this->standingsForFixture($fixture);
 
         return [
             'home_team' => $this->summarizeTeam($fixture->homeTeam, $standings->get($fixture->home_team_id)),
@@ -32,22 +27,41 @@ class StandingsSummaryService
 
     public function promptBlock(Fixture $fixture): string
     {
-        $summary = $this->summarize($fixture);
-        $lines = collect([$summary['home_team'], $summary['away_team']])
-            ->filter(fn (array $teamSummary): bool => $teamSummary['rank'] !== null)
-            ->map(fn (array $teamSummary): string => $this->formatter->bullet($this->formatTeamLine($teamSummary)))
-            ->values();
+        $lines = $this->promptLines($this->summarize($fixture));
 
         if ($lines->isEmpty()) {
-            return implode(PHP_EOL, [
-                'Standings summary:',
-                '- Standings data not available.',
-            ]);
+            return $this->unavailablePromptBlock();
         }
 
         return implode(PHP_EOL, [
             'Standings summary:',
             ...$lines,
+        ]);
+    }
+
+    private function standingsForFixture(Fixture $fixture): Collection
+    {
+        return Standing::query()
+            ->where('league_id', $fixture->league_id)
+            ->where('season', $fixture->season)
+            ->whereIn('team_id', $this->teamIds($fixture))
+            ->get()
+            ->keyBy('team_id');
+    }
+
+    private function promptLines(array $summary): Collection
+    {
+        return collect([$summary['home_team'], $summary['away_team']])
+            ->filter(fn (array $teamSummary): bool => $teamSummary['rank'] !== null)
+            ->map(fn (array $teamSummary): string => $this->formatter->bullet($this->formatTeamLine($teamSummary)))
+            ->values();
+    }
+
+    private function unavailablePromptBlock(): string
+    {
+        return implode(PHP_EOL, [
+            'Standings summary:',
+            '- Standings data not available.',
         ]);
     }
 
@@ -77,10 +91,10 @@ class StandingsSummaryService
      */
     private function teamIds(Fixture $fixture): array
     {
-        return Arr::whereNotNull([
+        return array_values(array_filter([
             $fixture->home_team_id,
             $fixture->away_team_id,
-        ]);
+        ]));
     }
 
     /**
