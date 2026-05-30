@@ -22,7 +22,7 @@ class PreviewAiPredictionPrompt extends Command
     {
         $fixtureId = (int) $this->argument('fixture');
 
-        $fixture = Fixture::query()->find($fixtureId);
+        $fixture = $this->findFixture($fixtureId);
 
         if (! $fixture) {
             $this->error("Fixture {$fixtureId} niet gevonden.");
@@ -33,5 +33,10 @@ class PreviewAiPredictionPrompt extends Command
         $this->line($this->promptBuilder->build($fixture));
 
         return self::SUCCESS;
+    }
+
+    private function findFixture(int $fixtureId): ?Fixture
+    {
+        return Fixture::query()->find($fixtureId);
     }
 }

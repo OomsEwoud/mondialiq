@@ -176,5 +176,4 @@ class FixtureOddsSummaryService
     {
         return trim($value);
     }
-
 }

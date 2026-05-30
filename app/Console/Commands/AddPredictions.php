@@ -36,12 +36,12 @@ class AddPredictions extends Command
 
         $this->info("{$fixtures->count()} relevante fixtures gevonden.");
 
-        $this->withProgressBar($fixtures, function (Fixture $fixture) {
+        $this->withProgressBar($fixtures, function (Fixture $fixture): void {
             try {
                 $this->syncFixturePrediction($fixture);
-            } catch (Throwable $e) {
+            } catch (Throwable $exception) {
                 $this->newLine();
-                $this->error("Fout bij ophalen voorspelling voor fixture {$fixture->id}: {$e->getMessage()}");
+                $this->error("Fout bij ophalen voorspelling voor fixture {$fixture->id}: {$exception->getMessage()}");
             }
         });
 

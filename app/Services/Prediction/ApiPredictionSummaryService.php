@@ -6,6 +6,11 @@ use App\Models\Prediction;
 
 class ApiPredictionSummaryService
 {
+    private const PREFIX_COMBO_WINNER = 'Combo Winner :';
+    private const PREFIX_COMBO_DOUBLE_CHANCE = 'Combo Double chance :';
+    private const PREFIX_WINNER = 'Winner :';
+    private const PREFIX_DOUBLE_CHANCE = 'Double chance :';
+
     public function __construct(
         private readonly PromptFormatter $formatter,
     ) {
@@ -64,42 +69,42 @@ class ApiPredictionSummaryService
     private function parseAdvice(?string $advice): array
     {
         if ($advice === null || trim($advice) === '') {
-            return [
-                'predicted_outcome' => null,
-                'goal_trend' => null,
-            ];
+            return $this->emptyAdviceSummary();
         }
 
         $advice = trim($advice);
 
-        if (($comboWinnerAdvice = $this->afterPrefix($advice, 'Combo Winner :')) !== null) {
+        if (($comboWinnerAdvice = $this->afterPrefix($advice, self::PREFIX_COMBO_WINNER)) !== null) {
             return $this->parseComboAdvice($comboWinnerAdvice, true);
         }
 
-        if (($comboDoubleChanceAdvice = $this->afterPrefix($advice, 'Combo Double chance :')) !== null) {
+        if (($comboDoubleChanceAdvice = $this->afterPrefix($advice, self::PREFIX_COMBO_DOUBLE_CHANCE)) !== null) {
             return $this->parseComboAdvice($comboDoubleChanceAdvice, false);
         }
 
-        if (($winner = $this->afterPrefix($advice, 'Winner :')) !== null) {
-            $winner = trim($winner);
-
-            return [
-                'predicted_outcome' => $winner === '' ? null : "{$winner} win",
-                'goal_trend' => null,
-            ];
+        if (($winner = $this->afterPrefix($advice, self::PREFIX_WINNER)) !== null) {
+            return $this->outcomeAdviceSummary(trim($winner), suffix: ' win');
         }
 
-        if (($doubleChance = $this->afterPrefix($advice, 'Double chance :')) !== null) {
-            $doubleChance = trim($doubleChance);
-
-            return [
-                'predicted_outcome' => $doubleChance === '' ? null : $doubleChance,
-                'goal_trend' => null,
-            ];
+        if (($doubleChance = $this->afterPrefix($advice, self::PREFIX_DOUBLE_CHANCE)) !== null) {
+            return $this->outcomeAdviceSummary(trim($doubleChance));
         }
 
+        return $this->emptyAdviceSummary();
+    }
+
+    private function emptyAdviceSummary(): array
+    {
         return [
             'predicted_outcome' => null,
+            'goal_trend' => null,
+        ];
+    }
+
+    private function outcomeAdviceSummary(string $outcome, string $suffix = ''): array
+    {
+        return [
+            'predicted_outcome' => $outcome === '' ? null : "{$outcome}{$suffix}",
             'goal_trend' => null,
         ];
     }
@@ -147,6 +152,6 @@ class ApiPredictionSummaryService
             return null;
         }
 
-        return preg_replace('/\s+:\s+/', ': ', trim($advice));
+        return preg_replace('/\s+:\s+/', ': ', trim($advice)) ?? trim($advice);
     }
 }

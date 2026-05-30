@@ -12,6 +12,10 @@ use RuntimeException;
 
 class AiPredictionService
 {
+    private const MODEL = 'gpt-5.4-mini';
+
+    private const SCORE_PATTERN = '/^(?<home>\d+(?:\.\d+)?)\s*[-:]\s*(?<away>\d+(?:\.\d+)?)$/';
+
     public function __construct(
         private readonly AiPredictionPromptBuilder $promptBuilder,
     ) {
@@ -37,7 +41,7 @@ class AiPredictionService
     private function openAiParameters(Fixture $fixture): array
     {
         return [
-            'model' => 'gpt-5.4-mini',
+            'model' => self::MODEL,
             'instructions' => $this->promptBuilder->instructions(),
             'input' => $this->promptBuilder->context($fixture),
         ];
@@ -79,15 +83,15 @@ class AiPredictionService
 
     private function cleanJson(string $outputText): string
     {
-        $outputText = trim($outputText);
+        $cleanedOutputText = trim($outputText);
 
-        if (! str_starts_with($outputText, '```')) {
-            return $outputText;
+        if (! str_starts_with($cleanedOutputText, '```')) {
+            return $cleanedOutputText;
         }
 
-        $outputText = preg_replace('/^```(?:json)?\s*/', '', $outputText) ?? $outputText;
+        $cleanedOutputText = preg_replace('/^```(?:json)?\s*/', '', $cleanedOutputText) ?? $cleanedOutputText;
 
-        return trim(preg_replace('/\s*```$/', '', $outputText) ?? $outputText);
+        return trim(preg_replace('/\s*```$/', '', $cleanedOutputText) ?? $cleanedOutputText);
     }
 
     /**
@@ -134,7 +138,7 @@ class AiPredictionService
      */
     private function scoreFromPrediction(mixed $score): array
     {
-        if (is_string($score) && preg_match('/^(?<home>\d+(?:\.\d+)?)\s*[-:]\s*(?<away>\d+(?:\.\d+)?)$/', $score, $matches)) {
+        if (is_string($score) && preg_match(self::SCORE_PATTERN, $score, $matches) === 1) {
             return [(float) $matches['home'], (float) $matches['away']];
         }
 

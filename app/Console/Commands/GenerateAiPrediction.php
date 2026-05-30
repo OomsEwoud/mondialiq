@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Fixture;
+use App\Models\Prediction;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\AiPredictionService;
 use Illuminate\Console\Attributes\Description;
@@ -25,7 +26,7 @@ class GenerateAiPrediction extends Command
     {
         $fixtureId = (int) $this->argument('fixture');
 
-        $fixture = Fixture::query()->find($fixtureId);
+        $fixture = $this->findFixture($fixtureId);
 
         if (! $fixture) {
             $this->error("Fixture {$fixtureId} niet gevonden.");
@@ -34,16 +35,7 @@ class GenerateAiPrediction extends Command
         }
 
         if ($this->option('dry-run')) {
-            if ($this->option('show-instructions')) {
-                $this->line('OpenAI instructions:');
-                $this->line($this->promptBuilder->instructions());
-                $this->newLine();
-            }
-
-            $this->line('OpenAI input:');
-            $this->line($this->promptBuilder->context($fixture));
-
-            return self::SUCCESS;
+            return $this->showDryRun($fixture);
         }
 
         try {
@@ -54,6 +46,32 @@ class GenerateAiPrediction extends Command
             return self::FAILURE;
         }
 
+        $this->showStoredPrediction($fixture, $prediction);
+
+        return self::SUCCESS;
+    }
+
+    private function findFixture(int $fixtureId): ?Fixture
+    {
+        return Fixture::query()->find($fixtureId);
+    }
+
+    private function showDryRun(Fixture $fixture): int
+    {
+        if ($this->option('show-instructions')) {
+            $this->line('OpenAI instructions:');
+            $this->line($this->promptBuilder->instructions());
+            $this->newLine();
+        }
+
+        $this->line('OpenAI input:');
+        $this->line($this->promptBuilder->context($fixture));
+
+        return self::SUCCESS;
+    }
+
+    private function showStoredPrediction(Fixture $fixture, Prediction $prediction): void
+    {
         $this->info("AI prediction opgeslagen voor fixture {$fixture->id}.");
         $this->line("Home: {$prediction->home_chance}%");
         $this->line("Draw: {$prediction->draw_chance}%");
@@ -63,7 +81,5 @@ class GenerateAiPrediction extends Command
         if ($prediction->home_goals !== null && $prediction->away_goals !== null) {
             $this->line("Expected score: {$prediction->home_goals}-{$prediction->away_goals}");
         }
-
-        return self::SUCCESS;
     }
 }

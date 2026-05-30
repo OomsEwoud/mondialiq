@@ -7,6 +7,13 @@ use App\Models\Prediction;
 
 class PredictionContextService
 {
+    private const FIXTURE_RELATIONS = [
+        'homeTeam:id,name',
+        'awayTeam:id,name',
+        'league:id,name',
+        'venue:id,name,city',
+    ];
+
     private const GUIDANCE_LINES = [
         'Market odds are the strongest external signal.',
         'API predictions are a secondary signal.',
@@ -28,10 +35,7 @@ class PredictionContextService
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing([
-            'homeTeam:id,name',
-            'awayTeam:id,name',
-            'league:id,name',
-            'venue:id,name,city',
+            ...self::FIXTURE_RELATIONS,
             'apiPrediction',
         ]);
 
@@ -85,7 +89,7 @@ class PredictionContextService
 
     private function fixturePromptBlock(Fixture $fixture): string
     {
-        $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name', 'league:id,name', 'venue:id,name,city']);
+        $fixture->loadMissing(self::FIXTURE_RELATIONS);
 
         $lines = [
             'Fixture:',
@@ -134,7 +138,7 @@ class PredictionContextService
         return implode(PHP_EOL, [
             'Guidance:',
             ...array_map(
-                fn (string $guidanceLine): string => "- {$guidanceLine}",
+                fn (string $line): string => "- {$line}",
                 self::GUIDANCE_LINES,
             ),
         ]);

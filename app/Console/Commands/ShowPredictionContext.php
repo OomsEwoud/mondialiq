@@ -23,7 +23,7 @@ class ShowPredictionContext extends Command
     {
         $fixtureId = (int) $this->argument('fixture');
 
-        $fixture = Fixture::query()->find($fixtureId);
+        $fixture = $this->findFixture($fixtureId);
 
         if (! $fixture) {
             $this->error("Fixture {$fixtureId} niet gevonden.");
@@ -38,6 +38,11 @@ class ShowPredictionContext extends Command
         $this->line($this->predictionContextService->promptBlock($fixture));
 
         return self::SUCCESS;
+    }
+
+    private function findFixture(int $fixtureId): ?Fixture
+    {
+        return Fixture::query()->find($fixtureId);
     }
 
     private function showJson(Fixture $fixture): int

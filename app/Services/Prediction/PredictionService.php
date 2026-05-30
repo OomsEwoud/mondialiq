@@ -10,12 +10,20 @@ class PredictionService
 {
     public function storeApiPrediction(array $prediction, int $fixtureId): void
     {
-        $apiPrediction = data_get($prediction, '0.predictions', []);
-
         Prediction::query()->updateOrCreate(
             $this->predictionIdentity($fixtureId),
-            $this->predictionAttributes($apiPrediction),
+            $this->predictionAttributes($this->apiPredictionPayload($prediction)),
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function apiPredictionPayload(array $prediction): array
+    {
+        $apiPrediction = data_get($prediction, '0.predictions');
+
+        return is_array($apiPrediction) ? $apiPrediction : [];
     }
 
     /**
@@ -47,23 +55,23 @@ class PredictionService
         ];
     }
 
-    private function resolveWinnerId(?int $apiWinnerId): ?int
+    private function resolveWinnerId(mixed $apiWinnerId): ?int
     {
-        if ($apiWinnerId === null) {
+        if (! is_numeric($apiWinnerId)) {
             return null;
         }
 
         return Team::query()
-            ->where('external_id', $apiWinnerId)
+            ->where('external_id', (int) $apiWinnerId)
             ->value('id');
     }
 
-    private function normalizePercentage(null|string $percentage): ?float
+    private function normalizePercentage(mixed $percentage): ?float
     {
         if ($percentage === null) {
             return null;
         }
 
-        return (float) rtrim($percentage, '%');
+        return (float) rtrim((string) $percentage, '%');
     }
 }
