@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { Bot, UserRound } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { predictions } from '@/routes';
 
 export type PredictionTab = 'ai' | 'mine';
@@ -39,11 +40,13 @@ export default function PredictionTabs({ activeTab }: Props) {
                             href={predictions.url({
                                 query: { mode: tab.value },
                             })}
-                            className={`flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none ${
+                            aria-current={isActive ? 'page' : undefined}
+                            className={cn(
+                                'flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none',
                                 isActive
                                     ? 'bg-blue-950 text-white shadow-sm'
-                                    : 'text-slate-500 hover:bg-slate-50 hover:text-blue-950'
-                            }`}
+                                    : 'text-slate-500 hover:bg-slate-50 hover:text-blue-950',
+                            )}
                         >
                             <Icon className="h-4 w-4" />
                             {tab.label}

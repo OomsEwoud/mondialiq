@@ -11,9 +11,10 @@ interface Props {
 }
 
 export default function Groups({ groups }: Props) {
-    const [activeGroupId, setActiveGroupId] = useState(groups[0]?.id ?? '');
+    const firstGroup = groups[0] ?? null;
+    const [activeGroupId, setActiveGroupId] = useState(firstGroup?.id ?? '');
     const activeGroup =
-        groups.find((group) => group.id === activeGroupId) ?? groups[0];
+        groups.find((group) => group.id === activeGroupId) ?? firstGroup;
 
     return (
         <>
