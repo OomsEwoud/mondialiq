@@ -1,5 +1,5 @@
 import { CheckCircle2, ImagePlus } from 'lucide-react';
-import type { ChangeEvent, RefObject } from 'react';
+import type * as React from 'react';
 import InputError from '@/components/forms/input-error';
 import {
     Avatar,
@@ -12,9 +12,9 @@ import { useInitials } from '@/hooks/use-initials';
 import type { User } from '@/types';
 
 type ProfileAvatarFieldProps = {
-    avatarInputRef: RefObject<HTMLInputElement | null>;
+    avatarInputRef: React.RefObject<HTMLInputElement | null>;
     error?: string;
-    onAvatarChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     previewUrl: string | null;
     selectedFileName: string;
     user: User;

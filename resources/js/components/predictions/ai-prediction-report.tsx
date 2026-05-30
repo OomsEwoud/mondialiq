@@ -20,6 +20,16 @@ import type {
     ApiPredictionSummary,
     MarketOddsSummary,
 } from '@/types/prediction';
+import {
+    cleanAiAdvice,
+    formatAiConfidence,
+    formatProbability,
+    hasMarketOdds,
+} from '@/utils/ai-prediction';
+import {
+    aiPredictionScoreLabel,
+    normalizeScoreLabel,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -30,7 +40,7 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const prediction = match.aiPrediction;
     const score = aiPredictionScoreLabel(match);
-    const confidence = formatConfidence(prediction?.confidence);
+    const confidence = formatAiConfidence(prediction?.confidence);
 
     return (
         <>
@@ -126,7 +136,7 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
 
                     <div className="mt-4 max-w-3xl rounded-lg border border-slate-200 bg-slate-50 p-4">
                         <p className="text-sm leading-7 font-medium text-slate-700">
-                            {cleanAdvice(prediction?.advice) ??
+                            {cleanAiAdvice(prediction?.advice) ??
                                 'No AI explanation available yet'}
                         </p>
                     </div>
@@ -329,7 +339,7 @@ function MarketSourceCard({ marketOdds }: { marketOdds: MarketOddsSummary }) {
                 ],
                 [
                     'Most likely score',
-                    normalizeScore(marketOdds.most_likely_score) ??
+                    normalizeScoreLabel(marketOdds.most_likely_score) ??
                         'Not available',
                 ],
             ]}
@@ -403,81 +413,4 @@ function SourceCard({
             </dl>
         </article>
     );
-}
-
-function aiPredictionScoreLabel(match: Match): string | null {
-    if (
-        match.aiPrediction?.homeScore === null ||
-        match.aiPrediction?.homeScore === undefined ||
-        match.aiPrediction.awayScore === null ||
-        match.aiPrediction.awayScore === undefined
-    ) {
-        return null;
-    }
-
-    return `${match.aiPrediction.homeScore} - ${match.aiPrediction.awayScore}`;
-}
-
-function formatConfidence(confidence: string | null | undefined): {
-    value: string;
-    label: string;
-} {
-    if (!confidence) {
-        return {
-            value: 'Not available',
-            label: 'Confidence not available',
-        };
-    }
-
-    const numericConfidence = Number(confidence);
-
-    if (Number.isNaN(numericConfidence)) {
-        return {
-            value: confidence,
-            label: 'Model confidence',
-        };
-    }
-
-    return {
-        value: `${Math.round(numericConfidence)} / 100`,
-        label: confidenceLabel(numericConfidence),
-    };
-}
-
-function confidenceLabel(confidence: number): string {
-    if (confidence >= 75) {
-        return 'High confidence';
-    }
-
-    if (confidence >= 50) {
-        return 'Moderate confidence';
-    }
-
-    return 'Low confidence';
-}
-
-function formatProbability(value: number | null): string {
-    if (value === null) {
-        return 'Not available';
-    }
-
-    return `${Math.round(value)}%`;
-}
-
-function normalizeScore(score: string | null): string | null {
-    return score?.replace(':', ' - ') ?? null;
-}
-
-function cleanAdvice(advice: string | null | undefined): string | null {
-    return advice?.replace(/^AI outcome:\s*[^.]+\.\s*/i, '').trim() || null;
-}
-
-function hasMarketOdds(marketOdds: MarketOddsSummary): boolean {
-    return [
-        marketOdds.home_win_probability,
-        marketOdds.draw_probability,
-        marketOdds.away_win_probability,
-        marketOdds.over_2_5_probability,
-        marketOdds.most_likely_score,
-    ].some((value) => value !== null);
 }

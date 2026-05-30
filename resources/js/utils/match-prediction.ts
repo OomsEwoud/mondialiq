@@ -24,9 +24,34 @@ export function predictionScoreLabel(match: Match): string | null {
     const homeScore = match.userPrediction?.homeScore;
     const awayScore = match.userPrediction?.awayScore;
 
-    if (homeScore === null || awayScore === null) {
+    if (
+        homeScore === null ||
+        homeScore === undefined ||
+        awayScore === null ||
+        awayScore === undefined
+    ) {
         return null;
     }
 
     return `${homeScore}-${awayScore}`;
+}
+
+export function aiPredictionScoreLabel(match: Match): string | null {
+    const homeScore = match.aiPrediction?.homeScore;
+    const awayScore = match.aiPrediction?.awayScore;
+
+    if (
+        homeScore === null ||
+        homeScore === undefined ||
+        awayScore === null ||
+        awayScore === undefined
+    ) {
+        return null;
+    }
+
+    return `${homeScore} - ${awayScore}`;
+}
+
+export function normalizeScoreLabel(score: string | null): string | null {
+    return score?.replace(':', ' - ') ?? null;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type * as React from 'react';
 
 export function useAvatarUpload() {
     const croppedAvatarInput = useRef<HTMLInputElement>(null);
@@ -11,7 +11,7 @@ export function useAvatarUpload() {
     useObjectUrlCleanup(avatarPreview);
     useObjectUrlCleanup(cropperImage);
 
-    function handleAvatarChange(event: ChangeEvent<HTMLInputElement>) {
+    function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0];
 
         if (!file) {

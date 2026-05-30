@@ -5,7 +5,10 @@ import UserPredictionTeam from '@/components/matches/prediction/user-prediction-
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import { Button } from '@/components/ui/forms/button';
 import type { Match } from '@/types/match';
-import { predictionScoreLabel } from '@/utils/match-prediction';
+import {
+    aiPredictionScoreLabel,
+    predictionScoreLabel,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -18,9 +21,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
     const activePrediction = isAiPrediction
         ? match.aiPrediction
         : (match.userPrediction ?? match.aiPrediction);
-    const score = !isAiPrediction && match.userPrediction
-        ? predictionScoreLabel(match)
-        : aiPredictionScoreLabel(match);
+    const score =
+        !isAiPrediction && match.userPrediction
+            ? predictionScoreLabel(match)
+            : aiPredictionScoreLabel(match);
 
     return (
         <>
@@ -29,7 +33,9 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p className="text-xs font-black tracking-[0.24em] text-cyan-600 uppercase">
-                                {isAiPrediction ? 'AI prediction' : 'My prediction'}
+                                {isAiPrediction
+                                    ? 'AI prediction'
+                                    : 'My prediction'}
                             </p>
                             <h1 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
                                 {match.homeTeam} vs {match.awayTeam}
@@ -101,27 +107,29 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                                 Chance
                                             </p>
                                             <p className="mt-1 text-base font-bold text-blue-950 capitalize">
-                                                {activePrediction.confidence} confidence
+                                                {activePrediction.confidence}{' '}
+                                                confidence
                                             </p>
                                         </div>
                                     </div>
                                 )}
 
-                                {isAiPrediction && match.aiPrediction?.advice && (
-                                    <div className="flex items-start gap-3 text-left">
-                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
-                                            <Sparkles className="size-4" />
-                                        </span>
-                                        <div>
-                                            <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
-                                                AI insight
-                                            </p>
-                                            <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
-                                                {match.aiPrediction.advice}
-                                            </p>
+                                {isAiPrediction &&
+                                    match.aiPrediction?.advice && (
+                                        <div className="flex items-start gap-3 text-left">
+                                            <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
+                                                <Sparkles className="size-4" />
+                                            </span>
+                                            <div>
+                                                <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                                    AI insight
+                                                </p>
+                                                <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
+                                                    {match.aiPrediction.advice}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
                             </div>
                         </section>
                     </div>
@@ -150,17 +158,4 @@ export default function PredictionDetailHero({ match, mode }: Props) {
             )}
         </>
     );
-}
-
-function aiPredictionScoreLabel(match: Match): string | null {
-    if (
-        match.aiPrediction?.homeScore === null ||
-        match.aiPrediction?.homeScore === undefined ||
-        match.aiPrediction.awayScore === null ||
-        match.aiPrediction.awayScore === undefined
-    ) {
-        return null;
-    }
-
-    return `${match.aiPrediction.homeScore} - ${match.aiPrediction.awayScore}`;
 }
