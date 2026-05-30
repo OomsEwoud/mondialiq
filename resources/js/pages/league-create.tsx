@@ -54,7 +54,8 @@ export default function LeagueCreate({
                                 table.
                             </p>
                             <p className="mt-4 text-sm font-semibold text-slate-600">
-                                {currentLeagueCount}/{maxLeagueCount} leagues joined
+                                {currentLeagueCount}/{maxLeagueCount} leagues
+                                joined
                             </p>
                         </div>
                     </div>
@@ -122,7 +123,10 @@ export default function LeagueCreate({
                                             </Link>
                                         </Button>
                                         <Button
-                                            disabled={processing || hasReachedLeagueLimit}
+                                            disabled={
+                                                processing ||
+                                                hasReachedLeagueLimit
+                                            }
                                             className="h-11 rounded-lg px-5 font-black"
                                         >
                                             <Plus className="size-4" />

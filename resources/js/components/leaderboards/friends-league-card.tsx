@@ -2,7 +2,11 @@ import { Link } from '@inertiajs/react';
 import { Crown, Medal, Settings2, Users } from 'lucide-react';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMetric from '@/components/leaderboards/league-metric';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -21,7 +25,6 @@ import {
     getLeagueBrandPalette,
 } from '@/utils/league-branding';
 
-
 type Props = {
     league: JoinedLeague;
 };
@@ -39,13 +42,18 @@ export default function FriendsLeagueCard({ league }: Props) {
 
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
-            <div className={getLeagueBrandBannerClass(league.accentColor, league.coverStyle)}>
+            <div
+                className={getLeagueBrandBannerClass(
+                    league.accentColor,
+                    league.coverStyle,
+                )}
+            >
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
                     <div className="flex size-12 items-center justify-center rounded-2xl bg-white/18 text-2xl shadow-sm backdrop-blur-sm">
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-xs font-black tracking-[0.18em] uppercase text-white/80">
+                        <p className="text-xs font-black tracking-[0.18em] text-white/80 uppercase">
                             Friends league
                         </p>
                         <p className="truncate text-lg font-black text-white">
@@ -128,7 +136,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </p>
                 </div>
             </CardContent>
-            <CardFooter className="grid gap-3 px-4 pb-4 pt-0 sm:grid-cols-2 sm:px-5">
+            <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
                     className="h-10 w-full rounded-lg px-4 font-black"

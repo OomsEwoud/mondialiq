@@ -123,7 +123,10 @@ export default function LeagueJoin({
                                             </Link>
                                         </Button>
                                         <Button
-                                            disabled={processing || hasReachedLeagueLimit}
+                                            disabled={
+                                                processing ||
+                                                hasReachedLeagueLimit
+                                            }
                                             className="h-11 rounded-lg px-5 font-black"
                                         >
                                             <LogIn className="size-4" />

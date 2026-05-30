@@ -1,16 +1,20 @@
-import { Form } from '@inertiajs/react'
-import { Crown, ShieldCheck, ShieldPlus, UserMinus } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar'
-import { Badge } from '@/components/ui/feedback/badge'
-import { Spinner } from '@/components/ui/feedback/spinner'
-import { Button } from '@/components/ui/forms/button'
+import { Form } from '@inertiajs/react';
+import { Crown, ShieldCheck, ShieldPlus, UserMinus } from 'lucide-react';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/display/avatar';
+import { Badge } from '@/components/ui/feedback/badge';
+import { Spinner } from '@/components/ui/feedback/spinner';
+import { Button } from '@/components/ui/forms/button';
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from '@/components/ui/layout/card'
+} from '@/components/ui/layout/card';
 import {
     Dialog,
     DialogClose,
@@ -19,22 +23,25 @@ import {
     DialogFooter,
     DialogTitle,
     DialogTrigger,
-} from '@/components/ui/overlays/dialog'
-import { useInitials } from '@/hooks/use-initials'
-import { cn } from '@/lib/utils'
-import type { LeagueMember } from '@/types/league'
-import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController'
-import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController'
+} from '@/components/ui/overlays/dialog';
+import { useInitials } from '@/hooks/use-initials';
+import { cn } from '@/lib/utils';
+import type { LeagueMember } from '@/types/league';
+import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
+import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
 
 type Props = {
-    leagueId: number
-    members: LeagueMember[]
-}
+    leagueId: number;
+    members: LeagueMember[];
+};
 
-export default function LeagueMembersManagementCard({ leagueId, members }: Props) {
-    const getInitials = useInitials()
-    const manageableMembers = members.filter((member) => member.canBeManaged)
-    const manageableCount = manageableMembers.length
+export default function LeagueMembersManagementCard({
+    leagueId,
+    members,
+}: Props) {
+    const getInitials = useInitials();
+    const manageableMembers = members.filter((member) => member.canBeManaged);
+    const manageableCount = manageableMembers.length;
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -49,17 +56,20 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                     Team access overview
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    Owners are marked clearly, and removable members are highlighted for a future management flow.
+                    Owners are marked clearly, and removable members are
+                    highlighted for a future management flow.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
                 {manageableCount === 0 && (
                     <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-4">
                         <p className="text-sm font-black text-cyan-900">
-                            You are the only active manager in this league right now.
+                            You are the only active manager in this league right
+                            now.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-cyan-800">
-                            Invite another member before you transfer ownership or start removing access.
+                            Invite another member before you transfer ownership
+                            or start removing access.
                         </p>
                     </div>
                 )}
@@ -70,7 +80,9 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                             Only one member can currently be managed.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-amber-800">
-                            Double-check ownership transfer or removal carefully so the league does not become harder to manage afterwards.
+                            Double-check ownership transfer or removal carefully
+                            so the league does not become harder to manage
+                            afterwards.
                         </p>
                     </div>
                 )}
@@ -138,21 +150,34 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                                         </DialogTrigger>
                                         <DialogContent className="border-slate-200 bg-white sm:max-w-md">
                                             <DialogTitle className="text-blue-950">
-                                                Transfer ownership to {member.name}?
+                                                Transfer ownership to{' '}
+                                                {member.name}?
                                             </DialogTitle>
                                             <DialogDescription className="text-sm leading-6 text-slate-600">
-                                                {member.name} will become the new league owner immediately. You will stay in the league as a member, but owner controls move to them.
+                                                {member.name} will become the
+                                                new league owner immediately.
+                                                You will stay in the league as a
+                                                member, but owner controls move
+                                                to them.
                                             </DialogDescription>
                                             <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
-                                                After this transfer, use the regular league page as a normal member. Only the new owner will keep access to this settings page.
+                                                After this transfer, use the
+                                                regular league page as a normal
+                                                member. Only the new owner will
+                                                keep access to this settings
+                                                page.
                                             </div>
 
                                             <Form
-                                                {...TransferLeagueOwnershipController.form({
-                                                    scoreboard: leagueId,
-                                                    member: member.id,
-                                                })}
-                                                options={{ preserveScroll: true }}
+                                                {...TransferLeagueOwnershipController.form(
+                                                    {
+                                                        scoreboard: leagueId,
+                                                        member: member.id,
+                                                    },
+                                                )}
+                                                options={{
+                                                    preserveScroll: true,
+                                                }}
                                                 className="space-y-4"
                                             >
                                                 {({ processing }) => (
@@ -169,12 +194,18 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
 
                                                         <Button
                                                             type="submit"
-                                                            disabled={processing}
+                                                            disabled={
+                                                                processing
+                                                            }
                                                             className="rounded-lg font-black"
                                                         >
-                                                            {processing && <Spinner />}
+                                                            {processing && (
+                                                                <Spinner />
+                                                            )}
                                                             <ShieldPlus className="size-4" />
-                                                            {processing ? 'Transferring...' : 'Confirm transfer'}
+                                                            {processing
+                                                                ? 'Transferring...'
+                                                                : 'Confirm transfer'}
                                                         </Button>
                                                     </DialogFooter>
                                                 )}
@@ -195,18 +226,27 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                                         </DialogTrigger>
                                         <DialogContent className="border-slate-200 bg-white sm:max-w-md">
                                             <DialogTitle className="text-blue-950">
-                                                Remove {member.name} from this league?
+                                                Remove {member.name} from this
+                                                league?
                                             </DialogTitle>
                                             <DialogDescription className="text-sm leading-6 text-slate-600">
-                                                This removes their access to the league immediately. Existing predictions stay recorded, but they will no longer appear as an active member.
+                                                This removes their access to the
+                                                league immediately. Existing
+                                                predictions stay recorded, but
+                                                they will no longer appear as an
+                                                active member.
                                             </DialogDescription>
 
                                             <Form
-                                                {...RemoveLeagueMemberController.form({
-                                                    scoreboard: leagueId,
-                                                    member: member.id,
-                                                })}
-                                                options={{ preserveScroll: true }}
+                                                {...RemoveLeagueMemberController.form(
+                                                    {
+                                                        scoreboard: leagueId,
+                                                        member: member.id,
+                                                    },
+                                                )}
+                                                options={{
+                                                    preserveScroll: true,
+                                                }}
                                                 className="space-y-4"
                                             >
                                                 {({ processing }) => (
@@ -224,12 +264,18 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                                                         <Button
                                                             type="submit"
                                                             variant="destructive"
-                                                            disabled={processing}
+                                                            disabled={
+                                                                processing
+                                                            }
                                                             className="rounded-lg font-black"
                                                         >
-                                                            {processing && <Spinner />}
+                                                            {processing && (
+                                                                <Spinner />
+                                                            )}
                                                             <UserMinus className="size-4" />
-                                                            {processing ? 'Removing...' : 'Confirm remove'}
+                                                            {processing
+                                                                ? 'Removing...'
+                                                                : 'Confirm remove'}
                                                         </Button>
                                                     </DialogFooter>
                                                 )}
@@ -247,5 +293,5 @@ export default function LeagueMembersManagementCard({ leagueId, members }: Props
                 ))}
             </CardContent>
         </Card>
-    )
+    );
 }

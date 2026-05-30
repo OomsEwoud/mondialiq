@@ -3,8 +3,8 @@ import FriendsLeaguesSection from '@/components/leaderboards/friends-leagues-sec
 import GlobalLeaderboardCard from '@/components/leaderboards/global-leaderboard-card';
 import LeaderboardsPageHeader from '@/components/leaderboards/leaderboards-page-header';
 import YourPositionCard from '@/components/leaderboards/your-position-card';
-import type { LeaderboardsPageProps } from '@/types/leaderboard';
 import type { Auth } from '@/types';
+import type { LeaderboardsPageProps } from '@/types/leaderboard';
 
 export default function Leaderboards(props: LeaderboardsPageProps) {
     const { auth } = usePage<{ auth: Auth }>().props;

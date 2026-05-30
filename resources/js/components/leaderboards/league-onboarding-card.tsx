@@ -52,7 +52,8 @@ export default function LeagueOnboardingCard({
                         Invite more friends into the league.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Bigger leagues create more movement, more tension, and a better leaderboard every matchday.
+                        Bigger leagues create more movement, more tension, and a
+                        better leaderboard every matchday.
                     </p>
                     <Button
                         asChild
@@ -77,7 +78,8 @@ export default function LeagueOnboardingCard({
                         Make your next prediction.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Fresh picks are the fastest way to climb once this league starts filling up.
+                        Fresh picks are the fastest way to climb once this
+                        league starts filling up.
                     </p>
                     <Button
                         asChild
@@ -101,7 +103,8 @@ export default function LeagueOnboardingCard({
                         Track how your picks stack up.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Keep your prediction history close so you can spot momentum early.
+                        Keep your prediction history close so you can spot
+                        momentum early.
                     </p>
                     <Button
                         asChild

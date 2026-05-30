@@ -25,11 +25,7 @@ export type LeagueAccentColor =
     | 'violet'
     | 'blue';
 
-export type LeagueCoverStyle =
-    | 'stadium'
-    | 'spotlight'
-    | 'pitch'
-    | 'night';
+export type LeagueCoverStyle = 'stadium' | 'spotlight' | 'pitch' | 'night';
 
 export interface LeagueDetails {
     id: number;
@@ -73,6 +69,17 @@ export interface LeagueDetailsPageProps {
 export interface LeagueSettingsPageProps {
     league: Pick<
         LeagueDetails,
-        'id' | 'name' | 'icon' | 'accentColor' | 'coverStyle' | 'code' | 'showHref' | 'joinHref' | 'settingsHref' | 'canManage' | 'membersCount' | 'members'
+        | 'id'
+        | 'name'
+        | 'icon'
+        | 'accentColor'
+        | 'coverStyle'
+        | 'code'
+        | 'showHref'
+        | 'joinHref'
+        | 'settingsHref'
+        | 'canManage'
+        | 'membersCount'
+        | 'members'
     >;
 }

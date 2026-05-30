@@ -1,7 +1,7 @@
 import PredictionMatchSummary from '@/components/predictions/prediction-match-summary';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
-import PredictionUserActions from '@/components/predictions/prediction-user-actions';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
+import PredictionUserActions from '@/components/predictions/prediction-user-actions';
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
 import type { Match } from '@/types/match';
 

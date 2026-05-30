@@ -60,7 +60,7 @@ export default function LeagueSettingsCard({
         accent !== accentColor ||
         cover !== coverStyle;
     const canSubmit = normalizedName.length > 0 && hasChanges;
-    
+
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-6">
@@ -104,7 +104,7 @@ export default function LeagueSettingsCard({
                                     getLeagueBrandBannerClass(accent, cover),
                                 )}
                             >
-                                <p className="text-xs font-black tracking-[0.16em] uppercase text-white/76">
+                                <p className="text-xs font-black tracking-[0.16em] text-white/76 uppercase">
                                     Live preview
                                 </p>
                                 <div className="mt-3 flex items-center gap-3">
@@ -163,7 +163,9 @@ export default function LeagueSettingsCard({
                                             key={option.value}
                                             type="button"
                                             variant="outline"
-                                            onClick={() => setIcon(option.value)}
+                                            onClick={() =>
+                                                setIcon(option.value)
+                                            }
                                             className={cn(
                                                 'h-14 rounded-xl border-slate-200 text-2xl hover:bg-slate-50',
                                                 icon === option.value &&
@@ -214,9 +216,7 @@ export default function LeagueSettingsCard({
                                     ))}
                                 </div>
                                 <div className="min-h-5">
-                                    <InputError
-                                        message={errors.accent_color}
-                                    />
+                                    <InputError message={errors.accent_color} />
                                 </div>
                             </div>
 

@@ -6,8 +6,8 @@ import {
     Settings2,
     Target,
     Users,
-    type LucideIcon,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
