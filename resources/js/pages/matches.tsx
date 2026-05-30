@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
@@ -31,6 +31,8 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
 
     return (
         <>
+            <Head title="Matches" />
+
             <h1 className="mb-6 bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-center text-4xl font-bold text-transparent">
                 All Matches
             </h1>

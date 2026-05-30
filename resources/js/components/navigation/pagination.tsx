@@ -21,7 +21,8 @@ export default function Pagination({ links }: Props) {
 
     return (
         <div className="mt-8 flex flex-wrap justify-center gap-1">
-            {links.map((link, index) => {
+            {links.map((link) => {
+                const key = `${link.label}-${link.url ?? 'disabled'}`;
                 const className = cn(
                     'rounded-lg border px-4 py-2 text-sm',
                     link.active
@@ -33,7 +34,8 @@ export default function Pagination({ links }: Props) {
                 if (!link.url) {
                     return (
                         <span
-                            key={index}
+                            key={key}
+                            aria-disabled="true"
                             className={className}
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />
@@ -42,8 +44,9 @@ export default function Pagination({ links }: Props) {
 
                 return (
                     <Link
-                        key={index}
+                        key={key}
                         href={link.url}
+                        aria-current={link.active ? 'page' : undefined}
                         className={className}
                         dangerouslySetInnerHTML={{ __html: link.label }}
                         preserveScroll

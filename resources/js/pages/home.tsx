@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import HeroSection from '@/components/home/hero-section';
 import LiveMatches from '@/components/home/live-matches';
 import PlatformOverview from '@/components/home/platform-overview';
@@ -17,6 +18,8 @@ const mockLive = [
 export default function Home({ upcomingFixtures }: Props) {
     return (
         <>
+            <Head title="Home" />
+
             <HeroSection />
             <PlatformOverview />
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

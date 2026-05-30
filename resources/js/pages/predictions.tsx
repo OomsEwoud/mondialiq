@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import Pagination from '@/components/navigation/pagination';
 import PredictionList from '@/components/predictions/prediction-list';
 import PredictionPageHeader from '@/components/predictions/prediction-page-header';
@@ -7,6 +8,8 @@ import type { PredictionPageProps as Props } from '@/types/prediction';
 export default function Predictions({ fixtures, mode }: Props) {
     return (
         <>
+            <Head title="Predictions" />
+
             <PredictionPageHeader />
             <PredictionTabs activeTab={mode} />
             <PredictionList

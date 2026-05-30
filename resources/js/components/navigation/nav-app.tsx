@@ -18,7 +18,8 @@ export default function NavApp({ onNavigate }: Props) {
                 return isActive ? (
                     <Badge
                         key={href}
-                        className="w-full cursor-pointer justify-center rounded-full bg-cyan-400 px-6 py-2 font-bold text-blue-950 hover:bg-cyan-300 md:w-auto"
+                        aria-current="page"
+                        className="w-full justify-center rounded-full bg-cyan-400 px-6 py-2 font-bold text-blue-950 md:w-auto"
                     >
                         {label}
                     </Badge>
