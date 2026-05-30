@@ -8,6 +8,10 @@ interface Props {
 }
 
 export default function UserPredictionButton({ match, onClick }: Props) {
+    const actionLabel = match.userPrediction
+        ? 'Edit Prediction'
+        : 'Make Prediction';
+
     return (
         <Button
             type="button"
@@ -15,7 +19,7 @@ export default function UserPredictionButton({ match, onClick }: Props) {
             className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
         >
             <PencilLine className="h-4 w-4" />
-            {match.userPrediction ? 'Edit Prediction' : 'Make Prediction'}
+            {actionLabel}
         </Button>
     );
 }

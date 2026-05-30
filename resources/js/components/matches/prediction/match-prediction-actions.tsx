@@ -11,6 +11,7 @@ interface Props {
 
 export default function MatchPredictionActions({ match }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
+    const openPredictionModal = () => setPredictionOpen(true);
 
     return (
         <div className="mt-4 border-t border-slate-200 pt-4">
@@ -33,7 +34,7 @@ export default function MatchPredictionActions({ match }: Props) {
                     />
                     <UserPredictionButton
                         match={match}
-                        onClick={() => setPredictionOpen(true)}
+                        onClick={openPredictionModal}
                     />
                 </div>
             </div>

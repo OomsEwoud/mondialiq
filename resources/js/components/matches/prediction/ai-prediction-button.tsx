@@ -11,19 +11,16 @@ interface Props {
 export default function AiPredictionButton({ available, matchId }: Props) {
     if (!available) {
         return (
-            <span
-                className="cursor-not-allowed"
+            <Button
+                disabled
+                variant="outline"
                 title="AI prediction is not available yet"
+                aria-label="AI prediction is not available yet"
+                className="w-full justify-center border-slate-200 bg-slate-50 text-slate-400"
             >
-                <Button
-                    disabled
-                    variant="outline"
-                    className="w-full justify-center border-slate-200 bg-slate-50 text-slate-400"
-                >
-                    <Sparkles className="h-4 w-4" />
-                    AI Pending
-                </Button>
-            </span>
+                <Sparkles className="h-4 w-4" />
+                AI Pending
+            </Button>
         );
     }
 

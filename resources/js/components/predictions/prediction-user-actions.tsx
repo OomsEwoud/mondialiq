@@ -13,6 +13,7 @@ interface Props {
 
 export default function PredictionUserActions({ match, viewLabel }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
+    const openPredictionModal = () => setPredictionOpen(true);
 
     return (
         <>
@@ -21,7 +22,7 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                     type="button"
                     variant="outline"
                     className="justify-center border-slate-200 bg-white text-slate-700 hover:bg-slate-100 hover:text-blue-950"
-                    onClick={() => setPredictionOpen(true)}
+                    onClick={openPredictionModal}
                 >
                     <PencilLine className="h-4 w-4" />
                     Edit prediction
