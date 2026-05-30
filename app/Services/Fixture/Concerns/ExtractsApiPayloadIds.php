@@ -26,4 +26,15 @@ trait ExtractsApiPayloadIds
             ->unique()
             ->values();
     }
+
+    private function localIdForExternalId(Collection $localIdsByExternalId, mixed $externalId): ?int
+    {
+        if (! is_numeric($externalId)) {
+            return null;
+        }
+
+        $localId = $localIdsByExternalId[(int) $externalId] ?? null;
+
+        return is_numeric($localId) ? (int) $localId : null;
+    }
 }

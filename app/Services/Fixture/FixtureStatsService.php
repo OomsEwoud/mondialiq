@@ -24,13 +24,13 @@ class FixtureStatsService
 
     private function storeFixtureStatsPerTeam(array $stat, int $fixtureId, Collection $teamIds): void
     {
-        $localTeamId = $teamIds[data_get($stat, 'team.id')] ?? null;
+        $localTeamId = $this->localIdForExternalId($teamIds, data_get($stat, 'team.id'));
 
-        if (! $localTeamId) {
+        if ($localTeamId === null) {
             return;
         }
 
-        foreach (data_get($stat, 'statistics', []) as $matchStat) {
+        foreach ($this->statEntries($stat) as $matchStat) {
             $name = data_get($matchStat, 'type');
 
             if (! is_string($name) || $name === '') {
@@ -42,6 +42,16 @@ class FixtureStatsService
                 $this->statAttributes($matchStat),
             );
         }
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function statEntries(array $stat): array
+    {
+        $statistics = data_get($stat, 'statistics', []);
+
+        return is_array($statistics) ? $statistics : [];
     }
 
     /**

@@ -14,13 +14,8 @@ class FixtureEventsService
 
     public function storeFixtureEvents(array $events, int $fixtureId): void
     {
-        $playerExternalIds = $this->extractNumericIds($events, 'player.id')
-            ->merge($this->extractNumericIds($events, 'assist.id'))
-            ->unique()
-            ->values();
-
         $playerIds = Player::query()
-            ->whereIn('external_id', $playerExternalIds)
+            ->whereIn('external_id', $this->extractEventPlayerIds($events))
             ->pluck('id', 'external_id');
 
         $teamIds = Team::query()
@@ -67,9 +62,18 @@ class FixtureEventsService
 
     private function localPlayerId(array $event, string $path, Collection $playerIds): ?int
     {
-        $playerId = $playerIds[data_get($event, $path)] ?? null;
+        return $this->localIdForExternalId($playerIds, data_get($event, $path));
+    }
 
-        return is_numeric($playerId) ? (int) $playerId : null;
+    /**
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    private function extractEventPlayerIds(array $events): Collection
+    {
+        return $this->extractNumericIds($events, 'player.id')
+            ->merge($this->extractNumericIds($events, 'assist.id'))
+            ->unique()
+            ->values();
     }
 
     /**

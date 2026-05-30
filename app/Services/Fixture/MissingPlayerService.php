@@ -31,8 +31,8 @@ class MissingPlayerService
         $summary = $this->emptySummary(count($missingPlayers));
 
         foreach ($missingPlayers as $missingPlayerData) {
-            $fixtureId = $fixtureIds[data_get($missingPlayerData, 'fixture.id')] ?? null;
-            $playerId = $playerIds[data_get($missingPlayerData, 'player.id')] ?? null;
+            $fixtureId = $this->localIdForExternalId($fixtureIds, data_get($missingPlayerData, 'fixture.id'));
+            $playerId = $this->localIdForExternalId($playerIds, data_get($missingPlayerData, 'player.id'));
 
             if ($fixtureId === null || $playerId === null) {
                 $summary['skipped']++;

@@ -4,11 +4,14 @@ namespace App\Services\Fixture;
 
 use App\Models\Player;
 use App\Models\PlayerFixtureStat;
+use App\Services\Fixture\Concerns\ExtractsApiPayloadIds;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class FixturePlayerStatsService
 {
+    use ExtractsApiPayloadIds;
+
     /**
      * @return array{processed: int, created: int, updated: int, skipped: int}
      */
@@ -58,15 +61,7 @@ class FixturePlayerStatsService
 
     private function localPlayerId(array $playerData, Collection $playerIds): ?int
     {
-        $externalPlayerId = data_get($playerData, 'player.id');
-
-        if (! is_numeric($externalPlayerId)) {
-            return null;
-        }
-
-        $localPlayerId = $playerIds[(int) $externalPlayerId] ?? null;
-
-        return is_numeric($localPlayerId) ? (int) $localPlayerId : null;
+        return $this->localIdForExternalId($playerIds, data_get($playerData, 'player.id'));
     }
 
     /**
@@ -117,14 +112,12 @@ class FixturePlayerStatsService
      */
     private function extractPlayerIds(array $teamPlayerStats): Collection
     {
-        return collect($teamPlayerStats)
+        $playerIds = collect($teamPlayerStats)
             ->pluck('players')
             ->flatten(1)
-            ->pluck('player.id')
-            ->filter(fn (mixed $value): bool => is_numeric($value))
-            ->map(fn (mixed $value): int => (int) $value)
-            ->unique()
-            ->values();
+            ->pluck('player.id');
+
+        return $this->normalizeNumericIds($playerIds);
     }
 
     /**

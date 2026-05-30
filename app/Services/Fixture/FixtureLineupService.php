@@ -15,7 +15,7 @@ class FixtureLineupService
 
     public function storeLineups(array $lineupData, int $fixtureId): void
     {
-        $fixture = Fixture::query()->find($fixtureId);
+        $fixture = $this->fixture($fixtureId);
 
         if (! $fixture) {
             return;
@@ -35,9 +35,7 @@ class FixtureLineupService
                 continue;
             }
 
-            $fixture->lineups()->syncWithoutDetaching([
-                $lineupPayload['team_id'] => ['formation' => $lineupPayload['formation']],
-            ]);
+            $this->storeTeamLineup($fixture, $lineupPayload);
 
             $this->storePlayers(
                 $this->playerEntries(data_get($data, 'startXI', [])),
@@ -54,6 +52,11 @@ class FixtureLineupService
                 false,
             );
         }
+    }
+
+    private function fixture(int $fixtureId): ?Fixture
+    {
+        return Fixture::query()->find($fixtureId);
     }
 
     /**
@@ -77,6 +80,16 @@ class FixtureLineupService
     private function playerEntries(mixed $players): array
     {
         return is_array($players) ? $players : [];
+    }
+
+    /**
+     * @param  array{team_id: int, formation: string}  $lineupPayload
+     */
+    private function storeTeamLineup(Fixture $fixture, array $lineupPayload): void
+    {
+        $fixture->lineups()->syncWithoutDetaching([
+            $lineupPayload['team_id'] => ['formation' => $lineupPayload['formation']],
+        ]);
     }
 
     private function storePlayers(
@@ -108,9 +121,7 @@ class FixtureLineupService
 
     private function localPlayerId(array $playerData, Collection $playerIds): ?int
     {
-        $playerId = $playerIds[data_get($playerData, 'id')] ?? null;
-
-        return is_numeric($playerId) ? (int) $playerId : null;
+        return $this->localIdForExternalId($playerIds, data_get($playerData, 'id'));
     }
 
     /**
