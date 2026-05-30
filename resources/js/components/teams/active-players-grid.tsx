@@ -57,6 +57,11 @@ export default function ActivePlayersGrid({ players }: Props) {
         () => groupPlayersByPosition(visiblePlayers),
         [visiblePlayers],
     );
+    const hasPlayers = players.length > 0;
+    const hasVisiblePlayers = groupedPlayers.length > 0;
+    const emptyMessage = hasPlayers
+        ? 'No players match your search.'
+        : 'No active players available yet.';
 
     return (
         <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -87,7 +92,7 @@ export default function ActivePlayersGrid({ players }: Props) {
                 </div>
             </div>
 
-            {players.length > 0 ? (
+            {hasPlayers ? (
                 <>
                     <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
                         {positionFilters.map((filter) => (
@@ -108,7 +113,7 @@ export default function ActivePlayersGrid({ players }: Props) {
                         ))}
                     </div>
 
-                    {groupedPlayers.length > 0 ? (
+                    {hasVisiblePlayers ? (
                         <div className="flex flex-col gap-6">
                             {groupedPlayers.map((group) => (
                                 <div key={group.key}>
@@ -133,13 +138,13 @@ export default function ActivePlayersGrid({ players }: Props) {
                         </div>
                     ) : (
                         <p className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-500">
-                            No players match your search.
+                            {emptyMessage}
                         </p>
                     )}
                 </>
             ) : (
                 <p className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-500">
-                    No active players available yet.
+                    {emptyMessage}
                 </p>
             )}
         </section>

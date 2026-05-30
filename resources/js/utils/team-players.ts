@@ -116,13 +116,11 @@ export function sortPlayersByPositionAndNumber(
 export function groupPlayersByPosition(
     players: TeamDetailsPlayer[],
 ): PlayerPositionGroup[] {
-    const sortedPlayers = sortPlayersByPositionAndNumber(players);
-
     return Object.entries(positionGroups)
         .map(([key, group]) => ({
             key: key as PlayerPositionGroupKey,
             label: group.label,
-            players: sortedPlayers.filter(
+            players: players.filter(
                 (player) =>
                     getPlayerPositionGroup(player.position) ===
                     (key as PlayerPositionGroupKey),
