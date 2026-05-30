@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import type { Filters, MatchStatusFilter } from '@/types/match-page';
+import type { FilterKey, Filters, MatchStatusFilter } from '@/types/match-page';
 import DateFilter from './filters/date-filter';
 import MatchStatusTabs from './filters/match-status-tabs';
 import RoundFilter from './filters/round-filter';
@@ -10,10 +10,7 @@ interface Props {
     dates: Array<{ label: string; value: string }>;
     teams: string[];
     selected: Filters;
-    onChange: (
-        key: 'round' | 'date' | 'team' | 'status',
-        value: string | MatchStatusFilter,
-    ) => void;
+    onChange: (key: FilterKey, value: string | MatchStatusFilter) => void;
     onClear: () => void;
 }
 

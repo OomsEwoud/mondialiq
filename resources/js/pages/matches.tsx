@@ -22,6 +22,13 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
         });
     };
 
+    const handleFilterChange = (
+        key: FilterKey,
+        value: string | Filters['status'],
+    ) => {
+        visit({ ...filters, [key]: value });
+    };
+
     return (
         <>
             <h1 className="mb-6 bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-center text-4xl font-bold text-transparent">
@@ -33,7 +40,7 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                 dates={filterOptions.dates}
                 teams={filterOptions.teams}
                 selected={filters}
-                onChange={(key, value) => visit({ ...filters, [key]: value })}
+                onChange={handleFilterChange}
                 onClear={() => visit(emptyFilters)}
             />
 

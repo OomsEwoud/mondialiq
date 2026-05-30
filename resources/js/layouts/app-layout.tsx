@@ -76,7 +76,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             </Link>
                         )}
                         <button
+                            type="button"
                             onClick={() => setMenuOpen(!menuOpen)}
+                            aria-expanded={menuOpen}
+                            aria-label={
+                                menuOpen
+                                    ? 'Close navigation menu'
+                                    : 'Open navigation menu'
+                            }
                             className="text-blue-200 transition-colors hover:text-cyan-400 md:hidden"
                         >
                             {menuOpen ? <X size={22} /> : <Menu size={22} />}
