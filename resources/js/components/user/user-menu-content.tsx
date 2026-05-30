@@ -15,6 +15,10 @@ type Props = {
     user: User;
 };
 
+const menuItemClassName =
+    'rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950';
+const menuLinkClassName = 'flex w-full items-center gap-2';
+
 export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
 
@@ -32,12 +36,9 @@ export function UserMenuContent({ user }: Props) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="my-2 bg-slate-200" />
             <DropdownMenuGroup>
-                <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
-                >
+                <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
-                        className="flex w-full cursor-pointer items-center gap-2"
+                        className={menuLinkClassName}
                         href={editAccount.url()}
                         prefetch
                         onClick={cleanup}
@@ -46,12 +47,9 @@ export function UserMenuContent({ user }: Props) {
                         Profile settings
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
-                >
+                <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
-                        className="flex w-full cursor-pointer items-center gap-2"
+                        className={menuLinkClassName}
                         href={predictions.url({ query: { mode: 'mine' } })}
                         prefetch
                         onClick={cleanup}
@@ -60,12 +58,9 @@ export function UserMenuContent({ user }: Props) {
                         My predictions
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950"
-                >
+                <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
-                        className="flex w-full cursor-pointer items-center gap-2"
+                        className={menuLinkClassName}
                         href={leaderboards.url()}
                         prefetch
                         onClick={cleanup}
@@ -81,7 +76,7 @@ export function UserMenuContent({ user }: Props) {
                 className="rounded-lg px-3 py-2 font-semibold text-slate-600 transition-colors focus:bg-red-50 focus:text-red-600"
             >
                 <Link
-                    className="flex w-full cursor-pointer items-center gap-2"
+                    className={menuLinkClassName}
                     href={logout()}
                     as="button"
                     onClick={handleLogout}

@@ -60,6 +60,10 @@ export default function LeagueSettingsCard({
         accent !== accentColor ||
         cover !== coverStyle;
     const canSubmit = normalizedName.length > 0 && hasChanges;
+    const updateIcon = (nextIcon: string) => setIcon(nextIcon);
+    const updateAccent = (nextAccent: LeagueAccentColor) =>
+        setAccent(nextAccent);
+    const updateCover = (nextCover: LeagueCoverStyle) => setCover(nextCover);
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -163,9 +167,7 @@ export default function LeagueSettingsCard({
                                             key={option.value}
                                             type="button"
                                             variant="outline"
-                                            onClick={() =>
-                                                setIcon(option.value)
-                                            }
+                                            onClick={() => updateIcon(option.value)}
                                             className={cn(
                                                 'h-14 rounded-xl border-slate-200 text-2xl hover:bg-slate-50',
                                                 icon === option.value &&
@@ -196,9 +198,7 @@ export default function LeagueSettingsCard({
                                             key={option.value}
                                             type="button"
                                             variant="outline"
-                                            onClick={() =>
-                                                setAccent(option.value)
-                                            }
+                                            onClick={() => updateAccent(option.value)}
                                             className={cn(
                                                 'h-11 justify-start rounded-xl border-slate-200 px-3 font-black hover:bg-slate-50',
                                                 accent === option.value &&
@@ -233,9 +233,7 @@ export default function LeagueSettingsCard({
                                             key={option.value}
                                             type="button"
                                             variant="outline"
-                                            onClick={() =>
-                                                setCover(option.value)
-                                            }
+                                            onClick={() => updateCover(option.value)}
                                             className={cn(
                                                 'h-auto items-start justify-start rounded-xl border-slate-200 px-4 py-3 text-left hover:bg-slate-50',
                                                 cover === option.value &&

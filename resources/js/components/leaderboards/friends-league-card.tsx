@@ -31,14 +31,20 @@ type Props = {
 
 export default function FriendsLeagueCard({ league }: Props) {
     const getInitials = useInitials();
-    const performanceLabel =
-        league.points !== null && league.points !== undefined
-            ? `${league.points} pts`
-            : league.predictionsCount !== null &&
-                league.predictionsCount !== undefined
-              ? `${league.predictionsCount} predictions`
-              : null;
+    const performanceLabel = (() => {
+        if (league.points !== null) {
+            return `${league.points} pts`;
+        }
+
+        if (league.predictionsCount !== null) {
+            return `${league.predictionsCount} predictions`;
+        }
+
+        return null;
+    })();
     const palette = getLeagueBrandPalette(league.accentColor);
+    const memberLabel =
+        league.membersCount === 1 ? 'member' : 'members';
 
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -98,8 +104,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                             )}
                         >
                             <Users className="size-3.5" />
-                            {league.membersCount}{' '}
-                            {league.membersCount === 1 ? 'member' : 'members'}
+                            {league.membersCount} {memberLabel}
                         </Badge>
                     </div>
                 </div>
