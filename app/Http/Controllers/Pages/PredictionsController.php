@@ -7,6 +7,7 @@ use App\Queries\Fixture\FixtureQuery;
 use App\Queries\Fixture\PredictionFixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use App\Support\WorldCup\WorldCupContext;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,11 +24,7 @@ class PredictionsController extends Controller
     public function __invoke(Request $request): Response
     {
         $mode = $this->predictionMode($request);
-        $query = new FixtureQuery(
-            $this->worldCupContext->leagueId(),
-            $this->worldCupContext->season(),
-        );
-        $fixtureQuery = $query->build();
+        $fixtureQuery = $this->fixtureQuery();
 
         $this->predictionFixtureQuery->applyMode(
             $fixtureQuery,
@@ -48,5 +45,13 @@ class PredictionsController extends Controller
         return $request->string('mode')->toString() === 'mine'
             ? 'mine'
             : 'ai';
+    }
+
+    private function fixtureQuery(): Builder
+    {
+        return (new FixtureQuery(
+            $this->worldCupContext->leagueId(),
+            $this->worldCupContext->season(),
+        ))->build();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
 use App\Services\Helper\HelperService;
@@ -14,6 +15,8 @@ use Inertia\Response;
 
 class MatchesController extends Controller
 {
+    private const DEFAULT_STATUS_FILTER = 'all';
+
     public function __construct(
         private readonly HelperService $helperService,
         private readonly FixturePaginationService $paginationService,
@@ -24,38 +27,47 @@ class MatchesController extends Controller
     public function __invoke(Request $request): Response
     {
         $filters = $this->parseFilters($request);
-
-        $query = new FixtureQuery(
-            $this->worldCupContext->leagueId(),
-            $this->worldCupContext->season(),
-        );
-        $baseQuery = $query->build();
-
+        $baseQuery = $this->fixtureQuery()->build();
         $filterOptions = $this->helperService->filterOptions($baseQuery);
+        $fixturesQuery = $this->fixturesQuery($filters, $filterOptions);
 
-        $queryFilters = $filters;
-        $queryFilters['round'] = $this->helperService->roundNameFromSlug(
-            $filterOptions['rounds']->all(),
-            $filters['round'],
-        );
+        $this->loadPredictionRelations($fixturesQuery, $request->user());
 
-        $fixturesQuery = $query->build($queryFilters)->with('aiPrediction');
+        return Inertia::render('matches', [
+            'fixtures' => $this->paginationService->paginate($fixturesQuery),
+            'filterOptions' => $filterOptions,
+            'filters' => $filters,
+        ]);
+    }
 
-        if ($user = $request->user()) {
+    private function fixturesQuery(array $filters, array $filterOptions): Builder
+    {
+        return $this->fixtureQuery()
+            ->build($this->queryFilters($filters, $filterOptions));
+    }
+
+    private function queryFilters(array $filters, array $filterOptions): array
+    {
+        return [
+            ...$filters,
+            'round' => $this->helperService->roundNameFromSlug(
+                $filterOptions['rounds']->all(),
+                $filters['round'],
+            ),
+        ];
+    }
+
+    private function loadPredictionRelations(Builder $fixturesQuery, ?User $user): void
+    {
+        $fixturesQuery->with('aiPrediction');
+
+        if ($user) {
             $fixturesQuery->with([
                 'userPredictions' => fn (Builder $query) => $query
                     ->whereBelongsTo($user)
                     ->with('winner'),
             ]);
         }
-
-        $fixtures = $this->paginationService->paginate($fixturesQuery);
-
-        return Inertia::render('matches', [
-            'fixtures'      => $fixtures,
-            'filterOptions' => $filterOptions,
-            'filters'       => $filters,
-        ]);
     }
 
     private function parseFilters(Request $request): array
@@ -64,7 +76,15 @@ class MatchesController extends Controller
             'round' => $request->string('round')->toString(),
             'date' => $request->date('date')?->format('Y-m-d') ?? '',
             'team' => $request->string('team')->toString(),
-            'status' => $request->string('status')->toString() ?: 'all',
+            'status' => $request->string('status')->toString() ?: self::DEFAULT_STATUS_FILTER,
         ];
+    }
+
+    private function fixtureQuery(): FixtureQuery
+    {
+        return new FixtureQuery(
+            $this->worldCupContext->leagueId(),
+            $this->worldCupContext->season(),
+        );
     }
 }
