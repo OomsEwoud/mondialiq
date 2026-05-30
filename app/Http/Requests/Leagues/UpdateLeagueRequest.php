@@ -2,19 +2,18 @@
 
 namespace App\Http\Requests\Leagues;
 
-use App\Models\Scoreboard;
+use App\Http\Requests\Leagues\Concerns\ResolvesLeagueRoutes;
 use App\Support\Leagues\LeagueBranding;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateLeagueRequest extends FormRequest
 {
+    use ResolvesLeagueRoutes;
+
     public function authorize(): bool
     {
-        /** @var Scoreboard $scoreboard */
-        $scoreboard = $this->route('scoreboard');
-
-        return $this->user()?->can('manage', $scoreboard) ?? false;
+        return $this->user()?->can('manage', $this->league()) ?? false;
     }
 
     /**

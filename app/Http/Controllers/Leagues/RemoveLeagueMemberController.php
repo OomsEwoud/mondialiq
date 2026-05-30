@@ -16,8 +16,6 @@ class RemoveLeagueMemberController extends Controller
         Scoreboard $scoreboard,
         User $member,
     ): RedirectResponse {
-        $this->authorize('manage', $scoreboard);
-
         $scoreboard->users()->detach($member->id);
 
         Inertia::flash('toast', [

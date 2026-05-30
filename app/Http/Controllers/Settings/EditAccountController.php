@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
-use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Inertia\Inertia;
 
 class EditAccountController extends Controller
 {

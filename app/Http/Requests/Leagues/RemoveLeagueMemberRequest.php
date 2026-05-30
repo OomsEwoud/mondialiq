@@ -2,19 +2,17 @@
 
 namespace App\Http\Requests\Leagues;
 
-use App\Models\Scoreboard;
-use App\Models\User;
+use App\Http\Requests\Leagues\Concerns\ResolvesLeagueRoutes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
 class RemoveLeagueMemberRequest extends FormRequest
 {
+    use ResolvesLeagueRoutes;
+
     public function authorize(): bool
     {
-        /** @var Scoreboard $scoreboard */
-        $scoreboard = $this->route('scoreboard');
-
-        return $this->user()?->can('manage', $scoreboard) ?? false;
+        return $this->user()?->can('manage', $this->league()) ?? false;
     }
 
     public function rules(): array
@@ -29,10 +27,8 @@ class RemoveLeagueMemberRequest extends FormRequest
 
     private function validateMemberRemoval(Validator $validator): void
     {
-        /** @var Scoreboard $scoreboard */
-        $scoreboard = $this->route('scoreboard');
-        /** @var User $member */
-        $member = $this->route('member');
+        $scoreboard = $this->league();
+        $member = $this->member();
 
         if (! $scoreboard->users()->whereKey($member->id)->exists()) {
             $validator->errors()->add('member', 'This user is not part of the league.');

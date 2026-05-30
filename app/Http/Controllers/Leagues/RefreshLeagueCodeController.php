@@ -18,8 +18,6 @@ class RefreshLeagueCodeController extends Controller
 
     public function __invoke(RefreshLeagueCodeRequest $request, Scoreboard $scoreboard): RedirectResponse
     {
-        $this->authorize('manage', $scoreboard);
-
         $scoreboard->update([
             'code' => $this->codeGenerator->generate(),
         ]);

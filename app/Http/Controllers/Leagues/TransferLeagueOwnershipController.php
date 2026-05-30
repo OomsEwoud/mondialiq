@@ -16,8 +16,6 @@ class TransferLeagueOwnershipController extends Controller
         Scoreboard $scoreboard,
         User $member,
     ): RedirectResponse {
-        $this->authorize('manage', $scoreboard);
-
         $scoreboard->update([
             'owner_id' => $member->id,
         ]);

@@ -34,7 +34,7 @@ class StoreMatchPredictionRequest extends FormRequest
         /** @var Fixture|null $fixture */
         $fixture = $this->route('fixture');
 
-        if ($fixture?->match_date->isPast()) {
+        if ($fixture?->match_date?->isPast()) {
             $validator->errors()->add(
                 'outcome',
                 'Predictions are closed for matches that have already started.',

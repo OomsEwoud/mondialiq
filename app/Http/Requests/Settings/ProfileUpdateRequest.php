@@ -17,10 +17,7 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (
-            blank($this->user()->getAttribute('password')) &&
-            filled($this->user()->getAttribute('social_provider'))
-        ) {
+        if ($this->isSocialOnlyAccount()) {
             return [
                 'name' => $this->nameRules(),
                 'avatar' => $this->avatarRules(),
@@ -28,5 +25,11 @@ class ProfileUpdateRequest extends FormRequest
         }
 
         return $this->profileRules($this->user()->id);
+    }
+
+    private function isSocialOnlyAccount(): bool
+    {
+        return blank($this->user()->getAttribute('password'))
+            && filled($this->user()->getAttribute('social_provider'));
     }
 }

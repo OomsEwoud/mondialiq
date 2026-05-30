@@ -2,17 +2,16 @@
 
 namespace App\Http\Requests\Leagues;
 
-use App\Models\Scoreboard;
+use App\Http\Requests\Leagues\Concerns\ResolvesLeagueRoutes;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LeaveLeagueRequest extends FormRequest
 {
+    use ResolvesLeagueRoutes;
+
     public function authorize(): bool
     {
-        /** @var Scoreboard $scoreboard */
-        $scoreboard = $this->route('scoreboard');
-
-        return $this->user()?->can('leave', $scoreboard) ?? false;
+        return $this->user()?->can('leave', $this->league()) ?? false;
     }
 
     public function rules(): array
