@@ -93,7 +93,14 @@ class FootballApiService
             ?? $response->json('errors')
             ?? $response->reason();
 
-        return "API call to {$endpoint} failed with status {$response->status()}: ".json_encode($message);
+        $encodedMessage = json_encode($message) ?: $this->fallbackFailureMessage($message);
+
+        return "API call to {$endpoint} failed with status {$response->status()}: {$encodedMessage}";
+    }
+
+    private function fallbackFailureMessage(mixed $message): string
+    {
+        return is_scalar($message) ? (string) $message : 'Unknown API error';
     }
 
     private function json(Response $response): array

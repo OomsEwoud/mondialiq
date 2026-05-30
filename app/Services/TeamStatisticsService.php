@@ -13,6 +13,9 @@ use Illuminate\Support\Carbon;
 
 class TeamStatisticsService
 {
+    private const REFRESH_HOURS_WITH_FIXTURE_TODAY = 24;
+    private const REFRESH_DAYS_WITHOUT_FIXTURE_TODAY = 7;
+
     public function __construct(
         private readonly FootballApiService $api,
     ) {
@@ -89,7 +92,9 @@ class TeamStatisticsService
 
     private function refreshThreshold(bool $hasFixtureToday): Carbon
     {
-        return $hasFixtureToday ? now()->subDay() : now()->subDays(7);
+        return $hasFixtureToday
+            ? now()->subHours(self::REFRESH_HOURS_WITH_FIXTURE_TODAY)
+            : now()->subDays(self::REFRESH_DAYS_WITHOUT_FIXTURE_TODAY);
     }
 
     /**
@@ -223,11 +228,13 @@ class TeamStatisticsService
             return null;
         }
 
-        return collect($lineups)
+        $formation = collect($lineups)
             ->filter(fn (mixed $lineup): bool => is_array($lineup) && isset($lineup['formation']))
             ->sortByDesc(fn (array $lineup): int => $this->toInt($lineup['played'] ?? 0))
             ->pluck('formation')
             ->first();
+
+        return is_string($formation) && $formation !== '' ? $formation : null;
     }
 
     public function findExisting(int $apiTeamId, int $apiLeagueId, int $season, ?string $date = null): ?TeamStatistic
@@ -262,16 +269,21 @@ class TeamStatisticsService
 
     private function localTeamId(int $apiTeamId): ?int
     {
-        $teamId = Team::query()->where('external_id', $apiTeamId)->value('id');
-
-        return is_numeric($teamId) ? (int) $teamId : null;
+        return $this->localId(
+            Team::query()->where('external_id', $apiTeamId)->value('id'),
+        );
     }
 
     private function localLeagueId(int $apiLeagueId): ?int
     {
-        $leagueId = League::query()->where('external_id', $apiLeagueId)->value('id');
+        return $this->localId(
+            League::query()->where('external_id', $apiLeagueId)->value('id'),
+        );
+    }
 
-        return is_numeric($leagueId) ? (int) $leagueId : null;
+    private function localId(mixed $value): ?int
+    {
+        return is_numeric($value) ? (int) $value : null;
     }
 
     public function makeStatisticsKey(int $apiTeamId, int $apiLeagueId, int $season, ?string $date = null): string

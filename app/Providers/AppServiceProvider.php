@@ -59,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
     {
         RateLimiter::for('prediction-store', function (Request $request) {
             return Limit::perMinute(12)->by(
-                $request->user()?->id ?: $request->ip(),
+                $this->userOrIpRateLimitKey($request),
             );
         });
 
@@ -71,8 +71,13 @@ class AppServiceProvider extends ServiceProvider
 
         RateLimiter::for('league-manage', function (Request $request) {
             return Limit::perMinute(12)->by(
-                $request->user()?->id ?: $request->ip(),
+                $this->userOrIpRateLimitKey($request),
             );
         });
+    }
+
+    private function userOrIpRateLimitKey(Request $request): string
+    {
+        return (string) ($request->user()?->id ?: $request->ip());
     }
 }
