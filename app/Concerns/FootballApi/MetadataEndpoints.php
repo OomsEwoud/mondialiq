@@ -4,15 +4,13 @@ namespace App\Concerns\FootballApi;
 
 trait MetadataEndpoints
 {
-    public function getCountries()
+    public function getCountries(): array
     {
-        //1 call per day
         return $this->call('/countries');
     }
 
-    public function getLeagues()
+    public function getLeagues(): array
     {
-        //1 call per day
         return $this->call('/leagues');
     }
 }

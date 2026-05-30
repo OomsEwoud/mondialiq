@@ -6,13 +6,11 @@ trait TeamEndpoints
 {
     public function getTeams(int $idLeague, int $season): array
     {
-        //1 call per day
         return $this->call('/teams', ['league' => $idLeague, 'season' => $season]);
     }
 
     public function getTeamsStats(int $teamId, int $season, int $leagueId): array
     {
-        //1 call per day
         return $this->getTeamStatistics($teamId, $leagueId, $season);
     }
 
@@ -28,19 +26,16 @@ trait TeamEndpoints
             $params['date'] = $date;
         }
 
-        //1 call per day
         return $this->call('/teams/statistics', $params);
     }
 
     public function getStandings(int $idLeague, int $season): array
     {
-        //1 call per hour
         return $this->call('/standings', ['league' => $idLeague, 'season' => $season]);
     }
 
     public function getCoach(int $teamId): array
     {
-        //1 call per day
         return $this->call('/coachs', ['team' => $teamId]);
     }
 
@@ -55,5 +50,4 @@ trait TeamEndpoints
         // Player details and season statistics, not the authoritative squad list.
         return $this->callAllPages('/players', ['league' => $leagueId, 'season' => $season]);
     }
-
 }
