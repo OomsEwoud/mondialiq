@@ -19,30 +19,39 @@ class TeamStatsSummaryService
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
 
         return [
-            'home_team' => $this->summarizeTeam(
-                $fixture->homeTeam,
-                $this->latestStatisticForTeam($fixture, $fixture->home_team_id),
-            ),
-            'away_team' => $this->summarizeTeam(
-                $fixture->awayTeam,
-                $this->latestStatisticForTeam($fixture, $fixture->away_team_id),
-            ),
+            'home_team' => $this->summarizeFixtureTeam($fixture, $fixture->homeTeam, $fixture->home_team_id),
+            'away_team' => $this->summarizeFixtureTeam($fixture, $fixture->awayTeam, $fixture->away_team_id),
         ];
     }
 
     public function promptBlock(Fixture $fixture): string
     {
-        $summary = $this->summarize($fixture);
-        $homeTeam = $summary['home_team'];
-        $awayTeam = $summary['away_team'];
+        return implode(PHP_EOL, $this->promptLines($this->summarize($fixture)));
+    }
 
-        return implode(PHP_EOL, [
+    private function summarizeFixtureTeam(Fixture $fixture, ?Team $team, ?int $teamId): array
+    {
+        return $this->summarizeTeam(
+            $team,
+            $this->latestStatisticForTeam($fixture, $teamId),
+        );
+    }
+
+    private function promptLines(array $summary): array
+    {
+        return [
             'Team statistics summary:',
-            '- '.$this->formatFormLine($homeTeam),
-            '- '.$this->formatRecordLine($homeTeam),
-            '- '.$this->formatFormLine($awayTeam),
-            '- '.$this->formatRecordLine($awayTeam),
-        ]);
+            ...$this->teamPromptLines($summary['home_team']),
+            ...$this->teamPromptLines($summary['away_team']),
+        ];
+    }
+
+    private function teamPromptLines(array $teamSummary): array
+    {
+        return [
+            '- '.$this->formatFormLine($teamSummary),
+            '- '.$this->formatRecordLine($teamSummary),
+        ];
     }
 
     private function latestStatisticForTeam(Fixture $fixture, ?int $teamId): ?TeamStatistic
@@ -55,15 +64,18 @@ class TeamStatsSummaryService
             ->where('team_id', $teamId)
             ->where('league_id', $fixture->league_id)
             ->where('season', $fixture->season)
-            ->where(function (Builder $query) use ($fixture) {
-                $query
-                    ->whereNull('statistics_date')
-                    ->orWhereDate('statistics_date', '<=', $fixture->match_date);
-            })
+            ->where(fn (Builder $query) => $this->applyStatisticsDateScope($query, $fixture))
             ->orderByDesc('statistics_date')
             ->orderByDesc('fetched_at')
             ->orderByDesc('id')
             ->first();
+    }
+
+    private function applyStatisticsDateScope(Builder $query, Fixture $fixture): Builder
+    {
+        return $query
+            ->whereNull('statistics_date')
+            ->orWhereDate('statistics_date', '<=', $fixture->match_date);
     }
 
     private function summarizeTeam(?Team $team, ?TeamStatistic $statistic): array
@@ -72,26 +84,36 @@ class TeamStatsSummaryService
             return $this->emptyTeamSummary($team);
         }
 
-        $fixturesPlayed = $statistic->fixtures_played_total;
-        $wins = $statistic->wins_total;
-        $goalsFor = $statistic->goals_for_total;
-        $goalsAgainst = $statistic->goals_against_total;
-
         return [
             'team_name' => $team?->name,
             'form' => $statistic->form,
             'recent_form_score' => $this->recentFormScore($statistic->form),
-            'fixtures_played' => $fixturesPlayed,
-            'wins' => $wins,
+            'fixtures_played' => $statistic->fixtures_played_total,
+            'wins' => $statistic->wins_total,
             'draws' => $statistic->draws_total,
             'losses' => $statistic->losses_total,
-            'win_percentage' => $this->percentage($wins, $fixturesPlayed),
-            'goals_for' => $goalsFor,
-            'goals_against' => $goalsAgainst,
-            'goal_difference' => $this->goalDifference($goalsFor, $goalsAgainst),
-            'average_goals_for' => $statistic->goals_for_avg_total ?? $this->average($goalsFor, $fixturesPlayed),
-            'average_goals_against' => $statistic->goals_against_avg_total ?? $this->average($goalsAgainst, $fixturesPlayed),
+            'win_percentage' => $this->percentage($statistic->wins_total, $statistic->fixtures_played_total),
+            'goals_for' => $statistic->goals_for_total,
+            'goals_against' => $statistic->goals_against_total,
+            'goal_difference' => $this->goalDifference(
+                $statistic->goals_for_total,
+                $statistic->goals_against_total,
+            ),
+            'average_goals_for' => $this->averageGoalsFor($statistic),
+            'average_goals_against' => $this->averageGoalsAgainst($statistic),
         ];
+    }
+
+    private function averageGoalsFor(TeamStatistic $statistic): ?float
+    {
+        return $statistic->goals_for_avg_total
+            ?? $this->average($statistic->goals_for_total, $statistic->fixtures_played_total);
+    }
+
+    private function averageGoalsAgainst(TeamStatistic $statistic): ?float
+    {
+        return $statistic->goals_against_avg_total
+            ?? $this->average($statistic->goals_against_total, $statistic->fixtures_played_total);
     }
 
     /**

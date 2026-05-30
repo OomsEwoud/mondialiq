@@ -21,18 +21,7 @@ class HeadToHeadSummaryService
             return $this->emptySummary();
         }
 
-        $summary = $this->homeAwaySummary($fixture, $headToHead);
-
-        return [
-            'total_meetings' => $headToHead->total_matches,
-            'home_team_h2h_wins' => $summary['home_wins'],
-            'away_team_h2h_wins' => $summary['away_wins'],
-            'draws' => $headToHead->draws,
-            'home_team_h2h_goals' => $summary['home_goals'],
-            'away_team_h2h_goals' => $summary['away_goals'],
-            'last_meeting_date' => $headToHead->last_meeting_at?->toDateString(),
-            'conclusion' => $this->conclusion($fixture, $summary['home_wins'], $summary['away_wins']),
-        ];
+        return $this->summaryAttributes($fixture, $headToHead, $this->homeAwaySummary($fixture, $headToHead));
     }
 
     public function promptBlock(Fixture $fixture): string
@@ -40,16 +29,44 @@ class HeadToHeadSummaryService
         $summary = $this->summarize($fixture);
 
         if ($summary['total_meetings'] === null) {
-            return implode(PHP_EOL, [
-                'Head-to-head summary:',
-                '- Head-to-head data not available.',
-            ]);
+            return $this->unavailablePromptBlock();
         }
 
+        return implode(PHP_EOL, $this->promptLines($fixture, $summary));
+    }
+
+    private function summaryAttributes(Fixture $fixture, HeadToHead $headToHead, array $homeAwaySummary): array
+    {
+        return [
+            'total_meetings' => $headToHead->total_matches,
+            'home_team_h2h_wins' => $homeAwaySummary['home_wins'],
+            'away_team_h2h_wins' => $homeAwaySummary['away_wins'],
+            'draws' => $headToHead->draws,
+            'home_team_h2h_goals' => $homeAwaySummary['home_goals'],
+            'away_team_h2h_goals' => $homeAwaySummary['away_goals'],
+            'last_meeting_date' => $headToHead->last_meeting_at?->toDateString(),
+            'conclusion' => $this->conclusion(
+                $fixture,
+                $homeAwaySummary['home_wins'],
+                $homeAwaySummary['away_wins'],
+            ),
+        ];
+    }
+
+    private function unavailablePromptBlock(): string
+    {
+        return implode(PHP_EOL, [
+            'Head-to-head summary:',
+            '- Head-to-head data not available.',
+        ]);
+    }
+
+    private function promptLines(Fixture $fixture, array $summary): array
+    {
         $homeTeamName = $this->formatter->teamName($fixture->homeTeam?->name, 'Home team');
         $awayTeamName = $this->formatter->teamName($fixture->awayTeam?->name, 'Away team');
 
-        return implode(PHP_EOL, [
+        return [
             'Head-to-head summary:',
             '- Total meetings: '.$summary['total_meetings'],
             "- {$homeTeamName} wins: {$summary['home_team_h2h_wins']}",
@@ -57,7 +74,7 @@ class HeadToHeadSummaryService
             '- Draws: '.$summary['draws'],
             "- Goals: {$homeTeamName} {$summary['home_team_h2h_goals']} - {$summary['away_team_h2h_goals']} {$awayTeamName}",
             '- Last meeting: '.$this->formatter->value($summary['last_meeting_date']),
-        ]);
+        ];
     }
 
     private function headToHeadForFixture(Fixture $fixture): ?HeadToHead

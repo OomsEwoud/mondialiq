@@ -5,6 +5,7 @@ namespace App\Services\Prediction;
 use App\Models\Fixture;
 use App\Models\MissingPlayer;
 use App\Models\Player;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Facades\Schema;
 
 class MissingPlayersSummaryService
@@ -19,24 +20,13 @@ class MissingPlayersSummaryService
     public function summarize(Fixture $fixture): array
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
-        $hasType = Schema::hasColumn('missing_players', 'type');
-        $hasReason = Schema::hasColumn('missing_players', 'reason');
+        $hasType = $this->missingPlayersTableHasColumn('type');
+        $hasReason = $this->missingPlayersTableHasColumn('reason');
 
         $summary = $this->emptySummary($fixture, $hasType);
 
-        $missingPlayers = MissingPlayer::query()
-            ->with(['player.teams:id,name'])
-            ->where('fixture_id', $fixture->id)
-            ->get();
-
-        foreach ($missingPlayers as $missingPlayer) {
-            $side = $this->sideForPlayer($missingPlayer->player, $fixture);
-
-            if ($side === null) {
-                continue;
-            }
-
-            $this->addMissingPlayerToSummary($summary, $side, $missingPlayer, $hasType, $hasReason);
+        foreach ($this->missingPlayers($fixture) as $missingPlayer) {
+            $this->addMissingPlayerForFixture($summary, $fixture, $missingPlayer, $hasType, $hasReason);
         }
 
         return $summary;
@@ -47,12 +37,51 @@ class MissingPlayersSummaryService
         $summary = $this->summarize($fixture);
 
         if ($summary['home_missing_count'] === 0 && $summary['away_missing_count'] === 0) {
-            return implode(PHP_EOL, [
-                'Missing players summary:',
-                '- No missing players reported.',
-            ]);
+            return $this->unavailablePromptBlock();
         }
 
+        return implode(PHP_EOL, $this->promptLines($summary));
+    }
+
+    private function missingPlayersTableHasColumn(string $column): bool
+    {
+        return Schema::hasColumn('missing_players', $column);
+    }
+
+    private function missingPlayers(Fixture $fixture): EloquentCollection
+    {
+        return MissingPlayer::query()
+            ->with(['player.teams:id,name'])
+            ->where('fixture_id', $fixture->id)
+            ->get();
+    }
+
+    private function addMissingPlayerForFixture(
+        array &$summary,
+        Fixture $fixture,
+        MissingPlayer $missingPlayer,
+        bool $hasType,
+        bool $hasReason,
+    ): void {
+        $side = $this->sideForPlayer($missingPlayer->player, $fixture);
+
+        if ($side === null) {
+            return;
+        }
+
+        $this->addMissingPlayerToSummary($summary, $side, $missingPlayer, $hasType, $hasReason);
+    }
+
+    private function unavailablePromptBlock(): string
+    {
+        return implode(PHP_EOL, [
+            'Missing players summary:',
+            '- No missing players reported.',
+        ]);
+    }
+
+    private function promptLines(array $summary): array
+    {
         $lines = [
             'Missing players summary:',
             $this->formatter->bullet(
@@ -75,7 +104,7 @@ class MissingPlayersSummaryService
             );
         }
 
-        return implode(PHP_EOL, $lines);
+        return $lines;
     }
 
     private function sideForPlayer(?Player $player, Fixture $fixture): ?string
@@ -162,9 +191,10 @@ class MissingPlayersSummaryService
             return 'Unknown player';
         }
 
-        return $player->display_name
-            ?? trim("{$player->first_name} {$player->last_name}")
-            ?: 'Unknown player';
+        $name = $player->display_name
+            ?? trim("{$player->first_name} {$player->last_name}");
+
+        return $name !== '' ? $name : 'Unknown player';
     }
 
     private function countLine(?string $teamName, int $count): string
