@@ -1,24 +1,42 @@
 import { BadgeCheck, Gauge, Goal } from 'lucide-react';
 import { Badge } from '@/components/ui/feedback/badge';
 import type { Match } from '@/types/match';
-import { predictionScoreLabel } from '@/utils/match-prediction';
+import {
+    aiPredictionScoreLabel,
+    predictionScoreLabel,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
+    aiMode?: boolean;
 }
 
-export default function UserPredictionSummary({ match }: Props) {
-    if (!match.userPrediction) {
+export default function UserPredictionSummary({
+    match,
+    aiMode = false,
+}: Props) {
+    const prediction = aiMode ? match.aiPrediction : match.userPrediction;
+
+    if (!prediction) {
         return null;
     }
 
-    const score = predictionScoreLabel(match);
+    const score = aiMode
+        ? aiPredictionScoreLabel(match)
+        : predictionScoreLabel(match);
 
     return (
         <div className="flex flex-wrap items-center gap-2 text-sm">
-            <Badge className="border-blue-200 bg-blue-50 text-blue-800">
+            <Badge
+                className={
+                    aiMode
+                        ? 'border-cyan-200 bg-cyan-50 text-cyan-700'
+                        : 'border-slate-200 bg-slate-50 text-slate-800'
+                }
+            >
                 <BadgeCheck className="h-3 w-3" />
-                Prediction: {match.userPrediction.label}
+                {aiMode ? 'Predicted outcome' : 'Prediction'}:{' '}
+                {prediction.label}
             </Badge>
 
             {score && (
@@ -28,10 +46,10 @@ export default function UserPredictionSummary({ match }: Props) {
                 </Badge>
             )}
 
-            {match.userPrediction.confidence && (
+            {prediction.confidence && (
                 <Badge className="border-cyan-200 bg-cyan-50 text-cyan-700 capitalize">
                     <Gauge className="h-3 w-3" />
-                    {match.userPrediction.confidence} confidence
+                    {prediction.confidence} confidence
                 </Badge>
             )}
         </div>

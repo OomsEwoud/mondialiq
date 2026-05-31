@@ -1,3 +1,4 @@
+import EmptyPredictionsState from '@/components/predictions/empty-predictions-state';
 import PredictionCard from '@/components/predictions/prediction-card';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import type { Match } from '@/types/match';
@@ -16,14 +17,7 @@ export default function PredictionList({
     mode,
 }: Props) {
     if (matches.length === 0) {
-        return (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-white py-12 text-center">
-                <p className="text-sm font-black text-blue-950">
-                    Nothing to show yet.
-                </p>
-                <p className="mt-1 text-sm text-slate-500">{emptyMessage}</p>
-            </div>
-        );
+        return <EmptyPredictionsState mode={mode} message={emptyMessage} />;
     }
 
     return (
