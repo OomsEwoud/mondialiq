@@ -23,7 +23,7 @@ export default function Groups({ groups }: Props) {
             <GroupPageHeader />
 
             {activeGroup ? (
-                <div>
+                <div className="mx-auto flex max-w-7xl flex-col gap-5 sm:gap-6">
                     <GroupTabs
                         groups={groups}
                         activeGroupId={activeGroup.id}
