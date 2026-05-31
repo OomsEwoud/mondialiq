@@ -7,6 +7,7 @@ import {
     UserRound,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+
 import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import UpdateAccountController from '@/actions/App/Http/Controllers/Settings/UpdateAccountController';
 import UpdatePasswordController from '@/actions/App/Http/Controllers/Settings/UpdatePasswordController';
@@ -26,6 +27,12 @@ import { useAvatarUpload } from '@/hooks/use-avatar-upload';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { disable, enable } from '@/routes/two-factor';
 import { send } from '@/routes/verification';
+import {
+    settingsFieldClassName,
+    settingsLabelClassName,
+    settingsPrimaryButtonClassName,
+    settingsSubtlePanelClassName,
+} from '@/utils/settings-ui';
 
 type Props = {
     mustVerifyEmail: boolean;
@@ -35,10 +42,10 @@ type Props = {
     twoFactorEnabled?: boolean;
 };
 
-const fieldClassName =
-    'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
-const primaryButtonClassName =
-    'h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950';
+const fieldErrorWrapperClassName = 'min-h-10';
+const fieldErrorClassName = 'leading-5';
+const emailVerificationCardClassName =
+    'rounded-xl border border-amber-200 bg-amber-50 p-4';
 
 export default function Profile({
     mustVerifyEmail,
@@ -50,6 +57,8 @@ export default function Profile({
     const { auth } = usePage().props;
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
+    const [showSetupModal, setShowSetupModal] = useState(false);
+    const prevTwoFactorEnabled = useRef(twoFactorEnabled);
 
     const {
         qrCodeSvg,
@@ -63,9 +72,6 @@ export default function Profile({
         errors,
     } = useTwoFactorAuth();
     const avatarUpload = useAvatarUpload();
-
-    const [showSetupModal, setShowSetupModal] = useState<boolean>(false);
-    const prevTwoFactorEnabled = useRef(twoFactorEnabled);
 
     useEffect(() => {
         if (prevTwoFactorEnabled.current && !twoFactorEnabled) {
@@ -84,6 +90,17 @@ export default function Profile({
     const needsEmailVerification =
         mustVerifyEmail && user.email_verified_at === null;
     const showTwoFactorSection = canManageTwoFactor && !isSsoOnly;
+    const profileGridClassName = isSsoOnly
+        ? 'grid items-start gap-5'
+        : 'grid items-start gap-5 md:grid-cols-2';
+    const twoFactorStatusText = twoFactorEnabled
+        ? 'Your account asks for an authenticator code during login.'
+        : 'Enable 2FA to require an authenticator code during login.';
+    const twoFactorBadgeClassName = twoFactorEnabled
+        ? 'border-green-200 bg-green-50 text-green-700'
+        : 'border-slate-200 bg-white text-slate-600';
+    const twoFactorBadgeLabel = twoFactorEnabled ? 'Enabled' : 'Not enabled';
+
     const openSetupModal = () => setShowSetupModal(true);
     const closeSetupModal = () => setShowSetupModal(false);
 
@@ -113,46 +130,34 @@ export default function Profile({
                         {({ processing, errors }) => (
                             <>
                                 <ProfileAvatarField
-                                    avatarInputRef={
-                                        avatarUpload.croppedAvatarInput
-                                    }
+                                    avatarInputRef={avatarUpload.croppedAvatarInput}
                                     error={errors.avatar}
-                                    onAvatarChange={
-                                        avatarUpload.handleAvatarChange
-                                    }
+                                    onAvatarChange={avatarUpload.handleAvatarChange}
                                     previewUrl={avatarUpload.avatarPreview}
-                                    selectedFileName={
-                                        avatarUpload.selectedAvatarName
-                                    }
+                                    selectedFileName={avatarUpload.selectedAvatarName}
                                     user={user}
                                 />
 
-                                <div
-                                    className={
-                                        isSsoOnly
-                                            ? 'grid items-start gap-5'
-                                            : 'grid items-start gap-5 md:grid-cols-2'
-                                    }
-                                >
+                                <div className={profileGridClassName}>
                                     <div className="flex min-w-0 flex-col gap-2">
                                         <Label
                                             htmlFor="name"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            className={settingsLabelClassName}
                                         >
                                             Name
                                         </Label>
                                         <Input
                                             id="name"
-                                            className={fieldClassName}
+                                            className={settingsFieldClassName}
                                             defaultValue={user.name}
                                             name="name"
                                             autoComplete="name"
                                             placeholder="Example User"
                                         />
-                                        <div className="min-h-10">
+                                        <div className={fieldErrorWrapperClassName}>
                                             <InputError
                                                 message={errors.name}
-                                                className="leading-5"
+                                                className={fieldErrorClassName}
                                             />
                                         </div>
                                     </div>
@@ -161,23 +166,23 @@ export default function Profile({
                                         <div className="flex min-w-0 flex-col gap-2">
                                             <Label
                                                 htmlFor="email"
-                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                                className={settingsLabelClassName}
                                             >
                                                 Email address
                                             </Label>
                                             <Input
                                                 id="email"
                                                 type="email"
-                                                className={fieldClassName}
+                                                className={settingsFieldClassName}
                                                 defaultValue={user.email}
                                                 name="email"
                                                 autoComplete="username"
                                                 placeholder="name@example.com"
                                             />
-                                            <div className="min-h-10">
+                                            <div className={fieldErrorWrapperClassName}>
                                                 <InputError
                                                     message={errors.email}
-                                                    className="leading-5"
+                                                    className={fieldErrorClassName}
                                                 />
                                             </div>
                                         </div>
@@ -185,18 +190,16 @@ export default function Profile({
                                 </div>
 
                                 {needsEmailVerification && (
-                                    <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                                    <div className={emailVerificationCardClassName}>
                                         <div className="flex gap-3">
                                             <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
                                             <div className="space-y-2">
                                                 <p className="text-sm font-black text-amber-900">
-                                                    Your email address is
-                                                    unverified.
+                                                    Your email address is unverified.
                                                 </p>
                                                 <p className="text-sm leading-6 text-amber-800">
-                                                    Verify your email to keep
-                                                    all account features
-                                                    available.
+                                                    Verify your email to keep all
+                                                    account features available.
                                                 </p>
                                                 <Link
                                                     href={send()}
@@ -208,8 +211,8 @@ export default function Profile({
                                                 {status ===
                                                     'verification-link-sent' && (
                                                     <p className="text-sm font-semibold text-green-700">
-                                                        A new verification link
-                                                        has been sent.
+                                                        A new verification link has
+                                                        been sent.
                                                     </p>
                                                 )}
                                             </div>
@@ -221,7 +224,7 @@ export default function Profile({
                                     <Button
                                         disabled={processing}
                                         data-test="update-profile-button"
-                                        className={primaryButtonClassName}
+                                        className={settingsPrimaryButtonClassName}
                                     >
                                         Save profile
                                     </Button>
@@ -264,7 +267,7 @@ export default function Profile({
                                         <div className="flex min-w-0 flex-col gap-2">
                                             <Label
                                                 htmlFor="current_password"
-                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                                className={settingsLabelClassName}
                                             >
                                                 Current password
                                             </Label>
@@ -272,16 +275,14 @@ export default function Profile({
                                                 id="current_password"
                                                 ref={currentPasswordInput}
                                                 name="current_password"
-                                                className={fieldClassName}
+                                                className={settingsFieldClassName}
                                                 autoComplete="current-password"
-                                                placeholder="••••••••••••"
+                                                placeholder="************"
                                             />
-                                            <div className="min-h-10">
+                                            <div className={fieldErrorWrapperClassName}>
                                                 <InputError
-                                                    message={
-                                                        errors.current_password
-                                                    }
-                                                    className="leading-5"
+                                                    message={errors.current_password}
+                                                    className={fieldErrorClassName}
                                                 />
                                             </div>
                                         </div>
@@ -289,7 +290,7 @@ export default function Profile({
                                         <div className="flex min-w-0 flex-col gap-2">
                                             <Label
                                                 htmlFor="password"
-                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                                className={settingsLabelClassName}
                                             >
                                                 New password
                                             </Label>
@@ -297,14 +298,14 @@ export default function Profile({
                                                 id="password"
                                                 ref={passwordInput}
                                                 name="password"
-                                                className={fieldClassName}
+                                                className={settingsFieldClassName}
                                                 autoComplete="new-password"
                                                 placeholder="Min. 8 characters"
                                             />
-                                            <div className="min-h-10">
+                                            <div className={fieldErrorWrapperClassName}>
                                                 <InputError
                                                     message={errors.password}
-                                                    className="leading-5"
+                                                    className={fieldErrorClassName}
                                                 />
                                             </div>
                                         </div>
@@ -312,23 +313,21 @@ export default function Profile({
                                         <div className="flex min-w-0 flex-col gap-2">
                                             <Label
                                                 htmlFor="password_confirmation"
-                                                className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                                className={settingsLabelClassName}
                                             >
                                                 Confirm password
                                             </Label>
                                             <PasswordInput
                                                 id="password_confirmation"
                                                 name="password_confirmation"
-                                                className={fieldClassName}
+                                                className={settingsFieldClassName}
                                                 autoComplete="new-password"
                                                 placeholder="Repeat new password"
                                             />
-                                            <div className="min-h-10">
+                                            <div className={fieldErrorWrapperClassName}>
                                                 <InputError
-                                                    message={
-                                                        errors.password_confirmation
-                                                    }
-                                                    className="leading-5"
+                                                    message={errors.password_confirmation}
+                                                    className={fieldErrorClassName}
                                                 />
                                             </div>
                                         </div>
@@ -338,7 +337,7 @@ export default function Profile({
                                         <Button
                                             disabled={processing}
                                             data-test="update-password-button"
-                                            className={primaryButtonClassName}
+                                            className={settingsPrimaryButtonClassName}
                                         >
                                             Save password
                                         </Button>
@@ -357,7 +356,9 @@ export default function Profile({
                         description="Add an authenticator app check to protect your account."
                     >
                         <div className="space-y-5">
-                            <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div
+                                className={`${settingsSubtlePanelClassName} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}
+                            >
                                 <div>
                                     <div className="mb-2 flex items-center gap-2">
                                         <LockKeyhole className="size-4 text-cyan-500" />
@@ -366,22 +367,14 @@ export default function Profile({
                                         </p>
                                     </div>
                                     <p className="text-sm leading-6 text-slate-600">
-                                        {twoFactorEnabled
-                                            ? 'Your account asks for an authenticator code during login.'
-                                            : 'Enable 2FA to require an authenticator code during login.'}
+                                        {twoFactorStatusText}
                                     </p>
                                 </div>
                                 <Badge
-                                    className={
-                                        twoFactorEnabled
-                                            ? 'border-green-200 bg-green-50 text-green-700'
-                                            : 'border-slate-200 bg-white text-slate-600'
-                                    }
+                                    className={twoFactorBadgeClassName}
                                     variant="outline"
                                 >
-                                    {twoFactorEnabled
-                                        ? 'Enabled'
-                                        : 'Not enabled'}
+                                    {twoFactorBadgeLabel}
                                 </Badge>
                             </div>
 
@@ -411,7 +404,7 @@ export default function Profile({
                                     {hasSetupData ? (
                                         <Button
                                             onClick={openSetupModal}
-                                            className={primaryButtonClassName}
+                                            className={settingsPrimaryButtonClassName}
                                         >
                                             <ShieldCheck />
                                             Continue setup
@@ -425,7 +418,7 @@ export default function Profile({
                                                 <Button
                                                     type="submit"
                                                     disabled={processing}
-                                                    className={primaryButtonClassName}
+                                                    className={settingsPrimaryButtonClassName}
                                                 >
                                                     Enable 2FA
                                                 </Button>

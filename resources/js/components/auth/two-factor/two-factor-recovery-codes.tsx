@@ -7,6 +7,10 @@ import { Button } from '@/components/ui/forms/button';
 import { PASSWORD_CONFIRMATION_REQUIRED_ERROR } from '@/hooks/use-two-factor-auth';
 import { confirm as confirmPassword } from '@/routes/password';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
+import {
+    settingsPrimaryButtonClassName,
+    settingsSubtlePanelClassName,
+} from '@/utils/settings-ui';
 
 type Props = {
     recoveryCodesList: string[];
@@ -46,9 +50,10 @@ export default function TwoFactorRecoveryCodes({
     }, [codesAreVisible, fetchRecoveryCodes, hasRecoveryCodes]);
 
     const RecoveryCodeIconComponent = codesAreVisible ? EyeOff : Eye;
+    const recoveryToggleLabel = `${codesAreVisible ? 'Hide' : 'View'} recovery codes`;
 
     return (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className={settingsSubtlePanelClassName}>
             <div className="mb-4">
                 <h3 className="flex items-center gap-2 text-sm font-black text-blue-950">
                     <LockKeyhole
@@ -66,7 +71,7 @@ export default function TwoFactorRecoveryCodes({
             <div className="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
                 <Button
                     onClick={toggleCodesVisibility}
-                    className="w-fit rounded-lg bg-blue-950 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                    className={`w-fit ${settingsPrimaryButtonClassName}`}
                     aria-expanded={codesAreVisible}
                     aria-controls="recovery-codes-section"
                 >
@@ -74,7 +79,7 @@ export default function TwoFactorRecoveryCodes({
                         className="size-4"
                         aria-hidden="true"
                     />
-                    {codesAreVisible ? 'Hide' : 'View'} recovery codes
+                    {recoveryToggleLabel}
                 </Button>
 
                 {canRegenerateCodes && (
@@ -111,7 +116,7 @@ export default function TwoFactorRecoveryCodes({
                             {needsPasswordConfirmation && (
                                 <Button
                                     asChild
-                                    className="rounded-lg bg-blue-950 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                    className={settingsPrimaryButtonClassName}
                                 >
                                     <Link
                                         href={confirmPassword({
