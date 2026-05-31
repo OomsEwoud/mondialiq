@@ -37,9 +37,14 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
         <>
             <Head title="Matches" />
 
-            <h1 className="mb-6 bg-gradient-to-r from-slate-950 via-blue-900 to-cyan-700 bg-clip-text text-center text-4xl font-bold text-transparent">
-                All Matches
-            </h1>
+            <header className="mb-6 text-center sm:mb-8">
+                <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">
+                    World Cup 2026 schedule
+                </p>
+                <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+                    All Matches
+                </h1>
+            </header>
 
             <MatchFilters
                 rounds={filterOptions.rounds}

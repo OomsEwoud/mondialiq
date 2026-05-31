@@ -11,7 +11,7 @@ export default function RoundFilter({ rounds, selected, onChange }: Props) {
             <select
                 value={selected}
                 onChange={(e) => onChange(e.target.value)}
-                className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 normal-case transition-colors outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 normal-case transition-colors outline-none hover:bg-slate-50 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-100"
             >
                 <option value="">All rounds</option>
                 {rounds.map((round) => (

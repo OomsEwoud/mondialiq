@@ -14,8 +14,8 @@ export default function MatchPredictionActions({ match }: Props) {
     const openPredictionModal = () => setPredictionOpen(true);
 
     return (
-        <div className="mt-4 border-t border-slate-200 pt-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-3 border-t border-slate-200 pt-3">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
                         Match actions

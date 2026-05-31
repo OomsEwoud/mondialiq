@@ -21,10 +21,10 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
                     type="button"
                     onClick={() => onChange(tab.value)}
                     className={cn(
-                        'h-9 rounded-full border px-4 text-sm font-black transition-colors',
+                        'h-9 rounded-full border px-4 text-sm font-black transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                         selected === tab.value
-                            ? 'border-cyan-300 bg-cyan-100 text-blue-950'
-                            : 'border-slate-200 bg-white text-slate-500 hover:border-cyan-200 hover:bg-cyan-50 hover:text-blue-950',
+                            ? 'border-cyan-200 bg-cyan-50 text-cyan-700'
+                            : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                     )}
                 >
                     {tab.label}

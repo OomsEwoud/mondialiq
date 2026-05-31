@@ -13,7 +13,7 @@ export default function MatchStatusBadge({ match }: Props) {
     return (
         <Badge
             className={cn(
-                'border px-2.5 py-1 font-black',
+                'border px-2.5 py-1 font-black shadow-none',
                 kind === 'finished' &&
                     'border-emerald-200 bg-emerald-50 text-emerald-700',
                 kind === 'upcoming' &&

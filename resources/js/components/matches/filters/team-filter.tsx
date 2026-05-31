@@ -50,7 +50,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
             <div className="relative">
                 <Search
                     aria-hidden
-                    className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-blue-600"
+                    className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-cyan-600"
                 />
                 <input
                     ref={inputRef}
@@ -65,21 +65,21 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                         setActiveIndex(0);
                     }}
                     onKeyDown={handleKeyDown}
-                    className="h-11 w-full rounded-md border border-slate-200 bg-white px-3 pr-10 pl-10 text-sm font-medium text-slate-800 normal-case transition-colors outline-none placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 pr-10 pl-10 text-sm font-medium text-slate-800 normal-case transition-colors outline-none placeholder:text-slate-400 hover:bg-slate-50 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-100"
                 />
                 {selected && (
                     <button
                         type="button"
                         onClick={handleClear}
                         aria-label="Clear team"
-                        className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 transition-colors hover:text-blue-700"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full text-slate-400 transition-colors hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                     >
                         <X size={15} />
                     </button>
                 )}
             </div>
             {open && matches.length > 0 && (
-                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-md border border-slate-200 bg-white py-1 shadow-lg">
+                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg shadow-blue-950/10">
                     {matches.map((team, index) => (
                         <button
                             key={team}
@@ -93,8 +93,8 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                             className={[
                                 'block w-full px-3 py-2 text-left text-sm font-medium normal-case transition-colors',
                                 index === safeIndex
-                                    ? 'bg-blue-50 text-blue-700'
-                                    : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700',
+                                    ? 'bg-cyan-50 text-cyan-700'
+                                    : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
                             ].join(' ')}
                         >
                             {team}

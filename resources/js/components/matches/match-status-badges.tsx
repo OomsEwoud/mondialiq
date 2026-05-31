@@ -13,14 +13,14 @@ export default function MatchStatusBadges({ match }: Props) {
             <MatchStatusBadge match={match} />
 
             {match.hasAiPrediction && (
-                <Badge className="border-cyan-200 bg-cyan-50 text-cyan-700">
+                <Badge className="border-cyan-200 bg-cyan-50 text-cyan-700 shadow-none">
                     <Sparkles className="h-3 w-3" />
                     AI Ready
                 </Badge>
             )}
 
             {match.userPrediction && (
-                <Badge className="border-blue-200 bg-blue-50 text-blue-800">
+                <Badge className="border-slate-200 bg-slate-50 text-slate-700 shadow-none">
                     <CheckCircle2 className="h-3 w-3" />
                     Your Pick: {match.userPrediction.label}
                 </Badge>

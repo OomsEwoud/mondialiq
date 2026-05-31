@@ -20,15 +20,19 @@ export default function Pagination({ links }: Props) {
     }
 
     return (
-        <div className="mt-8 flex flex-wrap justify-center gap-1">
+        <nav
+            className="mt-8 flex flex-wrap justify-center gap-1.5"
+            aria-label="Pagination"
+        >
             {links.map((link) => {
                 const key = `${link.label}-${link.url ?? 'disabled'}`;
                 const className = cn(
-                    'rounded-lg border px-4 py-2 text-sm',
+                    'inline-flex min-h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                     link.active
-                        ? 'border-rose-600 bg-rose-600 text-white'
-                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50',
-                    !link.url && 'cursor-not-allowed opacity-50',
+                        ? 'border-cyan-200 bg-cyan-50 text-cyan-700 shadow-sm shadow-blue-950/5'
+                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-950',
+                    !link.url &&
+                        'cursor-not-allowed bg-slate-50 text-slate-400 opacity-100 hover:bg-slate-50 hover:text-slate-400',
                 );
 
                 if (!link.url) {
@@ -53,6 +57,6 @@ export default function Pagination({ links }: Props) {
                     />
                 );
             })}
-        </div>
+        </nav>
     );
 }

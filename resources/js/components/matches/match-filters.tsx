@@ -29,10 +29,12 @@ export default function MatchFilters({
         selected.status !== 'all';
 
     return (
-        <section className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+        <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5">
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-sm font-bold text-blue-950">Filters</h2>
+                    <h2 className="text-sm font-black text-slate-950">
+                        Filters
+                    </h2>
                     <p className="text-xs text-slate-500">
                         Find matches by round, date or team.
                     </p>
@@ -41,7 +43,7 @@ export default function MatchFilters({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex h-9 items-center gap-2 rounded-md border border-slate-200 px-3 text-sm font-medium text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-700"
+                        className="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white px-3 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <X size={15} />
                         Clear
