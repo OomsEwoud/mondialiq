@@ -11,13 +11,15 @@ interface Props {
 export default function AiPredictionSummaryCards({ match, score }: Props) {
     const prediction = match.aiPrediction;
     const confidence = formatAiConfidence(prediction?.confidence);
+    const predictedOutcome = prediction?.label ?? 'Outcome not available';
+    const expectedScore = score ?? 'Score prediction not available';
 
     return (
         <section className="grid gap-3 md:grid-cols-3">
             <PredictionSummaryCard
                 icon={Trophy}
                 label="Predicted outcome"
-                value={prediction?.label ?? 'Outcome not available'}
+                value={predictedOutcome}
             />
             <PredictionSummaryCard
                 icon={Gauge}
@@ -28,7 +30,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
             <PredictionSummaryCard
                 icon={Goal}
                 label="Expected score"
-                value={score ?? 'Score prediction not available'}
+                value={expectedScore}
             />
         </section>
     );

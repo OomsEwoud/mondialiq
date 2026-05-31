@@ -18,13 +18,21 @@ interface Props {
 export default function PredictionDetailHero({ match, mode }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const isAiPrediction = mode === 'ai';
+    const userPrediction = match.userPrediction;
+    const aiPrediction = match.aiPrediction;
     const activePrediction = isAiPrediction
-        ? match.aiPrediction
-        : (match.userPrediction ?? match.aiPrediction);
+        ? aiPrediction
+        : (userPrediction ?? aiPrediction);
     const score =
-        !isAiPrediction && match.userPrediction
+        !isAiPrediction && userPrediction
             ? predictionScoreLabel(match)
             : aiPredictionScoreLabel(match);
+    const headerLabel = isAiPrediction ? 'AI prediction' : 'My prediction';
+    const activePredictionLabel = activePrediction?.label ?? 'Not available';
+    const activePredictionConfidence = activePrediction?.confidence;
+    const showAiInsight = Boolean(isAiPrediction && aiPrediction?.advice);
+    const showEditAction = Boolean(!isAiPrediction && userPrediction);
+    const openPredictionModal = () => setPredictionOpen(true);
 
     return (
         <>
@@ -33,9 +41,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p className="text-xs font-black tracking-[0.24em] text-cyan-600 uppercase">
-                                {isAiPrediction
-                                    ? 'AI prediction'
-                                    : 'My prediction'}
+                                {headerLabel}
                             </p>
                             <h1 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
                                 {match.homeTeam} vs {match.awayTeam}
@@ -92,12 +98,12 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                             Predicted winner
                                         </p>
                                         <p className="mt-1 text-base font-bold text-blue-950">
-                                            {activePrediction?.label}
+                                            {activePredictionLabel}
                                         </p>
                                     </div>
                                 </div>
 
-                                {activePrediction?.confidence && (
+                                {activePredictionConfidence && (
                                     <div className="flex items-start gap-3 text-left">
                                         <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">
                                             <Gauge className="size-4" />
@@ -107,39 +113,38 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                                 Chance
                                             </p>
                                             <p className="mt-1 text-base font-bold text-blue-950 capitalize">
-                                                {activePrediction.confidence}{' '}
+                                                {activePredictionConfidence}{' '}
                                                 confidence
                                             </p>
                                         </div>
                                     </div>
                                 )}
 
-                                {isAiPrediction &&
-                                    match.aiPrediction?.advice && (
-                                        <div className="flex items-start gap-3 text-left">
-                                            <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
-                                                <Sparkles className="size-4" />
-                                            </span>
-                                            <div>
-                                                <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
-                                                    AI insight
-                                                </p>
-                                                <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
-                                                    {match.aiPrediction.advice}
-                                                </p>
-                                            </div>
+                                {showAiInsight && (
+                                    <div className="flex items-start gap-3 text-left">
+                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
+                                            <Sparkles className="size-4" />
+                                        </span>
+                                        <div>
+                                            <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                                AI insight
+                                            </p>
+                                            <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
+                                                {aiPrediction?.advice}
+                                            </p>
                                         </div>
-                                    )}
+                                    </div>
+                                )}
                             </div>
                         </section>
                     </div>
 
-                    {!isAiPrediction && match.userPrediction && (
+                    {showEditAction && (
                         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
                             <Button
                                 type="button"
                                 className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
-                                onClick={() => setPredictionOpen(true)}
+                                onClick={openPredictionModal}
                             >
                                 <PencilLine className="h-4 w-4" />
                                 Edit prediction
@@ -149,7 +154,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                 </div>
             </section>
 
-            {!isAiPrediction && match.userPrediction && (
+            {showEditAction && (
                 <UserPredictionModal
                     match={match}
                     open={predictionOpen}

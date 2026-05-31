@@ -19,6 +19,8 @@ interface Props {
 export default function AiPredictionReport({ match, aiContext }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const prediction = match.aiPrediction;
+    const hasUserPrediction = Boolean(match.userPrediction);
+    const openPredictionModal = () => setPredictionOpen(true);
     const score = aiPredictionScoreLabel(match);
 
     return (
@@ -34,9 +36,9 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                 <AiPredictionAdviceCard advice={prediction?.advice} />
 
                 <AiPredictionReportActions
-                    hasUserPrediction={Boolean(match.userPrediction)}
+                    hasUserPrediction={hasUserPrediction}
                     matchId={match.id}
-                    onPredictionClick={() => setPredictionOpen(true)}
+                    onPredictionClick={openPredictionModal}
                 />
             </div>
 

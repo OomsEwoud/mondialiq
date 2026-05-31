@@ -17,9 +17,11 @@ interface Props {
 
 export default function UserPredictionDetail({ match }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
-    const prediction = match.userPrediction;
+    const hasUserPrediction = Boolean(match.userPrediction);
+    const hasAiComparison = Boolean(match.hasAiPrediction);
     const score = predictionScoreLabel(match);
     const matchStarted = hasMatchStarted(match);
+    const openPredictionModal = () => setPredictionOpen(true);
 
     return (
         <>
@@ -28,17 +30,17 @@ export default function UserPredictionDetail({ match }: Props) {
                 <UserPredictedScoreCard match={match} score={score} />
                 <UserPredictionSummaryCards match={match} score={score} />
 
-                {match.hasAiPrediction ? (
+                {hasAiComparison ? (
                     <UserPredictionAiComparisonCard matchId={match.id} />
                 ) : null}
 
                 <UserPredictionActions
                     locked={matchStarted}
-                    onEdit={() => setPredictionOpen(true)}
+                    onEdit={openPredictionModal}
                 />
             </div>
 
-            {prediction ? (
+            {hasUserPrediction ? (
                 <UserPredictionModal
                     match={match}
                     open={predictionOpen}

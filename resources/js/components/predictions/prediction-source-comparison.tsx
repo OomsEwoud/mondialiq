@@ -8,8 +8,9 @@ interface Props {
 }
 
 export default function PredictionSourceComparison({ aiContext }: Props) {
-    const hasMarket = hasMarketOdds(aiContext.marketOdds);
-    const hasApi = aiContext.apiPrediction !== null;
+    const { apiPrediction, marketOdds } = aiContext;
+    const hasMarket = hasMarketOdds(marketOdds);
+    const hasApi = apiPrediction !== null;
 
     if (!hasMarket && !hasApi) {
         return null;
@@ -17,12 +18,8 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
 
     return (
         <section className="grid gap-4 lg:grid-cols-2">
-            {hasMarket && (
-                <MarketSourceCard marketOdds={aiContext.marketOdds} />
-            )}
-            {aiContext.apiPrediction && (
-                <ApiSourceCard apiPrediction={aiContext.apiPrediction} />
-            )}
+            {hasMarket && <MarketSourceCard marketOdds={marketOdds} />}
+            {apiPrediction && <ApiSourceCard apiPrediction={apiPrediction} />}
         </section>
     );
 }

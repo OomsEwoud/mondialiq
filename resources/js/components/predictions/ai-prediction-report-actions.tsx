@@ -14,6 +14,10 @@ export default function AiPredictionReportActions({
     matchId,
     onPredictionClick,
 }: Props) {
+    const predictionActionLabel = hasUserPrediction
+        ? 'Edit your prediction'
+        : 'Make your prediction';
+
     return (
         <section className="flex flex-col gap-2 sm:flex-row sm:justify-end">
             <Button
@@ -33,9 +37,7 @@ export default function AiPredictionReportActions({
                 onClick={onPredictionClick}
             >
                 <PencilLine className="size-4" />
-                {hasUserPrediction
-                    ? 'Edit your prediction'
-                    : 'Make your prediction'}
+                {predictionActionLabel}
             </Button>
         </section>
     );
