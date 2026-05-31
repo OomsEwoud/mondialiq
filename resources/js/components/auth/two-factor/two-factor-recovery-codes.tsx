@@ -4,8 +4,13 @@ import { useCallback, useRef, useState } from 'react';
 import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import AlertError from '@/components/shared/alert-error';
 import { Button } from '@/components/ui/forms/button';
+import { PASSWORD_CONFIRMATION_REQUIRED_ERROR } from '@/hooks/use-two-factor-auth';
 import { confirm as confirmPassword } from '@/routes/password';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
+import {
+    settingsPrimaryButtonClassName,
+    settingsSubtlePanelClassName,
+} from '@/utils/settings-ui';
 
 type Props = {
     recoveryCodesList: string[];
@@ -20,19 +25,21 @@ export default function TwoFactorRecoveryCodes({
 }: Props) {
     const [codesAreVisible, setCodesAreVisible] = useState<boolean>(false);
     const codesSectionRef = useRef<HTMLDivElement | null>(null);
-    const canRegenerateCodes = recoveryCodesList.length > 0 && codesAreVisible;
+    const hasRecoveryCodes = recoveryCodesList.length > 0;
+    const canRegenerateCodes = hasRecoveryCodes && codesAreVisible;
     const needsPasswordConfirmation = errors.includes(
-        'Confirm your password before viewing recovery codes.',
+        PASSWORD_CONFIRMATION_REQUIRED_ERROR,
     );
 
     const toggleCodesVisibility = useCallback(async () => {
-        if (!codesAreVisible && !recoveryCodesList.length) {
+        if (!codesAreVisible && !hasRecoveryCodes) {
             await fetchRecoveryCodes();
         }
 
-        setCodesAreVisible(!codesAreVisible);
+        const nextVisibility = !codesAreVisible;
+        setCodesAreVisible(nextVisibility);
 
-        if (!codesAreVisible) {
+        if (nextVisibility) {
             setTimeout(() => {
                 codesSectionRef.current?.scrollIntoView({
                     behavior: 'smooth',
@@ -40,12 +47,13 @@ export default function TwoFactorRecoveryCodes({
                 });
             });
         }
-    }, [codesAreVisible, recoveryCodesList.length, fetchRecoveryCodes]);
+    }, [codesAreVisible, fetchRecoveryCodes, hasRecoveryCodes]);
 
     const RecoveryCodeIconComponent = codesAreVisible ? EyeOff : Eye;
+    const recoveryToggleLabel = `${codesAreVisible ? 'Hide' : 'View'} recovery codes`;
 
     return (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className={settingsSubtlePanelClassName}>
             <div className="mb-4">
                 <h3 className="flex items-center gap-2 text-sm font-black text-blue-950">
                     <LockKeyhole
@@ -63,7 +71,7 @@ export default function TwoFactorRecoveryCodes({
             <div className="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between">
                 <Button
                     onClick={toggleCodesVisibility}
-                    className="w-fit rounded-lg bg-blue-950 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                    className={`w-fit ${settingsPrimaryButtonClassName}`}
                     aria-expanded={codesAreVisible}
                     aria-controls="recovery-codes-section"
                 >
@@ -71,7 +79,7 @@ export default function TwoFactorRecoveryCodes({
                         className="size-4"
                         aria-hidden="true"
                     />
-                    {codesAreVisible ? 'Hide' : 'View'} recovery codes
+                    {recoveryToggleLabel}
                 </Button>
 
                 {canRegenerateCodes && (
@@ -108,7 +116,7 @@ export default function TwoFactorRecoveryCodes({
                             {needsPasswordConfirmation && (
                                 <Button
                                     asChild
-                                    className="rounded-lg bg-blue-950 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                    className={settingsPrimaryButtonClassName}
                                 >
                                     <Link
                                         href={confirmPassword({
@@ -131,10 +139,10 @@ export default function TwoFactorRecoveryCodes({
                                 role="list"
                                 aria-label="Recovery codes"
                             >
-                                {recoveryCodesList.length ? (
-                                    recoveryCodesList.map((code, index) => (
+                                {hasRecoveryCodes ? (
+                                    recoveryCodesList.map((code) => (
                                         <div
-                                            key={index}
+                                            key={code}
                                             role="listitem"
                                             className="select-text"
                                         >

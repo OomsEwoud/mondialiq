@@ -24,13 +24,16 @@ export default function UserPredictionModal({
     onOpenChange,
 }: Props) {
     const auth = usePage<{ auth: Auth }>().props.auth;
+    const isEditing = Boolean(match.userPrediction);
+    const currentPredictionLabel = match.userPrediction?.label;
+    const closeModal = () => onOpenChange(false);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto border-slate-200 bg-white sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>
-                        {match.userPrediction
+                        {isEditing
                             ? 'Edit your prediction'
                             : 'Make your prediction'}
                     </DialogTitle>
@@ -41,12 +44,10 @@ export default function UserPredictionModal({
 
                 <UserPredictionMatchSummary match={match} />
 
-                {match.userPrediction && (
+                {currentPredictionLabel && (
                     <div className="rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm text-blue-900">
                         Current pick:{' '}
-                        <span className="font-bold">
-                            {match.userPrediction.label}
-                        </span>
+                        <span className="font-bold">{currentPredictionLabel}</span>
                     </div>
                 )}
 
@@ -56,8 +57,8 @@ export default function UserPredictionModal({
                     <UserPredictionForm
                         match={match}
                         open={open}
-                        onSaved={() => onOpenChange(false)}
-                        onCancel={() => onOpenChange(false)}
+                        onSaved={closeModal}
+                        onCancel={closeModal}
                     />
                 )}
             </DialogContent>

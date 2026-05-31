@@ -28,6 +28,8 @@ class FixtureQuery
 
     public function build(array $filters = []): Builder
     {
+        $status = $this->statusFilter($filters);
+
         return Fixture::query()
             ->where('league_id', $this->leagueId)
             ->where('season', $this->season)
@@ -36,10 +38,17 @@ class FixtureQuery
             ->when($filters['date'] ?? null, $this->applyDateFilter(...))
             ->when($filters['team'] ?? null, $this->applyTeamFilter(...))
             ->when(
-                ($filters['status'] ?? self::STATUS_ALL) !== self::STATUS_ALL,
-                fn (Builder $query) => $this->applyStatusFilter($query, $filters['status']),
+                $status !== self::STATUS_ALL,
+                fn (Builder $query) => $this->applyStatusFilter($query, $status),
             )
             ->orderBy('match_date');
+    }
+
+    private function statusFilter(array $filters): string
+    {
+        $status = $filters['status'] ?? self::STATUS_ALL;
+
+        return is_string($status) && $status !== '' ? $status : self::STATUS_ALL;
     }
 
     private function applyRoundFilter(Builder $query, string $round): Builder

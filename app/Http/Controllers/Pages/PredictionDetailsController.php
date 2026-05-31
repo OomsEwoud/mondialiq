@@ -8,7 +8,6 @@ use App\Models\Fixture;
 use App\Models\User;
 use App\Services\Prediction\ApiPredictionSummaryService;
 use App\Services\Prediction\FixtureOddsSummaryService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -50,7 +49,7 @@ class PredictionDetailsController extends Controller
             'awayTeam',
             'aiPrediction.winner',
             'apiPrediction',
-            'userPredictions' => fn (Builder $query) => $query
+            'userPredictions' => fn ($query) => $query
                 ->whereBelongsTo($user)
                 ->with('winner'),
         ]);

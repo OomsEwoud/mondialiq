@@ -25,24 +25,27 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
-            <header className="sticky top-0 z-50 border-b border-blue-900 bg-[#1a237e]">
-                <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6">
-                    <Link href="/" className="group flex items-center">
+            <header className="sticky top-0 z-50 border-b border-cyan-200/10 bg-[#141c69] shadow-lg shadow-blue-950/10">
+                <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
+                    <Link
+                        href="/"
+                        className="group flex shrink-0 items-center rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
+                    >
                         <AppLogo
                             textClassName="hidden text-white sm:inline"
                             markClassName="transition-transform group-hover:scale-105"
                         />
                     </Link>
-                    <div className="hidden items-center gap-6 md:flex">
+                    <div className="hidden flex-1 items-center justify-center md:flex">
                         <NavApp />
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
                         {auth.user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button
                                         type="button"
-                                        className="rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none"
+                                        className="rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
                                         aria-label="Open user menu"
                                     >
                                         <Avatar className="h-10 w-10 border-2 border-slate-200">
@@ -70,22 +73,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         ) : (
                             <Link
                                 href={login()}
-                                className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-black text-blue-950 transition-colors hover:bg-cyan-300 focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none"
+                                className="rounded-full bg-cyan-300 px-3.5 py-2 text-sm font-black text-blue-950 shadow-sm shadow-cyan-950/20 transition-colors duration-200 hover:bg-cyan-200 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none sm:px-4"
                             >
                                 Inloggen
                             </Link>
                         )}
                         <button
+                            type="button"
                             onClick={() => setMenuOpen(!menuOpen)}
-                            className="text-blue-200 transition-colors hover:text-cyan-400 md:hidden"
+                            aria-expanded={menuOpen}
+                            aria-label={
+                                menuOpen
+                                    ? 'Close navigation menu'
+                                    : 'Open navigation menu'
+                            }
+                            className="rounded-full p-2 text-blue-100 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none md:hidden"
                         >
                             {menuOpen ? <X size={22} /> : <Menu size={22} />}
                         </button>
                     </div>
                 </div>
                 {menuOpen && (
-                    <div className="border-t border-blue-800 bg-[#1a237e] px-6 py-3 md:hidden">
-                        <NavApp onNavigate={() => setMenuOpen(false)} />
+                    <div className="border-t border-white/10 bg-[#141c69] px-4 py-2.5 md:hidden">
+                        <div className="mx-auto w-full max-w-5xl">
+                            <NavApp onNavigate={() => setMenuOpen(false)} />
+                        </div>
                     </div>
                 )}
             </header>

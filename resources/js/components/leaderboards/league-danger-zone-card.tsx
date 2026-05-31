@@ -25,10 +25,7 @@ type Props = {
     leagueName: string;
 };
 
-export default function LeagueDangerZoneCard({
-    leagueId,
-    leagueName,
-}: Props) {
+export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
     return (
         <Card className="rounded-2xl border-rose-200 bg-rose-50 shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-6">
@@ -63,9 +60,9 @@ export default function LeagueDangerZoneCard({
                             Delete {leagueName}?
                         </DialogTitle>
                         <DialogDescription className="text-sm leading-6 text-slate-600">
-                            This action cannot be undone. All members lose access
-                            immediately and the league page will disappear from
-                            leaderboards.
+                            This action cannot be undone. All members lose
+                            access immediately and the league page will
+                            disappear from leaderboards.
                         </DialogDescription>
 
                         <Form

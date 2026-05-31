@@ -1,8 +1,11 @@
 import { Trophy } from 'lucide-react';
 
+const leaderboardHeaderClassName =
+    'mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-6 text-center shadow-sm sm:mb-8 sm:px-8 sm:py-8';
+
 export default function LeaderboardsPageHeader() {
     return (
-        <section className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-6 text-center shadow-sm sm:mb-8 sm:px-8 sm:py-8">
+        <section className={leaderboardHeaderClassName}>
             <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 shadow-sm ring-1 ring-cyan-100">
                 <Trophy size={22} />
             </div>

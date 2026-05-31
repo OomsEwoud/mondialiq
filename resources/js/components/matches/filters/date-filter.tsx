@@ -39,10 +39,10 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
             <button
                 type="button"
                 onClick={() => (open ? setOpen(false) : openAt(selected))}
-                className="flex h-11 w-full items-center justify-between rounded-md border border-slate-200 bg-white px-3 text-left text-sm font-medium text-slate-800 normal-case transition-colors outline-none hover:border-blue-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="flex h-11 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 text-left text-sm font-medium text-slate-800 normal-case transition-colors outline-none hover:bg-slate-50 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-100"
             >
                 <span className="flex items-center gap-2">
-                    <CalendarDays className="size-4 text-blue-600" />
+                    <CalendarDays className="size-4 text-cyan-600" />
                     {selected
                         ? (dateLookup.get(selected) ??
                           formatReadableDate(selected))
@@ -56,7 +56,7 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
                             e.stopPropagation();
                             handleClear();
                         }}
-                        className="rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-blue-700"
+                        className="rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                     >
                         <X size={14} />
                     </span>

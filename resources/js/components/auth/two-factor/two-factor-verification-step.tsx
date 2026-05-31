@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/forms/input-otp';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
 import { confirm } from '@/routes/two-factor';
+import { settingsPrimaryButtonClassName } from '@/utils/settings-ui';
 
 interface Props {
     onClose: () => void;
@@ -19,11 +20,15 @@ interface Props {
 export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
     const [code, setCode] = useState<string>('');
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
+    const isCodeComplete = code.length === OTP_MAX_LENGTH;
+    const otpSlots = Array.from({ length: OTP_MAX_LENGTH }, (_, index) => index);
 
     useEffect(() => {
-        setTimeout(() => {
+        const animationFrame = requestAnimationFrame(() => {
             pinInputContainerRef.current?.querySelector('input')?.focus();
-        }, 0);
+        });
+
+        return () => cancelAnimationFrame(animationFrame);
     }, []);
 
     return (
@@ -54,15 +59,9 @@ export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
                             pattern={REGEXP_ONLY_DIGITS}
                         >
                             <InputOTPGroup>
-                                {Array.from(
-                                    { length: OTP_MAX_LENGTH },
-                                    (_, index) => (
-                                        <InputOTPSlot
-                                            key={index}
-                                            index={index}
-                                        />
-                                    ),
-                                )}
+                                {otpSlots.map((index) => (
+                                    <InputOTPSlot key={index} index={index} />
+                                ))}
                             </InputOTPGroup>
                         </InputOTP>
                         <InputError
@@ -84,10 +83,8 @@ export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
                         </Button>
                         <Button
                             type="submit"
-                            className="flex-1"
-                            disabled={
-                                processing || code.length < OTP_MAX_LENGTH
-                            }
+                            className={`flex-1 ${settingsPrimaryButtonClassName}`}
+                            disabled={processing || !isCodeComplete}
                         >
                             Confirm
                         </Button>

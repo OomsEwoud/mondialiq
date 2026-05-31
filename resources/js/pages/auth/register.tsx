@@ -9,6 +9,13 @@ import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { home, login } from '@/routes';
 import { store } from '@/routes/register';
+import {
+    authFieldLabelClass,
+    authInputClass,
+    authLinkClass,
+    authMutedPanelClass,
+    authPrimaryButtonClass,
+} from '@/utils/auth-form';
 
 export default function Register() {
     return (
@@ -26,7 +33,7 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="name"
-                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    className={authFieldLabelClass}
                                 >
                                     Name
                                 </Label>
@@ -38,7 +45,7 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Example User"
-                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authInputClass}
                                 />
                                 <InputError message={errors.name} />
                             </div>
@@ -46,7 +53,7 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="email"
-                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    className={authFieldLabelClass}
                                 >
                                     Email address
                                 </Label>
@@ -57,7 +64,7 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="name@example.com"
-                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authInputClass}
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -65,7 +72,7 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="password"
-                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    className={authFieldLabelClass}
                                 >
                                     Password
                                 </Label>
@@ -75,7 +82,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Min. 8 characters"
-                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authInputClass}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -83,7 +90,7 @@ export default function Register() {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="password_confirmation"
-                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    className={authFieldLabelClass}
                                 >
                                     Confirm password
                                 </Label>
@@ -93,7 +100,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Repeat password"
-                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authInputClass}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -102,7 +109,7 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 h-12 w-full rounded-lg bg-blue-950 font-black text-white shadow-lg shadow-blue-950/15 hover:bg-cyan-500 hover:text-blue-950"
+                                className={`mt-2 ${authPrimaryButtonClass}`}
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -111,12 +118,12 @@ export default function Register() {
                             </Button>
                         </div>
 
-                        <div className="rounded-lg bg-slate-50 px-4 py-3 text-center text-sm text-slate-600">
+                        <div className={authMutedPanelClass}>
                             Already have an account?{' '}
                             <TextLink
                                 href={login()}
                                 tabIndex={6}
-                                className="font-black text-blue-950 decoration-cyan-300 hover:text-cyan-600"
+                                className={authLinkClass}
                             >
                                 Log in
                             </TextLink>

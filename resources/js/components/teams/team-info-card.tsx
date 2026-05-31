@@ -7,8 +7,10 @@ interface Props {
 }
 
 export default function TeamInfoCard({ team }: Props) {
+    const foundedLabel = team.foundedAt ? String(team.foundedAt) : 'TBC';
+
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5">
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-lg font-black text-blue-950">Team info</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <TeamInfoItem
@@ -19,7 +21,7 @@ export default function TeamInfoCard({ team }: Props) {
                 <TeamInfoItem
                     icon={<CalendarDays />}
                     label="Founded"
-                    value={team.foundedAt ? String(team.foundedAt) : 'TBC'}
+                    value={foundedLabel}
                 />
                 <TeamInfoItem
                     icon={<MapPin />}

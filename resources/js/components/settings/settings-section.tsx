@@ -1,6 +1,8 @@
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import { settingsSectionClassName } from '@/utils/settings-ui';
+
 interface Props {
     icon: LucideIcon;
     eyebrow: string;
@@ -17,7 +19,7 @@ export default function SettingsSection({
     children,
 }: Props) {
     return (
-        <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className={settingsSectionClassName}>
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex gap-4">
                     <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-blue-950">

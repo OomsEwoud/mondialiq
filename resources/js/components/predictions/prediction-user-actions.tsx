@@ -13,6 +13,7 @@ interface Props {
 
 export default function PredictionUserActions({ match, viewLabel }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
+    const openPredictionModal = () => setPredictionOpen(true);
 
     return (
         <>
@@ -20,8 +21,8 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                 <Button
                     type="button"
                     variant="outline"
-                    className="justify-center border-slate-200 bg-white text-slate-700 hover:bg-slate-100 hover:text-blue-950"
-                    onClick={() => setPredictionOpen(true)}
+                    className="justify-center rounded-xl border-slate-200 bg-white text-slate-700 shadow-none hover:bg-slate-50 hover:text-slate-950 focus-visible:ring-cyan-300"
+                    onClick={openPredictionModal}
                 >
                     <PencilLine className="h-4 w-4" />
                     Edit prediction
@@ -29,7 +30,7 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
 
                 <Button
                     asChild
-                    className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
+                    className="justify-center rounded-xl bg-blue-950 text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300"
                 >
                     <Link href={showMyPrediction.url(match.id)}>
                         <Sparkles className="h-4 w-4" />

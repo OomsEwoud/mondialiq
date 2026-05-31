@@ -19,7 +19,8 @@ export default function TeamCodeLink({
     return (
         <Link
             href={showTeam.url(id)}
-            className="flex items-center gap-2 rounded-lg transition-colors hover:bg-blue-50"
+            aria-label={`View ${name} team details`}
+            className="flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
             {!reverse && (
                 <img
@@ -28,7 +29,7 @@ export default function TeamCodeLink({
                     className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
                 />
             )}
-            <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
+            <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-black text-slate-700">
                 {code}
             </span>
             {reverse && (

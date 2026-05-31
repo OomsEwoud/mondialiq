@@ -20,8 +20,10 @@ export function NavUser() {
     const { auth } = usePage().props;
     const { state } = useSidebar();
     const isMobile = useIsMobile();
+    const user = auth.user;
+    const menuSide = isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom';
 
-    if (!auth.user) {
+    if (!user) {
         return (
             <SidebarMenu>
                 <SidebarMenuItem>
@@ -45,22 +47,16 @@ export function NavUser() {
                             className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent"
                             data-test="sidebar-menu-button"
                         >
-                            <UserInfo user={auth.user} />
+                            <UserInfo user={user} />
                             <ChevronsUpDown className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                         className="w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-xl shadow-blue-950/10"
                         align="end"
-                        side={
-                            isMobile
-                                ? 'bottom'
-                                : state === 'collapsed'
-                                  ? 'left'
-                                  : 'bottom'
-                        }
+                        side={menuSide}
                     >
-                        <UserMenuContent user={auth.user} />
+                        <UserMenuContent user={user} />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

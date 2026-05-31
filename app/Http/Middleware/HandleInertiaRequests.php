@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,35 +36,42 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $user = $request->user();
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'auth' => [
-                'user' => $user
-                    ? [
-                        ...$user->only([
-                            'id',
-                            'name',
-                            'email',
-                            'email_verified_at',
-                            'social_provider',
-                            'avatar_type',
-                            'created_at',
-                            'updated_at',
-                        ]),
-                        'avatar' => $user->avatarUrl(),
-                        'has_password' => filled(
-                            $user->getAttribute('password'),
-                        ),
-                        'is_sso_only' => blank(
-                            $user->getAttribute('password'),
-                        ) && filled($user->getAttribute('social_provider')),
-                    ]
-                    : null,
-            ],
+            'auth' => ['user' => $this->sharedUser($request->user())],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function sharedUser(?User $user): ?array
+    {
+        if ($user === null) {
+            return null;
+        }
+
+        return [
+            ...$user->only([
+                'id',
+                'name',
+                'email',
+                'email_verified_at',
+                'social_provider',
+                'avatar_type',
+                'created_at',
+                'updated_at',
+            ]),
+            'avatar' => $user->avatarUrl(),
+            'has_password' => $this->hasPassword($user),
+            'is_sso_only' => ! $this->hasPassword($user) && filled($user->getAttribute('social_provider')),
+        ];
+    }
+
+    private function hasPassword(User $user): bool
+    {
+        return filled($user->getAttribute('password'));
     }
 }

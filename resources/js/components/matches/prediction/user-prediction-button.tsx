@@ -8,14 +8,18 @@ interface Props {
 }
 
 export default function UserPredictionButton({ match, onClick }: Props) {
+    const actionLabel = match.userPrediction
+        ? 'Edit Prediction'
+        : 'Make Prediction';
+
     return (
         <Button
             type="button"
             onClick={onClick}
-            className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
+            className="justify-center rounded-xl bg-blue-950 text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300"
         >
             <PencilLine className="h-4 w-4" />
-            {match.userPrediction ? 'Edit Prediction' : 'Make Prediction'}
+            {actionLabel}
         </Button>
     );
 }

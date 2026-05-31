@@ -5,8 +5,9 @@ export interface Filters {
     date: string;
     team: string;
     status: MatchStatusFilter;
-    [key: string]: string;
 }
+
+export type FilterKey = keyof Filters;
 
 export type MatchStatusFilter = 'all' | 'upcoming' | 'played';
 

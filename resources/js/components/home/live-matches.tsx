@@ -32,7 +32,7 @@ export default function LiveMatches({ matches }: Props) {
                                 {match.home}
                             </span>
                             <span className="text-lg font-bold text-slate-800">
-                                {match.homeScore} – {match.awayScore}
+                                {match.homeScore} - {match.awayScore}
                             </span>
                             <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-medium">
                                 {match.away}

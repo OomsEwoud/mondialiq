@@ -1,5 +1,5 @@
 import { CheckCircle2, ImagePlus } from 'lucide-react';
-import type { ChangeEvent, RefObject } from 'react';
+import type * as React from 'react';
 import InputError from '@/components/forms/input-error';
 import {
     Avatar,
@@ -10,11 +10,12 @@ import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { useInitials } from '@/hooks/use-initials';
 import type { User } from '@/types';
+import { settingsSubtlePanelClassName } from '@/utils/settings-ui';
 
 type ProfileAvatarFieldProps = {
-    avatarInputRef: RefObject<HTMLInputElement | null>;
+    avatarInputRef: React.RefObject<HTMLInputElement | null>;
     error?: string;
-    onAvatarChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onAvatarChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     previewUrl: string | null;
     selectedFileName: string;
     user: User;
@@ -31,9 +32,14 @@ export default function ProfileAvatarField({
     const getInitials = useInitials();
     const avatarSrc = previewUrl ?? user.avatar ?? undefined;
     const hasSelectedAvatar = Boolean(previewUrl);
+    const selectedImageLabel = hasSelectedAvatar
+        ? selectedFileName
+        : 'No image selected';
 
     return (
-        <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 lg:flex-row lg:items-start lg:justify-between">
+        <div
+            className={`${settingsSubtlePanelClassName} flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between`}
+        >
             <div className="flex items-center gap-4">
                 <Avatar className="size-20 border-2 border-white shadow-sm ring-1 ring-slate-200">
                     <AvatarImage
@@ -80,9 +86,7 @@ export default function ProfileAvatarField({
                                 Choose image
                             </span>
                             <span className="block truncate text-xs font-semibold text-slate-500">
-                                {hasSelectedAvatar
-                                    ? selectedFileName
-                                    : 'No image selected'}
+                                {selectedImageLabel}
                             </span>
                         </span>
                     </span>

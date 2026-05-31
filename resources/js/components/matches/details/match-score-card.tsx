@@ -25,7 +25,7 @@ export default function MatchScoreCard({ match }: Props) {
     });
 
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5">
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-lg font-black text-blue-950">
                 Score details
             </h2>

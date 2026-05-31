@@ -45,6 +45,7 @@ class HelperService
     {
         return $fixtures
             ->pluck('round_name')
+            ->filter(fn (mixed $roundName): bool => is_string($roundName) && $roundName !== '')
             ->unique()
             ->values()
             ->map(fn (string $roundName) => [
@@ -57,6 +58,7 @@ class HelperService
     private function dateOptions(Collection $fixtures): Collection
     {
         return $fixtures
+            ->filter(fn (Fixture $fixture): bool => $fixture->match_date !== null)
             ->map(fn (Fixture $fixture) => [
                 'label' => $fixture->match_date->format('d M'),
                 'value' => $fixture->match_date->format('Y-m-d'),
@@ -69,9 +71,10 @@ class HelperService
     {
         return $fixtures
             ->flatMap(fn (Fixture $fixture) => [
-                $fixture->homeTeam->name,
-                $fixture->awayTeam->name,
+                $fixture->homeTeam?->name,
+                $fixture->awayTeam?->name,
             ])
+            ->filter(fn (mixed $teamName): bool => is_string($teamName) && $teamName !== '')
             ->unique()
             ->sort()
             ->values();

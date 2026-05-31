@@ -12,7 +12,7 @@ export default function PredictionStatusAction({ matchId, label }: Props) {
     return (
         <Button
             asChild
-            className="w-fit bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
+            className="w-full justify-center rounded-xl bg-blue-950 text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-fit"
         >
             <Link href={showAiPrediction.url(matchId)}>
                 <Sparkles className="h-4 w-4" />

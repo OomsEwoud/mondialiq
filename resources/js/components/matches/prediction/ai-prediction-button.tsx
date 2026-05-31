@@ -11,19 +11,16 @@ interface Props {
 export default function AiPredictionButton({ available, matchId }: Props) {
     if (!available) {
         return (
-            <span
-                className="cursor-not-allowed"
+            <Button
+                disabled
+                variant="outline"
                 title="AI prediction is not available yet"
+                aria-label="AI prediction is not available yet"
+                className="w-full cursor-not-allowed justify-center rounded-xl border-slate-200 bg-slate-50 text-slate-400 opacity-100 shadow-none"
             >
-                <Button
-                    disabled
-                    variant="outline"
-                    className="w-full justify-center border-slate-200 bg-slate-50 text-slate-400"
-                >
-                    <Sparkles className="h-4 w-4" />
-                    AI Pending
-                </Button>
-            </span>
+                <Sparkles className="h-4 w-4" />
+                AI Pending
+            </Button>
         );
     }
 
@@ -31,7 +28,7 @@ export default function AiPredictionButton({ available, matchId }: Props) {
         <Button
             asChild
             variant="outline"
-            className="justify-center border-cyan-200 bg-cyan-50 text-cyan-700 hover:bg-cyan-100 hover:text-cyan-900"
+            className="justify-center rounded-xl border-cyan-200 bg-cyan-50 text-cyan-700 shadow-none hover:bg-cyan-100 hover:text-cyan-900 focus-visible:ring-cyan-300"
         >
             <Link href={showAiPrediction.url(matchId)}>
                 <Sparkles className="h-4 w-4" />

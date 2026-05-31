@@ -12,9 +12,11 @@ interface Props {
 }
 
 export default function MatchDetails({ match }: Props) {
+    const pageTitle = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
+
     return (
         <>
-            <Head title={`${match.homeTeam.name} vs ${match.awayTeam.name}`} />
+            <Head title={pageTitle} />
 
             <div className="mb-5">
                 <BackButton />

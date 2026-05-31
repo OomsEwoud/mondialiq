@@ -6,6 +6,10 @@ import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { update } from '@/routes/password';
+import {
+    authInputClass,
+    authPrimaryButtonClass,
+} from '@/utils/auth-form';
 
 type Props = {
     token: string;
@@ -13,6 +17,9 @@ type Props = {
 };
 
 export default function ResetPassword({ token, email }: Props) {
+    const readOnlyEmailInputClass = `${authInputClass} mt-1 block w-full`;
+    const passwordFieldClass = `${authInputClass} mt-1 block w-full`;
+
     return (
         <>
             <Head title="Reset password" />
@@ -32,7 +39,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 name="email"
                                 autoComplete="email"
                                 value={email}
-                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                className={readOnlyEmailInputClass}
                                 readOnly
                             />
                             <InputError
@@ -47,7 +54,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 id="password"
                                 name="password"
                                 autoComplete="new-password"
-                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                className={passwordFieldClass}
                                 autoFocus
                                 placeholder="Min. 8 characters"
                             />
@@ -62,7 +69,7 @@ export default function ResetPassword({ token, email }: Props) {
                                 id="password_confirmation"
                                 name="password_confirmation"
                                 autoComplete="new-password"
-                                className="auth-input mt-1 block h-11 w-full rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                className={passwordFieldClass}
                                 placeholder="Repeat new password"
                             />
                             <InputError
@@ -73,7 +80,7 @@ export default function ResetPassword({ token, email }: Props) {
 
                         <Button
                             type="submit"
-                            className="mt-4 w-full"
+                            className={`mt-4 ${authPrimaryButtonClass}`}
                             disabled={processing}
                             data-test="reset-password-button"
                         >

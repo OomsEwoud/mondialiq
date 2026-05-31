@@ -6,19 +6,21 @@ import { predictions } from '@/routes';
 import type { PredictionShowPageProps as Props } from '@/types/prediction';
 
 export default function PredictionShow({ match, mode, aiContext }: Props) {
+    const isAiMode = mode === 'ai';
     const fallbackHref = predictions.url({
         query: { mode },
     });
+    const pageTitle = `${match.homeTeam} vs ${match.awayTeam} Prediction`;
 
     return (
         <>
-            <Head title={`${match.homeTeam} vs ${match.awayTeam} Prediction`} />
+            <Head title={pageTitle} />
 
             <div className="mb-5">
                 <BackButton fallbackHref={fallbackHref} />
             </div>
 
-            {mode === 'ai' ? (
+            {isAiMode ? (
                 <AiPredictionReport match={match} aiContext={aiContext} />
             ) : (
                 <UserPredictionDetail match={match} />

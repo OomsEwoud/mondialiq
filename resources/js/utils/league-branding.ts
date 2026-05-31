@@ -112,10 +112,8 @@ const coverClasses: Record<LeagueCoverStyle, string> = {
         'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.95),_rgba(255,255,255,0.5)_26%,_transparent_60%),linear-gradient(135deg,_#082f49_0%,_#0f766e_45%,_#38bdf8_100%)]',
     spotlight:
         'bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(255,255,255,0.1)_34%,_transparent_64%),linear-gradient(135deg,_#1e293b_0%,_#312e81_48%,_#0f766e_100%)]',
-    pitch:
-        'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.85),_rgba(255,255,255,0.08)_28%,_transparent_60%),linear-gradient(135deg,_#14532d_0%,_#15803d_46%,_#65a30d_100%)]',
-    night:
-        'bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.75),_rgba(255,255,255,0.08)_24%,_transparent_58%),linear-gradient(135deg,_#0f172a_0%,_#1d4ed8_42%,_#0f766e_100%)]',
+    pitch: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.85),_rgba(255,255,255,0.08)_28%,_transparent_60%),linear-gradient(135deg,_#14532d_0%,_#15803d_46%,_#65a30d_100%)]',
+    night: 'bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.75),_rgba(255,255,255,0.08)_24%,_transparent_58%),linear-gradient(135deg,_#0f172a_0%,_#1d4ed8_42%,_#0f766e_100%)]',
 };
 
 export function getLeagueBrandPalette(accentColor: LeagueAccentColor) {

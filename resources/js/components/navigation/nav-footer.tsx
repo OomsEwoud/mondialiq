@@ -9,13 +9,18 @@ import {
 import { toUrl } from '@/lib/utils';
 import type { NavItem } from '@/types';
 
+type NavFooterProps = ComponentPropsWithoutRef<typeof SidebarGroup> & {
+    items: NavItem[];
+};
+
+const navFooterLinkClassName =
+    'text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100';
+
 export function NavFooter({
     items,
     className,
     ...props
-}: ComponentPropsWithoutRef<typeof SidebarGroup> & {
-    items: NavItem[];
-}) {
+}: NavFooterProps) {
     return (
         <SidebarGroup
             {...props}
@@ -27,7 +32,7 @@ export function NavFooter({
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton
                                 asChild
-                                className="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
+                                className={navFooterLinkClassName}
                             >
                                 <a
                                     href={toUrl(item.href)}

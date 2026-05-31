@@ -11,8 +11,9 @@ export default function MatchDetailsToggle({ expanded, onToggle }: Props) {
             <button
                 type="button"
                 onClick={onToggle}
-                className="inline-flex min-h-9 items-center gap-1 rounded-md border border-blue-100 bg-blue-50 px-3 py-1.5 text-sm font-black text-blue-700 transition-colors hover:bg-cyan-100 hover:text-blue-950 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+                className="inline-flex min-h-9 items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-black text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none data-[expanded=true]:border-cyan-200 data-[expanded=true]:bg-cyan-50 data-[expanded=true]:text-cyan-700"
                 aria-expanded={expanded}
+                data-expanded={expanded}
             >
                 Match details
                 <ChevronDown

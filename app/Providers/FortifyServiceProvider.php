@@ -15,13 +15,8 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    private const LOGIN_RATE_LIMIT_PER_MINUTE = 5;
+    private const TWO_FACTOR_RATE_LIMIT_PER_MINUTE = 5;
 
     /**
      * Bootstrap any application services.
@@ -71,14 +66,26 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
 
         Fortify::confirmPasswordView(function (Request $request) {
-            $intended = $request->query('intended');
-
-            if (is_string($intended) && str_starts_with($intended, '/') && ! str_starts_with($intended, '//')) {
-                $request->session()->put('url.intended', $intended);
-            }
+            $this->storeIntendedUrl($request);
 
             return Inertia::render('auth/confirm-password');
         });
+    }
+
+    private function storeIntendedUrl(Request $request): void
+    {
+        $intended = $request->query('intended');
+
+        if ($this->isSafeIntendedPath($intended)) {
+            $request->session()->put('url.intended', $intended);
+        }
+    }
+
+    private function isSafeIntendedPath(mixed $intended): bool
+    {
+        return is_string($intended)
+            && str_starts_with($intended, '/')
+            && ! str_starts_with($intended, '//');
     }
 
     /**
@@ -87,13 +94,25 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureRateLimiting(): void
     {
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+            return Limit::perMinute(self::TWO_FACTOR_RATE_LIMIT_PER_MINUTE)
+                ->by($this->twoFactorRateLimitKey($request));
         });
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
-
-            return Limit::perMinute(5)->by($throttleKey);
+            return Limit::perMinute(self::LOGIN_RATE_LIMIT_PER_MINUTE)
+                ->by($this->loginRateLimitKey($request));
         });
+    }
+
+    private function twoFactorRateLimitKey(Request $request): string
+    {
+        return (string) ($request->session()->get('login.id') ?: $request->ip());
+    }
+
+    private function loginRateLimitKey(Request $request): string
+    {
+        return Str::transliterate(
+            Str::lower((string) $request->input(Fortify::username())).'|'.$request->ip(),
+        );
     }
 }

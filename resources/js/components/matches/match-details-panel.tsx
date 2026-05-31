@@ -9,8 +9,8 @@ interface Props {
 
 export default function MatchDetailsPanel({ match }: Props) {
     return (
-        <div className="mt-4 rounded-lg border border-slate-100 bg-slate-50 p-4">
-            <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50/70 p-3 sm:p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
                 <div>
                     <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
                         Match details
@@ -21,7 +21,7 @@ export default function MatchDetailsPanel({ match }: Props) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                 <MatchDetailTeam
                     id={match.homeTeamId}
                     label="Home team"
@@ -29,7 +29,7 @@ export default function MatchDetailsPanel({ match }: Props) {
                     name={match.homeTeam}
                 />
 
-                <span className="text-center text-xs font-black text-slate-300">
+                <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-center text-xs font-black text-slate-500">
                     VS
                 </span>
 

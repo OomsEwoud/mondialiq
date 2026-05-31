@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import HeroSection from '@/components/home/hero-section';
 import LiveMatches from '@/components/home/live-matches';
 import PlatformOverview from '@/components/home/platform-overview';
@@ -17,11 +18,17 @@ const mockLive = [
 export default function Home({ upcomingFixtures }: Props) {
     return (
         <>
-            <HeroSection />
-            <PlatformOverview />
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <UpcomingMatches matches={upcomingFixtures} />
-                <LiveMatches matches={mockLive} />
+            <Head title="Home" />
+
+            <div className="relative left-1/2 w-screen -translate-x-1/2">
+                <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:gap-10 lg:px-8 lg:py-10">
+                    <HeroSection />
+                    <PlatformOverview />
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <UpcomingMatches matches={upcomingFixtures} />
+                        <LiveMatches matches={mockLive} />
+                    </div>
+                </div>
             </div>
         </>
     );

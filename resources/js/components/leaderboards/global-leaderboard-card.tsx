@@ -1,5 +1,9 @@
 import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import {
     Card,
@@ -52,7 +56,7 @@ export default function GlobalLeaderboardCard({
                                     className={cn(
                                         'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 transition-colors sm:px-6',
                                         isCurrentUser &&
-                                            'bg-cyan-50/70 ring-1 ring-inset ring-cyan-100',
+                                            'bg-cyan-50/70 ring-1 ring-cyan-100 ring-inset',
                                         isTopThree &&
                                             !isCurrentUser &&
                                             'bg-linear-to-r from-slate-50 to-white',

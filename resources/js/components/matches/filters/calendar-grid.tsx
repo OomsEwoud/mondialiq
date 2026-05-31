@@ -26,17 +26,17 @@ export default function CalendarGrid({
     onClose,
 }: Props) {
     return (
-        <div className="absolute top-full left-0 z-20 mt-2 w-[19rem] rounded-lg border border-slate-200 bg-white p-3 shadow-lg">
+        <div className="absolute top-full left-0 z-20 mt-2 w-[19rem] rounded-xl border border-slate-200 bg-white p-3 shadow-lg shadow-blue-950/10">
             <div className="mb-3 flex items-center justify-between">
                 <button
                     type="button"
                     onClick={onPrev}
-                    className="inline-flex size-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-700"
+                    className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                     aria-label="Previous month"
                 >
                     <ChevronLeft size={16} />
                 </button>
-                <span className="text-sm font-bold text-blue-950">
+                <span className="text-sm font-bold text-slate-950">
                     {new Intl.DateTimeFormat('en-GB', {
                         month: 'long',
                         year: 'numeric',
@@ -45,7 +45,7 @@ export default function CalendarGrid({
                 <button
                     type="button"
                     onClick={onNext}
-                    className="inline-flex size-9 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition-colors hover:border-blue-200 hover:text-blue-700"
+                    className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                     aria-label="Next month"
                 >
                     <ChevronRight size={16} />
@@ -80,11 +80,11 @@ export default function CalendarGrid({
                             disabled={!isAvailable}
                             onClick={() => onSelect(date)}
                             className={[
-                                'aspect-square rounded-md text-sm font-medium transition-colors',
+                                'aspect-square rounded-lg text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none',
                                 isActive
-                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    ? 'bg-cyan-600 text-white shadow-sm'
                                     : isAvailable
-                                      ? 'text-slate-800 hover:bg-blue-50 hover:text-blue-700'
+                                      ? 'text-slate-800 hover:bg-slate-50 hover:text-slate-950'
                                       : 'cursor-not-allowed text-slate-300',
                             ].join(' ')}
                         >
@@ -98,14 +98,14 @@ export default function CalendarGrid({
                 <button
                     type="button"
                     onClick={onClear}
-                    className="text-sm font-medium text-slate-600 transition-colors hover:text-blue-700"
+                    className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                 >
                     Clear date
                 </button>
                 <button
                     type="button"
                     onClick={onClose}
-                    className="text-sm font-medium text-blue-700 transition-colors hover:text-blue-900"
+                    className="text-sm font-medium text-cyan-700 transition-colors hover:text-cyan-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                 >
                     Close
                 </button>

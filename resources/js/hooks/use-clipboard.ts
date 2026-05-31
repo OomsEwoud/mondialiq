@@ -20,6 +20,7 @@ export function useClipboard(): UseClipboardReturn {
         try {
             await navigator.clipboard.writeText(text);
             setCopiedText(text);
+
             if (resetTimeoutRef.current) {
                 window.clearTimeout(resetTimeoutRef.current);
             }

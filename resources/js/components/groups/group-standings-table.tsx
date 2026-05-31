@@ -1,5 +1,7 @@
-import TeamCodeBadge from '@/components/groups/team-code-badge';
+import PointsBadge from '@/components/groups/points-badge';
+import TeamStandingLink from '@/components/groups/team-standing-link';
 import { stats } from '@/const/standing';
+import { cn } from '@/lib/utils';
 import type { GroupTeam } from '@/types/group';
 import { formatGoalDifference } from '@/utils/standings';
 
@@ -14,31 +16,36 @@ export default function GroupStandingsTable({ teams }: Props) {
                 {teams.map((team) => (
                     <article
                         key={team.id}
-                        className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+                        className={cn(
+                            'rounded-2xl border bg-white p-3 shadow-sm',
+                            team.rank <= 2
+                                ? 'border-cyan-200 bg-cyan-50/30'
+                                : 'border-slate-200',
+                        )}
                     >
-                        <div className="mb-4 flex items-center justify-between gap-3">
-                            <div className="flex min-w-0 items-center gap-3">
-                                <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-slate-100 font-bold text-slate-700">
+                        <div className="mb-3 flex items-center justify-between gap-3">
+                            <div className="flex min-w-0 items-center gap-2">
+                                <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-black text-slate-700">
                                     {team.rank}
                                 </span>
                                 <div className="min-w-0">
-                                    <div className="mb-1">
-                                        <TeamCodeBadge
-                                            code={team.code}
-                                            logo={team.logo}
-                                        />
-                                    </div>
-                                    <p className="truncate font-black text-blue-950">
-                                        {team.name}
-                                    </p>
+                                    <TeamStandingLink
+                                        id={team.id}
+                                        code={team.code}
+                                        logo={team.logo}
+                                        name={team.name}
+                                    />
+                                    {team.rank <= 2 && (
+                                        <span className="mt-1 ml-1.5 inline-flex rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-[10px] font-black text-cyan-700">
+                                            Advances
+                                        </span>
+                                    )}
                                 </div>
                             </div>
-                            <span className="inline-flex min-w-11 items-center justify-center rounded-full bg-emerald-500 px-3 py-1 font-black text-white">
-                                {team.points}
-                            </span>
+                            <PointsBadge points={team.points} />
                         </div>
 
-                        <div className="grid grid-cols-6 overflow-hidden rounded-md border border-slate-100 text-center text-sm">
+                        <div className="grid grid-cols-6 overflow-hidden rounded-xl border border-slate-200 bg-white text-center text-sm">
                             {[
                                 ...stats.map((stat) => [
                                     stat.label,
@@ -57,7 +64,7 @@ export default function GroupStandingsTable({ teams }: Props) {
                                     <p className="text-[10px] font-bold text-slate-400">
                                         {label}
                                     </p>
-                                    <p className="font-black text-blue-950">
+                                    <p className="font-black text-slate-900">
                                         {value}
                                     </p>
                                 </div>
@@ -67,9 +74,9 @@ export default function GroupStandingsTable({ teams }: Props) {
                 ))}
             </div>
 
-            <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm md:block">
+            <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:block">
                 <table className="w-full min-w-[720px] border-collapse text-sm">
-                    <thead className="bg-blue-50 text-xs text-slate-600 uppercase">
+                    <thead className="bg-slate-50 text-xs text-slate-600 uppercase">
                         <tr>
                             <th className="w-16 px-4 py-4 text-left">#</th>
                             <th className="px-4 py-4 text-left">Team</th>
@@ -89,7 +96,11 @@ export default function GroupStandingsTable({ teams }: Props) {
                         {teams.map((team) => (
                             <tr
                                 key={team.id}
-                                className="border-t border-slate-100 text-blue-950"
+                                className={cn(
+                                    'border-t border-slate-100 text-slate-900 transition-colors hover:bg-slate-50',
+                                    team.rank <= 2 &&
+                                        'border-l-4 border-l-cyan-300 bg-cyan-50/30',
+                                )}
                             >
                                 <td className="px-4 py-4">
                                     <span className="inline-flex size-8 items-center justify-center rounded-full bg-slate-100 font-bold text-slate-700">
@@ -97,15 +108,12 @@ export default function GroupStandingsTable({ teams }: Props) {
                                     </span>
                                 </td>
                                 <td className="px-4 py-4">
-                                    <div className="flex items-center gap-4">
-                                        <TeamCodeBadge
-                                            code={team.code}
-                                            logo={team.logo}
-                                        />
-                                        <span className="font-black">
-                                            {team.name}
-                                        </span>
-                                    </div>
+                                    <TeamStandingLink
+                                        id={team.id}
+                                        code={team.code}
+                                        logo={team.logo}
+                                        name={team.name}
+                                    />
                                 </td>
                                 {stats.map((stat) => (
                                     <td
@@ -119,9 +127,7 @@ export default function GroupStandingsTable({ teams }: Props) {
                                     {formatGoalDifference(team.goalDifference)}
                                 </td>
                                 <td className="px-4 py-4 text-center">
-                                    <span className="inline-flex min-w-10 items-center justify-center rounded-full bg-emerald-500 px-3 py-1 font-black text-white">
-                                        {team.points}
-                                    </span>
+                                    <PointsBadge points={team.points} />
                                 </td>
                             </tr>
                         ))}

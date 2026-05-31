@@ -34,29 +34,46 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
             ? window.location.origin
             : 'http://localhost',
     ).pathname;
+    const normalizePath = (path: string): string =>
+        path === '/' ? path : path.replace(/\/+$/, '');
+
+    const normalizeUrlPath = (
+        urlToCheck: NonNullable<InertiaLinkProps['href']>,
+    ): string | null => {
+        const urlString = toUrl(urlToCheck);
+
+        if (!urlString.startsWith('http')) {
+            return normalizePath(urlString.split(/[?#]/)[0] ?? '/');
+        }
+
+        try {
+            return normalizePath(new URL(urlString).pathname);
+        } catch {
+            return null;
+        }
+    };
 
     const isCurrentUrl: IsCurrentUrlFn = (
         urlToCheck: NonNullable<InertiaLinkProps['href']>,
         currentUrl?: string,
         startsWith: boolean = false,
     ) => {
-        const urlToCompare = currentUrl ?? currentUrlPath;
-        const urlString = toUrl(urlToCheck);
+        const urlToCompare = normalizePath(currentUrl ?? currentUrlPath);
+        const normalizedPath = normalizeUrlPath(urlToCheck);
 
         const comparePath = (path: string): boolean =>
-            startsWith ? urlToCompare.startsWith(path) : path === urlToCompare;
+            startsWith
+                ? path === '/'
+                    ? urlToCompare === path
+                    : urlToCompare === path ||
+                      urlToCompare.startsWith(`${path}/`)
+                : path === urlToCompare;
 
-        if (!urlString.startsWith('http')) {
-            return comparePath(urlString);
-        }
-
-        try {
-            const absoluteUrl = new URL(urlString);
-
-            return comparePath(absoluteUrl.pathname);
-        } catch {
+        if (!normalizedPath) {
             return false;
         }
+
+        return comparePath(normalizedPath);
     };
 
     const isCurrentOrParentUrl: IsCurrentOrParentUrlFn = (

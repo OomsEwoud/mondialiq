@@ -1,26 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
-import {
-    Activity,
-    ArrowLeft,
-    Crown,
-    Settings2,
-    Target,
-    Users,
-    type LucideIcon,
-} from 'lucide-react';
+import { ArrowLeft, Crown, Settings2, Users } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
+import LeagueSnapshotCard from '@/components/leaderboards/league-snapshot-card';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/layout/card';
 import { cn } from '@/lib/utils';
 import { leaderboards } from '@/routes';
 import type { LeagueDetailsPageProps } from '@/types/league';
@@ -32,6 +18,8 @@ import {
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
     const host = league.members.find((member) => member.isOwner);
     const palette = getLeagueBrandPalette(league.accentColor);
+    const memberLabel = league.membersCount === 1 ? 'member' : 'members';
+    const hostName = host?.name;
 
     return (
         <>
@@ -72,17 +60,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     className="rounded-full border-white/20 bg-white/14 px-2.5 py-1 font-semibold text-white"
                                 >
                                     <Users className="size-3.5" />
-                                    {league.membersCount}{' '}
-                                    {league.membersCount === 1
-                                        ? 'member'
-                                        : 'members'}
+                                    {league.membersCount} {memberLabel}
                                 </Badge>
                                 {league.currentUserRank && (
                                     <Badge className="rounded-full bg-white px-2.5 py-1 font-black text-blue-950">
                                         Your rank #{league.currentUserRank}
                                     </Badge>
                                 )}
-                                {host && (
+                                {hostName && (
                                     <Badge
                                         variant="outline"
                                         className={cn(
@@ -91,7 +76,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                         )}
                                     >
                                         <Crown className="size-3.5" />
-                                        Host: {host.name}
+                                        Host: {hostName}
                                     </Badge>
                                 )}
                             </div>
@@ -128,42 +113,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                     <LeagueMembersCard members={league.members} />
 
                     <div className="space-y-6">
-                        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
-                            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                                <CardTitle className="text-2xl font-black text-blue-950">
-                                    League Snapshot
-                                </CardTitle>
-                                <CardDescription className="text-sm leading-6 text-slate-500">
-                                    Quick overview of the current race.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="grid gap-3 px-4 pb-5 sm:px-6">
-                                <SnapshotMetric
-                                    icon={Crown}
-                                    label="Current leader"
-                                    value={league.currentLeader ?? 'TBD'}
-                                    helper={`${league.leaderPoints} pts`}
-                                />
-                                <SnapshotMetric
-                                    icon={Users}
-                                    label="Members"
-                                    value={`${league.membersCount}`}
-                                />
-                                <SnapshotMetric
-                                    icon={Target}
-                                    label="Total predictions"
-                                    value={`${league.totalPredictions}`}
-                                />
-                                <SnapshotMetric
-                                    icon={Activity}
-                                    label="Last activity"
-                                    value={
-                                        league.lastActivityLabel ??
-                                        'No predictions yet'
-                                    }
-                                />
-                            </CardContent>
-                        </Card>
+                        <LeagueSnapshotCard league={league} />
 
                         <InviteCodeCard
                             leagueName={league.name}
@@ -182,36 +132,5 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                 </div>
             </div>
         </>
-    );
-}
-
-type SnapshotMetricProps = {
-    icon: LucideIcon;
-    label: string;
-    value: string;
-    helper?: string;
-};
-
-function SnapshotMetric({
-    icon: Icon,
-    label,
-    value,
-    helper,
-}: SnapshotMetricProps) {
-    return (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-            <div className="flex items-center gap-2 text-slate-500">
-                <Icon className="size-4 text-cyan-600" />
-                <p className="text-xs font-black tracking-[0.16em] uppercase">
-                    {label}
-                </p>
-            </div>
-            <p className="mt-2 text-base font-black text-blue-950">{value}</p>
-            {helper && (
-                <p className="mt-1 text-xs font-semibold text-slate-500">
-                    {helper}
-                </p>
-            )}
-        </div>
     );
 }

@@ -96,8 +96,8 @@ export default function FriendsLeaguesSection({
                             You reached the league limit.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-amber-800">
-                            Leave one of your current leagues before creating
-                            or joining another.
+                            Leave one of your current leagues before creating or
+                            joining another.
                         </p>
                     </div>
                 )}
@@ -106,7 +106,10 @@ export default function FriendsLeaguesSection({
                 {leagues.length > 0 ? (
                     <div className="grid gap-4 lg:grid-cols-2">
                         {leagues.map((league) => (
-                            <FriendsLeagueCard key={league.id} league={league} />
+                            <FriendsLeagueCard
+                                key={league.id}
+                                league={league}
+                            />
                         ))}
                     </div>
                 ) : (

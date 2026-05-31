@@ -12,6 +12,8 @@ type Props = {
     className?: string;
 };
 
+const emptyStateButtonClassName = 'h-10 rounded-lg px-4 font-black';
+
 export default function LeaderboardEmptyState({
     title,
     description,
@@ -37,7 +39,10 @@ export default function LeaderboardEmptyState({
             {actionLabel && (
                 <div className="mt-5 flex justify-center">
                     {actionHref && !actionDisabled ? (
-                        <Button asChild className="h-10 rounded-lg px-4 font-black">
+                        <Button
+                            asChild
+                            className={emptyStateButtonClassName}
+                        >
                             <Link href={actionHref}>
                                 <Plus className="size-4" />
                                 {actionLabel}
@@ -47,7 +52,7 @@ export default function LeaderboardEmptyState({
                         <Button
                             type="button"
                             disabled
-                            className="h-10 rounded-lg px-4 font-black"
+                            className={emptyStateButtonClassName}
                         >
                             <Plus className="size-4" />
                             {actionLabel}

@@ -63,7 +63,7 @@ class MatchesController extends Controller
 
         if ($user) {
             $fixturesQuery->with([
-                'userPredictions' => fn (Builder $query) => $query
+                'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
                     ->with('winner'),
             ]);

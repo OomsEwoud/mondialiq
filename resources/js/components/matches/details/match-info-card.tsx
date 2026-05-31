@@ -15,9 +15,13 @@ interface Props {
 
 export default function MatchInfoCard({ match }: Props) {
     const venue = match.venue;
+    const venueLabel = venue
+        ? [venue.name, venue.city].filter(Boolean).join(', ')
+        : 'TBC';
+    const seasonLabel = String(match.season);
 
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5">
+        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-lg font-black text-blue-950">
                 Match info
             </h2>
@@ -35,7 +39,7 @@ export default function MatchInfoCard({ match }: Props) {
                 <MatchInfoItem
                     icon={<Trophy />}
                     label="Season"
-                    value={String(match.season)}
+                    value={seasonLabel}
                 />
                 <MatchInfoItem
                     icon={<Shield />}
@@ -45,13 +49,7 @@ export default function MatchInfoCard({ match }: Props) {
                 <MatchInfoItem
                     icon={<MapPin />}
                     label="Venue"
-                    value={
-                        venue
-                            ? [venue.name, venue.city]
-                                  .filter(Boolean)
-                                  .join(', ')
-                            : 'TBC'
-                    }
+                    value={venueLabel}
                 />
                 <MatchInfoItem
                     icon={<UserRound />}

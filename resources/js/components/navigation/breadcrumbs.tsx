@@ -10,14 +10,16 @@ import {
 } from '@/components/ui/navigation/breadcrumb';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
 
-export function Breadcrumbs({
-    breadcrumbs,
-}: {
+type BreadcrumbsProps = {
     breadcrumbs: BreadcrumbItemType[];
-}) {
+};
+
+export function Breadcrumbs({ breadcrumbs }: BreadcrumbsProps) {
+    const hasBreadcrumbs = breadcrumbs.length > 0;
+
     return (
         <>
-            {breadcrumbs.length > 0 && (
+            {hasBreadcrumbs && (
                 <Breadcrumb>
                     <BreadcrumbList>
                         {breadcrumbs.map((item, index) => {

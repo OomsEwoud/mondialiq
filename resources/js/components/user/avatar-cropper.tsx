@@ -37,6 +37,12 @@ export default function AvatarCropper({
         null,
     );
 
+    const resetCropperState = () => {
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setCroppedAreaPixels(null);
+    };
+
     const handleCropComplete = useCallback(
         (_croppedArea: Area, nextCroppedAreaPixels: Area) => {
             setCroppedAreaPixels(nextCroppedAreaPixels);
@@ -62,9 +68,7 @@ export default function AvatarCropper({
         onOpenChange(nextOpen);
 
         if (!nextOpen) {
-            setCrop({ x: 0, y: 0 });
-            setZoom(1);
-            setCroppedAreaPixels(null);
+            resetCropperState();
         }
     }
 

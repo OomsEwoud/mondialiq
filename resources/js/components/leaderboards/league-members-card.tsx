@@ -1,5 +1,9 @@
 import { Crown } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/display/avatar';
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
 import {
     Card,
@@ -52,7 +56,7 @@ export default function LeagueMembersCard({ members }: Props) {
                             className={cn(
                                 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 px-4 py-4 sm:px-6',
                                 member.isCurrentUser &&
-                                    'bg-cyan-50/70 ring-1 ring-inset ring-cyan-100',
+                                    'bg-cyan-50/70 ring-1 ring-cyan-100 ring-inset',
                             )}
                         >
                             <div
@@ -96,7 +100,9 @@ export default function LeagueMembersCard({ members }: Props) {
                                         <Badge
                                             className={cn(
                                                 'rounded-full px-2 py-0.5 text-[11px] font-black',
-                                                formToneStyles[member.form.tone],
+                                                formToneStyles[
+                                                    member.form.tone
+                                                ],
                                             )}
                                         >
                                             {member.form.label}

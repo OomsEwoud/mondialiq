@@ -14,6 +14,8 @@ import {
 
 export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
     const palette = getLeagueBrandPalette(league.accentColor);
+    const backHref = league.showHref ?? leaderboards.url();
+    const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
         <>
@@ -31,7 +33,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                 >
                     <div className="flex flex-wrap items-center gap-3">
                         <Link
-                            href={league.showHref ?? leaderboards.url()}
+                            href={backHref}
                             className="inline-flex items-center gap-2 text-sm font-black text-white/78 transition-colors hover:text-white"
                         >
                             <ArrowLeft className="size-4" />
@@ -69,10 +71,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                                 className="rounded-full border-white/20 bg-white/14 px-2.5 py-1 font-semibold text-white"
                             >
                                 <Users className="size-3.5" />
-                                {league.membersCount}{' '}
-                                {league.membersCount === 1
-                                    ? 'member'
-                                    : 'members'}
+                                {league.membersCount} {memberLabel}
                             </Badge>
                         </div>
                     </div>

@@ -16,6 +16,11 @@ import {
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
 import type { User } from '@/types';
+import {
+    settingsDangerSectionClassName,
+    settingsFieldClassName,
+    settingsLabelClassName,
+} from '@/utils/settings-ui';
 import { formatProviderName } from '@/utils/social-provider';
 
 type Props = {
@@ -26,9 +31,12 @@ export default function DeleteUser({ user }: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const requiresPassword = user?.has_password ?? true;
     const providerName = formatProviderName(user?.social_provider);
+    const providerAccountLabel = providerName
+        ? `${providerName} account.`
+        : 'login account.';
 
     return (
-        <section className="rounded-xl border border-red-200 bg-white p-5 shadow-sm">
+        <section className={settingsDangerSectionClassName}>
             <div className="mb-5 flex gap-4">
                 <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-700">
                     <AlertTriangle className="size-5" />
@@ -88,7 +96,7 @@ export default function DeleteUser({ user }: Props) {
                                         <div className="grid gap-2">
                                             <Label
                                                 htmlFor="password"
-                                                className="sr-only"
+                                                className={`sr-only ${settingsLabelClassName}`}
                                             >
                                                 Password
                                             </Label>
@@ -97,7 +105,7 @@ export default function DeleteUser({ user }: Props) {
                                                 id="password"
                                                 name="password"
                                                 ref={passwordInput}
-                                                className="h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                                className={settingsFieldClassName}
                                                 placeholder="Password"
                                                 autoComplete="current-password"
                                             />
@@ -110,9 +118,7 @@ export default function DeleteUser({ user }: Props) {
                                         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
                                             This only deletes your MondialIQ
                                             account. It will not delete your
-                                            {providerName
-                                                ? ` ${providerName} account.`
-                                                : ' login account.'}
+                                            {` ${providerAccountLabel}`}
                                         </div>
                                     )}
 

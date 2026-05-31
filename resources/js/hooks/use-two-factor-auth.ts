@@ -19,6 +19,8 @@ export type UseTwoFactorAuthReturn = {
 };
 
 export const OTP_MAX_LENGTH = 6;
+export const PASSWORD_CONFIRMATION_REQUIRED_ERROR =
+    'Confirm your password before viewing recovery codes.';
 
 export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
     const { submit } = useHttp();
@@ -29,23 +31,28 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
     const [errors, setErrors] = useState<string[]>([]);
 
     const hasSetupData = qrCodeSvg !== null && manualSetupKey !== null;
+    const clearSetupState = useCallback((): void => {
+        setManualSetupKey(null);
+        setQrCodeSvg(null);
+    }, []);
+    const setGenericError = useCallback((message: string): void => {
+        setErrors([message]);
+    }, []);
 
     const clearErrors = useCallback((): void => {
         setErrors([]);
     }, []);
 
     const clearSetupData = useCallback((): void => {
-        setManualSetupKey(null);
-        setQrCodeSvg(null);
+        clearSetupState();
         setErrors([]);
-    }, []);
+    }, [clearSetupState]);
 
     const clearTwoFactorAuthData = useCallback((): void => {
-        setManualSetupKey(null);
-        setQrCodeSvg(null);
+        clearSetupState();
         setErrors([]);
         setRecoveryCodesList([]);
-    }, []);
+    }, [clearSetupState]);
 
     const fetchQrCode = useCallback(async (): Promise<void> => {
         try {
@@ -56,10 +63,10 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
 
             setQrCodeSvg(svg);
         } catch {
-            setErrors((prev) => [...prev, 'Failed to fetch QR code']);
+            setGenericError('Failed to fetch QR code');
             setQrCodeSvg(null);
         }
-    }, [submit]);
+    }, [setGenericError, submit]);
 
     const fetchSetupKey = useCallback(async (): Promise<void> => {
         try {
@@ -69,10 +76,10 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
 
             setManualSetupKey(key);
         } catch {
-            setErrors((prev) => [...prev, 'Failed to fetch a setup key']);
+            setGenericError('Failed to fetch a setup key');
             setManualSetupKey(null);
         }
-    }, [submit]);
+    }, [setGenericError, submit]);
 
     const fetchRecoveryCodes = useCallback(async (): Promise<void> => {
         try {
@@ -84,27 +91,24 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
                 error instanceof HttpResponseError &&
                 error.response.status === 423
             ) {
-                setErrors([
-                    'Confirm your password before viewing recovery codes.',
-                ]);
+                setErrors([PASSWORD_CONFIRMATION_REQUIRED_ERROR]);
 
                 return;
             }
 
-            setErrors((prev) => [...prev, 'Failed to fetch recovery codes']);
+            setGenericError('Failed to fetch recovery codes');
             setRecoveryCodesList([]);
         }
-    }, [submit]);
+    }, [setGenericError, submit]);
 
     const fetchSetupData = useCallback(async (): Promise<void> => {
         try {
             setErrors([]);
             await Promise.all([fetchQrCode(), fetchSetupKey()]);
         } catch {
-            setQrCodeSvg(null);
-            setManualSetupKey(null);
+            clearSetupState();
         }
-    }, [fetchQrCode, fetchSetupKey]);
+    }, [clearSetupState, fetchQrCode, fetchSetupKey]);
 
     return {
         qrCodeSvg,

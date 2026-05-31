@@ -7,7 +7,7 @@ interface Props {
 
 export default function PredictionMatchSummary({ match }: Props) {
     return (
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
             <div className="flex min-w-0 items-center gap-3">
                 <TeamCodeLink
                     id={match.homeTeamId}
@@ -15,7 +15,9 @@ export default function PredictionMatchSummary({ match }: Props) {
                     logo={match.homeTeamLogo}
                     name={match.homeTeam}
                 />
-                <span className="text-xs font-black text-slate-300">VS</span>
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-black text-slate-500">
+                    VS
+                </span>
                 <TeamCodeLink
                     id={match.awayTeamId}
                     code={match.awayTeamShort}
@@ -26,7 +28,9 @@ export default function PredictionMatchSummary({ match }: Props) {
             </div>
 
             <div className="text-left">
-                <p className="text-xs text-slate-400">{match.round}</p>
+                <p className="text-xs font-bold text-slate-400">
+                    {match.round}
+                </p>
                 <p className="text-sm font-medium text-slate-600">
                     {match.date} &middot; {match.time}
                 </p>

@@ -11,9 +11,10 @@ interface Props {
 }
 
 export default function Groups({ groups }: Props) {
-    const [activeGroupId, setActiveGroupId] = useState(groups[0]?.id ?? '');
+    const firstGroup = groups[0] ?? null;
+    const [activeGroupId, setActiveGroupId] = useState(firstGroup?.id ?? '');
     const activeGroup =
-        groups.find((group) => group.id === activeGroupId) ?? groups[0];
+        groups.find((group) => group.id === activeGroupId) ?? firstGroup;
 
     return (
         <>
@@ -22,7 +23,7 @@ export default function Groups({ groups }: Props) {
             <GroupPageHeader />
 
             {activeGroup ? (
-                <div>
+                <div className="mx-auto flex max-w-7xl flex-col gap-5 sm:gap-6">
                     <GroupTabs
                         groups={groups}
                         activeGroupId={activeGroup.id}

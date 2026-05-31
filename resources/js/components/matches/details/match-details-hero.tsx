@@ -8,9 +8,10 @@ interface Props {
 export default function MatchDetailsHero({ match }: Props) {
     const score = match.score.fulltime;
     const hasScore = score.home !== null && score.away !== null;
+    const scoreLabel = hasScore ? `${score.home} - ${score.away}` : 'vs';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <p className="mb-5 text-center text-xs font-black tracking-widest text-cyan-500 uppercase">
                 {match.round}
             </p>
@@ -24,7 +25,7 @@ export default function MatchDetailsHero({ match }: Props) {
                 />
                 <div className="text-center">
                     <p className="text-3xl font-black text-blue-950">
-                        {hasScore ? `${score.home} - ${score.away}` : 'vs'}
+                        {scoreLabel}
                     </p>
                     <p className="mt-1 text-xs font-medium text-slate-400">
                         {match.status}

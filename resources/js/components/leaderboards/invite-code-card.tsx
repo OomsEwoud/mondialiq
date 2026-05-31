@@ -61,7 +61,10 @@ export default function InviteCodeCard({
     };
 
     const shareInvite = async () => {
-        if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+        if (
+            typeof navigator !== 'undefined' &&
+            typeof navigator.share === 'function'
+        ) {
             try {
                 await navigator.share({
                     title: `${leagueName} on MondialIQ`,
@@ -71,7 +74,7 @@ export default function InviteCodeCard({
 
                 return;
             } catch {
-                // Fall back to copying the share text below when native share is dismissed or unavailable.
+                toast.error('Could not share this invite on your device.');
             }
         }
 
@@ -79,7 +82,7 @@ export default function InviteCodeCard({
 
         if (!success) {
             toast.error('Could not share this invite on your device.');
-            
+
             return;
         }
 
@@ -113,7 +116,8 @@ export default function InviteCodeCard({
                             This league is just getting started.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-slate-600">
-                            Share the direct join link or send the invite code so your group can start competing faster.
+                            Share the direct join link or send the invite code
+                            so your group can start competing faster.
                         </p>
                     </div>
                 )}
@@ -129,7 +133,8 @@ export default function InviteCodeCard({
                         {code}
                     </p>
                     <p className="mt-2 text-xs leading-5 text-slate-500">
-                        Best result: send the join link for one-tap access and keep this code as a backup.
+                        Best result: send the join link for one-tap access and
+                        keep this code as a backup.
                     </p>
                 </div>
 
@@ -165,7 +170,6 @@ export default function InviteCodeCard({
                         <Share2 className="size-4" />
                         Share invite
                     </Button>
-
                 </div>
             </CardContent>
         </Card>
