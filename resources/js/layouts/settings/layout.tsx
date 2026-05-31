@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/forms/button';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import type { NavItem } from '@/types';
+import { settingsSectionClassName } from '@/utils/settings-ui';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -20,7 +21,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="min-w-0 space-y-6">
-            <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div className={settingsSectionClassName}>
                 <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div>
                         <p className="mb-2 text-xs font-black tracking-widest text-cyan-500 uppercase">

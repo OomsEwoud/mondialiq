@@ -1,3 +1,9 @@
+const heroMetaItems = [
+    { colorClassName: 'bg-red-500', label: '104 matches' },
+    { colorClassName: 'bg-blue-600', label: '48 teams' },
+    { colorClassName: 'bg-teal-400', label: 'June 11 - July 19' },
+];
+
 export default function HeroSection() {
     return (
         <div className="relative mb-8 rounded-2xl bg-white p-8 text-center">
@@ -15,20 +21,17 @@ export default function HeroSection() {
                 with other fans on the leaderboard.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-500">
-                <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-red-500" />
-                    104 matches
-                </span>
-                <span className="text-slate-300">·</span>
-                <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-blue-600" />
-                    48 teams
-                </span>
-                <span className="text-slate-300">·</span>
-                <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-teal-400" />
-                    June 11 – July 19
-                </span>
+                {heroMetaItems.map((item, index) => (
+                    <div key={item.label} className="contents">
+                        {index > 0 && <span className="text-slate-300">·</span>}
+                        <span className="flex items-center gap-2">
+                            <span
+                                className={`h-2 w-2 rounded-full ${item.colorClassName}`}
+                            />
+                            {item.label}
+                        </span>
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -1,8 +1,11 @@
 import { Trophy } from 'lucide-react';
 
+const pageHeaderClassName =
+    'mb-6 rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm sm:mb-8 sm:p-8';
+
 export default function GroupPageHeader() {
     return (
-        <section className="mb-6 rounded-lg border border-slate-200 bg-white p-5 text-center shadow-sm sm:mb-8 sm:p-8">
+        <section className={pageHeaderClassName}>
             <div className="mx-auto mb-3 flex size-11 items-center justify-center rounded-lg bg-cyan-50 text-cyan-700 sm:size-12">
                 <Trophy size={22} />
             </div>
