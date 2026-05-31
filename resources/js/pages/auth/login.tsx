@@ -21,6 +21,7 @@ import {
     authPrimaryButtonClass,
     authStatusMessageClass,
 } from '@/utils/auth-form';
+import type * as React from 'react';
 
 type Props = {
     status?: string;
@@ -28,22 +29,62 @@ type Props = {
     canRegister: boolean;
 };
 
+type SocialProvider = {
+    name: string;
+    provider: string;
+    icon: React.ReactNode;
+    className: string;
+    iconClassName: string;
+};
+
 const socialProviders = [
     {
         name: 'Google',
         provider: 'google',
-        mark: 'G',
+        icon: (
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+                <path
+                    fill="#4285F4"
+                    d="M21.6 12.23c0-.68-.06-1.33-.17-1.96H12v3.7h5.39a4.61 4.61 0 0 1-2 3.03v2.52h3.24c1.89-1.74 2.97-4.3 2.97-7.29Z"
+                />
+                <path
+                    fill="#34A853"
+                    d="M12 22c2.7 0 4.97-.9 6.62-2.45l-3.24-2.52c-.9.6-2.05.95-3.38.95-2.6 0-4.8-1.76-5.58-4.12H3.08v2.6A10 10 0 0 0 12 22Z"
+                />
+                <path
+                    fill="#FBBC05"
+                    d="M6.42 13.86A5.98 5.98 0 0 1 6.1 12c0-.65.11-1.28.32-1.86V7.54H3.08A10 10 0 0 0 2 12c0 1.61.39 3.14 1.08 4.46l3.34-2.6Z"
+                />
+                <path
+                    fill="#EA4335"
+                    d="M12 6.02c1.47 0 2.8.5 3.84 1.5l2.88-2.88C16.96 2.98 14.7 2 12 2a10 10 0 0 0-8.92 5.54l3.34 2.6C7.2 7.78 9.4 6.02 12 6.02Z"
+                />
+            </svg>
+        ),
         className:
             'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-blue-950',
+        iconClassName: 'bg-white ring-slate-200',
     },
     {
         name: 'Facebook',
         provider: 'facebook',
-        mark: 'f',
+        icon: (
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4">
+                <path
+                    fill="#1877F2"
+                    d="M24 12a12 12 0 1 0-13.88 11.85v-8.39H7.08V12h3.04V9.36c0-3 1.79-4.66 4.53-4.66 1.31 0 2.68.23 2.68.23v2.95h-1.51c-1.49 0-1.95.92-1.95 1.87V12h3.31l-.53 3.46h-2.78v8.39A12 12 0 0 0 24 12Z"
+                />
+                <path
+                    fill="#fff"
+                    d="m16.65 15.46.53-3.46h-3.31V9.75c0-.95.46-1.87 1.95-1.87h1.51V4.93s-1.37-.23-2.68-.23c-2.74 0-4.53 1.66-4.53 4.66V12H7.08v3.46h3.04v8.39a12.1 12.1 0 0 0 3.75 0v-8.39h2.78Z"
+                />
+            </svg>
+        ),
         className:
             'border-blue-200 bg-blue-50 text-blue-950 hover:border-blue-300 hover:bg-blue-100',
+        iconClassName: 'bg-white ring-blue-100',
     },
-];
+] satisfies SocialProvider[];
 
 const socialDividerLabelClass =
     'text-xs font-black tracking-widest text-slate-400 uppercase';
@@ -177,8 +218,10 @@ export default function Login({
                                             )}
                                             aria-label={`Log in with ${provider.name}`}
                                         >
-                                            <span className="flex size-6 items-center justify-center rounded-full bg-white text-sm font-black shadow-sm ring-1 ring-slate-200">
-                                                {provider.mark}
+                                            <span
+                                                className={`flex size-7 items-center justify-center rounded-full shadow-sm ring-1 ${provider.iconClassName}`}
+                                            >
+                                                {provider.icon}
                                             </span>
                                             {provider.name}
                                         </a>
