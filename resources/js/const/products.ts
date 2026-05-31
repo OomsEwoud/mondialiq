@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { BrainCircuit, ChartNoAxesColumn, Trophy } from 'lucide-react';
-import { groups, matches, login } from '@/routes';
+import { groups, login, predictions } from '@/routes';
 
 export type ProductCard = {
     title: string;
@@ -19,7 +19,7 @@ export const products: ProductCard[] = [
             'Every match modeled with win, draw and loss probabilities plus a short model insight.',
         badge: 'Public',
         cta: 'Browse predictions',
-        href: matches.url(),
+        href: predictions.url(),
         icon: BrainCircuit,
     },
     {
