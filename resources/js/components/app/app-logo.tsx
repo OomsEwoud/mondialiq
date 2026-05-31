@@ -7,6 +7,11 @@ type Props = {
     showText?: boolean;
 };
 
+const logoMarkClassName =
+    'flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900/20';
+
+const logoTextClassName = 'text-xl font-black tracking-tight text-slate-900';
+
 export default function AppLogo({
     className,
     markClassName,
@@ -15,21 +20,11 @@ export default function AppLogo({
 }: Props) {
     return (
         <div className={cn('flex items-center gap-3', className)}>
-            <div
-                className={cn(
-                    'flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900/20',
-                    markClassName,
-                )}
-            >
+            <div className={cn(logoMarkClassName, markClassName)}>
                 MI
             </div>
             {showText && (
-                <span
-                    className={cn(
-                        'text-xl font-black tracking-tight text-slate-900',
-                        textClassName,
-                    )}
-                >
+                <span className={cn(logoTextClassName, textClassName)}>
                     Mondial<span className="text-cyan-400">IQ</span>
                 </span>
             )}

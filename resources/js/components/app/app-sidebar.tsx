@@ -16,7 +16,7 @@ import {
 import { home } from '@/routes';
 import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const dashboardNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: home(),
@@ -24,7 +24,7 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const resourceNavItems: NavItem[] = [
     {
         title: 'Repository',
         href: 'https://github.com/laravel/react-starter-kit',
@@ -45,7 +45,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
                             <Link href={home()} prefetch>
-                                <AppLogo />
+                                <AppLogo showText />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -53,11 +53,11 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={dashboardNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavFooter items={resourceNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

@@ -34,6 +34,21 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
             ? window.location.origin
             : 'http://localhost',
     ).pathname;
+    const normalizeUrlPath = (
+        urlToCheck: NonNullable<InertiaLinkProps['href']>,
+    ): string | null => {
+        const urlString = toUrl(urlToCheck);
+
+        if (!urlString.startsWith('http')) {
+            return urlString;
+        }
+
+        try {
+            return new URL(urlString).pathname;
+        } catch {
+            return null;
+        }
+    };
 
     const isCurrentUrl: IsCurrentUrlFn = (
         urlToCheck: NonNullable<InertiaLinkProps['href']>,
@@ -41,22 +56,16 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
         startsWith: boolean = false,
     ) => {
         const urlToCompare = currentUrl ?? currentUrlPath;
-        const urlString = toUrl(urlToCheck);
+        const normalizedPath = normalizeUrlPath(urlToCheck);
 
         const comparePath = (path: string): boolean =>
             startsWith ? urlToCompare.startsWith(path) : path === urlToCompare;
 
-        if (!urlString.startsWith('http')) {
-            return comparePath(urlString);
-        }
-
-        try {
-            const absoluteUrl = new URL(urlString);
-
-            return comparePath(absoluteUrl.pathname);
-        } catch {
+        if (!normalizedPath) {
             return false;
         }
+
+        return comparePath(normalizedPath);
     };
 
     const isCurrentOrParentUrl: IsCurrentOrParentUrlFn = (
