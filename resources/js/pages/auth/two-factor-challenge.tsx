@@ -1,6 +1,6 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import InputError from '@/components/forms/input-error';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
@@ -15,36 +15,23 @@ import { store } from '@/routes/two-factor/login';
 export default function TwoFactorChallenge() {
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
-
-    const authConfigContent = useMemo<{
-        title: string;
-        description: string;
-        toggleText: string;
-    }>(() => {
-        if (showRecoveryInput) {
-            return {
-                title: 'Recovery code',
-                description:
-                    'Please confirm access to your account by entering one of your emergency recovery codes.',
-                toggleText: 'login using an authentication code',
-            };
-        }
-
-        return {
-            title: 'Authentication code',
-            description:
-                'Enter the authentication code provided by your authenticator application.',
-            toggleText: 'login using a recovery code',
-        };
-    }, [showRecoveryInput]);
+    const title = showRecoveryInput
+        ? 'Recovery code'
+        : 'Authentication code';
+    const description = showRecoveryInput
+        ? 'Please confirm access to your account by entering one of your emergency recovery codes.'
+        : 'Enter the authentication code provided by your authenticator application.';
+    const toggleText = showRecoveryInput
+        ? 'login using an authentication code'
+        : 'login using a recovery code';
 
     setLayoutProps({
-        title: authConfigContent.title,
-        description: authConfigContent.description,
+        title,
+        description,
     });
 
     const toggleRecoveryMode = (clearErrors: () => void): void => {
-        setShowRecoveryInput(!showRecoveryInput);
+        setShowRecoveryInput((current) => !current);
         clearErrors();
         setCode('');
     };
@@ -120,7 +107,7 @@ export default function TwoFactorChallenge() {
                                         toggleRecoveryMode(clearErrors)
                                     }
                                 >
-                                    {authConfigContent.toggleText}
+                                    {toggleText}
                                 </button>
                             </div>
                         </>

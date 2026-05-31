@@ -20,11 +20,14 @@ export default function TwoFactorSetupStep({
     errors,
 }: Props) {
     const [copiedText, copy] = useClipboard();
-    const IconComponent = copiedText === manualSetupKey ? Check : Copy;
+    const hasErrors = errors.length > 0;
+    const setupKey = manualSetupKey ?? '';
+    const hasManualSetupKey = setupKey.length > 0;
+    const IconComponent = copiedText === setupKey ? Check : Copy;
 
     return (
         <>
-            {errors?.length ? (
+            {hasErrors ? (
                 <AlertError errors={errors} />
             ) : (
                 <>
@@ -60,7 +63,7 @@ export default function TwoFactorSetupStep({
 
                     <div className="flex w-full space-x-2">
                         <div className="flex w-full items-stretch overflow-hidden rounded-xl border border-border">
-                            {!manualSetupKey ? (
+                            {!hasManualSetupKey ? (
                                 <div className="flex h-full w-full items-center justify-center bg-muted p-3">
                                     <Spinner />
                                 </div>
@@ -69,11 +72,13 @@ export default function TwoFactorSetupStep({
                                     <input
                                         type="text"
                                         readOnly
-                                        value={manualSetupKey}
+                                        value={setupKey}
                                         className="h-full w-full bg-background p-3 text-foreground outline-none"
                                     />
                                     <button
-                                        onClick={() => copy(manualSetupKey)}
+                                        type="button"
+                                        aria-label="Copy manual setup key"
+                                        onClick={() => copy(setupKey)}
                                         className="border-l border-border px-3 hover:bg-muted"
                                     >
                                         <IconComponent className="w-4" />

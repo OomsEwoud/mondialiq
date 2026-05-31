@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import AlertError from '@/components/shared/alert-error';
 import { Button } from '@/components/ui/forms/button';
+import { PASSWORD_CONFIRMATION_REQUIRED_ERROR } from '@/hooks/use-two-factor-auth';
 import { confirm as confirmPassword } from '@/routes/password';
 import { regenerateRecoveryCodes } from '@/routes/two-factor';
 
@@ -20,19 +21,21 @@ export default function TwoFactorRecoveryCodes({
 }: Props) {
     const [codesAreVisible, setCodesAreVisible] = useState<boolean>(false);
     const codesSectionRef = useRef<HTMLDivElement | null>(null);
-    const canRegenerateCodes = recoveryCodesList.length > 0 && codesAreVisible;
+    const hasRecoveryCodes = recoveryCodesList.length > 0;
+    const canRegenerateCodes = hasRecoveryCodes && codesAreVisible;
     const needsPasswordConfirmation = errors.includes(
-        'Confirm your password before viewing recovery codes.',
+        PASSWORD_CONFIRMATION_REQUIRED_ERROR,
     );
 
     const toggleCodesVisibility = useCallback(async () => {
-        if (!codesAreVisible && !recoveryCodesList.length) {
+        if (!codesAreVisible && !hasRecoveryCodes) {
             await fetchRecoveryCodes();
         }
 
-        setCodesAreVisible(!codesAreVisible);
+        const nextVisibility = !codesAreVisible;
+        setCodesAreVisible(nextVisibility);
 
-        if (!codesAreVisible) {
+        if (nextVisibility) {
             setTimeout(() => {
                 codesSectionRef.current?.scrollIntoView({
                     behavior: 'smooth',
@@ -40,7 +43,7 @@ export default function TwoFactorRecoveryCodes({
                 });
             });
         }
-    }, [codesAreVisible, recoveryCodesList.length, fetchRecoveryCodes]);
+    }, [codesAreVisible, fetchRecoveryCodes, hasRecoveryCodes]);
 
     const RecoveryCodeIconComponent = codesAreVisible ? EyeOff : Eye;
 
@@ -131,10 +134,10 @@ export default function TwoFactorRecoveryCodes({
                                 role="list"
                                 aria-label="Recovery codes"
                             >
-                                {recoveryCodesList.length ? (
-                                    recoveryCodesList.map((code, index) => (
+                                {hasRecoveryCodes ? (
+                                    recoveryCodesList.map((code) => (
                                         <div
-                                            key={index}
+                                            key={code}
                                             role="listitem"
                                             className="select-text"
                                         >

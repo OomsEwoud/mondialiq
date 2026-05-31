@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TwoFactorSetupIcon from '@/components/auth/two-factor/two-factor-setup-icon';
 import TwoFactorSetupStep from '@/components/auth/two-factor/two-factor-setup-step';
 import TwoFactorVerificationStep from '@/components/auth/two-factor/two-factor-verification-step';
@@ -35,37 +35,18 @@ export default function TwoFactorSetupModal({
 }: Props) {
     const [showVerificationStep, setShowVerificationStep] =
         useState<boolean>(false);
-
-    const modalConfig = useMemo<{
-        title: string;
-        description: string;
-        buttonText: string;
-    }>(() => {
-        if (twoFactorEnabled) {
-            return {
-                title: 'Two-factor authentication enabled',
-                description:
-                    'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
-                buttonText: 'Close',
-            };
-        }
-
-        if (showVerificationStep) {
-            return {
-                title: 'Verify authentication code',
-                description:
-                    'Enter the 6-digit code from your authenticator app',
-                buttonText: 'Continue',
-            };
-        }
-
-        return {
-            title: 'Enable two-factor authentication',
-            description:
-                'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
-            buttonText: 'Continue',
-        };
-    }, [twoFactorEnabled, showVerificationStep]);
+    const isCompleted = twoFactorEnabled;
+    const title = isCompleted
+        ? 'Two-factor authentication enabled'
+        : showVerificationStep
+          ? 'Verify authentication code'
+          : 'Enable two-factor authentication';
+    const description = isCompleted
+        ? 'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.'
+        : showVerificationStep
+          ? 'Enter the 6-digit code from your authenticator app'
+          : 'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app';
+    const buttonText = isCompleted ? 'Close' : 'Continue';
 
     const resetModalState = useCallback(() => {
         setShowVerificationStep(false);
@@ -87,26 +68,20 @@ export default function TwoFactorSetupModal({
         handleClose();
     }, [requiresConfirmation, handleClose]);
 
-    const fetchSetupDataRef = useRef(fetchSetupData);
-
-    useEffect(() => {
-        fetchSetupDataRef.current = fetchSetupData;
-    }, [fetchSetupData]);
-
     useEffect(() => {
         if (isOpen && !qrCodeSvg) {
-            fetchSetupDataRef.current();
+            void fetchSetupData();
         }
-    }, [isOpen, qrCodeSvg]);
+    }, [fetchSetupData, isOpen, qrCodeSvg]);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader className="flex items-center justify-center">
                     <TwoFactorSetupIcon />
-                    <DialogTitle>{modalConfig.title}</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                     <DialogDescription className="text-center">
-                        {modalConfig.description}
+                        {description}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -120,7 +95,7 @@ export default function TwoFactorSetupModal({
                         <TwoFactorSetupStep
                             qrCodeSvg={qrCodeSvg}
                             manualSetupKey={manualSetupKey}
-                            buttonText={modalConfig.buttonText}
+                            buttonText={buttonText}
                             onNextStep={handleModalNextStep}
                             errors={errors}
                         />

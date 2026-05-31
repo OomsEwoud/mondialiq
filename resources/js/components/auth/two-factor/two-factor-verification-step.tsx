@@ -19,11 +19,14 @@ interface Props {
 export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
     const [code, setCode] = useState<string>('');
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
+    const isCodeComplete = code.length === OTP_MAX_LENGTH;
 
     useEffect(() => {
-        setTimeout(() => {
+        const animationFrame = requestAnimationFrame(() => {
             pinInputContainerRef.current?.querySelector('input')?.focus();
-        }, 0);
+        });
+
+        return () => cancelAnimationFrame(animationFrame);
     }, []);
 
     return (
@@ -85,9 +88,7 @@ export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
                         <Button
                             type="submit"
                             className="flex-1"
-                            disabled={
-                                processing || code.length < OTP_MAX_LENGTH
-                            }
+                            disabled={processing || !isCodeComplete}
                         >
                             Confirm
                         </Button>
