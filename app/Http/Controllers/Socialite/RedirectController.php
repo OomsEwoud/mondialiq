@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Socialite;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Socialite\Concerns\HandlesSocialiteProviders;
-use Laravel\Socialite\Socialite;
+use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class RedirectController extends Controller

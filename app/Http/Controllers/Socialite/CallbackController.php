@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
-use Laravel\Socialite\Socialite;
+use Laravel\Socialite\Facades\Socialite;
 
 class CallbackController extends Controller
 {
