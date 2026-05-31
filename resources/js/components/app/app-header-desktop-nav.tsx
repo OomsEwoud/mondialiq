@@ -18,7 +18,7 @@ const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 export default function AppHeaderDesktopNav({ items }: Props) {
-    const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+    const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
         <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
@@ -33,14 +33,17 @@ export default function AppHeaderDesktopNav({ items }: Props) {
                                 href={item.href}
                                 className={cn(
                                     navigationMenuTriggerStyle(),
-                                    whenCurrentUrl(item.href, activeItemStyles),
+                                    isCurrentOrParentUrl(item.href) &&
+                                        activeItemStyles,
                                     'h-9 cursor-pointer px-3',
                                 )}
                             >
-                                {item.icon && <item.icon className="mr-2 h-4 w-4" />}
+                                {item.icon && (
+                                    <item.icon className="mr-2 h-4 w-4" />
+                                )}
                                 {item.title}
                             </Link>
-                            {isCurrentUrl(item.href) && (
+                            {isCurrentOrParentUrl(item.href) && (
                                 <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white" />
                             )}
                         </NavigationMenuItem>

@@ -10,6 +10,8 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/overlays/sheet';
+import { useCurrentUrl } from '@/hooks/use-current-url';
+import { cn } from '@/lib/utils';
 import type { NavItem } from '@/types';
 
 type Props = {
@@ -17,6 +19,8 @@ type Props = {
 };
 
 export default function AppHeaderMobileNav({ items }: Props) {
+    const { isCurrentOrParentUrl } = useCurrentUrl();
+
     return (
         <div className="lg:hidden">
             <Sheet>
@@ -38,16 +42,28 @@ export default function AppHeaderMobileNav({ items }: Props) {
                         <AppLogo textClassName="text-sidebar-foreground" />
                     </SheetHeader>
                     <nav className="flex flex-1 flex-col space-y-4 p-4 text-sm">
-                        {items.map((item) => (
-                            <Link
-                                key={item.title}
-                                href={item.href}
-                                className="flex items-center space-x-2 font-medium"
-                            >
-                                {item.icon && <item.icon className="h-5 w-5" />}
-                                <span>{item.title}</span>
-                            </Link>
-                        ))}
+                        {items.map((item) => {
+                            const isActive = isCurrentOrParentUrl(item.href);
+
+                            return (
+                                <Link
+                                    key={item.title}
+                                    href={item.href}
+                                    aria-current={isActive ? 'page' : undefined}
+                                    className={cn(
+                                        'flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors',
+                                        isActive
+                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                                            : 'text-sidebar-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground',
+                                    )}
+                                >
+                                    {item.icon && (
+                                        <item.icon className="h-5 w-5" />
+                                    )}
+                                    <span>{item.title}</span>
+                                </Link>
+                            );
+                        })}
                     </nav>
                 </SheetContent>
             </Sheet>

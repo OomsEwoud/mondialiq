@@ -1,11 +1,15 @@
 import { Head, router } from '@inertiajs/react';
+import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
 import { emptyFilters } from '@/const/match';
-import type { FilterKey, Filters, MatchPageProps as Props } from '@/types/match-page';
+import type {
+    FilterKey,
+    Filters,
+    MatchPageProps as Props,
+} from '@/types/match-page';
 import { filledMatchFilters } from '@/utils/match-filters';
-import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 
 export default function Matches({ fixtures, filterOptions, filters }: Props) {
     const visit = (nextFilters: Filters) => {
@@ -33,7 +37,7 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
         <>
             <Head title="Matches" />
 
-            <h1 className="mb-6 bg-gradient-to-r from-purple-500 to-blue-600 bg-clip-text text-center text-4xl font-bold text-transparent">
+            <h1 className="mb-6 bg-gradient-to-r from-slate-950 via-blue-900 to-cyan-700 bg-clip-text text-center text-4xl font-bold text-transparent">
                 All Matches
             </h1>
 

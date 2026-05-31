@@ -31,7 +31,7 @@ class PredictionFixtureQuery
 
         return $query
             ->with([
-                'userPredictions' => fn (Builder $query) => $this->userPredictionEagerLoad($query, $user),
+                'userPredictions' => fn ($query) => $this->userPredictionEagerLoad($query, $user),
             ])
             ->whereHas('userPredictions', fn (Builder $query) => $this->userPredictionConstraint($query, $user));
     }
@@ -41,13 +41,13 @@ class PredictionFixtureQuery
         return $query->whereKey([]);
     }
 
-    private function userPredictionEagerLoad(Builder $query, User $user): Builder
+    private function userPredictionEagerLoad($query, User $user)
     {
         return $this->userPredictionConstraint($query, $user)
             ->with('winner');
     }
 
-    private function userPredictionConstraint(Builder $query, User $user): Builder
+    private function userPredictionConstraint($query, User $user)
     {
         return $query->whereBelongsTo($user);
     }
