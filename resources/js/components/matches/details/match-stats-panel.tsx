@@ -20,6 +20,17 @@ const statCategories: MatchStatCategory[] = [
 ];
 
 export default function MatchStatsPanel({ match }: Props) {
+    const groupedStats = statCategories
+        .map((category) => ({
+            category,
+            stats: sortStatsByDisplayPriority(
+                match.stats.filter(
+                    (stat) => getStatCategory(stat.name) === category,
+                ),
+            ),
+        }))
+        .filter((group) => group.stats.length > 0);
+
     return (
         <div className="flex flex-col gap-4">
             <MatchStatsHeader
@@ -28,19 +39,8 @@ export default function MatchStatsPanel({ match }: Props) {
             />
 
             <div className="flex flex-col gap-4">
-                {statCategories.map((category) => {
-                    const stats = sortStatsByDisplayPriority(
-                        match.stats.filter(
-                            (stat) => getStatCategory(stat.name) === category,
-                        ),
-                    );
-
-                    if (stats.length === 0) {
-                        return null;
-                    }
-
-                    return (
-                        <section key={category} className="flex flex-col gap-2">
+                {groupedStats.map(({ category, stats }) => (
+                    <section key={category} className="flex flex-col gap-2">
                             <h3 className="px-1 text-xs font-black tracking-wide text-slate-400 uppercase">
                                 {category}
                             </h3>
@@ -49,9 +49,8 @@ export default function MatchStatsPanel({ match }: Props) {
                                     <MatchStatRow key={stat.name} stat={stat} />
                                 ))}
                             </div>
-                        </section>
-                    );
-                })}
+                    </section>
+                ))}
             </div>
         </div>
     );

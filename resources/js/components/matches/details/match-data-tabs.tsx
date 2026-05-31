@@ -37,6 +37,7 @@ const tabs = [
 
 export default function MatchDataTabs({ match }: Props) {
     const [activeTab, setActiveTab] = useState<MatchDataTab>('events');
+    const activeTabContent = renderTabPanel(activeTab, match);
 
     return (
         <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -51,6 +52,7 @@ export default function MatchDataTabs({ match }: Props) {
                                 key={tab.value}
                                 type="button"
                                 onClick={() => setActiveTab(tab.value)}
+                                aria-pressed={isActive}
                                 className={cn(
                                     'flex min-h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 text-xs font-black transition-colors focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
                                     isActive
@@ -66,7 +68,7 @@ export default function MatchDataTabs({ match }: Props) {
                 </div>
             </div>
 
-            <div className="p-4 sm:p-5">{renderTabPanel(activeTab, match)}</div>
+            <div className="p-4 sm:p-5">{activeTabContent}</div>
         </section>
     );
 }
