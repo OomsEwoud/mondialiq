@@ -12,6 +12,15 @@ import { home, register } from '@/routes';
 import { redirect as authRedirect } from '@/routes/auth';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
+import {
+    authFieldLabelClass,
+    authInputClass,
+    authLinkClass,
+    authMutedPanelClass,
+    authPasswordInputClass,
+    authPrimaryButtonClass,
+    authStatusMessageClass,
+} from '@/utils/auth-form';
 
 type Props = {
     status?: string;
@@ -36,11 +45,19 @@ const socialProviders = [
     },
 ];
 
+const socialDividerLabelClass =
+    'text-xs font-black tracking-widest text-slate-400 uppercase';
+const rememberMeContainerClass =
+    'flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3';
+const socialButtonBaseClass = 'h-12 rounded-lg font-black shadow-none';
+
 export default function Login({
     status,
     canResetPassword,
     canRegister,
 }: Props) {
+    const showStatus = Boolean(status);
+
     return (
         <>
             <Head title="Log in" />
@@ -52,8 +69,8 @@ export default function Login({
             >
                 {({ processing, errors }) => (
                     <>
-                        {status && (
-                            <div className="rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-semibold text-blue-950">
+                        {showStatus && (
+                            <div className={authStatusMessageClass}>
                                 {status}
                             </div>
                         )}
@@ -64,7 +81,7 @@ export default function Login({
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="email"
-                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    className={authFieldLabelClass}
                                 >
                                     Email address
                                 </Label>
@@ -76,7 +93,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="name@example.com"
-                                    className="auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authInputClass}
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -85,14 +102,14 @@ export default function Login({
                                 <div className="flex items-center">
                                     <Label
                                         htmlFor="password"
-                                        className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                        className={authFieldLabelClass}
                                     >
                                         Password
                                     </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm font-semibold text-blue-950 decoration-cyan-300 hover:text-cyan-600"
+                                            className={`ml-auto text-sm font-semibold ${authLinkClass}`}
                                             tabIndex={5}
                                         >
                                             Forgot password?
@@ -105,12 +122,12 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="********"
-                                    className="auth-input h-12 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    className={authPasswordInputClass}
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3">
+                            <div className={rememberMeContainerClass}>
                                 <Checkbox
                                     id="remember"
                                     name="remember"
@@ -127,7 +144,7 @@ export default function Login({
 
                             <Button
                                 type="submit"
-                                className="mt-2 h-12 w-full rounded-lg bg-blue-950 font-black text-white shadow-lg shadow-blue-950/15 hover:bg-cyan-500 hover:text-blue-950"
+                                className={`mt-2 ${authPrimaryButtonClass}`}
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -140,7 +157,7 @@ export default function Login({
                         <div className="grid gap-4">
                             <div className="flex items-center gap-3">
                                 <div className="h-px flex-1 bg-slate-200" />
-                                <span className="text-xs font-black tracking-widest text-slate-400 uppercase">
+                                <span className={socialDividerLabelClass}>
                                     Or continue with
                                 </span>
                                 <div className="h-px flex-1 bg-slate-200" />
@@ -152,7 +169,7 @@ export default function Login({
                                         key={provider.provider}
                                         asChild
                                         variant="outline"
-                                        className={`h-12 rounded-lg font-black shadow-none ${provider.className}`}
+                                        className={`${socialButtonBaseClass} ${provider.className}`}
                                     >
                                         <a
                                             href={authRedirect.url(
@@ -171,12 +188,12 @@ export default function Login({
                         </div>
 
                         {canRegister && (
-                            <div className="rounded-lg bg-slate-50 px-4 py-3 text-center text-sm text-slate-500">
+                            <div className={authMutedPanelClass}>
                                 Don't have an account?{' '}
                                 <TextLink
                                     href={register()}
                                     tabIndex={5}
-                                    className="font-black text-blue-950 decoration-cyan-300 hover:text-cyan-600"
+                                    className={authLinkClass}
                                 >
                                     Sign up
                                 </TextLink>
