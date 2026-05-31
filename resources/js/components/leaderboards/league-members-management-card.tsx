@@ -42,6 +42,7 @@ export default function LeagueMembersManagementCard({
     const getInitials = useInitials();
     const manageableMembers = members.filter((member) => member.canBeManaged);
     const manageableCount = manageableMembers.length;
+    const showEmptyManageableState = manageableCount === 0;
     const showSingleManageableWarning = manageableCount === 1;
 
     return (
@@ -62,7 +63,6 @@ export default function LeagueMembersManagementCard({
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
-                {manageableCount === 0 && (
                 {showEmptyManageableState && (
                     <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-4">
                         <p className="text-sm font-black text-cyan-900">
