@@ -37,6 +37,8 @@ type Props = {
 
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+const primaryButtonClassName =
+    'h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950';
 
 export default function Profile({
     mustVerifyEmail,
@@ -79,6 +81,11 @@ export default function Profile({
 
     const user = auth.user;
     const isSsoOnly = user.is_sso_only;
+    const needsEmailVerification =
+        mustVerifyEmail && user.email_verified_at === null;
+    const showTwoFactorSection = canManageTwoFactor && !isSsoOnly;
+    const openSetupModal = () => setShowSetupModal(true);
+    const closeSetupModal = () => setShowSetupModal(false);
 
     return (
         <>
@@ -177,46 +184,44 @@ export default function Profile({
                                     )}
                                 </div>
 
-                                {mustVerifyEmail &&
-                                    user.email_verified_at === null && (
-                                        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-                                            <div className="flex gap-3">
-                                                <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
-                                                <div className="space-y-2">
-                                                    <p className="text-sm font-black text-amber-900">
-                                                        Your email address is
-                                                        unverified.
+                                {needsEmailVerification && (
+                                    <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                                        <div className="flex gap-3">
+                                            <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
+                                            <div className="space-y-2">
+                                                <p className="text-sm font-black text-amber-900">
+                                                    Your email address is
+                                                    unverified.
+                                                </p>
+                                                <p className="text-sm leading-6 text-amber-800">
+                                                    Verify your email to keep
+                                                    all account features
+                                                    available.
+                                                </p>
+                                                <Link
+                                                    href={send()}
+                                                    as="button"
+                                                    className="text-sm font-black text-blue-950 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
+                                                >
+                                                    Resend verification email
+                                                </Link>
+                                                {status ===
+                                                    'verification-link-sent' && (
+                                                    <p className="text-sm font-semibold text-green-700">
+                                                        A new verification link
+                                                        has been sent.
                                                     </p>
-                                                    <p className="text-sm leading-6 text-amber-800">
-                                                        Verify your email to
-                                                        keep all account
-                                                        features available.
-                                                    </p>
-                                                    <Link
-                                                        href={send()}
-                                                        as="button"
-                                                        className="text-sm font-black text-blue-950 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
-                                                    >
-                                                        Resend verification
-                                                        email
-                                                    </Link>
-                                                    {status ===
-                                                        'verification-link-sent' && (
-                                                        <p className="text-sm font-semibold text-green-700">
-                                                            A new verification
-                                                            link has been sent.
-                                                        </p>
-                                                    )}
-                                                </div>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
+                                    </div>
+                                )}
 
                                 <div className="flex justify-end">
                                     <Button
                                         disabled={processing}
                                         data-test="update-profile-button"
-                                        className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                        className={primaryButtonClassName}
                                     >
                                         Save profile
                                     </Button>
@@ -333,7 +338,7 @@ export default function Profile({
                                         <Button
                                             disabled={processing}
                                             data-test="update-password-button"
-                                            className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                            className={primaryButtonClassName}
                                         >
                                             Save password
                                         </Button>
@@ -344,7 +349,7 @@ export default function Profile({
                     </SettingsSection>
                 )}
 
-                {canManageTwoFactor && !isSsoOnly && (
+                {showTwoFactorSection && (
                     <SettingsSection
                         icon={ShieldCheck}
                         eyebrow="Sign-in"
@@ -405,10 +410,8 @@ export default function Profile({
                                 <div>
                                     {hasSetupData ? (
                                         <Button
-                                            onClick={() =>
-                                                setShowSetupModal(true)
-                                            }
-                                            className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                            onClick={openSetupModal}
+                                            className={primaryButtonClassName}
                                         >
                                             <ShieldCheck />
                                             Continue setup
@@ -416,15 +419,13 @@ export default function Profile({
                                     ) : (
                                         <Form
                                             {...enable.form()}
-                                            onSuccess={() =>
-                                                setShowSetupModal(true)
-                                            }
+                                            onSuccess={openSetupModal}
                                         >
                                             {({ processing }) => (
                                                 <Button
                                                     type="submit"
                                                     disabled={processing}
-                                                    className="h-11 rounded-lg bg-blue-950 px-5 font-black text-white hover:bg-cyan-500 hover:text-blue-950"
+                                                    className={primaryButtonClassName}
                                                 >
                                                     Enable 2FA
                                                 </Button>
@@ -436,7 +437,7 @@ export default function Profile({
 
                             <TwoFactorSetupModal
                                 isOpen={showSetupModal}
-                                onClose={() => setShowSetupModal(false)}
+                                onClose={closeSetupModal}
                                 requiresConfirmation={requiresConfirmation}
                                 twoFactorEnabled={twoFactorEnabled}
                                 qrCodeSvg={qrCodeSvg}
