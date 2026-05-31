@@ -18,6 +18,8 @@ import {
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
     const host = league.members.find((member) => member.isOwner);
     const palette = getLeagueBrandPalette(league.accentColor);
+    const memberLabel = league.membersCount === 1 ? 'member' : 'members';
+    const hostName = host?.name;
 
     return (
         <>
@@ -58,17 +60,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     className="rounded-full border-white/20 bg-white/14 px-2.5 py-1 font-semibold text-white"
                                 >
                                     <Users className="size-3.5" />
-                                    {league.membersCount}{' '}
-                                    {league.membersCount === 1
-                                        ? 'member'
-                                        : 'members'}
+                                    {league.membersCount} {memberLabel}
                                 </Badge>
                                 {league.currentUserRank && (
                                     <Badge className="rounded-full bg-white px-2.5 py-1 font-black text-blue-950">
                                         Your rank #{league.currentUserRank}
                                     </Badge>
                                 )}
-                                {host && (
+                                {hostName && (
                                     <Badge
                                         variant="outline"
                                         className={cn(
@@ -77,7 +76,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                         )}
                                     >
                                         <Crown className="size-3.5" />
-                                        Host: {host.name}
+                                        Host: {hostName}
                                     </Badge>
                                 )}
                             </div>

@@ -23,6 +23,9 @@ export default function LeagueOnboardingCard({
 }: Props) {
     const isNewLeague = membersCount <= 3;
     const needsFirstPrediction = currentUserPoints === 0;
+    const description = isNewLeague
+        ? `${leagueName} is still a fresh league. A few quick steps will make it feel competitive much faster.`
+        : 'You are in the league. Now turn it into an active race.';
 
     if (!isNewLeague && !needsFirstPrediction) {
         return null;
@@ -35,9 +38,7 @@ export default function LeagueOnboardingCard({
                     What next?
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-600">
-                    {isNewLeague
-                        ? `${leagueName} is still a fresh league. A few quick steps will make it feel competitive much faster.`
-                        : 'You are in the league. Now turn it into an active race.'}
+                    {description}
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">

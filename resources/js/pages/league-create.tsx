@@ -17,12 +17,20 @@ import type { LeagueCreatePageProps } from '@/types';
 
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+const secondaryActionClassName =
+    'h-11 rounded-lg px-5 font-black text-slate-600';
+const leagueNamePlaceholder = 'Example: MondialIQ Friends';
 
 export default function LeagueCreate({
     currentLeagueCount,
     maxLeagueCount,
     hasReachedLeagueLimit,
 }: LeagueCreatePageProps) {
+    const leagueCountLabel = `${currentLeagueCount}/${maxLeagueCount} leagues joined`;
+    const leagueLimitCopy = hasReachedLeagueLimit
+        ? 'You are already at the league limit. Leave one of your current leagues before creating a new one.'
+        : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`;
+
     return (
         <>
             <Head title="Create League" />
@@ -54,8 +62,7 @@ export default function LeagueCreate({
                                 table.
                             </p>
                             <p className="mt-4 text-sm font-semibold text-slate-600">
-                                {currentLeagueCount}/{maxLeagueCount} leagues
-                                joined
+                                {leagueCountLabel}
                             </p>
                         </div>
                     </div>
@@ -77,9 +84,7 @@ export default function LeagueCreate({
                                 You can join up to {maxLeagueCount} leagues.
                             </p>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
-                                {hasReachedLeagueLimit
-                                    ? 'You are already at the league limit. Leave one of your current leagues before creating a new one.'
-                                    : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`}
+                                {leagueLimitCopy}
                             </p>
                         </div>
 
@@ -101,7 +106,7 @@ export default function LeagueCreate({
                                             id="name"
                                             name="name"
                                             className={fieldClassName}
-                                            placeholder="Example: MondialIQ Friends"
+                                            placeholder={leagueNamePlaceholder}
                                         />
                                         <div className="min-h-10">
                                             <InputError
@@ -116,7 +121,7 @@ export default function LeagueCreate({
                                             asChild
                                             type="button"
                                             variant="ghost"
-                                            className="h-11 rounded-lg px-5 font-black text-slate-600"
+                                            className={secondaryActionClassName}
                                         >
                                             <Link href={leaderboards.url()}>
                                                 Cancel

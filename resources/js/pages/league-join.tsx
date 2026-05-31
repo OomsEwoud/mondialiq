@@ -17,6 +17,9 @@ import type { LeagueJoinPageProps } from '@/types';
 
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+const secondaryActionClassName =
+    'h-11 rounded-lg px-5 font-black text-slate-600';
+const inviteCodePlaceholder = 'ABCDEFGH';
 
 export default function LeagueJoin({
     initialCode,
@@ -24,6 +27,11 @@ export default function LeagueJoin({
     maxLeagueCount,
     hasReachedLeagueLimit,
 }: LeagueJoinPageProps) {
+    const leagueCountLabel = `${currentLeagueCount}/${maxLeagueCount} leagues joined`;
+    const leagueLimitCopy = hasReachedLeagueLimit
+        ? 'You are already at the league limit. Leave one of your current leagues before joining another.'
+        : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`;
+
     return (
         <>
             <Head title="Join League" />
@@ -53,7 +61,7 @@ export default function LeagueJoin({
                             friend to join their standings instantly.
                         </p>
                         <p className="mt-4 text-sm font-semibold text-slate-600">
-                            {currentLeagueCount}/{maxLeagueCount} leagues joined
+                            {leagueCountLabel}
                         </p>
                     </div>
                 </section>
@@ -73,9 +81,7 @@ export default function LeagueJoin({
                                 You can join up to {maxLeagueCount} leagues.
                             </p>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
-                                {hasReachedLeagueLimit
-                                    ? 'You are already at the league limit. Leave one of your current leagues before joining another.'
-                                    : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`}
+                                {leagueLimitCopy}
                             </p>
                         </div>
 
@@ -97,7 +103,7 @@ export default function LeagueJoin({
                                             id="code"
                                             name="code"
                                             className={fieldClassName}
-                                            placeholder="ABCDEFGH"
+                                            placeholder={inviteCodePlaceholder}
                                             defaultValue={initialCode}
                                             maxLength={8}
                                             autoCapitalize="characters"
@@ -116,7 +122,7 @@ export default function LeagueJoin({
                                             asChild
                                             type="button"
                                             variant="ghost"
-                                            className="h-11 rounded-lg px-5 font-black text-slate-600"
+                                            className={secondaryActionClassName}
                                         >
                                             <Link href={leaderboards.url()}>
                                                 Cancel

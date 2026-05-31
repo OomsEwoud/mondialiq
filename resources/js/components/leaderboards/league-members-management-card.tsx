@@ -42,6 +42,7 @@ export default function LeagueMembersManagementCard({
     const getInitials = useInitials();
     const manageableMembers = members.filter((member) => member.canBeManaged);
     const manageableCount = manageableMembers.length;
+    const showSingleManageableWarning = manageableCount === 1;
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -62,6 +63,7 @@ export default function LeagueMembersManagementCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
                 {manageableCount === 0 && (
+                {showEmptyManageableState && (
                     <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-4">
                         <p className="text-sm font-black text-cyan-900">
                             You are the only active manager in this league right
@@ -74,7 +76,7 @@ export default function LeagueMembersManagementCard({
                     </div>
                 )}
 
-                {manageableCount === 1 && (
+                {showSingleManageableWarning && (
                     <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
                         <p className="text-sm font-black text-amber-900">
                             Only one member can currently be managed.
