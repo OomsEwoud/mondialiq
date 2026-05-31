@@ -30,7 +30,9 @@ class AddFixturePlayerStats extends Command
             'Geen relevante fixtures gevonden voor spelerstatistieken sync.',
             'Spelerstatistieken voor relevante fixtures zijn geupdate',
             'Fout bij ophalen spelerstatistieken voor fixture',
-            fn (Fixture $fixture): void => $this->syncFixturePlayerStats($fixture),
+            function (Fixture $fixture): void {
+                $this->syncFixturePlayerStats($fixture);
+            },
         );
     }
 

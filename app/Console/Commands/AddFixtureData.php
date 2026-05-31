@@ -34,7 +34,9 @@ class AddFixtureData extends Command
             'Geen relevante fixtures gevonden voor fixture data sync.',
             'Fixture data voor relevante fixtures is geupdate',
             'Fout bij ophalen fixture',
-            fn (Fixture $fixture): void => $this->syncFixtureData($fixture),
+            function (Fixture $fixture): void {
+                $this->syncFixtureData($fixture);
+            },
         );
     }
 
