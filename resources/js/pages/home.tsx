@@ -21,7 +21,7 @@ export default function Home({ upcomingFixtures }: Props) {
             <Head title="Home" />
 
             <div className="relative left-1/2 w-screen -translate-x-1/2">
-                <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:gap-10 lg:px-8 lg:py-10">
+                <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-4 sm:px-6 sm:py-6 lg:gap-8 lg:px-8 lg:py-8">
                     <HeroSection />
                     <PlatformOverview />
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

@@ -74,8 +74,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     return (
         <>
-            <div className="border-b border-sidebar-border/80">
-                <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
+            <div className="sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-lg shadow-blue-950/10 backdrop-blur-xl">
+                <div className="mx-auto flex h-16 items-center px-4 sm:px-6 md:max-w-7xl lg:px-8">
                     <AppHeaderMobileNav items={navigationItems} />
 
                     <Link
@@ -94,15 +94,15 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         variant="ghost"
-                                        className="size-10 rounded-full p-1"
+                                        className="size-10 rounded-full p-1 text-white hover:bg-white/10 focus-visible:ring-cyan-300"
                                     >
-                                        <Avatar className="size-8 overflow-hidden rounded-full">
+                                        <Avatar className="size-8 overflow-hidden rounded-full ring-2 ring-cyan-200/40">
                                             <AvatarImage
                                                 src={user.avatar ?? undefined}
                                                 alt={user.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                            <AvatarFallback className="rounded-lg bg-cyan-100 text-blue-950">
                                                 {getInitials(user.name)}
                                             </AvatarFallback>
                                         </Avatar>
@@ -116,7 +116,10 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Button asChild className="h-9 rounded-md px-4">
+                            <Button
+                                asChild
+                                className="h-9 rounded-full bg-cyan-300 px-4 font-black text-blue-950 shadow-sm shadow-cyan-950/20 hover:bg-cyan-200"
+                            >
                                 <Link href={login()}>Inloggen</Link>
                             </Button>
                         )}
@@ -124,8 +127,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 </div>
             </div>
             {showBreadcrumbs && (
-                <div className="flex w-full border-b border-sidebar-border/70">
-                    <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl">
+                <div className="flex w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+                    <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-slate-500 sm:px-6 md:max-w-7xl lg:px-8">
                         <Breadcrumbs breadcrumbs={breadcrumbs} />
                     </div>
                 </div>

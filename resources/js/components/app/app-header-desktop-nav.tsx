@@ -15,15 +15,15 @@ type Props = {
 };
 
 const activeItemStyles =
-    'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
+    'border-cyan-300/40 bg-white/12 text-white shadow-sm shadow-blue-950/20';
 
 export default function AppHeaderDesktopNav({ items }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
+        <div className="ml-6 hidden h-full items-center space-x-4 lg:flex">
             <NavigationMenu className="flex h-full items-stretch">
-                <NavigationMenuList className="flex h-full items-stretch space-x-2">
+                <NavigationMenuList className="flex h-full items-center space-x-1.5">
                     {items.map((item) => (
                         <NavigationMenuItem
                             key={item.title}
@@ -33,9 +33,9 @@ export default function AppHeaderDesktopNav({ items }: Props) {
                                 href={item.href}
                                 className={cn(
                                     navigationMenuTriggerStyle(),
+                                    'h-9 cursor-pointer rounded-full border border-transparent bg-transparent px-3 text-sm font-black text-blue-100 transition-colors hover:border-white/15 hover:bg-white/8 hover:text-white focus-visible:ring-cyan-300',
                                     isCurrentOrParentUrl(item.href) &&
                                         activeItemStyles,
-                                    'h-9 cursor-pointer px-3',
                                 )}
                             >
                                 {item.icon && (
@@ -44,7 +44,7 @@ export default function AppHeaderDesktopNav({ items }: Props) {
                                 {item.title}
                             </Link>
                             {isCurrentOrParentUrl(item.href) && (
-                                <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white" />
+                                <div className="absolute bottom-1 left-1/2 h-1 w-5 -translate-x-1/2 rounded-full bg-cyan-300" />
                             )}
                         </NavigationMenuItem>
                     ))}

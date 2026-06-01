@@ -28,20 +28,20 @@ export default function AppHeaderMobileNav({ items }: Props) {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="mr-2 h-[34px] w-[34px]"
+                        className="mr-2 h-[38px] w-[38px] rounded-full text-blue-100 hover:bg-white/10 hover:text-white focus-visible:ring-cyan-300"
                     >
                         <Menu className="h-5 w-5" />
                     </Button>
                 </SheetTrigger>
                 <SheetContent
                     side="left"
-                    className="flex h-full w-64 flex-col bg-sidebar"
+                    className="flex h-full w-72 flex-col border-white/10 bg-blue-950 text-white"
                 >
                     <SheetTitle className="sr-only">Navigation menu</SheetTitle>
                     <SheetHeader className="flex justify-start text-left">
-                        <AppLogo textClassName="text-sidebar-foreground" />
+                        <AppLogo textClassName="text-white" />
                     </SheetHeader>
-                    <nav className="flex flex-1 flex-col space-y-4 p-4 text-sm">
+                    <nav className="flex flex-1 flex-col gap-2 p-4 text-sm">
                         {items.map((item) => {
                             const isActive = isCurrentOrParentUrl(item.href);
 
@@ -53,8 +53,8 @@ export default function AppHeaderMobileNav({ items }: Props) {
                                     className={cn(
                                         'flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors',
                                         isActive
-                                            ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                                            : 'text-sidebar-foreground hover:bg-sidebar-accent/70 hover:text-sidebar-accent-foreground',
+                                            ? 'bg-cyan-300 text-blue-950'
+                                            : 'text-blue-100 hover:bg-white/10 hover:text-white',
                                     )}
                                 >
                                     {item.icon && (

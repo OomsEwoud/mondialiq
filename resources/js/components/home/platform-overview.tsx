@@ -6,11 +6,11 @@ import { cn } from '@/lib/utils';
 
 export default function PlatformOverview() {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm shadow-blue-950/5 sm:p-6 lg:p-8">
+        <section className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm shadow-blue-950/5 backdrop-blur sm:p-6 lg:p-7">
             <header className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
-                    <p className="mb-2 text-xs font-black tracking-widest text-cyan-600 uppercase">
-                        Three products, one platform
+                    <p className="mb-2 text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                        Platform modules
                     </p>
                     <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                         Built for fans who want signal, not noise
@@ -29,9 +29,9 @@ export default function PlatformOverview() {
                         key={product.title}
                         href={product.href}
                         className={cn(
-                            'group flex min-h-56 flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5',
+                            'group flex min-h-56 flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm shadow-blue-950/5 transition-all hover:-translate-y-1 hover:border-cyan-200 hover:shadow-lg hover:shadow-blue-950/10 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5',
                             product.featured
-                                ? 'border-cyan-300/70 bg-cyan-50/40 shadow-cyan-900/5'
+                                ? 'border-cyan-300/70 bg-[linear-gradient(180deg,#ecfeff_0%,#ffffff_70%)] shadow-cyan-900/5'
                                 : 'border-slate-200',
                         )}
                     >
@@ -41,8 +41,8 @@ export default function PlatformOverview() {
                                     className={cn(
                                         'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm',
                                         product.featured
-                                            ? 'bg-cyan-600'
-                                            : 'bg-blue-950',
+                                            ? 'bg-cyan-600 shadow-cyan-900/20'
+                                            : 'bg-blue-950 shadow-blue-950/20',
                                     )}
                                 >
                                     <product.icon className="h-5 w-5" />

@@ -13,7 +13,7 @@ export default function UpcomingMatches({ matches }: Props) {
     const hasMatches = matches.length > 0;
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5">
+        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur">
             <header className="mb-4 flex items-center justify-between gap-3">
                 <div>
                     <p className="text-[11px] font-black tracking-widest text-cyan-600 uppercase">
@@ -30,7 +30,7 @@ export default function UpcomingMatches({ matches }: Props) {
                     {matches.map((match) => (
                         <article
                             key={match.id}
-                            className="rounded-2xl border border-slate-200 bg-slate-50/70 p-3 shadow-sm transition-shadow hover:shadow-md"
+                            className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-white hover:shadow-md"
                         >
                             <div className="mb-3 flex items-center justify-between gap-3">
                                 <span className="text-[11px] font-bold tracking-wide text-slate-500 uppercase">
@@ -46,7 +46,7 @@ export default function UpcomingMatches({ matches }: Props) {
                                     <img
                                         src={match.homeTeamLogo}
                                         alt={match.homeTeam}
-                                        className="h-8 w-8 shrink-0 object-contain"
+                                        className="h-8 w-8 shrink-0 rounded-full bg-white object-contain ring-1 ring-slate-200"
                                     />
                                     <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-800">
                                         {match.homeTeamShort}
@@ -59,7 +59,7 @@ export default function UpcomingMatches({ matches }: Props) {
                                     <img
                                         src={match.awayTeamLogo}
                                         alt={match.awayTeam}
-                                        className="h-8 w-8 shrink-0 object-contain"
+                                        className="h-8 w-8 shrink-0 rounded-full bg-white object-contain ring-1 ring-slate-200"
                                     />
                                     <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-800">
                                         {match.awayTeamShort}
