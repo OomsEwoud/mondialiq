@@ -38,10 +38,10 @@ export default function ProfileAvatarField({
 
     return (
         <div
-            className={`${settingsSubtlePanelClassName} flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between`}
+            className={`${settingsSubtlePanelClassName} flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between`}
         >
             <div className="flex items-center gap-4">
-                <Avatar className="size-20 border-2 border-white shadow-sm ring-1 ring-slate-200">
+                <Avatar className="size-16 border-2 border-white shadow-sm ring-1 ring-slate-200 sm:size-20">
                     <AvatarImage
                         src={avatarSrc}
                         alt={user.name}
@@ -56,8 +56,7 @@ export default function ProfileAvatarField({
                         Profile photo
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Upload a photo, crop it round, and choose exactly what
-                        appears in your avatar.
+                        JPG, PNG or WebP. Square images work best.
                     </p>
                 </div>
             </div>
@@ -75,7 +74,7 @@ export default function ProfileAvatarField({
                 />
                 <label
                     htmlFor="avatar"
-                    className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 shadow-sm transition-colors focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-200 hover:border-cyan-300 hover:bg-cyan-50"
+                    className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 shadow-sm transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
                 >
                     <span className="flex min-w-0 items-center gap-3">
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-blue-950">
