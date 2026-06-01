@@ -158,9 +158,9 @@ export default function PredictionScoreBreakdown({
                 <p className="mt-1 text-sm leading-6 text-slate-600">
                     Exact score gives 20 points. If the score is not exact,
                     points are awarded for the correct outcome, goal difference,
-                    team goals and total goals. Correctly predicting a draw
-                    gives an extra bonus because draws are harder to predict.
-                    Confidence does not affect points.
+                    team goals and total goals. Draws are already covered by
+                    outcome and goal difference. Confidence does not affect
+                    points.
                 </p>
             </div>
         </section>

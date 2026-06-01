@@ -17,7 +17,6 @@ export interface PredictionScoreItem {
 export interface PredictionScoreBreakdown {
     exactScore: boolean;
     correctOutcome: boolean;
-    drawBonus: boolean;
     correctGoalDifference: boolean;
     correctHomeGoals: boolean;
     correctAwayGoals: boolean;

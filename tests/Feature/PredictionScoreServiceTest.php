@@ -14,10 +14,10 @@ test('correct winner but wrong score gives partial points', function () {
     expect($score)->toBe(11);
 });
 
-test('correct draw gets outcome points draw bonus and goal difference points', function () {
+test('correct draw gets outcome and goal difference points', function () {
     $score = app(PredictionScoreService::class)->calculate(1, 1, 2, 2);
 
-    expect($score)->toBe(14);
+    expect($score)->toBe(12);
 });
 
 test('wrong outcome can still get points for exact team goals', function () {

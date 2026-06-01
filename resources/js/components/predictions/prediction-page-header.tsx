@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { Calculator, Sparkles } from 'lucide-react';
+import { CalendarDays, Calculator, Sparkles } from 'lucide-react';
+import { matches } from '@/routes';
 
 interface Props {
     scoringGuideHref: string;
@@ -29,13 +30,20 @@ export default function PredictionPageHeader({ scoringGuideHref }: Props) {
                     Personal prediction tracking
                 </span>
             </div>
-            <div className="mt-5">
+            <div className="mx-auto mt-5 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
+                <Link
+                    href={matches.url()}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-blue-950 px-4 py-2.5 text-sm font-black text-white shadow-sm transition hover:bg-blue-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                >
+                    <CalendarDays className="size-4" />
+                    View matches
+                </Link>
                 <Link
                     href={scoringGuideHref}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-blue-950/10 bg-blue-950 px-4 py-2 text-sm font-black text-white shadow-sm transition hover:bg-blue-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                 >
                     <Calculator className="size-4" />
-                    How points work
+                    How scoring works
                 </Link>
             </div>
         </section>

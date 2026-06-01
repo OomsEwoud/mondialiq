@@ -40,7 +40,6 @@ export function calculatePredictionScore({
     }
 
     const correctOutcome = predictedOutcome === actualOutcome;
-    const drawBonus = actualOutcome === 'draw' && predictedOutcome === 'draw';
     const correctGoalDifference =
         goalDifference(predictedHomeScore, predictedAwayScore) ===
         goalDifference(actualHomeScore, actualAwayScore);
@@ -51,7 +50,6 @@ export function calculatePredictionScore({
         totalGoals(actualHomeScore, actualAwayScore);
     const items = scoreItems({
         correctOutcome,
-        drawBonus,
         correctGoalDifference,
         correctHomeGoals,
         correctAwayGoals,
@@ -61,7 +59,6 @@ export function calculatePredictionScore({
     return {
         exactScore,
         correctOutcome,
-        drawBonus,
         correctGoalDifference,
         correctHomeGoals,
         correctAwayGoals,
@@ -75,7 +72,6 @@ function perfectScoreBreakdown(): PredictionScoreBreakdown {
     return {
         exactScore: true,
         correctOutcome: true,
-        drawBonus: false,
         correctGoalDifference: true,
         correctHomeGoals: true,
         correctAwayGoals: true,
@@ -94,7 +90,6 @@ function perfectScoreBreakdown(): PredictionScoreBreakdown {
 
 function scoreItems({
     correctOutcome,
-    drawBonus,
     correctGoalDifference,
     correctHomeGoals,
     correctAwayGoals,
@@ -109,12 +104,6 @@ function scoreItems({
             description: 'Correct winner or correctly predicted a draw.',
             points: 8,
             earned: correctOutcome,
-        },
-        {
-            label: 'Draw bonus',
-            description: 'Extra reward for correctly predicting a draw.',
-            points: 2,
-            earned: drawBonus,
         },
         {
             label: 'Goal difference',

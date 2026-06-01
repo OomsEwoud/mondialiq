@@ -25,11 +25,6 @@ class PredictionScoreService
             $score += 8;
         }
 
-        // Draws get a small bonus because they are harder to predict.
-        if ($actualOutcome === 'draw' && $predictedOutcome === 'draw') {
-            $score += 2;
-        }
-
         // Score shape rewards remain available even when the exact score misses.
         if (
             $this->getGoalDifference($predictedHomeScore, $predictedAwayScore)
