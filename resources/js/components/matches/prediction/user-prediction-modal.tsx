@@ -1,4 +1,5 @@
 import { usePage } from '@inertiajs/react';
+import { LockKeyhole } from 'lucide-react';
 import UserPredictionForm from '@/components/matches/prediction/user-prediction-form';
 import UserPredictionLoginPrompt from '@/components/matches/prediction/user-prediction-login-prompt';
 import UserPredictionMatchSummary from '@/components/matches/prediction/user-prediction-match-summary';
@@ -11,7 +12,10 @@ import {
 } from '@/components/ui/overlays/dialog';
 import type { Auth } from '@/types/auth';
 import type { Match } from '@/types/match';
-import { predictionScoreLabel } from '@/utils/match-prediction';
+import {
+    isPredictionLocked,
+    predictionScoreLabel,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -26,6 +30,7 @@ export default function UserPredictionModal({
 }: Props) {
     const auth = usePage<{ auth: Auth }>().props.auth;
     const isEditing = Boolean(match.userPrediction);
+    const predictionLocked = isPredictionLocked(match);
     const currentPredictionLabel = match.userPrediction?.label;
     const currentScoreLabel = predictionScoreLabel(match);
     const currentConfidence = match.userPrediction?.confidence;
@@ -41,19 +46,32 @@ export default function UserPredictionModal({
                         </span>
                         <div className="grid gap-2">
                             <DialogTitle className="text-2xl font-black tracking-tight text-blue-950">
-                                {isEditing
-                                    ? 'Edit your prediction'
-                                    : 'Make your prediction'}
+                                {predictionLocked && isEditing
+                                    ? 'View your prediction'
+                                    : isEditing
+                                      ? 'Edit your prediction'
+                                      : 'Make your prediction'}
                             </DialogTitle>
                             <DialogDescription className="text-sm leading-6 text-slate-600">
-                                Choose a winner, predict the score and set your
-                                confidence before kickoff.
+                                {predictionLocked
+                                    ? 'Predictions are locked once the match has started.'
+                                    : 'Choose a winner, predict the score and set your confidence before kickoff.'}
                             </DialogDescription>
                         </div>
                     </DialogHeader>
 
                     <div className="mt-5 grid gap-4">
                         <UserPredictionMatchSummary match={match} />
+
+                        {predictionLocked && (
+                            <div className="flex gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium text-amber-900">
+                                <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0" />
+                                <p>
+                                    Predictions are closed because this match
+                                    has already started.
+                                </p>
+                            </div>
+                        )}
 
                         <div className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-3 text-sm text-slate-700">
                             <div className="flex flex-wrap items-center gap-2">

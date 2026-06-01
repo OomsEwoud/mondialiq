@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\FixtureEvent;
 use App\Models\FixturePlayer;
 use App\Models\Player;
+use App\Models\Prediction;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -14,6 +15,9 @@ class MatchDetailsResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $aiPrediction = $this->aiPredictionForResponse();
+        $userPrediction = $this->userPredictionForResponse();
+
         return [
             'id' => $this->id,
             'homeTeam' => $this->teamAttributes($this->homeTeam),
@@ -21,10 +25,13 @@ class MatchDetailsResource extends JsonResource
             'round' => $this->round_name,
             'season' => $this->season,
             'date' => $this->match_date->format('d M Y'),
+            'dateValue' => $this->match_date->format('Y-m-d'),
             'time' => $this->match_date->format('H:i'),
             'status' => $this->status_long,
             'elapsedTime' => $this->elapsed_time,
             'score' => $this->scoreAttributes(),
+            'hasAiPrediction' => (bool) $aiPrediction,
+            'userPrediction' => $this->userPredictionAttributes($userPrediction),
             'venue' => $this->venueAttributes(),
             'referee' => $this->referee?->name,
             'events' => $this->eventAttributes(),
@@ -70,6 +77,67 @@ class MatchDetailsResource extends JsonResource
                 'away' => $this->penalty_away_goals,
             ],
         ];
+    }
+
+    private function userPredictionAttributes(?Prediction $prediction): ?array
+    {
+        if (! $prediction) {
+            return null;
+        }
+
+        return [
+            'winnerId' => $prediction->winner_id,
+            'outcome' => $this->predictionOutcome($prediction),
+            'label' => $this->predictionLabel($prediction),
+            'homeScore' => $prediction->home_goals,
+            'awayScore' => $prediction->away_goals,
+            'confidence' => $prediction->confidence,
+            'points' => $prediction->points,
+        ];
+    }
+
+    private function aiPredictionForResponse(): ?Prediction
+    {
+        if ($this->relationLoaded('aiPrediction')) {
+            return $this->aiPrediction;
+        }
+
+        return null;
+    }
+
+    private function userPredictionForResponse(): ?Prediction
+    {
+        if ($this->relationLoaded('userPredictions')) {
+            return $this->userPredictions->first();
+        }
+
+        return null;
+    }
+
+    private function predictionLabel(Prediction $prediction): string
+    {
+        if (! $prediction->winner_id) {
+            return 'Draw';
+        }
+
+        if ($prediction->relationLoaded('winner')) {
+            return $prediction->winner?->name ?? 'Team pick';
+        }
+
+        return match ($prediction->winner_id) {
+            $this->home_team_id => $this->homeTeam->name,
+            $this->away_team_id => $this->awayTeam->name,
+            default => 'Team pick',
+        };
+    }
+
+    private function predictionOutcome(Prediction $prediction): string
+    {
+        return match ($prediction->winner_id) {
+            $this->home_team_id => 'home',
+            $this->away_team_id => 'away',
+            default => 'draw',
+        };
     }
 
     private function venueAttributes(): ?array

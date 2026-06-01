@@ -17,7 +17,23 @@ export function predictionScoreValue(score: number | null | undefined): string {
 }
 
 export function hasMatchStarted(match: Match): boolean {
-    return new Date(`${match.dateValue}T${match.time}:00`) <= new Date();
+    return isPredictionLocked(match);
+}
+
+export function canMakePrediction(match: Match): boolean {
+    return !isPredictionLocked(match);
+}
+
+export function isPredictionLocked(match: Match): boolean {
+    if (hasClosedMatchStatus(match.status)) {
+        return true;
+    }
+
+    if (hasOpenMatchStatus(match.status)) {
+        return hasKickoffPassed(match);
+    }
+
+    return hasKickoffPassed(match);
 }
 
 export function predictionScoreLabel(match: Match): string | null {
@@ -54,4 +70,43 @@ export function aiPredictionScoreLabel(match: Match): string | null {
 
 export function normalizeScoreLabel(score: string | null): string | null {
     return score?.replace(':', ' - ') ?? null;
+}
+
+function hasKickoffPassed(match: Match): boolean {
+    const kickoff = new Date(`${match.dateValue}T${match.time}:00`);
+
+    if (Number.isNaN(kickoff.getTime())) {
+        return false;
+    }
+
+    return kickoff <= new Date();
+}
+
+function hasOpenMatchStatus(status: string): boolean {
+    return ['not started', 'ns', 'tbd', 'time to be defined'].includes(
+        normalizeStatus(status),
+    );
+}
+
+function hasClosedMatchStatus(status: string): boolean {
+    const normalizedStatus = normalizeStatus(status);
+
+    return [
+        'live',
+        'in progress',
+        'halftime',
+        'half-time',
+        'full-time',
+        'full time',
+        'finished',
+        'after penalties',
+        'second half',
+        'first half',
+        'extra time',
+        'penalties',
+    ].some((closedStatus) => normalizedStatus.includes(closedStatus));
+}
+
+function normalizeStatus(status: string): string {
+    return status.trim().toLowerCase();
 }

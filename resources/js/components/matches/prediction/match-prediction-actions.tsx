@@ -21,8 +21,8 @@ export default function MatchPredictionActions({ match }: Props) {
                         Match actions
                     </p>
                     <p className="mt-1 text-sm text-slate-600">
-                        Review the matchup, compare the model, then lock in your
-                        pick.
+                        Review the matchup, check AI availability and manage
+                        your pick before kickoff.
                     </p>
                 </div>
 

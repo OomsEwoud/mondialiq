@@ -1,11 +1,14 @@
 <?php
 
+use App\Enums\PredictionTypes;
 use App\Models\Country;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\MissingPlayer;
 use App\Models\Player;
+use App\Models\Prediction;
 use App\Models\Team;
+use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('the match detail page exposes missing players grouped by team', function () {
@@ -60,6 +63,42 @@ test('the match detail page exposes empty availability when no players are missi
             ->component('match-details')
             ->where('match.availability.home', [])
             ->where('match.availability.away', []));
+});
+
+test('the match detail page exposes ai and current user prediction metadata', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam, $awayTeam] = createFixtureForMatchDetails();
+
+    Prediction::query()->create([
+        'fixture_id' => $fixture->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::Ai->value,
+        'home_chance' => 58,
+        'draw_chance' => 24,
+        'away_chance' => 18,
+    ]);
+
+    Prediction::query()->create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $user->id,
+        'winner_id' => $awayTeam->id,
+        'source' => PredictionTypes::User->value,
+        'home_goals' => 1,
+        'away_goals' => 2,
+        'confidence' => 'high',
+    ]);
+
+    $response = $this->actingAs($user)->get(route('matches.show', $fixture));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('match-details')
+            ->where('match.hasAiPrediction', true)
+            ->where('match.userPrediction.label', 'Away Team')
+            ->where('match.userPrediction.homeScore', 1)
+            ->where('match.userPrediction.awayScore', 2)
+            ->where('match.userPrediction.confidence', 'high'));
 });
 
 function createMatchDetailsMissingPlayerRow(

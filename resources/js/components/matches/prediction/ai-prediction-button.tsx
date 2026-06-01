@@ -15,11 +15,11 @@ export default function AiPredictionButton({ available, matchId }: Props) {
                 disabled
                 variant="outline"
                 title="AI prediction is not available yet"
-                aria-label="AI prediction is not available yet"
+                aria-label="AI prediction pending"
                 className="w-full cursor-not-allowed justify-center rounded-xl border-slate-200 bg-slate-50 text-slate-400 opacity-100 shadow-none"
             >
                 <Sparkles className="h-4 w-4" />
-                AI Pending
+                AI pending
             </Button>
         );
     }
@@ -32,7 +32,7 @@ export default function AiPredictionButton({ available, matchId }: Props) {
         >
             <Link href={showAiPrediction.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
-                View AI Prediction
+                View AI prediction
             </Link>
         </Button>
     );

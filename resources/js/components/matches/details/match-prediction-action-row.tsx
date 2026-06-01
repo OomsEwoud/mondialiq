@@ -1,9 +1,8 @@
-import { Link } from '@inertiajs/react';
-import { PencilLine, Sparkles } from 'lucide-react';
 import { useState } from 'react';
+import AiPredictionButton from '@/components/matches/prediction/ai-prediction-button';
+import MatchDetailsActionButton from '@/components/matches/prediction/match-details-action-button';
+import UserPredictionButton from '@/components/matches/prediction/user-prediction-button';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
-import { Button } from '@/components/ui/forms/button';
-import { show as showAiPrediction } from '@/routes/predictions/ai';
 import type { Match } from '@/types/match';
 import type { MatchDetails } from '@/types/match-details';
 
@@ -11,15 +10,9 @@ interface Props {
     match: MatchDetails;
 }
 
-type MatchDetailsWithPredictionMeta = MatchDetails & {
-    hasAiPrediction?: boolean;
-};
-
 export default function MatchPredictionActionRow({ match }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
-    const hasAiPrediction = Boolean(
-        (match as MatchDetailsWithPredictionMeta).hasAiPrediction,
-    );
+    const hasAiPrediction = Boolean(match.hasAiPrediction);
     const modalMatch = toPredictionMatch(match);
 
     return (
@@ -27,46 +20,24 @@ export default function MatchPredictionActionRow({ match }: Props) {
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">
-                        Predictions
+                        Match actions
                     </p>
                     <p className="mt-1 text-sm font-medium text-slate-600">
-                        Compare the model insight, then lock in your personal
-                        pick.
+                        Open the match report, check the AI signal and manage
+                        your pick.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                    {hasAiPrediction ? (
-                        <Button
-                            asChild
-                            variant="outline"
-                            className="h-11 rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 shadow-none hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-cyan-300"
-                        >
-                            <Link href={showAiPrediction.url(match.id)}>
-                                <Sparkles className="h-4 w-4 text-cyan-600" />
-                                View AI prediction
-                            </Link>
-                        </Button>
-                    ) : (
-                        <Button
-                            type="button"
-                            disabled
-                            variant="outline"
-                            className="h-11 cursor-not-allowed rounded-xl border-slate-200 bg-slate-50 px-4 font-black text-slate-400 opacity-100 shadow-none"
-                        >
-                            <Sparkles className="h-4 w-4" />
-                            AI pending
-                        </Button>
-                    )}
-
-                    <Button
-                        type="button"
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                    <MatchDetailsActionButton matchId={match.id} />
+                    <AiPredictionButton
+                        available={hasAiPrediction}
+                        matchId={match.id}
+                    />
+                    <UserPredictionButton
+                        match={modalMatch}
                         onClick={() => setPredictionOpen(true)}
-                        className="h-11 rounded-xl bg-blue-950 px-4 font-black text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300"
-                    >
-                        <PencilLine className="h-4 w-4" />
-                        Make prediction
-                    </Button>
+                    />
                 </div>
             </div>
 
@@ -92,7 +63,7 @@ function toPredictionMatch(match: MatchDetails): Match {
         awayTeamLogo: match.awayTeam.logo,
         round: match.round,
         date: match.date,
-        dateValue: toDateValue(match.date),
+        dateValue: match.dateValue,
         time: match.time,
         status: match.status,
         elapsedTime: match.elapsedTime,
@@ -101,17 +72,7 @@ function toPredictionMatch(match: MatchDetails): Match {
             extratime: match.score.extratime,
             penalties: match.score.penalties,
         },
-        hasAiPrediction: (match as MatchDetailsWithPredictionMeta)
-            .hasAiPrediction,
+        hasAiPrediction: match.hasAiPrediction,
+        userPrediction: match.userPrediction,
     };
-}
-
-function toDateValue(date: string): string {
-    const parsedDate = new Date(date);
-
-    if (Number.isNaN(parsedDate.getTime())) {
-        return '';
-    }
-
-    return parsedDate.toISOString().slice(0, 10);
 }

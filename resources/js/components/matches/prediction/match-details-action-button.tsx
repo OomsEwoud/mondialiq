@@ -16,7 +16,7 @@ export default function MatchDetailsActionButton({ matchId }: Props) {
         >
             <Link href={show.url(matchId)}>
                 <BarChart3 className="h-4 w-4" />
-                Match Details
+                Match details
             </Link>
         </Button>
     );

@@ -10,7 +10,7 @@ import { store as storePrediction } from '@/routes/matches/prediction';
 import type { Match } from '@/types/match';
 import type { UserPredictionFormData } from '@/types/match-prediction';
 import {
-    hasMatchStarted,
+    isPredictionLocked,
     initialPredictionFormData,
 } from '@/utils/match-prediction';
 
@@ -27,7 +27,7 @@ export default function UserPredictionForm({
     onSaved,
     onCancel,
 }: Props) {
-    const matchStarted = hasMatchStarted(match);
+    const predictionLocked = isPredictionLocked(match);
     const { data, setData, post, processing, errors, clearErrors } =
         useForm<UserPredictionFormData>(initialPredictionFormData(match));
 
@@ -55,17 +55,10 @@ export default function UserPredictionForm({
 
     return (
         <form onSubmit={submit} className="grid gap-4">
-            {matchStarted && (
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium text-amber-900">
-                    Predictions are closed because this match has already
-                    started.
-                </div>
-            )}
-
             <PredictionOutcomeField
                 match={match}
                 value={data.outcome}
-                disabled={matchStarted || processing}
+                disabled={predictionLocked || processing}
                 error={errors.outcome}
                 onChange={(outcome) => setData('outcome', outcome)}
             />
@@ -74,7 +67,7 @@ export default function UserPredictionForm({
                 match={match}
                 homeScore={data.home_score}
                 awayScore={data.away_score}
-                disabled={matchStarted || processing}
+                disabled={predictionLocked || processing}
                 homeError={errors.home_score}
                 awayError={errors.away_score}
                 onHomeScoreChange={(score) => setData('home_score', score)}
@@ -83,7 +76,7 @@ export default function UserPredictionForm({
 
             <PredictionConfidenceField
                 value={data.confidence}
-                disabled={matchStarted || processing}
+                disabled={predictionLocked || processing}
                 error={errors.confidence}
                 onChange={(confidence) => setData('confidence', confidence)}
             />
@@ -100,14 +93,18 @@ export default function UserPredictionForm({
                 </Button>
                 <Button
                     type="submit"
-                    disabled={processing || matchStarted || data.outcome === ''}
+                    disabled={
+                        processing || predictionLocked || data.outcome === ''
+                    }
                     className="h-11 rounded-xl bg-blue-950 px-5 font-black text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                    {processing
-                        ? 'Saving...'
-                        : match.userPrediction
-                          ? 'Save Changes'
-                          : 'Save Prediction'}
+                    {predictionLocked
+                        ? 'Predictions closed'
+                        : processing
+                          ? 'Saving...'
+                          : match.userPrediction
+                            ? 'Save changes'
+                            : 'Save prediction'}
                 </Button>
             </div>
         </form>

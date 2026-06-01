@@ -70,9 +70,20 @@ export interface MatchDetails {
     round: string;
     season: number;
     date: string;
+    dateValue: string;
     time: string;
     status: string;
     elapsedTime: number | null;
+    hasAiPrediction: boolean;
+    userPrediction?: {
+        winnerId: number | null;
+        outcome: 'home' | 'draw' | 'away';
+        label: string;
+        homeScore: number | null;
+        awayScore: number | null;
+        confidence: 'low' | 'medium' | 'high' | null;
+        points: number | null;
+    } | null;
     score: {
         halftime: MatchDetailsScoreLine;
         fulltime: MatchDetailsScoreLine;
