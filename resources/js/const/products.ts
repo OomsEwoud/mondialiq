@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { BrainCircuit, ChartNoAxesColumn, Trophy } from 'lucide-react';
-import { groups, login, predictions } from '@/routes';
+import { groups, leaderboards, predictions } from '@/routes';
 
 export type ProductCard = {
     title: string;
@@ -38,7 +38,7 @@ export const products: ProductCard[] = [
             'Lock in your scores, build your bracket and compete in a private leaderboard with friends.',
         badge: 'Login required',
         cta: 'Start playing',
-        href: login.url(),
+        href: leaderboards.url(),
         icon: Trophy,
     },
 ];
