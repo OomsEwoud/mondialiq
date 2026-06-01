@@ -16,8 +16,8 @@ type Props = {
 };
 
 const menuItemClassName =
-    'rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950';
-const menuLinkClassName = 'flex w-full items-center gap-2';
+    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950';
+const menuLinkClassName = 'flex w-full cursor-pointer items-center gap-2';
 
 export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
@@ -73,7 +73,7 @@ export function UserMenuContent({ user }: Props) {
             <DropdownMenuSeparator className="my-2 bg-slate-200" />
             <DropdownMenuItem
                 asChild
-                className="rounded-lg px-3 py-2 font-semibold text-slate-600 transition-colors focus:bg-red-50 focus:text-red-600"
+                className="cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-600 transition-colors focus:bg-red-50 focus:text-red-600"
             >
                 <Link
                     className={menuLinkClassName}
