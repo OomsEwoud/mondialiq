@@ -1,0 +1,16 @@
+<svg width="300" height="72" viewBox="0 0 300 72" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">MondialIQ navbar logo</title>
+  <desc id="desc">Compact MondialIQ logo for dark navigation bars.</desc>
+  <g transform="translate(7 8) scale(0.11)">
+    <path d="M116 118C154 74 221 55 280 73" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+    <path d="M336 90C383 126 407 188 394 248" stroke="#10C8E8" stroke-width="20" stroke-linecap="round"/>
+    <path d="M98 285C129 361 209 405 289 387" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+    <path d="M128 166L223 238L318 166V298H262V252L223 282L184 252V298H128V166Z" fill="#FFFFFF"/>
+    <rect x="333" y="151" width="48" height="148" rx="24" fill="#10C8E8"/>
+    <circle cx="357" cy="117" r="31" fill="#10C8E8"/>
+    <path d="M151 328C174 294 206 279 248 281C290 283 323 302 342 330C316 355 284 368 248 368C211 368 179 354 151 328Z" fill="#07164D" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M244 292L277 311L265 346H224L212 311L244 292Z" fill="#FFFFFF"/>
+  </g>
+  <text x="72" y="45" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="31" font-weight="800" letter-spacing="-1.2" fill="#FFFFFF">Mondial</text>
+  <text x="202" y="45" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="31" font-weight="900" letter-spacing="-1.2" fill="#10C8E8">IQ</text>
+</svg>

@@ -1,5 +1,7 @@
 import { cn } from '@/lib/utils';
 
+import MondialIQLogo from './mondialiq-logo';
+
 type Props = {
     className?: string;
     markClassName?: string;
@@ -7,8 +9,7 @@ type Props = {
     showText?: boolean;
 };
 
-const logoMarkClassName =
-    'flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400 text-xl font-black text-blue-950 shadow-lg shadow-blue-900/20';
+const logoMarkClassName = 'h-10 w-10 rounded-xl shadow-lg shadow-blue-900/20';
 
 const logoTextClassName = 'text-xl font-black tracking-tight text-slate-900';
 
@@ -20,9 +21,11 @@ export default function AppLogo({
 }: Props) {
     return (
         <div className={cn('flex items-center gap-3', className)}>
-            <div className={cn(logoMarkClassName, markClassName)}>
-                MI
-            </div>
+            <MondialIQLogo
+                aria-hidden="true"
+                className={cn(logoMarkClassName, markClassName)}
+                variant="icon"
+            />
             {showText && (
                 <span className={cn(logoTextClassName, textClassName)}>
                     Mondial<span className="text-cyan-400">IQ</span>
