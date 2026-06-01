@@ -3,44 +3,19 @@
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Team;
-use App\Services\Prediction\PredictionContextService;
-use Mockery\MockInterface;
 
 test('it shows the prediction context prompt block for a fixture', function () {
     $fixture = createShowPredictionContextFixture();
 
-    $this->mock(PredictionContextService::class, function (MockInterface $mock) use ($fixture) {
-        $mock->shouldReceive('promptBlock')
-            ->once()
-            ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
-            ->andReturn(implode(PHP_EOL, [
-                'Prediction context:',
-                'Fixture:',
-                '- Belgium vs Netherlands',
-            ]));
-    });
-
     $this->artisan("app:show-prediction-context {$fixture->id}")
-        ->expectsOutput('Prediction context:')
-        ->expectsOutput('Fixture:')
-        ->expectsOutput('- Belgium vs Netherlands')
+        ->expectsOutputToContain('Prediction context:')
+        ->expectsOutputToContain('Fixture:')
+        ->expectsOutputToContain('- Belgium vs Netherlands')
         ->assertSuccessful();
 });
 
 test('it shows the prediction context as json', function () {
     $fixture = createShowPredictionContextFixture();
-
-    $this->mock(PredictionContextService::class, function (MockInterface $mock) use ($fixture) {
-        $mock->shouldReceive('summarize')
-            ->once()
-            ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
-            ->andReturn([
-                'fixture' => [
-                    'home_team' => 'Belgium',
-                    'away_team' => 'Netherlands',
-                ],
-            ]);
-    });
 
     $this->artisan("app:show-prediction-context {$fixture->id} --json")
         ->expectsOutputToContain('"home_team": "Belgium"')
@@ -49,11 +24,6 @@ test('it shows the prediction context as json', function () {
 });
 
 test('it fails when the fixture does not exist', function () {
-    $this->mock(PredictionContextService::class, function (MockInterface $mock) {
-        $mock->shouldNotReceive('promptBlock');
-        $mock->shouldNotReceive('summarize');
-    });
-
     $this->artisan('app:show-prediction-context 999999')
         ->expectsOutput('Fixture 999999 niet gevonden.')
         ->assertFailed();

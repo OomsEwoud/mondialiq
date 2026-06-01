@@ -13,13 +13,7 @@ use JsonException;
 #[Description('Toon de prediction context voor een fixture')]
 class ShowPredictionContext extends Command
 {
-    public function __construct(
-        private readonly PredictionContextService $predictionContextService,
-    ) {
-        parent::__construct();
-    }
-
-    public function handle(): int
+    public function handle(PredictionContextService $predictionContextService): int
     {
         $fixtureId = (int) $this->argument('fixture');
 
@@ -32,10 +26,10 @@ class ShowPredictionContext extends Command
         }
 
         if ($this->option('json')) {
-            return $this->showJson($fixture);
+            return $this->showJson($fixture, $predictionContextService);
         }
 
-        $this->line($this->predictionContextService->promptBlock($fixture));
+        $this->writeMultiline($predictionContextService->promptBlock($fixture));
 
         return self::SUCCESS;
     }
@@ -45,11 +39,11 @@ class ShowPredictionContext extends Command
         return Fixture::query()->find($fixtureId);
     }
 
-    private function showJson(Fixture $fixture): int
+    private function showJson(Fixture $fixture, PredictionContextService $predictionContextService): int
     {
         try {
-            $this->line(json_encode(
-                $this->predictionContextService->summarize($fixture),
+            $this->writeMultiline(json_encode(
+                $predictionContextService->summarize($fixture),
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
             ));
         } catch (JsonException $exception) {
@@ -59,5 +53,12 @@ class ShowPredictionContext extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private function writeMultiline(string $output): void
+    {
+        foreach (preg_split('/\R/', $output) ?: [$output] as $line) {
+            $this->line($line);
+        }
     }
 }

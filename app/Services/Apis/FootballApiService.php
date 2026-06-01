@@ -79,7 +79,7 @@ class FootballApiService
         ])
             ->connectTimeout(self::CONNECT_TIMEOUT_SECONDS)
             ->timeout(self::REQUEST_TIMEOUT_SECONDS)
-            ->retry(self::RETRY_TIMES, self::RETRY_SLEEP_MILLISECONDS);
+            ->retry(self::RETRY_TIMES, self::RETRY_SLEEP_MILLISECONDS, throw: false);
     }
 
     private function url(string $endpoint): string

@@ -6,7 +6,6 @@ use App\Models\Prediction;
 use App\Models\Team;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\AiPredictionService;
-use Mockery;
 use Mockery\MockInterface;
 
 test('it generates an ai prediction for a fixture', function () {

@@ -4,14 +4,21 @@ namespace App\Services\Fixture;
 
 use App\Models\Fixture;
 use App\Models\League;
+use App\Models\Prediction;
 use App\Models\Referee;
 use App\Models\Team;
 use App\Models\Venue;
+use App\Services\Prediction\PredictionScoreService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class FixtureService
 {
+    public function __construct(
+        private readonly PredictionScoreService $predictionScoreService,
+    ) {
+    }
+
     public function storeFixtures(array $fixtures): void
     {
         $leagueIds = League::query()->pluck('id', 'external_id');
@@ -24,10 +31,12 @@ class FixtureService
                 continue;
             }
 
-            Fixture::query()->updateOrCreate(
+            $storedFixture = Fixture::query()->updateOrCreate(
                 $this->fixtureUpdateIdentity($identity),
                 $this->fixtureAttributes($fixture, $identity),
             );
+
+            $this->scoreUserPredictions($storedFixture);
         }
     }
 
@@ -184,5 +193,27 @@ class FixtureService
         }
 
         return 'D';
+    }
+
+    private function scoreUserPredictions(Fixture $fixture): void
+    {
+        if ($fixture->fulltime_home_goals === null || $fixture->fulltime_away_goals === null) {
+            return;
+        }
+
+        $fixture->userPredictions()
+            ->whereNotNull('home_goals')
+            ->whereNotNull('away_goals')
+            ->get()
+            ->each(function (Prediction $prediction) use ($fixture): void {
+                $prediction->update([
+                    'points' => $this->predictionScoreService->calculate(
+                        (int) $prediction->home_goals,
+                        (int) $prediction->away_goals,
+                        $fixture->fulltime_home_goals,
+                        $fixture->fulltime_away_goals,
+                    ),
+                ]);
+            });
     }
 }

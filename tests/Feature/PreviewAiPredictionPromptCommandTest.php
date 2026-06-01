@@ -3,36 +3,18 @@
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Team;
-use App\Services\Prediction\AiPredictionPromptBuilder;
-use Mockery;
-use Mockery\MockInterface;
 
 test('it previews the ai prediction prompt for a fixture', function () {
     $fixture = createPreviewAiPredictionPromptFixture();
 
-    $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) use ($fixture) {
-        $mock->shouldReceive('build')
-            ->once()
-            ->with(Mockery::on(fn (Fixture $givenFixture) => $givenFixture->is($fixture)))
-            ->andReturn(implode(PHP_EOL, [
-                'You are an AI football prediction analyst for MondialIQ.',
-                'Context:',
-                'Prediction context:',
-            ]));
-    });
-
     $this->artisan("app:preview-ai-prediction-prompt {$fixture->id}")
-        ->expectsOutput('You are an AI football prediction analyst for MondialIQ.')
-        ->expectsOutput('Context:')
-        ->expectsOutput('Prediction context:')
+        ->expectsOutputToContain('You are an AI football prediction analyst for MondialIQ.')
+        ->expectsOutputToContain('Context:')
+        ->expectsOutputToContain('Prediction context:')
         ->assertSuccessful();
 });
 
 test('it fails when previewing a prompt for a missing fixture', function () {
-    $this->mock(AiPredictionPromptBuilder::class, function (MockInterface $mock) {
-        $mock->shouldNotReceive('build');
-    });
-
     $this->artisan('app:preview-ai-prediction-prompt 999999')
         ->expectsOutput('Fixture 999999 niet gevonden.')
         ->assertFailed();

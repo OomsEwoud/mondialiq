@@ -8,8 +8,8 @@ use App\Models\Team;
 use App\Models\TeamStatistic;
 use App\Services\Apis\FootballApiService;
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 
 class TeamStatisticsService
 {
@@ -90,7 +90,7 @@ class TeamStatisticsService
         return $existing->fetched_at->lt($this->refreshThreshold($hasFixtureToday));
     }
 
-    private function refreshThreshold(bool $hasFixtureToday): Carbon
+    private function refreshThreshold(bool $hasFixtureToday): CarbonInterface
     {
         return $hasFixtureToday
             ? now()->subHours(self::REFRESH_HOURS_WITH_FIXTURE_TODAY)

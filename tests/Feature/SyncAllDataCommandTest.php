@@ -2,7 +2,6 @@
 
 use App\Console\Commands\SyncAllData;
 use Illuminate\Console\OutputStyle;
-use Mockery;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 

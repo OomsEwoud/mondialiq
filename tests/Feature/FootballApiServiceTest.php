@@ -2,7 +2,6 @@
 
 use App\Services\Apis\FootballApiService;
 use Illuminate\Support\Facades\Http;
-use RuntimeException;
 
 beforeEach(function () {
     config([

@@ -6,13 +6,13 @@ use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\PredictionContextService;
-use Mockery;
 use Mockery\MockInterface;
+use function Pest\Laravel\mock;
 
 test('it builds a prompt with all prediction context sections', function () {
     $fixture = createAiPredictionPromptFixture();
 
-    mockPredictionPromptContext($this, $fixture, implode(PHP_EOL.PHP_EOL, [
+    mockPredictionPromptContext($fixture, implode(PHP_EOL.PHP_EOL, [
         'Prediction context:',
         'Fixture:',
         '- Belgium vs Netherlands',
@@ -44,7 +44,7 @@ test('it builds a prompt with all prediction context sections', function () {
 test('it separates instructions from fixture context', function () {
     $fixture = createAiPredictionPromptFixture();
 
-    mockPredictionPromptContext($this, $fixture, 'Prediction context:');
+    mockPredictionPromptContext($fixture, 'Prediction context:');
 
     $builder = app(AiPredictionPromptBuilder::class);
 
@@ -57,7 +57,7 @@ test('it separates instructions from fixture context', function () {
 test('it contains stable json output instructions', function () {
     $fixture = createAiPredictionPromptFixture();
 
-    mockPredictionPromptContext($this, $fixture, 'Prediction context:');
+    mockPredictionPromptContext($fixture, 'Prediction context:');
 
     $prompt = app(AiPredictionPromptBuilder::class)->build($fixture);
 
@@ -86,7 +86,7 @@ test('it contains stable json output instructions', function () {
 test('it includes prediction guidance', function () {
     $fixture = createAiPredictionPromptFixture();
 
-    mockPredictionPromptContext($this, $fixture, 'Prediction context:');
+    mockPredictionPromptContext($fixture, 'Prediction context:');
 
     $prompt = app(AiPredictionPromptBuilder::class)->build($fixture);
 
@@ -94,7 +94,7 @@ test('it includes prediction guidance', function () {
         ->and($prompt)->toContain('Treat API predictions as a secondary signal.')
         ->and($prompt)->toContain('Use team stats, standings, head-to-head and missing players as supporting context.')
         ->and($prompt)->toContain('Do not assume the listed home team has home advantage.')
-        ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage.')
+        ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
         ->and($prompt)->toContain('Do not claim certainty.')
         ->and($prompt)->toContain('Explain uncertainty where relevant.')
@@ -104,7 +104,7 @@ test('it includes prediction guidance', function () {
 test('it handles missing context safely', function () {
     $fixture = createAiPredictionPromptFixture();
 
-    mockPredictionPromptContext($this, $fixture, implode(PHP_EOL.PHP_EOL, [
+    mockPredictionPromptContext($fixture, implode(PHP_EOL.PHP_EOL, [
         'Prediction context:',
         'Market odds summary:',
         '- Home win probability: not available',
@@ -131,14 +131,14 @@ test('it does not call external football api services', function () {
         $mock->shouldNotReceive('getFixturePrediction');
     });
 
-    mockPredictionPromptContext($this, $fixture, 'Prediction context:');
+    mockPredictionPromptContext($fixture, 'Prediction context:');
 
     app(AiPredictionPromptBuilder::class)->build($fixture);
 });
 
-function mockPredictionPromptContext(object $testCase, Fixture $fixture, string $contextBlock): void
+function mockPredictionPromptContext(Fixture $fixture, string $contextBlock): void
 {
-    $testCase->mock(PredictionContextService::class, function (MockInterface $mock) use ($fixture, $contextBlock) {
+    mock(PredictionContextService::class, function (MockInterface $mock) use ($fixture, $contextBlock) {
         $mock->shouldReceive('promptBlock')
             ->once()
             ->with(

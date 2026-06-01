@@ -7,7 +7,6 @@ use App\Models\Fixture;
 use App\Models\Prediction;
 use Illuminate\Support\Arr;
 use JsonException;
-use OpenAI\Laravel\Facades\OpenAI;
 use RuntimeException;
 
 class AiPredictionService
@@ -18,6 +17,7 @@ class AiPredictionService
 
     public function __construct(
         private readonly AiPredictionPromptBuilder $promptBuilder,
+        private readonly OpenAiResponseClient $openAi,
     ) {
     }
 
@@ -25,7 +25,7 @@ class AiPredictionService
     {
         $fixture->loadMissing(['homeTeam:id,name', 'awayTeam:id,name']);
 
-        $response = OpenAI::responses()->create($this->openAiParameters($fixture));
+        $response = $this->openAi->create($this->openAiParameters($fixture));
 
         $prediction = $this->decodePrediction($response->outputText);
 

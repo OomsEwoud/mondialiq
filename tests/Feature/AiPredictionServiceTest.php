@@ -6,9 +6,9 @@ use App\Models\League;
 use App\Models\Team;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\AiPredictionService;
-use Mockery;
+use App\Services\Prediction\OpenAiResponseClient;
 use Mockery\MockInterface;
-use OpenAI\Laravel\Facades\OpenAI;
+use function Pest\Laravel\mock;
 
 test('it sends the built prompt to openai and stores the ai prediction', function () {
     $fixture = createAiPredictionServiceFixture();
@@ -23,23 +23,18 @@ test('it sends the built prompt to openai and stores the ai prediction', functio
             ->andReturn('prediction context');
     });
 
-    OpenAI::shouldReceive('responses->create')
-        ->once()
-        ->with(Mockery::on(fn (array $parameters): bool => isset($parameters['model'])
-            && $parameters['instructions'] === 'system instructions'
-            && $parameters['input'] === 'prediction context'))
-        ->andReturn((object) [
-            'outputText' => json_encode([
-                'predicted_outcome' => 'home',
-                'home_chance' => 58,
-                'draw_chance' => 24,
-                'away_chance' => 18,
-                'confidence' => 72,
-                'expected_score' => '2-1',
-                'explanation' => 'Market odds and team form favor the home team.',
-                'key_factors' => ['market odds', 'team form'],
-            ]),
-        ]);
+    mockOpenAiResponse([
+        'predicted_outcome' => 'home',
+        'home_chance' => 58,
+        'draw_chance' => 24,
+        'away_chance' => 18,
+        'confidence' => 72,
+        'expected_score' => '2-1',
+        'explanation' => 'Market odds and team form favor the home team.',
+        'key_factors' => ['market odds', 'team form'],
+    ], fn (array $parameters): bool => isset($parameters['model'])
+        && $parameters['instructions'] === 'system instructions'
+        && $parameters['input'] === 'prediction context');
 
     $prediction = app(AiPredictionService::class)->predict($fixture);
 
@@ -64,20 +59,16 @@ test('it stores the full ai advice text', function () {
         $mock->shouldReceive('context')->andReturn('prediction context');
     });
 
-    OpenAI::shouldReceive('responses->create')
-        ->once()
-        ->andReturn((object) [
-            'outputText' => json_encode([
-                'predicted_outcome' => 'home_or_draw',
-                'home_chance' => 49,
-                'draw_chance' => 28,
-                'away_chance' => 23,
-                'confidence' => 62,
-                'expected_score' => '1-0',
-                'explanation' => str_repeat('The market and API prediction both lean toward the home team avoiding defeat. ', 10),
-                'key_factors' => ['market odds', 'api prediction'],
-            ]),
-        ]);
+    mockOpenAiResponse([
+        'predicted_outcome' => 'home_or_draw',
+        'home_chance' => 49,
+        'draw_chance' => 28,
+        'away_chance' => 23,
+        'confidence' => 62,
+        'expected_score' => '1-0',
+        'explanation' => str_repeat('The market and API prediction both lean toward the home team avoiding defeat. ', 10),
+        'key_factors' => ['market odds', 'api prediction'],
+    ]);
 
     $prediction = app(AiPredictionService::class)->predict($fixture);
 
@@ -93,20 +84,16 @@ test('it maps double chance outcomes to the primary team and accepts colon score
         $mock->shouldReceive('context')->andReturn('prediction context');
     });
 
-    OpenAI::shouldReceive('responses->create')
-        ->once()
-        ->andReturn((object) [
-            'outputText' => json_encode([
-                'predicted_outcome' => 'home_or_draw',
-                'home_chance' => 49,
-                'draw_chance' => 28,
-                'away_chance' => 23,
-                'confidence' => 63,
-                'expected_score' => '1:0',
-                'explanation' => 'The market leans home or draw with a low score.',
-                'key_factors' => ['market odds'],
-            ]),
-        ]);
+    mockOpenAiResponse([
+        'predicted_outcome' => 'home_or_draw',
+        'home_chance' => 49,
+        'draw_chance' => 28,
+        'away_chance' => 23,
+        'confidence' => 63,
+        'expected_score' => '1:0',
+        'explanation' => 'The market leans home or draw with a low score.',
+        'key_factors' => ['market odds'],
+    ]);
 
     $prediction = app(AiPredictionService::class)->predict($fixture);
 
@@ -124,24 +111,20 @@ test('it accepts fenced json from openai', function () {
         $mock->shouldReceive('context')->andReturn('prediction context');
     });
 
-    OpenAI::shouldReceive('responses->create')
-        ->once()
-        ->andReturn((object) [
-            'outputText' => implode(PHP_EOL, [
-                '```json',
-                '{',
-                '  "predicted_outcome": "draw",',
-                '  "home_chance": 34,',
-                '  "draw_chance": 36,',
-                '  "away_chance": 30,',
-                '  "confidence": 55,',
-                '  "expected_score": null,',
-                '  "explanation": "The sources are close.",',
-                '  "key_factors": []',
-                '}',
-                '```',
-            ]),
-        ]);
+    mockOpenAiRawResponse(implode(PHP_EOL, [
+        '```json',
+        '{',
+        '  "predicted_outcome": "draw",',
+        '  "home_chance": 34,',
+        '  "draw_chance": 36,',
+        '  "away_chance": 30,',
+        '  "confidence": 55,',
+        '  "expected_score": null,',
+        '  "explanation": "The sources are close.",',
+        '  "key_factors": []',
+        '}',
+        '```',
+    ]));
 
     $prediction = app(AiPredictionService::class)->predict($fixture);
 
@@ -150,6 +133,25 @@ test('it accepts fenced json from openai', function () {
         ->and($prediction->home_goals)->toBeNull()
         ->and($prediction->away_goals)->toBeNull();
 });
+
+function mockOpenAiResponse(array $prediction, ?callable $parameterExpectation = null): void
+{
+    mockOpenAiRawResponse(json_encode($prediction), $parameterExpectation);
+}
+
+function mockOpenAiRawResponse(string $outputText, ?callable $parameterExpectation = null): void
+{
+    $mock = mock(OpenAiResponseClient::class);
+    $expectation = $mock->shouldReceive('create')->once();
+
+    if ($parameterExpectation !== null) {
+        $expectation->with(Mockery::on($parameterExpectation));
+    }
+
+    $expectation->andReturn((object) [
+        'outputText' => $outputText,
+    ]);
+}
 
 function createAiPredictionServiceFixture(): Fixture
 {

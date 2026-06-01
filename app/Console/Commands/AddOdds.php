@@ -5,11 +5,11 @@ namespace App\Console\Commands;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureOddsService;
+use Carbon\CarbonInterface;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Carbon;
 use Throwable;
 
 #[Signature('app:add-odds
@@ -59,7 +59,7 @@ class AddOdds extends Command
         return self::SUCCESS;
     }
 
-    private function oddsWindowStart(): Carbon
+    private function oddsWindowStart(): CarbonInterface
     {
         if ($this->option('include-recent')) {
             return now('UTC')->subDays(7);
@@ -68,7 +68,7 @@ class AddOdds extends Command
         return now('UTC');
     }
 
-    private function oddsWindowEnd(): Carbon
+    private function oddsWindowEnd(): CarbonInterface
     {
         return now('UTC')->addDays(max(1, (int) $this->option('days')));
     }

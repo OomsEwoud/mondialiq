@@ -13,8 +13,8 @@ use App\Services\Prediction\MissingPlayersSummaryService;
 use App\Services\Prediction\PredictionContextService;
 use App\Services\Prediction\StandingsSummaryService;
 use App\Services\Prediction\TeamStatsSummaryService;
-use Mockery;
 use Mockery\MockInterface;
+use function Pest\Laravel\mock;
 
 test('it builds context when all sources exist', function () {
     $fixture = createPredictionContextFixture();
@@ -24,7 +24,7 @@ test('it builds context when all sources exist', function () {
         'advice' => 'Double chance : Liverpool or draw',
     ]);
 
-    mockPredictionContextSummaryServices($this);
+    mockPredictionContextSummaryServices();
 
     $context = app(PredictionContextService::class)->summarize($fixture);
 
@@ -48,7 +48,7 @@ test('it builds context when all sources exist', function () {
 test('it builds context when some sources are missing', function () {
     $fixture = createPredictionContextFixture();
 
-    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+    mockPredictionContextSummaryServices(expectApiPrediction: false);
 
     $context = app(PredictionContextService::class)->summarize($fixture);
 
@@ -66,7 +66,7 @@ test('it does not crash with incomplete fixture data', function () {
     $fixture->match_date = null;
     $fixture->round_name = null;
 
-    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+    mockPredictionContextSummaryServices(expectApiPrediction: false);
 
     $promptBlock = app(PredictionContextService::class)->promptBlock($fixture);
 
@@ -83,7 +83,7 @@ test('prompt block contains all available sections', function () {
         'advice' => 'Winner : Liverpool',
     ]);
 
-    mockPredictionContextSummaryServices($this);
+    mockPredictionContextSummaryServices();
 
     $promptBlock = app(PredictionContextService::class)->promptBlock($fixture);
 
@@ -102,7 +102,7 @@ test('prompt block contains all available sections', function () {
 test('prompt block can omit guidance for ai input', function () {
     $fixture = createPredictionContextFixture();
 
-    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+    mockPredictionContextSummaryServices(expectApiPrediction: false);
 
     $promptBlock = app(PredictionContextService::class)->promptBlock($fixture, includeGuidance: false);
 
@@ -115,24 +115,26 @@ test('prompt block can omit guidance for ai input', function () {
 test('prompt block marks finals as likely neutral venue context', function () {
     $fixture = createPredictionContextFixture(['round_name' => 'Final']);
 
-    mockPredictionContextSummaryServices($this, expectApiPrediction: false);
+    mockPredictionContextSummaryServices(expectApiPrediction: false);
 
     $promptBlock = app(PredictionContextService::class)->promptBlock($fixture, includeGuidance: false);
 
     expect($promptBlock)->toContain('Venue context: Likely neutral venue; do not treat the listed home team as having home advantage.');
 });
 
-function mockPredictionContextSummaryServices(object $testCase, bool $expectApiPrediction = true): void
+function mockPredictionContextSummaryServices(bool $expectApiPrediction = true): void
 {
-    $testCase->mock(FixtureOddsSummaryService::class, function (MockInterface $mock) {
-        $mock->shouldReceive('summarize')->andReturn(['home_win_probability' => 82.0]);
+    mock(FixtureOddsSummaryService::class, function (MockInterface $mock) use ($expectApiPrediction) {
+        $mock->shouldReceive('summarize')->andReturn([
+            'home_win_probability' => $expectApiPrediction ? 82.0 : null,
+        ]);
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Market odds summary:',
-            '- Home win probability: 82%',
+            '- Home win probability: '.($expectApiPrediction ? '82%' : 'not available'),
         ]));
     });
 
-    $testCase->mock(ApiPredictionSummaryService::class, function (MockInterface $mock) use ($expectApiPrediction) {
+    mock(ApiPredictionSummaryService::class, function (MockInterface $mock) use ($expectApiPrediction) {
         if (! $expectApiPrediction) {
             $mock->shouldNotReceive('summarize');
             $mock->shouldNotReceive('promptBlock');
@@ -151,7 +153,7 @@ function mockPredictionContextSummaryServices(object $testCase, bool $expectApiP
             ]));
     });
 
-    $testCase->mock(TeamStatsSummaryService::class, function (MockInterface $mock) {
+    mock(TeamStatsSummaryService::class, function (MockInterface $mock) {
         $mock->shouldReceive('summarize')->andReturn(['home_team' => ['form' => 'WWDWL']]);
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Team statistics summary:',
@@ -159,7 +161,7 @@ function mockPredictionContextSummaryServices(object $testCase, bool $expectApiP
         ]));
     });
 
-    $testCase->mock(StandingsSummaryService::class, function (MockInterface $mock) {
+    mock(StandingsSummaryService::class, function (MockInterface $mock) {
         $mock->shouldReceive('summarize')->andReturn(['home_team' => ['rank' => 2]]);
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Standings summary:',
@@ -167,15 +169,17 @@ function mockPredictionContextSummaryServices(object $testCase, bool $expectApiP
         ]));
     });
 
-    $testCase->mock(HeadToHeadSummaryService::class, function (MockInterface $mock) {
-        $mock->shouldReceive('summarize')->andReturn(['total_meetings' => 8]);
+    mock(HeadToHeadSummaryService::class, function (MockInterface $mock) use ($expectApiPrediction) {
+        $mock->shouldReceive('summarize')->andReturn([
+            'total_meetings' => $expectApiPrediction ? 8 : null,
+        ]);
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Head-to-head summary:',
-            '- Total meetings: 8',
+            '- Total meetings: '.($expectApiPrediction ? '8' : 'not available'),
         ]));
     });
 
-    $testCase->mock(MissingPlayersSummaryService::class, function (MockInterface $mock) {
+    mock(MissingPlayersSummaryService::class, function (MockInterface $mock) {
         $mock->shouldReceive('summarize')->andReturn(['home_missing_count' => 1]);
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Missing players summary:',

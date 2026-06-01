@@ -12,13 +12,7 @@ use Illuminate\Console\Command;
 #[Description('Toon lokaal de AI prediction prompt voor een fixture zonder externe API call')]
 class PreviewAiPredictionPrompt extends Command
 {
-    public function __construct(
-        private readonly AiPredictionPromptBuilder $promptBuilder,
-    ) {
-        parent::__construct();
-    }
-
-    public function handle(): int
+    public function handle(AiPredictionPromptBuilder $promptBuilder): int
     {
         $fixtureId = (int) $this->argument('fixture');
 
@@ -30,7 +24,7 @@ class PreviewAiPredictionPrompt extends Command
             return self::FAILURE;
         }
 
-        $this->line($this->promptBuilder->build($fixture));
+        $this->writeMultiline($promptBuilder->build($fixture));
 
         return self::SUCCESS;
     }
@@ -38,5 +32,12 @@ class PreviewAiPredictionPrompt extends Command
     private function findFixture(int $fixtureId): ?Fixture
     {
         return Fixture::query()->find($fixtureId);
+    }
+
+    private function writeMultiline(string $output): void
+    {
+        foreach (preg_split('/\R/', $output) ?: [$output] as $line) {
+            $this->line($line);
+        }
     }
 }
