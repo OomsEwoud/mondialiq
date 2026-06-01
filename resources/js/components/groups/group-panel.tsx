@@ -1,4 +1,4 @@
-import GroupStandingsTable from '@/components/groups/group-standings-table';
+import { GroupStandingsTable } from '@/components/groups/group-standings-table';
 import QualificationProbability from '@/components/groups/qualification-probability';
 import type { WorldCupGroup } from '@/types/group';
 

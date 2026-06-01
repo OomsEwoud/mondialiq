@@ -21,22 +21,31 @@ export default function PredictionOptionCard({
             type="button"
             disabled={disabled}
             onClick={onSelect}
+            aria-pressed={selected}
             className={cn(
-                'flex min-h-24 w-full flex-col justify-between rounded-lg border bg-white p-3 text-left transition-all',
-                'hover:border-blue-300 hover:bg-blue-50/50 focus:ring-2 focus:ring-blue-100 focus:outline-none',
+                'relative flex min-h-24 w-full flex-col justify-between rounded-2xl border bg-white p-3 text-left transition-all sm:p-4',
+                'hover:border-cyan-200 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                 selected
-                    ? 'border-blue-600 bg-blue-50 shadow-sm'
-                    : 'border-slate-200',
-                disabled && 'cursor-not-allowed opacity-60 hover:bg-white',
+                    ? 'border-cyan-300 bg-cyan-50 text-blue-950 shadow-sm ring-2 ring-cyan-100'
+                    : 'border-slate-200 text-slate-700',
+                disabled &&
+                    'cursor-not-allowed opacity-60 hover:border-slate-200 hover:bg-white',
             )}
         >
             <span className="flex items-center justify-between gap-2">
-                <span className="text-sm font-bold text-slate-900">
+                <span className="text-sm font-black text-slate-900">
                     {label}
                 </span>
-                {selected && <CheckCircle2 className="h-4 w-4 text-blue-600" />}
+                {selected && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[10px] font-black text-cyan-700 ring-1 ring-cyan-100">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        Selected
+                    </span>
+                )}
             </span>
-            <span className="text-xs text-slate-500">{description}</span>
+            <span className="text-xs leading-5 text-slate-500">
+                {description}
+            </span>
         </button>
     );
 }

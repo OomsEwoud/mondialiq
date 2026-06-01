@@ -56,7 +56,7 @@ export default function UserPredictionForm({
     return (
         <form onSubmit={submit} className="grid gap-4">
             {matchStarted && (
-                <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium text-amber-900">
                     Predictions are closed because this match has already
                     started.
                 </div>
@@ -88,18 +88,20 @@ export default function UserPredictionForm({
                 onChange={(confidence) => setData('confidence', confidence)}
             />
 
-            <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
+            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4 backdrop-blur sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
                 <Button
                     type="button"
                     variant="outline"
                     disabled={processing}
                     onClick={onCancel}
+                    className="h-11 rounded-xl border-slate-200 bg-white font-black text-slate-700 hover:bg-slate-50"
                 >
                     Cancel
                 </Button>
                 <Button
                     type="submit"
                     disabled={processing || matchStarted || data.outcome === ''}
+                    className="h-11 rounded-xl bg-blue-950 px-5 font-black text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {processing
                         ? 'Saving...'

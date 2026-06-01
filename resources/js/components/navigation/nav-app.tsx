@@ -19,7 +19,7 @@ export default function NavApp({ onNavigate }: Props) {
                 return (
                     <Link
                         key={url}
-                        href={href}
+                        href={url}
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(

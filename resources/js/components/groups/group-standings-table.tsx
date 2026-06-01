@@ -9,7 +9,7 @@ interface Props {
     teams: GroupTeam[];
 }
 
-export default function GroupStandingsTable({ teams }: Props) {
+export function GroupStandingsTable({ teams }: Props) {
     return (
         <>
             <div className="grid gap-3 md:hidden">
@@ -137,3 +137,5 @@ export default function GroupStandingsTable({ teams }: Props) {
         </>
     );
 }
+
+export default GroupStandingsTable;
