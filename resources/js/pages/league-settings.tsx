@@ -21,20 +21,20 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
         <>
             <Head title={`${league.name} settings`} />
 
-            <div className="space-y-6">
+            <div className="mx-auto max-w-7xl space-y-6">
                 <section
                     className={cn(
-                        'rounded-2xl p-5 shadow-sm sm:p-8',
+                        'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7',
                         getLeagueBrandBannerClass(
                             league.accentColor,
                             league.coverStyle,
                         ),
                     )}
                 >
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             href={backHref}
-                            className="inline-flex items-center gap-2 text-sm font-black text-white/78 transition-colors hover:text-white"
+                            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-blue-950/25 px-3.5 py-2 text-sm font-black text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-blue-950/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
                         >
                             <ArrowLeft className="size-4" />
                             Back to league
@@ -51,50 +51,63 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                         </Badge>
                     </div>
 
-                    <div className="mt-6 max-w-3xl">
-                        <div className="mb-3 flex size-14 items-center justify-center rounded-2xl bg-white/18 text-3xl shadow-sm backdrop-blur-sm">
-                            <span aria-hidden="true">{league.icon}</span>
+                    <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                        <div className="max-w-3xl">
+                            <div className="mb-3 flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-3xl shadow-sm backdrop-blur-sm">
+                                <span aria-hidden="true">{league.icon}</span>
+                            </div>
+                            <p className="text-xs font-black tracking-[0.22em] text-white uppercase">
+                                League settings
+                            </p>
+                            <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
+                                Manage {league.name}
+                            </h1>
+                            <p className="mt-3 text-sm leading-6 text-white/90 sm:text-base">
+                                Update the league identity, manage member
+                                access, and keep invite controls tidy from one
+                                owner dashboard.
+                            </p>
                         </div>
-                        <p className="text-xs font-black tracking-[0.22em] text-white/72 uppercase">
-                            League settings
-                        </p>
-                        <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
-                            Manage {league.name}
-                        </h1>
-                        <p className="mt-3 text-sm leading-6 text-white/78 sm:text-base">
-                            Update league details, visual identity, and access
-                            for your members from one dedicated owner page.
-                        </p>
-                        <div className="mt-4 flex flex-wrap gap-2">
+
+                        <div className="flex flex-wrap gap-2 lg:justify-end">
                             <Badge
                                 variant="outline"
-                                className="rounded-full border-white/20 bg-white/14 px-2.5 py-1 font-semibold text-white"
+                                className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                             >
                                 <Users className="size-3.5" />
                                 {league.membersCount} {memberLabel}
+                            </Badge>
+                            <Badge
+                                variant="outline"
+                                className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
+                            >
+                                Private league
                             </Badge>
                         </div>
                     </div>
                 </section>
 
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px] xl:items-start">
                     <LeagueMembersManagementCard
                         leagueId={league.id}
                         members={league.members}
                     />
 
-                    <LeagueSettingsCard
-                        leagueId={league.id}
-                        leagueName={league.name}
-                        leagueIcon={league.icon}
-                        accentColor={league.accentColor}
-                        coverStyle={league.coverStyle}
-                    />
+                    <aside className="space-y-6">
+                        <LeagueSettingsCard
+                            leagueId={league.id}
+                            leagueName={league.name}
+                            leagueIcon={league.icon}
+                            leagueCode={league.code}
+                            accentColor={league.accentColor}
+                            coverStyle={league.coverStyle}
+                        />
 
-                    <LeagueDangerZoneCard
-                        leagueId={league.id}
-                        leagueName={league.name}
-                    />
+                        <LeagueDangerZoneCard
+                            leagueId={league.id}
+                            leagueName={league.name}
+                        />
+                    </aside>
                 </div>
             </div>
         </>

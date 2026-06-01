@@ -1,5 +1,7 @@
 import { Form } from '@inertiajs/react';
-import { Crown, ShieldCheck, ShieldPlus, UserMinus } from 'lucide-react';
+import { Crown, ShieldCheck, ShieldPlus, UserMinus, Users } from 'lucide-react';
+import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
+import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
 import {
     Avatar,
     AvatarFallback,
@@ -27,8 +29,6 @@ import {
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { LeagueMember } from '@/types/league';
-import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
-import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
 
 type Props = {
     leagueId: number;
@@ -40,52 +40,55 @@ export default function LeagueMembersManagementCard({
     members,
 }: Props) {
     const getInitials = useInitials();
-    const manageableMembers = members.filter((member) => member.canBeManaged);
-    const manageableCount = manageableMembers.length;
-    const showEmptyManageableState = manageableCount === 0;
-    const showSingleManageableWarning = manageableCount === 1;
+    const showOnlyOwnerState = members.length <= 1;
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
-            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                <div className="flex items-center gap-2 text-cyan-700">
-                    <ShieldCheck className="size-4" />
-                    <p className="text-xs font-black tracking-[0.16em] uppercase">
-                        Member management
-                    </p>
+            <CardHeader className="gap-3 px-4 py-5 sm:px-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <div className="flex items-center gap-2 text-cyan-700">
+                            <ShieldCheck className="size-4" />
+                            <p className="text-xs font-black tracking-[0.16em] uppercase">
+                                Member management
+                            </p>
+                        </div>
+                        <CardTitle className="mt-2 text-2xl font-black text-blue-950">
+                            Team access
+                        </CardTitle>
+                    </div>
+
+                    <Badge
+                        variant="outline"
+                        className="w-fit rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-black text-slate-700"
+                    >
+                        <Users className="size-3.5 text-cyan-700" />
+                        {members.length}{' '}
+                        {members.length === 1 ? 'member' : 'members'}
+                    </Badge>
                 </div>
-                <CardTitle className="text-2xl font-black text-blue-950">
-                    Team access overview
-                </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    Owners are marked clearly, and removable members are
-                    highlighted for a future management flow.
+                    Review members, transfer ownership, or remove access when a
+                    league invite is no longer meant for someone.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
-                {showEmptyManageableState && (
-                    <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-4">
-                        <p className="text-sm font-black text-cyan-900">
-                            You are the only active manager in this league right
-                            now.
-                        </p>
-                        <p className="mt-1 text-sm leading-6 text-cyan-800">
-                            Invite another member before you transfer ownership
-                            or start removing access.
-                        </p>
-                    </div>
-                )}
-
-                {showSingleManageableWarning && (
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4">
-                        <p className="text-sm font-black text-amber-900">
-                            Only one member can currently be managed.
-                        </p>
-                        <p className="mt-1 text-sm leading-6 text-amber-800">
-                            Double-check ownership transfer or removal carefully
-                            so the league does not become harder to manage
-                            afterwards.
-                        </p>
+                {showOnlyOwnerState && (
+                    <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-3">
+                        <div className="flex gap-3">
+                            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-cyan-700 shadow-sm">
+                                <Users className="size-4" />
+                            </span>
+                            <div>
+                                <p className="text-sm font-black text-cyan-950">
+                                    Invite friends to fill this league.
+                                </p>
+                                <p className="mt-1 text-sm leading-6 text-cyan-900">
+                                    Once more members join, ownership transfer
+                                    and removal controls will appear here.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -93,9 +96,9 @@ export default function LeagueMembersManagementCard({
                     <div
                         key={member.id}
                         className={cn(
-                            'flex flex-col gap-4 rounded-2xl border px-4 py-4 sm:flex-row sm:items-center sm:justify-between',
+                            'flex flex-col gap-3 rounded-2xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between',
                             member.isOwner
-                                ? 'border-amber-200 bg-amber-50'
+                                ? 'border-amber-200 bg-amber-50/70'
                                 : 'border-slate-200 bg-slate-50',
                         )}
                     >
@@ -128,10 +131,10 @@ export default function LeagueMembersManagementCard({
                                         </Badge>
                                     )}
                                 </div>
-                                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                                <p className="mt-1 text-xs leading-5 text-slate-500">
                                     {member.canBeManaged
-                                        ? 'You can remove this member from the league if needed.'
-                                        : 'Owner access cannot be removed from this screen later on.'}
+                                        ? 'Can be transferred or removed.'
+                                        : 'Protected owner access.'}
                                 </p>
                             </div>
                         </div>
@@ -144,7 +147,7 @@ export default function LeagueMembersManagementCard({
                                             <Button
                                                 type="button"
                                                 variant="outline"
-                                                className="h-10 w-full rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
+                                                className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
                                             >
                                                 <ShieldPlus className="size-4" />
                                                 Make owner
@@ -220,7 +223,7 @@ export default function LeagueMembersManagementCard({
                                             <Button
                                                 type="button"
                                                 variant="destructive"
-                                                className="h-10 w-full rounded-lg px-4 font-black"
+                                                className="h-10 w-full rounded-xl bg-red-600 px-4 font-black hover:bg-red-700 focus-visible:ring-red-200"
                                             >
                                                 <UserMinus className="size-4" />
                                                 Remove member

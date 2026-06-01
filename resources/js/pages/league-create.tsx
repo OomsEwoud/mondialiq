@@ -39,7 +39,7 @@ export default function LeagueCreate({
                 <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex items-center gap-2 text-sm font-black text-slate-500 transition-colors hover:text-blue-950"
+                        className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-black text-slate-700 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards

@@ -68,7 +68,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                 >
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex items-center gap-2 rounded-full text-sm font-black text-white/80 transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
+                        className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-blue-950/25 px-3.5 py-2 text-sm font-black text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-blue-950/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
