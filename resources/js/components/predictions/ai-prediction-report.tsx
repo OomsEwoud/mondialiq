@@ -9,7 +9,10 @@ import AiProbabilityBreakdown from '@/components/predictions/ai-probability-brea
 import PredictionSourceComparison from '@/components/predictions/prediction-source-comparison';
 import type { Match } from '@/types/match';
 import type { AiPredictionContext } from '@/types/prediction';
-import { aiPredictionScoreLabel } from '@/utils/match-prediction';
+import {
+    aiPredictionScoreLabel,
+    canMakePrediction,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -20,6 +23,7 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const prediction = match.aiPrediction;
     const hasUserPrediction = Boolean(match.userPrediction);
+    const predictionAllowed = canMakePrediction(match);
     const openPredictionModal = () => setPredictionOpen(true);
     const score = aiPredictionScoreLabel(match);
 
@@ -36,6 +40,7 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                 <AiPredictionAdviceCard advice={prediction?.advice} />
 
                 <AiPredictionReportActions
+                    canMakePrediction={predictionAllowed}
                     hasUserPrediction={hasUserPrediction}
                     onPredictionClick={openPredictionModal}
                 />
