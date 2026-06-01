@@ -14,9 +14,13 @@ import {
 
 interface Props {
     match: Match;
+    scoringGuideHref: string;
 }
 
-export default function UserPredictionDetail({ match }: Props) {
+export default function UserPredictionDetail({
+    match,
+    scoringGuideHref,
+}: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const hasUserPrediction = Boolean(match.userPrediction);
     const hasAiComparison = Boolean(match.hasAiPrediction);
@@ -36,6 +40,7 @@ export default function UserPredictionDetail({ match }: Props) {
                     actualAwayScore={match.score.fulltime.away}
                     homeTeamName={match.homeTeam}
                     awayTeamName={match.awayTeam}
+                    scoringGuideHref={scoringGuideHref}
                 />
                 <UserPredictionSummaryCards match={match} score={score} />
 

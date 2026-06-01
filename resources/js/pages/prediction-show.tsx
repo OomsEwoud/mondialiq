@@ -5,7 +5,12 @@ import UserPredictionDetail from '@/components/predictions/user-prediction-detai
 import { predictions } from '@/routes';
 import type { PredictionShowPageProps as Props } from '@/types/prediction';
 
-export default function PredictionShow({ match, mode, aiContext }: Props) {
+export default function PredictionShow({
+    match,
+    mode,
+    aiContext,
+    scoringGuideHref,
+}: Props) {
     const isAiMode = mode === 'ai';
     const fallbackHref = predictions.url({
         query: { mode },
@@ -23,7 +28,10 @@ export default function PredictionShow({ match, mode, aiContext }: Props) {
             {isAiMode ? (
                 <AiPredictionReport match={match} aiContext={aiContext} />
             ) : (
-                <UserPredictionDetail match={match} />
+                <UserPredictionDetail
+                    match={match}
+                    scoringGuideHref={scoringGuideHref}
+                />
             )}
         </>
     );

@@ -14,6 +14,7 @@ export interface PredictionShowPageProps {
     match: Match;
     mode: PredictionTab;
     aiContext: AiPredictionContext;
+    scoringGuideHref: string;
 }
 
 export interface AiPredictionContext {

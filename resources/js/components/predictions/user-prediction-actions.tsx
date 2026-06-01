@@ -16,7 +16,7 @@ export default function UserPredictionActions({ locked, onEdit }: Props) {
                 </h2>
                 <p className="mt-1 text-sm font-medium text-slate-500">
                     {locked
-                        ? 'This prediction is locked because the match has started.'
+                        ? 'Predictions are locked after kickoff.'
                         : 'You can still adjust your prediction before kickoff.'}
                 </p>
             </div>
@@ -28,7 +28,7 @@ export default function UserPredictionActions({ locked, onEdit }: Props) {
                     'justify-center',
                     locked
                         ? 'bg-slate-200 text-slate-500'
-                        : 'bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950',
+                        : 'bg-blue-950 text-white hover:bg-blue-900',
                 )}
                 onClick={onEdit}
             >

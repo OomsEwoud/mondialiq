@@ -34,6 +34,7 @@ class PredictionDetailsController extends Controller
             'match' => FixtureResource::make($fixture)->resolve(),
             'mode' => $mode,
             'aiContext' => $this->aiContext($fixture),
+            'scoringGuideHref' => route('scoring'),
         ]);
     }
 

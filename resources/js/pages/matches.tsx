@@ -1,4 +1,5 @@
 import { Head, router } from '@inertiajs/react';
+import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
@@ -9,7 +10,6 @@ import type {
     MatchPageProps as Props,
 } from '@/types/match-page';
 import { filledMatchFilters } from '@/utils/match-filters';
-import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 
 export default function Matches({ fixtures, filterOptions, filters }: Props) {
     const visit = (nextFilters: Filters) => {
