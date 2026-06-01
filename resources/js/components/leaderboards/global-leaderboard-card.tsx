@@ -24,7 +24,7 @@ type Props = {
 const topRankStyles: Record<number, string> = {
     1: 'border-amber-200 bg-amber-50 text-amber-700',
     2: 'border-slate-300 bg-slate-100 text-slate-700',
-    3: 'border-orange-200 bg-orange-50 text-orange-700',
+    3: 'border-cyan-200 bg-cyan-50 text-cyan-700',
 };
 
 export default function GlobalLeaderboardCard({
@@ -36,11 +36,12 @@ export default function GlobalLeaderboardCard({
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-2 border-b border-slate-200 px-4 py-5 sm:px-6">
-                <CardTitle className="text-2xl font-black text-blue-950">
-                    Global Leaderboard
+                <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                    Global leaderboard
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    The strongest prediction runs across MondialIQ right now.
+                    Compare total points, prediction volume and the strongest
+                    runs across MondialIQ.
                 </CardDescription>
             </CardHeader>
             <CardContent className="p-0">
@@ -54,9 +55,9 @@ export default function GlobalLeaderboardCard({
                                 <div
                                     key={leader.id}
                                     className={cn(
-                                        'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 transition-colors sm:px-6',
+                                        'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-l-4 border-transparent px-4 py-4 transition-colors sm:px-6',
                                         isCurrentUser &&
-                                            'bg-cyan-50/70 ring-1 ring-cyan-100 ring-inset',
+                                            'border-cyan-200 bg-cyan-50/50 ring-1 ring-cyan-100 ring-inset',
                                         isTopThree &&
                                             !isCurrentUser &&
                                             'bg-linear-to-r from-slate-50 to-white',
@@ -64,7 +65,7 @@ export default function GlobalLeaderboardCard({
                                 >
                                     <div
                                         className={cn(
-                                            'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black',
+                                            'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black shadow-xs',
                                             topRankStyles[leader.rank] ??
                                                 'border-slate-200 bg-slate-50 text-blue-950',
                                         )}
@@ -90,26 +91,35 @@ export default function GlobalLeaderboardCard({
                                                     {leader.name}
                                                 </p>
                                                 {isCurrentUser && (
-                                                    <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-[11px] font-black text-blue-950">
+                                                    <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-[11px] font-black text-cyan-700 shadow-none">
                                                         You
                                                     </Badge>
                                                 )}
                                             </div>
-                                            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                                            <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
                                                 {leader.predictionsCount}{' '}
                                                 {leader.predictionsCount === 1
                                                     ? 'prediction'
                                                     : 'predictions'}
                                             </p>
+                                            {isCurrentUser &&
+                                                leader.predictionsCount ===
+                                                    0 && (
+                                                    <p className="mt-1 text-xs font-semibold text-cyan-700">
+                                                        Make your first
+                                                        prediction to start
+                                                        scoring.
+                                                    </p>
+                                                )}
                                         </div>
                                     </div>
 
                                     <div className="text-right">
-                                        <p className="text-xl font-black text-cyan-600 sm:text-2xl">
+                                        <p className="text-2xl leading-none font-black text-blue-950 sm:text-3xl">
                                             {leader.totalPoints}
                                         </p>
                                         <p className="text-[11px] font-black tracking-[0.18em] text-slate-500 uppercase">
-                                            pts
+                                            PTS
                                         </p>
                                     </div>
                                 </div>

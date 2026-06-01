@@ -33,6 +33,7 @@ export default function Leaderboards({
                     />
                     <YourPositionCard
                         currentUserPosition={currentUserPosition}
+                        topPosition={globalLeaderboard[0] ?? null}
                         totalPlayers={totalPlayers}
                     />
                 </div>

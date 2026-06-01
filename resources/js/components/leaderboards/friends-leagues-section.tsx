@@ -34,12 +34,12 @@ export default function FriendsLeaguesSection({
             <CardHeader className="gap-4 border-b border-slate-200 px-4 py-5 sm:px-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <CardTitle className="text-2xl font-black text-blue-950">
-                            Friends Leagues
+                        <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                            Friends leagues
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
-                            Track the private leagues you joined and see where
-                            you stand against your friends.
+                            Create private leagues to compare predictions with
+                            friends.
                         </CardDescription>
                         <p className="mt-3 text-sm font-semibold text-slate-600">
                             {currentLeagueCount}/{maxLeagueCount} leagues joined
@@ -50,11 +50,11 @@ export default function FriendsLeaguesSection({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 sm:w-auto"
                             >
                                 <Link href={joinLeagueHref}>
                                     <LogIn className="size-4" />
-                                    Join League
+                                    Join league
                                 </Link>
                             </Button>
                         ) : (
@@ -62,30 +62,30 @@ export default function FriendsLeaguesSection({
                                 type="button"
                                 disabled
                                 variant="outline"
-                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-xl px-4 font-black sm:w-auto"
                             >
                                 <LogIn className="size-4" />
-                                Join League
+                                Join league
                             </Button>
                         )}
                         {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
-                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-xl bg-blue-950 px-4 font-black text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
                             >
                                 <Link href={createLeagueHref}>
                                     <Plus className="size-4" />
-                                    Create League
+                                    Create league
                                 </Link>
                             </Button>
                         ) : (
                             <Button
                                 type="button"
                                 disabled
-                                className="h-10 w-full rounded-lg px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-xl px-4 font-black sm:w-auto"
                             >
                                 <Plus className="size-4" />
-                                Create League
+                                Create league
                             </Button>
                         )}
                     </div>
@@ -115,10 +115,13 @@ export default function FriendsLeaguesSection({
                 ) : (
                     <LeaderboardEmptyState
                         title="No friends leagues yet"
-                        description="Create your first private league to invite friends, compare picks, and make every matchday more competitive."
-                        actionLabel="Create League"
+                        description="Create a private league and invite friends to compete during the tournament."
+                        actionLabel="Create league"
                         actionHref={createLeagueHref}
                         actionDisabled={hasReachedLeagueLimit}
+                        secondaryActionLabel="Join league"
+                        secondaryActionHref={joinLeagueHref}
+                        secondaryActionDisabled={hasReachedLeagueLimit}
                     />
                 )}
             </CardContent>

@@ -12,20 +12,30 @@ import PositionMetric from './position-metric';
 
 type Props = {
     currentUserPosition: LeaderboardEntry | null;
+    topPosition: LeaderboardEntry | null;
     totalPlayers: number;
 };
 
 export default function YourPositionCard({
     currentUserPosition,
+    topPosition,
     totalPlayers,
 }: Props) {
+    const pointsBehindLeader =
+        currentUserPosition && topPosition
+            ? Math.max(
+                  0,
+                  topPosition.totalPoints - currentUserPosition.totalPoints,
+              )
+            : null;
+
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-6">
                 <div className="flex items-center justify-between gap-3">
                     <div>
-                        <CardTitle className="text-2xl font-black text-blue-950">
-                            Your Position
+                        <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                            Your position
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
                             Your current place in the full MondialIQ rankings.
@@ -44,7 +54,7 @@ export default function YourPositionCard({
             <CardContent className="px-4 pb-5 sm:px-6">
                 {currentUserPosition ? (
                     <div className="space-y-4">
-                        <div className="rounded-2xl bg-linear-to-br from-blue-950 via-blue-900 to-cyan-600 px-5 py-5 text-white shadow-sm">
+                        <div className="rounded-2xl bg-linear-to-br from-blue-950 via-blue-900 to-cyan-700 px-5 py-5 text-white shadow-sm">
                             <p className="text-xs font-black tracking-[0.22em] text-cyan-100 uppercase">
                                 Current rank
                             </p>
@@ -55,6 +65,15 @@ export default function YourPositionCard({
                                 Out of {totalPlayers}{' '}
                                 {totalPlayers === 1 ? 'player' : 'players'}
                             </p>
+                            {pointsBehindLeader !== null && (
+                                <div className="mt-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2">
+                                    <p className="text-xs font-semibold text-cyan-50">
+                                        {pointsBehindLeader === 0
+                                            ? 'You are currently leading the table.'
+                                            : `You are ${pointsBehindLeader} pts behind rank #1.`}
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
