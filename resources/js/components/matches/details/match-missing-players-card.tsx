@@ -11,7 +11,7 @@ interface Props {
 
 export default function MatchMissingPlayersCard({ team, players }: Props) {
     return (
-        <section className="min-w-0 rounded-lg border border-slate-100 bg-slate-50 p-3 sm:p-4">
+        <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
             <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3">
                 <div className="flex min-w-0 items-center gap-3">
                     <img
@@ -28,7 +28,7 @@ export default function MatchMissingPlayersCard({ team, players }: Props) {
                         </p>
                     </div>
                 </div>
-                <span className="rounded-md border border-blue-100 bg-white px-2.5 py-1 text-xs font-black text-blue-700">
+                <span className="rounded-full border border-cyan-100 bg-white px-2.5 py-1 text-xs font-black text-cyan-700">
                     {players.length}
                 </span>
             </div>
@@ -36,11 +36,14 @@ export default function MatchMissingPlayersCard({ team, players }: Props) {
             {players.length > 0 ? (
                 <div className="mt-3 flex flex-col gap-2">
                     {players.map((player) => (
-                        <MatchMissingPlayerRow key={player.id} player={player} />
+                        <MatchMissingPlayerRow
+                            key={player.id}
+                            player={player}
+                        />
                     ))}
                 </div>
             ) : (
-                <p className="mt-3 rounded-md border border-dashed border-slate-200 bg-white px-3 py-4 text-sm font-medium text-slate-500">
+                <p className="mt-3 rounded-xl border border-dashed border-slate-200 bg-white px-3 py-4 text-sm font-medium text-slate-500">
                     No missing players reported.
                 </p>
             )}

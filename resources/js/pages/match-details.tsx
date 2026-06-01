@@ -3,6 +3,7 @@ import MatchAvailabilitySection from '@/components/matches/details/match-availab
 import MatchDataTabs from '@/components/matches/details/match-data-tabs';
 import MatchDetailsHero from '@/components/matches/details/match-details-hero';
 import MatchInfoCard from '@/components/matches/details/match-info-card';
+import MatchPredictionActionRow from '@/components/matches/details/match-prediction-action-row';
 import MatchScoreCard from '@/components/matches/details/match-score-card';
 import BackButton from '@/components/navigation/back-button';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
@@ -18,18 +19,19 @@ export default function MatchDetails({ match }: Props) {
         <>
             <Head title={pageTitle} />
 
-            <div className="mb-5">
-                <BackButton />
-            </div>
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:py-8">
+                <BackButton className="w-fit rounded-xl bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
 
-            <div className="flex flex-col gap-5">
-                <MatchDetailsHero match={match} />
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                    <MatchInfoCard match={match} />
-                    <MatchScoreCard match={match} />
+                <div className="flex flex-col gap-4 lg:gap-6">
+                    <MatchDetailsHero match={match} />
+                    <MatchPredictionActionRow match={match} />
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+                        <MatchInfoCard match={match} />
+                        <MatchScoreCard match={match} />
+                    </div>
+                    <MatchDataTabs match={match} />
+                    <MatchAvailabilitySection match={match} />
                 </div>
-                <MatchDataTabs match={match} />
-                <MatchAvailabilitySection match={match} />
             </div>
         </>
     );

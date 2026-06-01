@@ -18,7 +18,7 @@ export default function MatchMissingPlayerRow({ player }: Props) {
     const meta = [formatPlayerMeta(player), reason].filter(Boolean).join(' - ');
 
     return (
-        <div className="flex min-w-0 items-center gap-3 rounded-md border border-slate-100 bg-white px-3 py-2.5 shadow-xs">
+        <div className="flex min-w-0 items-center gap-3 rounded-xl border border-slate-100 bg-white px-3 py-2.5 shadow-xs">
             <Avatar className="size-10 border border-white shadow-sm ring-1 ring-slate-200">
                 {player.photo ? (
                     <AvatarImage

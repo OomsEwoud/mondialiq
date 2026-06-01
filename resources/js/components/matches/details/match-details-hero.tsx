@@ -11,12 +11,12 @@ export default function MatchDetailsHero({ match }: Props) {
     const scoreLabel = hasScore ? `${score.home} - ${score.away}` : 'vs';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <p className="mb-5 text-center text-xs font-black tracking-widest text-cyan-500 uppercase">
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5 lg:p-6">
+            <p className="mb-4 text-center text-xs font-black tracking-widest text-cyan-600 uppercase">
                 {match.round}
             </p>
 
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
                 <MatchDetailsTeamBlock
                     id={match.homeTeam.id}
                     logo={match.homeTeam.logo}
@@ -24,10 +24,10 @@ export default function MatchDetailsHero({ match }: Props) {
                     code={match.homeTeam.code}
                 />
                 <div className="text-center">
-                    <p className="text-3xl font-black text-blue-950">
+                    <p className="text-2xl font-black text-blue-950 sm:text-3xl">
                         {scoreLabel}
                     </p>
-                    <p className="mt-1 text-xs font-medium text-slate-400">
+                    <p className="mt-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-black tracking-wide text-slate-500 uppercase sm:text-xs">
                         {match.status}
                     </p>
                 </div>
