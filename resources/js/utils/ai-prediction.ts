@@ -55,11 +55,11 @@ export function hasMarketOdds(marketOdds: MarketOddsSummary): boolean {
 }
 
 function aiConfidenceLabel(confidence: number): string {
-    if (confidence >= 75) {
+    if (confidence >= 70) {
         return 'High confidence';
     }
 
-    if (confidence >= 50) {
+    if (confidence >= 40) {
         return 'Moderate confidence';
     }
 

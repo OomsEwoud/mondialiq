@@ -6,24 +6,38 @@ interface Props {
 }
 
 export default function AiPredictionAdviceCard({ advice }: Props) {
+    const chips = ['Market signal', 'API signal', 'Match context'];
+
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-2">
-                <span className="flex size-9 items-center justify-center rounded-md bg-blue-100 text-blue-900">
+        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+            <div className="flex items-start gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
                     <Sparkles className="size-4" />
                 </span>
                 <div>
-                    <h2 className="text-base font-black text-blue-950">
+                    <h2 className="text-lg font-black text-blue-950">
                         Why this prediction?
                     </h2>
-                    <p className="text-xs font-medium text-slate-500">
-                        Model reasoning based on the available match context.
+                    <p className="mt-1 text-sm leading-6 font-medium text-slate-500">
+                        The AI weighs market signals, API predictions and
+                        available match context.
                     </p>
                 </div>
             </div>
 
-            <div className="mt-4 max-w-3xl rounded-lg border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm leading-7 font-medium text-slate-700">
+            <div className="mt-5 flex flex-wrap gap-2">
+                {chips.map((chip) => (
+                    <span
+                        key={chip}
+                        className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-600"
+                    >
+                        {chip}
+                    </span>
+                ))}
+            </div>
+
+            <div className="mt-5 max-w-prose">
+                <p className="text-sm leading-7 font-medium text-slate-700 sm:text-base">
                     {cleanAiAdvice(advice) ?? 'No AI explanation available yet'}
                 </p>
             </div>

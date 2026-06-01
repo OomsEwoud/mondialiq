@@ -9,8 +9,8 @@ interface Props {
 export default function ApiSourceCard({ apiPrediction }: Props) {
     return (
         <PredictionSourceCard
-            title="API view"
-            subtitle="API-Football prediction signal"
+            title="API-Football prediction signal"
+            subtitle="External model and goal trend signal"
             rows={[
                 [
                     'Advice',

@@ -10,7 +10,7 @@ interface Props {
 export default function MarketSourceCard({ marketOdds }: Props) {
     return (
         <PredictionSourceCard
-            title="Market view"
+            title="Market signal"
             subtitle="Averaged bookmaker signal"
             rows={[
                 [
