@@ -45,6 +45,7 @@ export interface Match {
         homeScore: number | null;
         awayScore: number | null;
         confidence: string | null;
+        points: number | null;
         advice: string | null;
     } | null;
     userPrediction?: {
@@ -54,6 +55,7 @@ export interface Match {
         homeScore: number | null;
         awayScore: number | null;
         confidence: 'low' | 'medium' | 'high' | null;
+        points: number | null;
     } | null;
 }
 

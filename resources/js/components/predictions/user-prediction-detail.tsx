@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
+import PredictionScoreBreakdown from '@/components/predictions/prediction-score-breakdown';
 import UserPredictedScoreCard from '@/components/predictions/user-predicted-score-card';
 import UserPredictionActions from '@/components/predictions/user-prediction-actions';
 import UserPredictionAiComparisonCard from '@/components/predictions/user-prediction-ai-comparison-card';
@@ -28,6 +29,14 @@ export default function UserPredictionDetail({ match }: Props) {
             <div className="space-y-4 sm:space-y-5">
                 <UserPredictionHero match={match} />
                 <UserPredictedScoreCard match={match} score={score} />
+                <PredictionScoreBreakdown
+                    predictedHomeScore={match.userPrediction?.homeScore ?? null}
+                    predictedAwayScore={match.userPrediction?.awayScore ?? null}
+                    actualHomeScore={match.score.fulltime.home}
+                    actualAwayScore={match.score.fulltime.away}
+                    homeTeamName={match.homeTeam}
+                    awayTeamName={match.awayTeam}
+                />
                 <UserPredictionSummaryCards match={match} score={score} />
 
                 {hasAiComparison ? (

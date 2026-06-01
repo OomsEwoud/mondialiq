@@ -1,4 +1,5 @@
 import { BadgeCheck, Gauge, Goal } from 'lucide-react';
+import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { Badge } from '@/components/ui/feedback/badge';
 import type { Match } from '@/types/match';
 import {
@@ -51,6 +52,10 @@ export default function UserPredictionSummary({
                     <Gauge className="h-3 w-3" />
                     {prediction.confidence} confidence
                 </Badge>
+            )}
+
+            {!aiMode && (
+                <PredictionPointsBadge points={prediction.points ?? null} />
             )}
         </div>
     );

@@ -107,6 +107,7 @@ class FixtureResource extends JsonResource
             'homeScore' => $prediction->home_goals,
             'awayScore' => $prediction->away_goals,
             'confidence' => $prediction->confidence,
+            'points' => $prediction->points,
         ];
     }
 
