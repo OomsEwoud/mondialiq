@@ -15,13 +15,10 @@ export default function TeamDetails({ team }: Props) {
         <>
             <Head title={team.name} />
 
-            <div className="mb-5">
-                <BackButton />
-            </div>
-
-            <div className="flex flex-col gap-5">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:py-8">
+                <BackButton className="w-fit rounded-xl bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
                 <TeamHero team={team} />
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                     <TeamInfoCard team={team} />
                     <TeamCoachCard coach={team.coach} />
                 </div>
