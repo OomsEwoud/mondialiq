@@ -1,4 +1,4 @@
-import { Sparkles, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface Props {
     onClear: () => void;
@@ -6,10 +6,10 @@ interface Props {
 
 export default function EmptyFilteredPredictionsState({ onClear }: Props) {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white px-5 py-8 text-center shadow-sm shadow-blue-950/5">
-            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-cyan-50 text-cyan-700">
-                <Sparkles className="size-6" />
-            </div>
+        <section className="rounded-2xl border border-slate-200 bg-white/90 px-5 py-8 text-center shadow-sm shadow-blue-950/5 backdrop-blur">
+            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                Filtered view
+            </p>
             <h2 className="text-lg font-black text-slate-950">
                 No predictions match your filters.
             </h2>

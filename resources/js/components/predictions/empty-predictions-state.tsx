@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 import { matches } from '@/routes';
 
@@ -12,10 +12,10 @@ export default function EmptyPredictionsState({ mode, message }: Props) {
     const isAiMode = mode === 'ai';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white px-5 py-10 text-center shadow-sm shadow-blue-950/5">
-            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-cyan-50 text-cyan-700">
-                <Sparkles className="h-6 w-6" />
-            </div>
+        <section className="rounded-2xl border border-slate-200 bg-white/90 px-5 py-10 text-center shadow-sm shadow-blue-950/5 backdrop-blur">
+            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                Empty board
+            </p>
             <h2 className="text-lg font-black text-slate-950">
                 {isAiMode
                     ? 'AI predictions are warming up'

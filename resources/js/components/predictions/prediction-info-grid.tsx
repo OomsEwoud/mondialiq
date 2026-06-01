@@ -1,22 +1,20 @@
-import { Bot, GitCompareArrows, UserRound } from 'lucide-react';
-
 const infoItems = [
     {
         title: 'AI Predictions',
         description:
             'Model prediction based on match data, market signals and team context.',
-        icon: Bot,
+        metric: '01',
     },
     {
         title: 'Your Predictions',
         description: 'Lock in your own score, winner and confidence.',
-        icon: UserRound,
+        metric: '02',
     },
     {
         title: 'Compare',
         description:
             'See where your football instinct matches or differs from the model.',
-        icon: GitCompareArrows,
+        metric: '03',
     },
 ];
 
@@ -26,12 +24,12 @@ export default function PredictionInfoGrid() {
             {infoItems.map((item) => (
                 <article
                     key={item.title}
-                    className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5"
+                    className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur"
                 >
-                    <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
-                        <item.icon className="h-5 w-5" />
-                    </div>
-                    <h2 className="text-sm font-black text-slate-950">
+                    <p className="mb-3 text-xs font-black tracking-[0.2em] text-cyan-700 uppercase">
+                        {item.metric}
+                    </p>
+                    <h2 className="text-base font-black text-blue-950">
                         {item.title}
                     </h2>
                     <p className="mt-1 text-sm leading-6 text-slate-600">

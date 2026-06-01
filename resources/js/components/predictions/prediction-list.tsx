@@ -21,7 +21,7 @@ export default function PredictionList({
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
             {matches.map((match) => (
                 <PredictionCard
                     key={match.id}

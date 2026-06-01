@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, PencilLine, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import { Button } from '@/components/ui/forms/button';
@@ -21,19 +21,17 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                 <Button
                     type="button"
                     variant="outline"
-                    className="justify-center rounded-xl border-slate-200 bg-white text-slate-700 shadow-none hover:bg-slate-50 hover:text-slate-950 focus-visible:ring-cyan-300"
+                    className="justify-center rounded-xl border-slate-200 bg-white px-5 font-black text-slate-700 shadow-none hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300"
                     onClick={openPredictionModal}
                 >
-                    <PencilLine className="h-4 w-4" />
                     Edit prediction
                 </Button>
 
                 <Button
                     asChild
-                    className="justify-center rounded-xl bg-blue-950 text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300"
+                    className="justify-center rounded-xl bg-blue-950 px-5 font-black text-white shadow-sm shadow-blue-950/10 hover:bg-blue-900 focus-visible:ring-cyan-300"
                 >
                     <Link href={showMyPrediction.url(match.id)}>
-                        <Sparkles className="h-4 w-4" />
                         {viewLabel}
                         <ArrowRight className="h-4 w-4" />
                     </Link>
