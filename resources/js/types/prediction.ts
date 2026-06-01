@@ -7,6 +7,7 @@ export interface PredictionPageProps {
         links: Array<{ url: string | null; label: string; active: boolean }>;
     };
     mode: PredictionTab;
+    scoringGuideHref: string;
 }
 
 export interface PredictionShowPageProps {

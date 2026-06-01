@@ -37,6 +37,7 @@ export interface LeaderboardsPageProps {
     joinedLeagues: JoinedLeague[];
     createLeagueHref: string;
     joinLeagueHref: string;
+    scoringGuideHref: string;
     totalPlayers: number;
     currentLeagueCount: number;
     maxLeagueCount: number;

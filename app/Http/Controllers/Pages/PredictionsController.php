@@ -37,6 +37,7 @@ class PredictionsController extends Controller
         return Inertia::render('predictions', [
             'fixtures' => $fixtures,
             'mode' => $mode,
+            'scoringGuideHref' => route('scoring'),
         ]);
     }
 

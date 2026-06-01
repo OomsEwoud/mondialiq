@@ -19,6 +19,7 @@ use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionDetailsController;
 use App\Http\Controllers\Pages\PredictionsController;
+use App\Http\Controllers\Pages\ScoringGuideController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
@@ -31,6 +32,7 @@ Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.s
 Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
+Route::get('/scoring', ScoringGuideController::class)->name('scoring');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
     ->middleware('throttle:social-auth')
     ->name('auth.redirect');

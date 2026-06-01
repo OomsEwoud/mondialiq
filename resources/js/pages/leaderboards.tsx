@@ -12,6 +12,7 @@ export default function Leaderboards({
     joinedLeagues,
     createLeagueHref,
     joinLeagueHref,
+    scoringGuideHref,
     totalPlayers,
     currentLeagueCount,
     maxLeagueCount,
@@ -22,7 +23,7 @@ export default function Leaderboards({
         <>
             <Head title="Leaderboards" />
 
-            <LeaderboardsPageHeader />
+            <LeaderboardsPageHeader scoringGuideHref={scoringGuideHref} />
 
             <div className="space-y-6">
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.65fr)_minmax(320px,0.95fr)]">

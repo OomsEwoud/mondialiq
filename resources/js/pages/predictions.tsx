@@ -6,12 +6,16 @@ import PredictionPageHeader from '@/components/predictions/prediction-page-heade
 import PredictionTabs from '@/components/predictions/prediction-tabs';
 import type { PredictionPageProps as Props } from '@/types/prediction';
 
-export default function Predictions({ fixtures, mode }: Props) {
+export default function Predictions({
+    fixtures,
+    mode,
+    scoringGuideHref,
+}: Props) {
     return (
         <>
             <Head title="Predictions" />
 
-            <PredictionPageHeader />
+            <PredictionPageHeader scoringGuideHref={scoringGuideHref} />
             <PredictionInfoGrid />
             <PredictionTabs activeTab={mode} />
             <PredictionList

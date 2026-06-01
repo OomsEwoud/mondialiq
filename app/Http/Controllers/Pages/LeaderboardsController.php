@@ -28,6 +28,7 @@ class LeaderboardsController extends Controller
             'joinedLeagues' => $this->joinedLeagues($user),
             'createLeagueHref' => route('leagues.create'),
             'joinLeagueHref' => route('leagues.join'),
+            'scoringGuideHref' => route('scoring'),
             'currentLeagueCount' => $this->currentLeagueCount($user),
             'maxLeagueCount' => LeagueMembershipLimit::MAX_LEAGUES_PER_USER,
         ]);
