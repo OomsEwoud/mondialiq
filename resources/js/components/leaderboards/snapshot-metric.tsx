@@ -21,7 +21,9 @@ export default function SnapshotMetric({
                     {label}
                 </p>
             </div>
-            <p className="mt-2 text-base font-black text-blue-950">{value}</p>
+            <p className="mt-2 text-base leading-tight font-black text-blue-950">
+                {value}
+            </p>
             {helper && (
                 <p className="mt-1 text-xs font-semibold text-slate-500">
                     {helper}

@@ -15,16 +15,16 @@ interface Props {
 
 export default function LeagueSnapshotCard({ league }: Props) {
     return (
-        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
-            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                <CardTitle className="text-2xl font-black text-blue-950">
-                    League Snapshot
+        <Card className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm">
+            <CardHeader className="gap-2 px-4 py-4 sm:px-6">
+                <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                    League snapshot
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
                     Quick overview of the current race.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-3 px-4 pb-5 sm:px-6">
+            <CardContent className="grid gap-2 px-4 pb-4 sm:grid-cols-2 sm:px-6 xl:grid-cols-1 2xl:grid-cols-2">
                 <SnapshotMetric
                     icon={Crown}
                     label="Current leader"

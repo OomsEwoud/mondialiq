@@ -31,18 +31,24 @@ export default function LeagueOnboardingCard({
         return null;
     }
 
+    const openInviteTools = () => {
+        document
+            .getElementById('league-invite')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     return (
-        <Card className="rounded-2xl border-cyan-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 shadow-sm">
-            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                <CardTitle className="text-2xl font-black text-blue-950">
+        <Card className="gap-0 rounded-2xl border-cyan-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 py-0 shadow-sm">
+            <CardHeader className="gap-2 px-4 py-4 sm:px-6">
+                <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
                     What next?
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-600">
                     {description}
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
-                <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-4">
+            <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
+                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
                     <div className="flex items-center gap-2 text-cyan-700">
                         <Share2 className="size-4" />
                         <p className="text-xs font-black tracking-[0.16em] uppercase">
@@ -57,18 +63,17 @@ export default function LeagueOnboardingCard({
                         better leaderboard every matchday.
                     </p>
                     <Button
-                        asChild
+                        type="button"
                         variant="outline"
-                        className="mt-3 h-10 rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
+                        onClick={openInviteTools}
+                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300 sm:w-auto"
                     >
-                        <a href="#league-invite">
-                            Open invite tools
-                            <ArrowRight className="size-4" />
-                        </a>
+                        Open invite tools
+                        <ArrowRight className="size-4" />
                     </Button>
                 </div>
 
-                <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-4">
+                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
                     <div className="flex items-center gap-2 text-cyan-700">
                         <Target className="size-4" />
                         <p className="text-xs font-black tracking-[0.16em] uppercase">
@@ -84,7 +89,7 @@ export default function LeagueOnboardingCard({
                     </p>
                     <Button
                         asChild
-                        className="mt-3 h-10 rounded-lg px-4 font-black"
+                        className="mt-3 h-10 w-full rounded-xl bg-blue-950 px-4 font-black text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         <Link href={matches.url()}>
                             Explore matches
@@ -93,7 +98,7 @@ export default function LeagueOnboardingCard({
                     </Button>
                 </div>
 
-                <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-4">
+                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
                     <div className="flex items-center gap-2 text-cyan-700">
                         <Trophy className="size-4" />
                         <p className="text-xs font-black tracking-[0.16em] uppercase">
@@ -110,7 +115,7 @@ export default function LeagueOnboardingCard({
                     <Button
                         asChild
                         variant="outline"
-                        className="mt-3 h-10 rounded-lg px-4 font-black"
+                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         <Link href={predictions.url()}>
                             Open my predictions

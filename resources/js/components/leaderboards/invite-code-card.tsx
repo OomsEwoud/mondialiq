@@ -1,4 +1,4 @@
-import { Copy, Link2, Share2, Sparkles, Ticket } from 'lucide-react';
+import { Check, Copy, Link2, Share2, Sparkles, Ticket } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -92,20 +92,20 @@ export default function InviteCodeCard({
     return (
         <Card
             id="league-invite"
-            className="rounded-2xl border-slate-200 bg-white shadow-sm"
+            className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm"
         >
-            <CardHeader className="gap-2 px-4 py-5 sm:px-6">
+            <CardHeader className="gap-2 px-4 py-4 sm:px-6">
                 <CardTitle className="text-xl font-black text-blue-950">
                     Invite teammates
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    Share this league code so friends can join your private
+                    Share this league with friends so they can join your private
                     standings.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 px-4 pb-5 sm:px-6">
+            <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 {isSmallLeague && (
-                    <div className="rounded-2xl border border-cyan-200 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-4 py-4">
+                    <div className="rounded-2xl border border-cyan-200 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-4 py-3">
                         <div className="flex items-center gap-2 text-cyan-700">
                             <Sparkles className="size-4" />
                             <p className="text-xs font-black tracking-[0.16em] uppercase">
@@ -122,14 +122,14 @@ export default function InviteCodeCard({
                     </div>
                 )}
 
-                <div className="rounded-2xl border border-slate-200 bg-linear-to-r from-slate-50 to-white px-4 py-4">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <div className="flex items-center gap-2 text-slate-500">
                         <Ticket className="size-4 text-cyan-600" />
                         <p className="text-xs font-black tracking-[0.16em] uppercase">
                             Invite code
                         </p>
                     </div>
-                    <p className="mt-3 text-2xl font-black tracking-[0.28em] text-blue-950 sm:text-3xl">
+                    <p className="mt-3 overflow-hidden font-mono text-2xl font-black tracking-widest text-blue-950 sm:text-3xl">
                         {code}
                     </p>
                     <p className="mt-2 text-xs leading-5 text-slate-500">
@@ -138,37 +138,46 @@ export default function InviteCodeCard({
                     </p>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-2">
+                    <Button
+                        type="button"
+                        className="h-10 w-full rounded-xl bg-blue-950 px-4 font-black text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
+                        disabled={isCopyingCode || isCopyingJoinLink}
+                        onClick={shareInvite}
+                    >
+                        <Share2 className="size-4" />
+                        Share invite
+                    </Button>
                     <Button
                         type="button"
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-black"
+                        aria-label="Copy invite code"
+                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyCode}
                     >
-                        <Copy className="size-4" />
+                        {isCopyingCode ? (
+                            <Check className="size-4" />
+                        ) : (
+                            <Copy className="size-4" />
+                        )}
                         {isCopyingCode ? 'Copied' : 'Copy code'}
                     </Button>
 
                     <Button
                         type="button"
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-black"
+                        aria-label="Copy invite link"
+                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyJoinLink}
                     >
-                        <Link2 className="size-4" />
+                        {isCopyingJoinLink ? (
+                            <Check className="size-4" />
+                        ) : (
+                            <Link2 className="size-4" />
+                        )}
                         {isCopyingJoinLink ? 'Copied' : 'Copy join link'}
-                    </Button>
-                    <Button
-                        type="button"
-                        variant="outline"
-                        className="h-10 w-full rounded-lg border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:bg-cyan-50"
-                        disabled={isCopyingCode || isCopyingJoinLink}
-                        onClick={shareInvite}
-                    >
-                        <Share2 className="size-4" />
-                        Share invite
                     </Button>
                 </div>
             </CardContent>
