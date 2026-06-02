@@ -46,7 +46,7 @@ type Props = {
 const fieldErrorWrapperClassName = 'min-h-10';
 const fieldErrorClassName = 'leading-5';
 const emailVerificationCardClassName =
-    'rounded-xl border border-amber-200 bg-amber-50 p-4';
+    'rounded-[1.5rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] p-4 shadow-sm shadow-amber-950/5';
 
 export default function Profile({
     mustVerifyEmail,
@@ -455,7 +455,7 @@ export default function Profile({
                                                 variant="destructive"
                                                 type="submit"
                                                 disabled={processing}
-                                                className="w-full rounded-xl bg-red-600 font-black text-white hover:bg-red-700 sm:w-auto"
+                                                className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 sm:w-auto"
                                             >
                                                 Disable 2FA
                                             </Button>

@@ -40,11 +40,11 @@ export default function DeleteUser({ user }: Props) {
     return (
         <section className={settingsDangerSectionClassName}>
             <div className="mb-5 flex gap-4">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-700">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-700 ring-1 ring-red-100">
                     <AlertTriangle className="size-5" />
                 </span>
                 <div>
-                    <p className="mb-1 text-xs font-black tracking-widest text-red-500 uppercase">
+                    <p className="mb-1 text-xs font-black tracking-[0.18em] text-red-500 uppercase">
                         Danger zone
                     </p>
                     <h2 className="text-xl font-black tracking-tight text-blue-950">
@@ -57,7 +57,7 @@ export default function DeleteUser({ user }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4 rounded-2xl border border-red-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 rounded-[1.6rem] border border-red-200 bg-white p-4 shadow-sm shadow-red-950/5 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm font-semibold text-red-700">
                     Only continue if you are completely sure.
                 </p>
@@ -66,13 +66,13 @@ export default function DeleteUser({ user }: Props) {
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
-                            className="w-full rounded-xl bg-red-600 font-black text-white hover:bg-red-700 sm:w-auto"
+                            className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 sm:w-auto"
                             onClick={() => setConfirmationText('')}
                         >
                             Delete account
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-2xl border-red-100">
+                    <DialogContent className="rounded-[1.8rem] border-red-100">
                         <DialogTitle>
                             Are you sure you want to delete your account?
                         </DialogTitle>
@@ -121,7 +121,7 @@ export default function DeleteUser({ user }: Props) {
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+                                            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
                                                 This only deletes your MondialIQ
                                                 account. It will not delete your
                                                 {` ${providerAccountLabel}`}
@@ -162,7 +162,7 @@ export default function DeleteUser({ user }: Props) {
                                                     resetAndClearErrors();
                                                     setConfirmationText('');
                                                 }}
-                                                className="w-full rounded-xl font-black sm:w-auto"
+                                                className="w-full rounded-2xl font-black sm:w-auto"
                                             >
                                                 Cancel
                                             </Button>
@@ -174,7 +174,7 @@ export default function DeleteUser({ user }: Props) {
                                                 processing ||
                                                 confirmationText !== 'DELETE'
                                             }
-                                            className="w-full rounded-xl bg-red-600 font-black text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                                            className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                                             data-test="confirm-delete-user-button"
                                         >
                                             Delete account

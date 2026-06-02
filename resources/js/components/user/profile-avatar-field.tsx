@@ -74,10 +74,10 @@ export default function ProfileAvatarField({
                 />
                 <label
                     htmlFor="avatar"
-                    className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 shadow-sm transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
+                    className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm shadow-cyan-950/5 transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
                 >
                     <span className="flex min-w-0 items-center gap-3">
-                        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-cyan-100 text-blue-950">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-blue-950 ring-1 ring-cyan-200/70">
                             <ImagePlus className="size-5" />
                         </span>
                         <span className="min-w-0">
