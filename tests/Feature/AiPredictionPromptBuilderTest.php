@@ -63,21 +63,23 @@ test('it contains stable json output instructions', function () {
 
     expect($prompt)->toContain('Return a JSON object only.')
         ->and($prompt)->toContain('Expected JSON format:')
-        ->and($prompt)->toContain('"predicted_outcome": "home|draw|away|home_or_draw|away_or_draw|home_or_away"')
+        ->and($prompt)->toContain('"predicted_outcome": "home|draw|away"')
+        ->and($prompt)->toContain('"predicted_home_score": 0')
+        ->and($prompt)->toContain('"predicted_away_score": 0')
         ->and($prompt)->toContain('"home_chance": 0')
         ->and($prompt)->toContain('"draw_chance": 0')
         ->and($prompt)->toContain('"away_chance": 0')
         ->and($prompt)->toContain('"confidence": 0')
-        ->and($prompt)->toContain('"expected_score": "home-away|null"')
         ->and($prompt)->toContain('"explanation": ""')
         ->and($prompt)->toContain('"key_factors": []')
         ->and(AiPredictionPromptBuilder::EXPECTED_JSON_FORMAT)->toHaveKeys([
             'predicted_outcome',
+            'predicted_home_score',
+            'predicted_away_score',
             'home_chance',
             'draw_chance',
             'away_chance',
             'confidence',
-            'expected_score',
             'explanation',
             'key_factors',
         ]);
@@ -96,9 +98,15 @@ test('it includes prediction guidance', function () {
         ->and($prompt)->toContain('Do not assume the listed home team has home advantage.')
         ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
+        ->and($prompt)->toContain('The predicted score MUST match the predicted outcome.')
+        ->and($prompt)->toContain('If predicted_outcome is home, predicted_home_score must be greater than predicted_away_score.')
+        ->and($prompt)->toContain('If predicted_outcome is draw, both predicted scores must be equal.')
+        ->and($prompt)->toContain('If predicted_outcome is away, predicted_away_score must be greater than predicted_home_score.')
+        ->and($prompt)->toContain('Do not choose a draw only because API draw chance is high if market odds and API advice support one side.')
         ->and($prompt)->toContain('Do not claim certainty.')
         ->and($prompt)->toContain('Explain uncertainty where relevant.')
-        ->and($prompt)->toContain('Include expected_score as "home-away" when the context contains a market most likely score or enough goal data.');
+        ->and($prompt)->toContain('Most likely score is a supporting signal, not a hard rule.')
+        ->and($prompt)->toContain('Use market most likely score only when it matches the final predicted outcome.');
 });
 
 test('it handles missing context safely', function () {

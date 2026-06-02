@@ -6,18 +6,16 @@ use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use Illuminate\Support\Arr;
-use JsonException;
 use RuntimeException;
 
 class AiPredictionService
 {
     private const MODEL = 'gpt-5.4-mini';
 
-    private const SCORE_PATTERN = '/^(?<home>\d+(?:\.\d+)?)\s*[-:]\s*(?<away>\d+(?:\.\d+)?)$/';
-
     public function __construct(
         private readonly AiPredictionPromptBuilder $promptBuilder,
         private readonly OpenAiResponseClient $openAi,
+        private readonly AiPredictionPayloadValidator $payloadValidator,
     ) {
     }
 
@@ -29,9 +27,14 @@ class AiPredictionService
 
         $prediction = $this->decodePrediction($response->outputText);
 
+        $validatedPrediction = $this->payloadValidator->validateAiPredictionPayload(
+            $fixture,
+            $prediction,
+        );
+
         return Prediction::query()->updateOrCreate(
             $this->predictionIdentity($fixture),
-            $this->predictionAttributes($fixture, $prediction),
+            $this->predictionAttributes($fixture, $validatedPrediction),
         );
     }
 
@@ -70,7 +73,7 @@ class AiPredictionService
 
         try {
             $prediction = json_decode($this->cleanJson($outputText), true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (\JsonException $exception) {
             throw new RuntimeException("OpenAI response bevat geen geldige JSON: {$exception->getMessage()}", previous: $exception);
         }
 
@@ -100,7 +103,8 @@ class AiPredictionService
      */
     private function predictionAttributes(Fixture $fixture, array $prediction): array
     {
-        [$homeGoals, $awayGoals] = $this->scoreFromPrediction(Arr::get($prediction, 'expected_score'));
+        $homeGoals = $this->numericOrNull(Arr::get($prediction, 'predicted_home_score'));
+        $awayGoals = $this->numericOrNull(Arr::get($prediction, 'predicted_away_score'));
 
         return [
             'winner_id' => $this->winnerId($fixture, Arr::get($prediction, 'predicted_outcome')),
@@ -131,25 +135,6 @@ class AiPredictionService
         }
 
         return max(0, min(100, round((float) $value, 2)));
-    }
-
-    /**
-     * @return array{0: float|null, 1: float|null}
-     */
-    private function scoreFromPrediction(mixed $score): array
-    {
-        if (is_string($score) && preg_match(self::SCORE_PATTERN, $score, $matches) === 1) {
-            return [(float) $matches['home'], (float) $matches['away']];
-        }
-
-        if (is_array($score)) {
-            return [
-                $this->numericOrNull($score['home'] ?? null),
-                $this->numericOrNull($score['away'] ?? null),
-            ];
-        }
-
-        return [null, null];
     }
 
     private function numericOrNull(mixed $value): ?float
