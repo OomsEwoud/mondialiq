@@ -2,19 +2,26 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import GroupPageHeader from '@/components/groups/group-page-header';
 import GroupPanel from '@/components/groups/group-panel';
-import GroupTabs from '@/components/groups/group-tabs';
+import GroupTabs, { THIRD_PLACE_TAB_ID } from '@/components/groups/group-tabs';
 import GroupsEmptyState from '@/components/groups/groups-empty-state';
-import type { WorldCupGroup } from '@/types/group';
+import ThirdPlacePanel from '@/components/groups/third-place-panel';
+import type { ThirdPlaceRanking, WorldCupGroup } from '@/types/group';
 
 interface Props {
     groups: WorldCupGroup[];
+    thirdPlaceRanking: ThirdPlaceRanking;
 }
 
-export default function Groups({ groups }: Props) {
+export default function Groups({ groups, thirdPlaceRanking }: Props) {
     const firstGroup = groups[0] ?? null;
-    const [activeGroupId, setActiveGroupId] = useState(firstGroup?.id ?? '');
+    const hasThirdPlaceRanking = thirdPlaceRanking.teams.length > 0;
+    const initialGroupId = firstGroup?.id ?? THIRD_PLACE_TAB_ID;
+    const [activeGroupId, setActiveGroupId] = useState(initialGroupId);
     const activeGroup =
         groups.find((group) => group.id === activeGroupId) ?? firstGroup;
+    const showThirdPlaceRanking =
+        activeGroupId === THIRD_PLACE_TAB_ID && hasThirdPlaceRanking;
+    const hasStandings = activeGroup !== null || hasThirdPlaceRanking;
 
     return (
         <>
@@ -22,14 +29,23 @@ export default function Groups({ groups }: Props) {
 
             <GroupPageHeader />
 
-            {activeGroup ? (
+            {hasStandings ? (
                 <div className="mx-auto flex max-w-7xl flex-col gap-5 sm:gap-6">
                     <GroupTabs
                         groups={groups}
-                        activeGroupId={activeGroup.id}
+                        activeGroupId={
+                            showThirdPlaceRanking
+                                ? THIRD_PLACE_TAB_ID
+                                : (activeGroup?.id ?? THIRD_PLACE_TAB_ID)
+                        }
+                        showThirdPlaceRanking={hasThirdPlaceRanking}
                         onChange={setActiveGroupId}
                     />
-                    <GroupPanel group={activeGroup} />
+                    {showThirdPlaceRanking || activeGroup === null ? (
+                        <ThirdPlacePanel ranking={thirdPlaceRanking} />
+                    ) : (
+                        <GroupPanel group={activeGroup} />
+                    )}
                 </div>
             ) : (
                 <GroupsEmptyState />

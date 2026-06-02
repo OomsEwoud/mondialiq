@@ -3,25 +3,43 @@ import type { WorldCupGroup } from '@/types/group';
 interface Props {
     groups: WorldCupGroup[];
     activeGroupId: string;
+    showThirdPlaceRanking: boolean;
     onChange: (groupId: string) => void;
 }
 
-export default function GroupTabs({ groups, activeGroupId, onChange }: Props) {
+export const THIRD_PLACE_TAB_ID = 'BEST_3RD';
+
+export default function GroupTabs({
+    groups,
+    activeGroupId,
+    showThirdPlaceRanking,
+    onChange,
+}: Props) {
+    const tabs = [
+        ...groups.map((group) => ({
+            id: group.id,
+            label: group.id,
+        })),
+        ...(showThirdPlaceRanking
+            ? [{ id: THIRD_PLACE_TAB_ID, label: 'Best 3rd' }]
+            : []),
+    ];
+
     return (
         <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-sm shadow-blue-950/5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div
                 role="tablist"
                 aria-label="World Cup groups"
-                className="grid min-w-max auto-cols-[4.25rem] grid-flow-col gap-2 md:min-w-0 md:grid-flow-row md:grid-cols-8 lg:grid-cols-12"
+                className="grid min-w-max auto-cols-[5.25rem] grid-flow-col gap-2 md:min-w-0 md:grid-flow-row md:grid-cols-8 lg:grid-cols-[repeat(13,minmax(0,1fr))]"
             >
-                {groups.map((group) => {
-                    const isActive = group.id === activeGroupId;
+                {tabs.map((tab) => {
+                    const isActive = tab.id === activeGroupId;
 
                     return (
                         <button
-                            key={group.id}
+                            key={tab.id}
                             type="button"
-                            onClick={() => onChange(group.id)}
+                            onClick={() => onChange(tab.id)}
                             role="tab"
                             aria-selected={isActive}
                             className={[
@@ -31,7 +49,7 @@ export default function GroupTabs({ groups, activeGroupId, onChange }: Props) {
                                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                             ].join(' ')}
                         >
-                            {group.id}
+                            {tab.label}
                         </button>
                     );
                 })}

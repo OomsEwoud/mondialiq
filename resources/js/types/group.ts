@@ -18,3 +18,9 @@ export interface WorldCupGroup {
     name: string;
     teams: GroupTeam[];
 }
+
+export interface ThirdPlaceRanking {
+    id: 'BEST_3RD';
+    name: string;
+    teams: GroupTeam[];
+}

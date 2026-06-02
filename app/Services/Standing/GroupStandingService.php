@@ -19,6 +19,15 @@ class GroupStandingService
             ->values();
     }
 
+    public function thirdPlaceRanking(Collection $standings): array
+    {
+        return [
+            'id' => 'BEST_3RD',
+            'name' => 'Best third-placed teams',
+            'teams' => $this->teams($standings),
+        ];
+    }
+
     private function groupId(string $groupName): string
     {
         return str($groupName)->afterLast(' ')->upper()->toString();
