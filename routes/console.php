@@ -41,7 +41,7 @@ Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
-Schedule::command('app:add-fixture-data')->everyFifteenMinutes()->when($hasActiveOrSoonFixture)->withoutOverlapping();
+Schedule::command('app:add-fixture-data')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-data')->hourly()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
@@ -49,4 +49,4 @@ Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasFixtu
 
 Schedule::command('app:add-fixture-player-stats')->dailyAt('04:30')->skip($hasFixtureInProgress)->withoutOverlapping();
 
-Schedule::command('app:generate-ai-predictions --days=14')->everySixHours()->withoutOverlapping();
+Schedule::command('app:generate-ai-predictions --days=3')->everySixHours()->withoutOverlapping();

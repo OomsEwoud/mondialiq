@@ -158,16 +158,21 @@ class MatchDetailsResource extends JsonResource
     private function eventAttributes(): Collection
     {
         return $this->fixtureEvents
-            ->sortBy('time_elapsed')
+            ->sortBy(fn (FixtureEvent $event): string => sprintf(
+                '%05d-%05d-%010d',
+                $event->time_elapsed,
+                $event->extra_time ?? 0,
+                $event->id,
+            ))
             ->values()
             ->map(fn (FixtureEvent $event) => [
                 'id' => $event->id,
                 'minute' => $event->time_elapsed,
                 'extraTime' => $event->extra_time,
-                'team' => $event->team->name,
-                'teamLogo' => $event->team->logo_url,
-                'player' => $event->player?->display_name,
-                'assist' => $event->assist?->display_name,
+                'team' => $event->team?->name ?? $event->team_name ?? 'Unknown team',
+                'teamLogo' => $event->team?->logo_url ?? '',
+                'player' => $event->player?->display_name ?? $event->player_name,
+                'assist' => $event->assist?->display_name ?? $event->assist_name,
                 'type' => $event->type,
                 'detail' => $event->detail,
             ]);
