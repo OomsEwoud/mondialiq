@@ -29,10 +29,10 @@ export default function PredictionScoreBreakdown({
         actualAwayScore === null
     ) {
         return (
-            <section className="rounded-2xl border border-cyan-100 bg-linear-to-br from-cyan-50/80 via-white to-blue-50/70 p-5 shadow-sm shadow-blue-950/5">
+            <section className="rounded-[1.9rem] border border-cyan-200/70 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-cyan-950/8">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-cyan-700 ring-1 ring-cyan-100">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100">
                             <Trophy className="size-5" />
                         </div>
                         <div>
@@ -51,7 +51,7 @@ export default function PredictionScoreBreakdown({
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-cyan-200 bg-white px-5 py-4 text-center shadow-xs">
+                    <div className="rounded-[1.6rem] border border-cyan-200 bg-white px-5 py-4 text-center shadow-lg shadow-cyan-950/6">
                         <div className="text-3xl font-black text-blue-950">
                             20
                         </div>
@@ -62,7 +62,7 @@ export default function PredictionScoreBreakdown({
                 </div>
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-xl border border-slate-200 bg-white/80 p-4">
+                    <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
                         <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
                             Exact score
                         </p>
@@ -70,7 +70,7 @@ export default function PredictionScoreBreakdown({
                             Instantly earns the full 20 points.
                         </p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 bg-white/80 p-4">
+                    <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
                         <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
                             Partial score
                         </p>
@@ -79,7 +79,7 @@ export default function PredictionScoreBreakdown({
                             can still score.
                         </p>
                     </div>
-                    <div className="rounded-xl border border-slate-200 bg-white/80 p-4">
+                    <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
                         <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
                             Confidence
                         </p>
@@ -91,7 +91,7 @@ export default function PredictionScoreBreakdown({
 
                 <Link
                     href={scoringGuideHref}
-                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                 >
                     <Info className="size-4" />
                     How scoring works
@@ -108,10 +108,10 @@ export default function PredictionScoreBreakdown({
     });
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm shadow-blue-950/5">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-start gap-3">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
                         <Calculator className="size-5" />
                     </div>
                     <div>
@@ -136,7 +136,7 @@ export default function PredictionScoreBreakdown({
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-5 py-4 text-center">
+                <div className="rounded-[1.6rem] border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-5 py-4 text-center shadow-lg shadow-cyan-950/6">
                     <div className="text-3xl font-black text-blue-950">
                         {score.total}
                     </div>
@@ -147,7 +147,7 @@ export default function PredictionScoreBreakdown({
             </div>
 
             {score.exactScore ? (
-                <div className="mt-5 rounded-xl border border-emerald-100 bg-emerald-50 p-4">
+                <div className="mt-5 rounded-2xl border border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,1),rgba(209,250,229,0.82))] p-4 shadow-sm shadow-emerald-950/5">
                     <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
                         <CheckCircle2 className="size-4" />
                         Perfect prediction
@@ -163,10 +163,10 @@ export default function PredictionScoreBreakdown({
                         <div
                             key={item.label}
                             className={cn(
-                                'rounded-xl border p-4 transition-colors',
+                                'rounded-2xl border p-4 shadow-sm transition-colors',
                                 item.earned
-                                    ? 'border-cyan-100 bg-cyan-50/70'
-                                    : 'border-slate-200 bg-slate-50/70',
+                                    ? 'border-cyan-100 bg-cyan-50/70 shadow-cyan-950/5'
+                                    : 'border-slate-200 bg-slate-50/70 shadow-cyan-950/5',
                             )}
                         >
                             <div className="flex items-start justify-between gap-3">
@@ -210,7 +210,7 @@ export default function PredictionScoreBreakdown({
                 </div>
             )}
 
-            <div className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h4 className="text-sm font-black text-blue-950">
                         How points are calculated
@@ -223,7 +223,7 @@ export default function PredictionScoreBreakdown({
                 </div>
                 <Link
                     href={scoringGuideHref}
-                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                     <Info className="size-4" />
                     View guide

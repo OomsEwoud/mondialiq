@@ -11,7 +11,7 @@ export default function PredictionPointsBadge({ points }: Props) {
         <Badge
             className={
                 hasPoints
-                    ? 'border-cyan-200 bg-cyan-50 text-cyan-800'
+                    ? 'border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] text-cyan-800'
                     : 'border-slate-200 bg-slate-50 text-slate-500'
             }
         >

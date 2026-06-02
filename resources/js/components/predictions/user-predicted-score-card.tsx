@@ -16,7 +16,7 @@ export default function UserPredictedScoreCard({ match, score }: Props) {
         : 'Up to 20 points';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">
             <div className="grid grid-cols-[1fr] gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                 <UserPredictionTeam
                     logo={match.homeTeamLogo}
@@ -24,9 +24,9 @@ export default function UserPredictedScoreCard({ match, score }: Props) {
                     code={match.homeTeamShort}
                 />
 
-                <div className="rounded-2xl border border-cyan-100 bg-linear-to-b from-cyan-50/80 to-white px-5 py-4 text-center shadow-inner shadow-cyan-100/40">
+                <div className="rounded-[1.7rem] border border-cyan-200 bg-[radial-gradient(circle_at_top,rgba(103,232,249,0.18),transparent_10rem),linear-gradient(180deg,rgba(236,254,255,0.88),rgba(255,255,255,0.98))] px-5 py-5 text-center shadow-lg shadow-cyan-950/6">
                     <div className="flex justify-center">
-                        <span className="rounded-full border border-cyan-200 bg-white px-3 py-1 text-[11px] font-black tracking-[0.16em] text-cyan-700 uppercase">
+                        <span className="rounded-full border border-cyan-200 bg-white px-3 py-1 text-[11px] font-black tracking-[0.16em] text-cyan-700 uppercase shadow-sm shadow-cyan-950/5">
                             {pointsLabel}
                         </span>
                     </div>
