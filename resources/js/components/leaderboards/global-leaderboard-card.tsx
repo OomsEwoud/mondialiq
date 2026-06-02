@@ -34,8 +34,8 @@ export default function GlobalLeaderboardCard({
     const getInitials = useInitials();
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm">
-            <CardHeader className="gap-2 border-b border-slate-200 px-4 py-5 sm:px-6">
+        <Card className="overflow-hidden rounded-[1.9rem] border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] shadow-xl shadow-cyan-950/8">
+            <CardHeader className="gap-2 border-b border-slate-200 px-5 py-5 sm:px-6">
                 <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
                     Global leaderboard
                 </CardTitle>
@@ -55,7 +55,7 @@ export default function GlobalLeaderboardCard({
                                 <div
                                     key={leader.id}
                                     className={cn(
-                                        'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-l-4 border-transparent px-4 py-4 transition-colors sm:px-6',
+                                        'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-l-4 border-transparent px-5 py-4 transition-colors sm:px-6',
                                         isCurrentUser &&
                                             'border-cyan-200 bg-cyan-50/50 ring-1 ring-cyan-100 ring-inset',
                                         isTopThree &&
@@ -65,7 +65,7 @@ export default function GlobalLeaderboardCard({
                                 >
                                     <div
                                         className={cn(
-                                            'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black shadow-xs',
+                                            'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-black shadow-sm',
                                             topRankStyles[leader.rank] ??
                                                 'border-slate-200 bg-slate-50 text-blue-950',
                                         )}
@@ -74,7 +74,7 @@ export default function GlobalLeaderboardCard({
                                     </div>
 
                                     <div className="flex min-w-0 items-center gap-3">
-                                        <Avatar className="size-11 rounded-2xl ring-1 ring-slate-200">
+                                        <Avatar className="size-11 rounded-2xl ring-1 ring-slate-200 shadow-sm shadow-cyan-950/5">
                                             <AvatarImage
                                                 src={leader.avatar ?? undefined}
                                                 alt={leader.name}

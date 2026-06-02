@@ -47,7 +47,7 @@ export default function FriendsLeagueCard({ league }: Props) {
         league.membersCount === 1 ? 'member' : 'members';
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+        <Card className="overflow-hidden rounded-[1.7rem] border-cyan-100 bg-white shadow-lg shadow-cyan-950/6 transition-all hover:-translate-y-0.5 hover:shadow-xl">
             <div
                 className={getLeagueBrandBannerClass(
                     league.accentColor,
@@ -83,7 +83,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.memberAvatars.map((member) => (
                                 <Avatar
                                     key={member.id}
-                                    className="size-8 rounded-full ring-2 ring-white"
+                                className="size-8 rounded-full ring-2 ring-white shadow-sm shadow-blue-950/10"
                                 >
                                     <AvatarImage
                                         src={member.avatar ?? undefined}
@@ -129,7 +129,7 @@ export default function FriendsLeagueCard({ league }: Props) {
 
                 <div
                     className={cn(
-                        'rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3',
+                        'rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-3',
                         !performanceLabel && 'text-slate-400',
                     )}
                 >
@@ -144,7 +144,7 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
-                    className="h-10 w-full rounded-lg px-4 font-black"
+                    className="h-10 w-full rounded-2xl px-4 font-black"
                 >
                     <Link href={league.href}>View League</Link>
                 </Button>
@@ -154,7 +154,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-lg px-4 font-black',
+                            'h-10 w-full rounded-2xl px-4 font-black',
                             palette.button,
                         )}
                     >
@@ -167,14 +167,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                     <LeagueLeaveCard
                         leagueId={league.id}
                         leagueName={league.name}
-                        className="h-10 w-full rounded-lg border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
+                        className="h-10 w-full rounded-2xl border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
                     />
                 ) : (
                     <Button
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-black"
+                        className="h-10 w-full rounded-2xl px-4 font-black"
                     >
                         League action
                     </Button>
