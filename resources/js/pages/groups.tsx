@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import GroupPageHeader from '@/components/groups/group-page-header';
 import GroupPanel from '@/components/groups/group-panel';
+import StandingsExplanationModal from '@/components/groups/standings-explanation-modal';
 import GroupTabs, { THIRD_PLACE_TAB_ID } from '@/components/groups/group-tabs';
 import GroupsEmptyState from '@/components/groups/groups-empty-state';
 import ThirdPlacePanel from '@/components/groups/third-place-panel';
@@ -17,6 +18,8 @@ export default function Groups({ groups, thirdPlaceRanking }: Props) {
     const hasThirdPlaceRanking = thirdPlaceRanking.teams.length > 0;
     const initialGroupId = firstGroup?.id ?? THIRD_PLACE_TAB_ID;
     const [activeGroupId, setActiveGroupId] = useState(initialGroupId);
+    const [showStandingsExplanation, setShowStandingsExplanation] =
+        useState(false);
     const activeGroup =
         groups.find((group) => group.id === activeGroupId) ?? firstGroup;
     const showThirdPlaceRanking =
@@ -45,14 +48,25 @@ export default function Groups({ groups, thirdPlaceRanking }: Props) {
                         onChange={setActiveGroupId}
                     />
                     {showThirdPlaceRanking || activeGroup === null ? (
-                        <ThirdPlacePanel ranking={thirdPlaceRanking} />
+                        <ThirdPlacePanel
+                            ranking={thirdPlaceRanking}
+                            onExplain={() => setShowStandingsExplanation(true)}
+                        />
                     ) : (
-                        <GroupPanel group={activeGroup} />
+                        <GroupPanel
+                            group={activeGroup}
+                            onExplain={() => setShowStandingsExplanation(true)}
+                        />
                     )}
                 </div>
             ) : (
                 <GroupsEmptyState />
             )}
+
+            <StandingsExplanationModal
+                open={showStandingsExplanation}
+                onOpenChange={setShowStandingsExplanation}
+            />
         </>
     );
 }

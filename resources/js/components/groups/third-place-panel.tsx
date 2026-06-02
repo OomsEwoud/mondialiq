@@ -1,12 +1,14 @@
 import QualificationProbability from '@/components/groups/qualification-probability';
+import StandingsExplanationTrigger from '@/components/groups/standings-explanation-trigger';
 import ThirdPlaceStandingsTable from '@/components/groups/third-place-standings-table';
 import type { ThirdPlaceRanking } from '@/types/group';
 
 interface Props {
     ranking: ThirdPlaceRanking;
+    onExplain: () => void;
 }
 
-export default function ThirdPlacePanel({ ranking }: Props) {
+export default function ThirdPlacePanel({ ranking, onExplain }: Props) {
     return (
         <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.97))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">
             <header className="mb-5 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
@@ -18,9 +20,12 @@ export default function ThirdPlacePanel({ ranking }: Props) {
                         Best third-placed teams
                     </h2>
                 </div>
-                <p className="text-sm font-semibold text-slate-500 sm:text-sm">
-                    Top eight third-placed teams advance
-                </p>
+                <div className="flex flex-col items-start gap-3 sm:items-end">
+                    <p className="text-sm font-semibold text-slate-500 sm:text-sm">
+                        Top eight third-placed teams advance
+                    </p>
+                    <StandingsExplanationTrigger onClick={onExplain} />
+                </div>
             </header>
 
             <p className="mb-5 text-sm font-medium text-slate-600 sm:mb-6">
