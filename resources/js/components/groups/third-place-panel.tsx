@@ -8,22 +8,22 @@ interface Props {
 
 export default function ThirdPlacePanel({ ranking }: Props) {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-6">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.97))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">
             <header className="mb-5 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">
+                    <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
                         Best 3rd
                     </p>
-                    <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                    <h2 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
                         Best third-placed teams
                     </h2>
                 </div>
-                <p className="text-xs font-medium text-slate-500 sm:text-sm">
+                <p className="text-sm font-semibold text-slate-500 sm:text-sm">
                     Top eight third-placed teams advance
                 </p>
             </header>
 
-            <p className="mb-5 text-sm font-medium text-slate-500 sm:mb-6">
+            <p className="mb-5 text-sm font-medium text-slate-600 sm:mb-6">
                 The top eight third-placed teams advance to the Round of 32.
             </p>
 
