@@ -20,7 +20,12 @@ if (typeof window !== 'undefined' && window.location.hash === '#_=_') {
 }
 
 createInertiaApp({
-    title: (title) => (title ? `${title} | ${appName}` : appName),
+    title: (title) =>
+        title
+            ? title.includes(appName)
+                ? title
+                : `${title} | ${appName}`
+            : appName,
     layout: (name) => {
         switch (true) {
             case name === 'welcome':

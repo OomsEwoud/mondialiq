@@ -3,6 +3,19 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Track World Cup 2026 matches, explore AI-powered predictions and compete with friends in private prediction leagues.">
+        <meta name="robots" content="index, follow">
+        <link rel="canonical" href="https://mondialiq.ewoud.ooms.kdgmt.be/">
+        <meta property="og:title" content="MondialIQ - AI World Cup 2026 Predictions">
+        <meta property="og:description" content="Track World Cup 2026 matches, explore AI-powered predictions and compete with friends in private prediction leagues.">
+        <meta property="og:image" content="https://mondialiq.ewoud.ooms.kdgmt.be/og-image.png">
+        <meta property="og:url" content="https://mondialiq.ewoud.ooms.kdgmt.be/">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="MondialIQ">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="MondialIQ - AI World Cup 2026 Predictions">
+        <meta name="twitter:description" content="Track World Cup 2026 matches, explore AI-powered predictions and compete with friends in private prediction leagues.">
+        <meta name="twitter:image" content="https://mondialiq.ewoud.ooms.kdgmt.be/og-image.png">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -17,7 +30,7 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx'])
         <x-inertia::head>
-            <title>{{ config('app.name', 'MondialIQ') }}</title>
+            <title>MondialIQ - AI World Cup 2026 Predictions</title>
         </x-inertia::head>
     </head>
     <body class="font-sans antialiased">

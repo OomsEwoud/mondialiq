@@ -19,7 +19,7 @@ export default function Home({ upcomingFixtures }: Props) {
     return (
         <>
             <PageHead
-                title="World Cup 2026 Predictions"
+                title="MondialIQ - AI World Cup 2026 Predictions"
                 description="MondialIQ combines AI match insights, World Cup 2026 fixtures, user predictions and private leaderboards in one football prediction platform."
             />
 

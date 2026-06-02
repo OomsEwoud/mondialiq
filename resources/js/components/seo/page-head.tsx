@@ -1,6 +1,7 @@
 import { Head, usePage } from '@inertiajs/react';
 
-const defaultImagePath = '/brand/mondialiq-logo-horizontal.png';
+const defaultBaseUrl = 'https://mondialiq.ewoud.ooms.kdgmt.be';
+const defaultImagePath = '/og-image.png';
 const siteName = 'MondialIQ';
 
 type PageHeadProps = {
@@ -19,6 +20,7 @@ export default function PageHead({
     const { appUrl, url } = usePage().props;
     const canonicalUrl = absoluteUrl(appUrl, url);
     const imageUrl = absoluteUrl(appUrl, image);
+    const socialTitle = formatSocialTitle(title);
 
     return (
         <Head title={title}>
@@ -35,7 +37,7 @@ export default function PageHead({
             <meta
                 head-key="og:title"
                 property="og:title"
-                content={title ? `${title} | ${siteName}` : siteName}
+                content={socialTitle}
             />
             <meta
                 head-key="og:description"
@@ -53,7 +55,7 @@ export default function PageHead({
             <meta
                 head-key="twitter:title"
                 name="twitter:title"
-                content={title ? `${title} | ${siteName}` : siteName}
+                content={socialTitle}
             />
             <meta
                 head-key="twitter:description"
@@ -78,16 +80,23 @@ export default function PageHead({
 }
 
 function absoluteUrl(appUrl: unknown, path: unknown): string {
-    const baseUrl = typeof appUrl === 'string' ? appUrl : '';
+    const baseUrl =
+        typeof appUrl === 'string' && appUrl.startsWith('http')
+            ? appUrl
+            : defaultBaseUrl;
     const value = typeof path === 'string' && path.length > 0 ? path : '/';
 
     if (value.startsWith('http://') || value.startsWith('https://')) {
         return value;
     }
 
-    if (!baseUrl) {
-        return value;
+    return `${baseUrl.replace(/\/$/, '')}/${value.replace(/^\//, '')}`;
+}
+
+function formatSocialTitle(title?: string): string {
+    if (!title) {
+        return 'MondialIQ - AI World Cup 2026 Predictions';
     }
 
-    return `${baseUrl.replace(/\/$/, '')}/${value.replace(/^\//, '')}`;
+    return title.includes(siteName) ? title : `${title} | ${siteName}`;
 }

@@ -1,2 +1,4 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://mondialiq.ewoud.ooms.kdgmt.be/sitemap.xml
