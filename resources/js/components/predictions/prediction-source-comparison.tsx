@@ -24,7 +24,7 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
         <section className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 className="text-lg font-black text-blue-950">
+                    <h2 className="text-2xl font-black text-blue-950">
                         Data signals
                     </h2>
                     <p className="text-sm font-medium text-slate-500">

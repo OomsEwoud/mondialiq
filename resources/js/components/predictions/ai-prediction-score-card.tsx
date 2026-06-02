@@ -22,9 +22,9 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
               : null;
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-5">
-                <div className="min-w-0 rounded-xl bg-slate-50 p-2 sm:p-3">
+                <div className="min-w-0 rounded-2xl bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-3 shadow-sm shadow-cyan-950/5">
                     <UserPredictionTeam
                         logo={match.homeTeamLogo}
                         name={match.homeTeam}
@@ -32,7 +32,7 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                     />
                 </div>
 
-                <div className="min-w-[7.5rem] rounded-2xl border border-cyan-100 bg-cyan-50/50 px-3 py-4 text-center sm:min-w-40 sm:px-6">
+                <div className="min-w-[7.5rem] rounded-[1.6rem] border border-cyan-200 bg-[radial-gradient(circle_at_top,rgba(103,232,249,0.18),transparent_10rem),linear-gradient(180deg,rgba(236,254,255,0.9),rgba(255,255,255,0.98))] px-3 py-5 text-center shadow-lg shadow-cyan-950/6 sm:min-w-40 sm:px-6">
                     <p className="text-[11px] font-black tracking-[0.2em] text-slate-400 uppercase">
                         Predicted score
                     </p>
@@ -40,13 +40,13 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                         {score ?? 'Not available'}
                     </p>
                     {predictionLabel ? (
-                        <p className="mt-3 rounded-full border border-cyan-200 bg-white px-3 py-1 text-xs font-black text-blue-950">
+                        <p className="mt-4 inline-flex rounded-full border border-cyan-200 bg-white px-3 py-1 text-xs font-black text-blue-950 shadow-sm shadow-cyan-950/5">
                             {predictionLabel}
                         </p>
                     ) : null}
                 </div>
 
-                <div className="min-w-0 rounded-xl bg-slate-50 p-2 sm:p-3">
+                <div className="min-w-0 rounded-2xl bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-3 shadow-sm shadow-cyan-950/5">
                     <UserPredictionTeam
                         logo={match.awayTeamLogo}
                         name={match.awayTeam}

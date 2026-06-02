@@ -45,7 +45,7 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                     onPredictionClick={openPredictionModal}
                 />
 
-                <p className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 font-medium text-slate-600">
+                <p className="rounded-[1.7rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 text-sm leading-6 font-medium text-slate-600 shadow-sm shadow-cyan-950/5">
                     Predictions are data-driven insights, not certainties.
                 </p>
             </div>

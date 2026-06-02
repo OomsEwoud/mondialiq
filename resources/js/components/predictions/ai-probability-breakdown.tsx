@@ -35,17 +35,17 @@ export default function AiProbabilityBreakdown({ match }: Props) {
     }
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
             <div className="flex items-start justify-between gap-3">
                 <div>
-                    <h2 className="text-lg font-black text-blue-950">
+                    <h2 className="text-2xl font-black text-blue-950">
                         Probability breakdown
                     </h2>
                     <p className="mt-1 text-sm font-medium text-slate-500">
                         Estimated outcome chances, not certainties.
                     </p>
                 </div>
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100">
                     <BarChart3 className="size-5" />
                 </span>
             </div>

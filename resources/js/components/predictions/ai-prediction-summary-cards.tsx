@@ -20,7 +20,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
     const expectedScore = score ?? 'Score prediction not available';
 
     return (
-        <section className="grid gap-3 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-3">
             <AiPredictionSummaryCard icon={Trophy} label="Predicted outcome">
                 <p className="text-2xl leading-tight font-black text-blue-950">
                     {predictedOutcome}
@@ -39,10 +39,10 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                         {confidence.label}
                     </p>
                 </div>
-                <div className="mt-4 h-2 rounded-full bg-slate-100">
+                <div className="mt-4 h-2.5 rounded-full bg-slate-100">
                     <div
                         className={cn(
-                            'h-2 rounded-full',
+                            'h-2.5 rounded-full shadow-sm',
                             confidenceValue === null && 'bg-slate-300',
                             confidenceValue !== null &&
                                 confidenceValue < 40 &&
