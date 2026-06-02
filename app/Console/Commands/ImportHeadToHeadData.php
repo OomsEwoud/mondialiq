@@ -66,7 +66,7 @@ class ImportHeadToHeadData extends Command
     }
 
     /**
-     * @param  \Illuminate\Support\Collection<int, \App\Models\Fixture>  $fixtures
+     * @param Collection<int, Fixture>  $fixtures
      */
     private function importFixtures(Collection $fixtures, bool $force): int
     {

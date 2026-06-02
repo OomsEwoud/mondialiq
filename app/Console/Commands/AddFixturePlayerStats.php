@@ -41,8 +41,7 @@ class AddFixturePlayerStats extends Command
         $playerStats = $this->api->getFixturePlayersStats($this->externalFixtureId($fixture));
 
         $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
-
-        // API-FOOTBALL applies tight per-endpoint rate limits during live syncing.
+        
         sleep(1);
     }
 }

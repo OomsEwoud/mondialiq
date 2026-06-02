@@ -43,10 +43,12 @@ class AddOdds extends Command
 
         $totals = $this->emptySummary();
 
-        $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$totals): void {
+        $failed = 0;
+        $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$totals, &$failed): void {
             try {
                 $totals = $this->mergeSummary($totals, $this->syncFixtureOdds($fixture));
             } catch (Throwable $exception) {
+                $failed++;
                 $this->newLine();
                 $this->error("Fout bij ophalen odds voor fixture {$fixture->id}: {$exception->getMessage()}");
             }
@@ -55,6 +57,11 @@ class AddOdds extends Command
         $this->newLine();
         $this->reportSummary($totals);
         $this->info('Fixture odds sync klaar');
+
+        if ($failed > 0) {
+            $this->error("Er zijn odds voor {$failed} fixtures niet gesynchroniseerd vanwege fouten.");
+            return self::FAILURE;
+        }
 
         return self::SUCCESS;
     }

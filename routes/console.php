@@ -1,13 +1,7 @@
 <?php
 
 use App\Models\Fixture;
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
 
 $hasFixtureInProgress = static fn (): bool => Fixture::query()
     ->whereNotNull('external_id')
@@ -27,11 +21,11 @@ Schedule::command('app:add-teams')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
-Schedule::command('app:add-fixtures')->daily()->withoutOverlapping();
+Schedule::command('app:add-fixtures')->everyThirtyMinutes()->withoutOverlapping();
 
 Schedule::command('app:add-missing-players')->daily()->withoutOverlapping();
 
-if (now()->between('2026-06-11', '2026-06-29')) {
+if (now()->between('2026-06-11', '2026-07-19')) {
     Schedule::command('app:add-standings')->hourly()->withoutOverlapping();
 } else {
     Schedule::command('app:add-standings')->daily()->withoutOverlapping();
@@ -41,9 +35,7 @@ Schedule::command('app:add-bookmakers')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-odds')->everyThreeHours()->withoutOverlapping();
 
-Schedule::command('app:add-predictions')->hourly()->when($hasFixtureInProgress)->withoutOverlapping();
-
-Schedule::command('app:add-predictions')->dailyAt('03:00')->skip($hasFixtureInProgress)->withoutOverlapping();
+Schedule::command('app:add-predictions')->everySixHours()->withoutOverlapping();
 
 Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
@@ -51,8 +43,10 @@ Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-fixture-data')->everyFifteenMinutes()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
-Schedule::command('app:add-fixture-data')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
+Schedule::command('app:add-fixture-data')->hourly()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasFixtureInProgress)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-player-stats')->dailyAt('04:30')->skip($hasFixtureInProgress)->withoutOverlapping();
+
+Schedule::command('app:generate-ai-predictions --days=14')->everySixHours()->withoutOverlapping();

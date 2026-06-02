@@ -17,19 +17,23 @@ class SyncWorldCupData extends Command
         ['command' => 'app:add-countries'],
         ['command' => 'app:add-leagues'],
         ['command' => 'app:add-teams'],
-        ['command' => 'app:add-players'],
         ['command' => 'app:add-fixtures'],
+
+        ['command' => 'app:add-players'],
+        ['command' => 'app:add-coaches'],
+        ['command' => 'app:add-venues'],
+
         ['command' => 'app:add-standings'],
         ['command' => 'app:add-bookmakers'],
         ['command' => 'app:add-odds', 'arguments' => ['--days' => 90]],
         ['command' => 'app:add-predictions'],
-        ['command' => 'app:add-coaches'],
-        ['command' => 'app:add-venues'],
+
         ['command' => 'app:add-missing-players'],
         ['command' => 'app:import-head-to-head', 'arguments' => ['--force' => true]],
         ['command' => 'app:import-team-statistics', 'arguments' => ['--force' => true]],
         ['command' => 'app:add-fixture-data'],
         ['command' => 'app:add-fixture-player-stats'],
+        ['command' => 'app:generate-ai-predictions', 'arguments' => ['--days' => 14]],
     ];
 
     public function handle(): int

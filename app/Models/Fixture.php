@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
-    private const RECENT_DATA_SYNC_WINDOW_HOURS = 3;
-    private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 45;
+    private const RECENT_DATA_SYNC_WINDOW_HOURS = 12;
+    private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 120;
 
     private const LIVE_STATUS_LONGS = [
         'Kick Off',

@@ -36,10 +36,12 @@ class AddPredictions extends Command
 
         $this->info("{$fixtures->count()} relevante fixtures gevonden.");
 
-        $this->withProgressBar($fixtures, function (Fixture $fixture): void {
+        $failed = 0;
+        $this->withProgressBar($fixtures, function (Fixture $fixture) use ($failed): void {
             try {
                 $this->syncFixturePrediction($fixture);
             } catch (Throwable $exception) {
+                $failed++;
                 $this->newLine();
                 $this->error("Fout bij ophalen voorspelling voor fixture {$fixture->id}: {$exception->getMessage()}");
             }
@@ -47,6 +49,11 @@ class AddPredictions extends Command
 
         $this->newLine();
         $this->info('Alle voorspellingen zijn geupdate');
+
+        if ($failed > 0) {
+            $this->error("Er zijn {$failed} voorspellingen niet gesynchroniseerd vanwege fouten.");
+            return self::FAILURE;
+        }
 
         return self::SUCCESS;
     }
