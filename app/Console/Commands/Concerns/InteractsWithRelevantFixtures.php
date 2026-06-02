@@ -16,7 +16,7 @@ trait InteractsWithRelevantFixtures
     {
         return $this->dataSyncFixtureQuery()
             ->relevantForDataSync()
-            ->get(['id', 'external_id', 'match_date']);
+            ->get(['id', 'external_id', 'match_date', 'status_short', 'status_long', 'elapsed_time']);
     }
 
     protected function runRelevantFixtureDataSync(
@@ -37,6 +37,7 @@ trait InteractsWithRelevantFixtures
         }
 
         $this->info("{$fixtures->count()} relevante fixtures gevonden.");
+        $this->logRelevantFixtures($fixtures);
 
         $this->withProgressBar($fixtures, function (Fixture $fixture) use ($syncFixture, $errorMessage): void {
             try {
@@ -79,5 +80,22 @@ trait InteractsWithRelevantFixtures
         return Fixture::query()
             ->whereNotNull('external_id')
             ->orderBy('match_date');
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>  $fixtures
+     */
+    private function logRelevantFixtures(Collection $fixtures): void
+    {
+        foreach ($fixtures as $fixture) {
+            $this->line(sprintf(
+                ' - Fixture %d (external %d) geselecteerd [%s | %s | elapsed %s]',
+                $fixture->id,
+                (int) $fixture->external_id,
+                $fixture->status_short ?? '-',
+                $fixture->status_long ?? '-',
+                $fixture->elapsed_time ?? '-',
+            ));
+        }
     }
 }

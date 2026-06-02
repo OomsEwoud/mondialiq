@@ -88,6 +88,7 @@ class FixtureService
             'round_name' => data_get($fixture, 'league.round'),
             'season' => data_get($fixture, 'league.season'),
             'match_date' => Carbon::parse(data_get($fixture, 'fixture.date')),
+            'status_short' => data_get($fixture, 'fixture.status.short'),
             'status_long' => data_get($fixture, 'fixture.status.long'),
             'elapsed_time' => data_get($fixture, 'fixture.status.elapsed'),
             ...$this->scoreAttributes($fixture),

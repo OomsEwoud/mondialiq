@@ -7,6 +7,7 @@ use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
+use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -20,6 +21,7 @@ class AddFixtureData extends Command
 
     public function __construct(
         private readonly FootballApiService $api,
+        private readonly FixtureService $fixtureService,
         private readonly FixtureStatsService $statsService,
         private readonly FixtureEventsService $eventsService,
         private readonly FixtureLineupService $lineupService,
@@ -43,6 +45,11 @@ class AddFixtureData extends Command
     private function syncFixtureData(Fixture $fixture): void
     {
         $externalFixtureId = $this->externalFixtureId($fixture);
+        $fixturePayload = $this->api->getFixture($externalFixtureId);
+
+        $this->fixtureService->storeFixtures($fixturePayload);
+
+        $fixture->refresh();
 
         $this->lineupService->storeLineups(
             $this->api->getFixtureLineups($externalFixtureId),
@@ -58,6 +65,15 @@ class AddFixtureData extends Command
             $this->api->getFixtureEvents($externalFixtureId),
             $fixture->id,
         );
+
+        $this->newLine();
+        $this->line(sprintf(
+            'Fixture %d geupdate naar [%s | %s | elapsed %s]',
+            $fixture->id,
+            $fixture->status_short ?? '-',
+            $fixture->status_long ?? '-',
+            $fixture->elapsed_time ?? '-',
+        ));
 
         sleep(1);
     }

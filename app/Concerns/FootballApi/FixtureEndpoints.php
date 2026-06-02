@@ -13,6 +13,14 @@ trait FixtureEndpoints
         ]);
     }
 
+    public function getFixture(int $fixtureId): array
+    {
+        return $this->call('/fixtures', [
+            'id' => $fixtureId,
+            'timezone' => 'Europe/Brussels',
+        ]);
+    }
+
     public function getHeadToHead(int $team1Id, int $team2Id): array
     {
         return $this->call('/fixtures/headtohead', ['h2h' => "{$team1Id}-{$team2Id}"]);

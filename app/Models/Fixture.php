@@ -12,22 +12,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
-    private const RECENT_DATA_SYNC_WINDOW_HOURS = 12;
-    private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 120;
+    private const RECENT_DATA_SYNC_WINDOW_HOURS = 3;
+    private const UPCOMING_DATA_SYNC_WINDOW_HOURS = 3;
 
-    private const LIVE_STATUS_LONGS = [
-        'Kick Off',
-        'First Half',
-        'Halftime',
-        '2nd Half Started',
-        'Second Half',
-        'Extra Time',
-        'Break Time',
-        'Penalty In Progress',
-        'Match Suspended',
-        'Match Interrupted',
-        'In Progress',
-    ];
+    private const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
 
     protected $fillable = [
         'external_id',
@@ -39,6 +27,7 @@ class Fixture extends Model
         'round_name',
         'season',
         'match_date',
+        'status_short',
         'status_long',
         'elapsed_time',
         'halftime_home_goals',
@@ -73,14 +62,14 @@ class Fixture extends Model
 
     public function scopeInProgress(Builder $query): Builder
     {
-        return $query->whereIn('status_long', self::LIVE_STATUS_LONGS);
+        return $query->whereIn('status_short', self::LIVE_STATUS_SHORTS);
     }
 
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
         $now = now('UTC');
         $windowStart = $now->copy()->subHours(self::RECENT_DATA_SYNC_WINDOW_HOURS);
-        $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
+        $windowEnd = $now->copy()->addHours(self::UPCOMING_DATA_SYNC_WINDOW_HOURS);
 
         return $query->where(function (Builder $query) use ($windowStart, $windowEnd) {
             $query

@@ -115,6 +115,107 @@ test('it scores user predictions when fulltime fixture scores are synced', funct
     expect($prediction->refresh()->points)->toBe(11);
 });
 
+test('it stores fixture live status short and elapsed time from the api payload', function () {
+    $league = League::query()->create([
+        'external_id' => 39,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 1,
+        'name' => 'Home Team',
+        'code' => 'HOM',
+        'logo_url' => 'https://example.com/home.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 2,
+        'name' => 'Away Team',
+        'code' => 'AWA',
+        'logo_url' => 'https://example.com/away.png',
+    ]);
+
+    $payload = fixturePayloadWithVenue(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: $homeTeam->external_id,
+        awayTeamId: $awayTeam->external_id,
+        venueName: 'Estadio Municipal',
+        venueCity: 'Madrid',
+    );
+    $payload['fixture']['status']['short'] = '2H';
+    $payload['fixture']['status']['long'] = 'Second Half';
+    $payload['fixture']['status']['elapsed'] = 70;
+
+    app(FixtureService::class)->storeFixtures([$payload]);
+
+    $fixture = Fixture::query()->firstOrFail();
+
+    expect($fixture->status_short)->toBe('2H')
+        ->and($fixture->status_long)->toBe('Second Half')
+        ->and($fixture->elapsed_time)->toBe(70);
+});
+
+test('it allows a fixture to transition from live to full time on a later sync', function () {
+    $league = League::query()->create([
+        'external_id' => 39,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 1,
+        'name' => 'Home Team',
+        'code' => 'HOM',
+        'logo_url' => 'https://example.com/home.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 2,
+        'name' => 'Away Team',
+        'code' => 'AWA',
+        'logo_url' => 'https://example.com/away.png',
+    ]);
+
+    $livePayload = fixturePayloadWithVenue(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: $homeTeam->external_id,
+        awayTeamId: $awayTeam->external_id,
+        venueName: 'Estadio Municipal',
+        venueCity: 'Madrid',
+    );
+    $livePayload['fixture']['status']['short'] = '2H';
+    $livePayload['fixture']['status']['long'] = 'Second Half';
+    $livePayload['fixture']['status']['elapsed'] = 70;
+
+    app(FixtureService::class)->storeFixtures([$livePayload]);
+
+    $finishedPayload = fixturePayloadWithVenue(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: $homeTeam->external_id,
+        awayTeamId: $awayTeam->external_id,
+        venueName: 'Estadio Municipal',
+        venueCity: 'Madrid',
+    );
+    $finishedPayload['fixture']['status']['short'] = 'FT';
+    $finishedPayload['fixture']['status']['long'] = 'Match Finished';
+    $finishedPayload['fixture']['status']['elapsed'] = 90;
+    $finishedPayload['score']['fulltime'] = ['home' => 2, 'away' => 1];
+
+    app(FixtureService::class)->storeFixtures([$finishedPayload]);
+
+    $fixture = Fixture::query()->firstOrFail();
+
+    expect($fixture->status_short)->toBe('FT')
+        ->and($fixture->status_long)->toBe('Match Finished')
+        ->and($fixture->elapsed_time)->toBe(90)
+        ->and($fixture->fulltime_home_goals)->toBe(2)
+        ->and($fixture->fulltime_away_goals)->toBe(1);
+});
+
 function fixturePayloadWithVenue(
     int $fixtureId,
     int $leagueId,
@@ -134,6 +235,7 @@ function fixturePayloadWithVenue(
                 'city' => $venueCity,
             ],
             'status' => [
+                'short' => 'NS',
                 'long' => 'Not Started',
                 'elapsed' => null,
             ],
