@@ -109,6 +109,35 @@ test('it handles all standings missing', function () {
         ->and($summary['away_team']['rank'])->toBeNull();
 });
 
+test('it summarizes the group standing when a team also has a third placed ranking', function () {
+    $fixture = createStandingsSummaryFixture([
+        'home_team_name' => 'South Korea',
+    ]);
+
+    createStandingSummaryRow($fixture->homeTeam, $fixture->league, [
+        'season' => $fixture->season,
+        'group_name' => 'Group A',
+        'rank' => 3,
+        'points' => 4,
+    ]);
+
+    createStandingSummaryRow($fixture->homeTeam, $fixture->league, [
+        'season' => $fixture->season,
+        'group_name' => 'Ranking of third-placed teams',
+        'rank' => 1,
+        'points' => 4,
+    ]);
+
+    $summary = app(StandingsSummaryService::class)->summarize($fixture);
+
+    expect($summary['home_team'])->toMatchArray([
+        'team_name' => 'South Korea',
+        'rank' => 3,
+        'points' => 4,
+        'group_name' => 'Group A',
+    ]);
+});
+
 test('it formats prompt block correctly', function () {
     $fixture = createStandingsSummaryFixture([
         'home_team_name' => 'Liverpool',

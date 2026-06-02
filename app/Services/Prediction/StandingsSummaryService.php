@@ -45,6 +45,7 @@ class StandingsSummaryService
             ->where('league_id', $fixture->league_id)
             ->where('season', $fixture->season)
             ->whereIn('team_id', $this->teamIds($fixture))
+            ->where('group_name', '!=', 'Ranking of third-placed teams')
             ->get()
             ->keyBy('team_id');
     }

@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer('season'); 
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->foreignId('league_id')->constrained()->onDelete('cascade');
-            $table->unique(['team_id', 'league_id', 'season']);
+            $table->unique(['league_id', 'season', 'group_name', 'team_id']);
             $table->index('group_name');
             $table->timestamps();
         });

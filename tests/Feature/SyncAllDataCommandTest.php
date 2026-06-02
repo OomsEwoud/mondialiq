@@ -5,15 +5,15 @@ use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-test('the all data sync command runs all required imports in order', function () {
+test('the all data sync command runs the configured commands in order', function () {
     $command = Mockery::mock(SyncAllData::class)->makePartial();
 
     foreach ([
         'app:add-countries',
         'app:add-leagues',
         'app:add-teams',
-        'app:add-players',
         'app:add-fixtures',
+        'app:add-players',
         'app:add-standings',
         'app:add-bookmakers',
         'app:add-predictions',

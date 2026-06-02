@@ -31,8 +31,19 @@ class GroupsController extends Controller
             ->with('team:id,name,code,logo_url')
             ->where('league_id', $this->worldCupContext->leagueId())
             ->where('season', $this->worldCupContext->season())
+            ->whereIn('group_name', $this->worldCupGroupNames())
             ->orderBy('group_name')
             ->orderBy('rank')
             ->get();
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function worldCupGroupNames(): array
+    {
+        return collect(range('A', 'L'))
+            ->map(fn (string $group): string => "Group {$group}")
+            ->all();
     }
 }

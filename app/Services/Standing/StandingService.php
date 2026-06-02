@@ -28,9 +28,11 @@ class StandingService
                 continue;
             }
 
+            $groupName = (string) data_get($standing, 'group', '');
+
             Standing::query()->updateOrCreate(
-                $this->standingIdentity($teamId, $league->id, $season),
-                $this->standingAttributes($standing),
+                $this->standingIdentity($teamId, $league->id, $season, $groupName),
+                $this->standingAttributes($standing, $groupName),
             );
         }
     }
@@ -81,14 +83,15 @@ class StandingService
     }
 
     /**
-     * @return array{team_id: int, league_id: int, season: int}
+     * @return array{team_id: int, league_id: int, season: int, group_name: string}
      */
-    private function standingIdentity(int $teamId, int $leagueId, int $season): array
+    private function standingIdentity(int $teamId, int $leagueId, int $season, string $groupName): array
     {
         return [
             'team_id' => $teamId,
             'league_id' => $leagueId,
             'season' => $season,
+            'group_name' => $groupName,
         ];
     }
 
@@ -107,10 +110,10 @@ class StandingService
      *     form: string|null
      * }
      */
-    private function standingAttributes(array $standing): array
+    private function standingAttributes(array $standing, string $groupName): array
     {
         return [
-            'group_name' => (string) data_get($standing, 'group', ''),
+            'group_name' => $groupName,
             'rank' => (int) data_get($standing, 'rank', 0),
             'points' => (int) data_get($standing, 'points', 0),
             'matches_played' => (int) data_get($standing, 'all.played', 0),

@@ -82,6 +82,60 @@ test('standing service skips unknown teams and empty payloads', function () {
     expect(Standing::query()->count())->toBe(0);
 });
 
+test('standing service keeps group standings and third placed ranking rows separate', function () {
+    $league = League::query()->create([
+        'external_id' => 1,
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $team = Team::query()->create([
+        'external_id' => 200,
+        'name' => 'South Korea',
+        'code' => 'KOR',
+        'logo_url' => 'https://example.com/south-korea.png',
+    ]);
+
+    $payload = [
+        [
+            'league' => [
+                'name' => 'World Cup',
+                'season' => 2026,
+                'standings' => [
+                    [
+                        standingPayload(200, [
+                            'group' => 'Group A',
+                            'rank' => 3,
+                            'points' => 4,
+                        ]),
+                    ],
+                    [
+                        standingPayload(200, [
+                            'group' => 'Ranking of third-placed teams',
+                            'rank' => 1,
+                            'points' => 4,
+                        ]),
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    app(StandingService::class)->storeStandings($payload);
+    app(StandingService::class)->storeStandings($payload);
+
+    $standings = Standing::query()
+        ->where('team_id', $team->id)
+        ->where('league_id', $league->id)
+        ->where('season', 2026)
+        ->get()
+        ->keyBy('group_name');
+
+    expect($standings)->toHaveCount(2)
+        ->and($standings['Group A']->rank)->toBe(3)
+        ->and($standings['Ranking of third-placed teams']->rank)->toBe(1);
+});
+
 function standingPayload(int $teamExternalId, array $overrides = []): array
 {
     return [

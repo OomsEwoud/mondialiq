@@ -12,7 +12,7 @@ use Mockery\MockInterface;
 
 afterEach(fn () => Carbon::setTestNow());
 
-test('the relevant fixture data sync scope includes recent upcoming and live fixtures only', function () {
+test('the relevant fixture data sync scope includes fixtures inside the configured sync windows', function () {
     Carbon::setTestNow('2026-06-12 18:00:00');
 
     $league = League::create([
@@ -68,7 +68,7 @@ test('the relevant fixture data sync scope includes recent upcoming and live fix
         'status_long' => 'First Half',
     ]);
 
-    Fixture::create([
+    $recentKnockoutFixture = Fixture::create([
         'external_id' => 304,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
@@ -79,7 +79,7 @@ test('the relevant fixture data sync scope includes recent upcoming and live fix
         'status_long' => 'Finished',
     ]);
 
-    Fixture::create([
+    $upcomingKnockoutFixture = Fixture::create([
         'external_id' => 305,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
@@ -87,6 +87,28 @@ test('the relevant fixture data sync scope includes recent upcoming and live fix
         'round_name' => 'Quarter-final',
         'season' => config('services.api_football.season'),
         'match_date' => now('UTC')->addHour(),
+        'status_long' => 'Not Started',
+    ]);
+
+    Fixture::create([
+        'external_id' => 306,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Semi-final',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('UTC')->subHours(13),
+        'status_long' => 'Finished',
+    ]);
+
+    Fixture::create([
+        'external_id' => 307,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Final',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('UTC')->addMinutes(121),
         'status_long' => 'Not Started',
     ]);
 
@@ -98,8 +120,10 @@ test('the relevant fixture data sync scope includes recent upcoming and live fix
 
     expect($relevantFixtureIds->all())->toBe([
         $liveFixture->external_id,
+        $recentKnockoutFixture->external_id,
         $recentFixture->external_id,
         $upcomingFixture->external_id,
+        $upcomingKnockoutFixture->external_id,
     ]);
 });
 
