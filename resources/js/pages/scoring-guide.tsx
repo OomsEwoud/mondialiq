@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     BadgeCheck,
     CalendarDays,
@@ -9,6 +9,7 @@ import {
     Trophy,
 } from 'lucide-react';
 import BackButton from '@/components/navigation/back-button';
+import PageHead from '@/components/seo/page-head';
 import { matches, predictions } from '@/routes';
 
 const scoringRules = [
@@ -85,7 +86,10 @@ const examples = [
 export default function ScoringGuide() {
     return (
         <>
-            <Head title="How Scoring Works" />
+            <PageHead
+                title="How Scoring Works"
+                description="Learn how MondialIQ scores World Cup predictions out of 20 points, including exact scores, outcomes, goal difference and partial points."
+            />
 
             <div className="mb-5">
                 <BackButton fallbackHref={predictions.url()} />

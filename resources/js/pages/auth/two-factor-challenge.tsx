@@ -1,7 +1,8 @@
-import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { Form, setLayoutProps } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useState } from 'react';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import {
@@ -15,9 +16,7 @@ import { store } from '@/routes/two-factor/login';
 export default function TwoFactorChallenge() {
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
     const [code, setCode] = useState<string>('');
-    const title = showRecoveryInput
-        ? 'Recovery code'
-        : 'Authentication code';
+    const title = showRecoveryInput ? 'Recovery code' : 'Authentication code';
     const description = showRecoveryInput
         ? 'Please confirm access to your account by entering one of your emergency recovery codes.'
         : 'Enter the authentication code provided by your authenticator application.';
@@ -38,7 +37,11 @@ export default function TwoFactorChallenge() {
 
     return (
         <>
-            <Head title="Two-factor authentication" />
+            <PageHead
+                title="Two-factor authentication"
+                description="Complete two-factor authentication to securely access your MondialIQ account."
+                noIndex
+            />
 
             <div className="space-y-6">
                 <Form

@@ -1,15 +1,13 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { update } from '@/routes/password';
-import {
-    authInputClass,
-    authPrimaryButtonClass,
-} from '@/utils/auth-form';
+import { authInputClass, authPrimaryButtonClass } from '@/utils/auth-form';
 
 type Props = {
     token: string;
@@ -22,7 +20,11 @@ export default function ResetPassword({ token, email }: Props) {
 
     return (
         <>
-            <Head title="Reset password" />
+            <PageHead
+                title="Reset password"
+                description="Set a new password for your MondialIQ account."
+                noIndex
+            />
 
             <Form
                 {...update.form()}

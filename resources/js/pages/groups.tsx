@@ -1,10 +1,10 @@
-import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import GroupPageHeader from '@/components/groups/group-page-header';
 import GroupPanel from '@/components/groups/group-panel';
 import GroupTabs, { THIRD_PLACE_TAB_ID } from '@/components/groups/group-tabs';
 import GroupsEmptyState from '@/components/groups/groups-empty-state';
 import ThirdPlacePanel from '@/components/groups/third-place-panel';
+import PageHead from '@/components/seo/page-head';
 import type { ThirdPlaceRanking, WorldCupGroup } from '@/types/group';
 
 interface Props {
@@ -25,7 +25,10 @@ export default function Groups({ groups, thirdPlaceRanking }: Props) {
 
     return (
         <>
-            <Head title="Group Standings" />
+            <PageHead
+                title="Group Standings"
+                description="Track World Cup 2026 group standings, qualification positions and third-place rankings with a clear tournament overview."
+            />
 
             <GroupPageHeader />
 

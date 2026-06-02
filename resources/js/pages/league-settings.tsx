@@ -1,8 +1,9 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ArrowLeft, Users } from 'lucide-react';
 import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
 import LeagueMembersManagementCard from '@/components/leaderboards/league-members-management-card';
 import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
+import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { cn } from '@/lib/utils';
 import { leaderboards } from '@/routes';
@@ -19,7 +20,11 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
 
     return (
         <>
-            <Head title={`${league.name} settings`} />
+            <PageHead
+                title={`${league.name} settings`}
+                description={`Manage ${league.name} league members, branding, invite settings and owner controls on MondialIQ.`}
+                noIndex
+            />
 
             <div className="mx-auto max-w-7xl space-y-6">
                 <section

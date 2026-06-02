@@ -1,7 +1,8 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
 import BackButton from '@/components/navigation/back-button';
+import PageHead from '@/components/seo/page-head';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
@@ -20,7 +21,11 @@ import {
 export default function Register() {
     return (
         <>
-            <Head title="Register" />
+            <PageHead
+                title="Create account"
+                description="Create a MondialIQ account to save World Cup predictions, join private leagues and track your score."
+                noIndex
+            />
 
             <Form
                 {...store.form()}

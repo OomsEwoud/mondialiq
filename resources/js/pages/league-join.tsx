@@ -1,7 +1,8 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import { ArrowLeft, LogIn, Ticket } from 'lucide-react';
 import JoinLeagueController from '@/actions/App/Http/Controllers/Leagues/JoinLeagueController';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
@@ -34,7 +35,11 @@ export default function LeagueJoin({
 
     return (
         <>
-            <Head title="Join League" />
+            <PageHead
+                title="Join League"
+                description="Join a private MondialIQ friends league with an invite code and start competing on World Cup prediction points."
+                noIndex
+            />
 
             <div className="space-y-6">
                 <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">

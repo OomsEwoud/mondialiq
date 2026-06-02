@@ -1,8 +1,9 @@
-import { Head, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
+import PageHead from '@/components/seo/page-head';
 import { emptyFilters } from '@/const/match';
 import type {
     FilterKey,
@@ -35,7 +36,10 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
 
     return (
         <>
-            <Head title="Matches" />
+            <PageHead
+                title="Matches"
+                description="Browse the complete World Cup 2026 match schedule, filter fixtures by team, round, date and status, and open each match for details and predictions."
+            />
 
             <header className="mb-6 text-center sm:mb-8">
                 <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">

@@ -1,6 +1,7 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Label } from '@/components/ui/forms/label';
@@ -9,7 +10,11 @@ import { store } from '@/routes/password/confirm';
 export default function ConfirmPassword() {
     return (
         <>
-            <Head title="Confirm password" />
+            <PageHead
+                title="Confirm password"
+                description="Confirm your MondialIQ password before continuing to a protected account area."
+                noIndex
+            />
 
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (

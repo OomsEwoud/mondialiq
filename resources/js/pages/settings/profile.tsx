@@ -1,4 +1,4 @@
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Link, usePage } from '@inertiajs/react';
 import {
     KeyRound,
     LockKeyhole,
@@ -15,6 +15,7 @@ import PasswordInput from '@/components/auth/password/password-input';
 import TwoFactorRecoveryCodes from '@/components/auth/two-factor/two-factor-recovery-codes';
 import TwoFactorSetupModal from '@/components/auth/two-factor/two-factor-setup-modal';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import SettingsSection from '@/components/settings/settings-section';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
@@ -106,7 +107,11 @@ export default function Profile({
 
     return (
         <>
-            <Head title="Profile settings" />
+            <PageHead
+                title="Profile settings"
+                description="Manage your MondialIQ profile, email address, password, two-factor authentication and account safety settings."
+                noIndex
+            />
 
             <h1 className="sr-only">Profile settings</h1>
 

@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
@@ -8,6 +7,7 @@ import PredictionPageHeader from '@/components/predictions/prediction-page-heade
 import PredictionTabs from '@/components/predictions/prediction-tabs';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
+import PageHead from '@/components/seo/page-head';
 import type { PredictionPageProps as Props } from '@/types/prediction';
 import type { PredictionFilters } from '@/types/prediction-filter';
 import {
@@ -60,7 +60,10 @@ export default function Predictions({
 
     return (
         <>
-            <Head title="Predictions" />
+            <PageHead
+                title="Predictions"
+                description="Compare AI-powered football predictions with your own World Cup 2026 picks, confidence levels and scoring progress."
+            />
 
             <div className="mx-auto max-w-7xl">
                 <PredictionPageHeader scoringGuideHref={scoringGuideHref} />

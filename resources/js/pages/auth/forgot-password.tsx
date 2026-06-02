@@ -1,5 +1,6 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
@@ -21,12 +22,14 @@ export default function ForgotPassword({ status }: { status?: string }) {
 
     return (
         <>
-            <Head title="Forgot password" />
+            <PageHead
+                title="Forgot password"
+                description="Request a secure MondialIQ password reset link for your account."
+                noIndex
+            />
 
             {showStatus && (
-                <div className={`mb-4 ${authStatusMessageClass}`}>
-                    {status}
-                </div>
+                <div className={`mb-4 ${authStatusMessageClass}`}>{status}</div>
             )}
 
             <div className="space-y-6">

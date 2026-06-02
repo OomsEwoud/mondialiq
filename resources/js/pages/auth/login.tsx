@@ -1,7 +1,9 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
+import type * as React from 'react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
 import BackButton from '@/components/navigation/back-button';
+import PageHead from '@/components/seo/page-head';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
@@ -21,7 +23,6 @@ import {
     authPrimaryButtonClass,
     authStatusMessageClass,
 } from '@/utils/auth-form';
-import type * as React from 'react';
 
 type Props = {
     status?: string;
@@ -101,7 +102,11 @@ export default function Login({
 
     return (
         <>
-            <Head title="Log in" />
+            <PageHead
+                title="Log in"
+                description="Log in to MondialIQ to manage your World Cup predictions, account settings and friends league rankings."
+                noIndex
+            />
 
             <Form
                 {...store.form()}

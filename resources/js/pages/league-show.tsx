@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import {
     ArrowLeft,
     Crown,
@@ -12,6 +12,7 @@ import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
 import LeagueSnapshotCard from '@/components/leaderboards/league-snapshot-card';
+import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import { cn } from '@/lib/utils';
@@ -54,7 +55,11 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
     return (
         <>
-            <Head title={league.name} />
+            <PageHead
+                title={league.name}
+                description={`Follow the ${league.name} friends league on MondialIQ with member rankings, prediction points and invite tools.`}
+                noIndex
+            />
 
             <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
                 <section

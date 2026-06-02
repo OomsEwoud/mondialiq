@@ -1,8 +1,9 @@
-import { Head, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import FriendsLeaguesSection from '@/components/leaderboards/friends-leagues-section';
 import GlobalLeaderboardCard from '@/components/leaderboards/global-leaderboard-card';
 import LeaderboardsPageHeader from '@/components/leaderboards/leaderboards-page-header';
 import YourPositionCard from '@/components/leaderboards/your-position-card';
+import PageHead from '@/components/seo/page-head';
 import type { Auth } from '@/types';
 import type { LeaderboardsPageProps } from '@/types/leaderboard';
 
@@ -21,7 +22,10 @@ export default function Leaderboards({
 
     return (
         <>
-            <Head title="Leaderboards" />
+            <PageHead
+                title="Leaderboards"
+                description="See global MondialIQ rankings, your prediction points, your current position and private friends leagues for World Cup 2026."
+            />
 
             <LeaderboardsPageHeader scoringGuideHref={scoringGuideHref} />
 

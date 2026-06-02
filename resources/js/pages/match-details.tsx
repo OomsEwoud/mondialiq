@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import MatchAvailabilitySection from '@/components/matches/details/match-availability-section';
 import MatchDataTabs from '@/components/matches/details/match-data-tabs';
 import MatchDetailsHero from '@/components/matches/details/match-details-hero';
@@ -6,6 +5,7 @@ import MatchInfoCard from '@/components/matches/details/match-info-card';
 import MatchPredictionActionRow from '@/components/matches/details/match-prediction-action-row';
 import MatchScoreCard from '@/components/matches/details/match-score-card';
 import BackButton from '@/components/navigation/back-button';
+import PageHead from '@/components/seo/page-head';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
 
 interface Props {
@@ -17,7 +17,10 @@ export default function MatchDetails({ match }: Props) {
 
     return (
         <>
-            <Head title={pageTitle} />
+            <PageHead
+                title={pageTitle}
+                description={`View ${match.homeTeam.name} vs ${match.awayTeam.name} match details, kickoff information, lineups, stats and prediction options on MondialIQ.`}
+            />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 sm:px-6 lg:py-8">
                 <BackButton className="w-fit rounded-xl bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />

@@ -1,7 +1,8 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import { ArrowLeft, Plus, Users } from 'lucide-react';
 import StoreLeagueController from '@/actions/App/Http/Controllers/Leagues/StoreLeagueController';
 import InputError from '@/components/forms/input-error';
+import PageHead from '@/components/seo/page-head';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
@@ -33,7 +34,11 @@ export default function LeagueCreate({
 
     return (
         <>
-            <Head title="Create League" />
+            <PageHead
+                title="Create League"
+                description="Create a private MondialIQ friends league, invite people with a code and compare World Cup prediction points together."
+                noIndex
+            />
 
             <div className="space-y-6">
                 <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
