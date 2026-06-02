@@ -33,16 +33,16 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
     return (
         <div
             ref={ref}
-            className="relative grid gap-1.5 text-xs font-bold text-slate-500 uppercase"
+            className="relative grid gap-2 text-[11px] font-black tracking-[0.14em] text-slate-500 uppercase"
         >
             Date
             <button
                 type="button"
                 onClick={() => (open ? setOpen(false) : openAt(selected))}
-                className="flex h-11 w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-3 text-left text-sm font-medium text-slate-800 normal-case transition-colors outline-none hover:bg-slate-50 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-100"
+                className="flex h-12 w-full items-center justify-between rounded-2xl border border-cyan-100 bg-white/90 px-4 text-left text-sm font-semibold text-slate-800 normal-case shadow-sm shadow-cyan-950/5 transition-all outline-none hover:border-cyan-200 hover:bg-white focus:border-cyan-300 focus:ring-4 focus:ring-cyan-100"
             >
                 <span className="flex items-center gap-2">
-                    <CalendarDays className="size-4 text-cyan-600" />
+                    <CalendarDays className="size-4 text-cyan-700" />
                     {selected
                         ? (dateLookup.get(selected) ??
                           formatReadableDate(selected))
@@ -61,7 +61,9 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
                         <X size={14} />
                     </span>
                 ) : (
-                    <span className="text-slate-300">Calendar</span>
+                    <span className="text-xs font-bold tracking-normal text-slate-400">
+                        Calendar
+                    </span>
                 )}
             </button>
             {open && (

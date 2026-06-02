@@ -15,14 +15,14 @@ export default function MatchStatusBadges({ match }: Props) {
             <PredictionAvailabilityBadge match={match} />
 
             {match.hasAiPrediction ? (
-                <Badge className="border-cyan-200 bg-cyan-50 text-cyan-700 shadow-none">
+                <Badge className="border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.85))] text-cyan-800 shadow-none">
                     <Sparkles className="h-3 w-3" />
                     AI Ready
                 </Badge>
             ) : (
                 <Badge
                     aria-label="AI prediction pending"
-                    className="border-slate-200 bg-slate-50 text-slate-400 shadow-none"
+                    className="border-slate-200 bg-slate-50 text-slate-500 shadow-none"
                 >
                     <Sparkles className="h-3 w-3" />
                     AI pending
@@ -30,7 +30,7 @@ export default function MatchStatusBadges({ match }: Props) {
             )}
 
             {match.userPrediction && (
-                <Badge className="border-slate-200 bg-slate-50 text-slate-700 shadow-none">
+                <Badge className="border-slate-200 bg-white text-slate-700 shadow-none">
                     <CheckCircle2 className="h-3 w-3" />
                     Your Pick: {match.userPrediction.label}
                 </Badge>

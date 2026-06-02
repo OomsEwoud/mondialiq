@@ -29,21 +29,21 @@ export default function MatchFilters({
         selected.status !== 'all';
 
     return (
-        <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5">
-            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <section className="mb-6 rounded-[1.75rem] border border-cyan-200/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.92))] p-4 shadow-xl shadow-cyan-950/8 backdrop-blur sm:p-6">
+            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-sm font-black text-slate-950">
+                    <h2 className="text-sm font-black tracking-[0.16em] text-blue-950 uppercase">
                         Filters
                     </h2>
-                    <p className="text-xs text-slate-500">
-                        Find matches by round, date or team.
+                    <p className="mt-1 text-sm text-slate-600">
+                        Fine-tune the schedule by round, date or team.
                     </p>
                 </div>
                 {hasActiveFilters && (
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white px-3 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex h-10 items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-all hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <X size={15} />
                         Clear
@@ -51,7 +51,7 @@ export default function MatchFilters({
                 )}
             </div>
 
-            <div className="mb-4 border-b border-slate-100 pb-4">
+            <div className="mb-5 border-b border-cyan-100/70 pb-5">
                 <MatchStatusTabs
                     selected={selected.status}
                     onChange={(value) => onChange('status', value)}

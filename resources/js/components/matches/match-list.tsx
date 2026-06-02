@@ -8,11 +8,11 @@ interface Props {
 export default function MatchList({ matches }: Props) {
     if (matches.length === 0) {
         return (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-white py-12 text-center">
-                <p className="text-sm font-black text-blue-950">
+            <div className="rounded-[1.75rem] border border-dashed border-cyan-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.88))] py-14 text-center shadow-lg shadow-cyan-950/5">
+                <p className="text-sm font-black tracking-[0.12em] text-blue-950 uppercase">
                     No matches found.
                 </p>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-slate-600">
                     Try changing your filters.
                 </p>
             </div>
@@ -20,7 +20,7 @@ export default function MatchList({ matches }: Props) {
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
             {matches.map((match) => (
                 <MatchCard key={match.id} match={match} />
             ))}
