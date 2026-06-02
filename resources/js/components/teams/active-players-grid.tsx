@@ -51,17 +51,17 @@ export default function ActivePlayersGrid({ players }: Props) {
     const showGroupHeaders = activeFilter === 'all';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5">
+        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
             <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">
+                    <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
                         Squad
                     </p>
                     <div className="mt-1 flex items-center gap-3">
-                        <h2 className="text-lg font-black text-blue-950">
+                        <h2 className="text-2xl font-black text-blue-950">
                             Active players
                         </h2>
-                        <span className="rounded-full border border-cyan-100 bg-cyan-50 px-3 py-1 text-xs font-black text-cyan-700">
+                        <span className="rounded-full border border-cyan-100 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-xs font-black text-cyan-700 shadow-sm shadow-cyan-950/5">
                             {players.length}
                         </span>
                     </div>
@@ -73,7 +73,7 @@ export default function ActivePlayersGrid({ players }: Props) {
             </div>
 
             {hasPlayers ? (
-                <div className="grid gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-5">
+                <div className="grid gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-6">
                     <SquadPositionFilters
                         activeFilter={activeFilter}
                         onChange={setActiveFilter}

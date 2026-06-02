@@ -13,21 +13,21 @@ interface Props {
 
 export default function TeamCoachCard({ coach }: Props) {
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-[1.8rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8">
             <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                    <p className="text-xs font-black tracking-widest text-cyan-500 uppercase">
+                    <p className="text-xs font-black tracking-[0.18em] text-cyan-600 uppercase">
                         Staff
                     </p>
-                    <h2 className="text-lg font-black text-blue-950">Coach</h2>
+                    <h2 className="text-2xl font-black text-blue-950">Coach</h2>
                 </div>
-                <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-black text-blue-700">
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
                     Head coach
                 </span>
             </div>
             {coach ? (
-                <div className="flex min-w-0 items-center gap-4 rounded-lg border border-slate-100 bg-slate-50 p-4">
-                    <Avatar className="size-20 rounded-xl border border-white shadow-sm ring-1 ring-slate-200">
+                <div className="flex min-w-0 items-center gap-4 rounded-[1.4rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 shadow-sm shadow-cyan-950/5">
+                    <Avatar className="size-20 rounded-2xl border border-white shadow-sm ring-1 ring-slate-200">
                         {coach.photo ? (
                             <AvatarImage
                                 src={coach.photo}
@@ -35,7 +35,7 @@ export default function TeamCoachCard({ coach }: Props) {
                                 className="object-cover"
                             />
                         ) : null}
-                        <AvatarFallback className="rounded-xl bg-blue-950 text-lg font-black text-white">
+                        <AvatarFallback className="rounded-2xl bg-blue-950 text-lg font-black text-white">
                             {getPersonInitials(coach.name) || (
                                 <UserRound className="size-8" />
                             )}
@@ -70,7 +70,7 @@ export default function TeamCoachCard({ coach }: Props) {
                     </div>
                 </div>
             ) : (
-                <p className="rounded-lg border border-dashed border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-500">
+                <p className="rounded-2xl border border-dashed border-cyan-100 bg-slate-50 p-4 text-sm font-medium text-slate-500">
                     No coach information available yet.
                 </p>
             )}

@@ -37,11 +37,11 @@ export default function TeamHero({ team }: Props) {
     const visibleMetadata = metadata.filter((item) => item.show && item.label);
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-sm">
-            <div className="border-b border-slate-100 bg-linear-to-br from-blue-950 via-blue-900 to-cyan-700 p-4 text-white sm:p-5">
+        <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-white shadow-2xl shadow-cyan-950/8">
+            <div className="border-b border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.18),transparent_16rem),linear-gradient(135deg,#16255f_0%,#27408b_54%,#0f7aa2_100%)] p-5 text-white sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex min-w-0 items-center gap-4">
-                        <span className="flex size-20 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white p-3 shadow-lg shadow-blue-950/20 sm:size-24">
+                        <span className="flex size-22 shrink-0 items-center justify-center rounded-[1.7rem] border border-white/20 bg-white p-3 shadow-xl shadow-blue-950/20 sm:size-24">
                             <img
                                 src={team.logo}
                                 alt={team.name}
@@ -49,11 +49,11 @@ export default function TeamHero({ team }: Props) {
                             />
                         </span>
                         <div className="min-w-0">
-                            <p className="text-xs font-black tracking-widest text-cyan-200 uppercase">
+                            <p className="text-xs font-black tracking-[0.24em] text-cyan-200 uppercase">
                                 National team
                             </p>
                             <h1
-                                className="truncate text-3xl font-black text-white sm:text-4xl"
+                                className="truncate text-4xl font-black text-white sm:text-5xl"
                                 title={team.name}
                             >
                                 {team.name}
@@ -69,11 +69,11 @@ export default function TeamHero({ team }: Props) {
                             <img
                                 src={team.country.flag}
                                 alt={team.country.name}
-                                className="h-11 w-16 shrink-0 rounded-lg border border-white/30 object-cover shadow-sm"
+                                className="h-11 w-16 shrink-0 rounded-xl border border-white/30 object-cover shadow-lg shadow-blue-950/20"
                             />
                         ) : null}
                         {team.code ? (
-                            <span className="rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm font-black text-white">
+                            <span className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-black text-white backdrop-blur">
                                 {team.code}
                             </span>
                         ) : null}
@@ -87,7 +87,7 @@ export default function TeamHero({ team }: Props) {
                         <Badge
                             key={item.label}
                             variant="outline"
-                            className="gap-1.5 border-slate-200 bg-slate-50 px-2.5 py-1.5 font-black text-slate-600 [&_svg]:size-3.5 [&_svg]:text-cyan-500"
+                            className="gap-1.5 rounded-full border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] px-3 py-1.5 font-black text-slate-600 shadow-sm shadow-cyan-950/5 [&_svg]:size-3.5 [&_svg]:text-cyan-600"
                         >
                             {item.icon}
                             <span className="max-w-44 truncate">
