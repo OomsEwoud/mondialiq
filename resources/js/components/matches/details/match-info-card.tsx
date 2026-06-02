@@ -21,11 +21,11 @@ export default function MatchInfoCard({ match }: Props) {
     const seasonLabel = String(match.season);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-blue-950/5 sm:p-5">
-            <h2 className="mb-4 text-lg font-black text-blue-950">
+        <section className="rounded-[1.8rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+            <h2 className="mb-5 text-2xl font-black text-blue-950">
                 Match info
             </h2>
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 <MatchInfoItem
                     icon={<CalendarDays />}
                     label="Date"

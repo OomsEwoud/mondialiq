@@ -16,19 +16,19 @@ export default function MatchPredictionActionRow({ match }: Props) {
     const modalMatch = toPredictionMatch(match);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm shadow-blue-950/5 sm:p-4">
+        <section className="rounded-[1.8rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-xl shadow-cyan-950/8 sm:p-5">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p className="text-xs font-black tracking-widest text-cyan-600 uppercase">
+                    <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
                         Match actions
                     </p>
-                    <p className="mt-1 text-sm font-medium text-slate-600">
+                    <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
                         Open the match report, check the AI signal and manage
                         your pick.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                     <MatchDetailsActionButton matchId={match.id} />
                     <AiPredictionButton
                         available={hasAiPrediction}

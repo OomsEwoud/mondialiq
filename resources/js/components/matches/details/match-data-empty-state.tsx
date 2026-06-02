@@ -6,11 +6,11 @@ interface Props {
 
 export default function MatchDataEmptyState({ message }: Props) {
     return (
-        <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm font-medium text-slate-500">
-            <span className="flex size-10 items-center justify-center rounded-full bg-white text-cyan-600 ring-1 ring-slate-200">
+        <div className="flex flex-col items-center gap-3 rounded-[1.7rem] border border-dashed border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] px-4 py-10 text-center text-sm font-medium text-slate-500">
+            <span className="flex size-11 items-center justify-center rounded-full bg-white text-cyan-700 ring-1 ring-cyan-100 shadow-sm shadow-cyan-950/5">
                 <Info className="size-4" />
             </span>
-            <p className="max-w-md">{message}</p>
+            <p className="max-w-md leading-6">{message}</p>
         </div>
     );
 }
