@@ -12,6 +12,7 @@ use App\Services\Fixture\LiveFixtureService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 #[Signature('app:add-fixture-data')]
 #[Description('Haal basis-, live- en finale data op voor relevante fixtures')]
@@ -42,10 +43,7 @@ class AddFixtureData extends Command
         );
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, Fixture>
-     */
-    protected function relevantFixturesForDataSync(): \Illuminate\Database\Eloquent\Collection
+    protected function relevantFixturesForDataSync(): Collection
     {
         return Fixture::query()
             ->whereNotNull('external_id')

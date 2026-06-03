@@ -9,6 +9,7 @@ use App\Services\Fixture\FixturePlayerStatsService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 
 #[Signature('app:add-fixture-player-stats')]
 #[Description('Haal spelerstatistieken op voor relevante fixtures')]
@@ -36,10 +37,7 @@ class AddFixturePlayerStats extends Command
         );
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
-    protected function relevantFixturesForDataSync(): \Illuminate\Database\Eloquent\Collection
+    protected function relevantFixturesForDataSync(): Collection
     {
         return Fixture::query()
             ->whereNotNull('external_id')

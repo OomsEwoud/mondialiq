@@ -9,9 +9,6 @@ use Throwable;
 
 trait InteractsWithRelevantFixtures
 {
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
     protected function relevantFixturesForDataSync(): Collection
     {
         return $this->dataSyncFixtureQuery()
@@ -59,9 +56,6 @@ trait InteractsWithRelevantFixtures
         return (int) $fixture->external_id;
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
     protected function fixturesForHeadToHeadImport(bool $force): Collection
     {
         $query = $this->dataSyncFixtureQuery()
@@ -82,9 +76,6 @@ trait InteractsWithRelevantFixtures
             ->orderBy('match_date');
     }
 
-    /**
-     * @param  \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>  $fixtures
-     */
     private function logRelevantFixtures(Collection $fixtures): void
     {
         foreach ($fixtures as $fixture) {

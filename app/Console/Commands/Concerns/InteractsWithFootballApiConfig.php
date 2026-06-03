@@ -4,9 +4,6 @@ namespace App\Console\Commands\Concerns;
 
 trait InteractsWithFootballApiConfig
 {
-    /**
-     * @return array{leagueId: int, season: int}|null
-     */
     protected function footballApiConfig(): ?array
     {
         $leagueId = (int) config('services.api_football.league_id');

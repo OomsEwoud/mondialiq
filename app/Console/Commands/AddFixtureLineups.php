@@ -9,6 +9,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Collection;
 use Throwable;
 
 #[Signature('app:add-fixture-lineups')]
@@ -48,11 +49,7 @@ class AddFixtureLineups extends Command
 
         return self::SUCCESS;
     }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
-    private function lineupCandidates(): \Illuminate\Database\Eloquent\Collection
+    private function lineupCandidates(): Collection
     {
         $now = now('Europe/Brussels');
 
