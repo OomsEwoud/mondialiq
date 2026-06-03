@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { liveFixtures as liveFixturesRoute } from '@/routes/api/live-fixtures';
+import { liveFixtures as liveFixturesRoute } from '@/routes/api';
 import type { LiveFixture, LiveFixturesResponse } from '@/types/live-fixture';
 
 interface UseLiveFixturesPollingResult {
