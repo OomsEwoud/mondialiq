@@ -61,8 +61,10 @@ test('the live fixtures endpoint returns slim cached live fixture data', functio
         ->assertJsonPath('data.0.id', $liveFixture->id)
         ->assertJsonPath('data.0.home_team.name', 'Belgium')
         ->assertJsonPath('data.0.home_team.code', 'BEL')
+        ->assertJsonPath('data.0.home_team.logo_url', 'https://example.com/belgium.png')
         ->assertJsonPath('data.0.away_team.name', 'Netherlands')
         ->assertJsonPath('data.0.away_team.code', 'NED')
+        ->assertJsonPath('data.0.away_team.logo_url', 'https://example.com/netherlands.png')
         ->assertJsonPath('data.0.home_goals', 2)
         ->assertJsonPath('data.0.away_goals', 1)
         ->assertJsonPath('data.0.status_short', '2H')
@@ -72,8 +74,8 @@ test('the live fixtures endpoint returns slim cached live fixture data', functio
             'data' => [
                 [
                     'id',
-                    'home_team' => ['id', 'name', 'code'],
-                    'away_team' => ['id', 'name', 'code'],
+                    'home_team' => ['id', 'name', 'code', 'logo_url'],
+                    'away_team' => ['id', 'name', 'code', 'logo_url'],
                     'home_goals',
                     'away_goals',
                     'status_short',

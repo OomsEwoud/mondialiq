@@ -17,8 +17,8 @@ export default function MatchDetailsHero({
 }: Props) {
     const score = liveMatch
         ? {
-              home: liveMatch.home_goals,
-              away: liveMatch.away_goals,
+              home: liveMatch.home_goals ?? match.score.fulltime.home,
+              away: liveMatch.away_goals ?? match.score.fulltime.away,
           }
         : match.score.fulltime;
     const hasScore = score.home !== null && score.away !== null;

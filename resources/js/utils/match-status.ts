@@ -60,7 +60,9 @@ export function getMatchStatusLabel(match: Match): string {
     const kind = getMatchStatusKind(match);
 
     if (kind === 'live') {
-        return match.elapsedTime ? `Live ${match.elapsedTime}'` : 'Live';
+        const status = readableLiveStatus(match.status);
+
+        return match.elapsedTime ? `${status} ${match.elapsedTime}'` : status;
     }
 
     return (
@@ -72,6 +74,36 @@ export function getMatchStatusLabel(match: Match): string {
             unknown: match.status || 'Upcoming',
         } satisfies Record<Exclude<MatchStatusKind, 'live'>, string>
     )[kind];
+}
+
+function readableLiveStatus(status: string): string {
+    const normalizedStatus = status.trim().toLowerCase();
+
+    if (normalizedStatus === '1h') {
+        return 'First Half';
+    }
+
+    if (normalizedStatus === '2h') {
+        return 'Second Half';
+    }
+
+    if (normalizedStatus === 'ht') {
+        return 'Half Time';
+    }
+
+    if (normalizedStatus === 'et') {
+        return 'Extra Time';
+    }
+
+    if (normalizedStatus === 'bt') {
+        return 'Break Time';
+    }
+
+    if (normalizedStatus === 'p') {
+        return 'Penalties';
+    }
+
+    return status || 'Live';
 }
 
 export function isMatchFinished(match: Match): boolean {

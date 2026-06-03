@@ -102,19 +102,16 @@ class FixtureService
      */
     private function scoreAttributes(array $fixture): array
     {
+        $currentHomeGoals = data_get($fixture, 'goals.home');
+        $currentAwayGoals = data_get($fixture, 'goals.away');
+
         return [
             'halftime_home_goals' => data_get($fixture, 'score.halftime.home'),
             'halftime_away_goals' => data_get($fixture, 'score.halftime.away'),
-            'fulltime_home_goals' => data_get(
-                $fixture,
-                'score.fulltime.home',
-                data_get($fixture, 'goals.home'),
-            ),
-            'fulltime_away_goals' => data_get(
-                $fixture,
-                'score.fulltime.away',
-                data_get($fixture, 'goals.away'),
-            ),
+            'fulltime_home_goals' => data_get($fixture, 'score.fulltime.home')
+                ?? $currentHomeGoals,
+            'fulltime_away_goals' => data_get($fixture, 'score.fulltime.away')
+                ?? $currentAwayGoals,
             'extratime_home_goals' => data_get($fixture, 'score.extratime.home'),
             'extratime_away_goals' => data_get($fixture, 'score.extratime.away'),
             'penalty_home_goals' => data_get($fixture, 'score.penalty.home'),

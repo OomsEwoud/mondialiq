@@ -2,6 +2,7 @@ export interface LiveFixtureTeam {
     id: number | null;
     name: string | null;
     code: string | null;
+    logo_url: string | null;
 }
 
 export interface LiveFixture {

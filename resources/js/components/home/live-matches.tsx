@@ -1,4 +1,8 @@
+import { Link } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
+
 import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
+import { show as showMatch } from '@/routes/matches';
 import type { LiveFixture } from '@/types/live-fixture';
 
 interface Props {
@@ -38,20 +42,30 @@ export default function LiveMatches({ initialMatches }: Props) {
                             key={match.id}
                             className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm"
                         >
-                            <div className="grid grid-cols-[1fr_auto_1fr_auto] items-center gap-3">
-                                <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
-                                    {teamLabel(match.home_team)}
-                                </span>
-                                <span className="text-lg font-black text-blue-950">
-                                    {scoreLabel(match.home_goals)} -{' '}
-                                    {scoreLabel(match.away_goals)}
-                                </span>
-                                <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
-                                    {teamLabel(match.away_team)}
-                                </span>
-                                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-black text-emerald-700">
-                                    {minuteLabel(match)}
-                                </span>
+                            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                                <TeamLabel team={match.home_team} />
+                                <div className="text-center">
+                                    <p className="text-xl font-black text-blue-950 tabular-nums">
+                                        {scoreLabel(match.home_goals)} -{' '}
+                                        {scoreLabel(match.away_goals)}
+                                    </p>
+                                    <p className="mt-1 inline-flex rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10px] font-black text-red-700">
+                                        {minuteLabel(match)}
+                                    </p>
+                                </div>
+                                <TeamLabel
+                                    team={match.away_team}
+                                    align="right"
+                                />
+                            </div>
+                            <div className="mt-3 flex justify-end border-t border-slate-200 pt-2">
+                                <Link
+                                    href={showMatch.url(match.id)}
+                                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-black text-blue-950 shadow-sm transition-colors hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                >
+                                    Match details
+                                    <ArrowRight className="h-3.5 w-3.5" />
+                                </Link>
                             </div>
                         </div>
                     ))
@@ -65,20 +79,72 @@ export default function LiveMatches({ initialMatches }: Props) {
     );
 }
 
-function teamLabel(team: LiveFixture['home_team']) {
-    return team.code ?? team.name ?? 'TBD';
+function TeamLabel({
+    team,
+    align = 'left',
+}: {
+    team: LiveFixture['home_team'];
+    align?: 'left' | 'right';
+}) {
+    const label = team.code ?? team.name ?? 'TBD';
+
+    return (
+        <div
+            className={`flex min-w-0 items-center gap-2 ${align === 'right' ? 'justify-end text-right' : ''}`}
+        >
+            {align === 'left' && <TeamLogo team={team} />}
+            <span className="min-w-0 truncate rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-700">
+                {label}
+            </span>
+            {align === 'right' && <TeamLogo team={team} />}
+        </div>
+    );
+}
+
+function TeamLogo({ team }: { team: LiveFixture['home_team'] }) {
+    if (!team.logo_url) {
+        return null;
+    }
+
+    return (
+        <img
+            src={team.logo_url}
+            alt={team.name ?? team.code ?? 'Team'}
+            className="h-7 w-7 shrink-0 rounded-full bg-white object-contain ring-1 ring-slate-200"
+        />
+    );
 }
 
 function scoreLabel(score: number | null) {
-    return score ?? 0;
+    return score ?? '-';
 }
 
 function minuteLabel(match: LiveFixture) {
-    if (match.elapsed_time) {
-        return `${match.elapsed_time}'`;
+    const status = readableStatus(match.status_long, match.status_short);
+
+    if (match.elapsed_time !== null) {
+        return `${status} ${match.elapsed_time}'`;
     }
 
-    return match.status_short ?? 'Live';
+    return status;
+}
+
+function readableStatus(statusLong: string | null, statusShort: string | null) {
+    if (statusLong) {
+        return statusLong;
+    }
+
+    return (
+        {
+            '1H': 'First Half',
+            HT: 'Half Time',
+            '2H': 'Second Half',
+            ET: 'Extra Time',
+            BT: 'Break Time',
+            P: 'Penalties',
+            LIVE: 'Live',
+        }[statusShort ?? ''] ?? 'Live'
+    );
 }
 
 function formatUpdatedTime(updatedAt: string) {

@@ -47,8 +47,8 @@ class LiveFixtureService
                 'updated_at',
             ])
             ->with([
-                'homeTeam:id,name,code',
-                'awayTeam:id,name,code',
+                'homeTeam:id,name,code,logo_url',
+                'awayTeam:id,name,code,logo_url',
             ])
             ->orderBy('match_date')
             ->get()
@@ -58,11 +58,13 @@ class LiveFixtureService
                     'id' => $fixture->homeTeam?->id,
                     'name' => $fixture->homeTeam?->name,
                     'code' => $fixture->homeTeam?->code,
+                    'logo_url' => $fixture->homeTeam?->logo_url,
                 ],
                 'away_team' => [
                     'id' => $fixture->awayTeam?->id,
                     'name' => $fixture->awayTeam?->name,
                     'code' => $fixture->awayTeam?->code,
+                    'logo_url' => $fixture->awayTeam?->logo_url,
                 ],
                 'home_goals' => $fixture->fulltime_home_goals,
                 'away_goals' => $fixture->fulltime_away_goals,
