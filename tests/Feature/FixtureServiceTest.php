@@ -157,6 +157,49 @@ test('it stores fixture live status short and elapsed time from the api payload'
         ->and($fixture->elapsed_time)->toBe(70);
 });
 
+test('it stores live fixture goals as the current fulltime score fields', function () {
+    $league = League::query()->create([
+        'external_id' => 39,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 1,
+        'name' => 'Home Team',
+        'code' => 'HOM',
+        'logo_url' => 'https://example.com/home.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 2,
+        'name' => 'Away Team',
+        'code' => 'AWA',
+        'logo_url' => 'https://example.com/away.png',
+    ]);
+
+    $payload = fixturePayloadWithVenue(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: $homeTeam->external_id,
+        awayTeamId: $awayTeam->external_id,
+        venueName: 'Estadio Municipal',
+        venueCity: 'Madrid',
+    );
+    $payload['fixture']['status']['short'] = '2H';
+    $payload['fixture']['status']['long'] = 'Second Half';
+    $payload['fixture']['status']['elapsed'] = 62;
+    $payload['goals'] = ['home' => 1, 'away' => 0];
+
+    app(FixtureService::class)->storeFixtures([$payload]);
+
+    $fixture = Fixture::query()->firstOrFail();
+
+    expect($fixture->fulltime_home_goals)->toBe(1)
+        ->and($fixture->fulltime_away_goals)->toBe(0)
+        ->and($fixture->elapsed_time)->toBe(62);
+});
+
 test('it allows a fixture to transition from live to full time on a later sync', function () {
     $league = League::query()->create([
         'external_id' => 39,

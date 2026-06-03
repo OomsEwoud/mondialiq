@@ -43,7 +43,7 @@ class AddFixtureData extends Command
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
+     * @return \Illuminate\Database\Eloquent\Collection<int, Fixture>
      */
     protected function relevantFixturesForDataSync(): \Illuminate\Database\Eloquent\Collection
     {

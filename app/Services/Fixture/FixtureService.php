@@ -105,8 +105,16 @@ class FixtureService
         return [
             'halftime_home_goals' => data_get($fixture, 'score.halftime.home'),
             'halftime_away_goals' => data_get($fixture, 'score.halftime.away'),
-            'fulltime_home_goals' => data_get($fixture, 'score.fulltime.home'),
-            'fulltime_away_goals' => data_get($fixture, 'score.fulltime.away'),
+            'fulltime_home_goals' => data_get(
+                $fixture,
+                'score.fulltime.home',
+                data_get($fixture, 'goals.home'),
+            ),
+            'fulltime_away_goals' => data_get(
+                $fixture,
+                'score.fulltime.away',
+                data_get($fixture, 'goals.away'),
+            ),
             'extratime_home_goals' => data_get($fixture, 'score.extratime.home'),
             'extratime_away_goals' => data_get($fixture, 'score.extratime.away'),
             'penalty_home_goals' => data_get($fixture, 'score.penalty.home'),

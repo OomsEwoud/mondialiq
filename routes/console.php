@@ -28,7 +28,9 @@ Schedule::command('app:add-teams')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
-Schedule::command('app:add-fixtures')->hourly()->withoutOverlapping();
+Schedule::command('app:add-fixtures')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
+
+Schedule::command('app:add-fixtures')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-missing-players')->daily()->withoutOverlapping();
 
@@ -42,7 +44,9 @@ Schedule::command('app:add-bookmakers')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-odds')->everyThreeHours()->withoutOverlapping();
 
-Schedule::command('app:add-predictions')->everySixHours()->withoutOverlapping();
+Schedule::command('app:add-predictions')->hourly()->when($hasActiveOrSoonFixture)->withoutOverlapping();
+
+Schedule::command('app:add-predictions')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
@@ -50,12 +54,14 @@ Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-fixture-lineups')->everyFifteenMinutes()->when($hasLineupCandidate)->withoutOverlapping();
 
+Schedule::command('app:add-fixture-lineups')->daily()->skip($hasLineupCandidate)->withoutOverlapping();
+
 Schedule::command('app:add-fixture-data')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
-Schedule::command('app:add-fixture-data')->hourly()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
+Schedule::command('app:add-fixture-data')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
-Schedule::command('app:add-fixture-player-stats')->everyFifteenMinutes()->when($hasPlayerStatsCandidate)->withoutOverlapping();
+Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasPlayerStatsCandidate)->withoutOverlapping();
 
-Schedule::command('app:add-fixture-player-stats')->dailyAt('04:30')->skip($hasPlayerStatsCandidate)->withoutOverlapping();
+Schedule::command('app:add-fixture-player-stats')->daily()->skip($hasPlayerStatsCandidate)->withoutOverlapping();
 
 Schedule::command('app:generate-ai-predictions --days=3')->everySixHours()->withoutOverlapping();

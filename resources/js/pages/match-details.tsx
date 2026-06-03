@@ -6,6 +6,7 @@ import MatchPredictionActionRow from '@/components/matches/details/match-predict
 import MatchScoreCard from '@/components/matches/details/match-score-card';
 import BackButton from '@/components/navigation/back-button';
 import PageHead from '@/components/seo/page-head';
+import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
 
 interface Props {
@@ -14,6 +15,14 @@ interface Props {
 
 export default function MatchDetails({ match }: Props) {
     const pageTitle = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
+    const {
+        matches: liveMatches,
+        lastUpdatedAt,
+        hasPollingError,
+    } = useLiveFixturesPolling([]);
+    const liveMatch = liveMatches.find(
+        (liveMatch) => liveMatch.id === match.id,
+    );
 
     return (
         <>
@@ -26,7 +35,12 @@ export default function MatchDetails({ match }: Props) {
                 <BackButton className="w-fit rounded-2xl border border-cyan-100 bg-white/95 text-slate-700 shadow-lg shadow-cyan-950/6 hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
 
                 <div className="flex flex-col gap-5 lg:gap-6">
-                    <MatchDetailsHero match={match} />
+                    <MatchDetailsHero
+                        match={match}
+                        liveMatch={liveMatch}
+                        lastUpdatedAt={lastUpdatedAt}
+                        hasPollingError={hasPollingError}
+                    />
                     <MatchPredictionActionRow match={match} />
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.65fr]">
                         <MatchInfoCard match={match} />
