@@ -36,12 +36,41 @@ class AddFixturePlayerStats extends Command
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
+     */
+    protected function relevantFixturesForDataSync(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Fixture::query()
+            ->whereNotNull('external_id')
+            ->readyForPlayerStatsSync()
+            ->orderBy('match_date')
+            ->get([
+                'id',
+                'external_id',
+                'match_date',
+                'status_short',
+                'status_long',
+                'elapsed_time',
+                'player_stats_synced_at',
+                'player_stats_sync_attempts',
+            ]);
+    }
+
     private function syncFixturePlayerStats(Fixture $fixture): void
     {
+        $this->line("Fetching player stats for fixture {$fixture->id}: status {$fixture->status_short}");
+        $this->line("Calling endpoint /fixtures/players for fixture {$fixture->id}");
+
         $playerStats = $this->api->getFixturePlayersStats($this->externalFixtureId($fixture));
 
         $this->playerStatsService->storeFixturePlayerStats($playerStats, $fixture->id);
-        
+
+        $fixture->forceFill([
+            'player_stats_synced_at' => now('UTC'),
+            'player_stats_sync_attempts' => $fixture->player_stats_sync_attempts + 1,
+        ])->save();
+
         sleep(1);
     }
 }

@@ -93,6 +93,7 @@ class FixtureService
             'elapsed_time' => data_get($fixture, 'fixture.status.elapsed'),
             ...$this->scoreAttributes($fixture),
             'result' => $this->calculateResult(data_get($fixture, 'score.fulltime', [])),
+            'fixture_basics_synced_at' => now('UTC'),
         ];
     }
 

@@ -13,12 +13,12 @@ class FixtureLineupService
 {
     use ExtractsApiPayloadIds;
 
-    public function storeLineups(array $lineupData, int $fixtureId): void
+    public function storeLineups(array $lineupData, int $fixtureId): bool
     {
         $fixture = $this->fixture($fixtureId);
 
         if (! $fixture) {
-            return;
+            return false;
         }
 
         $teamIds = Team::query()
@@ -28,6 +28,8 @@ class FixtureLineupService
             ->whereIn('external_id', $this->extractPlayerIds($lineupData))
             ->pluck('id', 'external_id');
 
+        $storedLineups = 0;
+
         foreach ($lineupData as $data) {
             $lineupPayload = $this->lineupPayload($data, $teamIds);
 
@@ -36,6 +38,7 @@ class FixtureLineupService
             }
 
             $this->storeTeamLineup($fixture, $lineupPayload);
+            $storedLineups++;
 
             $this->storePlayers(
                 $this->playerEntries(data_get($data, 'startXI', [])),
@@ -52,6 +55,8 @@ class FixtureLineupService
                 false,
             );
         }
+
+        return $storedLineups > 0;
     }
 
     private function fixture(int $fixtureId): ?Fixture

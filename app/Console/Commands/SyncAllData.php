@@ -27,6 +27,7 @@ class SyncAllData extends Command
         'app:add-missing-players',
         'app:import-head-to-head',
         'app:import-team-statistics',
+        'app:add-fixture-lineups',
         'app:add-fixture-data',
         'app:add-fixture-player-stats',
     ];
