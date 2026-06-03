@@ -20,6 +20,8 @@ class FootballApiService
     private const int REQUEST_TIMEOUT_SECONDS = 20;
     private const int RETRY_TIMES = 2;
     private const int RETRY_SLEEP_MILLISECONDS = 500;
+    private const int RATE_LIMIT_SLEEP_SECONDS = 10;
+    private const int RATE_LIMIT_RETRY_TIMES = 3;
 
     private readonly string $baseUrl;
     private readonly string $apiKey;
@@ -32,8 +34,20 @@ class FootballApiService
 
     private function rawCall(string $endpoint, array $params = []): array
     {
-        $response = $this->httpClient()
-            ->get($this->url($endpoint), $params);
+        $attempt = 0;
+
+        do {
+            $response = $this->httpClient()
+                ->get($this->url($endpoint), $params);
+
+            if ($response->status() !== 429) {
+                break;
+            }
+
+            $attempt++;
+
+            sleep(self::RATE_LIMIT_SLEEP_SECONDS);
+        } while ($attempt < self::RATE_LIMIT_RETRY_TIMES);
 
         if ($response->failed()) {
             throw new RuntimeException($this->failureMessage($endpoint, $response));
