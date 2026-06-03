@@ -9,6 +9,7 @@ use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
+use App\Services\Fixture\LiveFixtureService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -25,6 +26,7 @@ class AddFixtureData extends Command
         private readonly FixtureStatsService $statsService,
         private readonly FixtureEventsService $eventsService,
         private readonly FixtureLineupService $lineupService,
+        private readonly LiveFixtureService $liveFixtureService,
     ) {
         parent::__construct();
     }
@@ -45,11 +47,21 @@ class AddFixtureData extends Command
     private function syncFixtureData(Fixture $fixture): void
     {
         $externalFixtureId = $this->externalFixtureId($fixture);
+
+        $this->line(sprintf(
+            'Fixture %d oud [%s | %s | elapsed %s]',
+            $fixture->id,
+            $fixture->status_short ?? '-',
+            $fixture->status_long ?? '-',
+            $fixture->elapsed_time ?? '-',
+        ));
+
         $fixturePayload = $this->api->getFixture($externalFixtureId);
 
         $this->fixtureService->storeFixtures($fixturePayload);
 
         $fixture->refresh();
+        $this->liveFixtureService->forgetCache();
 
         $this->lineupService->storeLineups(
             $this->api->getFixtureLineups($externalFixtureId),
@@ -68,7 +80,7 @@ class AddFixtureData extends Command
 
         $this->newLine();
         $this->line(sprintf(
-            'Fixture %d geupdate naar [%s | %s | elapsed %s]',
+            'Fixture %d nieuw [%s | %s | elapsed %s]',
             $fixture->id,
             $fixture->status_short ?? '-',
             $fixture->status_long ?? '-',

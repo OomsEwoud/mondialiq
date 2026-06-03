@@ -15,7 +15,7 @@ class Fixture extends Model
     private const RECENT_DATA_SYNC_WINDOW_HOURS = 3;
     private const UPCOMING_DATA_SYNC_WINDOW_HOURS = 3;
 
-    private const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
+    public const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
 
     protected $fillable = [
         'external_id',

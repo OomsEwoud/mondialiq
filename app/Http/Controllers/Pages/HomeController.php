@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fixture;
+use App\Services\Fixture\LiveFixtureService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -13,10 +14,11 @@ class HomeController extends Controller
 {
     private const UPCOMING_FIXTURE_LIMIT = 5;
 
-    public function __invoke(): Response
+    public function __invoke(LiveFixtureService $liveFixtureService): Response
     {
         return Inertia::render('home', [
             'upcomingFixtures' => $this->upcomingFixtures(),
+            'liveFixtures' => $liveFixtureService->liveFixtures(),
         ]);
     }
 

@@ -1,17 +1,14 @@
-interface Match {
-    id: number;
-    home: string;
-    away: string;
-    homeScore: number;
-    awayScore: number;
-    minute: number;
-}
+import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
+import type { LiveFixture } from '@/types/live-fixture';
 
 interface Props {
-    matches: Match[];
+    initialMatches: LiveFixture[];
 }
 
-export default function LiveMatches({ matches }: Props) {
+export default function LiveMatches({ initialMatches }: Props) {
+    const { matches, lastUpdatedAt, hasPollingError } =
+        useLiveFixturesPolling(initialMatches);
+
     return (
         <section className="rounded-2xl border border-emerald-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur">
             <header className="mb-4 flex items-center justify-between gap-3">
@@ -27,30 +24,66 @@ export default function LiveMatches({ matches }: Props) {
                         Live now
                     </h2>
                 </div>
+                <div className="text-right text-[11px] font-bold text-slate-400">
+                    {lastUpdatedAt && (
+                        <p>Updated {formatUpdatedTime(lastUpdatedAt)}</p>
+                    )}
+                    {hasPollingError && <p>Using latest data</p>}
+                </div>
             </header>
             <div className="flex flex-col gap-3">
-                {matches.map((match) => (
-                    <div
-                        key={match.id}
-                        className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm"
-                    >
-                        <div className="grid grid-cols-[1fr_auto_1fr_auto] items-center gap-3">
-                            <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
-                                {match.home}
-                            </span>
-                            <span className="text-lg font-black text-blue-950">
-                                {match.homeScore} - {match.awayScore}
-                            </span>
-                            <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
-                                {match.away}
-                            </span>
-                            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-black text-emerald-700">
-                                {match.minute}'
-                            </span>
+                {matches.length > 0 ? (
+                    matches.map((match) => (
+                        <div
+                            key={match.id}
+                            className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm"
+                        >
+                            <div className="grid grid-cols-[1fr_auto_1fr_auto] items-center gap-3">
+                                <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
+                                    {teamLabel(match.home_team)}
+                                </span>
+                                <span className="text-lg font-black text-blue-950">
+                                    {scoreLabel(match.home_goals)} -{' '}
+                                    {scoreLabel(match.away_goals)}
+                                </span>
+                                <span className="rounded-xl border border-slate-200 bg-white px-2.5 py-1 text-center text-xs font-black text-slate-700">
+                                    {teamLabel(match.away_team)}
+                                </span>
+                                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-xs font-black text-emerald-700">
+                                    {minuteLabel(match)}
+                                </span>
+                            </div>
                         </div>
+                    ))
+                ) : (
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 text-sm font-bold text-slate-500 shadow-sm">
+                        No live matches right now.
                     </div>
-                ))}
+                )}
             </div>
         </section>
     );
+}
+
+function teamLabel(team: LiveFixture['home_team']) {
+    return team.code ?? team.name ?? 'TBD';
+}
+
+function scoreLabel(score: number | null) {
+    return score ?? 0;
+}
+
+function minuteLabel(match: LiveFixture) {
+    if (match.elapsed_time) {
+        return `${match.elapsed_time}'`;
+    }
+
+    return match.status_short ?? 'Live';
+}
+
+function formatUpdatedTime(updatedAt: string) {
+    return new Intl.DateTimeFormat(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+    }).format(new Date(updatedAt));
 }

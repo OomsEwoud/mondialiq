@@ -3,19 +3,15 @@ import LiveMatches from '@/components/home/live-matches';
 import PlatformOverview from '@/components/home/platform-overview';
 import UpcomingMatches from '@/components/home/upcoming-matches';
 import PageHead from '@/components/seo/page-head';
+import type { LiveFixture } from '@/types/live-fixture';
 import type { UpcomingMatch } from '@/types/match';
 
 interface Props {
     upcomingFixtures: UpcomingMatch[];
+    liveFixtures: LiveFixture[];
 }
 
-const mockLive = [
-    { id: 1, home: 'GER', away: 'ESP', homeScore: 1, awayScore: 1, minute: 67 },
-    { id: 2, home: 'FRA', away: 'POR', homeScore: 2, awayScore: 0, minute: 82 },
-    { id: 3, home: 'NED', away: 'ENG', homeScore: 0, awayScore: 0, minute: 14 },
-];
-
-export default function Home({ upcomingFixtures }: Props) {
+export default function Home({ upcomingFixtures, liveFixtures }: Props) {
     return (
         <>
             <PageHead
@@ -29,7 +25,7 @@ export default function Home({ upcomingFixtures }: Props) {
                     <PlatformOverview />
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         <UpcomingMatches matches={upcomingFixtures} />
-                        <LiveMatches matches={mockLive} />
+                        <LiveMatches initialMatches={liveFixtures} />
                     </div>
                 </div>
             </div>

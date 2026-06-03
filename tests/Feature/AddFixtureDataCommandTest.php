@@ -252,8 +252,10 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ->expectsOutput('2 relevante fixtures gevonden.')
         ->expectsOutput(" - Fixture {$liveFixture->id} (external {$liveFixture->external_id}) geselecteerd [1H | First Half | elapsed 45]")
         ->expectsOutput(" - Fixture {$soonFixture->id} (external {$soonFixture->external_id}) geselecteerd [- | Not Started | elapsed -]")
-        ->expectsOutput("Fixture {$liveFixture->id} geupdate naar [2H | Second Half | elapsed 70]")
-        ->expectsOutput("Fixture {$soonFixture->id} geupdate naar [NS | Not Started | elapsed -]")
+        ->expectsOutput("Fixture {$liveFixture->id} oud [1H | First Half | elapsed 45]")
+        ->expectsOutput("Fixture {$liveFixture->id} nieuw [2H | Second Half | elapsed 70]")
+        ->expectsOutput("Fixture {$soonFixture->id} oud [- | Not Started | elapsed -]")
+        ->expectsOutput("Fixture {$soonFixture->id} nieuw [NS | Not Started | elapsed -]")
         ->expectsOutput('Fixture data voor relevante fixtures is geupdate')
         ->assertSuccessful();
 });
