@@ -73,7 +73,7 @@ export function normalizeScoreLabel(score: string | null): string | null {
 }
 
 function hasKickoffPassed(match: Match): boolean {
-    const kickoff = new Date(`${match.dateValue}T${match.time}:00`);
+    const kickoff = new Date(match.kickoffAt);
 
     if (Number.isNaN(kickoff.getTime())) {
         return false;

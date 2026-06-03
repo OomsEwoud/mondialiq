@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Predictions;
 
 use App\Models\Fixture;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -34,7 +35,7 @@ class StoreMatchPredictionRequest extends FormRequest
         /** @var Fixture|null $fixture */
         $fixture = $this->route('fixture');
 
-        if ($fixture?->match_date?->isPast()) {
+        if ($fixture !== null && CarbonImmutable::parse($fixture->kickoffAt())->isPast()) {
             $validator->errors()->add(
                 'outcome',
                 'Predictions are closed for matches that have already started.',

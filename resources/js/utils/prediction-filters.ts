@@ -185,7 +185,7 @@ function getConfidenceValue(mode: PredictionFilterMode, match: Match): number {
 }
 
 function hasKickoffPassed(match: Match): boolean {
-    const kickoff = new Date(`${match.dateValue}T${match.time}:00`);
+    const kickoff = new Date(match.kickoffAt);
 
     if (Number.isNaN(kickoff.getTime())) {
         return getMatchStatusKind(match) === 'finished';

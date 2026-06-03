@@ -65,6 +65,7 @@ function toPredictionMatch(match: MatchDetails): Match {
         date: match.date,
         dateValue: match.dateValue,
         time: match.time,
+        kickoffAt: match.kickoffAt,
         status: match.status,
         elapsedTime: match.elapsedTime,
         score: {

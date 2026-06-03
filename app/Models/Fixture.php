@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PredictionTypes;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,10 +23,41 @@ class Fixture extends Model
     private const RECENT_FINAL_SYNC_WINDOW_HOURS = 6;
     private const MAX_FINAL_DATA_SYNC_ATTEMPTS = 3;
     private const MAX_PLAYER_STATS_SYNC_ATTEMPTS = 3;
+    private const DISPLAY_TIMEZONE = 'Europe/Brussels';
 
     public const NOT_STARTED_STATUS_SHORT = 'NS';
     public const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
     public const FINISHED_STATUS_SHORTS = ['FT', 'AET', 'PEN'];
+    public const UNAVAILABLE_UPCOMING_STATUS_SHORTS = [
+        '1H',
+        'HT',
+        '2H',
+        'ET',
+        'BT',
+        'P',
+        'LIVE',
+        'FT',
+        'AET',
+        'PEN',
+        'CANC',
+        'PST',
+        'ABD',
+        'AWD',
+        'WO',
+        'SUSP',
+        'INT',
+    ];
+    private const UNAVAILABLE_UPCOMING_STATUS_LONG_PATTERNS = [
+        '%Abandon%',
+        '%Award%',
+        '%Cancel%',
+        '%Finished%',
+        '%Forfeit%',
+        '%Interrupt%',
+        '%Postpon%',
+        '%Suspend%',
+        '%Walk%',
+    ];
 
     protected $fillable = [
         'external_id',
@@ -96,6 +128,24 @@ class Fixture extends Model
         return $query->where('status_short', self::NOT_STARTED_STATUS_SHORT);
     }
 
+    public function scopeUpcomingNotStarted(Builder $query): Builder
+    {
+        foreach (self::UNAVAILABLE_UPCOMING_STATUS_LONG_PATTERNS as $statusPattern) {
+            $query->where('status_long', 'not like', $statusPattern);
+        }
+
+        return $query
+            ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))
+            ->where(fn (Builder $query) => $query
+                ->where('status_short', self::NOT_STARTED_STATUS_SHORT)
+                ->orWhere(fn (Builder $query) => $query
+                    ->whereNull('status_short')
+                    ->where('status_long', 'Not Started')))
+            ->where(fn (Builder $query) => $query
+                ->whereNull('status_short')
+                ->orWhereNotIn('status_short', self::UNAVAILABLE_UPCOMING_STATUS_SHORTS));
+    }
+
     public function scopeFinished(Builder $query): Builder
     {
         return $query->whereIn('status_short', self::FINISHED_STATUS_SHORTS);
@@ -103,30 +153,34 @@ class Fixture extends Model
 
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
-        $now = now('UTC');
+        $now = now(self::DISPLAY_TIMEZONE);
         $windowStart = $now->copy()->subHours(self::RECENT_DATA_SYNC_WINDOW_HOURS);
         $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
+        $basicDataRetryCutoff = now('UTC')->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
 
-        return $query->where(function (Builder $query) use ($now, $windowStart, $windowEnd) {
+        return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $windowStart, $windowEnd) {
             $query
                 ->where(fn (Builder $query) => $query
-                    ->whereBetween('match_date', [$windowStart, $windowEnd])
+                    ->whereBetween('match_date', [
+                        $windowStart->format('Y-m-d H:i:s'),
+                        $windowEnd->format('Y-m-d H:i:s'),
+                    ])
                     ->where(fn (Builder $query) => $query
                         ->whereNull('fixture_basics_synced_at')
-                        ->orWhere('fixture_basics_synced_at', '<=', $now->copy()->subMinutes(self::BASIC_DATA_RETRY_MINUTES))))
+                        ->orWhere('fixture_basics_synced_at', '<=', $basicDataRetryCutoff)))
                 ->orWhere(fn (Builder $query) => $query->inProgress());
         });
     }
 
     public function scopeReadyForLineupSync(Builder $query): Builder
     {
-        $now = now('UTC');
+        $now = now(self::DISPLAY_TIMEZONE);
 
         return $query
             ->notStarted()
             ->whereBetween('match_date', [
-                $now->copy()->subMinutes(self::POST_KICKOFF_LINEUP_WINDOW_MINUTES),
-                $now->copy()->addMinutes(self::PRE_MATCH_LINEUP_WINDOW_MINUTES),
+                $now->copy()->subMinutes(self::POST_KICKOFF_LINEUP_WINDOW_MINUTES)->format('Y-m-d H:i:s'),
+                $now->copy()->addMinutes(self::PRE_MATCH_LINEUP_WINDOW_MINUTES)->format('Y-m-d H:i:s'),
             ])
             ->where('has_lineups', false)
             ->where('lineup_sync_attempts', '<', self::MAX_LINEUP_SYNC_ATTEMPTS)
@@ -139,7 +193,7 @@ class Fixture extends Model
     {
         return $query
             ->finished()
-            ->where('match_date', '>=', now('UTC')->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS))
+            ->where('match_date', '>=', now(self::DISPLAY_TIMEZONE)->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
             ->where('final_data_sync_attempts', '<', self::MAX_FINAL_DATA_SYNC_ATTEMPTS)
             ->whereNull('final_data_synced_at');
     }
@@ -148,7 +202,7 @@ class Fixture extends Model
     {
         return $query
             ->finished()
-            ->where('match_date', '>=', now('UTC')->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS))
+            ->where('match_date', '>=', now(self::DISPLAY_TIMEZONE)->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
             ->where('player_stats_sync_attempts', '<', self::MAX_PLAYER_STATS_SYNC_ATTEMPTS)
             ->whereNull('player_stats_synced_at');
     }
@@ -251,5 +305,20 @@ class Fixture extends Model
     public function aiPredictions(): HasOne
     {
         return $this->aiPrediction();
+    }
+
+    public function kickoffAt(): string
+    {
+        $kickoffAt = CarbonImmutable::createFromFormat(
+            'Y-m-d H:i:s',
+            $this->match_date->format('Y-m-d H:i:s'),
+            self::DISPLAY_TIMEZONE,
+        );
+
+        if (! $kickoffAt instanceof CarbonImmutable) {
+            return $this->match_date->toIso8601String();
+        }
+
+        return $kickoffAt->toIso8601String();
     }
 }

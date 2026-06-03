@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Models\Fixture;
 use App\Services\Fixture\LiveFixtureService;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,7 +25,7 @@ class HomeController extends Controller
     {
         return Fixture::query()
             ->with(['homeTeam:id,name,code,logo_url', 'awayTeam:id,name,code,logo_url'])
-            ->where('match_date', '>=', Carbon::now())
+            ->upcomingNotStarted()
             ->orderBy('match_date', 'asc')
             ->take(self::UPCOMING_FIXTURE_LIMIT)
             ->get()
@@ -45,7 +44,10 @@ class HomeController extends Controller
             'awayTeamLogo' => $match->awayTeam->logo_url,
             'day' => $match->match_date->format('d M'),
             'time' => $match->match_date->format('H:i'),
+            'kickoffAt' => $match->kickoffAt(),
             'round' => $match->round_name,
+            'statusShort' => $match->status_short,
+            'statusLong' => $match->status_long,
         ];
     }
 }

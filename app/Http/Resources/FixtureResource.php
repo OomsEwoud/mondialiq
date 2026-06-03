@@ -19,6 +19,7 @@ class FixtureResource extends JsonResource
             'date' => $this->match_date->format('d M'),
             'dateValue' => $this->match_date->format('Y-m-d'),
             'time' => $this->match_date->format('H:i'),
+            'kickoffAt' => $this->kickoffAt(),
             'round' => $this->round_name,
             'status' => $this->status_long,
             'elapsedTime' => $this->elapsed_time,

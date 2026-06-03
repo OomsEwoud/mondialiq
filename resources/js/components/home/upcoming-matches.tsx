@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight, CalendarClock } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { matches as matchesRoute } from '@/routes';
 import { show as showMatch } from '@/routes/matches';
@@ -9,8 +10,41 @@ interface Props {
     matches: UpcomingMatch[];
 }
 
+const brusselsDateKeyFormatter = new Intl.DateTimeFormat('en-CA', {
+    day: '2-digit',
+    month: '2-digit',
+    timeZone: 'Europe/Brussels',
+    year: 'numeric',
+});
+const kickoffDateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+    month: 'short',
+    timeZone: 'Europe/Brussels',
+});
+
 export default function UpcomingMatches({ matches }: Props) {
-    const hasMatches = matches.length > 0;
+    const [currentTime, setCurrentTime] = useState(() => new Date());
+    const visibleMatches = useMemo(
+        () =>
+            matches.filter((match) =>
+                isVisibleUpcomingMatch(match, currentTime),
+            ),
+        [matches, currentTime],
+    );
+    const hasMatches = visibleMatches.length > 0;
+
+    useEffect(() => {
+        const interval = window.setInterval(() => {
+            setCurrentTime(new Date());
+        }, 60000);
+
+        return () => {
+            window.clearInterval(interval);
+        };
+    }, []);
 
     return (
         <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur">
@@ -27,7 +61,7 @@ export default function UpcomingMatches({ matches }: Props) {
 
             {hasMatches ? (
                 <div className="flex flex-col gap-3">
-                    {matches.map((match) => (
+                    {visibleMatches.map((match) => (
                         <article
                             key={match.id}
                             className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-white hover:shadow-md"
@@ -36,9 +70,17 @@ export default function UpcomingMatches({ matches }: Props) {
                                 <span className="text-[11px] font-bold tracking-wide text-slate-500 uppercase">
                                     Matchday
                                 </span>
-                                <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] leading-none font-black text-blue-950">
-                                    {match.day} - {match.time}
-                                </span>
+                                <div className="flex flex-wrap justify-end gap-1.5">
+                                    <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] leading-none font-black text-blue-950">
+                                        {formatKickoffDateTime(match.kickoffAt)}
+                                    </span>
+                                    <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] leading-none font-black text-emerald-700">
+                                        {kickoffCountdown(
+                                            match.kickoffAt,
+                                            currentTime,
+                                        )}
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
@@ -102,4 +144,88 @@ export default function UpcomingMatches({ matches }: Props) {
             )}
         </section>
     );
+}
+
+function isVisibleUpcomingMatch(match: UpcomingMatch, currentTime: Date) {
+    const kickoffAt = new Date(match.kickoffAt);
+
+    if (Number.isNaN(kickoffAt.getTime()) || kickoffAt <= currentTime) {
+        return false;
+    }
+
+    if (hasUnavailableStatusLong(match.statusLong)) {
+        return false;
+    }
+
+    if (match.statusShort !== null) {
+        return match.statusShort === 'NS';
+    }
+
+    return match.statusLong === 'Not Started';
+}
+
+function hasUnavailableStatusLong(statusLong: string | null) {
+    if (statusLong === null) {
+        return false;
+    }
+
+    const normalizedStatus = statusLong.toLowerCase();
+
+    return [
+        'abandon',
+        'award',
+        'cancel',
+        'finished',
+        'forfeit',
+        'interrupt',
+        'postpon',
+        'suspend',
+        'walk',
+    ].some((status) => normalizedStatus.includes(status));
+}
+
+function kickoffCountdown(kickoffAt: string, currentTime: Date) {
+    const kickoffDate = new Date(kickoffAt);
+    const diffInMinutes = Math.ceil(
+        (kickoffDate.getTime() - currentTime.getTime()) / 60000,
+    );
+
+    if (diffInMinutes <= 0) {
+        return 'Kickoff now';
+    }
+
+    if (diffInMinutes < 60) {
+        return `Kickoff in ${diffInMinutes} min`;
+    }
+
+    if (diffInMinutes < 24 * 60) {
+        const hours = Math.floor(diffInMinutes / 60);
+        const minutes = diffInMinutes % 60;
+
+        return minutes > 0
+            ? `Kickoff in ${hours}h ${minutes}m`
+            : `Kickoff in ${hours}h`;
+    }
+
+    if (isTomorrow(kickoffDate, currentTime)) {
+        return 'Kickoff tomorrow';
+    }
+
+    const days = Math.ceil(diffInMinutes / (24 * 60));
+
+    return `Kickoff in ${days}d`;
+}
+
+function isTomorrow(date: Date, currentTime: Date) {
+    const tomorrow = new Date(currentTime);
+    tomorrow.setDate(currentTime.getDate() + 1);
+
+    return (
+        brusselsDateKeyFormatter.format(date) ===
+        brusselsDateKeyFormatter.format(tomorrow)
+    );
+}
+
+function formatKickoffDateTime(kickoffAt: string) {
+    return kickoffDateTimeFormatter.format(new Date(kickoffAt));
 }

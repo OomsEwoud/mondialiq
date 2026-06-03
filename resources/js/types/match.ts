@@ -8,7 +8,10 @@ export interface UpcomingMatch {
     awayTeamLogo: string;
     day: string;
     time: string;
+    kickoffAt: string;
     round: string;
+    statusShort: string | null;
+    statusLong: string | null;
 }
 
 export interface Match {
@@ -25,6 +28,7 @@ export interface Match {
     date: string;
     dateValue: string;
     time: string;
+    kickoffAt: string;
     status: string;
     elapsedTime: number | null;
     score: {

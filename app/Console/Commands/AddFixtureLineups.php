@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureLineupService;
+use Carbon\CarbonImmutable;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -53,15 +54,15 @@ class AddFixtureLineups extends Command
      */
     private function lineupCandidates(): \Illuminate\Database\Eloquent\Collection
     {
-        $now = now('UTC');
+        $now = now('Europe/Brussels');
 
         return Fixture::query()
             ->whereNotNull('external_id')
             ->notStarted()
             ->with(['homeTeam:id,name,code', 'awayTeam:id,name,code'])
             ->whereBetween('match_date', [
-                $now->copy()->subMinutes(15),
-                $now->copy()->addMinutes(90),
+                $now->copy()->subMinutes(15)->format('Y-m-d H:i:s'),
+                $now->copy()->addMinutes(90)->format('Y-m-d H:i:s'),
             ])
             ->orderBy('match_date')
             ->get([
@@ -101,7 +102,10 @@ class AddFixtureLineups extends Command
 
     private function syncLineups(Fixture $fixture): void
     {
-        $kickoffInMinutes = (int) now('UTC')->diffInMinutes($fixture->match_date, false);
+        $kickoffInMinutes = (int) now('Europe/Brussels')->diffInMinutes(
+            CarbonImmutable::parse($fixture->kickoffAt()),
+            false,
+        );
 
         $this->line(sprintf(
             'Fetching lineups for fixture %d: %s vs %s, kickoff in %d minutes',
