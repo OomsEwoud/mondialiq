@@ -11,9 +11,6 @@ class MissingPlayerService
 {
     use ExtractsApiPayloadIds;
 
-    /**
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     public function storeMissingPlayers(array $missingPlayers): array
     {
         if ($missingPlayers === []) {
@@ -51,9 +48,6 @@ class MissingPlayerService
         return $summary;
     }
 
-    /**
-     * @return array{fixture_id: int, player_id: int}
-     */
     private function missingPlayerIdentity(int $fixtureId, int $playerId): array
     {
         return [
@@ -62,9 +56,6 @@ class MissingPlayerService
         ];
     }
 
-    /**
-     * @return array{type: mixed, reason: mixed}
-     */
     private function missingPlayerAttributes(array $missingPlayerData): array
     {
         return [
@@ -73,9 +64,6 @@ class MissingPlayerService
         ];
     }
 
-    /**
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     private function emptySummary(int $processed = 0): array
     {
         return [
@@ -86,10 +74,6 @@ class MissingPlayerService
         ];
     }
 
-    /**
-     * @param  array{processed: int, created: int, updated: int, skipped: int}  $summary
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     private function recordStoredModel(array $summary, MissingPlayer $missingPlayer): array
     {
         if ($missingPlayer->wasRecentlyCreated) {

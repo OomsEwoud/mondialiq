@@ -10,9 +10,6 @@ class LiveFixtureService
     private const CACHE_KEY = 'live-fixtures';
     private const CACHE_TTL_SECONDS = 30;
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     public function liveFixtures(): array
     {
         return Cache::remember(
@@ -27,9 +24,6 @@ class LiveFixtureService
         Cache::forget(self::CACHE_KEY);
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     private function freshLiveFixtures(): array
     {
         return Fixture::query()

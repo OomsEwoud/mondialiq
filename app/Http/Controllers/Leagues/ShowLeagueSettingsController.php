@@ -17,7 +17,6 @@ class ShowLeagueSettingsController extends Controller
     {
         $this->authorize('manage', $scoreboard);
 
-        /** @var User $user */
         $user = $request->user();
         $members = $this->members($scoreboard, $user);
 

@@ -23,9 +23,6 @@ class FixtureEvent extends Model
         'comments',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

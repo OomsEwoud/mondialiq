@@ -17,9 +17,6 @@ class AiPredictionOutcomeHelper
         };
     }
 
-    /**
-     * @param  array<string, mixed>  $prediction
-     */
     public function getOutcomeFromPredictionData(array $prediction): ?string
     {
         return $this->normalizeOutcome($prediction['predicted_outcome'] ?? null);

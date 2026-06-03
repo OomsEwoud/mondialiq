@@ -17,10 +17,7 @@ class Coach extends Model
         'birth_date',
         'photo_url',
     ];
-
-    /**
-     * @return array<string, string>
-     */
+    
     protected function casts(): array
     {
         return [

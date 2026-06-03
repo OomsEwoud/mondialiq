@@ -116,23 +116,6 @@ class TeamStatsSummaryService
             ?? $this->average($statistic->goals_against_total, $statistic->fixtures_played_total);
     }
 
-    /**
-     * @return array{
-     *     team_name: string|null,
-     *     form: null,
-     *     recent_form_score: null,
-     *     fixtures_played: null,
-     *     wins: null,
-     *     draws: null,
-     *     losses: null,
-     *     win_percentage: null,
-     *     goals_for: null,
-     *     goals_against: null,
-     *     goal_difference: null,
-     *     average_goals_for: null,
-     *     average_goals_against: null
-     * }
-     */
     private function emptyTeamSummary(?Team $team): array
     {
         return [

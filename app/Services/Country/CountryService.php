@@ -68,10 +68,7 @@ class CountryService
             'name' => $countryName,
         ];
     }
-
-    /**
-     * @return array{fifa_code: mixed, flag_url: mixed}
-     */
+    
     private function countryAttributes(array $countryData): array
     {
         return [

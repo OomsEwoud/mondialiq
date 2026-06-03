@@ -8,9 +8,6 @@ use App\Models\Prediction;
 
 class UserPredictionService
 {
-    /**
-     * @param  array{outcome: string, home_score?: int|null, away_score?: int|null, confidence?: string|null}  $data
-     */
     public function store(Fixture $fixture, int $userId, array $data): Prediction
     {
         return Prediction::query()->updateOrCreate(
@@ -19,9 +16,6 @@ class UserPredictionService
         );
     }
 
-    /**
-     * @return array{fixture_id: int, user_id: int}
-     */
     private function predictionIdentity(Fixture $fixture, int $userId): array
     {
         return [
@@ -30,10 +24,6 @@ class UserPredictionService
         ];
     }
 
-    /**
-     * @param  array{outcome: string, home_score?: int|null, away_score?: int|null, confidence?: string|null}  $data
-     * @return array{winner_id: int|null, source: string, home_goals: int|null, away_goals: int|null, total_goals: int|null, confidence: string|null}
-     */
     private function predictionAttributes(Fixture $fixture, array $data): array
     {
         $homeScore = $data['home_score'] ?? null;

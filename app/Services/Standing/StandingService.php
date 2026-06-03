@@ -82,9 +82,6 @@ class StandingService
         return $teams[(int) $externalTeamId] ?? null;
     }
 
-    /**
-     * @return array{team_id: int, league_id: int, season: int, group_name: string}
-     */
     private function standingIdentity(int $teamId, int $leagueId, int $season, string $groupName): array
     {
         return [
@@ -95,21 +92,6 @@ class StandingService
         ];
     }
 
-    /**
-     * @return array{
-     *     group_name: string,
-     *     rank: int,
-     *     points: int,
-     *     matches_played: int,
-     *     wins: int,
-     *     draws: int,
-     *     losses: int,
-     *     goals_for: int,
-     *     goals_against: int,
-     *     goal_difference: int,
-     *     form: string|null
-     * }
-     */
     private function standingAttributes(array $standing, string $groupName): array
     {
         return [

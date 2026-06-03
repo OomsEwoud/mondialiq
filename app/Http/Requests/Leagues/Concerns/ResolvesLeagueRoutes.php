@@ -9,17 +9,13 @@ trait ResolvesLeagueRoutes
 {
     private function league(): Scoreboard
     {
-        /** @var Scoreboard $scoreboard */
         $scoreboard = $this->route('scoreboard');
-
         return $scoreboard;
     }
 
     private function member(): User
     {
-        /** @var User $member */
         $member = $this->route('member');
-
         return $member;
     }
 }

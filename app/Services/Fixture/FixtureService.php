@@ -40,9 +40,6 @@ class FixtureService
         }
     }
 
-    /**
-     * @return array{external_id: int, league_id: int, home_team_id: int, away_team_id: int}|null
-     */
     private function fixtureIdentity(array $fixture, Collection $leagueIds, Collection $teamIds): ?array
     {
         $externalId = data_get($fixture, 'fixture.id');
@@ -62,10 +59,6 @@ class FixtureService
         ];
     }
 
-    /**
-     * @param  array{external_id: int, league_id: int, home_team_id: int, away_team_id: int}  $identity
-     * @return array{external_id: int}
-     */
     private function fixtureUpdateIdentity(array $identity): array
     {
         return [
@@ -73,10 +66,6 @@ class FixtureService
         ];
     }
 
-    /**
-     * @param  array{external_id: int, league_id: int, home_team_id: int, away_team_id: int}  $identity
-     * @return array<string, mixed>
-     */
     private function fixtureAttributes(array $fixture, array $identity): array
     {
         return [
@@ -97,9 +86,6 @@ class FixtureService
         ];
     }
 
-    /**
-     * @return array{halftime_home_goals: mixed, halftime_away_goals: mixed, fulltime_home_goals: mixed, fulltime_away_goals: mixed, extratime_home_goals: mixed, extratime_away_goals: mixed, penalty_home_goals: mixed, penalty_away_goals: mixed}
-     */
     private function scoreAttributes(array $fixture): array
     {
         $currentHomeGoals = data_get($fixture, 'goals.home');
@@ -159,9 +145,6 @@ class FixtureService
             ->first();
     }
 
-    /**
-     * @return array{external_id: int|null, name: mixed, city: mixed}
-     */
     private function venueAttributes(array $venueData, ?int $externalId): array
     {
         return [

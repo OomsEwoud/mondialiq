@@ -95,18 +95,6 @@ class HeadToHeadSummaryService
             : "{$awayTeamId}-{$homeTeamId}";
     }
 
-    /**
-     * @return array{
-     *     total_meetings: null,
-     *     home_team_h2h_wins: null,
-     *     away_team_h2h_wins: null,
-     *     draws: null,
-     *     home_team_h2h_goals: null,
-     *     away_team_h2h_goals: null,
-     *     last_meeting_date: null,
-     *     conclusion: null
-     * }
-     */
     private function emptySummary(): array
     {
         return [
@@ -121,9 +109,6 @@ class HeadToHeadSummaryService
         ];
     }
 
-    /**
-     * @return array{home_wins: int, away_wins: int, home_goals: int, away_goals: int}
-     */
     private function homeAwaySummary(Fixture $fixture, HeadToHead $headToHead): array
     {
         $homeTeamIsTeamA = $headToHead->team_a_id === $fixture->home_team_id;

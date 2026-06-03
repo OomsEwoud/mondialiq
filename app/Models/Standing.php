@@ -29,9 +29,6 @@ class Standing extends Model
         'season',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

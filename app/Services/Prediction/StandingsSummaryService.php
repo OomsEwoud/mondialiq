@@ -87,9 +87,6 @@ class StandingsSummaryService
         ];
     }
 
-    /**
-     * @return array<int, int>
-     */
     private function teamIds(Fixture $fixture): array
     {
         return array_values(array_filter([
@@ -98,21 +95,6 @@ class StandingsSummaryService
         ]));
     }
 
-    /**
-     * @return array{
-     *     team_name: string|null,
-     *     rank: null,
-     *     points: null,
-     *     played: null,
-     *     wins: null,
-     *     draws: null,
-     *     losses: null,
-     *     goals_for: null,
-     *     goals_against: null,
-     *     goal_difference: null,
-     *     group_name: null
-     * }
-     */
     private function emptyTeamSummary(?Team $team): array
     {
         return [

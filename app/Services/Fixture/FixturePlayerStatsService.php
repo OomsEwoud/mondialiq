@@ -12,9 +12,6 @@ class FixturePlayerStatsService
 {
     use ExtractsApiPayloadIds;
 
-    /**
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     public function storeFixturePlayerStats(array $teamPlayerStats, int $fixtureId): array
     {
         if ($teamPlayerStats === []) {
@@ -64,9 +61,6 @@ class FixturePlayerStatsService
         return $this->localIdForExternalId($playerIds, data_get($playerData, 'player.id'));
     }
 
-    /**
-     * @return array{fixture_id: int, player_id: int}
-     */
     private function playerFixtureStatIdentity(int $fixtureId, int $playerId): array
     {
         return [
@@ -75,9 +69,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     private function emptySummary(): array
     {
         return [
@@ -88,10 +79,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @param  array{processed: int, created: int, updated: int, skipped: int}  $summary
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     private function recordStoredModel(array $summary, Model $model): array
     {
         if ($model->wasRecentlyCreated) {
@@ -107,9 +94,6 @@ class FixturePlayerStatsService
         return $summary;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function extractPlayerIds(array $teamPlayerStats): Collection
     {
         $playerIds = collect($teamPlayerStats)
@@ -120,9 +104,6 @@ class FixturePlayerStatsService
         return $this->normalizeNumericIds($playerIds);
     }
 
-    /**
-     * @return array<string, bool|float|int|string|null>
-     */
     private function mapStats(array $playerData, int $fixtureId, int $playerId): array
     {
         $statistics = data_get($playerData, 'statistics.0', []);
@@ -141,9 +122,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{game_minutes: int, number: int|null, position: string|null, rating: float|null, is_captain: bool, is_substitute: bool, offsides: int}
-     */
     private function gameAttributes(array $statistics): array
     {
         return [
@@ -157,9 +135,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_shots: int, shots_on_target: int}
-     */
     private function shotAttributes(array $statistics): array
     {
         return [
@@ -168,9 +143,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{goals: int, goals_conceded: int, assists: int, saves: int}
-     */
     private function goalAttributes(array $statistics): array
     {
         return [
@@ -181,9 +153,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{passes: int, key_passes: int, passes_accuracy: float}
-     */
     private function passingAttributes(array $statistics): array
     {
         return [
@@ -193,9 +162,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{tackles: int, blocks: int, interceptions: int}
-     */
     private function defensiveAttributes(array $statistics): array
     {
         return [
@@ -205,9 +171,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{duels: int, duels_won: int, dribbles_attempts: int, dribbles_success: int, dribbles_past: int}
-     */
     private function duelAttributes(array $statistics): array
     {
         return [
@@ -219,9 +182,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{fouls_drawn: int, fouls_committed: int, yellow_cards: int, red_cards: int}
-     */
     private function disciplineAttributes(array $statistics): array
     {
         return [
@@ -232,9 +192,6 @@ class FixturePlayerStatsService
         ];
     }
 
-    /**
-     * @return array{penalties_won: int, penalties_committed: int, penalties_scored: int, penalties_missed: int, penalties_saved: int}
-     */
     private function penaltyAttributes(array $statistics): array
     {
         return [

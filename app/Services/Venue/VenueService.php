@@ -53,9 +53,6 @@ class VenueService
         $this->storeVenues($venueData, $countries);
     }
 
-    /**
-     * @return array{external_id: int, name: string, city: mixed, capacity: mixed, photo_url: mixed, country: mixed}|null
-     */
     private function venuePayload(array $venueData): ?array
     {
         $externalId = data_get($venueData, 'id');
@@ -75,9 +72,6 @@ class VenueService
         ];
     }
 
-    /**
-     * @return array{external_id: int}
-     */
     private function venueIdentity(array $venueData): array
     {
         return [
@@ -85,9 +79,6 @@ class VenueService
         ];
     }
 
-    /**
-     * @return array{name: string, city: string|null, capacity: int|null, photo_url: string|null, country_id: int|null}
-     */
     private function venueAttributes(array $venueData, Collection $countries): array
     {
         return [

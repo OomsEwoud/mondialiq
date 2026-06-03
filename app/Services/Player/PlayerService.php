@@ -16,9 +16,6 @@ class PlayerService
 {
     private array $countriesCache = [];
 
-    /**
-     * @var array<string, string>
-     */
     private const PLAYER_FIELD_MAP = [
         'name' => 'display_name',
         'firstname' => 'first_name',
@@ -113,9 +110,6 @@ class PlayerService
         );
     }
 
-    /**
-     * @return array{external_id: int}
-     */
     private function playerIdentity(array $data): array
     {
         return [
@@ -123,9 +117,6 @@ class PlayerService
         ];
     }
 
-    /**
-     * @return array<string, int|string|null>
-     */
     private function playerAttributes(array $data): array
     {
         $attributes = $this->mappedPlayerFields($data);
@@ -154,9 +145,6 @@ class PlayerService
         return $this->countriesCache[$apiName] ?? $this->countryService->getUnknownId();
     }
 
-    /**
-     * @return array<string, int|string|null>
-     */
     private function mappedPlayerFields(array $data): array
     {
         $attributes = [];
@@ -169,6 +157,7 @@ class PlayerService
 
         return $attributes;
     }
+    
     public function syncTeamPlayers(int $leagueId, int $season): void
     {
         $teamIds = Fixture::query()

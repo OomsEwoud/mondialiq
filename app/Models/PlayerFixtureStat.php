@@ -45,9 +45,6 @@ class PlayerFixtureStat extends Model
         'penalties_saved',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

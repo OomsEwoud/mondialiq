@@ -39,21 +39,6 @@ class FixtureEventsService
         }
     }
 
-    /**
-     * @return array{
-     *     team_id: int,
-     *     team_name: string|null,
-     *     time_elapsed: int,
-     *     extra_time: int|null,
-     *     type: string,
-     *     detail: string,
-     *     player_id: int|null,
-     *     player_name: string|null,
-     *     assist_id: int|null,
-     *     assist_name: string|null,
-     *     comments: string|null
-     * }|null
-     */
     private function eventPayload(array $event, Collection $playerIds, Collection $teamIds): ?array
     {
         $timeElapsed = data_get($event, 'time.elapsed');
@@ -91,9 +76,6 @@ class FixtureEventsService
         return $this->localIdForExternalId($playerIds, data_get($event, $path));
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function extractEventPlayerIds(array $events): Collection
     {
         return $this->extractNumericIds($events, 'player.id')
@@ -102,16 +84,6 @@ class FixtureEventsService
             ->values();
     }
 
-    /**
-     * @param  array{
-     *     team_id: int,
-     *     time_elapsed: int,
-     *     extra_time: int|null,
-     *     type: string,
-     *     detail: string
-     * }  $eventPayload
-     * @return array{fixture_id: int, event_key: string}
-     */
     private function eventIdentity(
         int $fixtureId,
         array $eventPayload,
@@ -129,22 +101,6 @@ class FixtureEventsService
         ];
     }
 
-    /**
-     * @param  array{
-     *     team_id: int,
-     *     team_name: string|null,
-     *     time_elapsed: int,
-     *     extra_time: int|null,
-     *     type: string,
-     *     detail: string,
-     *     player_id: int|null,
-     *     player_name: string|null,
-     *     assist_id: int|null,
-     *     assist_name: string|null,
-     *     comments: string|null
-     * }  $eventPayload
-     * @return array<string, int|string|null>
-     */
     private function eventAttributes(array $eventPayload, FixtureEvent $fixtureEvent): array
     {
         return [

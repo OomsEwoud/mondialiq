@@ -79,9 +79,6 @@ class CoachService
         );
     }
 
-    /**
-     * @return array{external_id: int, nationality: mixed, first_name: mixed, last_name: mixed, display_name: string, photo_url: mixed, birth_date: mixed}|null
-     */
     private function coachPayload(array $coachData): ?array
     {
         $externalId = data_get($coachData, 'id');
@@ -102,9 +99,6 @@ class CoachService
         ];
     }
 
-    /**
-     * @return array{external_id: int}
-     */
     private function coachIdentity(array $coachData): array
     {
         return [
@@ -112,9 +106,6 @@ class CoachService
         ];
     }
 
-    /**
-     * @return array{team_id: int, country_id: int|null, first_name: string|null, last_name: string|null, display_name: string, photo_url: string|null, birth_date: string|null}
-     */
     private function coachAttributes(Team $team, array $coachData): array
     {
         return [

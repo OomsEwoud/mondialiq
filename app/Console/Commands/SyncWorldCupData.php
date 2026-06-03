@@ -10,9 +10,6 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer World Cup data en prediction context uit de Football API')]
 class SyncWorldCupData extends Command
 {
-    /**
-     * @var array<int, array{command: string, arguments?: array<string, mixed>}>
-     */
     private array $commands = [
         ['command' => 'app:add-countries'],
         ['command' => 'app:add-leagues'],
@@ -34,7 +31,7 @@ class SyncWorldCupData extends Command
         ['command' => 'app:add-fixture-lineups'],
         ['command' => 'app:add-fixture-data'],
         ['command' => 'app:add-fixture-player-stats'],
-        ['command' => 'app:generate-ai-predictions', 'arguments' => ['--days' => 14]],
+        ['command' => 'app:generate-ai-predictions', 'arguments' => ['--days' => 3]],
     ];
 
     public function handle(): int

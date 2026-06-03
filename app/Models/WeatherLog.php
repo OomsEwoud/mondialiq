@@ -14,9 +14,6 @@ class WeatherLog extends Model
         'condition',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

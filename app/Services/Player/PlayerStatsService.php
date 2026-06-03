@@ -102,9 +102,6 @@ class PlayerStatsService
         return is_numeric($season) ? (int) $season : null;
     }
 
-    /**
-     * @return array{player_id: int, league_id: int, season: int}
-     */
     private function seasonStatIdentity(int $playerId, int $leagueId, int $season): array
     {
         return [
@@ -114,9 +111,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array<string, bool|float|int|string|null>
-     */
     private function seasonStatAttributes(int $teamId, array $playerData): array
     {
         return [
@@ -133,9 +127,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{appearances: mixed, total_minutes: mixed, position: mixed, rating: mixed, is_captain: mixed}
-     */
     private function gameAttributes(array $playerData): array
     {
         return [
@@ -147,9 +138,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{substitutes_in: mixed, substitutes_out: mixed, bench: mixed}
-     */
     private function substituteAttributes(array $playerData): array
     {
         return [
@@ -159,9 +147,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_shots: mixed, shots_on_target: mixed}
-     */
     private function shotAttributes(array $playerData): array
     {
         return [
@@ -170,9 +155,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_goals: mixed, total_goals_conceded: mixed, total_assists: mixed, total_saves: mixed}
-     */
     private function goalAttributes(array $playerData): array
     {
         return [
@@ -183,9 +165,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_passes: mixed, key_passes: mixed, pass_accuracy: mixed}
-     */
     private function passingAttributes(array $playerData): array
     {
         return [
@@ -195,9 +174,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_tackles: mixed, total_blocks: mixed, total_interceptions: mixed}
-     */
     private function defensiveAttributes(array $playerData): array
     {
         return [
@@ -207,9 +183,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{total_duels: mixed, duels_won: mixed, total_dribbles_attempts: mixed, dribbles_success: mixed, dribbles_past: mixed}
-     */
     private function duelAttributes(array $playerData): array
     {
         return [
@@ -221,9 +194,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{fouls_drawn: mixed, fouls_committed: mixed, yellow_cards: mixed, yellow_red_cards: mixed, red_cards: mixed}
-     */
     private function disciplineAttributes(array $playerData): array
     {
         return [
@@ -235,9 +205,6 @@ class PlayerStatsService
         ];
     }
 
-    /**
-     * @return array{penalties_won: mixed, penalties_committed: mixed, penalties_scored: mixed, penalties_missed: mixed, penalties_saved: mixed}
-     */
     private function penaltyAttributes(array $playerData): array
     {
         return [

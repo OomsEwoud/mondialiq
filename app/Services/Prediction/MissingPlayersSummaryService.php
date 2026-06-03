@@ -126,18 +126,6 @@ class MissingPlayersSummaryService
         return null;
     }
 
-    /**
-     * @return array{
-     *     home_team_name: string|null,
-     *     away_team_name: string|null,
-     *     home_missing_count: int,
-     *     away_missing_count: int,
-     *     home_questionable_count: int|null,
-     *     away_questionable_count: int|null,
-     *     home_missing_players: array<int, array{name: string, type: string|null, reason: string|null}>,
-     *     away_missing_players: array<int, array{name: string, type: string|null, reason: string|null}>
-     * }
-     */
     private function emptySummary(Fixture $fixture, bool $hasType): array
     {
         return [

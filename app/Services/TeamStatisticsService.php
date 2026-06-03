@@ -48,9 +48,6 @@ class TeamStatisticsService
         );
     }
 
-    /**
-     * @return array{statistics_key: string}
-     */
     private function teamStatisticIdentity(int $apiTeamId, int $apiLeagueId, int $season, ?string $date): array
     {
         return [
@@ -63,9 +60,6 @@ class TeamStatisticsService
         return $this->api->getTeamStatistics($apiTeamId, $apiLeagueId, $season, $date);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function teamStatisticAttributes(
         array $response,
         int $apiTeamId,
@@ -97,9 +91,6 @@ class TeamStatisticsService
             : now()->subDays(self::REFRESH_DAYS_WITHOUT_FIXTURE_TODAY);
     }
 
-    /**
-     * @return array<string, array|float|int|string|null>
-     */
     public function parseStatistics(
         array $response,
         int $apiTeamId,
@@ -119,9 +110,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array{api_team_id: int, api_league_id: int, season: int, statistics_date: string|null, statistics_key: string}
-     */
     private function baseStatisticAttributes(int $apiTeamId, int $apiLeagueId, int $season, ?string $date): array
     {
         return [
@@ -133,9 +121,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array<string, int>
-     */
     private function matchResultAttributes(array $response): array
     {
         return [
@@ -146,9 +131,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array<string, float|int|null>
-     */
     private function scoringAttributes(array $response): array
     {
         return [
@@ -159,9 +141,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array<string, int>
-     */
     private function availabilityAttributes(array $response): array
     {
         return [
@@ -170,9 +149,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array{biggest_wins_streak: int, biggest_draws_streak: int, biggest_losses_streak: int}
-     */
     private function streakAttributes(array $response): array
     {
         return [
@@ -182,9 +158,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array{most_used_formation: string|null, lineups: array<mixed>|null, cards: array<mixed>|null, goals_by_minute: array{for: array<mixed>|null, against: array<mixed>|null}}
-     */
     private function contextAttributes(array $response): array
     {
         return [
@@ -198,9 +171,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array<string, int>
-     */
     private function splitIntAttributes(array $response, string $prefix, string $path): array
     {
         return [
@@ -210,9 +180,6 @@ class TeamStatisticsService
         ];
     }
 
-    /**
-     * @return array<string, float|null>
-     */
     private function splitNullableFloatAttributes(array $response, string $prefix, string $path): array
     {
         return [
@@ -303,9 +270,6 @@ class TeamStatisticsService
         return is_numeric($value) ? (float) $value : null;
     }
 
-    /**
-     * @return array<mixed>|null
-     */
     private function normalizeArray(mixed $value): ?array
     {
         return is_array($value) ? $value : null;

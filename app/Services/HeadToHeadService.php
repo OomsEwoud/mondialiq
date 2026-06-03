@@ -69,9 +69,6 @@ class HeadToHeadService
         return (bool) $headToHead?->fetched_at?->gte(now()->subDays(self::REFRESH_AFTER_DAYS));
     }
 
-    /**
-     * @return array{0: int, 1: int}
-     */
     private function externalTeamIdsForPair(int $teamAId, int $teamBId): array
     {
         $externalIds = Team::query()
@@ -88,9 +85,6 @@ class HeadToHeadService
         return [(int) $teamAExternalId, (int) $teamBExternalId];
     }
 
-    /**
-     * @return array{pair_key: string}
-     */
     private function headToHeadIdentity(string $pairKey): array
     {
         return [
@@ -98,19 +92,6 @@ class HeadToHeadService
         ];
     }
 
-    /**
-     * @param  array{
-     *     total_matches: int,
-     *     team_a_wins: int,
-     *     team_b_wins: int,
-     *     draws: int,
-     *     team_a_goals: int,
-     *     team_b_goals: int,
-     *     last_meeting_at: \Illuminate\Support\Carbon|null,
-     *     raw_data: array
-     * }  $summary
-     * @return array<string, mixed>
-     */
     private function headToHeadAttributes(array $summary, int $teamAId, int $teamBId): array
     {
         return [
@@ -128,18 +109,6 @@ class HeadToHeadService
         ];
     }
 
-    /**
-     * @return array{
-     *     total_matches: int,
-     *     team_a_wins: int,
-     *     team_b_wins: int,
-     *     draws: int,
-     *     team_a_goals: int,
-     *     team_b_goals: int,
-     *     last_meeting_at: \Illuminate\Support\Carbon|null,
-     *     raw_data: array
-     * }
-     */
     public function calculateSummary(array $response, int $teamAId, int $teamBId): array
     {
         $teamIdsByExternalId = $this->teamIdsByExternalId($response);
@@ -170,9 +139,6 @@ class HeadToHeadService
         return $summary;
     }
 
-    /**
-     * @return array{0: int, 1: int, 2: \Carbon\CarbonImmutable|null}|null
-     */
     private function finishedMatchSummary(array $fixtureData, Collection $teamIdsByExternalId, int $teamAId): ?array
     {
         if (data_get($fixtureData, 'fixture.status.short') !== 'FT') {
@@ -206,9 +172,6 @@ class HeadToHeadService
         ];
     }
 
-    /**
-     * @return array{0: int, 1: int}|null
-     */
     private function teamIdsForMatch(array $fixtureData, Collection $teamIdsByExternalId): ?array
     {
         $homeTeamId = $teamIdsByExternalId[(int) data_get($fixtureData, 'teams.home.id')] ?? null;
@@ -221,9 +184,6 @@ class HeadToHeadService
         return [$homeTeamId, $awayTeamId];
     }
 
-    /**
-     * @return array{0: int, 1: int}|null
-     */
     private function goalsForMatch(array $fixtureData): ?array
     {
         $homeGoals = $this->normalizeGoals(data_get($fixtureData, 'goals.home'));
@@ -247,9 +207,6 @@ class HeadToHeadService
         return CarbonImmutable::parse($fixtureDate);
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function teamIdsByExternalId(array $response): Collection
     {
         return Team::query()
@@ -257,9 +214,6 @@ class HeadToHeadService
             ->pluck('id', 'external_id');
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function externalTeamIds(array $response): Collection
     {
         return collect($response)
@@ -273,18 +227,6 @@ class HeadToHeadService
             ->values();
     }
 
-    /**
-     * @return array{
-     *     total_matches: int,
-     *     team_a_wins: int,
-     *     team_b_wins: int,
-     *     draws: int,
-     *     team_a_goals: int,
-     *     team_b_goals: int,
-     *     last_meeting_at: \Illuminate\Support\Carbon|null,
-     *     raw_data: array
-     * }
-     */
     private function emptySummary(array $response): array
     {
         return [
@@ -299,9 +241,6 @@ class HeadToHeadService
         ];
     }
 
-    /**
-     * @return array{0: int, 1: int}|null
-     */
     private function scoreForTeamA(
         int $teamAId,
         int $homeTeamId,
@@ -320,10 +259,6 @@ class HeadToHeadService
         return null;
     }
 
-    /**
-     * @param  array<string, mixed>  $summary
-     * @return array<string, mixed>
-     */
     private function recordResult(array $summary, int $teamAGoals, int $teamBGoals): array
     {
         if ($teamAGoals === $teamBGoals) {
@@ -343,9 +278,6 @@ class HeadToHeadService
         return $summary;
     }
 
-    /**
-     * @param  array<int, \Carbon\CarbonImmutable>  $finishedMatchDates
-     */
     private function lastMeetingAt(array $finishedMatchDates): ?Carbon
     {
         if ($finishedMatchDates === []) {
@@ -360,9 +292,6 @@ class HeadToHeadService
         );
     }
 
-    /**
-     * @return array{0: int, 1: int}
-     */
     private function normalizeTeamIds(int $teamAId, int $teamBId): array
     {
         if ($teamAId === $teamBId) {

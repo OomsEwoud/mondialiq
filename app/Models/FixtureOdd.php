@@ -20,9 +20,6 @@ class FixtureOdd extends Model
         'api_updated_at',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

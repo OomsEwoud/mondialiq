@@ -38,9 +38,6 @@ class AiPredictionService
         );
     }
 
-    /**
-     * @return array{model: string, instructions: string, input: string}
-     */
     private function openAiParameters(Fixture $fixture): array
     {
         return [
@@ -50,9 +47,6 @@ class AiPredictionService
         ];
     }
 
-    /**
-     * @return array{fixture_id: int, user_id: null, source: string}
-     */
     private function predictionIdentity(Fixture $fixture): array
     {
         return [
@@ -62,9 +56,6 @@ class AiPredictionService
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function decodePrediction(?string $outputText): array
     {
         if (blank($outputText)) {
@@ -97,10 +88,6 @@ class AiPredictionService
         return trim(preg_replace('/\s*```$/', '', $cleanedOutputText) ?? $cleanedOutputText);
     }
 
-    /**
-     * @param  array<string, mixed>  $prediction
-     * @return array<string, mixed>
-     */
     private function predictionAttributes(Fixture $fixture, array $prediction): array
     {
         $homeGoals = $this->numericOrNull(Arr::get($prediction, 'predicted_home_score'));
@@ -155,9 +142,6 @@ class AiPredictionService
         return $homeGoals + $awayGoals;
     }
 
-    /**
-     * @param  array<string, mixed>  $prediction
-     */
     private function advice(array $prediction): string
     {
         $outcome = Arr::get($prediction, 'predicted_outcome', 'unknown');

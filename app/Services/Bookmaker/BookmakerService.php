@@ -30,10 +30,7 @@ class BookmakerService
 
         return $bookmaker['name'];
     }
-
-    /**
-     * @return array{name: string}
-     */
+    
     private function bookmakerIdentity(string $name): array
     {
         return [
@@ -41,9 +38,6 @@ class BookmakerService
         ];
     }
 
-    /**
-     * @return array{name: string}
-     */
     private function bookmakerAttributes(string $name): array
     {
         return [

@@ -19,9 +19,6 @@ class Team extends Model
         'country_id',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

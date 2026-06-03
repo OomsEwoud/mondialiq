@@ -80,9 +80,6 @@ class AddOdds extends Command
         return now('UTC')->addDays(max(1, (int) $this->option('days')));
     }
 
-    /**
-     * @return Collection<int, Fixture>
-     */
     private function fixturesForOddsSync(): Collection
     {
         return Fixture::query()
@@ -92,9 +89,6 @@ class AddOdds extends Command
             ->get(['id', 'external_id', 'match_date']);
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function syncFixtureOdds(Fixture $fixture): array
     {
         $odds = $this->api->getFixtureOdds((int) $fixture->external_id);
@@ -105,18 +99,12 @@ class AddOdds extends Command
         return $summary;
     }
 
-    /**
-     * @param  array{stored: int, skipped: int}  $summary
-     */
     private function reportSummary(array $summary): void
     {
         $this->info("Odds opgeslagen/bijgewerkt: {$summary['stored']}");
         $this->info("Odds overgeslagen: {$summary['skipped']}");
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function emptySummary(): array
     {
         return [
@@ -125,11 +113,6 @@ class AddOdds extends Command
         ];
     }
 
-    /**
-     * @param  array{stored: int, skipped: int}  $summary
-     * @param  array{stored: int, skipped: int}  $addition
-     * @return array{stored: int, skipped: int}
-     */
     private function mergeSummary(array $summary, array $addition): array
     {
         $summary['stored'] += $addition['stored'];

@@ -15,10 +15,6 @@ class AiPredictionPayloadValidator
     ) {
     }
 
-    /**
-     * @param  array<string, mixed>  $payload
-     * @return array<string, mixed>
-     */
     public function validateAiPredictionPayload(Fixture $fixture, array $payload): array
     {
         $fixture->loadMissing(['homeTeam:id,name,code', 'awayTeam:id,name,code', 'apiPrediction']);
@@ -97,16 +93,8 @@ class AiPredictionPayloadValidator
         return $validated;
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     * @return array{0: ?int, 1: ?int}
-     */
-    public function makeScoreCompatibleWithOutcome(
-        string $outcome,
-        ?int $homeScore,
-        ?int $awayScore,
-        array $context,
-    ): array {
+    public function makeScoreCompatibleWithOutcome(string $outcome,?int $homeScore,?int $awayScore,array $context): array 
+    {
         $marketScore = $this->parseMarketMostLikelyScore(
             Arr::get($context, 'market_odds.most_likely_score'),
         );
@@ -134,9 +122,6 @@ class AiPredictionPayloadValidator
         };
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function buildContext(Fixture $fixture): array
     {
         return [
@@ -147,10 +132,6 @@ class AiPredictionPayloadValidator
         ];
     }
 
-    /**
-     * @param  array<string, mixed>  $payload
-     * @return array{0: ?int, 1: ?int}
-     */
     private function extractScores(array $payload): array
     {
         $homeScore = $this->nonNegativeInt(Arr::get($payload, 'predicted_home_score'));
@@ -176,9 +157,6 @@ class AiPredictionPayloadValidator
         ];
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function resolvePredictedOutcome(
         Fixture $fixture,
         ?string $modelOutcome,
@@ -200,9 +178,6 @@ class AiPredictionPayloadValidator
         return $this->strongestContextOutcome($fixture, $context);
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function resolveAmbiguousOutcome(
         string $outcome,
         array $context,
@@ -218,19 +193,6 @@ class AiPredictionPayloadValidator
         return $preferredOutcome;
     }
 
-    private function isOutcomeAllowedByAmbiguousOutcome(string $ambiguousOutcome, string $outcome): bool
-    {
-        return match ($ambiguousOutcome) {
-            'home_or_draw' => in_array($outcome, ['home', 'draw'], true),
-            'away_or_draw' => in_array($outcome, ['away', 'draw'], true),
-            'home_or_away' => in_array($outcome, ['home', 'away'], true),
-            default => false,
-        };
-    }
-
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function preferredOutcomeBetween(array $outcomes, array $context): string
     {
         $scores = [];
@@ -244,9 +206,6 @@ class AiPredictionPayloadValidator
         return (string) array_key_first($scores);
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function strongestContextOutcome(Fixture $fixture, array $context): string
     {
         $scores = [
@@ -280,9 +239,6 @@ class AiPredictionPayloadValidator
         return (string) array_key_first($scores);
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function shouldTrustScoreOutcome(
         string $predictedOutcome,
         string $scoreOutcome,
@@ -303,9 +259,6 @@ class AiPredictionPayloadValidator
             && $contextOutcome === $scoreOutcome;
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function signalScoreForOutcome(string $outcome, array $context): float
     {
         $marketWeight = 1.6;
@@ -328,9 +281,6 @@ class AiPredictionPayloadValidator
         return ($marketScore * $marketWeight) + ($apiScore * $apiWeight);
     }
 
-    /**
-     * @param  array<string, mixed>  $context
-     */
     private function apiAdviceOutcome(Fixture $fixture, array $context): ?string
     {
         $advice = (string) (Arr::get($context, 'api_prediction.api_predicted_outcome') ?? '');
@@ -382,9 +332,6 @@ class AiPredictionPayloadValidator
         return $over > 0 && $over <= 40 && $btts <= 45;
     }
 
-    /**
-     * @return array{0: int, 1: int}|null
-     */
     private function parseMarketMostLikelyScore(?string $score): ?array
     {
         if ($score === null || preg_match('/^(?<home>\d+)\s*[-:]\s*(?<away>\d+)$/', trim($score), $matches) !== 1) {
@@ -421,10 +368,6 @@ class AiPredictionPayloadValidator
         return trim($value);
     }
 
-    /**
-     * @param  array<string, mixed>  $original
-     * @param  array<string, mixed>  $validated
-     */
     private function payloadWasCorrected(array $original, array $validated): bool
     {
         $originalHomeScore = $this->nonNegativeInt(Arr::get($original, 'predicted_home_score'));

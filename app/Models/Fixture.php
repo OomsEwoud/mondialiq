@@ -91,9 +91,6 @@ class Fixture extends Model
         'player_stats_sync_attempts',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

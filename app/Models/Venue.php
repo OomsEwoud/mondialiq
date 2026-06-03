@@ -17,9 +17,6 @@ class Venue extends Model
         'photo_url',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

@@ -58,9 +58,6 @@ class AddPredictions extends Command
         return self::SUCCESS;
     }
 
-    /**
-     * @return Collection<int, Fixture>
-     */
     private function fixturesForPredictionSync(): Collection
     {
         return Fixture::query()

@@ -41,13 +41,13 @@ class PredictionFixtureQuery
         return $query->whereKey([]);
     }
 
-    private function userPredictionEagerLoad($query, User $user)
+    private function userPredictionEagerLoad(Builder $query, User $user)
     {
         return $this->userPredictionConstraint($query, $user)
             ->with('winner');
     }
 
-    private function userPredictionConstraint($query, User $user)
+    private function userPredictionConstraint(Builder $query, User $user)
     {
         return $query->whereBelongsTo($user);
     }

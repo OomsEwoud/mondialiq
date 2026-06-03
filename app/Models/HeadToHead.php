@@ -22,9 +22,6 @@ class HeadToHead extends Model
         'fetched_at',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

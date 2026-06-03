@@ -59,9 +59,6 @@ class AddMissingPlayers extends Command
         return self::SUCCESS;
     }
 
-    /**
-     * @return array{processed: int, created: int, updated: int, skipped: int}
-     */
     private function emptySummary(): array
     {
         return [

@@ -16,9 +16,6 @@ class UpdateLeagueRequest extends FormRequest
         return $this->user()?->can('manage', $this->league()) ?? false;
     }
 
-    /**
-     * @return array<string, array<int, string>>
-     */
     public function rules(): array
     {
         return [

@@ -44,9 +44,6 @@ class FixtureStatsService
         }
     }
 
-    /**
-     * @return array<int, array<string, mixed>>
-     */
     private function statEntries(array $stat): array
     {
         $statistics = data_get($stat, 'statistics', []);
@@ -54,9 +51,6 @@ class FixtureStatsService
         return is_array($statistics) ? $statistics : [];
     }
 
-    /**
-     * @return array{fixture_id: int, team_id: int, name: string}
-     */
     private function statIdentity(int $fixtureId, int $teamId, string $name): array
     {
         return [
@@ -66,9 +60,6 @@ class FixtureStatsService
         ];
     }
 
-    /**
-     * @return array{value: float}
-     */
     private function statAttributes(array $matchStat): array
     {
         return [

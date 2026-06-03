@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\Concerns;
 
+use Symfony\Component\Console\Command\Command;
+
 trait RunsFootballApiImportTasks
 {
     protected function runFootballApiImport(
@@ -27,7 +29,7 @@ trait RunsFootballApiImportTasks
 
         $this->info($doneMessage);
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     protected function runDatabaseSyncTask(
@@ -42,7 +44,7 @@ trait RunsFootballApiImportTasks
 
         $this->info($doneMessage);
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     private function shouldStoreImportData(array $data, bool $storeWhenEmpty): bool

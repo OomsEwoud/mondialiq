@@ -10,9 +10,6 @@ use Illuminate\Console\Command;
 #[Description('Synchroniseer alle basisdata uit de Football API')]
 class SyncAllData extends Command
 {
-    /**
-     * @var array<int, string>
-     */
     private array $commands = [
         'app:add-countries',
         'app:add-leagues',

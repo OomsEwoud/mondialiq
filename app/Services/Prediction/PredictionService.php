@@ -16,9 +16,6 @@ class PredictionService
         );
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function apiPredictionPayload(array $prediction): array
     {
         $apiPrediction = data_get($prediction, '0.predictions');
@@ -26,9 +23,6 @@ class PredictionService
         return is_array($apiPrediction) ? $apiPrediction : [];
     }
 
-    /**
-     * @return array{fixture_id: int, user_id: null, source: string}
-     */
     private function predictionIdentity(int $fixtureId): array
     {
         return [
@@ -38,9 +32,6 @@ class PredictionService
         ];
     }
 
-    /**
-     * @return array{winner_id: int|null, total_goals: mixed, home_goals: mixed, away_goals: mixed, advice: mixed, home_chance: float|null, draw_chance: float|null, away_chance: float|null}
-     */
     private function predictionAttributes(array $apiPrediction): array
     {
         return [

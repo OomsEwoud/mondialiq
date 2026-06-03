@@ -26,9 +26,6 @@ class LeagueService
         }
     }
 
-    /**
-     * @return array{external_id: int, name: string, type: string, logo_url: mixed, country: mixed}|null
-     */
     private function leaguePayload(array $leagueData): ?array
     {
         $externalId = data_get($leagueData, 'league.id');
@@ -48,9 +45,6 @@ class LeagueService
         ];
     }
 
-    /**
-     * @return array{external_id: int}
-     */
     private function leagueIdentity(array $leagueData): array
     {
         return [
@@ -58,9 +52,6 @@ class LeagueService
         ];
     }
 
-    /**
-     * @return array{name: string, type: string, logo_url: string|null, country_id: int|null}
-     */
     private function leagueAttributes(array $leagueData, Collection $countries): array
     {
         return [

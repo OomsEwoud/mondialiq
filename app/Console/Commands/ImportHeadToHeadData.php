@@ -65,9 +65,6 @@ class ImportHeadToHeadData extends Command
         return $this->importFixtures($fixtures, $force);
     }
 
-    /**
-     * @param Collection<int, Fixture>  $fixtures
-     */
     private function importFixtures(Collection $fixtures, bool $force): int
     {
         $seenPairs = [];
@@ -90,9 +87,6 @@ class ImportHeadToHeadData extends Command
         return self::SUCCESS;
     }
 
-    /**
-     * @return array{home_team_id: int, away_team_id: int, pair_key: string}|null
-     */
     private function fixturePair(Fixture $fixture): ?array
     {
         if (! is_numeric($fixture->home_team_id) || ! is_numeric($fixture->away_team_id)) {
@@ -109,9 +103,6 @@ class ImportHeadToHeadData extends Command
         ];
     }
 
-    /**
-     * @param  array{home_team_id: int, away_team_id: int, pair_key: string}  $fixturePair
-     */
     private function importFixturePair(array $fixturePair, bool $force): void
     {
         try {
@@ -132,10 +123,7 @@ class ImportHeadToHeadData extends Command
             $this->error("Fout bij importeren van {$fixturePair['pair_key']}: {$exception->getMessage()}");
         }
     }
-
-    /**
-     * @param  array{home_team_id: int, away_team_id: int, pair_key: string}  $fixturePair
-     */
+    
     private function shouldSkipFreshPair(array $fixturePair, bool $force): bool
     {
         return ! $force && $this->headToHeadService->hasFreshData(

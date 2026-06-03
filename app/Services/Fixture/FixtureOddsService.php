@@ -46,9 +46,6 @@ class FixtureOddsService
         return $summary;
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function storeBookmakerOdds(mixed $bookmakerData, int $fixtureId, ?CarbonImmutable $apiUpdatedAt): array
     {
         $summary = $this->emptySummary();
@@ -85,9 +82,6 @@ class FixtureOddsService
         return $summary;
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function storeBetOdds(
         mixed $betData,
         int $fixtureId,
@@ -133,9 +127,6 @@ class FixtureOddsService
         return $summary;
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function storeValueOdds(
         mixed $valueData,
         int $fixtureId,
@@ -161,9 +152,6 @@ class FixtureOddsService
         return $this->storedSummary();
     }
 
-    /**
-     * @return array{external_id: int, name: string, bets: mixed}|null
-     */
     private function bookmakerPayload(mixed $bookmakerData): ?array
     {
         $externalBookmakerId = data_get($bookmakerData, 'id');
@@ -180,9 +168,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{external_id: int, name: string, values: mixed}|null
-     */
     private function betPayload(mixed $betData): ?array
     {
         $externalBetId = data_get($betData, 'id');
@@ -199,9 +184,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{value: string, odd: float}|null
-     */
     private function valuePayload(mixed $valueData): ?array
     {
         $value = data_get($valueData, 'value');
@@ -217,9 +199,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{fixture_id: int, external_bookmaker_id: int, external_bet_id: int, value: string}
-     */
     private function fixtureOddIdentity(int $fixtureId, int $externalBookmakerId, int $externalBetId, string $value): array
     {
         return [
@@ -230,9 +209,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{bookmaker_id: int, bet_type_id: int, bookmaker_name: string, bet_name: string, odd: float, api_updated_at: ?CarbonImmutable}
-     */
     private function fixtureOddAttributes(
         Bookmaker $bookmaker,
         string $bookmakerName,
@@ -251,9 +227,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function emptySummary(): array
     {
         return [
@@ -262,9 +235,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function storedSummary(): array
     {
         return [
@@ -273,9 +243,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @return array{stored: int, skipped: int}
-     */
     private function skippedSummary(): array
     {
         return [
@@ -284,11 +251,6 @@ class FixtureOddsService
         ];
     }
 
-    /**
-     * @param  array{stored: int, skipped: int}  $summary
-     * @param  array{stored: int, skipped: int}  $addition
-     * @return array{stored: int, skipped: int}
-     */
     private function mergeSummary(array $summary, array $addition): array
     {
         $summary['stored'] += $addition['stored'];

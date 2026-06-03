@@ -5,9 +5,10 @@ namespace App\Console\Commands\Concerns;
 use App\Models\Fixture;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Symfony\Component\Console\Command\Command;
 use Throwable;
 
-trait InteractsWithRelevantFixtures
+trait InteractsWithRelevantFixtures 
 {
     protected function relevantFixturesForDataSync(): Collection
     {
@@ -30,7 +31,7 @@ trait InteractsWithRelevantFixtures
         if ($fixtures->isEmpty()) {
             $this->info($emptyMessage);
 
-            return self::SUCCESS;
+            return Command::SUCCESS;
         }
 
         $this->info("{$fixtures->count()} relevante fixtures gevonden.");
@@ -48,7 +49,7 @@ trait InteractsWithRelevantFixtures
         $this->newLine();
         $this->info($doneMessage);
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     protected function externalFixtureId(Fixture $fixture): int

@@ -48,9 +48,6 @@ class ImportTeamStatistics extends Command
         return $this->importRelevantTeams($config['leagueId'], $config['season'], $options['date'], $options['force']);
     }
 
-    /**
-     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
-     */
     private function handleTargetedImport(array $options): int
     {
         if (! $this->hasCompleteTargetedImportOptions($options)) {
@@ -68,9 +65,6 @@ class ImportTeamStatistics extends Command
         );
     }
 
-    /**
-     * @return array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}
-     */
     private function importOptions(): array
     {
         $date = $this->option('date');
@@ -84,17 +78,11 @@ class ImportTeamStatistics extends Command
         ];
     }
 
-    /**
-     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
-     */
     private function hasTargetedImportOptions(array $options): bool
     {
         return $options['teamId'] !== null || $options['leagueId'] !== null || $options['season'] !== null;
     }
 
-    /**
-     * @param  array{teamId: mixed, leagueId: mixed, season: mixed, date: string|null, force: bool}  $options
-     */
     private function hasCompleteTargetedImportOptions(array $options): bool
     {
         return $options['teamId'] !== null && $options['leagueId'] !== null && $options['season'] !== null;
@@ -168,9 +156,6 @@ class ImportTeamStatistics extends Command
         return is_numeric($leagueId) ? (int) $leagueId : null;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function apiTeamIdsForLeague(int $leagueId, int $season): Collection
     {
         $fixtures = $this->relevantFixturesForTeamStatistics($leagueId, $season);
@@ -182,9 +167,6 @@ class ImportTeamStatistics extends Command
         return $this->apiTeamIds($fixtures);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
     private function relevantFixturesForTeamStatistics(int $leagueId, int $season): EloquentCollection
     {
         return $this->teamStatisticsFixtureQuery($leagueId, $season)
@@ -194,9 +176,6 @@ class ImportTeamStatistics extends Command
             ->get(['id', 'home_team_id', 'away_team_id']);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>
-     */
     private function allFixturesForTeamStatistics(int $leagueId, int $season): EloquentCollection
     {
         return $this->teamStatisticsFixtureQuery($leagueId, $season)
@@ -216,10 +195,6 @@ class ImportTeamStatistics extends Command
             ->where('season', $season);
     }
 
-    /**
-     * @param  \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fixture>  $fixtures
-     * @return \Illuminate\Support\Collection<int, int>
-     */
     private function apiTeamIds(EloquentCollection $fixtures): Collection
     {
         return $fixtures

@@ -20,10 +20,7 @@ class Player extends Model
         'position',
         'number',
     ];
-
-    /**
-     * @return array<string, string>
-     */
+    
     protected function casts(): array
     {
         return [

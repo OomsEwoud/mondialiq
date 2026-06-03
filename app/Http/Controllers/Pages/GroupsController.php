@@ -52,10 +52,7 @@ class GroupsController extends Controller
             ->orderBy('rank')
             ->get();
     }
-
-    /**
-     * @return array<int, string>
-     */
+    
     private function worldCupGroupNames(): array
     {
         return collect(range('A', 'L'))

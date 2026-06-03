@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Predictions;
 
-use App\Models\Fixture;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,7 +31,6 @@ class StoreMatchPredictionRequest extends FormRequest
 
     private function validatePredictionRules(Validator $validator): void
     {
-        /** @var Fixture|null $fixture */
         $fixture = $this->route('fixture');
 
         if ($fixture !== null && CarbonImmutable::parse($fixture->kickoffAt())->isPast()) {

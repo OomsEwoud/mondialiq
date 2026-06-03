@@ -14,9 +14,6 @@ class FixtureStat extends Model
         'value',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

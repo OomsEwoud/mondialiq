@@ -24,9 +24,6 @@ class Prediction extends Model
         'points',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

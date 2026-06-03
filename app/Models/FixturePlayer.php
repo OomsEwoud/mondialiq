@@ -16,9 +16,6 @@ class FixturePlayer extends Model
         'position',
     ];
 
-    /**
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

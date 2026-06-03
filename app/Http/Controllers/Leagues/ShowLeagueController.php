@@ -20,8 +20,7 @@ class ShowLeagueController extends Controller
     public function __invoke(Request $request, Scoreboard $scoreboard): Response
     {
         $this->authorize('view', $scoreboard);
-
-        /** @var User $user */
+        
         $user = $request->user();
         $memberIds = $this->memberIds($scoreboard);
         $members = $this->members($scoreboard, $user, $memberIds);

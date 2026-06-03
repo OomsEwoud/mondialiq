@@ -26,9 +26,6 @@ class TeamService
         }
     }
 
-    /**
-     * @return array{external_id: int, name: string, code: mixed, logo_url: mixed, founded_at: mixed, country: mixed}|null
-     */
     private function teamPayload(array $teamData): ?array
     {
         $externalId = data_get($teamData, 'team.id');
@@ -48,9 +45,6 @@ class TeamService
         ];
     }
 
-    /**
-     * @return array{external_id: int}
-     */
     private function teamIdentity(array $teamData): array
     {
         return [
@@ -58,9 +52,6 @@ class TeamService
         ];
     }
 
-    /**
-     * @return array{name: string, code: string|null, logo_url: string|null, founded_at: int|null, country_id: int|null}
-     */
     private function teamAttributes(array $teamData, Collection $countries): array
     {
         return [
