@@ -9,6 +9,7 @@ import {
 
 import AppHeaderDesktopNav from '@/components/app/app-header-desktop-nav';
 import AppHeaderMobileNav from '@/components/app/app-header-mobile-nav';
+import AppLoginButton from '@/components/app/app-login-button';
 import AppLogo from '@/components/app/app-logo';
 import { Breadcrumbs } from '@/components/navigation/breadcrumbs';
 import {
@@ -24,14 +25,7 @@ import {
 } from '@/components/ui/forms/dropdown-menu';
 import { UserMenuContent } from '@/components/user/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
-import {
-    groups,
-    home,
-    leaderboards,
-    login,
-    matches,
-    predictions,
-} from '@/routes';
+import { groups, home, leaderboards, matches, predictions } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
 type Props = {
@@ -116,12 +110,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Button
-                                asChild
-                                className="h-9 rounded-full bg-cyan-300 px-4 font-black text-blue-950 shadow-sm shadow-cyan-950/20 hover:bg-cyan-200"
-                            >
-                                <Link href={login()}>Inloggen</Link>
-                            </Button>
+                            <AppLoginButton />
                         )}
                     </div>
                 </div>

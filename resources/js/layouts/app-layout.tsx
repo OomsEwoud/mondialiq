@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import AppLoginButton from '@/components/app/app-login-button';
 import AppLogo from '@/components/app/app-logo';
 import Footer from '@/components/footer/footer';
 import NavApp from '@/components/navigation/nav-app';
@@ -16,7 +17,6 @@ import {
 } from '@/components/ui/forms/dropdown-menu';
 import { UserMenuContent } from '@/components/user/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
-import { login } from '@/routes';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -71,12 +71,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Link
-                                href={login()}
-                                className="rounded-full bg-cyan-300 px-3.5 py-2 text-sm font-black text-blue-950 shadow-sm shadow-cyan-950/20 transition-colors duration-200 hover:bg-cyan-200 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none sm:px-4"
-                            >
-                                Inloggen
-                            </Link>
+                            <AppLoginButton className="focus-visible:ring-offset-[#141c69]" />
                         )}
                         <button
                             type="button"
