@@ -180,6 +180,7 @@ php artisan app:add-fixtures
 php artisan app:add-fixture-data
 php artisan app:add-standings
 php artisan app:add-predictions
+php artisan predictions:validate
 ```
 
 ## Frontend Commands
@@ -289,6 +290,19 @@ Prediction validation includes:
 - Predictions are blocked after match start
 - If both scores are filled, the selected outcome must match the predicted score
 - The endpoint is rate limited
+
+Prediction scoring:
+
+- Finished fixtures are detected with the fixture `status_short` values `FT`, `AET`, and `PEN`
+- `php artisan predictions:validate` validates unscored user predictions for finished fixtures with a final score
+- The command reuses the existing prediction scoring service and marks predictions as awarded with `points_awarded_at`
+- The Laravel scheduler runs the validation command every four hours
+
+Production scheduling requires the Laravel scheduler cron to be active:
+
+```cron
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
+```
 
 ## Useful URLs
 

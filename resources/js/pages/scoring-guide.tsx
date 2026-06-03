@@ -56,6 +56,12 @@ const fairnessPoints = [
     'Confidence is saved, but does not multiply your score.',
 ];
 
+const validationPoints = [
+    'Predictions are scored after the fixture is finished and the final score is available.',
+    'MondialIQ automatically validates finished fixtures on a scheduled basis, for example every few hours.',
+    'Once your prediction has been validated, you can see how many points you earned and why.',
+];
+
 const examples = [
     {
         finalScore: '2-1',
@@ -96,7 +102,7 @@ export default function ScoringGuide() {
             </div>
 
             <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-6 text-center shadow-2xl shadow-cyan-950/8 sm:p-8">
-                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100">
+                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
                     <Calculator className="size-5" />
                 </div>
                 <p className="text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
@@ -117,6 +123,38 @@ export default function ScoringGuide() {
                     <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black text-slate-700 shadow-sm shadow-cyan-950/5">
                         Confidence does not affect points
                     </span>
+                </div>
+            </section>
+
+            <section className="mt-5 rounded-[1.85rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+                <div className="grid gap-5 lg:grid-cols-[auto_1fr] lg:items-start">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] text-white shadow-lg shadow-blue-950/20">
+                        <BadgeCheck className="size-5" />
+                    </div>
+                    <div>
+                        <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                            Validation
+                        </p>
+                        <h2 className="mt-1 text-2xl font-black text-blue-950">
+                            When points are awarded
+                        </h2>
+                        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+                            MondialIQ controleert automatisch op vaste momenten,
+                            bijvoorbeeld om de paar uur, welke wedstrijden
+                            afgewerkt zijn. Daarna worden de punten toegekend
+                            volgens het bestaande puntensysteem.
+                        </p>
+                        <div className="mt-4 grid gap-2.5 md:grid-cols-3">
+                            {validationPoints.map((point) => (
+                                <div
+                                    key={point}
+                                    className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm shadow-cyan-950/5"
+                                >
+                                    {point}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -168,7 +206,7 @@ export default function ScoringGuide() {
 
                 <aside className="rounded-[1.85rem] border border-cyan-200/70 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(236,254,255,0.88))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
                             <Scale className="size-5" />
                         </div>
                         <div>
@@ -238,7 +276,7 @@ export default function ScoringGuide() {
 
             <section className="mt-5 rounded-[1.85rem] border border-cyan-100 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.14),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
                 <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
                         <BadgeCheck className="size-5" />
                     </div>
                     <div>

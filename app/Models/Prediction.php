@@ -22,6 +22,7 @@ class Prediction extends Model
         'draw_chance',
         'away_chance',
         'points',
+        'points_awarded_at',
     ];
 
     protected function casts(): array
@@ -35,6 +36,7 @@ class Prediction extends Model
             'draw_chance' => 'float',
             'away_chance' => 'float',
             'points' => 'integer',
+            'points_awarded_at' => 'datetime',
         ];
     }
 

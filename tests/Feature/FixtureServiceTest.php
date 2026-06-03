@@ -108,11 +108,15 @@ test('it scores user predictions when fulltime fixture scores are synced', funct
         venueName: 'Estadio Municipal',
         venueCity: 'Madrid',
     );
+    $payload['fixture']['status']['short'] = 'FT';
+    $payload['fixture']['status']['long'] = 'Match Finished';
+    $payload['fixture']['status']['elapsed'] = 90;
     $payload['score']['fulltime'] = ['home' => 2, 'away' => 1];
 
     app(FixtureService::class)->storeFixtures([$payload]);
 
-    expect($prediction->refresh()->points)->toBe(11);
+    expect($prediction->refresh()->points)->toBe(11)
+        ->and($prediction->points_awarded_at)->not->toBeNull();
 });
 
 test('it stores fixture live status short and elapsed time from the api payload', function () {
