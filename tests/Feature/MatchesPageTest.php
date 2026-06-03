@@ -69,3 +69,64 @@ test('the matches page exposes ai and user prediction statuses', function () {
             ->where('fixtures.data.0.prediction.homeWin', 55)
         );
 });
+
+test('the matches page separates live fixtures from upcoming fixtures', function () {
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'name' => 'Croatia U21',
+        'code' => 'CRO',
+        'logo_url' => 'https://example.com/croatia.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'name' => 'Qatar U20',
+        'code' => 'QAT',
+        'logo_url' => 'https://example.com/qatar.png',
+    ]);
+
+    $liveFixture = Fixture::create([
+        'external_id' => 20,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Friendly International',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->subHour()->format('Y-m-d H:i:s'),
+        'status_short' => '2H',
+        'status_long' => 'Second Half',
+        'elapsed_time' => 62,
+    ]);
+
+    $upcomingFixture = Fixture::create([
+        'external_id' => 21,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Friendly International',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->addHour()->format('Y-m-d H:i:s'),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
+    $this->get(route('matches', ['status' => 'live']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('matches')
+            ->has('fixtures.data', 1)
+            ->where('fixtures.data.0.id', $liveFixture->id)
+        );
+
+    $this->get(route('matches', ['status' => 'upcoming']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('matches')
+            ->has('fixtures.data', 1)
+            ->where('fixtures.data.0.id', $upcomingFixture->id)
+        );
+});

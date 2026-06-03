@@ -9,6 +9,7 @@ export type MatchStatusKind =
     | 'unknown';
 
 const liveStatuses = [
+    'live',
     'kick off',
     'first half',
     'halftime',
@@ -41,7 +42,7 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
         return 'cancelled';
     }
 
-    if (liveStatuses.includes(status)) {
+    if (liveStatuses.some((liveStatus) => status.includes(liveStatus))) {
         return 'live';
     }
 

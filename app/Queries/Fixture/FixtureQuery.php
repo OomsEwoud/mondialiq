@@ -8,16 +8,23 @@ use Illuminate\Database\Eloquent\Builder;
 class FixtureQuery
 {
     private const STATUS_ALL = 'all';
+    private const STATUS_LIVE = 'live';
     private const STATUS_PLAYED = 'played';
     private const STATUS_UPCOMING = 'upcoming';
+    private const DISPLAY_TIMEZONE = 'Europe/Brussels';
 
     private const FINISHED_STATUS_PATTERN = '%Finished%';
-    private const UNAVAILABLE_UPCOMING_STATUS_PATTERNS = [
-        '%Finished%',
-        '%Postpon%',
-        '%Cancel%',
-        '%Abandon%',
-        '%Forfeit%',
+    private const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
+    private const LIVE_STATUS_LONG_PATTERNS = [
+        '%First Half%',
+        '%Halftime%',
+        '%Second Half%',
+        '%Extra Time%',
+        '%Break Time%',
+        '%Penalty%',
+        '%In Progress%',
+        '%Suspended%',
+        '%Interrupted%',
     ];
 
     public function __construct(
@@ -78,10 +85,18 @@ class FixtureQuery
     private function applyStatusFilter(Builder $query, string $status): Builder
     {
         return match ($status) {
+            self::STATUS_LIVE => $this->applyLiveStatusFilter($query),
             self::STATUS_PLAYED => $this->applyPlayedStatusFilter($query),
             self::STATUS_UPCOMING => $this->applyUpcomingStatusFilter($query),
             default => $query,
         };
+    }
+
+    private function applyLiveStatusFilter(Builder $query): Builder
+    {
+        return $query->where(fn (Builder $query) => $query
+            ->whereIn('status_short', self::LIVE_STATUS_SHORTS)
+            ->orWhere(fn (Builder $query) => $this->applyStatusLongPatterns($query, self::LIVE_STATUS_LONG_PATTERNS)));
     }
 
     private function applyPlayedStatusFilter(Builder $query): Builder
@@ -91,8 +106,19 @@ class FixtureQuery
 
     private function applyUpcomingStatusFilter(Builder $query): Builder
     {
-        foreach (self::UNAVAILABLE_UPCOMING_STATUS_PATTERNS as $statusPattern) {
-            $query->where('status_long', 'not like', $statusPattern);
+        return $query
+            ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))
+            ->where(fn (Builder $query) => $query
+                ->where('status_short', Fixture::NOT_STARTED_STATUS_SHORT)
+                ->orWhere(fn (Builder $query) => $query
+                    ->whereNull('status_short')
+                    ->where('status_long', 'Not Started')));
+    }
+
+    private function applyStatusLongPatterns(Builder $query, array $patterns): Builder
+    {
+        foreach ($patterns as $pattern) {
+            $query->orWhere('status_long', 'like', $pattern);
         }
 
         return $query;

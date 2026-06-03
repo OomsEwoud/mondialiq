@@ -8,6 +8,7 @@ interface Props {
 
 const statusTabs: Array<{ label: string; value: MatchStatusFilter }> = [
     { label: 'All', value: 'all' },
+    { label: 'Live', value: 'live' },
     { label: 'Upcoming', value: 'upcoming' },
     { label: 'Played', value: 'played' },
 ];

@@ -9,7 +9,7 @@ export interface Filters {
 
 export type FilterKey = keyof Filters;
 
-export type MatchStatusFilter = 'all' | 'upcoming' | 'played';
+export type MatchStatusFilter = 'all' | 'live' | 'upcoming' | 'played';
 
 export interface MatchPageProps {
     fixtures: {
