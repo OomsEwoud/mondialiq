@@ -28,7 +28,7 @@ class MissingPlayerResource extends Resource
 
     protected static ?string $navigationLabel = 'Missing Players';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $recordTitleAttribute = 'type';
 

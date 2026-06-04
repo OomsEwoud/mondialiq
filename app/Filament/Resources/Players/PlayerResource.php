@@ -26,7 +26,11 @@ class PlayerResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Management';
 
-    protected static ?string $navigationLabel = 'Players';
+    protected static ?string $navigationLabel = 'Players without team';
+
+    protected static ?string $modelLabel = 'player without team';
+
+    protected static ?string $pluralModelLabel = 'players without team';
 
     protected static ?int $navigationSort = 40;
 

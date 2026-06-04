@@ -28,7 +28,7 @@ class StandingResource extends Resource
 
     protected static ?string $navigationLabel = 'Standings';
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'group_name';
 

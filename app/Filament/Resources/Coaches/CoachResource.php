@@ -26,7 +26,11 @@ class CoachResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'Management';
 
-    protected static ?string $navigationLabel = 'Coaches';
+    protected static ?string $navigationLabel = 'Coaches without team';
+
+    protected static ?string $modelLabel = 'coach without team';
+
+    protected static ?string $pluralModelLabel = 'coaches without team';
 
     protected static ?int $navigationSort = 50;
 
