@@ -18,11 +18,6 @@ class LeagueForm
                 Section::make('League details')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('external_id')
-                            ->label('External ID')
-                            ->disabled()
-                            ->dehydrated(false),
-
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255),

@@ -24,10 +24,6 @@ class PlayerForm
             Section::make('Player profile')
                 ->columns(2)
                 ->schema(self::playerProfileFields()),
-
-            Section::make('API metadata')
-                ->columns(1)
-                ->schema(self::apiMetadataFields()),
         ];
     }
 
@@ -61,8 +57,9 @@ class PlayerForm
                 ->numeric()
                 ->minValue(0),
 
-            TextInput::make('position')
-                ->maxLength(255),
+            Select::make('position')
+                ->options(self::positionOptions())
+                ->searchable(),
 
             TextInput::make('photo_url')
                 ->label('Photo URL')
@@ -74,13 +71,13 @@ class PlayerForm
         ];
     }
 
-    public static function apiMetadataFields(): array
+    public static function positionOptions(): array
     {
         return [
-            TextInput::make('external_id')
-                ->label('External ID')
-                ->disabled()
-                ->dehydrated(false),
+            'Goalkeeper' => 'Goalkeeper',
+            'Defender' => 'Defender',
+            'Midfielder' => 'Midfielder',
+            'Forward' => 'Forward',
         ];
     }
 }

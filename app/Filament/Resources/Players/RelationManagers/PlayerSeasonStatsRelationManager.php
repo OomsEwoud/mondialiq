@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Players\RelationManagers;
 
 use App\Filament\Resources\Players\PlayerResource;
+use App\Filament\Resources\Players\Schemas\PlayerForm;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -71,7 +72,9 @@ class PlayerSeasonStatsRelationManager extends RelationManager
                             ->disabled(fn (string $operation): bool => $operation === 'edit' && ! PlayerResource::userIsSuperAdmin()),
 
                         TextInput::make('season')->required()->numeric(),
-                        TextInput::make('position')->maxLength(255),
+                        Select::make('position')
+                            ->options(PlayerForm::positionOptions())
+                            ->searchable(),
                         TextInput::make('rating')->numeric()->minValue(0),
                         Toggle::make('is_captain')->label('Captain'),
                     ]),
@@ -170,13 +173,7 @@ class PlayerSeasonStatsRelationManager extends RelationManager
                         ->all()),
 
                 SelectFilter::make('position')
-                    ->options(fn (): array => $this->getOwnerRecord()
-                        ->playerSeasonStats()
-                        ->whereNotNull('position')
-                        ->distinct()
-                        ->orderBy('position')
-                        ->pluck('position', 'position')
-                        ->all())
+                    ->options(PlayerForm::positionOptions())
                     ->searchable(),
             ])
             ->headerActions([

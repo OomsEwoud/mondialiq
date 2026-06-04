@@ -90,6 +90,7 @@ class TeamStatisticsRelationManager extends RelationManager
                     ]),
 
                 Section::make('Metadata')
+                    ->visible(fn (string $operation): bool => $operation === 'create' && LeagueResource::userIsSuperAdmin())
                     ->columns(3)
                     ->schema([
                         TextInput::make('statistics_key')

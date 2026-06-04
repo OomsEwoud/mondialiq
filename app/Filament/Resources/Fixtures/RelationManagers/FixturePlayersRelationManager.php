@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Fixtures\RelationManagers;
 
 use App\Filament\Resources\Fixtures\FixtureResource;
+use App\Filament\Resources\Players\Schemas\PlayerForm;
 use App\Models\Fixture;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
@@ -76,12 +77,7 @@ class FixturePlayersRelationManager extends RelationManager
                             ->minValue(0),
 
                         Select::make('position')
-                            ->options([
-                                'G' => 'Goalkeeper',
-                                'D' => 'Defender',
-                                'M' => 'Midfielder',
-                                'F' => 'Forward',
-                            ])
+                            ->options(PlayerForm::positionOptions())
                             ->searchable(),
                     ]),
 

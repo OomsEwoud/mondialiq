@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Players\RelationManagers;
 
 use App\Filament\Resources\Players\PlayerResource;
+use App\Filament\Resources\Players\Schemas\PlayerForm;
 use App\Models\Fixture;
 use App\Models\PlayerFixtureStat;
 use Filament\Actions\BulkActionGroup;
@@ -75,7 +76,9 @@ class PlayerFixtureStatsRelationManager extends RelationManager
 
                         TextInput::make('game_minutes')->label('Minutes')->numeric()->minValue(0),
                         TextInput::make('number')->numeric()->minValue(0),
-                        TextInput::make('position')->maxLength(255),
+                        Select::make('position')
+                            ->options(PlayerForm::positionOptions())
+                            ->searchable(),
                         TextInput::make('rating')->numeric()->minValue(0),
                         Toggle::make('is_captain')->label('Captain'),
                         Toggle::make('is_substitute')->label('Substitute'),
@@ -164,13 +167,7 @@ class PlayerFixtureStatsRelationManager extends RelationManager
                     ->preload(),
 
                 SelectFilter::make('position')
-                    ->options(fn (): array => $this->getOwnerRecord()
-                        ->playerFixtureStats()
-                        ->whereNotNull('position')
-                        ->distinct()
-                        ->orderBy('position')
-                        ->pluck('position', 'position')
-                        ->all())
+                    ->options(PlayerForm::positionOptions())
                     ->searchable(),
             ])
             ->headerActions([
