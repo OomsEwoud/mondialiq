@@ -4,6 +4,7 @@ namespace App\Queries\Fixture;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PredictionFixtureQuery
 {
@@ -31,9 +32,9 @@ class PredictionFixtureQuery
 
         return $query
             ->with([
-                'userPredictions' => fn ($query) => $this->userPredictionEagerLoad($query, $user),
+                'userPredictions' => fn($query) => $this->userPredictionEagerLoad($query, $user),
             ])
-            ->whereHas('userPredictions', fn (Builder $query) => $this->userPredictionConstraint($query, $user));
+            ->whereHas('userPredictions', fn(Builder $query) => $this->userPredictionConstraint($query, $user));
     }
 
     private function withoutResults(Builder $query): Builder
@@ -41,14 +42,15 @@ class PredictionFixtureQuery
         return $query->whereKey([]);
     }
 
-    private function userPredictionEagerLoad(Builder $query, User $user)
+    private function userPredictionEagerLoad(HasMany $query, User $user): Builder|HasMany
     {
-        return $this->userPredictionConstraint($query, $user)
-            ->with('winner');
+        return $this->userPredictionConstraint($query, $user)->with('winner');
     }
 
-    private function userPredictionConstraint(Builder $query, User $user)
+    private function userPredictionConstraint(Builder|HasMany $query, User $user): Builder|HasMany
     {
-        return $query->whereBelongsTo($user);
+        return $query
+            ->whereBelongsTo($user)
+            ->where('source', 'user');
     }
 }

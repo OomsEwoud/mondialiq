@@ -32,7 +32,7 @@ class ValidatePredictions extends Command
         if ($fixtures->isEmpty()) {
             Log::info('Prediction validation finished without open predictions.');
 
-            return Command::SUCCESS;
+            return self::SUCCESS;
         }
 
         $scored = 0;
@@ -79,7 +79,7 @@ class ValidatePredictions extends Command
             'errors' => $errors,
         ]);
 
-        return $errors > 0 ? Command::FAILURE : Command::SUCCESS;
+        return $errors > 0 ? self::FAILURE : self::SUCCESS;
     }
 
     private function finishedFixturesWithUnscoredPredictions(): Collection

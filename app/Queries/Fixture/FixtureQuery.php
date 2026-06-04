@@ -30,27 +30,29 @@ class FixtureQuery
     public function __construct(
         private readonly int $leagueId,
         private readonly int $season,
-    ) {
-    }
+    ) {}
 
     public function build(array $filters = []): Builder
     {
         $status = $this->statusFilter($filters);
 
-        return Fixture::query()
+        $query = Fixture::query()
             ->where('league_id', $this->leagueId)
             ->where('season', $this->season)
-            ->with(['homeTeam', 'awayTeam', 'apiPrediction'])
+            ->with(['homeTeam', 'awayTeam', 'apiPrediction']);
+
+        $query
             ->when($filters['round'] ?? null, $this->applyRoundFilter(...))
             ->when($filters['date'] ?? null, $this->applyDateFilter(...))
             ->when($filters['team'] ?? null, $this->applyTeamFilter(...))
             ->when(
                 $status !== self::STATUS_ALL,
-                fn (Builder $query) => $this->applyStatusFilter($query, $status),
+                fn(Builder $query) => $this->applyStatusFilter($query, $status),
             )
             ->orderBy('match_date');
-    }
 
+        return $query;
+    }
     private function statusFilter(array $filters): string
     {
         $status = $filters['status'] ?? self::STATUS_ALL;
@@ -70,10 +72,10 @@ class FixtureQuery
 
     private function applyTeamFilter(Builder $query, string $team): Builder
     {
-        return $query->where(function (Builder $query) use ($team) {
+        return $query->where(function ($query) use ($team) {
             $query
-                ->whereHas('homeTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team))
-                ->orWhereHas('awayTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team));
+                ->whereHas('homeTeam', fn(Builder $query) => $this->applyTeamNameFilter($query, $team))
+                ->orWhereHas('awayTeam', fn(Builder $query) => $this->applyTeamNameFilter($query, $team));
         });
     }
 
@@ -94,9 +96,9 @@ class FixtureQuery
 
     private function applyLiveStatusFilter(Builder $query): Builder
     {
-        return $query->where(fn (Builder $query) => $query
+        return $query->where(fn($query) => $query
             ->whereIn('status_short', self::LIVE_STATUS_SHORTS)
-            ->orWhere(fn (Builder $query) => $this->applyStatusLongPatterns($query, self::LIVE_STATUS_LONG_PATTERNS)));
+            ->orWhere(fn($query) => $this->applyStatusLongPatterns($query, self::LIVE_STATUS_LONG_PATTERNS)));
     }
 
     private function applyPlayedStatusFilter(Builder $query): Builder
@@ -108,9 +110,9 @@ class FixtureQuery
     {
         return $query
             ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))
-            ->where(fn (Builder $query) => $query
+            ->where(fn($query) => $query
                 ->where('status_short', Fixture::NOT_STARTED_STATUS_SHORT)
-                ->orWhere(fn (Builder $query) => $query
+                ->orWhere(fn($query) => $query
                     ->whereNull('status_short')
                     ->where('status_long', 'Not Started')));
     }
