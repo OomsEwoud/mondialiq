@@ -27,11 +27,11 @@ class LeagueResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTrophy;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Statistics';
+    protected static string | UnitEnum | null $navigationGroup = 'Competition Data';
 
-    protected static ?string $navigationLabel = 'Leagues';
+    protected static ?string $navigationLabel = 'Competitions';
 
-    protected static ?int $navigationSort = 20;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'name';
 

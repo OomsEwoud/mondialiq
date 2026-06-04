@@ -33,9 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'Management',
-                'Match Data',
-                'Predictions & Odds',
-                'Statistics',
+                'Match Management',
+                'Competition Data',
                 'Reference Data',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

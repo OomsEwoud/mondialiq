@@ -30,7 +30,7 @@ class FixtureResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Match Data';
+    protected static string | UnitEnum | null $navigationGroup = 'Match Management';
 
     protected static ?string $navigationLabel = 'Fixtures';
 
