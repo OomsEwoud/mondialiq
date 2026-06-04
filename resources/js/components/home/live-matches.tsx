@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
 import { show as showMatch } from '@/routes/matches';
 import type { LiveFixture } from '@/types/live-fixture';
+import { getLiveStatusLabel } from '@/utils/match-status';
 
 interface Props {
     initialMatches: LiveFixture[];
@@ -12,6 +13,7 @@ interface Props {
 export default function LiveMatches({ initialMatches }: Props) {
     const { matches, lastUpdatedAt, hasPollingError } =
         useLiveFixturesPolling(initialMatches);
+    const visibleMatches = matches;
 
     return (
         <section className="rounded-2xl border border-emerald-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur">
@@ -36,8 +38,8 @@ export default function LiveMatches({ initialMatches }: Props) {
                 </div>
             </header>
             <div className="flex flex-col gap-3">
-                {matches.length > 0 ? (
-                    matches.map((match) => (
+                {visibleMatches.length > 0 ? (
+                    visibleMatches.map((match) => (
                         <div
                             key={match.id}
                             className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm"
@@ -120,30 +122,10 @@ function scoreLabel(score: number | null) {
 }
 
 function minuteLabel(match: LiveFixture) {
-    const status = readableStatus(match.status_long, match.status_short);
-
-    if (match.elapsed_time !== null) {
-        return `${status} ${match.elapsed_time}'`;
-    }
-
-    return status;
-}
-
-function readableStatus(statusLong: string | null, statusShort: string | null) {
-    if (statusLong) {
-        return statusLong;
-    }
-
-    return (
-        {
-            '1H': 'First Half',
-            HT: 'Half Time',
-            '2H': 'Second Half',
-            ET: 'Extra Time',
-            BT: 'Break Time',
-            P: 'Penalties',
-            LIVE: 'Live',
-        }[statusShort ?? ''] ?? 'Live'
+    return getLiveStatusLabel(
+        match.status_long,
+        match.status_short,
+        match.elapsed_time,
     );
 }
 

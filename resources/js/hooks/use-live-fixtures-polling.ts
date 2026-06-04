@@ -33,7 +33,9 @@ export function useLiveFixturesPolling(
 
                 const payload = (await response.json()) as LiveFixturesResponse;
 
-                setMatches(payload.data);
+                setMatches((currentMatches) =>
+                    mergeLiveFixtures(currentMatches, payload.data),
+                );
                 setLastUpdatedAt(latestUpdatedAt(payload.data));
                 setHasPollingError(false);
             } catch {
@@ -70,4 +72,28 @@ function latestUpdatedAt(matches: LiveFixture[]) {
             .sort()
             .at(-1) ?? null
     );
+}
+
+function mergeLiveFixtures(
+    currentMatches: LiveFixture[],
+    nextMatches: LiveFixture[],
+): LiveFixture[] {
+    return nextMatches.map((nextMatch) => {
+        const currentMatch = currentMatches.find(
+            (match) => match.id === nextMatch.id,
+        );
+
+        if (currentMatch === undefined) {
+            return nextMatch;
+        }
+
+        return {
+            ...nextMatch,
+            home_goals: nextMatch.home_goals ?? currentMatch.home_goals,
+            away_goals: nextMatch.away_goals ?? currentMatch.away_goals,
+            status_short: nextMatch.status_short ?? currentMatch.status_short,
+            status_long: nextMatch.status_long ?? currentMatch.status_long,
+            elapsed_time: nextMatch.elapsed_time ?? currentMatch.elapsed_time,
+        };
+    });
 }

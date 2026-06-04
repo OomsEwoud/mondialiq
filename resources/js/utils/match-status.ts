@@ -22,6 +22,7 @@ const liveStatuses = [
     'match interrupted',
     'in progress',
 ];
+const liveStatusCodes = ['1h', 'ht', '2h', 'et', 'bt', 'p', 'live'];
 
 export function getMatchStatusKind(match: Match): MatchStatusKind {
     const status = match.status.toLowerCase();
@@ -42,7 +43,10 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
         return 'cancelled';
     }
 
-    if (liveStatuses.some((liveStatus) => status.includes(liveStatus))) {
+    if (
+        liveStatusCodes.includes(status) ||
+        liveStatuses.some((liveStatus) => status.includes(liveStatus))
+    ) {
         return 'live';
     }
 
@@ -60,9 +64,11 @@ export function getMatchStatusLabel(match: Match): string {
     const kind = getMatchStatusKind(match);
 
     if (kind === 'live') {
-        const status = readableLiveStatus(match.status);
+        const status = getReadableLiveStatus(match.status);
 
-        return match.elapsedTime ? `${status} ${match.elapsedTime}'` : status;
+        return match.elapsedTime !== null
+            ? `${status} ${match.elapsedTime}'`
+            : status;
     }
 
     return (
@@ -76,34 +82,42 @@ export function getMatchStatusLabel(match: Match): string {
     )[kind];
 }
 
-function readableLiveStatus(status: string): string {
+export function getReadableLiveStatus(
+    statusLong: string | null,
+    statusShort?: string | null,
+): string {
+    const status = statusLong || statusShort || 'Live';
     const normalizedStatus = status.trim().toLowerCase();
 
-    if (normalizedStatus === '1h') {
-        return 'First Half';
-    }
+    const readableStatuses: Record<string, string> = {
+        '1h': 'First Half',
+        'first half': 'First Half',
+        ht: 'Half Time',
+        halftime: 'Half Time',
+        'half time': 'Half Time',
+        '2h': 'Second Half',
+        '2nd half started': 'Second Half',
+        'second half': 'Second Half',
+        et: 'Extra Time',
+        'extra time': 'Extra Time',
+        bt: 'Break Time',
+        'break time': 'Break Time',
+        p: 'Penalties',
+        'penalty in progress': 'Penalties',
+        live: 'Live',
+    };
 
-    if (normalizedStatus === '2h') {
-        return 'Second Half';
-    }
+    return readableStatuses[normalizedStatus] ?? status;
+}
 
-    if (normalizedStatus === 'ht') {
-        return 'Half Time';
-    }
+export function getLiveStatusLabel(
+    statusLong: string | null,
+    statusShort: string | null,
+    elapsedTime: number | null,
+): string {
+    const status = getReadableLiveStatus(statusLong, statusShort);
 
-    if (normalizedStatus === 'et') {
-        return 'Extra Time';
-    }
-
-    if (normalizedStatus === 'bt') {
-        return 'Break Time';
-    }
-
-    if (normalizedStatus === 'p') {
-        return 'Penalties';
-    }
-
-    return status || 'Live';
+    return elapsedTime !== null ? `${status} ${elapsedTime}'` : status;
 }
 
 export function isMatchFinished(match: Match): boolean {

@@ -1,7 +1,7 @@
 import MatchCard from '@/components/matches/match-card';
 import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
-import type { LiveFixture } from '@/types/live-fixture';
 import type { Match } from '@/types/match';
+import { applyLiveFixtureToMatch } from '@/utils/live-fixtures';
 
 interface Props {
     matches: Match[];
@@ -10,7 +10,7 @@ interface Props {
 export default function MatchList({ matches }: Props) {
     const { matches: liveMatches } = useLiveFixturesPolling([]);
     const visibleMatches = matches.map((match) =>
-        applyLiveFixture(
+        applyLiveFixtureToMatch(
             match,
             liveMatches.find((liveMatch) => liveMatch.id === match.id),
         ),
@@ -36,26 +36,4 @@ export default function MatchList({ matches }: Props) {
             ))}
         </div>
     );
-}
-
-function applyLiveFixture(
-    match: Match,
-    liveFixture: LiveFixture | undefined,
-): Match {
-    if (liveFixture === undefined) {
-        return match;
-    }
-
-    return {
-        ...match,
-        status: liveFixture.status_long ?? match.status,
-        elapsedTime: liveFixture.elapsed_time,
-        score: {
-            ...match.score,
-            fulltime: {
-                home: liveFixture.home_goals ?? match.score.fulltime.home,
-                away: liveFixture.away_goals ?? match.score.fulltime.away,
-            },
-        },
-    };
 }

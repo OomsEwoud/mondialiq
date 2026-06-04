@@ -14,12 +14,12 @@ interface Props {
 }
 
 export default function MatchDetails({ match }: Props) {
-    const pageTitle = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
     const {
         matches: liveMatches,
         lastUpdatedAt,
         hasPollingError,
     } = useLiveFixturesPolling([]);
+    const pageTitle = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
     const liveMatch = liveMatches.find(
         (liveMatch) => liveMatch.id === match.id,
     );

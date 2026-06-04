@@ -1,6 +1,7 @@
 import MatchDetailsTeamBlock from '@/components/matches/details/match-details-team-block';
 import type { LiveFixture } from '@/types/live-fixture';
 import type { MatchDetails } from '@/types/match-details';
+import { getLiveStatusLabel } from '@/utils/match-status';
 
 interface Props {
     match: MatchDetails;
@@ -25,12 +26,12 @@ export default function MatchDetailsHero({
     const scoreLabel = hasScore ? `${score.home} - ${score.away}` : 'vs';
     const isLive = liveMatch !== undefined || isLiveStatus(match.status);
     const statusLabel = liveMatch
-        ? liveStatusLabel(
-              liveMatch.status_long,
+        ? getLiveStatusLabel(
+              liveMatch.status_long ?? match.status,
               liveMatch.status_short,
-              liveMatch.elapsed_time,
+              liveMatch.elapsed_time ?? match.elapsedTime,
           )
-        : liveStatusLabel(match.status, null, match.elapsedTime);
+        : getLiveStatusLabel(match.status, null, match.elapsedTime);
 
     return (
         <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.18),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-5 shadow-2xl shadow-cyan-950/8 sm:p-6 lg:p-7">
@@ -84,53 +85,25 @@ export default function MatchDetailsHero({
     );
 }
 
-function liveStatusLabel(
-    statusLong: string | null,
-    statusShort: string | null,
-    elapsedTime: number | null,
-) {
-    const status = readableStatus(statusLong, statusShort);
-
-    if (elapsedTime !== null) {
-        return `${status} ${elapsedTime}'`;
-    }
-
-    return status;
-}
-
-function readableStatus(statusLong: string | null, statusShort: string | null) {
-    if (statusLong) {
-        return statusLong;
-    }
-
-    return (
-        {
-            '1H': 'First Half',
-            HT: 'Half Time',
-            '2H': 'Second Half',
-            ET: 'Extra Time',
-            BT: 'Break Time',
-            P: 'Penalties',
-            LIVE: 'Live',
-        }[statusShort ?? ''] ?? 'Live'
-    );
-}
-
 function isLiveStatus(status: string) {
     const normalizedStatus = status.toLowerCase();
+    const liveStatusCodes = ['1h', 'ht', '2h', 'et', 'bt', 'p', 'live'];
 
-    return [
-        'live',
-        'first half',
-        'halftime',
-        'second half',
-        'extra time',
-        'break time',
-        'penalty',
-        'in progress',
-        'suspended',
-        'interrupted',
-    ].some((liveStatus) => normalizedStatus.includes(liveStatus));
+    return (
+        liveStatusCodes.includes(normalizedStatus) ||
+        [
+            'live',
+            'first half',
+            'halftime',
+            'second half',
+            'extra time',
+            'break time',
+            'penalty',
+            'in progress',
+            'suspended',
+            'interrupted',
+        ].some((liveStatus) => normalizedStatus.includes(liveStatus))
+    );
 }
 
 function formatUpdatedTime(updatedAt: string) {
