@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Fixtures;
 use App\Filament\Resources\Fixtures\Pages\CreateFixture;
 use App\Filament\Resources\Fixtures\Pages\EditFixture;
 use App\Filament\Resources\Fixtures\Pages\ListFixtures;
+use App\Filament\Resources\Fixtures\RelationManagers\FixturePlayersRelationManager;
 use App\Filament\Resources\Fixtures\Schemas\FixtureForm;
 use App\Filament\Resources\Fixtures\Tables\FixturesTable;
 use App\Models\Fixture;
@@ -51,7 +52,7 @@ class FixtureResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            FixturePlayersRelationManager::class,
         ];
     }
 
