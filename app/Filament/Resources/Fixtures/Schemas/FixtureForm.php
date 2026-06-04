@@ -17,19 +17,62 @@ class FixtureForm
             ->columns(1)
             ->components([
                 Section::make('Match corrections')
-                    ->columns(3)
+                    ->description('Use these fields to correct delayed or incorrect API status data.')
+                    ->columns(4)
                     ->schema([
-                        TextInput::make('status_short')
+                        Select::make('status_short')
                             ->label('Status short')
-                            ->maxLength(255),
+                            ->options([
+                                'NS' => 'NS - Not Started',
+                                '1H' => '1H - First Half',
+                                'HT' => 'HT - Half Time',
+                                '2H' => '2H - Second Half',
+                                'ET' => 'ET - Extra Time',
+                                'BT' => 'BT - Break Time',
+                                'P' => 'P - Penalties',
+                                'LIVE' => 'LIVE - In Progress',
+                                'FT' => 'FT - Finished',
+                                'AET' => 'AET - Finished After Extra Time',
+                                'PEN' => 'PEN - Finished After Penalties',
+                                'CANC' => 'CANC - Cancelled',
+                                'PST' => 'PST - Postponed',
+                            ])
+                            ->searchable()
+                            ->nullable()
+                            ->helperText('Correct the short match status when the API is delayed.'),
 
                         TextInput::make('status_long')
                             ->label('Status long')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->helperText('Human-readable status shown in admin context.'),
 
                         TextInput::make('elapsed_time')
                             ->label('Minute')
+                            ->numeric()
+                            ->minValue(0),
+
+                        Select::make('result')
+                            ->options([
+                                'H' => 'H - Home win',
+                                'D' => 'D - Draw',
+                                'A' => 'A - Away win',
+                            ])
+                            ->placeholder('No result yet')
+                            ->nullable(),
+                    ]),
+
+                Section::make('Score details')
+                    ->description('Use these fields to correct delayed or incorrect API score data.')
+                    ->columns(4)
+                    ->schema([
+                        TextInput::make('halftime_home_goals')
+                            ->label('Halftime home goals')
+                            ->numeric()
+                            ->minValue(0),
+
+                        TextInput::make('halftime_away_goals')
+                            ->label('Halftime away goals')
                             ->numeric()
                             ->minValue(0),
 
@@ -40,19 +83,6 @@ class FixtureForm
 
                         TextInput::make('fulltime_away_goals')
                             ->label('Fulltime away goals')
-                            ->numeric()
-                            ->minValue(0),
-
-                        TextInput::make('result')
-                            ->maxLength(255),
-
-                        TextInput::make('halftime_home_goals')
-                            ->label('Halftime home goals')
-                            ->numeric()
-                            ->minValue(0),
-
-                        TextInput::make('halftime_away_goals')
-                            ->label('Halftime away goals')
                             ->numeric()
                             ->minValue(0),
 
@@ -78,6 +108,7 @@ class FixtureForm
                     ]),
 
                 Section::make('Fixture details')
+                    ->description('Only super admins can change structural fixture data.')
                     ->columns(2)
                     ->schema([
                         Select::make('league_id')

@@ -67,15 +67,20 @@ class CountryResource extends Resource
 
     public static function canCreate(): bool
     {
-        return Auth::user()?->hasRole('super_admin') ?? false;
+        return static::userIsSuperAdmin();
     }
 
     public static function canDelete(Model $record): bool
     {
-        return Auth::user()?->hasRole('super_admin') ?? false;
+        return static::userIsSuperAdmin();
     }
 
     public static function canDeleteAny(): bool
+    {
+        return static::userIsSuperAdmin();
+    }
+
+    public static function userIsSuperAdmin(): bool
     {
         return Auth::user()?->hasRole('super_admin') ?? false;
     }

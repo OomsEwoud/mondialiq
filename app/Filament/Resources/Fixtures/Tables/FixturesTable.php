@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 
 class FixturesTable
 {
+    private const CANCELLED_OR_POSTPONED_STATUS_SHORTS = ['CANC', 'PST', 'ABD', 'AWD', 'WO', 'SUSP', 'INT'];
+
     public static function configure(Table $table): Table
     {
         return $table
@@ -30,6 +32,7 @@ class FixturesTable
 
                 TextColumn::make('league.name')
                     ->label('League')
+                    ->searchable()
                     ->toggleable()
                     ->limit(20),
 
@@ -70,8 +73,12 @@ class FixturesTable
                     ->query(fn (Builder $query): Builder => $query->whereIn('status_short', Fixture::FINISHED_STATUS_SHORTS)),
 
                 Filter::make('not_started')
-                    ->label('Not started fixtures')
+                    ->label('Upcoming / not started')
                     ->query(fn (Builder $query): Builder => $query->where('status_short', Fixture::NOT_STARTED_STATUS_SHORT)),
+
+                Filter::make('cancelled_or_postponed')
+                    ->label('Cancelled / postponed')
+                    ->query(fn (Builder $query): Builder => $query->whereIn('status_short', self::CANCELLED_OR_POSTPONED_STATUS_SHORTS)),
             ])
             ->recordActions([
                 EditAction::make()
@@ -99,7 +106,9 @@ class FixturesTable
         return match (true) {
             in_array($status, Fixture::LIVE_STATUS_SHORTS, true) => 'success',
             in_array($status, Fixture::FINISHED_STATUS_SHORTS, true) => 'gray',
-            $status === Fixture::NOT_STARTED_STATUS_SHORT => 'warning',
+            $status === 'CANC' => 'danger',
+            in_array($status, self::CANCELLED_OR_POSTPONED_STATUS_SHORTS, true) => 'warning',
+            $status === Fixture::NOT_STARTED_STATUS_SHORT => 'info',
             default => 'info',
         };
     }
