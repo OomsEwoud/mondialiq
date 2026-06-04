@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Fixtures\RelationManagers;
 
 use App\Filament\Resources\Fixtures\FixtureResource;
-use App\Models\Fixture;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -11,26 +10,23 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class FixturePlayersRelationManager extends RelationManager
+class FixtureStatsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'fixturePlayers';
+    protected static string $relationship = 'fixtureStats';
 
-    protected static ?string $modelLabel = 'lineup player';
+    protected static ?string $modelLabel = 'stat';
 
-    protected static ?string $pluralModelLabel = 'lineup players';
+    protected static ?string $pluralModelLabel = 'stats';
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
@@ -62,47 +58,23 @@ class FixturePlayersRelationManager extends RelationManager
         return $schema
             ->columns(1)
             ->components([
-                Section::make('Lineup details')
-                    ->description('Use these fields to correct starting status, shirt number and match position.')
+                Section::make('Stat details')
                     ->columns(3)
-                    ->schema([
-                        Toggle::make('is_starting')
-                            ->label('Starting')
-                            ->inline(false),
-
-                        TextInput::make('jersey_number')
-                            ->label('Jersey number')
-                            ->numeric()
-                            ->minValue(0),
-
-                        Select::make('position')
-                            ->options([
-                                'G' => 'Goalkeeper',
-                                'D' => 'Defender',
-                                'M' => 'Midfielder',
-                                'F' => 'Forward',
-                            ])
-                            ->searchable(),
-                    ]),
-
-                Section::make('Links')
-                    ->description('The parent fixture is set automatically. Only super admins can change links after creation.')
-                    ->columns(2)
                     ->schema([
                         Select::make('team_id')
                             ->label('Team')
-                            ->options(fn (): array => $this->fixtureTeamOptions())
+                            ->options(fn (): array => FixturePlayersRelationManager::fixtureTeamOptionsFor($this->getOwnerRecord()))
                             ->searchable()
                             ->required()
                             ->disabled(fn (string $operation): bool => $operation === 'edit' && ! FixtureResource::userIsSuperAdmin()),
 
-                        Select::make('player_id')
-                            ->label('Player')
-                            ->relationship('player', 'display_name')
-                            ->searchable()
-                            ->preload()
+                        TextInput::make('name')
                             ->required()
-                            ->disabled(fn (string $operation): bool => $operation === 'edit' && ! FixtureResource::userIsSuperAdmin()),
+                            ->maxLength(255),
+
+                        TextInput::make('value')
+                            ->required()
+                            ->numeric(),
                     ]),
             ]);
     }
@@ -111,45 +83,28 @@ class FixturePlayersRelationManager extends RelationManager
     {
         return $table
             ->modifyQueryUsing(fn (Builder $query): Builder => $query
-                ->with(['player', 'team'])
+                ->with('team')
                 ->orderBy('team_id')
-                ->orderByDesc('is_starting')
-                ->orderBy('position')
-                ->orderBy('jersey_number'))
+                ->orderBy('name'))
             ->columns([
                 TextColumn::make('team.name')
                     ->label('Team')
                     ->searchable()
                     ->limit(20),
 
-                TextColumn::make('player.display_name')
-                    ->label('Player')
+                TextColumn::make('name')
                     ->searchable()
                     ->limit(24),
 
-                IconColumn::make('is_starting')
-                    ->label('Starting')
-                    ->boolean(),
-
-                TextColumn::make('jersey_number')
-                    ->label('No.')
+                TextColumn::make('value')
+                    ->numeric(decimalPlaces: 2)
                     ->sortable(),
-
-                TextColumn::make('position')
-                    ->searchable()
-                    ->limit(16),
             ])
             ->filters([
                 SelectFilter::make('team_id')
                     ->label('Team')
-                    ->options(fn (): array => $this->fixtureTeamOptions())
+                    ->options(fn (): array => FixturePlayersRelationManager::fixtureTeamOptionsFor($this->getOwnerRecord()))
                     ->searchable(),
-
-                TernaryFilter::make('is_starting')
-                    ->label('Starting')
-                    ->placeholder('All players')
-                    ->trueLabel('Starting')
-                    ->falseLabel('Bench'),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -160,7 +115,7 @@ class FixturePlayersRelationManager extends RelationManager
                     ->visible(fn () => Auth::user()?->hasAnyRole(['admin', 'super_admin']))
                     ->using(function (Model $record, array $data): Model {
                         if (! FixtureResource::userIsSuperAdmin()) {
-                            unset($data['team_id'], $data['player_id']);
+                            unset($data['team_id']);
                         }
 
                         $record->update($data);
@@ -177,21 +132,5 @@ class FixturePlayersRelationManager extends RelationManager
                         ->visible(fn (): bool => FixtureResource::userIsSuperAdmin()),
                 ]),
             ]);
-    }
-
-    private function fixtureTeamOptions(): array
-    {
-        return self::fixtureTeamOptionsFor($this->getOwnerRecord());
-    }
-
-    public static function fixtureTeamOptionsFor(Fixture $fixture): array
-    {
-        $fixture->loadMissing(['awayTeam', 'homeTeam']);
-
-        $teams = collect([$fixture->homeTeam, $fixture->awayTeam])->filter();
-
-        return $teams
-            ->mapWithKeys(fn (Model $team): array => [$team->getKey() => $team->getAttribute('name')])
-            ->all();
     }
 }

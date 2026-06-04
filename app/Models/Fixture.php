@@ -241,6 +241,11 @@ class Fixture extends Model
             ->withTimestamps();
     }
 
+    public function missingPlayerRecords(): HasMany
+    {
+        return $this->hasMany(MissingPlayer::class);
+    }
+
     public function fixturePlayers(): HasMany
     {
         return $this->hasMany(FixturePlayer::class);
@@ -266,6 +271,11 @@ class Fixture extends Model
     public function playerFixtureStats(): HasMany
     {
         return $this->hasMany(PlayerFixtureStat::class);
+    }
+
+    public function predictions(): HasMany
+    {
+        return $this->hasMany(Prediction::class);
     }
 
     public function userPredictions(): HasMany

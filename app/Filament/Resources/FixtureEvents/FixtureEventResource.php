@@ -22,6 +22,8 @@ class FixtureEventResource extends Resource
 {
     protected static ?string $model = FixtureEvent::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBolt;
 
     protected static string | UnitEnum | null $navigationGroup = 'Match Data';

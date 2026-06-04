@@ -5,7 +5,12 @@ namespace App\Filament\Resources\Fixtures;
 use App\Filament\Resources\Fixtures\Pages\CreateFixture;
 use App\Filament\Resources\Fixtures\Pages\EditFixture;
 use App\Filament\Resources\Fixtures\Pages\ListFixtures;
+use App\Filament\Resources\Fixtures\RelationManagers\FixtureEventsRelationManager;
+use App\Filament\Resources\Fixtures\RelationManagers\FixtureOddsRelationManager;
 use App\Filament\Resources\Fixtures\RelationManagers\FixturePlayersRelationManager;
+use App\Filament\Resources\Fixtures\RelationManagers\FixtureStatsRelationManager;
+use App\Filament\Resources\Fixtures\RelationManagers\MissingPlayersRelationManager;
+use App\Filament\Resources\Fixtures\RelationManagers\PredictionsRelationManager;
 use App\Filament\Resources\Fixtures\Schemas\FixtureForm;
 use App\Filament\Resources\Fixtures\Tables\FixturesTable;
 use App\Models\Fixture;
@@ -53,6 +58,11 @@ class FixtureResource extends Resource
     {
         return [
             FixturePlayersRelationManager::class,
+            FixtureEventsRelationManager::class,
+            MissingPlayersRelationManager::class,
+            FixtureStatsRelationManager::class,
+            FixtureOddsRelationManager::class,
+            PredictionsRelationManager::class,
         ];
     }
 

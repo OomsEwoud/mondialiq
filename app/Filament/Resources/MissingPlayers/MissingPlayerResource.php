@@ -22,6 +22,8 @@ class MissingPlayerResource extends Resource
 {
     protected static ?string $model = MissingPlayer::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUserMinus;
 
     protected static string | UnitEnum | null $navigationGroup = 'Match Data';
