@@ -45,7 +45,8 @@ class CoachResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['country', 'team']);
+            ->with(['country', 'team'])
+            ->whereNull('team_id');
     }
 
     public static function getRelations(): array

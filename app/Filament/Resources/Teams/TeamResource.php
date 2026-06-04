@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Teams;
 use App\Filament\Resources\Teams\Pages\CreateTeam;
 use App\Filament\Resources\Teams\Pages\EditTeam;
 use App\Filament\Resources\Teams\Pages\ListTeams;
+use App\Filament\Resources\Teams\RelationManagers\CoachRelationManager;
 use App\Filament\Resources\Teams\RelationManagers\PlayersRelationManager;
 use App\Filament\Resources\Teams\Schemas\TeamForm;
 use App\Filament\Resources\Teams\Tables\TeamsTable;
@@ -46,13 +47,14 @@ class TeamResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with('country')
+            ->with(['coach', 'country'])
             ->withCount('players');
     }
 
     public static function getRelations(): array
     {
         return [
+            CoachRelationManager::class,
             PlayersRelationManager::class,
         ];
     }

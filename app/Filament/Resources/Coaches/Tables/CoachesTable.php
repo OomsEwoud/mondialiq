@@ -26,11 +26,6 @@ class CoachesTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('team.name')
-                    ->label('Team')
-                    ->searchable()
-                    ->limit(24),
-
                 TextColumn::make('country.name')
                     ->label('Country')
                     ->searchable()

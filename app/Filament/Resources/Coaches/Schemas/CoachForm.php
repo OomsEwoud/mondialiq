@@ -53,7 +53,6 @@ class CoachForm
                             ->relationship('team', 'name')
                             ->searchable()
                             ->preload()
-                            ->required()
                             ->disabled(fn (): bool => ! CoachResource::userIsSuperAdmin()),
 
                         Select::make('country_id')
