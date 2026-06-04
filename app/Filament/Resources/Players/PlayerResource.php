@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Players;
 use App\Filament\Resources\Players\Pages\CreatePlayer;
 use App\Filament\Resources\Players\Pages\EditPlayer;
 use App\Filament\Resources\Players\Pages\ListPlayers;
+use App\Filament\Resources\Players\RelationManagers\PlayerFixtureStatsRelationManager;
+use App\Filament\Resources\Players\RelationManagers\PlayerSeasonStatsRelationManager;
 use App\Filament\Resources\Players\Schemas\PlayerForm;
 use App\Filament\Resources\Players\Tables\PlayersTable;
 use App\Models\Player;
@@ -28,9 +30,9 @@ class PlayerResource extends Resource
 
     protected static ?string $navigationLabel = 'Players without team';
 
-    protected static ?string $modelLabel = 'player without team';
+    protected static ?string $modelLabel = 'player';
 
-    protected static ?string $pluralModelLabel = 'players without team';
+    protected static ?string $pluralModelLabel = 'players';
 
     protected static ?int $navigationSort = 40;
 
@@ -49,14 +51,22 @@ class PlayerResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with('country')
-            ->whereDoesntHave('teams');
+            ->with('country');
+    }
+
+    public static function getNavigationItemActiveRoutePattern(): string | array
+    {
+        return [
+            static::getRouteBaseName() . '.index',
+            static::getRouteBaseName() . '.create',
+        ];
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            PlayerFixtureStatsRelationManager::class,
+            PlayerSeasonStatsRelationManager::class,
         ];
     }
 

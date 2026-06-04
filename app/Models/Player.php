@@ -20,7 +20,7 @@ class Player extends Model
         'position',
         'number',
     ];
-    
+
     protected function casts(): array
     {
         return [
@@ -59,6 +59,11 @@ class Player extends Model
     public function playerFixtureStats(): HasMany
     {
         return $this->hasMany(PlayerFixtureStat::class);
+    }
+
+    public function playerSeasonStats(): HasMany
+    {
+        return $this->hasMany(PlayerSeasonStat::class);
     }
 
     public function teams(): BelongsToMany

@@ -15,56 +15,72 @@ class PlayerForm
     {
         return $schema
             ->columns(1)
-            ->components([
-                Section::make('Player profile')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('display_name')
-                            ->label('Display name')
-                            ->required()
-                            ->maxLength(255),
+            ->components(self::schema());
+    }
 
-                        Select::make('country_id')
-                            ->label('Country')
-                            ->relationship('country', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->disabled(fn (): bool => ! PlayerResource::userIsSuperAdmin()),
+    public static function schema(): array
+    {
+        return [
+            Section::make('Player profile')
+                ->columns(2)
+                ->schema(self::playerProfileFields()),
 
-                        TextInput::make('first_name')
-                            ->label('First name')
-                            ->maxLength(255),
+            Section::make('API metadata')
+                ->columns(1)
+                ->schema(self::apiMetadataFields()),
+        ];
+    }
 
-                        TextInput::make('last_name')
-                            ->label('Last name')
-                            ->maxLength(255),
+    public static function playerProfileFields(): array
+    {
+        return [
+            TextInput::make('display_name')
+                ->label('Display name')
+                ->required()
+                ->maxLength(255),
 
-                        DatePicker::make('birth_date')
-                            ->label('Birth date'),
+            Select::make('country_id')
+                ->label('Country')
+                ->relationship('country', 'name')
+                ->searchable()
+                ->preload()
+                ->disabled(fn (): bool => ! PlayerResource::userIsSuperAdmin()),
 
-                        TextInput::make('number')
-                            ->numeric()
-                            ->minValue(0),
+            TextInput::make('first_name')
+                ->label('First name')
+                ->maxLength(255),
 
-                        TextInput::make('position')
-                            ->maxLength(255),
+            TextInput::make('last_name')
+                ->label('Last name')
+                ->maxLength(255),
 
-                        TextInput::make('photo_url')
-                            ->label('Photo URL')
-                            ->url()
-                            ->maxLength(2048)
-                            ->placeholder('https://example.com/player.jpg')
-                            ->columnSpanFull(),
-                    ]),
+            DatePicker::make('birth_date')
+                ->label('Birth date'),
 
-                Section::make('API metadata')
-                    ->columns(1)
-                    ->schema([
-                        TextInput::make('external_id')
-                            ->label('External ID')
-                            ->disabled()
-                            ->dehydrated(false),
-                    ]),
-            ]);
+            TextInput::make('number')
+                ->numeric()
+                ->minValue(0),
+
+            TextInput::make('position')
+                ->maxLength(255),
+
+            TextInput::make('photo_url')
+                ->label('Photo URL')
+                ->url()
+                ->maxLength(2048)
+                ->placeholder('https://example.com/player.jpg')
+                ->helperText('Use this field to correct a missing or inappropriate player photo.')
+                ->columnSpanFull(),
+        ];
+    }
+
+    public static function apiMetadataFields(): array
+    {
+        return [
+            TextInput::make('external_id')
+                ->label('External ID')
+                ->disabled()
+                ->dehydrated(false),
+        ];
     }
 }

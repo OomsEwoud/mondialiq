@@ -2,15 +2,14 @@
 
 namespace App\Filament\Resources\Teams\RelationManagers;
 
+use App\Filament\Resources\Players\PlayerResource;
+use App\Filament\Resources\Players\Schemas\PlayerForm;
 use App\Filament\Resources\Teams\TeamResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\DetachAction;
+use Filament\Actions\DetachBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ImageColumn;
@@ -51,44 +50,8 @@ class PlayersRelationManager extends RelationManager
     public function form(Schema $schema): Schema
     {
         return $schema
-            ->columns(2)
-            ->components([
-                TextInput::make('display_name')
-                    ->label('Display name')
-                    ->maxLength(255),
-
-                Select::make('country_id')
-                    ->label('Country')
-                    ->relationship('country', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->disabled(fn (): bool => ! TeamResource::userIsSuperAdmin()),
-
-                TextInput::make('first_name')
-                    ->label('First name')
-                    ->maxLength(255),
-
-                TextInput::make('last_name')
-                    ->label('Last name')
-                    ->maxLength(255),
-
-                DatePicker::make('birth_date')
-                    ->label('Birth date'),
-
-                TextInput::make('number')
-                    ->numeric()
-                    ->minValue(0),
-
-                TextInput::make('position')
-                    ->maxLength(255),
-
-                TextInput::make('photo_url')
-                    ->label('Photo URL')
-                    ->url()
-                    ->maxLength(2048)
-                    ->placeholder('https://example.com/player.jpg')
-                    ->columnSpanFull(),
-            ]);
+            ->columns(1)
+            ->components(PlayerForm::schema());
     }
 
     public function table(Table $table): Table
@@ -124,22 +87,14 @@ class PlayersRelationManager extends RelationManager
             ->recordActions([
                 EditAction::make()
                     ->visible(fn () => Auth::user()?->hasAnyRole(['admin', 'super_admin']))
-                    ->using(function (Model $record, array $data): Model {
-                        if (! TeamResource::userIsSuperAdmin()) {
-                            unset($data['country_id'], $data['external_id']);
-                        }
+                    ->url(fn (Model $record): string => PlayerResource::getUrl('edit', ['record' => $record])),
 
-                        $record->update($data);
-
-                        return $record;
-                    }),
-
-                DeleteAction::make()
+                DetachAction::make()
                     ->visible(fn (): bool => TeamResource::userIsSuperAdmin()),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make()
+                    DetachBulkAction::make()
                         ->visible(fn (): bool => TeamResource::userIsSuperAdmin()),
                 ]),
             ]);

@@ -10,6 +10,10 @@ class ListPlayers extends ListRecords
 {
     protected static string $resource = PlayerResource::class;
 
+    protected static ?string $title = 'Players without team';
+
+    protected static ?string $breadcrumb = 'Players without team';
+
     protected function getHeaderActions(): array
     {
         return [
