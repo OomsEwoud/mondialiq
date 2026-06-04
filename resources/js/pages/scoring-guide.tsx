@@ -139,10 +139,10 @@ export default function ScoringGuide() {
                             When points are awarded
                         </h2>
                         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-                            MondialIQ controleert automatisch op vaste momenten,
-                            bijvoorbeeld om de paar uur, welke wedstrijden
-                            afgewerkt zijn. Daarna worden de punten toegekend
-                            volgens het bestaande puntensysteem.
+                            MondialIQ automatically checks on a fixed schedule,
+                            for example every few hours, which matches have
+                            finished. Points are then awarded using the existing
+                            scoring system.
                         </p>
                         <div className="mt-4 grid gap-2.5 md:grid-cols-3">
                             {validationPoints.map((point) => (

@@ -45,13 +45,13 @@ class CallbackController extends Controller
     {
         if ($request->has('error')) {
             return to_route('login')->withErrors([
-                'socialite' => 'Login met '.ucfirst($provider).' werd geannuleerd.',
+                'socialite' => ucfirst($provider).' login was cancelled.',
             ]);
         }
 
         if (! $request->filled('code')) {
             return to_route('login')->withErrors([
-                'socialite' => 'Social login kon niet worden voltooid. Probeer opnieuw.',
+                'socialite' => 'Social login could not be completed. Please try again.',
             ]);
         }
 
