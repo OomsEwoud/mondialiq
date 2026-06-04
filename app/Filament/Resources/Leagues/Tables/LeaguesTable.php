@@ -37,6 +37,20 @@ class LeaguesTable
                 TextColumn::make('fixtures_count')
                     ->label('Fixtures')
                     ->sortable(),
+
+                TextColumn::make('standings_count')
+                    ->label('Standings')
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('team_statistics_count')
+                    ->label('Team stats')
+                    ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('external_id')
+                    ->label('External ID')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
             ->recordActions([

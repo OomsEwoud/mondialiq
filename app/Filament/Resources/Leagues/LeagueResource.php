@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Leagues;
 use App\Filament\Resources\Leagues\Pages\CreateLeague;
 use App\Filament\Resources\Leagues\Pages\EditLeague;
 use App\Filament\Resources\Leagues\Pages\ListLeagues;
+use App\Filament\Resources\Leagues\RelationManagers\FixturesRelationManager;
+use App\Filament\Resources\Leagues\RelationManagers\StandingsRelationManager;
+use App\Filament\Resources\Leagues\RelationManagers\TeamStatisticsRelationManager;
 use App\Filament\Resources\Leagues\Schemas\LeagueForm;
 use App\Filament\Resources\Leagues\Tables\LeaguesTable;
 use App\Models\League;
@@ -46,13 +49,15 @@ class LeagueResource extends Resource
     {
         return parent::getEloquentQuery()
             ->with('country')
-            ->withCount('fixtures');
+            ->withCount(['fixtures', 'standings', 'teamStatistics']);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            FixturesRelationManager::class,
+            StandingsRelationManager::class,
+            TeamStatisticsRelationManager::class,
         ];
     }
 
