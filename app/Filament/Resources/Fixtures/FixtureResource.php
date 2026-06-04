@@ -16,12 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class FixtureResource extends Resource
 {
     protected static ?string $model = Fixture::class;
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendarDays;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Match Data';
+
+    protected static ?string $navigationLabel = 'Fixtures';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $recordTitleAttribute = 'round_name';
 

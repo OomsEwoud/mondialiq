@@ -17,12 +17,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class TeamResource extends Resource
 {
     protected static ?string $model = Team::class;
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedShieldCheck;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Management';
+
+    protected static ?string $navigationLabel = 'Teams';
+
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $recordTitleAttribute = 'name';
 

@@ -15,12 +15,19 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class CountryResource extends Resource
 {
     protected static ?string $model = Country::class;
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedFlag;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Management';
+
+    protected static ?string $navigationLabel = 'Countries';
+
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $recordTitleAttribute = 'name';
 

@@ -16,12 +16,19 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class CoachResource extends Resource
 {
     protected static ?string $model = Coach::class;
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUser;
+
+    protected static string | UnitEnum | null $navigationGroup = 'Management';
+
+    protected static ?string $navigationLabel = 'Coaches';
+
+    protected static ?int $navigationSort = 50;
 
     protected static ?string $recordTitleAttribute = 'display_name';
 
