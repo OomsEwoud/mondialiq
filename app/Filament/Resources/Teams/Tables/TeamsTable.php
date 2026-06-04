@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Leagues\Tables;
+namespace App\Filament\Resources\Teams\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,7 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 
-class LeaguesTable
+class TeamsTable
 {
     public static function configure(Table $table): Table
     {
@@ -24,18 +24,21 @@ class LeaguesTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('type')
+                TextColumn::make('code')
                     ->searchable()
-                    ->sortable()
-                    ->limit(18),
+                    ->sortable(),
 
                 TextColumn::make('country.name')
                     ->label('Country')
                     ->searchable()
                     ->limit(20),
 
-                TextColumn::make('fixtures_count')
-                    ->label('Fixtures')
+                TextColumn::make('founded_at')
+                    ->label('Founded')
+                    ->sortable(),
+
+                TextColumn::make('players_count')
+                    ->label('Players')
                     ->sortable(),
             ])
             ->filters([])
