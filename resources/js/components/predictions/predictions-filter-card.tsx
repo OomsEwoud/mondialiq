@@ -1,8 +1,8 @@
 import { X } from 'lucide-react';
 import { predictionFilterLabelClassName } from '@/components/predictions/filters/filter-field-label';
 import FilterSelect from '@/components/predictions/filters/filter-select';
+import MatchStatusSegmentedFilter from '@/components/predictions/filters/match-status-segmented-filter';
 import SearchInput from '@/components/predictions/filters/search-input';
-import StatusFilterPills from '@/components/predictions/filters/status-filter-pills';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import type {
     ConfidenceSort,
@@ -14,6 +14,8 @@ import type {
 } from '@/types/prediction-filter';
 import { toDateKey } from '@/utils/date';
 
+type MatchStatusSegmentValue = PredictionStatusFilter | 'today';
+
 interface Props {
     mode: PredictionTab;
     filters: PredictionFilters;
@@ -23,14 +25,9 @@ interface Props {
         value: PredictionFilters[K],
     ) => void;
     onQuickAll: () => void;
+    onMatchStatusChange: (status: PredictionStatusFilter, date: string) => void;
     onClear: () => void;
 }
-
-const statusOptions: PredictionFilterOption<PredictionStatusFilter>[] = [
-    { label: 'All', value: 'all' },
-    { label: 'Upcoming matches', value: 'upcoming' },
-    { label: 'Finished matches', value: 'past' },
-];
 
 const outcomeOptions: PredictionFilterOption<OutcomeFilter>[] = [
     { label: 'All outcomes', value: 'all' },
@@ -58,10 +55,28 @@ export default function PredictionsFilterCard({
     hasActiveFilters,
     onChange,
     onQuickAll,
+    onMatchStatusChange,
     onClear,
 }: Props) {
     const isMine = mode === 'mine';
     const today = toDateKey(new Date());
+    const matchStatusValue: MatchStatusSegmentValue =
+        filters.date === today ? 'today' : filters.status;
+    const updateMatchStatus = (value: MatchStatusSegmentValue) => {
+        if (value === 'all') {
+            onQuickAll();
+
+            return;
+        }
+
+        if (value === 'today') {
+            onMatchStatusChange('all', today);
+
+            return;
+        }
+
+        onMatchStatusChange(value, '');
+    };
 
     return (
         <section className="mb-5 rounded-[1.7rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.95))] p-5 shadow-lg shadow-cyan-950/6 backdrop-blur sm:p-6">
@@ -96,16 +111,10 @@ export default function PredictionsFilterCard({
                     value={filters.search}
                     onChange={(value) => onChange('search', value)}
                 />
-                <StatusFilterPills
+                <MatchStatusSegmentedFilter
                     className="lg:col-span-8"
-                    options={statusOptions}
-                    value={filters.status}
-                    todaySelected={filters.date === today}
-                    onChange={(value) => onChange('status', value)}
-                    onAllClick={onQuickAll}
-                    onTodayToggle={() =>
-                        onChange('date', filters.date === today ? '' : today)
-                    }
+                    value={matchStatusValue}
+                    onChange={updateMatchStatus}
                 />
                 <FilterSelect
                     className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}

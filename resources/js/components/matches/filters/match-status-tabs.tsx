@@ -1,71 +1,44 @@
 import { cn } from '@/lib/utils';
 import type { MatchStatusFilter } from '@/types/match-page';
 
+type MatchStatusTabValue = MatchStatusFilter | 'today';
+
 interface Props {
-    selected: MatchStatusFilter;
-    selectedDate: string;
-    today: string;
-    onChange: (value: MatchStatusFilter) => void;
-    onAllClick: () => void;
-    onDateChange: (value: string) => void;
+    selected: MatchStatusTabValue;
+    onChange: (value: MatchStatusTabValue) => void;
 }
 
-const statusTabs: Array<{ label: string; value: MatchStatusFilter }> = [
-    { label: 'All', value: 'all' },
-    { label: 'Live', value: 'live' },
+const statusTabs: Array<{ label: string; value: MatchStatusTabValue }> = [
+    { label: 'All matches', value: 'all' },
+    { label: 'Today', value: 'today' },
+    { label: 'Live now', value: 'live' },
     { label: 'Upcoming', value: 'upcoming' },
-    { label: 'Played', value: 'played' },
+    { label: 'Finished', value: 'played' },
 ];
 
-export default function MatchStatusTabs({
-    selected,
-    selectedDate,
-    today,
-    onChange,
-    onAllClick,
-    onDateChange,
-}: Props) {
-    const todaySelected = selectedDate === today;
-
+export default function MatchStatusTabs({ selected, onChange }: Props) {
     return (
-        <div className="flex flex-wrap gap-2.5">
+        <div
+            role="radiogroup"
+            aria-label="Match status"
+            className="grid grid-cols-2 gap-1 rounded-[1.35rem] border border-white/80 bg-white/70 p-1 shadow-sm shadow-cyan-950/5 sm:grid-cols-5"
+        >
             {statusTabs.map((tab) => (
-                <div key={tab.value} className="contents">
-                    <button
-                        type="button"
-                        onClick={() =>
-                            tab.value === 'all'
-                                ? onAllClick()
-                                : onChange(tab.value)
-                        }
-                        className={cn(
-                            'h-10 rounded-full border px-4 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
-                            selected === tab.value &&
-                                (tab.value !== 'all' || !todaySelected)
-                                ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
-                                : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
-                        )}
-                    >
-                        {tab.label}
-                    </button>
-                    {tab.value === 'all' && (
-                        <button
-                            type="button"
-                            aria-pressed={todaySelected}
-                            onClick={() =>
-                                onDateChange(todaySelected ? '' : today)
-                            }
-                            className={cn(
-                                'h-10 rounded-full border px-4 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
-                                todaySelected
-                                    ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
-                                    : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
-                            )}
-                        >
-                            Today
-                        </button>
+                <button
+                    key={tab.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected === tab.value}
+                    onClick={() => onChange(tab.value)}
+                    className={cn(
+                        'flex h-10 min-w-0 items-center justify-center rounded-[1rem] px-3 text-center text-sm leading-tight font-black transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                        selected === tab.value
+                            ? 'bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-sm ring-1 ring-cyan-300'
+                            : 'text-slate-600 hover:bg-white/80 hover:text-slate-900',
                     )}
-                </div>
+                >
+                    {tab.label}
+                </button>
             ))}
         </div>
     );

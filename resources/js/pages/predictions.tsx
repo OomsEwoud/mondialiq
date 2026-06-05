@@ -11,7 +11,10 @@ import PredictionsFilterCard from '@/components/predictions/predictions-filter-c
 import PageHead from '@/components/seo/page-head';
 import { predictions as predictionsRoute } from '@/routes';
 import type { PredictionPageProps as Props } from '@/types/prediction';
-import type { PredictionFilters } from '@/types/prediction-filter';
+import type {
+    PredictionFilters,
+    PredictionStatusFilter,
+} from '@/types/prediction-filter';
 import {
     defaultPredictionFilters,
     hasActivePredictionFilters,
@@ -137,6 +140,32 @@ export default function Predictions({
             },
         );
     };
+    const updateMatchStatusFilter = (
+        status: PredictionStatusFilter,
+        date: string,
+    ) => {
+        const nextFilters = {
+            ...filters,
+            date,
+            status,
+        };
+
+        setFiltersByMode((current) => ({
+            ...current,
+            [mode]: nextFilters,
+        }));
+
+        router.get(
+            predictionsRoute.url({
+                query: syncedQueryFilters(nextFilters),
+            }),
+            {},
+            {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        );
+    };
 
     return (
         <>
@@ -155,6 +184,7 @@ export default function Predictions({
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}
                     onQuickAll={applyQuickAll}
+                    onMatchStatusChange={updateMatchStatusFilter}
                     onClear={clearFilters}
                 />
                 {hasNoFilteredResults ? (

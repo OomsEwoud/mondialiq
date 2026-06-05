@@ -6,6 +6,8 @@ import MatchStatusTabs from './filters/match-status-tabs';
 import RoundFilter from './filters/round-filter';
 import TeamFilter from './filters/team-filter';
 
+type MatchStatusTabValue = MatchStatusFilter | 'today';
+
 interface Props {
     rounds: Array<{ label: string; value: string }>;
     dates: Array<{ label: string; value: string }>;
@@ -31,6 +33,21 @@ export default function MatchFilters({
         selected.date ||
         selected.team ||
         selected.status !== 'all';
+    const selectedMatchStatus: MatchStatusTabValue =
+        selected.status !== 'all'
+            ? selected.status
+            : selected.date === today
+              ? 'today'
+              : 'all';
+    const handleMatchStatusChange = (value: MatchStatusTabValue) => {
+        if (value === 'today') {
+            onQuickChange({ date: today, status: 'all' });
+
+            return;
+        }
+
+        onQuickChange({ date: '', status: value });
+    };
 
     return (
         <section className="mb-6 rounded-[1.75rem] border border-cyan-200/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.92))] p-4 shadow-xl shadow-cyan-950/8 backdrop-blur sm:p-6">
@@ -56,15 +73,12 @@ export default function MatchFilters({
             </div>
 
             <div className="mb-5 border-b border-cyan-100/70 pb-5">
+                <p className="mb-2 text-[11px] font-black tracking-[0.16em] text-slate-500 uppercase">
+                    Match status
+                </p>
                 <MatchStatusTabs
-                    selected={selected.status}
-                    selectedDate={selected.date}
-                    today={today}
-                    onChange={(value) => onChange('status', value)}
-                    onAllClick={() =>
-                        onQuickChange({ date: '', status: 'all' })
-                    }
-                    onDateChange={(value) => onChange('date', value)}
+                    selected={selectedMatchStatus}
+                    onChange={handleMatchStatusChange}
                 />
             </div>
 
