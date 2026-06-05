@@ -27,6 +27,7 @@ export default function Predictions({
 }: Props) {
     const defaultFilters = {
         ...defaultPredictionFilters,
+        date: initialFilters.date,
         status: initialFilters.status,
         pointsState: initialFilters.pointsState,
     };
@@ -54,7 +55,11 @@ export default function Predictions({
             [mode]: defaultPredictionFilters,
         }));
 
-        if (filters.status !== 'all' || filters.pointsState !== 'all') {
+        if (
+            filters.date !== '' ||
+            filters.status !== 'all' ||
+            filters.pointsState !== 'all'
+        ) {
             router.get(
                 predictionsRoute.url({
                     query: { mode },
@@ -72,6 +77,7 @@ export default function Predictions({
         nextFilters: PredictionFilters,
     ): Record<string, string> => ({
         mode,
+        ...(nextFilters.date === '' ? {} : { date: nextFilters.date }),
         ...(nextFilters.status === 'all' ? {} : { status: nextFilters.status }),
         ...(nextFilters.pointsState === 'all'
             ? {}
@@ -90,7 +96,7 @@ export default function Predictions({
             },
         }));
 
-        if (key === 'status' || key === 'pointsState') {
+        if (key === 'date' || key === 'status' || key === 'pointsState') {
             const nextFilters = {
                 ...filters,
                 [key]: value,

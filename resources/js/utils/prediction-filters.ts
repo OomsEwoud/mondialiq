@@ -11,6 +11,7 @@ import { getMatchStatusKind } from '@/utils/match-status';
 
 export const defaultPredictionFilters: PredictionFilters = {
     search: '',
+    date: '',
     status: 'all',
     outcome: 'all',
     pointsState: 'all',
@@ -22,6 +23,7 @@ export function hasActivePredictionFilters(
 ): boolean {
     return (
         filters.search.trim().length > 0 ||
+        filters.date.trim().length > 0 ||
         filters.status !== 'all' ||
         filters.outcome !== 'all' ||
         filters.pointsState !== 'all' ||
@@ -68,10 +70,19 @@ export function matchesFilters(
 ): boolean {
     return (
         matchesSearch(match, filters.search) &&
+        matchesDateFilter(match, filters.date) &&
         matchesStatusFilter(match, filters.status) &&
         matchesOutcomeFilter(mode, match, filters.outcome) &&
         matchesPointsState(mode, match, filters.pointsState)
     );
+}
+
+function matchesDateFilter(match: Match, date: string): boolean {
+    if (!date) {
+        return true;
+    }
+
+    return match.dateValue === date;
 }
 
 export function sortByConfidence(

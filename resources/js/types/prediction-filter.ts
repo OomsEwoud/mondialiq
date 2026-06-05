@@ -10,6 +10,7 @@ export type ConfidenceSort = 'default' | 'confidence-desc' | 'confidence-asc';
 
 export interface PredictionFilters {
     search: string;
+    date: string;
     status: PredictionStatusFilter;
     outcome: OutcomeFilter;
     pointsState: PointsStateFilter;

@@ -25,8 +25,9 @@ class PredictionsController extends Controller
     {
         $mode = $this->predictionMode($request);
         $status = $this->statusFilter($request);
+        $date = $this->dateFilter($request);
         $pointsState = $this->pointsStateFilter($request);
-        $fixtureQuery = $this->fixtureQuery($status);
+        $fixtureQuery = $this->fixtureQuery($status, $date);
 
         $this->predictionFixtureQuery->applyMode(
             $fixtureQuery,
@@ -42,6 +43,7 @@ class PredictionsController extends Controller
         return Inertia::render('predictions', [
             'fixtures' => $fixtures,
             'filters' => [
+                'date' => $date,
                 'status' => $status,
                 'pointsState' => $pointsState,
             ],
@@ -66,6 +68,11 @@ class PredictionsController extends Controller
             : 'all';
     }
 
+    private function dateFilter(Request $request): string
+    {
+        return $request->date('date')?->format('Y-m-d') ?? '';
+    }
+
     private function pointsStateFilter(Request $request): string
     {
         $pointsState = $request->string('pointsState')->toString();
@@ -79,12 +86,13 @@ class PredictionsController extends Controller
             : 'all';
     }
 
-    private function fixtureQuery(string $status): Builder
+    private function fixtureQuery(string $status, string $date): Builder
     {
         return (new FixtureQuery(
             $this->worldCupContext->leagueId(),
             $this->worldCupContext->season(),
         ))->build([
+            'date' => $date,
             'status' => $status,
         ]);
     }

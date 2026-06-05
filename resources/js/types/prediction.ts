@@ -11,6 +11,7 @@ export interface PredictionPageProps {
         links: Array<{ url: string | null; label: string; active: boolean }>;
     };
     filters: {
+        date: string;
         status: PredictionStatusFilter;
         pointsState: PointsStateFilter;
     };

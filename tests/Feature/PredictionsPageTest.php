@@ -133,6 +133,39 @@ test('ai predictions can be filtered to finished matches', function () {
         );
 });
 
+test('ai predictions can be filtered by fixture date', function () {
+    [$league, $homeTeam, $awayTeam] = createPredictionsPageContext();
+    $todayFixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 35,
+        'match_date' => '2026-06-05 20:00:00',
+        'status_short' => Fixture::NOT_STARTED_STATUS_SHORT,
+        'status_long' => 'Not Started',
+    ]);
+    $otherFixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 36,
+        'match_date' => '2026-06-06 20:00:00',
+        'status_short' => Fixture::NOT_STARTED_STATUS_SHORT,
+        'status_long' => 'Not Started',
+    ]);
+
+    createPredictionsPageAiPrediction($todayFixture);
+    createPredictionsPageAiPrediction($otherFixture);
+
+    $response = $this->get(route('predictions', [
+        'mode' => 'ai',
+        'date' => '2026-06-05',
+    ]));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('predictions')
+            ->where('filters.date', '2026-06-05')
+            ->has('fixtures.data', 1)
+            ->where('fixtures.data.0.id', $todayFixture->id),
+        );
+});
+
 test('a user prediction can be shown on the predictions page', function () {
     $user = User::factory()->create();
 

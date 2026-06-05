@@ -12,6 +12,7 @@ import type {
     PredictionFilters,
     PredictionStatusFilter,
 } from '@/types/prediction-filter';
+import { toDateKey } from '@/utils/date';
 
 interface Props {
     mode: PredictionTab;
@@ -58,6 +59,7 @@ export default function PredictionsFilterCard({
     onClear,
 }: Props) {
     const isMine = mode === 'mine';
+    const today = toDateKey(new Date());
 
     return (
         <section className="mb-5 rounded-[1.7rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.95))] p-5 shadow-lg shadow-cyan-950/6 backdrop-blur sm:p-6">
@@ -94,11 +96,31 @@ export default function PredictionsFilterCard({
                     onChange={(value) => onChange('search', value)}
                 />
                 <StatusFilterPills
-                    className="lg:col-span-8"
+                    className="lg:col-span-6"
                     options={statusOptions}
                     value={filters.status}
                     onChange={(value) => onChange('status', value)}
                 />
+                <div className="grid gap-2 lg:col-span-2">
+                    <p className={predictionFilterLabelClassName}>Quick</p>
+                    <button
+                        type="button"
+                        aria-pressed={filters.date === today}
+                        onClick={() =>
+                            onChange(
+                                'date',
+                                filters.date === today ? '' : today,
+                            )
+                        }
+                        className={
+                            filters.date === today
+                                ? 'h-11 rounded-full border border-cyan-200 bg-cyan-50 px-3 text-sm font-black whitespace-nowrap text-cyan-800 transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
+                                : 'h-11 rounded-full border border-slate-200 bg-white px-3 text-sm font-black whitespace-nowrap text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
+                        }
+                    >
+                        Today
+                    </button>
+                </div>
                 <FilterSelect
                     className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
                     label="Outcome"
