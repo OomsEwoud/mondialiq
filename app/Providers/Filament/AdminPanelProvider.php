@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\MondialiqStatsOverview;
+use App\Http\Middleware\SetFilamentLocale;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -47,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 MondialiqStatsOverview::class,
             ])
             ->middleware([
+                SetFilamentLocale::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,

@@ -3,6 +3,8 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\PredictionTypes;
+use App\Filament\Resources\Fixtures\FixtureResource;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\User;
@@ -14,9 +16,9 @@ use Illuminate\Support\Number;
 
 class MondialiqStatsOverview extends StatsOverviewWidget
 {
-    protected ?string $heading = 'MondialiQ overzicht';
+    protected ?string $heading = 'MondialiQ overview';
 
-    protected ?string $description = 'Kerncijfers voor gebruikers, wedstrijden en voorspellingen.';
+    protected ?string $description = 'Key metrics for users, fixtures and predictions.';
 
     protected int | array | null $columns = [
         'md' => 2,
@@ -29,45 +31,53 @@ class MondialiqStatsOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Gebruikers', $this->formatCount(User::query()->count()))
-                ->description('Totaal aantal accounts')
+            Stat::make('Users', $this->formatCount(User::query()->count()))
+                ->description('Total accounts')
                 ->icon(Heroicon::Users)
-                ->color('primary'),
+                ->color('primary')
+                ->url(UserResource::getUrl('index')),
 
-            Stat::make('Wedstrijden', $this->formatCount(Fixture::query()->count()))
-                ->description('Alle geimporteerde fixtures')
+            Stat::make('Fixtures', $this->formatCount(Fixture::query()->count()))
+                ->description('All imported fixtures')
                 ->icon(Heroicon::CalendarDays)
-                ->color('gray'),
+                ->color('gray')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('Live wedstrijden', $this->formatCount(Fixture::query()->inProgress()->count()))
-                ->description('Nu bezig volgens status')
+            Stat::make('Live fixtures', $this->formatCount(Fixture::query()->inProgress()->count()))
+                ->description('Currently in progress')
                 ->icon(Heroicon::Signal)
-                ->color('success'),
+                ->color('success')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('Aankomende wedstrijden', $this->formatCount(Fixture::query()->upcomingNotStarted()->count()))
-                ->description('Nog te spelen fixtures')
+            Stat::make('Upcoming fixtures', $this->formatCount(Fixture::query()->upcomingNotStarted()->count()))
+                ->description('Fixtures still to be played')
                 ->icon(Heroicon::Clock)
-                ->color('warning'),
+                ->color('warning')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('Afgelopen wedstrijden', $this->formatCount(Fixture::query()->finished()->count()))
-                ->description('Fixtures met eindstatus')
+            Stat::make('Finished fixtures', $this->formatCount(Fixture::query()->finished()->count()))
+                ->description('Fixtures with a final status')
                 ->icon(Heroicon::CheckCircle)
-                ->color('success'),
+                ->color('success')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('Gebruikersvoorspellingen', $this->formatCount($this->userPredictions()->count()))
-                ->description('Inzendingen van spelers')
+            Stat::make('User predictions', $this->formatCount($this->userPredictions()->count()))
+                ->description('Predictions submitted by users')
                 ->icon(Heroicon::PencilSquare)
-                ->color('info'),
+                ->color('info')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('Onverwerkte voorspellingen', $this->formatCount($this->userPredictions()->whereNull('points_awarded_at')->count()))
-                ->description('Nog te scoren inzendingen')
+            Stat::make('Unvalidated predictions', $this->formatCount($this->userPredictions()->whereNull('points_awarded_at')->count()))
+                ->description('Predictions still waiting for points')
                 ->icon(Heroicon::ExclamationTriangle)
-                ->color('danger'),
+                ->color('danger')
+                ->url(FixtureResource::getUrl('index')),
 
-            Stat::make('AI-voorspellingen', $this->formatCount(Prediction::query()->where('source', PredictionTypes::Ai->value)->count()))
-                ->description('Gegenereerde AI analyses')
+            Stat::make('AI predictions', $this->formatCount(Prediction::query()->where('source', PredictionTypes::Ai->value)->count()))
+                ->description('Generated AI analyses')
                 ->icon(Heroicon::CpuChip)
-                ->color('primary'),
+                ->color('primary')
+                ->url(FixtureResource::getUrl('index')),
         ];
     }
 
