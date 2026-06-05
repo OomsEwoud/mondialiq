@@ -3,8 +3,10 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\PredictionTypes;
+use App\Filament\Resources\FeedbackMessages\FeedbackMessageResource;
 use App\Filament\Resources\Fixtures\FixtureResource;
 use App\Filament\Resources\Users\UserResource;
+use App\Models\FeedbackMessage;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\User;
@@ -18,11 +20,11 @@ class MondialiqStatsOverview extends StatsOverviewWidget
 {
     protected ?string $heading = 'MondialiQ overview';
 
-    protected ?string $description = 'Key metrics for users, fixtures and predictions.';
+    protected ?string $description = 'Key metrics for users, fixtures, predictions and feedback.';
 
     protected int | array | null $columns = [
         'md' => 2,
-        'xl' => 4,
+        'xl' => 5,
     ];
 
     /**
@@ -55,11 +57,29 @@ class MondialiqStatsOverview extends StatsOverviewWidget
                 ->color('warning')
                 ->url(FixtureResource::getUrl('index')),
 
+            Stat::make('Open feedback', $this->formatCount(FeedbackMessage::query()->whereNull('handled_at')->count()))
+                ->description('Reports still to review')
+                ->icon(Heroicon::ChatBubbleLeftRight)
+                ->color('warning')
+                ->url(FeedbackMessageResource::getUrl('index', [
+                    'tableFilters' => [
+                        'handled_at' => [
+                            'value' => false,
+                        ],
+                    ],
+                ])),
+
             Stat::make('Finished fixtures', $this->formatCount(Fixture::query()->finished()->count()))
                 ->description('Fixtures with a final status')
                 ->icon(Heroicon::CheckCircle)
                 ->color('success')
                 ->url(FixtureResource::getUrl('index')),
+
+            Stat::make('Feedback', $this->formatCount(FeedbackMessage::query()->count()))
+                ->description('All submitted reports')
+                ->icon(Heroicon::Inbox)
+                ->color('info')
+                ->url(FeedbackMessageResource::getUrl('index')),
 
             Stat::make('User predictions', $this->formatCount($this->userPredictions()->count()))
                 ->description('Predictions submitted by users')
