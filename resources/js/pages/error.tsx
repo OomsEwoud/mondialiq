@@ -1,0 +1,285 @@
+import { Head, Link, router } from '@inertiajs/react';
+import {
+    ArrowLeft,
+    CalendarDays,
+    Clock3,
+    Home,
+    LockKeyhole,
+    RefreshCcw,
+    Search,
+    ServerCrash,
+    ShieldAlert,
+    Sparkles,
+    TimerReset,
+} from 'lucide-react';
+import AppLogo from '@/components/app/app-logo';
+import { Button } from '@/components/ui/forms/button';
+import { cn } from '@/lib/utils';
+import { home, matches, predictions } from '@/routes';
+
+type ErrorPageProps = {
+    status: number;
+};
+
+type ErrorAction = {
+    href: string;
+    icon: typeof Home;
+    label: string;
+};
+
+type ErrorConfig = {
+    accent: string;
+    action?: ErrorAction;
+    description: string;
+    icon: typeof Home;
+    kicker: string;
+    title: string;
+};
+
+const errorConfig: Record<number, ErrorConfig> = {
+    403: {
+        accent: 'text-amber-600',
+        action: {
+            href: predictions.url(),
+            icon: Sparkles,
+            label: 'View predictions',
+        },
+        description:
+            'You do not have permission to view this page. Some prediction zones are reserved for the right squad.',
+        icon: LockKeyhole,
+        kicker: 'Restricted area',
+        title: 'You do not have permission to view this page.',
+    },
+    404: {
+        accent: 'text-cyan-700',
+        action: {
+            href: matches.url(),
+            icon: CalendarDays,
+            label: 'Browse matches',
+        },
+        description:
+            'This match could not be found. It may have moved, finished, or never made the tournament schedule.',
+        icon: Search,
+        kicker: 'Lost possession',
+        title: 'This match could not be found.',
+    },
+    419: {
+        accent: 'text-blue-700',
+        description:
+            'Your session expired. Please refresh and try again before submitting your next prediction.',
+        icon: TimerReset,
+        kicker: 'Session timeout',
+        title: 'Your session expired. Please refresh and try again.',
+    },
+    429: {
+        accent: 'text-orange-600',
+        action: {
+            href: matches.url(),
+            icon: CalendarDays,
+            label: 'Check fixtures',
+        },
+        description:
+            'Too many requests. Please slow down for a moment so MondialIQ can keep the match feed steady.',
+        icon: Clock3,
+        kicker: 'Slow the tempo',
+        title: 'Too many requests. Please slow down.',
+    },
+    500: {
+        accent: 'text-red-600',
+        action: {
+            href: predictions.url(),
+            icon: Sparkles,
+            label: 'Go to predictions',
+        },
+        description:
+            'Something went wrong on our side. The team has dropped the ball, but your browser is still in play.',
+        icon: ServerCrash,
+        kicker: 'Unexpected stoppage',
+        title: 'Something went wrong on our side.',
+    },
+    503: {
+        accent: 'text-slate-700',
+        description:
+            'MondialIQ is temporarily unavailable. We are tuning the platform for the next prediction window.',
+        icon: ShieldAlert,
+        kicker: 'Maintenance break',
+        title: 'MondialIQ is temporarily unavailable.',
+    },
+};
+
+const fallbackConfig: ErrorConfig = {
+    accent: 'text-cyan-700',
+    action: {
+        href: matches.url(),
+        icon: CalendarDays,
+        label: 'Browse matches',
+    },
+    description:
+        'The match page could not be loaded. Head back to the tournament hub and try again.',
+    icon: ShieldAlert,
+    kicker: 'Match interrupted',
+    title: 'Something went offside.',
+};
+
+export default function ErrorPage({ status }: ErrorPageProps) {
+    const config = errorConfig[status] ?? fallbackConfig;
+    const StatusIcon = config.icon;
+    const ActionIcon = config.action?.icon;
+
+    const goBack = () => {
+        if (window.history.length > 1) {
+            window.history.back();
+
+            return;
+        }
+
+        router.visit(home.url());
+    };
+
+    return (
+        <>
+            <Head title={`${status} - ${config.title}`}>
+                <meta
+                    head-key="robots"
+                    name="robots"
+                    content="noindex,nofollow"
+                />
+                <meta
+                    head-key="description"
+                    name="description"
+                    content={config.description}
+                />
+            </Head>
+
+            <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
+                <header className="border-b border-cyan-200/10 bg-[#141c69] shadow-lg shadow-blue-950/10">
+                    <div className="mx-auto flex h-16 w-full max-w-6xl items-center px-5 sm:px-6">
+                        <Link
+                            href={home.url()}
+                            className="rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
+                        >
+                            <AppLogo textClassName="text-white" />
+                        </Link>
+                    </div>
+                </header>
+
+                <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center px-5 py-8 sm:px-6 lg:py-12">
+                    <section className="w-full overflow-hidden rounded-[2rem] border border-cyan-200/30 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_52%,#eef7ff_100%)] shadow-2xl shadow-cyan-950/8">
+                        <div className="grid min-h-[62vh] gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:p-10">
+                            <div className="min-w-0">
+                                <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                                    <StatusIcon className="size-6" />
+                                </div>
+
+                                <p className="text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+                                    {config.kicker}
+                                </p>
+                                <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
+                                    <span
+                                        className={cn(
+                                            'text-6xl leading-none font-black tracking-tight sm:text-7xl',
+                                            config.accent,
+                                        )}
+                                    >
+                                        {status}
+                                    </span>
+                                    <h1 className="max-w-2xl text-3xl leading-tight font-black tracking-tight text-blue-950 sm:text-4xl">
+                                        {config.title}
+                                    </h1>
+                                </div>
+
+                                <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                                    {config.description}
+                                </p>
+
+                                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                                    <Button
+                                        asChild
+                                        className="h-11 rounded-full px-5 font-black"
+                                    >
+                                        <Link href={home.url()}>
+                                            <Home className="size-4" />
+                                            Go home
+                                        </Link>
+                                    </Button>
+
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={goBack}
+                                        className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                    >
+                                        <ArrowLeft className="size-4" />
+                                        Go back
+                                    </Button>
+
+                                    {status === 419 && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={() =>
+                                                window.location.reload()
+                                            }
+                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                        >
+                                            <RefreshCcw className="size-4" />
+                                            Refresh page
+                                        </Button>
+                                    )}
+
+                                    {config.action && ActionIcon && (
+                                        <Button
+                                            asChild
+                                            variant="outline"
+                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                        >
+                                            <Link href={config.action.href}>
+                                                <ActionIcon className="size-4" />
+                                                {config.action.label}
+                                            </Link>
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+
+                            <aside className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-xl ring-1 shadow-cyan-950/8 ring-cyan-100/50">
+                                <p className="text-xs font-black tracking-[0.18em] text-slate-400 uppercase">
+                                    Match report
+                                </p>
+                                <div className="mt-4 grid gap-3">
+                                    <StatusPill
+                                        label="Status"
+                                        value={`${status}`}
+                                    />
+                                    <StatusPill
+                                        label="Platform"
+                                        value="MondialIQ"
+                                    />
+                                    <StatusPill
+                                        label="Next move"
+                                        value={
+                                            status === 419
+                                                ? 'Refresh and retry'
+                                                : 'Return to play'
+                                        }
+                                    />
+                                </div>
+                            </aside>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </>
+    );
+}
+
+function StatusPill({ label, value }: { label: string; value: string }) {
+    return (
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <p className="text-xs font-black tracking-widest text-slate-400 uppercase">
+                {label}
+            </p>
+            <p className="mt-1 text-sm font-black text-blue-950">{value}</p>
+        </div>
+    );
+}
