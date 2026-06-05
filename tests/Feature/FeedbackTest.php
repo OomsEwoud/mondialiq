@@ -49,6 +49,36 @@ test('a logged in user can submit feedback', function () {
     ]);
 });
 
+test('feedback can be marked as handled and reopened', function () {
+    $user = User::factory()->create();
+    $admin = User::factory()->create();
+
+    $feedback = FeedbackMessage::create([
+        'user_id' => $user->id,
+        'category' => 'UI bug or glitch',
+        'subject' => 'Button overlaps on mobile',
+        'message' => 'The submit button overlaps the footer on a small viewport.',
+    ]);
+
+    expect($feedback->isHandled())->toBeFalse();
+
+    $feedback->markAsHandled($admin);
+
+    $feedback->refresh();
+
+    expect($feedback->isHandled())->toBeTrue()
+        ->and($feedback->handled_by)->toBe($admin->id)
+        ->and($feedback->handled_at)->not->toBeNull();
+
+    $feedback->markAsOpen();
+
+    $feedback->refresh();
+
+    expect($feedback->isHandled())->toBeFalse()
+        ->and($feedback->handled_by)->toBeNull()
+        ->and($feedback->handled_at)->toBeNull();
+});
+
 test('feedback requires category subject and message', function (
     string $field,
     array $payload,
