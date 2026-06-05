@@ -114,6 +114,29 @@ export default function Predictions({
             );
         }
     };
+    const applyQuickAll = () => {
+        const nextFilters = {
+            ...filters,
+            date: '',
+            status: 'all' as const,
+        };
+
+        setFiltersByMode((current) => ({
+            ...current,
+            [mode]: nextFilters,
+        }));
+
+        router.get(
+            predictionsRoute.url({
+                query: syncedQueryFilters(nextFilters),
+            }),
+            {},
+            {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        );
+    };
 
     return (
         <>
@@ -131,6 +154,7 @@ export default function Predictions({
                     filters={filters}
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}
+                    onQuickAll={applyQuickAll}
                     onClear={clearFilters}
                 />
                 {hasNoFilteredResults ? (

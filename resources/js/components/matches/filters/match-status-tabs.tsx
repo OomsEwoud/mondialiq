@@ -3,7 +3,11 @@ import type { MatchStatusFilter } from '@/types/match-page';
 
 interface Props {
     selected: MatchStatusFilter;
+    selectedDate: string;
+    today: string;
     onChange: (value: MatchStatusFilter) => void;
+    onAllClick: () => void;
+    onDateChange: (value: string) => void;
 }
 
 const statusTabs: Array<{ label: string; value: MatchStatusFilter }> = [
@@ -13,23 +17,55 @@ const statusTabs: Array<{ label: string; value: MatchStatusFilter }> = [
     { label: 'Played', value: 'played' },
 ];
 
-export default function MatchStatusTabs({ selected, onChange }: Props) {
+export default function MatchStatusTabs({
+    selected,
+    selectedDate,
+    today,
+    onChange,
+    onAllClick,
+    onDateChange,
+}: Props) {
+    const todaySelected = selectedDate === today;
+
     return (
         <div className="flex flex-wrap gap-2.5">
             {statusTabs.map((tab) => (
-                <button
-                    key={tab.value}
-                    type="button"
-                    onClick={() => onChange(tab.value)}
-                    className={cn(
-                        'h-10 rounded-full border px-4 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
-                        selected === tab.value
-                            ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
-                            : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
+                <div key={tab.value} className="contents">
+                    <button
+                        type="button"
+                        onClick={() =>
+                            tab.value === 'all'
+                                ? onAllClick()
+                                : onChange(tab.value)
+                        }
+                        className={cn(
+                            'h-10 rounded-full border px-4 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                            selected === tab.value &&
+                                (tab.value !== 'all' || !todaySelected)
+                                ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
+                                : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
+                        )}
+                    >
+                        {tab.label}
+                    </button>
+                    {tab.value === 'all' && (
+                        <button
+                            type="button"
+                            aria-pressed={todaySelected}
+                            onClick={() =>
+                                onDateChange(todaySelected ? '' : today)
+                            }
+                            className={cn(
+                                'h-10 rounded-full border px-4 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                todaySelected
+                                    ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
+                                    : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
+                            )}
+                        >
+                            Today
+                        </button>
                     )}
-                >
-                    {tab.label}
-                </button>
+                </div>
             ))}
         </div>
     );

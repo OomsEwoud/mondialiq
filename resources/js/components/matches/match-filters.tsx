@@ -12,6 +12,7 @@ interface Props {
     teams: string[];
     selected: Filters;
     onChange: (key: FilterKey, value: string | MatchStatusFilter) => void;
+    onQuickChange: (values: Pick<Filters, 'date' | 'status'>) => void;
     onClear: () => void;
 }
 
@@ -21,6 +22,7 @@ export default function MatchFilters({
     teams,
     selected,
     onChange,
+    onQuickChange,
     onClear,
 }: Props) {
     const today = toDateKey(new Date());
@@ -38,7 +40,7 @@ export default function MatchFilters({
                         Filters
                     </h2>
                     <p className="mt-1 text-sm text-slate-600">
-                        Fine-tune the schedule by round, date or team.
+                        Fine-tune the schedule by status, round, date or team.
                     </p>
                 </div>
                 {hasActiveFilters && (
@@ -53,25 +55,17 @@ export default function MatchFilters({
                 )}
             </div>
 
-            <div className="mb-5 flex flex-col gap-3 border-b border-cyan-100/70 pb-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-5 border-b border-cyan-100/70 pb-5">
                 <MatchStatusTabs
                     selected={selected.status}
+                    selectedDate={selected.date}
+                    today={today}
                     onChange={(value) => onChange('status', value)}
+                    onAllClick={() =>
+                        onQuickChange({ date: '', status: 'all' })
+                    }
+                    onDateChange={(value) => onChange('date', value)}
                 />
-                <button
-                    type="button"
-                    aria-pressed={selected.date === today}
-                    onClick={() =>
-                        onChange('date', selected.date === today ? '' : today)
-                    }
-                    className={
-                        selected.date === today
-                            ? 'inline-flex h-10 w-fit items-center justify-center rounded-full border border-cyan-200 bg-cyan-50 px-4 text-sm font-black text-cyan-800 shadow-sm shadow-cyan-950/5 transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
-                            : 'inline-flex h-10 w-fit items-center justify-center rounded-full border border-slate-200 bg-white px-4 text-sm font-black text-slate-600 shadow-sm shadow-cyan-950/5 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
-                    }
-                >
-                    Today
-                </button>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

@@ -22,6 +22,7 @@ interface Props {
         key: K,
         value: PredictionFilters[K],
     ) => void;
+    onQuickAll: () => void;
     onClear: () => void;
 }
 
@@ -56,6 +57,7 @@ export default function PredictionsFilterCard({
     filters,
     hasActiveFilters,
     onChange,
+    onQuickAll,
     onClear,
 }: Props) {
     const isMine = mode === 'mine';
@@ -70,8 +72,7 @@ export default function PredictionsFilterCard({
                         Find predictions faster
                     </h2>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Search and refine predictions by match status, outcome
-                        or confidence.
+                        Find predictions by match status, date, round or team.
                     </p>
                 </div>
 
@@ -96,31 +97,16 @@ export default function PredictionsFilterCard({
                     onChange={(value) => onChange('search', value)}
                 />
                 <StatusFilterPills
-                    className="lg:col-span-6"
+                    className="lg:col-span-8"
                     options={statusOptions}
                     value={filters.status}
+                    todaySelected={filters.date === today}
                     onChange={(value) => onChange('status', value)}
+                    onAllClick={onQuickAll}
+                    onTodayToggle={() =>
+                        onChange('date', filters.date === today ? '' : today)
+                    }
                 />
-                <div className="grid gap-2 lg:col-span-2">
-                    <p className={predictionFilterLabelClassName}>Quick</p>
-                    <button
-                        type="button"
-                        aria-pressed={filters.date === today}
-                        onClick={() =>
-                            onChange(
-                                'date',
-                                filters.date === today ? '' : today,
-                            )
-                        }
-                        className={
-                            filters.date === today
-                                ? 'h-11 rounded-full border border-cyan-200 bg-cyan-50 px-3 text-sm font-black whitespace-nowrap text-cyan-800 transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
-                                : 'h-11 rounded-full border border-slate-200 bg-white px-3 text-sm font-black whitespace-nowrap text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none'
-                        }
-                    >
-                        Today
-                    </button>
-                </div>
                 <FilterSelect
                     className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
                     label="Outcome"

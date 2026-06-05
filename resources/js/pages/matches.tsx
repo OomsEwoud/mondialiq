@@ -33,6 +33,11 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
     ) => {
         visit({ ...filters, [key]: value });
     };
+    const handleQuickFiltersChange = (
+        values: Pick<Filters, 'date' | 'status'>,
+    ) => {
+        visit({ ...filters, ...values });
+    };
 
     return (
         <>
@@ -56,6 +61,7 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                 teams={filterOptions.teams}
                 selected={filters}
                 onChange={handleFilterChange}
+                onQuickChange={handleQuickFiltersChange}
                 onClear={() => visit(emptyFilters)}
             />
 
