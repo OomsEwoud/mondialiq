@@ -48,10 +48,10 @@ export default function LeagueMembersCard({ members }: Props) {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
-                            League rankings
+                            Group rankings
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
-                            Live standings in this private league.
+                            Member-only standings in this prediction group.
                         </CardDescription>
                     </div>
                     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-black text-slate-600">
@@ -129,7 +129,10 @@ export default function LeagueMembersCard({ members }: Props) {
                                             }
                                         />
                                         <StatPill
-                                            label={`${member.scoringPredictionsCount} scored picks`}
+                                            label={`${member.scoringPredictionsCount} validated picks`}
+                                        />
+                                        <StatPill
+                                            label={`${member.perfectPredictionsCount} perfect scores`}
                                         />
                                         <StatPill
                                             label={

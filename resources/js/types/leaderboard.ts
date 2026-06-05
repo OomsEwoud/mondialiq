@@ -12,6 +12,7 @@ export interface LeaderboardEntry {
 export interface JoinedLeague {
     id: number;
     name: string;
+    description: string | null;
     icon: string;
     memberAvatars: Array<{
         id: number;
@@ -23,6 +24,10 @@ export interface JoinedLeague {
     canManage: boolean;
     canLeave: boolean;
     membersCount: number;
+    rewardTitle: string | null;
+    rewardDescription: string | null;
+    visibility: 'private' | 'public';
+    isActive: boolean;
     userRank: number | null;
     leaderName: string | null;
     points: number | null;

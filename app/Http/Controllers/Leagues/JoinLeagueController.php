@@ -16,11 +16,14 @@ class JoinLeagueController extends Controller
             ->where('code', $request->validated('code'))
             ->firstOrFail();
 
-        $league->users()->attach($request->user()->id);
+        $league->users()->attach($request->user()->id, [
+            'role' => 'member',
+            'joined_at' => now(),
+        ]);
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('You joined :league.', ['league' => $league->name]),
+            'message' => __('You joined :group.', ['group' => $league->name]),
         ]);
 
         return to_route('leagues.show', $league);

@@ -18,7 +18,7 @@ export default function LeagueSnapshotCard({ league }: Props) {
         <Card className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm">
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
                 <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
-                    League snapshot
+                    Group snapshot
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
                     Quick overview of the current race.

@@ -43,8 +43,7 @@ export default function FriendsLeagueCard({ league }: Props) {
         return null;
     })();
     const palette = getLeagueBrandPalette(league.accentColor);
-    const memberLabel =
-        league.membersCount === 1 ? 'member' : 'members';
+    const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
         <Card className="overflow-hidden rounded-[1.7rem] border-cyan-100 bg-white shadow-lg shadow-cyan-950/6 transition-all hover:-translate-y-0.5 hover:shadow-xl">
@@ -60,7 +59,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </div>
                     <div className="min-w-0">
                         <p className="text-xs font-black tracking-[0.18em] text-white/80 uppercase">
-                            Friends league
+                            Prediction group
                         </p>
                         <p className="truncate text-lg font-black text-white">
                             {league.name}
@@ -75,7 +74,9 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.name}
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm text-slate-500">
-                            Private friends league standings.
+                            {league.visibility === 'private'
+                                ? 'Private prediction group standings.'
+                                : 'Public prediction group standings.'}
                         </CardDescription>
                     </div>
                     <div className="flex items-center gap-3">
@@ -83,7 +84,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.memberAvatars.map((member) => (
                                 <Avatar
                                     key={member.id}
-                                className="size-8 rounded-full ring-2 ring-white shadow-sm shadow-blue-950/10"
+                                    className="size-8 rounded-full shadow-sm ring-2 shadow-blue-950/10 ring-white"
                                 >
                                     <AvatarImage
                                         src={member.avatar ?? undefined}
@@ -134,7 +135,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     )}
                 >
                     <p className="text-xs font-black tracking-[0.18em] text-slate-500 uppercase">
-                        League pace
+                        Group pace
                     </p>
                     <p className="mt-1.5 text-sm font-semibold text-blue-950">
                         {performanceLabel ?? 'No scoring data yet'}
@@ -146,7 +147,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     asChild
                     className="h-10 w-full rounded-2xl px-4 font-black"
                 >
-                    <Link href={league.href}>View League</Link>
+                    <Link href={league.href}>View group</Link>
                 </Button>
 
                 {league.canManage && league.settingsHref ? (
@@ -160,7 +161,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     >
                         <Link href={league.settingsHref}>
                             <Settings2 className="size-4" />
-                            League settings
+                            Group settings
                         </Link>
                     </Button>
                 ) : league.canLeave ? (
@@ -176,7 +177,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         variant="outline"
                         className="h-10 w-full rounded-2xl px-4 font-black"
                     >
-                        League action
+                        Group action
                     </Button>
                 )}
             </CardFooter>

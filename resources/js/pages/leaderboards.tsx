@@ -24,7 +24,7 @@ export default function Leaderboards({
         <>
             <PageHead
                 title="Leaderboards"
-                description="See global MondialIQ rankings, your prediction points, your current position and private friends leagues for World Cup 2026."
+                description="See global MondialIQ rankings, your prediction points, your current position and private prediction groups for World Cup 2026."
             />
 
             <LeaderboardsPageHeader scoringGuideHref={scoringGuideHref} />

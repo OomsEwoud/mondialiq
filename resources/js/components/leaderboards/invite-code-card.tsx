@@ -31,7 +31,7 @@ export default function InviteCodeCard({
     const isSmallLeague = membersCount <= 3;
 
     const shareMessage = [
-        `Join my MondialIQ friends league ${leagueIcon} "${leagueName}".`,
+        `Join my MondialIQ prediction group ${leagueIcon} "${leagueName}".`,
         `Use code: ${code}`,
         `Join here: ${joinHref}`,
     ].join(' ');
@@ -68,7 +68,7 @@ export default function InviteCodeCard({
             try {
                 await navigator.share({
                     title: `${leagueName} on MondialIQ`,
-                    text: `Join my MondialIQ friends league ${leagueIcon} "${leagueName}" with code ${code}.`,
+                    text: `Join my MondialIQ prediction group ${leagueIcon} "${leagueName}" with code ${code}.`,
                     url: joinHref,
                 });
 
@@ -99,8 +99,8 @@ export default function InviteCodeCard({
                     Invite teammates
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    Share this league with friends so they can join your private
-                    standings.
+                    Share this group with friends so they can join your private
+                    ranking.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
@@ -113,7 +113,7 @@ export default function InviteCodeCard({
                             </p>
                         </div>
                         <p className="mt-2 text-sm font-black text-blue-950">
-                            This league is just getting started.
+                            This group is just getting started.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-slate-600">
                             Share the direct join link or send the invite code

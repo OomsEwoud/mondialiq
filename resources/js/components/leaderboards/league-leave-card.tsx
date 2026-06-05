@@ -1,5 +1,6 @@
 import { Form } from '@inertiajs/react';
 import { LogOut } from 'lucide-react';
+import LeaveLeagueController from '@/actions/App/Http/Controllers/Leagues/LeaveLeagueController';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import {
@@ -12,7 +13,6 @@ import {
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
 import { cn } from '@/lib/utils';
-import LeaveLeagueController from '@/actions/App/Http/Controllers/Leagues/LeaveLeagueController';
 
 type Props = {
     leagueId: number;
@@ -37,7 +37,7 @@ export default function LeagueLeaveCard({
                     )}
                 >
                     <LogOut className="size-4" />
-                    Leave league
+                    Leave group
                 </Button>
             </DialogTrigger>
             <DialogContent className="border-slate-200 bg-white sm:max-w-md">
@@ -45,7 +45,7 @@ export default function LeagueLeaveCard({
                     Leave {leagueName}?
                 </DialogTitle>
                 <DialogDescription className="text-sm leading-6 text-slate-600">
-                    You will lose access to this private league immediately. If
+                    You will lose access to this private group immediately. If
                     you want to come back later, you will need a fresh invite.
                 </DialogDescription>
 

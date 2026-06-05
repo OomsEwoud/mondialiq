@@ -14,6 +14,11 @@ class UpdateLeagueController extends Controller
     {
         $scoreboard->update($request->safe()->only([
             'name',
+            'description',
+            'reward_title',
+            'reward_description',
+            'visibility',
+            'is_active',
             'icon',
             'accent_color',
             'cover_style',
@@ -21,7 +26,7 @@ class UpdateLeagueController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('League updated.'),
+            'message' => __('Prediction group updated.'),
         ]);
 
         return to_route('leagues.settings', $scoreboard);

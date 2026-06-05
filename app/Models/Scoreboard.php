@@ -10,12 +10,24 @@ class Scoreboard extends Model
 {
     protected $fillable = [
         'name',
+        'description',
         'icon',
         'accent_color',
         'cover_style',
         'code',
         'owner_id',
+        'reward_title',
+        'reward_description',
+        'visibility',
+        'is_active',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
 
     public function owner(): BelongsTo
     {
@@ -24,6 +36,8 @@ class Scoreboard extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'users_has_scoreboards');
+        return $this->belongsToMany(User::class, 'users_has_scoreboards')
+            ->withPivot(['role', 'joined_at'])
+            ->withTimestamps();
     }
 }

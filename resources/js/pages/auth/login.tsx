@@ -104,7 +104,7 @@ export default function Login({
         <>
             <PageHead
                 title="Log in"
-                description="Log in to MondialIQ to manage your World Cup predictions, account settings and friends league rankings."
+                description="Log in to MondialIQ to manage your World Cup predictions, account settings and prediction group rankings."
                 noIndex
             />
 

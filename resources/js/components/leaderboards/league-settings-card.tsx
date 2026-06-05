@@ -1,6 +1,7 @@
 import { Form } from '@inertiajs/react';
 import {
     AlertTriangle,
+    Gift,
     KeyRound,
     PaintBucket,
     PencilLine,
@@ -16,6 +17,7 @@ import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
+import { Textarea } from '@/components/ui/forms/textarea';
 import {
     Card,
     CardContent,
@@ -46,30 +48,58 @@ type Props = {
     leagueName: string;
     leagueIcon: string;
     leagueCode: string;
+    description: string | null;
+    rewardTitle: string | null;
+    rewardDescription: string | null;
+    visibility: 'private' | 'public';
+    isActive: boolean;
     accentColor: LeagueAccentColor;
     coverStyle: LeagueCoverStyle;
 };
 
 const fieldClassName =
-    'h-11 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+    'h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
 
 export default function LeagueSettingsCard({
     leagueId,
     leagueName,
     leagueIcon,
     leagueCode,
+    description: initialDescription,
+    rewardTitle: initialRewardTitle,
+    rewardDescription: initialRewardDescription,
+    visibility: initialVisibility,
+    isActive: initialIsActive,
     accentColor,
     coverStyle,
 }: Props) {
     const [name, setName] = useState(leagueName);
+    const [description, setDescription] = useState(initialDescription ?? '');
+    const [rewardTitle, setRewardTitle] = useState(initialRewardTitle ?? '');
+    const [rewardDescription, setRewardDescription] = useState(
+        initialRewardDescription ?? '',
+    );
+    const [visibility, setVisibility] = useState<'private' | 'public'>(
+        initialVisibility,
+    );
+    const [isActive, setIsActive] = useState(initialIsActive);
     const [icon, setIcon] = useState(leagueIcon);
     const [accent, setAccent] = useState<LeagueAccentColor>(accentColor);
     const [cover, setCover] = useState<LeagueCoverStyle>(coverStyle);
     const [refreshDialogOpen, setRefreshDialogOpen] = useState(false);
 
     const normalizedName = name.trim();
+    const normalizedDescription = description.trim();
+    const normalizedRewardTitle = rewardTitle.trim();
+    const normalizedRewardDescription = rewardDescription.trim();
     const hasChanges =
         normalizedName !== leagueName.trim() ||
+        normalizedDescription !== (initialDescription ?? '').trim() ||
+        normalizedRewardTitle !== (initialRewardTitle ?? '').trim() ||
+        normalizedRewardDescription !==
+            (initialRewardDescription ?? '').trim() ||
+        visibility !== initialVisibility ||
+        isActive !== initialIsActive ||
         icon !== leagueIcon ||
         accent !== accentColor ||
         cover !== coverStyle;
@@ -91,7 +121,7 @@ export default function LeagueSettingsCard({
                             </p>
                         </div>
                         <CardTitle className="mt-2 text-xl font-black text-blue-950">
-                            League settings
+                            Prediction group settings
                         </CardTitle>
                     </div>
                     <span
@@ -106,8 +136,8 @@ export default function LeagueSettingsCard({
                     </span>
                 </div>
                 <CardDescription className="text-sm leading-6 text-slate-500">
-                    Shape the look of the league and keep invite access under
-                    control.
+                    Shape the group, optional reward and invite access from one
+                    owner dashboard.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5 px-4 pb-5 sm:px-5">
@@ -145,11 +175,12 @@ export default function LeagueSettingsCard({
                                     </div>
                                     <div className="min-w-0">
                                         <p className="truncate text-lg font-black text-white">
-                                            {normalizedName || 'Your league'}
+                                            {normalizedName || 'Your group'}
                                         </p>
                                         <p className="text-sm text-white/80">
-                                            Private competition with your
-                                            friends
+                                            {visibility === 'private'
+                                                ? 'Private prediction group'
+                                                : 'Public prediction group'}
                                         </p>
                                     </div>
                                 </div>
@@ -160,7 +191,7 @@ export default function LeagueSettingsCard({
                                     htmlFor="league-name"
                                     className="text-xs font-black tracking-widest text-slate-500 uppercase"
                                 >
-                                    League name
+                                    Group name
                                 </Label>
                                 <Input
                                     id="league-name"
@@ -170,15 +201,167 @@ export default function LeagueSettingsCard({
                                         setName(event.target.value)
                                     }
                                     className={fieldClassName}
-                                    placeholder="Your friends league"
+                                    placeholder="Your prediction group"
                                 />
                                 <p className="text-xs text-slate-500">
                                     {hasChanges
-                                        ? 'Your updated league branding will be visible right away.'
-                                        : 'Give the league a name that your group will recognise instantly.'}
+                                        ? 'Your updated group details will be visible right away.'
+                                        : 'Give the group a name that members recognise instantly.'}
                                 </p>
                                 <div className="min-h-5">
                                     <InputError message={errors.name} />
+                                </div>
+                            </div>
+
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                <Label
+                                    htmlFor="group-description"
+                                    className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                >
+                                    Description
+                                </Label>
+                                <Textarea
+                                    id="group-description"
+                                    name="description"
+                                    value={description}
+                                    onChange={(event) =>
+                                        setDescription(event.target.value)
+                                    }
+                                    className="min-h-24 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                    placeholder="What is this prediction group about?"
+                                />
+                                <p className="mt-2 text-xs leading-5 text-slate-500">
+                                    Short context for members. Keep it simple:
+                                    classmates, work crew, family group, or
+                                    matchday challenge.
+                                </p>
+                                <div className="min-h-5">
+                                    <InputError message={errors.description} />
+                                </div>
+                            </div>
+
+                            <div className="rounded-2xl border border-cyan-100 bg-cyan-50/50 p-4">
+                                <div className="flex items-center gap-2 text-cyan-700">
+                                    <Gift className="size-4" />
+                                    <Label className="text-xs font-black tracking-widest uppercase">
+                                        Optional reward
+                                    </Label>
+                                </div>
+                                <p className="mt-2 text-sm leading-6 text-cyan-900">
+                                    Rewards are social notes only. MondialIQ
+                                    does not process payments or payouts.
+                                </p>
+                                <div className="mt-4 grid gap-3">
+                                    <div>
+                                        <Label
+                                            htmlFor="reward-title"
+                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                        >
+                                            Reward title
+                                        </Label>
+                                        <Input
+                                            id="reward-title"
+                                            name="reward_title"
+                                            value={rewardTitle}
+                                            onChange={(event) =>
+                                                setRewardTitle(
+                                                    event.target.value,
+                                                )
+                                            }
+                                            className={fieldClassName}
+                                            placeholder="Winner gets pizza"
+                                        />
+                                        <InputError
+                                            message={errors.reward_title}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label
+                                            htmlFor="reward-description"
+                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                        >
+                                            Reward details
+                                        </Label>
+                                        <Textarea
+                                            id="reward-description"
+                                            name="reward_description"
+                                            value={rewardDescription}
+                                            onChange={(event) =>
+                                                setRewardDescription(
+                                                    event.target.value,
+                                                )
+                                            }
+                                            className="min-h-24 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                            placeholder="Example: €20 gift card, paid outside MondialIQ."
+                                        />
+                                        <InputError
+                                            message={errors.reward_description}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                    <Label
+                                        htmlFor="visibility"
+                                        className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    >
+                                        Visibility
+                                    </Label>
+                                    <select
+                                        id="visibility"
+                                        name="visibility"
+                                        value={visibility}
+                                        onChange={(event) =>
+                                            setVisibility(
+                                                event.target.value as
+                                                    | 'private'
+                                                    | 'public',
+                                            )
+                                        }
+                                        className={fieldClassName}
+                                    >
+                                        <option value="private">Private</option>
+                                        <option value="public">Public</option>
+                                    </select>
+                                    <p className="mt-2 text-xs leading-5 text-slate-500">
+                                        Private groups remain visible to members
+                                        only.
+                                    </p>
+                                    <InputError message={errors.visibility} />
+                                </div>
+
+                                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                    <Label
+                                        htmlFor="is-active"
+                                        className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                    >
+                                        Join status
+                                    </Label>
+                                    <select
+                                        id="is-active"
+                                        name="is_active"
+                                        value={isActive ? '1' : '0'}
+                                        onChange={(event) =>
+                                            setIsActive(
+                                                event.target.value === '1',
+                                            )
+                                        }
+                                        className={fieldClassName}
+                                    >
+                                        <option value="1">
+                                            Active, people can join
+                                        </option>
+                                        <option value="0">
+                                            Inactive, invites closed
+                                        </option>
+                                    </select>
+                                    <p className="mt-2 text-xs leading-5 text-slate-500">
+                                        Inactive groups keep existing members
+                                        but block new joins.
+                                    </p>
+                                    <InputError message={errors.is_active} />
                                 </div>
                             </div>
 
@@ -304,7 +487,7 @@ export default function LeagueSettingsCard({
                                     <PencilLine className="size-4" />
                                     {processing
                                         ? 'Saving...'
-                                        : 'Save league branding'}
+                                        : 'Save prediction group'}
                                 </Button>
                             </span>
                         </>
@@ -350,7 +533,7 @@ export default function LeagueSettingsCard({
                             </DialogTitle>
                             <DialogDescription className="text-sm leading-6 text-slate-600">
                                 The current code will stop working for future
-                                members. People already in the league stay in.
+                                members. People already in the group stay in.
                             </DialogDescription>
                             <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
                                 <div className="flex items-start gap-2">

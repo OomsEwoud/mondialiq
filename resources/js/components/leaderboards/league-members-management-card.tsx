@@ -69,7 +69,7 @@ export default function LeagueMembersManagementCard({
                 </div>
                 <CardDescription className="text-sm leading-6 text-slate-500">
                     Review members, transfer ownership, or remove access when a
-                    league invite is no longer meant for someone.
+                    group invite is no longer meant for someone.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-5 sm:px-6">
@@ -81,7 +81,7 @@ export default function LeagueMembersManagementCard({
                             </span>
                             <div>
                                 <p className="text-sm font-black text-cyan-950">
-                                    Invite friends to fill this league.
+                                    Invite friends to fill this group.
                                 </p>
                                 <p className="mt-1 text-sm leading-6 text-cyan-900">
                                     Once more members join, ownership transfer
@@ -160,14 +160,14 @@ export default function LeagueMembersManagementCard({
                                             </DialogTitle>
                                             <DialogDescription className="text-sm leading-6 text-slate-600">
                                                 {member.name} will become the
-                                                new league owner immediately.
-                                                You will stay in the league as a
+                                                new group owner immediately. You
+                                                will stay in the group as a
                                                 member, but owner controls move
                                                 to them.
                                             </DialogDescription>
                                             <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
                                                 After this transfer, use the
-                                                regular league page as a normal
+                                                regular group page as a normal
                                                 member. Only the new owner will
                                                 keep access to this settings
                                                 page.
@@ -232,11 +232,11 @@ export default function LeagueMembersManagementCard({
                                         <DialogContent className="border-slate-200 bg-white sm:max-w-md">
                                             <DialogTitle className="text-blue-950">
                                                 Remove {member.name} from this
-                                                league?
+                                                group?
                                             </DialogTitle>
                                             <DialogDescription className="text-sm leading-6 text-slate-600">
                                                 This removes their access to the
-                                                league immediately. Existing
+                                                group immediately. Existing
                                                 predictions stay recorded, but
                                                 they will no longer appear as an
                                                 active member.

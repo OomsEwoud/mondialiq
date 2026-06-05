@@ -16,7 +16,7 @@ class LeaveLeagueController extends Controller
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('You left :league.', ['league' => $scoreboard->name]),
+            'message' => __('You left :group.', ['group' => $scoreboard->name]),
         ]);
 
         return to_route('leaderboards');

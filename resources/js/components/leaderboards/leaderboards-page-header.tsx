@@ -10,11 +10,11 @@ interface Props {
 }
 
 export default function LeaderboardsPageHeader({ scoringGuideHref }: Props) {
-    const badges = ['Global ranking', 'Friends leagues', 'Scored out of 20'];
+    const badges = ['Global ranking', 'Prediction groups', 'Scored out of 20'];
 
     return (
         <section className={leaderboardHeaderClassName}>
-            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100 sm:size-14">
+            <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100 sm:size-14">
                 <Trophy size={22} />
             </div>
             <p className="text-xs font-black tracking-[0.24em] text-cyan-700 uppercase">
@@ -25,7 +25,7 @@ export default function LeaderboardsPageHeader({ scoringGuideHref }: Props) {
             </h1>
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
                 Track the global race, see your current position, and keep up
-                with the friends leagues that matter most.
+                with the prediction groups that matter most.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2.5">
                 {badges.map((badge, index) => (

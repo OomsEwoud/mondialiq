@@ -49,6 +49,12 @@ class JoinLeagueRequest extends FormRequest
             return;
         }
 
+        if (! $league->is_active) {
+            $validator->errors()->add('code', 'This prediction group is not accepting new members.');
+
+            return;
+        }
+
         if ($this->user()->scoreboards()->count() >= LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
             $validator->errors()->add('code', 'You can join up to 5 leagues.');
 

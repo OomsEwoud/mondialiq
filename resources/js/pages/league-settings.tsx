@@ -22,7 +22,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
         <>
             <PageHead
                 title={`${league.name} settings`}
-                description={`Manage ${league.name} league members, branding, invite settings and owner controls on MondialIQ.`}
+                description={`Manage ${league.name} prediction group members, reward, invite settings and owner controls on MondialIQ.`}
                 noIndex
             />
 
@@ -42,7 +42,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-blue-950/25 px-3.5 py-2 text-sm font-black text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-blue-950/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
                         >
                             <ArrowLeft className="size-4" />
-                            Back to league
+                            Back to group
                         </Link>
 
                         <Badge
@@ -62,15 +62,15 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
                             <p className="text-xs font-black tracking-[0.22em] text-white uppercase">
-                                League settings
+                                Prediction group settings
                             </p>
                             <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
                                 Manage {league.name}
                             </h1>
                             <p className="mt-3 text-sm leading-6 text-white/90 sm:text-base">
-                                Update the league identity, manage member
-                                access, and keep invite controls tidy from one
-                                owner dashboard.
+                                Update group details, manage member access, and
+                                keep invite controls tidy from one owner
+                                dashboard.
                             </p>
                         </div>
 
@@ -86,8 +86,18 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                                 variant="outline"
                                 className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                             >
-                                Private league
+                                {league.visibility === 'private'
+                                    ? 'Private group'
+                                    : 'Public group'}
                             </Badge>
+                            {!league.isActive && (
+                                <Badge
+                                    variant="outline"
+                                    className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                >
+                                    Invites closed
+                                </Badge>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -104,6 +114,11 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             leagueName={league.name}
                             leagueIcon={league.icon}
                             leagueCode={league.code}
+                            description={league.description}
+                            rewardTitle={league.rewardTitle}
+                            rewardDescription={league.rewardDescription}
+                            visibility={league.visibility}
+                            isActive={league.isActive}
                             accentColor={league.accentColor}
                             coverStyle={league.coverStyle}
                         />

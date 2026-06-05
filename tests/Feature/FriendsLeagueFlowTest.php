@@ -114,12 +114,17 @@ test('the create and join pages show the reached limit state at five leagues', f
         );
 });
 
-test('an authenticated user can create a friends league and joins it immediately', function () {
+test('an authenticated user can create a prediction group with an optional reward and joins it immediately', function () {
     $user = User::factory()->create();
 
     $response = $this->actingAs($user)
         ->post(route('leagues.store'), [
             'name' => 'MondialIQ Crew',
+            'description' => 'Prediction group for our class.',
+            'reward_title' => 'Winner gets pizza',
+            'reward_description' => 'Paid outside MondialIQ after the final.',
+            'visibility' => 'private',
+            'is_active' => '1',
         ]);
 
     $league = Scoreboard::query()->first();
@@ -128,7 +133,7 @@ test('an authenticated user can create a friends league and joins it immediately
         ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
-            'message' => 'League created.',
+            'message' => 'Prediction group created.',
         ]);
 
     $this->assertDatabaseHas('scoreboards', [
@@ -143,6 +148,24 @@ test('an authenticated user can create a friends league and joins it immediately
         'user_id' => $user->id,
         'scoreboard_id' => $league->id,
     ]);
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'description' => 'Prediction group for our class.',
+        'reward_title' => 'Winner gets pizza',
+        'reward_description' => 'Paid outside MondialIQ after the final.',
+        'visibility' => 'private',
+        'is_active' => true,
+    ]);
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $user->id,
+        'scoreboard_id' => $league->id,
+        'role' => 'owner',
+    ]);
+
+    expect($league->users()->whereKey($user->id)->first()->pivot->joined_at)
+        ->not->toBeNull();
 });
 
 test('a league name is required to create a friends league', function () {
@@ -151,6 +174,7 @@ test('a league name is required to create a friends league', function () {
     $this->actingAs($user)
         ->post(route('leagues.store'), [
             'name' => '',
+            'visibility' => 'private',
         ])
         ->assertSessionHasErrors('name');
 
@@ -178,6 +202,31 @@ test('an authenticated user can join a friends league with a valid code', functi
         ]);
 
     $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $user->id,
+        'scoreboard_id' => $league->id,
+        'role' => 'member',
+    ]);
+
+    expect($league->users()->whereKey($user->id)->first()->pivot->joined_at)
+        ->not->toBeNull();
+});
+
+test('a user cannot join an inactive prediction group', function () {
+    $user = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Closed Group',
+        'code' => 'CLOSED01',
+        'is_active' => false,
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('leagues.join.store'), [
+            'code' => 'CLOSED01',
+        ])
+        ->assertSessionHasErrors('code');
+
+    $this->assertDatabaseMissing('users_has_scoreboards', [
         'user_id' => $user->id,
         'scoreboard_id' => $league->id,
     ]);
@@ -225,6 +274,7 @@ test('a user cannot create more than 5 leagues', function () {
     $this->actingAs($user)
         ->post(route('leagues.store'), [
             'name' => 'One League Too Many',
+            'visibility' => 'private',
         ])
         ->assertSessionHasErrors('name');
 });
@@ -264,6 +314,7 @@ test('a league member can view the league detail page with rankings', function (
     $currentUser = User::factory()->create(['name' => 'Current Player']);
     $leader = User::factory()->create(['name' => 'League Captain']);
     $thirdMember = User::factory()->create(['name' => 'Third Member']);
+    $outsider = User::factory()->create(['name' => 'Outside Player']);
 
     $league = Scoreboard::create([
         'name' => 'Friends League',
@@ -288,6 +339,7 @@ test('a league member can view the league detail page with rankings', function (
     $leaderPrediction->forceFill([
         'updated_at' => now()->subHours(3),
         'created_at' => now()->subHours(3),
+        'points_awarded_at' => now()->subHours(3),
     ])->saveQuietly();
 
     $leaderSecondPrediction = Prediction::create([
@@ -308,6 +360,7 @@ test('a league member can view the league detail page with rankings', function (
     $leaderSecondPrediction->forceFill([
         'updated_at' => now()->subHours(8),
         'created_at' => now()->subHours(8),
+        'points_awarded_at' => now()->subHours(8),
     ])->saveQuietly();
 
     $currentUserPrediction = Prediction::create([
@@ -319,6 +372,7 @@ test('a league member can view the league detail page with rankings', function (
     $currentUserPrediction->forceFill([
         'updated_at' => now()->subHour(),
         'created_at' => now()->subHour(),
+        'points_awarded_at' => now()->subHour(),
     ])->saveQuietly();
 
     $thirdMemberPrediction = Prediction::create([
@@ -330,6 +384,7 @@ test('a league member can view the league detail page with rankings', function (
     $thirdMemberPrediction->forceFill([
         'updated_at' => now()->subHours(5),
         'created_at' => now()->subHours(5),
+        'points_awarded_at' => now()->subHours(5),
     ])->saveQuietly();
 
     $thirdMemberSecondPrediction = Prediction::create([
@@ -350,7 +405,16 @@ test('a league member can view the league detail page with rankings', function (
     $thirdMemberSecondPrediction->forceFill([
         'updated_at' => now()->subHours(10),
         'created_at' => now()->subHours(10),
+        'points_awarded_at' => now()->subHours(10),
     ])->saveQuietly();
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $outsider->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 100,
+        'points_awarded_at' => now()->subMinutes(30),
+    ]);
 
     $this->actingAs($currentUser)
         ->get(route('leagues.show', $league))
@@ -358,10 +422,15 @@ test('a league member can view the league detail page with rankings', function (
         ->assertInertia(fn (Assert $page) => $page
             ->component('league-show')
             ->where('league.name', 'Friends League')
+            ->where('league.description', null)
             ->where('league.icon', '🔥')
             ->where('league.accentColor', 'amber')
             ->where('league.coverStyle', 'night')
             ->where('league.code', 'FRIENDS1')
+            ->where('league.rewardTitle', null)
+            ->where('league.rewardDescription', null)
+            ->where('league.visibility', 'private')
+            ->where('league.isActive', true)
             ->where('league.joinHref', route('leagues.join', ['code' => 'FRIENDS1']))
             ->where('league.settingsHref', null)
             ->where('league.canManage', false)
@@ -374,8 +443,12 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.lastActivityLabel', now()->subHour()->diffForHumans())
             ->where('league.currentUserRank', 2)
             ->has('league.members', 3)
+            ->where('league.members', fn ($members) => collect($members)->doesntContain(
+                fn (array $leagueMember) => $leagueMember['name'] === 'Outside Player'
+            ))
             ->where('league.members.0.name', 'League Captain')
             ->where('league.members.0.scoringPredictionsCount', 2)
+            ->where('league.members.0.perfectPredictionsCount', 0)
             ->where('league.members.0.lastPredictionLabel', now()->subHours(3)->diffForHumans())
             ->where('league.members.0.gapToAbove', null)
             ->where('league.members.0.form.label', 'Hot streak')
@@ -384,10 +457,12 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.members.1.name', 'Current Player')
             ->where('league.members.1.isCurrentUser', true)
             ->where('league.members.1.scoringPredictionsCount', 1)
+            ->where('league.members.1.perfectPredictionsCount', 1)
             ->where('league.members.1.lastPredictionLabel', now()->subHour()->diffForHumans())
             ->where('league.members.1.gapToAbove', 28)
             ->where('league.members.1.form.label', 'Hot streak')
-            ->where('league.members.2.scoringPredictionsCount', 1)
+            ->where('league.members.2.scoringPredictionsCount', 2)
+            ->where('league.members.2.perfectPredictionsCount', 0)
             ->where('league.members.2.gapToAbove', 10)
             ->where('league.members.2.form.label', 'Chasing momentum'),
         );
@@ -410,6 +485,11 @@ test('a league owner can update the league name', function () {
     $this->actingAs($owner)
         ->patch(route('leagues.update', $league), [
             'name' => 'Updated League',
+            'description' => 'Updated group description.',
+            'reward_title' => 'Winner gets waffles',
+            'reward_description' => 'Handled outside MondialIQ.',
+            'visibility' => 'public',
+            'is_active' => '0',
             'icon' => '⭐',
             'accent_color' => 'violet',
             'cover_style' => 'spotlight',
@@ -417,7 +497,7 @@ test('a league owner can update the league name', function () {
         ->assertRedirect(route('leagues.settings', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
-            'message' => 'League updated.',
+            'message' => 'Prediction group updated.',
         ]);
 
     $this->assertDatabaseHas('scoreboards', [
@@ -427,6 +507,15 @@ test('a league owner can update the league name', function () {
         'accent_color' => 'violet',
         'cover_style' => 'spotlight',
         'owner_id' => $owner->id,
+    ]);
+
+    $this->assertDatabaseHas('scoreboards', [
+        'id' => $league->id,
+        'description' => 'Updated group description.',
+        'reward_title' => 'Winner gets waffles',
+        'reward_description' => 'Handled outside MondialIQ.',
+        'visibility' => 'public',
+        'is_active' => false,
     ]);
 });
 
@@ -475,11 +564,16 @@ test('a league owner can view the dedicated league settings page', function () {
 
     $league = Scoreboard::create([
         'name' => 'Settings League',
+        'description' => 'Settings description.',
         'icon' => '🎯',
         'accent_color' => 'rose',
         'cover_style' => 'spotlight',
         'code' => 'SETTINGS',
         'owner_id' => $owner->id,
+        'reward_title' => 'Settings reward',
+        'reward_description' => 'Settings reward details.',
+        'visibility' => 'public',
+        'is_active' => false,
     ]);
 
     $league->users()->attach([$owner->id, $member->id]);
@@ -491,10 +585,15 @@ test('a league owner can view the dedicated league settings page', function () {
             ->component('league-settings')
             ->where('league.id', $league->id)
             ->where('league.name', 'Settings League')
+            ->where('league.description', 'Settings description.')
             ->where('league.icon', '🎯')
             ->where('league.accentColor', 'rose')
             ->where('league.coverStyle', 'spotlight')
             ->where('league.code', 'SETTINGS')
+            ->where('league.rewardTitle', 'Settings reward')
+            ->where('league.rewardDescription', 'Settings reward details.')
+            ->where('league.visibility', 'public')
+            ->where('league.isActive', false)
             ->where('league.canManage', true)
             ->where('league.settingsHref', route('leagues.settings', $league))
             ->where('league.membersCount', 2)
@@ -528,6 +627,11 @@ test('a league owner cannot update branding with invalid options', function () {
     $this->actingAs($owner)
         ->patch(route('leagues.update', $league), [
             'name' => 'Validation League',
+            'description' => null,
+            'reward_title' => null,
+            'reward_description' => null,
+            'visibility' => 'private',
+            'is_active' => '1',
             'icon' => '💥',
             'accent_color' => 'pink',
             'cover_style' => 'galaxy',
@@ -640,7 +744,7 @@ test('a league owner can delete their league', function () {
         ->assertRedirect(route('leaderboards'))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
-            'message' => 'League deleted: Disposable League.',
+            'message' => 'Prediction group deleted: Disposable League.',
         ]);
 
     $this->assertDatabaseMissing('scoreboards', [
@@ -689,7 +793,7 @@ test('a league owner can remove a member', function () {
         ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
-            'message' => 'Member removed from the league.',
+            'message' => 'Member removed from the prediction group.',
         ]);
 
     $this->assertDatabaseMissing('users_has_scoreboards', [
@@ -844,12 +948,24 @@ test('a league owner can transfer ownership to another member', function () {
         ->assertRedirect(route('leagues.show', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
-            'message' => 'League ownership transferred.',
+            'message' => 'Prediction group ownership transferred.',
         ]);
 
     $this->assertDatabaseHas('scoreboards', [
         'id' => $league->id,
         'owner_id' => $member->id,
+    ]);
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $owner->id,
+        'scoreboard_id' => $league->id,
+        'role' => 'member',
+    ]);
+
+    $this->assertDatabaseHas('users_has_scoreboards', [
+        'user_id' => $member->id,
+        'scoreboard_id' => $league->id,
+        'role' => 'owner',
     ]);
 });
 

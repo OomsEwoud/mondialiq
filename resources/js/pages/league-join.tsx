@@ -28,16 +28,16 @@ export default function LeagueJoin({
     maxLeagueCount,
     hasReachedLeagueLimit,
 }: LeagueJoinPageProps) {
-    const leagueCountLabel = `${currentLeagueCount}/${maxLeagueCount} leagues joined`;
+    const leagueCountLabel = `${currentLeagueCount}/${maxLeagueCount} groups joined`;
     const leagueLimitCopy = hasReachedLeagueLimit
-        ? 'You are already at the league limit. Leave one of your current leagues before joining another.'
-        : `You currently belong to ${currentLeagueCount} league${currentLeagueCount === 1 ? '' : 's'}.`;
+        ? 'You are already at the prediction group limit. Leave one of your current groups before joining another.'
+        : `You currently belong to ${currentLeagueCount} prediction group${currentLeagueCount === 1 ? '' : 's'}.`;
 
     return (
         <>
             <PageHead
-                title="Join League"
-                description="Join a private MondialIQ friends league with an invite code and start competing on World Cup prediction points."
+                title="Join Prediction Group"
+                description="Join a private MondialIQ prediction group with an invite code and start competing on World Cup prediction points."
                 noIndex
             />
 
@@ -56,14 +56,14 @@ export default function LeagueJoin({
                             <Ticket className="size-6" />
                         </div>
                         <p className="text-xs font-black tracking-[0.22em] text-cyan-600 uppercase">
-                            Friends Leagues
+                            Prediction Groups
                         </p>
                         <h1 className="mt-2 text-3xl font-black text-blue-950 sm:text-4xl">
                             Join with an invite code
                         </h1>
                         <p className="mt-3 text-sm leading-6 text-slate-500 sm:text-base">
-                            Enter the private league code you received from a
-                            friend to join their standings instantly.
+                            Enter the group code you received from a friend to
+                            join their prediction ranking instantly.
                         </p>
                         <p className="mt-4 text-sm font-semibold text-slate-600">
                             {leagueCountLabel}
@@ -83,7 +83,8 @@ export default function LeagueJoin({
                     <CardContent className="px-4 pb-5 sm:px-6">
                         <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
                             <p className="text-sm font-black text-blue-950">
-                                You can join up to {maxLeagueCount} leagues.
+                                You can join up to {maxLeagueCount} prediction
+                                groups.
                             </p>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
                                 {leagueLimitCopy}
@@ -102,7 +103,7 @@ export default function LeagueJoin({
                                             htmlFor="code"
                                             className="text-xs font-black tracking-widest text-slate-500 uppercase"
                                         >
-                                            League code
+                                            Group code
                                         </Label>
                                         <Input
                                             id="code"
@@ -141,7 +142,7 @@ export default function LeagueJoin({
                                             className="h-11 rounded-lg px-5 font-black"
                                         >
                                             <LogIn className="size-4" />
-                                            Join League
+                                            Join group
                                         </Button>
                                     </div>
                                 </>

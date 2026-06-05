@@ -21,23 +21,33 @@ class StoreLeagueController extends Controller
     public function __invoke(StoreLeagueRequest $request): RedirectResponse
     {
         $league = DB::transaction(function () use ($request): Scoreboard {
+            $data = $request->validated();
+
             $league = Scoreboard::query()->create([
-                'name' => $request->validated('name'),
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
                 'icon' => LeagueBranding::DEFAULT_ICON,
                 'accent_color' => LeagueBranding::DEFAULT_ACCENT_COLOR,
                 'cover_style' => LeagueBranding::DEFAULT_COVER_STYLE,
                 'code' => $this->codeGenerator->generate(),
                 'owner_id' => $request->user()->id,
+                'reward_title' => $data['reward_title'] ?? null,
+                'reward_description' => $data['reward_description'] ?? null,
+                'visibility' => $data['visibility'] ?? 'private',
+                'is_active' => $request->boolean('is_active', true),
             ]);
 
-            $league->users()->attach($request->user()->id);
+            $league->users()->attach($request->user()->id, [
+                'role' => 'owner',
+                'joined_at' => now(),
+            ]);
 
             return $league;
         });
 
         Inertia::flash('toast', [
             'type' => 'success',
-            'message' => __('League created.'),
+            'message' => __('Prediction group created.'),
         ]);
 
         return to_route('leagues.show', $league);

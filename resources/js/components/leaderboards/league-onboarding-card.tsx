@@ -24,8 +24,8 @@ export default function LeagueOnboardingCard({
     const isNewLeague = membersCount <= 3;
     const needsFirstPrediction = currentUserPoints === 0;
     const description = isNewLeague
-        ? `${leagueName} is still a fresh league. A few quick steps will make it feel competitive much faster.`
-        : 'You are in the league. Now turn it into an active race.';
+        ? `${leagueName} is still a fresh group. A few quick steps will make it feel competitive much faster.`
+        : 'You are in the group. Now turn it into an active race.';
 
     if (!isNewLeague && !needsFirstPrediction) {
         return null;
@@ -56,10 +56,10 @@ export default function LeagueOnboardingCard({
                         </p>
                     </div>
                     <p className="mt-2 text-sm font-black text-blue-950">
-                        Invite more friends into the league.
+                        Invite more friends into the group.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Bigger leagues create more movement, more tension, and a
+                        Bigger groups create more movement, more tension, and a
                         better leaderboard every matchday.
                     </p>
                     <Button
@@ -84,8 +84,8 @@ export default function LeagueOnboardingCard({
                         Make your next prediction.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Fresh picks are the fastest way to climb once this
-                        league starts filling up.
+                        Fresh picks are the fastest way to climb once this group
+                        starts filling up.
                     </p>
                     <Button
                         asChild

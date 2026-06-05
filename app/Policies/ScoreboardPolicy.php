@@ -9,7 +9,8 @@ class ScoreboardPolicy
 {
     public function view(User $user, Scoreboard $scoreboard): bool
     {
-        return $scoreboard->users()->whereKey($user->id)->exists();
+        return $scoreboard->visibility === 'public'
+            || $scoreboard->users()->whereKey($user->id)->exists();
     }
 
     public function manage(User $user, Scoreboard $scoreboard): bool

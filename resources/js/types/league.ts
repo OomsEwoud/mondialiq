@@ -5,6 +5,7 @@ export interface LeagueMember {
     avatar: string | null;
     predictionsCount: number;
     scoringPredictionsCount: number;
+    perfectPredictionsCount: number;
     totalPoints: number;
     isCurrentUser: boolean;
     isOwner: boolean;
@@ -30,10 +31,15 @@ export type LeagueCoverStyle = 'stadium' | 'spotlight' | 'pitch' | 'night';
 export interface LeagueDetails {
     id: number;
     name: string;
+    description: string | null;
     icon: string;
     accentColor: LeagueAccentColor;
     coverStyle: LeagueCoverStyle;
     code: string;
+    rewardTitle: string | null;
+    rewardDescription: string | null;
+    visibility: 'private' | 'public';
+    isActive: boolean;
     showHref?: string | null;
     joinHref: string;
     settingsHref?: string | null;
@@ -71,10 +77,15 @@ export interface LeagueSettingsPageProps {
         LeagueDetails,
         | 'id'
         | 'name'
+        | 'description'
         | 'icon'
         | 'accentColor'
         | 'coverStyle'
         | 'code'
+        | 'rewardTitle'
+        | 'rewardDescription'
+        | 'visibility'
+        | 'isActive'
         | 'showHref'
         | 'joinHref'
         | 'settingsHref'

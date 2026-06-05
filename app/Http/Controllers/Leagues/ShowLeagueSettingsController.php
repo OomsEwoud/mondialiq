@@ -31,6 +31,13 @@ class ShowLeagueSettingsController extends Controller
             ->select(['users.id', 'users.name', 'users.avatar'])
             ->withSum('predictions', 'points')
             ->withCount('predictions')
+            ->withCount([
+                'predictions as scoring_predictions_count' => fn ($query) => $query
+                    ->whereNotNull('points_awarded_at'),
+                'predictions as perfect_predictions_count' => fn ($query) => $query
+                    ->whereNotNull('points_awarded_at')
+                    ->where('points', 20),
+            ])
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
             ->orderBy('users.name');
@@ -57,6 +64,8 @@ class ShowLeagueSettingsController extends Controller
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,
+            'scoringPredictionsCount' => $user->scoring_predictions_count,
+            'perfectPredictionsCount' => $user->perfect_predictions_count,
             'totalPoints' => $user->predictions_sum_points ?? 0,
             'isCurrentUser' => $user->id === $currentUser->id,
             'isOwner' => $user->id === $scoreboard->owner_id,
@@ -69,10 +78,15 @@ class ShowLeagueSettingsController extends Controller
         return [
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
+            'description' => $scoreboard->description,
             'icon' => $scoreboard->icon,
             'accentColor' => $scoreboard->accent_color,
             'coverStyle' => $scoreboard->cover_style,
             'code' => $scoreboard->code,
+            'rewardTitle' => $scoreboard->reward_title,
+            'rewardDescription' => $scoreboard->reward_description,
+            'visibility' => $scoreboard->visibility,
+            'isActive' => $scoreboard->is_active,
             'showHref' => route('leagues.show', $scoreboard),
             'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
             'settingsHref' => route('leagues.settings', $scoreboard),

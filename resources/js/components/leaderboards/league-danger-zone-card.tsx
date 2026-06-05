@@ -42,10 +42,10 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                     </p>
                 </div>
                 <CardTitle className="text-xl font-black text-red-950">
-                    Delete league
+                    Delete group
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-red-900/80">
-                    This permanently deletes the league, invite code and member
+                    This permanently deletes the group, invite code and member
                     access. This cannot be undone.
                 </CardDescription>
             </CardHeader>
@@ -58,7 +58,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                             className="h-11 w-full rounded-xl bg-red-600 px-5 font-black text-white hover:bg-red-700 focus-visible:ring-red-200"
                         >
                             <Trash2 className="size-4" />
-                            Delete league
+                            Delete group
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="border-slate-200 bg-white sm:max-w-md">
@@ -67,7 +67,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                         </DialogTitle>
                         <DialogDescription className="text-sm leading-6 text-slate-600">
                             This action cannot be undone. All members lose
-                            access immediately and the league page disappears
+                            access immediately and the group page disappears
                             from leaderboards.
                         </DialogDescription>
                         <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">

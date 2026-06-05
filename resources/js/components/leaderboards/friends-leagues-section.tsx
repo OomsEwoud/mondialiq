@@ -35,14 +35,14 @@ export default function FriendsLeaguesSection({
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                         <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
-                            Friends leagues
+                            Prediction Groups
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
-                            Create private leagues to compare predictions with
-                            friends.
+                            Create private groups to compare predictions with
+                            friends, classmates or your crew.
                         </CardDescription>
                         <p className="mt-3 text-sm font-semibold text-slate-600">
-                            {currentLeagueCount}/{maxLeagueCount} leagues joined
+                            {currentLeagueCount}/{maxLeagueCount} groups joined
                         </p>
                     </div>
                     <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
@@ -54,7 +54,7 @@ export default function FriendsLeaguesSection({
                             >
                                 <Link href={joinLeagueHref}>
                                     <LogIn className="size-4" />
-                                    Join league
+                                    Join group
                                 </Link>
                             </Button>
                         ) : (
@@ -65,7 +65,7 @@ export default function FriendsLeaguesSection({
                                 className="h-10 w-full rounded-2xl px-4 font-black sm:w-auto"
                             >
                                 <LogIn className="size-4" />
-                                Join league
+                                Join group
                             </Button>
                         )}
                         {!hasReachedLeagueLimit ? (
@@ -75,7 +75,7 @@ export default function FriendsLeaguesSection({
                             >
                                 <Link href={createLeagueHref}>
                                     <Plus className="size-4" />
-                                    Create league
+                                    Create group
                                 </Link>
                             </Button>
                         ) : (
@@ -85,7 +85,7 @@ export default function FriendsLeaguesSection({
                                 className="h-10 w-full rounded-2xl px-4 font-black sm:w-auto"
                             >
                                 <Plus className="size-4" />
-                                Create league
+                                Create group
                             </Button>
                         )}
                     </div>
@@ -93,10 +93,10 @@ export default function FriendsLeaguesSection({
                 {hasReachedLeagueLimit && (
                     <div className="rounded-[1.5rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] px-4 py-4 shadow-sm shadow-amber-950/5">
                         <p className="text-sm font-black text-amber-900">
-                            You reached the league limit.
+                            You reached the prediction group limit.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-amber-800">
-                            Leave one of your current leagues before creating or
+                            Leave one of your current groups before creating or
                             joining another.
                         </p>
                     </div>
@@ -114,12 +114,12 @@ export default function FriendsLeaguesSection({
                     </div>
                 ) : (
                     <LeaderboardEmptyState
-                        title="No friends leagues yet"
-                        description="Create a private league and invite friends to compete during the tournament."
-                        actionLabel="Create league"
+                        title="No prediction groups yet"
+                        description="Create a private group and invite friends to compete during the tournament."
+                        actionLabel="Create group"
                         actionHref={createLeagueHref}
                         actionDisabled={hasReachedLeagueLimit}
-                        secondaryActionLabel="Join league"
+                        secondaryActionLabel="Join group"
                         secondaryActionHref={joinLeagueHref}
                         secondaryActionDisabled={hasReachedLeagueLimit}
                     />

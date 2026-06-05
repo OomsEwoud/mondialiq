@@ -17,6 +17,11 @@ class StoreLeagueRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:80'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'reward_title' => ['nullable', 'string', 'max:120'],
+            'reward_description' => ['nullable', 'string', 'max:1000'],
+            'visibility' => ['required', 'string', 'in:private,public'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
     }
 

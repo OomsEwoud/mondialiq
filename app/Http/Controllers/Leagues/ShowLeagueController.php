@@ -64,7 +64,10 @@ class ShowLeagueController extends Controller
             ->withCount('predictions')
             ->withCount([
                 'predictions as scoring_predictions_count' => fn (Builder $query) => $query
-                    ->where('points', '>', 0),
+                    ->whereNotNull('points_awarded_at'),
+                'predictions as perfect_predictions_count' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at')
+                    ->where('points', 20),
             ])
             ->withMax('predictions', 'updated_at')
             ->orderByDesc('predictions_sum_points')
@@ -76,6 +79,7 @@ class ShowLeagueController extends Controller
     {
         return Prediction::query()
             ->whereIn('user_id', $memberIds)
+            ->whereNotNull('points_awarded_at')
             ->orderByDesc('updated_at')
             ->get(['user_id', 'points', 'updated_at'])
             ->groupBy('user_id')
@@ -96,6 +100,7 @@ class ShowLeagueController extends Controller
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,
             'scoringPredictionsCount' => $user->scoring_predictions_count,
+            'perfectPredictionsCount' => $user->perfect_predictions_count,
             'totalPoints' => $user->predictions_sum_points ?? 0,
             'isCurrentUser' => $user->id === $currentUser->id,
             'isOwner' => $user->id === $scoreboard->owner_id,
@@ -143,10 +148,15 @@ class ShowLeagueController extends Controller
         return [
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
+            'description' => $scoreboard->description,
             'icon' => $scoreboard->icon,
             'accentColor' => $scoreboard->accent_color,
             'coverStyle' => $scoreboard->cover_style,
             'code' => $scoreboard->code,
+            'rewardTitle' => $scoreboard->reward_title,
+            'rewardDescription' => $scoreboard->reward_description,
+            'visibility' => $scoreboard->visibility,
+            'isActive' => $scoreboard->is_active,
             'showHref' => route('leagues.show', $scoreboard),
             'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
             'settingsHref' => $user->can('manage', $scoreboard)

@@ -101,6 +101,7 @@ class LeaderboardsController extends Controller
         return [
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
+            'description' => $scoreboard->description,
             'icon' => $scoreboard->icon ?: LeagueBranding::DEFAULT_ICON,
             'memberAvatars' => $this->memberAvatars($scoreboard),
             'accentColor' => $scoreboard->accent_color ?: LeagueBranding::DEFAULT_ACCENT_COLOR,
@@ -108,6 +109,10 @@ class LeaderboardsController extends Controller
             'canManage' => $scoreboard->owner_id === $user->id,
             'canLeave' => $scoreboard->owner_id !== $user->id,
             'membersCount' => $scoreboard->users_count,
+            'rewardTitle' => $scoreboard->reward_title,
+            'rewardDescription' => $scoreboard->reward_description,
+            'visibility' => $scoreboard->visibility,
+            'isActive' => $scoreboard->is_active,
             'userRank' => $currentUserEntry
                 ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1
                 : null,
@@ -134,6 +139,13 @@ class LeaderboardsController extends Controller
             ->select(['users.id', 'users.name'])
             ->withSum('predictions', 'points')
             ->withCount('predictions')
+            ->withCount([
+                'predictions as scoring_predictions_count' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at'),
+                'predictions as perfect_predictions_count' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at')
+                    ->where('points', 20),
+            ])
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
             ->orderBy('users.name');

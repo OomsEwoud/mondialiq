@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import {
     ArrowLeft,
     Crown,
+    Gift,
     Settings2,
     Target,
     Trophy,
@@ -57,7 +58,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
         <>
             <PageHead
                 title={league.name}
-                description={`Follow the ${league.name} friends league on MondialIQ with member rankings, prediction points and invite tools.`}
+                description={`Follow the ${league.name} prediction group on MondialIQ with member rankings, prediction points and invite tools.`}
                 noIndex
             />
 
@@ -85,11 +86,16 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
                             <p className="text-xs font-black tracking-[0.22em] text-white/90 uppercase">
-                                Friends League
+                                Prediction Group
                             </p>
                             <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
                                 {league.name}
                             </h1>
+                            {league.description && (
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90 sm:text-base">
+                                    {league.description}
+                                </p>
+                            )}
                             <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                                 {heroStats.map((stat) => (
                                     <Badge
@@ -131,7 +137,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 >
                                     <Link href={league.settingsHref}>
                                         <Settings2 className="size-4" />
-                                        League settings
+                                        Group settings
                                     </Link>
                                 </Button>
                             )}
@@ -143,6 +149,35 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                     <LeagueMembersCard members={league.members} />
 
                     <div className="space-y-6">
+                        {(league.rewardTitle || league.rewardDescription) && (
+                            <section className="rounded-2xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(254,243,199,0.72))] p-5 shadow-sm shadow-amber-950/5">
+                                <div className="flex items-start gap-3">
+                                    <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-700 shadow-sm ring-1 ring-amber-100">
+                                        <Gift className="size-5" />
+                                    </span>
+                                    <div className="min-w-0">
+                                        <p className="text-xs font-black tracking-[0.18em] text-amber-700 uppercase">
+                                            Optional reward
+                                        </p>
+                                        <h2 className="mt-1 text-xl font-black text-amber-950">
+                                            {league.rewardTitle ??
+                                                'Reward available'}
+                                        </h2>
+                                        {league.rewardDescription && (
+                                            <p className="mt-2 text-sm leading-6 text-amber-900">
+                                                {league.rewardDescription}
+                                            </p>
+                                        )}
+                                        <p className="mt-3 text-xs leading-5 font-semibold text-amber-800">
+                                            MondialIQ does not process payments
+                                            or payouts. This is a social note
+                                            from the group owner.
+                                        </p>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
                         <LeagueSnapshotCard league={league} />
 
                         <InviteCodeCard

@@ -43,7 +43,19 @@ class User extends Authenticatable implements FilamentUser
 
     public function scoreboards(): BelongsToMany
     {
-        return $this->belongsToMany(Scoreboard::class, 'users_has_scoreboards');
+        return $this->belongsToMany(Scoreboard::class, 'users_has_scoreboards')
+            ->withPivot(['role', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    public function ownedPredictionGroups(): HasMany
+    {
+        return $this->hasMany(Scoreboard::class, 'owner_id');
+    }
+
+    public function predictionGroups(): BelongsToMany
+    {
+        return $this->scoreboards();
     }
 
     public function avatarUrl(): ?string
