@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Feedback\StoreFeedbackController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\DeleteLeagueController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Leagues\ShowLeagueSettingsController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
+use App\Http\Controllers\Pages\ContactController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\LeaderboardsController;
@@ -33,6 +35,7 @@ Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 Route::get('/scoring', ScoringGuideController::class)->name('scoring');
+Route::get('/contact', ContactController::class)->name('contact');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
     ->middleware('throttle:social-auth')
     ->name('auth.redirect');
@@ -60,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::class)
         ->middleware('throttle:prediction-store')
         ->name('matches.prediction.store');
+
+    Route::post('/feedback', StoreFeedbackController::class)
+        ->middleware('throttle:feedback-store')
+        ->name('feedback.store');
 
     Route::middleware('throttle:league-manage')->group(function () {
         Route::post('/leagues/{scoreboard}/refresh-code', RefreshLeagueCodeController::class)

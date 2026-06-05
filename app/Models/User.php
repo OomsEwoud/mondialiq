@@ -36,6 +36,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Prediction::class);
     }
 
+    public function feedbackMessages(): HasMany
+    {
+        return $this->hasMany(FeedbackMessage::class);
+    }
+
     public function scoreboards(): BelongsToMany
     {
         return $this->belongsToMany(Scoreboard::class, 'users_has_scoreboards');

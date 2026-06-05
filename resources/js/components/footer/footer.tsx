@@ -1,4 +1,5 @@
 import AppLogo from '@/components/app/app-logo';
+import { contact } from '@/routes';
 
 export default function Footer() {
     return (
@@ -63,7 +64,7 @@ export default function Footer() {
                             Terms of Service
                         </a>
                         <a
-                            href="#"
+                            href={contact.url()}
                             className="text-xs text-slate-400 transition-colors hover:text-slate-600"
                         >
                             Contact

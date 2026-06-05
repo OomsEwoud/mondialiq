@@ -63,6 +63,12 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        RateLimiter::for('feedback-store', function (Request $request) {
+            return Limit::perMinute(6)->by(
+                $this->userOrIpRateLimitKey($request),
+            );
+        });
+
         RateLimiter::for('social-auth', function (Request $request) {
             return Limit::perMinute(10)->by(
                 $request->route('provider').'|'.$request->ip(),
