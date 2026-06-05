@@ -16,12 +16,10 @@ export default function UserPredictionSummaryCards({ match, score }: Props) {
     const confidence = formatUserPredictionConfidence(
         prediction?.confidence ?? null,
     );
-    const hasFinalScore =
-        match.score.fulltime.home !== null &&
-        match.score.fulltime.away !== null;
-    const pointsValue = hasFinalScore
+    const pointsAwarded = prediction?.pointsAwarded ?? false;
+    const pointsValue = pointsAwarded
         ? `${prediction?.points ?? 0}/20`
-        : '20 max';
+        : 'Points pending';
 
     return (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -43,12 +41,12 @@ export default function UserPredictionSummaryCards({ match, score }: Props) {
             />
             <PredictionSummaryCard
                 icon={Medal}
-                label={hasFinalScore ? 'Points earned' : 'Possible points'}
+                label={pointsAwarded ? 'Points earned' : 'Points state'}
                 value={pointsValue}
                 helper={
-                    hasFinalScore
+                    pointsAwarded
                         ? 'Based on the final score'
-                        : 'Calculated after full time'
+                        : 'Calculated after validation'
                 }
             />
         </section>

@@ -8,6 +8,8 @@ interface Props {
     predictedAwayScore: number | null;
     actualHomeScore: number | null;
     actualAwayScore: number | null;
+    pointsAwarded: boolean;
+    awardedPoints: number | null;
     homeTeamName: string;
     awayTeamName: string;
     scoringGuideHref: string;
@@ -18,21 +20,24 @@ export default function PredictionScoreBreakdown({
     predictedAwayScore,
     actualHomeScore,
     actualAwayScore,
+    pointsAwarded,
+    awardedPoints,
     homeTeamName,
     awayTeamName,
     scoringGuideHref,
 }: Props) {
-    if (
+    const missingScoreContext =
         predictedHomeScore === null ||
         predictedAwayScore === null ||
         actualHomeScore === null ||
-        actualAwayScore === null
-    ) {
+        actualAwayScore === null;
+
+    if (!pointsAwarded || missingScoreContext) {
         return (
             <section className="rounded-[1.9rem] border border-cyan-200/70 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-cyan-950/8">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm shadow-cyan-950/5 ring-1 ring-cyan-100">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
                             <Trophy className="size-5" />
                         </div>
                         <div>
@@ -40,23 +45,24 @@ export default function PredictionScoreBreakdown({
                                 Scoring preview
                             </p>
                             <h3 className="mt-2 text-xl font-black text-blue-950">
-                                Points pending
+                                {pointsAwarded
+                                    ? `${awardedPoints ?? 0}/20 points`
+                                    : 'Points pending'}
                             </h3>
                             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                                Your prediction can earn up to 20 points once
-                                the match has a final score and both predicted
-                                scores are filled in. Confidence is saved for
-                                context, but does not affect points.
+                                {pointsAwarded
+                                    ? 'Your prediction has been validated, but there is not enough score detail to show a full breakdown.'
+                                    : 'Your prediction can earn up to 20 points once the match has finished and scoring validation has run. Confidence is saved for context, but does not affect points.'}
                             </p>
                         </div>
                     </div>
 
                     <div className="rounded-[1.6rem] border border-cyan-200 bg-white px-5 py-4 text-center shadow-lg shadow-cyan-950/6">
                         <div className="text-3xl font-black text-blue-950">
-                            20
+                            {pointsAwarded ? (awardedPoints ?? 0) : 20}
                         </div>
                         <div className="text-xs font-black tracking-wide text-cyan-700 uppercase">
-                            max points
+                            {pointsAwarded ? 'points' : 'max points'}
                         </div>
                     </div>
                 </div>

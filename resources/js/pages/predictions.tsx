@@ -28,6 +28,7 @@ export default function Predictions({
     const defaultFilters = {
         ...defaultPredictionFilters,
         status: initialFilters.status,
+        pointsState: initialFilters.pointsState,
     };
     const [filtersByMode, setFiltersByMode] = useState<
         Record<PredictionTab, PredictionFilters>
@@ -53,7 +54,7 @@ export default function Predictions({
             [mode]: defaultPredictionFilters,
         }));
 
-        if (filters.status !== 'all') {
+        if (filters.status !== 'all' || filters.pointsState !== 'all') {
             router.get(
                 predictionsRoute.url({
                     query: { mode },
@@ -66,6 +67,17 @@ export default function Predictions({
             );
         }
     };
+
+    const syncedQueryFilters = (
+        nextFilters: PredictionFilters,
+    ): Record<string, string> => ({
+        mode,
+        ...(nextFilters.status === 'all' ? {} : { status: nextFilters.status }),
+        ...(nextFilters.pointsState === 'all'
+            ? {}
+            : { pointsState: nextFilters.pointsState }),
+    });
+
     const updateFilter = <K extends keyof PredictionFilters>(
         key: K,
         value: PredictionFilters[K],
@@ -78,13 +90,15 @@ export default function Predictions({
             },
         }));
 
-        if (key === 'status') {
+        if (key === 'status' || key === 'pointsState') {
+            const nextFilters = {
+                ...filters,
+                [key]: value,
+            };
+
             router.get(
                 predictionsRoute.url({
-                    query: {
-                        mode,
-                        ...(value === 'all' ? {} : { status: value }),
-                    },
+                    query: syncedQueryFilters(nextFilters),
                 }),
                 {},
                 {

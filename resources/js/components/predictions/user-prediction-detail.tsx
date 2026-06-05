@@ -38,6 +38,8 @@ export default function UserPredictionDetail({
                     predictedAwayScore={match.userPrediction?.awayScore ?? null}
                     actualHomeScore={match.score.fulltime.home}
                     actualAwayScore={match.score.fulltime.away}
+                    pointsAwarded={match.userPrediction?.pointsAwarded ?? false}
+                    awardedPoints={match.userPrediction?.points ?? null}
                     homeTeamName={match.homeTeam}
                     awayTeamName={match.awayTeam}
                     scoringGuideHref={scoringGuideHref}

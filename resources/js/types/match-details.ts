@@ -84,6 +84,8 @@ export interface MatchDetails {
         awayScore: number | null;
         confidence: 'low' | 'medium' | 'high' | null;
         points: number | null;
+        pointsAwarded: boolean;
+        validatedAt: string | null;
     } | null;
     score: {
         halftime: MatchDetailsScoreLine;

@@ -135,10 +135,20 @@ function matchesPointsState(
     }
 
     if (filter === 'points-earned') {
-        return match.userPrediction.points !== null;
+        return (
+            match.userPrediction.pointsAwarded &&
+            (match.userPrediction.points ?? 0) > 0
+        );
     }
 
-    return match.userPrediction.points === null;
+    if (filter === 'no-points-earned') {
+        return (
+            match.userPrediction.pointsAwarded &&
+            (match.userPrediction.points ?? 0) <= 0
+        );
+    }
+
+    return !match.userPrediction.pointsAwarded;
 }
 
 function getConfidenceValue(mode: PredictionFilterMode, match: Match): number {

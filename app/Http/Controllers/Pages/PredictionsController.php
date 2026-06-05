@@ -25,12 +25,16 @@ class PredictionsController extends Controller
     {
         $mode = $this->predictionMode($request);
         $status = $this->statusFilter($request);
+        $pointsState = $this->pointsStateFilter($request);
         $fixtureQuery = $this->fixtureQuery($status);
 
         $this->predictionFixtureQuery->applyMode(
             $fixtureQuery,
             $mode,
             $request->user(),
+            [
+                'pointsState' => $pointsState,
+            ],
         );
 
         $fixtures = $this->paginationService->paginate($fixtureQuery);
@@ -39,6 +43,7 @@ class PredictionsController extends Controller
             'fixtures' => $fixtures,
             'filters' => [
                 'status' => $status,
+                'pointsState' => $pointsState,
             ],
             'mode' => $mode,
             'scoringGuideHref' => route('scoring'),
@@ -58,6 +63,19 @@ class PredictionsController extends Controller
 
         return in_array($status, ['upcoming', 'past'], true)
             ? $status
+            : 'all';
+    }
+
+    private function pointsStateFilter(Request $request): string
+    {
+        $pointsState = $request->string('pointsState')->toString();
+
+        return in_array($pointsState, [
+            'points-pending',
+            'points-earned',
+            'no-points-earned',
+        ], true)
+            ? $pointsState
             : 'all';
     }
 

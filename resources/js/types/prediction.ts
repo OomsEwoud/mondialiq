@@ -1,6 +1,9 @@
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import type { Match } from '@/types/match';
-import type { PredictionStatusFilter } from '@/types/prediction-filter';
+import type {
+    PointsStateFilter,
+    PredictionStatusFilter,
+} from '@/types/prediction-filter';
 
 export interface PredictionPageProps {
     fixtures: {
@@ -9,6 +12,7 @@ export interface PredictionPageProps {
     };
     filters: {
         status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
     };
     mode: PredictionTab;
     scoringGuideHref: string;

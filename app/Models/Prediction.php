@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PredictionTypes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -43,6 +44,39 @@ class Prediction extends Model
     public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
+    }
+
+    public function scopePointsPending(Builder $query): Builder
+    {
+        return $query->whereNull('points_awarded_at');
+    }
+
+    public function scopePointsEarned(Builder $query): Builder
+    {
+        return $query
+            ->whereNotNull('points_awarded_at')
+            ->where('points', '>', 0);
+    }
+
+    public function scopeNoPointsEarned(Builder $query): Builder
+    {
+        return $query
+            ->whereNotNull('points_awarded_at')
+            ->where('points', '<=', 0);
+    }
+
+    public function hasAwardedPoints(): bool
+    {
+        return $this->points_awarded_at !== null;
+    }
+
+    public function awardedPoints(): ?int
+    {
+        if (! $this->hasAwardedPoints()) {
+            return null;
+        }
+
+        return $this->points;
     }
 
     public function user(): BelongsTo

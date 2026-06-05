@@ -50,6 +50,8 @@ export interface Match {
         awayScore: number | null;
         confidence: string | null;
         points: number | null;
+        pointsAwarded: boolean;
+        validatedAt: string | null;
         advice: string | null;
     } | null;
     userPrediction?: {
@@ -60,6 +62,8 @@ export interface Match {
         awayScore: number | null;
         confidence: 'low' | 'medium' | 'high' | null;
         points: number | null;
+        pointsAwarded: boolean;
+        validatedAt: string | null;
     } | null;
 }
 

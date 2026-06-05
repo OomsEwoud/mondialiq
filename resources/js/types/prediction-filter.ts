@@ -1,7 +1,11 @@
 export type PredictionFilterMode = 'ai' | 'mine';
 export type PredictionStatusFilter = 'all' | 'upcoming' | 'past';
 export type OutcomeFilter = 'all' | 'home' | 'draw' | 'away';
-export type PointsStateFilter = 'all' | 'points-pending' | 'points-earned';
+export type PointsStateFilter =
+    | 'all'
+    | 'points-pending'
+    | 'points-earned'
+    | 'no-points-earned';
 export type ConfidenceSort = 'default' | 'confidence-desc' | 'confidence-asc';
 
 export interface PredictionFilters {

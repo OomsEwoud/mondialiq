@@ -93,7 +93,9 @@ class MatchDetailsResource extends JsonResource
             'homeScore' => $prediction->home_goals,
             'awayScore' => $prediction->away_goals,
             'confidence' => $prediction->confidence,
-            'points' => $prediction->points,
+            'points' => $prediction->awardedPoints(),
+            'pointsAwarded' => $prediction->hasAwardedPoints(),
+            'validatedAt' => $prediction->points_awarded_at?->toIso8601String(),
         ];
     }
 

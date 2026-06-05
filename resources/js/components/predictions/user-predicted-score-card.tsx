@@ -8,12 +8,10 @@ interface Props {
 }
 
 export default function UserPredictedScoreCard({ match, score }: Props) {
-    const hasFinalScore =
-        match.score.fulltime.home !== null &&
-        match.score.fulltime.away !== null;
-    const pointsLabel = hasFinalScore
+    const pointsAwarded = match.userPrediction?.pointsAwarded ?? false;
+    const pointsLabel = pointsAwarded
         ? `${match.userPrediction?.points ?? 0}/20 earned`
-        : 'Up to 20 points';
+        : 'Points pending';
 
     return (
         <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">
