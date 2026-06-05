@@ -100,10 +100,9 @@ class StandingsRelationManager extends RelationManager
                         TextInput::make('points')->numeric()->minValue(0),
                     ]),
 
-                Section::make('Form and prediction metrics')
+                Section::make('Form metrics')
                     ->columns(3)
                     ->schema([
-                        TextInput::make('qualification_chance')->label('Qualification chance')->numeric()->minValue(0)->maxValue(100),
                         TextInput::make('form')->maxLength(10),
                         TextInput::make('attacking_form')->label('Attacking form')->maxLength(255),
                         TextInput::make('defensive_form')->label('Defensive form')->maxLength(255),
@@ -132,7 +131,6 @@ class StandingsRelationManager extends RelationManager
                 TextColumn::make('goals_against')->label('GA')->sortable(),
                 TextColumn::make('goal_difference')->label('GD')->sortable(),
                 TextColumn::make('points')->label('Pts')->sortable(),
-                TextColumn::make('qualification_chance')->label('Qual. %')->numeric(decimalPlaces: 1)->suffix('%')->placeholder('-'),
                 TextColumn::make('season')->sortable(),
             ])
             ->headerActions([

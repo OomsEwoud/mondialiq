@@ -59,23 +59,6 @@ class GroupStandingService
             'losses' => $standing->losses,
             'goalDifference' => $standing->goal_difference,
             'points' => $standing->points,
-            'qualificationProbability' => $this->qualificationProbability($standing),
         ];
-    }
-
-    private function qualificationProbability(Standing $standing): int
-    {
-        if ($standing->qualification_chance !== null) {
-            return (int) round($standing->qualification_chance);
-        }
-
-        $rankBase = match ($standing->rank) {
-            1 => 78,
-            2 => 66,
-            3 => 34,
-            default => 8,
-        };
-
-        return min(96, max(2, $rankBase + ($standing->points * 2) + $standing->goal_difference));
     }
 }

@@ -1,4 +1,3 @@
-import QualificationProbability from '@/components/groups/qualification-probability';
 import StandingsExplanationTrigger from '@/components/groups/standings-explanation-trigger';
 import ThirdPlaceStandingsTable from '@/components/groups/third-place-standings-table';
 import type { ThirdPlaceRanking } from '@/types/group';
@@ -33,7 +32,6 @@ export default function ThirdPlacePanel({ ranking, onExplain }: Props) {
             </p>
 
             <ThirdPlaceStandingsTable teams={ranking.teams} />
-            <QualificationProbability teams={ranking.teams} />
         </section>
     );
 }

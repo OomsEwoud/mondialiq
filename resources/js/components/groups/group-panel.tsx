@@ -1,5 +1,4 @@
 import { GroupStandingsTable } from '@/components/groups/group-standings-table';
-import QualificationProbability from '@/components/groups/qualification-probability';
 import StandingsExplanationTrigger from '@/components/groups/standings-explanation-trigger';
 import type { WorldCupGroup } from '@/types/group';
 
@@ -29,7 +28,6 @@ export default function GroupPanel({ group, onExplain }: Props) {
             </header>
 
             <GroupStandingsTable teams={group.teams} />
-            <QualificationProbability teams={group.teams} />
         </section>
     );
 }

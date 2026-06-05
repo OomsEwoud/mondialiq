@@ -1,12 +1,9 @@
 import {
-    BarChart3,
     CheckCircle2,
     CircleHelp,
-    Info,
     ListOrdered,
     ShieldCheck,
     Trophy,
-    XCircle,
 } from 'lucide-react';
 import {
     Dialog,
@@ -52,19 +49,22 @@ const qualificationRules = [
     {
         label: 'Top 2',
         status: 'Qualified',
-        description: 'The first two teams in every group go through automatically.',
+        description:
+            'The first two teams in every group go through automatically.',
         tone: 'qualified',
     },
     {
         label: 'Best 3rd top 8',
         status: 'Qualified',
-        description: 'The best eight third-placed teams also reach the Round of 32.',
+        description:
+            'The best eight third-placed teams also reach the Round of 32.',
         tone: 'qualified',
     },
     {
         label: 'Others',
         status: 'Not qualified',
-        description: 'The remaining third-placed teams and all fourth-placed teams are eliminated.',
+        description:
+            'The remaining third-placed teams and all fourth-placed teams are eliminated.',
         tone: 'eliminated',
     },
 ] as const;
@@ -82,7 +82,7 @@ export default function StandingsExplanationModal({
                     <DialogHeader className="gap-3 pr-8 text-left">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                             <div className="min-w-0">
-                                <div className="flex size-14 items-center justify-center rounded-[1.35rem] bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100 shadow-sm shadow-cyan-950/5">
+                                <div className="flex size-14 items-center justify-center rounded-[1.35rem] bg-cyan-50 text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
                                     <Trophy className="size-6" />
                                 </div>
                                 <p className="mt-4 text-xs font-black tracking-[0.24em] text-cyan-700 uppercase">
@@ -93,15 +93,18 @@ export default function StandingsExplanationModal({
                                 </DialogTitle>
                                 <DialogDescription className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
                                     A clear guide to points, table columns,
-                                    qualification rules and model outlooks on
-                                    the World Cup 2026 standings page.
+                                    qualification rules and third-place rankings
+                                    on the World Cup 2026 standings page.
                                 </DialogDescription>
                             </div>
 
-                            <div className="grid gap-2 sm:grid-cols-3 lg:min-w-[22rem] lg:max-w-md">
+                            <div className="grid gap-2 sm:grid-cols-3 lg:max-w-md lg:min-w-[22rem]">
                                 <HeroStat label="Groups" value="12" />
                                 <HeroStat label="Teams each" value="4" />
-                                <HeroStat label="Advance" value="Top 2 + 8 best 3rd" />
+                                <HeroStat
+                                    label="Advance"
+                                    value="Top 2 + 8 best 3rd"
+                                />
                             </div>
                         </div>
                     </DialogHeader>
@@ -252,7 +255,9 @@ export default function StandingsExplanationModal({
                                     <CheckCircle2 className="size-5" />
                                 </span>
                                 <div>
-                                    <SectionEyebrow>Cross-group ranking</SectionEyebrow>
+                                    <SectionEyebrow>
+                                        Cross-group ranking
+                                    </SectionEyebrow>
                                     <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
                                         Best 3rd ranking
                                     </h2>
@@ -326,53 +331,6 @@ export default function StandingsExplanationModal({
                             </div>
                         </div>
                     </section>
-
-                    <section className="rounded-[1.8rem] border border-cyan-100 bg-white p-5 shadow-sm shadow-cyan-950/5">
-                        <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
-                                <BarChart3 className="size-5" />
-                            </span>
-                            <div>
-                                <SectionEyebrow>Model outlook</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
-                                    Qualification probability
-                                </h2>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    Qualification probability is a model
-                                    outlook. It estimates how likely a team is
-                                    to advance, but it is not a certainty.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="mt-5 grid gap-3 md:grid-cols-2">
-                            <div className="rounded-[1.4rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,255,255,0.98),rgba(255,255,255,0.98))] p-4 shadow-sm shadow-cyan-950/5">
-                                <p className="text-sm font-black text-blue-950">
-                                    Official ranking
-                                </p>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    Based on real match results, points and
-                                    standings positions.
-                                </p>
-                            </div>
-                            <div className="rounded-[1.4rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,255,255,0.98),rgba(255,255,255,0.98))] p-4 shadow-sm shadow-cyan-950/5">
-                                <p className="text-sm font-black text-blue-950">
-                                    Model outlook
-                                </p>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    A prediction estimate based on the model,
-                                    not an official tournament decision.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="mt-4 flex items-start gap-3 rounded-[1.45rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.45))] p-4 shadow-sm shadow-amber-950/5">
-                            <Info className="mt-0.5 size-5 shrink-0 text-amber-700" />
-                            <p className="text-sm font-black text-amber-900">
-                                Model outlooks are estimates, not guarantees.
-                            </p>
-                        </div>
-                    </section>
                 </div>
             </DialogContent>
         </Dialog>
@@ -393,7 +351,7 @@ function HeroStat({ label, value }: { label: string; value: string }) {
             <p className="text-[11px] font-black tracking-[0.16em] text-slate-400 uppercase">
                 {label}
             </p>
-            <p className="mt-1 text-sm font-black leading-5 text-blue-950">
+            <p className="mt-1 text-sm leading-5 font-black text-blue-950">
                 {value}
             </p>
         </div>

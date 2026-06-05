@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
-import { BrainCircuit, ChartNoAxesColumn, Trophy } from 'lucide-react';
-import { groups, leaderboards, predictions } from '@/routes';
+import { BrainCircuit, Trophy } from 'lucide-react';
+import { leaderboards, predictions } from '@/routes';
 
 export type ProductCard = {
     title: string;
@@ -21,16 +21,6 @@ export const products: ProductCard[] = [
         cta: 'Browse predictions',
         href: predictions.url(),
         icon: BrainCircuit,
-    },
-    {
-        title: 'Group Qualification Chances',
-        description:
-            'Live standings with model-based qualification percentages for the knockout stage.',
-        badge: 'Public',
-        cta: 'View groups',
-        href: groups.url(),
-        icon: ChartNoAxesColumn,
-        featured: true,
     },
     {
         title: 'Personal Prediction League',

@@ -10,7 +10,6 @@ export interface GroupTeam {
     losses: number;
     goalDifference: number;
     points: number;
-    qualificationProbability: number;
 }
 
 export interface WorldCupGroup {
