@@ -45,6 +45,11 @@ class LeagueResource extends Resource
         return LeaguesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage competition data and inspect linked fixtures, standings and team statistics.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

@@ -44,6 +44,11 @@ class TeamResource extends Resource
         return TeamsTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage team display data and linked players or coaches. API identifiers remain protected.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

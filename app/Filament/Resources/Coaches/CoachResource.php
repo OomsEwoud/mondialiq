@@ -46,6 +46,11 @@ class CoachResource extends Resource
         return CoachesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage coaches that are not currently linked to a team. Team coaches are managed from the team detail page.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

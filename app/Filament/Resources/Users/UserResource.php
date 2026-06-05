@@ -41,6 +41,11 @@ class UserResource extends Resource
         return UsersTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage user moderation data, roles and admin access. Email and password data are not editable here.';
+    }
+
     public static function getRelations(): array
     {
         return [

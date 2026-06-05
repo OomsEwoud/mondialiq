@@ -42,6 +42,11 @@ class RefereeResource extends Resource
         return RefereesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage referee names used for fixture data.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

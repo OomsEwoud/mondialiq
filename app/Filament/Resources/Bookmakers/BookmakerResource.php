@@ -42,6 +42,11 @@ class BookmakerResource extends Resource
         return BookmakersTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage bookmaker reference data used for fixture odds.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

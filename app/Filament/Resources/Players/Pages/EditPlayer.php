@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Players\Pages;
 
+use App\Filament\Resources\Concerns\HasResourcePageSubheading;
 use App\Filament\Resources\Players\PlayerResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditPlayer extends EditRecord
 {
+    use HasResourcePageSubheading;
+
     protected static string $resource = PlayerResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array

@@ -41,6 +41,11 @@ class CountryResource extends Resource
         return CountriesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage country names, FIFA codes and flag URLs used across teams, fixtures and statistics.';
+    }
+
     public static function getRelations(): array
     {
         return [

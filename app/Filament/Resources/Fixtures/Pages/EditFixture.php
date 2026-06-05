@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Fixtures\Pages;
 
+use App\Filament\Resources\Concerns\HasResourcePageSubheading;
 use App\Filament\Resources\Fixtures\FixtureResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditFixture extends EditRecord
 {
+    use HasResourcePageSubheading;
+
     protected static string $resource = FixtureResource::class;
 
     protected function mutateFormDataBeforeSave(array $data): array

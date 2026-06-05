@@ -48,6 +48,11 @@ class FixtureResource extends Resource
         return FixturesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage match data, scores, status corrections and related match information such as events, lineups, odds and predictions.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

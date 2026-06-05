@@ -42,6 +42,11 @@ class BetTypeResource extends Resource
         return BetTypesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage betting market types used for fixture odds.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

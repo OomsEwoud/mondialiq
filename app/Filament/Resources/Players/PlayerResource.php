@@ -48,6 +48,11 @@ class PlayerResource extends Resource
         return PlayersTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage players that are not currently linked to a team. Team players are managed from the team detail page.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

@@ -42,6 +42,11 @@ class VenueResource extends Resource
         return VenuesTable::configure($table);
     }
 
+    public static function getPageSubheading(): string
+    {
+        return 'Manage stadium and venue information used for match details.';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
