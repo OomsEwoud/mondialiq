@@ -7,6 +7,7 @@ use App\Filament\Resources\Referees\Pages\EditReferee;
 use App\Filament\Resources\Referees\Pages\ListReferees;
 use App\Filament\Resources\Referees\Schemas\RefereeForm;
 use App\Filament\Resources\Referees\Tables\RefereesTable;
+use App\Models\Fixture;
 use App\Models\Referee;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -50,7 +51,21 @@ class RefereeResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->withCount('fixtures');
+            ->withCount('fixtures')
+            ->addSelect([
+                'latest_match_date' => Fixture::query()
+                    ->select('match_date')
+                    ->whereColumn('referee_id', 'referees.id')
+                    ->where('match_date', '<=', now())
+                    ->latest('match_date')
+                    ->limit(1),
+                'next_match_date' => Fixture::query()
+                    ->select('match_date')
+                    ->whereColumn('referee_id', 'referees.id')
+                    ->where('match_date', '>', now())
+                    ->orderBy('match_date')
+                    ->limit(1),
+            ]);
     }
 
     public static function getPages(): array

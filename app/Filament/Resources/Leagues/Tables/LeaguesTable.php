@@ -35,22 +35,21 @@ class LeaguesTable
                     ->limit(20),
 
                 TextColumn::make('fixtures_count')
-                    ->label('Fixtures')
+                    ->label('Matches')
+                    ->tooltip('Number of fixtures linked to this competition.')
                     ->sortable(),
 
                 TextColumn::make('standings_count')
-                    ->label('Standings')
+                    ->label('Standing rows')
+                    ->tooltip('Number of team ranking rows linked to this competition.')
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('team_statistics_count')
-                    ->label('Team stats')
+                    ->label('Team stat rows')
+                    ->tooltip('Number of team statistic records linked to this competition.')
                     ->sortable()
                     ->toggleable(),
-
-                TextColumn::make('external_id')
-                    ->label('External ID')
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
             ->recordActions([

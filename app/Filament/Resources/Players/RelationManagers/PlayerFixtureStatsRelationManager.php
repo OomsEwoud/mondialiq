@@ -200,7 +200,7 @@ class PlayerFixtureStatsRelationManager extends RelationManager
     private static function statFixtureLabel(PlayerFixtureStat $stat): string
     {
         if (! $stat->fixture) {
-            return "Fixture #{$stat->fixture_id}";
+            return 'Unknown fixture';
         }
 
         return self::fixtureLabel($stat->fixture);

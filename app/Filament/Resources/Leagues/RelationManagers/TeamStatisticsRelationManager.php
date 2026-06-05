@@ -128,7 +128,6 @@ class TeamStatisticsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('team.name')->label('Team')->searchable()->limit(22),
                 TextColumn::make('season')->sortable(),
-                TextColumn::make('statistics_date')->label('Date')->date('d M Y')->sortable(),
                 TextColumn::make('form')->limit(10)->placeholder('-'),
                 TextColumn::make('fixtures_played_total')->label('MP')->sortable(),
                 TextColumn::make('wins_total')->label('W')->sortable(),
@@ -137,7 +136,16 @@ class TeamStatisticsRelationManager extends RelationManager
                 TextColumn::make('goals_for_total')->label('GF')->sortable(),
                 TextColumn::make('goals_against_total')->label('GA')->sortable(),
                 TextColumn::make('most_used_formation')->label('Formation')->limit(12),
-                TextColumn::make('fetched_at')->label('Fetched')->dateTime('d M H:i')->sortable()->toggleable(),
+                TextColumn::make('statistics_date')
+                    ->label('Statistics date')
+                    ->date('d M Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('fetched_at')
+                    ->label('API fetched')
+                    ->dateTime('d M H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->headerActions([
                 CreateAction::make()

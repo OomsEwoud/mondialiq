@@ -38,7 +38,8 @@ class TeamsTable
                     ->sortable(),
 
                 TextColumn::make('players_count')
-                    ->label('Players')
+                    ->label('Squad players')
+                    ->tooltip('Number of players linked to this team.')
                     ->sortable(),
             ])
             ->filters([])

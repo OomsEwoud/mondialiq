@@ -52,10 +52,6 @@ class PlayersTable
 
                 TextColumn::make('number')
                     ->sortable(),
-
-                TextColumn::make('external_id')
-                    ->label('External ID')
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
             ->recordActions([

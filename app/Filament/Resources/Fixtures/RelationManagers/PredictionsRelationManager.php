@@ -189,11 +189,13 @@ class PredictionsRelationManager extends RelationManager
                     ->limit(12),
 
                 TextColumn::make('points')
+                    ->state(fn (Model $record): string => self::awardedPoints($record))
                     ->sortable(),
 
                 TextColumn::make('points_awarded_at')
-                    ->label('Scored at')
+                    ->label('Validated at')
                     ->dateTime('d M H:i')
+                    ->placeholder('Not validated')
                     ->sortable(),
             ])
             ->filters([
@@ -254,11 +256,29 @@ class PredictionsRelationManager extends RelationManager
 
     private static function predictedScore(Model $prediction): string
     {
-        if ($prediction->home_goals === null || $prediction->away_goals === null) {
+        if (! self::isScoreValue($prediction->home_goals) || ! self::isScoreValue($prediction->away_goals)) {
             return '-';
         }
 
-        return "{$prediction->home_goals} - {$prediction->away_goals}";
+        return sprintf('%d - %d', $prediction->home_goals, $prediction->away_goals);
+    }
+
+    private static function awardedPoints(Model $prediction): string
+    {
+        if ($prediction->points_awarded_at === null) {
+            return '-';
+        }
+
+        return (string) ($prediction->points ?? 0);
+    }
+
+    private static function isScoreValue(mixed $value): bool
+    {
+        if ($value === null || (float) $value < 0) {
+            return false;
+        }
+
+        return (float) $value === floor((float) $value);
     }
 
     private static function sourceOptions(): array

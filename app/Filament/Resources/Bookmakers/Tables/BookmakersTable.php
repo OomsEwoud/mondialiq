@@ -20,7 +20,8 @@ class BookmakersTable
                     ->sortable(),
 
                 TextColumn::make('fixture_odds_count')
-                    ->label('Fixture odds')
+                    ->label('Odds entries')
+                    ->tooltip('Number of fixture odds linked to this bookmaker.')
                     ->sortable(),
             ])
             ->filters([])

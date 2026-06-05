@@ -132,12 +132,6 @@ class FixtureOddsRelationManager extends RelationManager
                 TextColumn::make('odd')
                     ->numeric(decimalPlaces: 2)
                     ->sortable(),
-
-                TextColumn::make('api_updated_at')
-                    ->label('Updated')
-                    ->dateTime('d M H:i')
-                    ->sortable()
-                    ->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('bookmaker_id')

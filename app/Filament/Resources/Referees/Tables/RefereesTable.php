@@ -21,7 +21,20 @@ class RefereesTable
                     ->sortable(),
 
                 TextColumn::make('fixtures_count')
-                    ->label('Fixtures')
+                    ->label('Matches')
+                    ->tooltip('Number of fixtures assigned to this referee.')
+                    ->sortable(),
+
+                TextColumn::make('latest_match_date')
+                    ->label('Latest match')
+                    ->dateTime('d M Y H:i')
+                    ->placeholder('-')
+                    ->sortable(),
+
+                TextColumn::make('next_match_date')
+                    ->label('Next match')
+                    ->dateTime('d M Y H:i')
+                    ->placeholder('-')
                     ->sortable(),
             ])
             ->filters([])

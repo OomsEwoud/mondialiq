@@ -41,12 +41,9 @@ class VenuesTable
                     ->sortable(),
 
                 TextColumn::make('fixtures_count')
-                    ->label('Fixtures')
+                    ->label('Assigned matches')
+                    ->tooltip('Number of fixtures scheduled at this venue.')
                     ->sortable(),
-
-                TextColumn::make('external_id')
-                    ->label('External ID')
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([])
             ->recordActions([

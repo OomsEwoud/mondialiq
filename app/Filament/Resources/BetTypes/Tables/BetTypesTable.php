@@ -20,7 +20,8 @@ class BetTypesTable
                     ->sortable(),
 
                 TextColumn::make('fixture_odds_count')
-                    ->label('Fixture odds')
+                    ->label('Odds entries')
+                    ->tooltip('Number of fixture odds using this betting market type.')
                     ->sortable(),
             ])
             ->filters([])
