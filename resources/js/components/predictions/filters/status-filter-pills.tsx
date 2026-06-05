@@ -20,8 +20,8 @@ export default function StatusFilterPills({
 }: Props) {
     return (
         <div className={cn('grid gap-2', className)}>
-            <p className={predictionFilterLabelClassName}>Status</p>
-            <div className="flex flex-wrap gap-2">
+            <p className={predictionFilterLabelClassName}>Match status</p>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 {options.map((option) => (
                     <button
                         key={option.value}

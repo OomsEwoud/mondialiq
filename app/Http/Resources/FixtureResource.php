@@ -21,7 +21,7 @@ class FixtureResource extends JsonResource
             'time' => $this->match_date->format('H:i'),
             'kickoffAt' => $this->kickoffAt(),
             'round' => $this->round_name,
-            'status' => $this->status_long,
+            'status' => $this->status_long ?? $this->status_short ?? '',
             'elapsedTime' => $this->elapsed_time,
             'score' => $this->scoreAttributes(),
             'prediction' => $this->predictionChances(),

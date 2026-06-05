@@ -1,10 +1,14 @@
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import type { Match } from '@/types/match';
+import type { PredictionStatusFilter } from '@/types/prediction-filter';
 
 export interface PredictionPageProps {
     fixtures: {
         data: Match[];
         links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        status: PredictionStatusFilter;
     };
     mode: PredictionTab;
     scoringGuideHref: string;

@@ -16,7 +16,6 @@ import type {
 interface Props {
     mode: PredictionTab;
     filters: PredictionFilters;
-    filteredCount: number;
     hasActiveFilters: boolean;
     onChange: <K extends keyof PredictionFilters>(
         key: K,
@@ -27,8 +26,8 @@ interface Props {
 
 const statusOptions: PredictionFilterOption<PredictionStatusFilter>[] = [
     { label: 'All', value: 'all' },
-    { label: 'Upcoming', value: 'upcoming' },
-    { label: 'Past', value: 'past' },
+    { label: 'Upcoming matches', value: 'upcoming' },
+    { label: 'Finished matches', value: 'past' },
 ];
 
 const outcomeOptions: PredictionFilterOption<OutcomeFilter>[] = [
@@ -53,7 +52,6 @@ const confidenceSortOptions: PredictionFilterOption<ConfidenceSort>[] = [
 export default function PredictionsFilterCard({
     mode,
     filters,
-    filteredCount,
     hasActiveFilters,
     onChange,
     onClear,
@@ -69,16 +67,12 @@ export default function PredictionsFilterCard({
                         Find predictions faster
                     </h2>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                        Search and refine predictions by status, outcome or
-                        confidence.
+                        Search and refine predictions by match status, outcome
+                        or confidence.
                     </p>
                 </div>
 
                 <div className="flex flex-col gap-2 lg:items-end">
-                    <p className="text-sm font-black whitespace-nowrap text-blue-950">
-                        Showing {filteredCount}{' '}
-                        {filteredCount === 1 ? 'prediction' : 'predictions'}
-                    </p>
                     {hasActiveFilters && (
                         <button
                             type="button"
@@ -94,25 +88,25 @@ export default function PredictionsFilterCard({
 
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-end">
                 <SearchInput
-                    className={isMine ? 'lg:col-span-3' : 'lg:col-span-4'}
+                    className="lg:col-span-4"
                     value={filters.search}
                     onChange={(value) => onChange('search', value)}
                 />
                 <StatusFilterPills
-                    className="lg:col-span-3"
+                    className="lg:col-span-8"
                     options={statusOptions}
                     value={filters.status}
                     onChange={(value) => onChange('status', value)}
                 />
                 <FilterSelect
-                    className="lg:col-span-2"
+                    className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
                     label="Outcome"
                     value={filters.outcome}
                     options={outcomeOptions}
                     onChange={(value) => onChange('outcome', value)}
                 />
                 <FilterSelect
-                    className={isMine ? 'lg:col-span-2' : 'lg:col-span-3'}
+                    className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
                     label="Confidence"
                     value={filters.confidenceSort}
                     options={confidenceSortOptions}
@@ -120,7 +114,7 @@ export default function PredictionsFilterCard({
                 />
                 {isMine && (
                     <FilterSelect
-                        className="lg:col-span-2"
+                        className="lg:col-span-4"
                         label="Points state"
                         value={filters.pointsState}
                         options={pointsStateOptions}

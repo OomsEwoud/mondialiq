@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
@@ -8,6 +9,7 @@ import PredictionTabs from '@/components/predictions/prediction-tabs';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
+import { predictions as predictionsRoute } from '@/routes';
 import type { PredictionPageProps as Props } from '@/types/prediction';
 import type { PredictionFilters } from '@/types/prediction-filter';
 import {
@@ -19,14 +21,19 @@ import {
 
 export default function Predictions({
     fixtures,
+    filters: initialFilters,
     mode,
     scoringGuideHref,
 }: Props) {
+    const defaultFilters = {
+        ...defaultPredictionFilters,
+        status: initialFilters.status,
+    };
     const [filtersByMode, setFiltersByMode] = useState<
         Record<PredictionTab, PredictionFilters>
     >({
-        ai: defaultPredictionFilters,
-        mine: defaultPredictionFilters,
+        ai: defaultFilters,
+        mine: defaultFilters,
     });
     const filters = filtersByMode[mode];
 
@@ -40,11 +47,25 @@ export default function Predictions({
     const hasActiveFilters = hasActivePredictionFilters(filters);
     const hasFilteredResults = filteredFixtures.length > 0;
     const hasNoFilteredResults = hasActiveFilters && !hasFilteredResults;
-    const clearFilters = () =>
+    const clearFilters = () => {
         setFiltersByMode((current) => ({
             ...current,
             [mode]: defaultPredictionFilters,
         }));
+
+        if (filters.status !== 'all') {
+            router.get(
+                predictionsRoute.url({
+                    query: { mode },
+                }),
+                {},
+                {
+                    preserveScroll: true,
+                    preserveState: true,
+                },
+            );
+        }
+    };
     const updateFilter = <K extends keyof PredictionFilters>(
         key: K,
         value: PredictionFilters[K],
@@ -56,6 +77,22 @@ export default function Predictions({
                 [key]: value,
             },
         }));
+
+        if (key === 'status') {
+            router.get(
+                predictionsRoute.url({
+                    query: {
+                        mode,
+                        ...(value === 'all' ? {} : { status: value }),
+                    },
+                }),
+                {},
+                {
+                    preserveScroll: true,
+                    preserveState: true,
+                },
+            );
+        }
     };
 
     return (
@@ -72,7 +109,6 @@ export default function Predictions({
                 <PredictionsFilterCard
                     mode={mode}
                     filters={filters}
-                    filteredCount={filteredFixtures.length}
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}
                     onClear={clearFilters}

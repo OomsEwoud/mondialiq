@@ -56,8 +56,13 @@ class FixtureQuery
     private function statusFilter(array $filters): string
     {
         $status = $filters['status'] ?? self::STATUS_ALL;
+        $normalizedStatus = is_string($status) ? $status : self::STATUS_ALL;
 
-        return is_string($status) && $status !== '' ? $status : self::STATUS_ALL;
+        return match ($normalizedStatus) {
+            'past', 'finished' => self::STATUS_PLAYED,
+            self::STATUS_LIVE, self::STATUS_PLAYED, self::STATUS_UPCOMING => $normalizedStatus,
+            default => self::STATUS_ALL,
+        };
     }
 
     private function applyRoundFilter(Builder $query, string $round): Builder
@@ -103,18 +108,27 @@ class FixtureQuery
 
     private function applyPlayedStatusFilter(Builder $query): Builder
     {
-        return $query->where('status_long', 'like', self::FINISHED_STATUS_PATTERN);
+        return $query->where(fn (Builder $query) => $query
+            ->finished()
+            ->orWhere('status_long', 'like', self::FINISHED_STATUS_PATTERN)
+            ->orWhere(fn (Builder $query) => $query
+                ->whereNull('status_short')
+                ->whereNull('status_long')
+                ->where('match_date', '<', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))));
     }
 
     private function applyUpcomingStatusFilter(Builder $query): Builder
     {
-        return $query
-            ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))
-            ->where(fn($query) => $query
+        return $query->where(fn (Builder $query) => $query
+            ->upcomingNotStarted()
+            ->orWhere(fn (Builder $query) => $query
                 ->where('status_short', Fixture::NOT_STARTED_STATUS_SHORT)
-                ->orWhere(fn($query) => $query
-                    ->whereNull('status_short')
-                    ->where('status_long', 'Not Started')));
+                ->whereNull('status_long')
+                ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s')))
+            ->orWhere(fn (Builder $query) => $query
+                ->whereNull('status_short')
+                ->whereNull('status_long')
+                ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))));
     }
 
     private function applyStatusLongPatterns(Builder $query, array $patterns): Builder

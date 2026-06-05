@@ -24,7 +24,8 @@ class PredictionsController extends Controller
     public function __invoke(Request $request): Response
     {
         $mode = $this->predictionMode($request);
-        $fixtureQuery = $this->fixtureQuery();
+        $status = $this->statusFilter($request);
+        $fixtureQuery = $this->fixtureQuery($status);
 
         $this->predictionFixtureQuery->applyMode(
             $fixtureQuery,
@@ -36,6 +37,9 @@ class PredictionsController extends Controller
 
         return Inertia::render('predictions', [
             'fixtures' => $fixtures,
+            'filters' => [
+                'status' => $status,
+            ],
             'mode' => $mode,
             'scoringGuideHref' => route('scoring'),
         ]);
@@ -48,11 +52,22 @@ class PredictionsController extends Controller
             : 'ai';
     }
 
-    private function fixtureQuery(): Builder
+    private function statusFilter(Request $request): string
+    {
+        $status = $request->string('status')->toString();
+
+        return in_array($status, ['upcoming', 'past'], true)
+            ? $status
+            : 'all';
+    }
+
+    private function fixtureQuery(string $status): Builder
     {
         return (new FixtureQuery(
             $this->worldCupContext->leagueId(),
             $this->worldCupContext->season(),
-        ))->build();
+        ))->build([
+            'status' => $status,
+        ]);
     }
 }
