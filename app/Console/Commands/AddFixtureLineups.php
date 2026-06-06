@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureLineupService;
-use Carbon\CarbonImmutable;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -38,6 +37,8 @@ class AddFixtureLineups extends Command
         $this->info("{$fixtures->count()} lineup kandidaten gevonden.");
 
         foreach ($fixtures as $fixture) {
+            $this->line("Fixture {$fixture->id} geselecteerd voor lineup check: {$fixture->lineupSyncReason()}");
+
             if ($this->shouldSkip($fixture)) {
                 continue;
             }
@@ -52,45 +53,34 @@ class AddFixtureLineups extends Command
 
     private function lineupCandidates(): Collection
     {
-        $now = now('UTC');
-
         return Fixture::query()
             ->whereNotNull('external_id')
-            ->notStarted()
             ->with(['homeTeam:id,name,code', 'awayTeam:id,name,code'])
-            ->whereBetween('match_date', [
-                $now->copy()->subMinutes(15)->format('Y-m-d H:i:s'),
-                $now->copy()->addMinutes(90)->format('Y-m-d H:i:s'),
-            ])
+            ->relevantForFixtureDataSync()
             ->orderBy('match_date')
-            ->get([
-                'id',
-                'external_id',
-                'home_team_id',
-                'away_team_id',
-                'match_date',
-                'has_lineups',
-                'lineups_synced_at',
-                'lineup_sync_attempts',
-            ]);
+            ->get($this->candidateColumns());
+    }
+
+    private function candidateColumns(): array
+    {
+        return [
+            'id',
+            'external_id',
+            'home_team_id',
+            'away_team_id',
+            'match_date',
+            'status_short',
+            'status_long',
+            'has_lineups',
+            'lineups_synced_at',
+            'lineup_sync_attempts',
+        ];
     }
 
     private function shouldSkip(Fixture $fixture): bool
     {
-        if ($fixture->has_lineups) {
-            $this->line("Skipping fixture {$fixture->id}: lineups already synced");
-
-            return true;
-        }
-
-        if ($fixture->lineup_sync_attempts >= 12) {
-            $this->line("Skipping fixture {$fixture->id}: lineup sync attempt limit reached");
-
-            return true;
-        }
-
-        if ($fixture->lineups_synced_at !== null && $fixture->lineups_synced_at->isAfter(now('UTC')->subMinutes(15))) {
-            $this->line("Skipping fixture {$fixture->id}: lineups checked recently");
+        if (! $fixture->shouldSyncLineups()) {
+            $this->line("Skipping fixture {$fixture->external_id}: {$fixture->lineupSyncSkipReason()}");
 
             return true;
         }
@@ -100,17 +90,12 @@ class AddFixtureLineups extends Command
 
     private function syncLineups(Fixture $fixture): void
     {
-        $kickoffInMinutes = (int) now('UTC')->diffInMinutes(
-            CarbonImmutable::parse($fixture->match_date, 'UTC'),
-            false,
-        );
-
         $this->line(sprintf(
             'Fetching lineups for fixture %d: %s vs %s, kickoff in %d minutes',
             $fixture->id,
             $fixture->homeTeam?->code ?? $fixture->homeTeam?->name ?? 'home',
             $fixture->awayTeam?->code ?? $fixture->awayTeam?->name ?? 'away',
-            $kickoffInMinutes,
+            $this->kickoffInMinutes($fixture),
         ));
         $this->line("Calling endpoint /fixtures/lineups for fixture {$fixture->id}");
 
@@ -137,5 +122,10 @@ class AddFixtureLineups extends Command
         }
 
         sleep(1);
+    }
+
+    private function kickoffInMinutes(Fixture $fixture): int
+    {
+        return (int) now('UTC')->diffInMinutes($fixture->match_date->copy()->setTimezone('UTC'), false);
     }
 }

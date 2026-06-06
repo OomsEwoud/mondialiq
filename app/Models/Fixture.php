@@ -46,10 +46,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Fixture extends Model
 {
     private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 15;
-    private const PRE_MATCH_LINEUP_WINDOW_MINUTES = 90;
+    private const PRE_MATCH_LINEUP_WINDOW_MINUTES = 45;
     private const POST_KICKOFF_LINEUP_WINDOW_MINUTES = 15;
     private const LINEUP_RETRY_MINUTES = 15;
-    private const MAX_LINEUP_SYNC_ATTEMPTS = 12;
     private const BASIC_DATA_RETRY_MINUTES = 60;
     private const RECENT_FINAL_SYNC_WINDOW_HOURS = 6;
     private const MAX_FINAL_DATA_SYNC_ATTEMPTS = 3;
@@ -88,6 +87,15 @@ class Fixture extends Model
         '%Postpon%',
         '%Suspend%',
         '%Walk%',
+    ];
+    private const UNAVAILABLE_LINEUP_STATUS_SHORTS = [
+        'CANC',
+        'PST',
+        'ABD',
+        'AWD',
+        'WO',
+        'SUSP',
+        'INT',
     ];
 
     protected function casts(): array
@@ -189,21 +197,235 @@ class Fixture extends Model
         });
     }
 
+    public function scopeRelevantForFixtureDataSync(Builder $query): Builder
+    {
+        return $query->where(fn (Builder $query) => $query
+            ->relevantForDataSync()
+            ->orWhere(fn (Builder $query) => $query->lineupSyncWindow()));
+    }
+
     public function scopeReadyForLineupSync(Builder $query): Builder
     {
         $now = now('UTC');
 
         return $query
-            ->notStarted()
-            ->whereBetween('match_date', [
-                $now->copy()->subMinutes(self::POST_KICKOFF_LINEUP_WINDOW_MINUTES)->format('Y-m-d H:i:s'),
-                $now->copy()->addMinutes(self::PRE_MATCH_LINEUP_WINDOW_MINUTES)->format('Y-m-d H:i:s'),
-            ])
+            ->lineupSyncWindow()
             ->where('has_lineups', false)
-            ->where('lineup_sync_attempts', '<', self::MAX_LINEUP_SYNC_ATTEMPTS)
             ->where(fn (Builder $query) => $query
                 ->whereNull('lineups_synced_at')
                 ->orWhere('lineups_synced_at', '<=', $now->copy()->subMinutes(self::LINEUP_RETRY_MINUTES)));
+    }
+
+    public function scopeRelevantForLineupSync(Builder $query): Builder
+    {
+        return $query->where(fn (Builder $query) => $query
+            ->relevantForDataSync()
+            ->orWhere(fn (Builder $query) => $query->lineupSyncWindow()));
+    }
+
+    public function scopeLineupSyncWindow(Builder $query): Builder
+    {
+        [$windowStart, $windowEnd] = self::lineupSyncWindowBounds();
+
+        return $query
+            ->where(fn (Builder $query) => $query
+                ->whereNull('status_short')
+                ->orWhereNotIn('status_short', self::UNAVAILABLE_LINEUP_STATUS_SHORTS))
+            ->whereBetween('match_date', [
+                $windowStart->format('Y-m-d H:i:s'),
+                $windowEnd->format('Y-m-d H:i:s'),
+            ]);
+    }
+
+    public function shouldSyncLineups(bool $force = false): bool
+    {
+        if ($this->has_lineups) {
+            return false;
+        }
+
+        if ($force) {
+            return ! $this->isKnownUnavailableForLineups();
+        }
+
+        if ($this->isLivePastLineupWindow()) {
+            return false;
+        }
+
+        if (! $force && $this->lineups_synced_at !== null && $this->lineups_synced_at->isAfter(now('UTC')->subMinutes($this->lineupRetryMinutes()))) {
+            return false;
+        }
+
+        if (! $this->match_date) {
+            return false;
+        }
+
+        $matchDate = $this->match_date->copy()->setTimezone('UTC');
+
+        if ($this->isFinished()) {
+            return ! $this->has_lineups
+                && $matchDate->betweenIncluded(
+                    self::lineupSyncWindowStart(),
+                    now('UTC'),
+                );
+        }
+
+        if ($this->isKnownUnavailableForLineups()) {
+            return false;
+        }
+
+        if ($matchDate->isFuture()) {
+            return $matchDate->betweenIncluded(
+                now('UTC'),
+                self::lineupSyncWindowEnd(),
+            );
+        }
+
+        return false;
+    }
+
+    public function lineupSyncSkipReason(bool $force = false): string
+    {
+        if ($this->has_lineups) {
+            return 'lineups already synced';
+        }
+
+        if ($this->isLivePastLineupWindow()) {
+            return 'live fixture is beyond the lineup sync window';
+        }
+
+        if (! $force && $this->lineups_synced_at !== null && $this->lineups_synced_at->isAfter(now('UTC')->subMinutes($this->lineupRetryMinutes()))) {
+            return sprintf('lineups checked recently; retry after %d minutes', $this->lineupRetryMinutes());
+        }
+
+        if (! $this->match_date) {
+            return 'missing match date';
+        }
+
+        if ($this->isKnownUnavailableForLineups()) {
+            return 'fixture status cannot have lineups';
+        }
+
+        if ($this->match_date->copy()->setTimezone('UTC')->isAfter(self::lineupSyncWindowEnd())) {
+            return 'fixture starts too far in the future';
+        }
+
+        if ($this->isFinished()) {
+            return 'finished fixture is outside the recent lineup retry window';
+        }
+
+        return 'fixture is outside the lineup sync window';
+    }
+
+    public function lineupSyncReason(): string
+    {
+        if ($this->isLive()) {
+            return 'live fixture';
+        }
+
+        if (! $this->match_date) {
+            return 'missing match date';
+        }
+
+        $matchDate = $this->match_date->copy()->setTimezone('UTC');
+
+        if ($this->isFinished() && ! $this->has_lineups && $matchDate->betweenIncluded(self::lineupSyncWindowStart(), now('UTC'))) {
+            return 'recent finished fixture without lineups';
+        }
+
+        if ($matchDate->isFuture() && $matchDate->betweenIncluded(now('UTC'), self::lineupSyncWindowEnd())) {
+            return 'fixture starts within lineup window';
+        }
+
+        return 'outside lineup sync window';
+    }
+
+    public function isLive(): bool
+    {
+        return in_array($this->status_short, self::LIVE_STATUS_SHORTS, true)
+            || in_array($this->status_long, [
+                'First Half',
+                'Halftime',
+                'Half Time',
+                'Second Half',
+                'Extra Time',
+                'Break Time',
+                'Penalty In Progress',
+                'Live',
+            ], true);
+    }
+
+    public function isNotStarted(): bool
+    {
+        return $this->status_short === self::NOT_STARTED_STATUS_SHORT
+            || ($this->status_short === null && $this->status_long === 'Not Started');
+    }
+
+    public function isFinished(): bool
+    {
+        return in_array($this->status_short, self::FINISHED_STATUS_SHORTS, true)
+            || str_contains($this->status_long ?? '', 'Finished');
+    }
+
+    private function isKnownUnavailableForLineups(): bool
+    {
+        return in_array($this->status_short, self::UNAVAILABLE_LINEUP_STATUS_SHORTS, true);
+    }
+
+    private function isLivePastLineupWindow(): bool
+    {
+        if (! $this->isLive()) {
+            return false;
+        }
+
+        if (is_numeric($this->elapsed_time)) {
+            return (int) $this->elapsed_time > self::POST_KICKOFF_LINEUP_WINDOW_MINUTES;
+        }
+
+        if (! $this->match_date) {
+            return false;
+        }
+
+        return $this->match_date
+            ->copy()
+            ->setTimezone('UTC')
+            ->isBefore(self::lineupSyncWindowStart());
+    }
+
+    private function lineupRetryMinutes(): int
+    {
+        if (! $this->match_date) {
+            return self::LINEUP_RETRY_MINUTES;
+        }
+
+        $kickoffInMinutes = now('UTC')->diffInMinutes($this->match_date->copy()->setTimezone('UTC'), false);
+
+        if ($kickoffInMinutes <= 30 && $kickoffInMinutes >= 0) {
+            return 1;
+        }
+
+        if ($kickoffInMinutes <= 60 && $kickoffInMinutes > 30) {
+            return 5;
+        }
+
+        return self::LINEUP_RETRY_MINUTES;
+    }
+
+    private static function lineupSyncWindowBounds(): array
+    {
+        return [
+            self::lineupSyncWindowStart(),
+            self::lineupSyncWindowEnd(),
+        ];
+    }
+
+    private static function lineupSyncWindowStart(): CarbonImmutable
+    {
+        return now('UTC')->toImmutable()->subMinutes(self::POST_KICKOFF_LINEUP_WINDOW_MINUTES);
+    }
+
+    private static function lineupSyncWindowEnd(): CarbonImmutable
+    {
+        return now('UTC')->toImmutable()->addMinutes(self::PRE_MATCH_LINEUP_WINDOW_MINUTES);
     }
 
     public function scopeReadyForFinalDataSync(Builder $query): Builder

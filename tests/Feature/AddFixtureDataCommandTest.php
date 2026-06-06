@@ -5,6 +5,7 @@ use App\Models\League;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
+use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Support\Carbon;
@@ -191,10 +192,12 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ]);
         $mock->shouldReceive('getFixtureStats')->once()->with($liveFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureEvents')->once()->with($liveFixture->external_id)->andReturn([]);
+        $mock->shouldReceive('getFixtureLineups')->once()->with($liveFixture->external_id)->andReturn([]);
 
         $mock->shouldReceive('getFixture')->once()->with($soonFixture->external_id)->andReturn([
             fixtureSyncPayload($soonFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
         ]);
+        $mock->shouldReceive('getFixtureLineups')->once()->with($soonFixture->external_id)->andReturn([]);
     });
 
     $this->mock(FixtureService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture, $homeTeam, $awayTeam) {
@@ -235,6 +238,11 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         $mock->shouldNotReceive('storeFixtureEvents')->with([], $soonFixture->id);
     });
 
+    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture) {
+        $mock->shouldReceive('storeLineups')->once()->with([], $liveFixture->id)->andReturn(false);
+        $mock->shouldReceive('storeLineups')->once()->with([], $soonFixture->id)->andReturn(false);
+    });
+
     $this->artisan('app:add-fixture-data')
         ->expectsOutput('Ophalen van fixture data voor relevante fixtures')
         ->expectsOutput('2 relevante fixtures gevonden.')
@@ -242,12 +250,14 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ->expectsOutput(" - Fixture {$soonFixture->id} (external {$soonFixture->external_id}) geselecteerd [- | Not Started | elapsed -]")
         ->expectsOutput("Fixture {$liveFixture->id} oud [1H | First Half | elapsed 45]")
         ->expectsOutput("Calling endpoint /fixtures for fixture {$liveFixture->id}")
+        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$liveFixture->id}")
         ->expectsOutput("Fetching live data for fixture {$liveFixture->id}: status 2H 70'")
         ->expectsOutput("Calling endpoint /fixtures/statistics for fixture {$liveFixture->id}")
         ->expectsOutput("Calling endpoint /fixtures/events for fixture {$liveFixture->id}")
         ->expectsOutput("Fixture {$liveFixture->id} nieuw [2H | Second Half | elapsed 70]")
         ->expectsOutput("Fixture {$soonFixture->id} oud [- | Not Started | elapsed -]")
         ->expectsOutput("Calling endpoint /fixtures for fixture {$soonFixture->id}")
+        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$soonFixture->id}")
         ->expectsOutput("Skipping heavy endpoints for fixture {$soonFixture->id}: Not Started; only fixture basics synced")
         ->expectsOutput("Fixture {$soonFixture->id} nieuw [NS | Not Started | elapsed -]")
         ->expectsOutput('Fixture data voor relevante fixtures is geupdate')

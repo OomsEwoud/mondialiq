@@ -10,9 +10,7 @@ $hasPlayerStatsCandidate = static fn (): bool => Fixture::query()
 
 $hasActiveOrSoonFixture = static fn (): bool => Fixture::query()
     ->whereNotNull('external_id')
-    ->where(fn ($query) => $query
-        ->relevantForDataSync()
-        ->orWhere(fn ($query) => $query->readyForFinalDataSync()))
+    ->relevantForFixtureDataSync()
     ->exists();
 
 $hasLineupCandidate = static fn (): bool => Fixture::query()
@@ -49,8 +47,6 @@ Schedule::command('app:add-predictions')->daily()->withoutOverlapping();
 Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
-
-Schedule::command('app:add-fixture-lineups')->everyFifteenMinutes()->when($hasLineupCandidate)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-lineups')->daily()->skip($hasLineupCandidate)->withoutOverlapping();
 

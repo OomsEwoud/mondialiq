@@ -6,6 +6,7 @@ use App\Console\Commands\Concerns\InteractsWithRelevantFixtures;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
+use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
 use App\Services\Fixture\LiveFixtureService;
@@ -13,6 +14,7 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Throwable;
 
 #[Signature('app:add-fixture-data')]
 #[Description('Haal basis-, live- en finale data op voor relevante fixtures')]
@@ -25,6 +27,7 @@ class AddFixtureData extends Command
         private readonly FixtureService $fixtureService,
         private readonly FixtureStatsService $statsService,
         private readonly FixtureEventsService $eventsService,
+        private readonly FixtureLineupService $lineupService,
         private readonly LiveFixtureService $liveFixtureService,
     ) {
         parent::__construct();
@@ -47,9 +50,7 @@ class AddFixtureData extends Command
     {
         return Fixture::query()
             ->whereNotNull('external_id')
-            ->where(fn ($query) => $query
-                ->relevantForDataSync()
-                ->orWhere(fn ($query) => $query->readyForFinalDataSync()))
+            ->relevantForFixtureDataSync()
             ->orderBy('match_date')
             ->get([
                 'id',
@@ -59,6 +60,9 @@ class AddFixtureData extends Command
                 'status_long',
                 'elapsed_time',
                 'fixture_basics_synced_at',
+                'has_lineups',
+                'lineups_synced_at',
+                'lineup_sync_attempts',
                 'final_data_synced_at',
                 'final_data_sync_attempts',
             ]);
@@ -85,7 +89,9 @@ class AddFixtureData extends Command
         $fixture->refresh();
         $this->liveFixtureService->forgetCache();
 
-        if ($this->isLive($fixture)) {
+        $this->syncLineupsWhenUseful($fixture, $externalFixtureId);
+
+        if ($fixture->isLive()) {
             $this->syncLiveEndpoints($fixture, $externalFixtureId);
         } elseif ($this->shouldSyncFinalData($fixture)) {
             $this->syncFinalEndpoints($fixture, $externalFixtureId);
@@ -103,6 +109,39 @@ class AddFixtureData extends Command
         ));
 
         sleep(1);
+    }
+
+    private function syncLineupsWhenUseful(Fixture $fixture, int $externalFixtureId): void
+    {
+        if (! $fixture->shouldSyncLineups()) {
+            $this->line("Skipping lineups for fixture {$fixture->id}: {$fixture->lineupSyncSkipReason()}");
+
+            return;
+        }
+
+        $this->line("Calling endpoint /fixtures/lineups for fixture {$fixture->id}");
+
+        try {
+            $lineups = $this->api->getFixtureLineups($externalFixtureId);
+            $hasLineups = $this->lineupService->storeLineups($lineups, $fixture->id);
+
+            $fixture->forceFill([
+                'has_lineups' => $hasLineups,
+                'lineups_synced_at' => now('UTC'),
+                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
+            ])->save();
+
+            if (! $hasLineups) {
+                $this->line("No lineups available for fixture {$fixture->id}; will retry later");
+            }
+        } catch (Throwable $exception) {
+            $fixture->forceFill([
+                'lineups_synced_at' => now('UTC'),
+                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
+            ])->save();
+
+            $this->error("Fout bij ophalen lineups voor fixture {$fixture->id}: {$exception->getMessage()}");
+        }
     }
 
     private function syncLiveEndpoints(Fixture $fixture, int $externalFixtureId): void
@@ -149,24 +188,9 @@ class AddFixtureData extends Command
         ])->save();
     }
 
-    private function isLive(Fixture $fixture): bool
-    {
-        return in_array($fixture->status_short, Fixture::LIVE_STATUS_SHORTS, true)
-            || in_array($fixture->status_long, [
-                'First Half',
-                'Halftime',
-                'Half Time',
-                'Second Half',
-                'Extra Time',
-                'Break Time',
-                'Penalty In Progress',
-                'Live',
-            ], true);
-    }
-
     private function shouldSyncFinalData(Fixture $fixture): bool
     {
-        return $this->isFinished($fixture)
+        return $fixture->isFinished()
             && $fixture->final_data_synced_at === null
             && $fixture->final_data_sync_attempts < 3;
     }
@@ -177,16 +201,10 @@ class AddFixtureData extends Command
             return 'Not Started; only fixture basics synced';
         }
 
-        if ($this->isFinished($fixture)) {
+        if ($fixture->isFinished()) {
             return 'final data already synced or attempt limit reached';
         }
 
         return 'not live or finished';
-    }
-
-    private function isFinished(Fixture $fixture): bool
-    {
-        return in_array($fixture->status_short, Fixture::FINISHED_STATUS_SHORTS, true)
-            || str_contains($fixture->status_long ?? '', 'Finished');
     }
 }
