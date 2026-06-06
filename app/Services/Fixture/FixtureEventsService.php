@@ -15,6 +15,10 @@ class FixtureEventsService
 
     public function storeFixtureEvents(array $events, int $fixtureId): void
     {
+        if ($events === []) {
+            return;
+        }
+
         $playerIds = Player::query()
             ->whereIn('external_id', $this->extractEventPlayerIds($events))
             ->pluck('id', 'external_id');
@@ -23,6 +27,10 @@ class FixtureEventsService
             ->whereIn('external_id', $this->extractNumericIds($events, 'team.id'))
             ->pluck('id', 'external_id');
 
+        FixtureEvent::query()
+            ->where('fixture_id', $fixtureId)
+            ->delete();
+
         foreach ($events as $event) {
             $eventPayload = $this->eventPayload($event, $playerIds, $teamIds);
 
@@ -30,12 +38,10 @@ class FixtureEventsService
                 continue;
             }
 
-            $fixtureEvent = FixtureEvent::query()->firstOrNew(
-                $this->eventIdentity($fixtureId, $eventPayload),
-            );
-
-            $fixtureEvent->fill($this->eventAttributes($eventPayload, $fixtureEvent));
-            $fixtureEvent->save();
+            FixtureEvent::query()->create([
+                ...$this->eventIdentity($fixtureId, $eventPayload),
+                ...$this->eventAttributes($eventPayload),
+            ]);
         }
     }
 
@@ -101,32 +107,20 @@ class FixtureEventsService
         ];
     }
 
-    private function eventAttributes(array $eventPayload, FixtureEvent $fixtureEvent): array
+    private function eventAttributes(array $eventPayload): array
     {
         return [
             'team_id' => $eventPayload['team_id'],
-            'team_name' => $this->preferIncomingString(
-                $eventPayload['team_name'],
-                $fixtureEvent->team_name,
-            ),
+            'team_name' => $eventPayload['team_name'],
             'time_elapsed' => $eventPayload['time_elapsed'],
             'extra_time' => $eventPayload['extra_time'],
             'type' => $eventPayload['type'],
             'detail' => $eventPayload['detail'],
-            'player_id' => $eventPayload['player_id'] ?? $fixtureEvent->player_id,
-            'player_name' => $this->preferIncomingString(
-                $eventPayload['player_name'],
-                $fixtureEvent->player_name,
-            ),
-            'assist_id' => $eventPayload['assist_id'] ?? $fixtureEvent->assist_id,
-            'assist_name' => $this->preferIncomingString(
-                $eventPayload['assist_name'],
-                $fixtureEvent->assist_name,
-            ),
-            'comments' => $this->preferIncomingString(
-                $eventPayload['comments'],
-                $fixtureEvent->comments,
-            ),
+            'player_id' => $eventPayload['player_id'],
+            'player_name' => $eventPayload['player_name'],
+            'assist_id' => $eventPayload['assist_id'],
+            'assist_name' => $eventPayload['assist_name'],
+            'comments' => $eventPayload['comments'],
         ];
     }
 
@@ -139,10 +133,5 @@ class FixtureEventsService
         $normalized = Str::of($value)->trim()->value();
 
         return $normalized !== '' ? $normalized : null;
-    }
-
-    private function preferIncomingString(?string $incoming, ?string $existing): ?string
-    {
-        return $incoming ?? $existing;
     }
 }

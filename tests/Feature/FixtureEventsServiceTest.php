@@ -7,7 +7,7 @@ use App\Models\Player;
 use App\Models\Team;
 use App\Services\Fixture\FixtureEventsService;
 
-test('it updates an existing fixture event when better player data arrives', function () {
+test('it removes stale fixture events when a corrected non-empty event snapshot is stored', function () {
     [$fixture, $homeTeam] = createFixtureForFixtureEventsService();
     $player = Player::query()->create([
         'external_id' => 1000,
@@ -19,7 +19,7 @@ test('it updates an existing fixture event when better player data arrives', fun
     ], $fixture->id);
 
     app(FixtureEventsService::class)->storeFixtureEvents([
-        createApiFixtureEventPayload($homeTeam->external_id, 4, 1000, 'I. Saibari', null),
+        createApiFixtureEventPayload($homeTeam->external_id, 6, 1000, 'I. Saibari', null),
     ], $fixture->id);
 
     expect(FixtureEvent::query()->count())->toBe(1);
@@ -30,10 +30,11 @@ test('it updates an existing fixture event when better player data arrives', fun
         ->and($event->team_id)->toBe($homeTeam->id)
         ->and($event->player_id)->toBe($player->id)
         ->and($event->player_name)->toBe('I. Saibari')
+        ->and($event->time_elapsed)->toBe(6)
         ->and($event->detail)->toBe('Normal Goal')
         ->and($event->event_key)->toBe(FixtureEvent::buildEventKey(
             $fixture->id,
-            4,
+            6,
             null,
             $homeTeam->id,
             'Goal',
@@ -41,7 +42,7 @@ test('it updates an existing fixture event when better player data arrives', fun
         ));
 });
 
-test('it does not overwrite better player data with null api player data', function () {
+test('it does not wipe existing fixture events when the api response is empty', function () {
     [$fixture, $homeTeam] = createFixtureForFixtureEventsService();
     $player = Player::query()->create([
         'external_id' => 1000,
@@ -52,9 +53,7 @@ test('it does not overwrite better player data with null api player data', funct
         createApiFixtureEventPayload($homeTeam->external_id, 25, 1000, 'I. Saibari', 'Clinical finish'),
     ], $fixture->id);
 
-    app(FixtureEventsService::class)->storeFixtureEvents([
-        createApiFixtureEventPayload($homeTeam->external_id, 25, null, null, null),
-    ], $fixture->id);
+    app(FixtureEventsService::class)->storeFixtureEvents([], $fixture->id);
 
     $event = FixtureEvent::query()->firstOrFail();
 
@@ -62,6 +61,73 @@ test('it does not overwrite better player data with null api player data', funct
         ->and($event->player_id)->toBe($player->id)
         ->and($event->player_name)->toBe('I. Saibari')
         ->and($event->comments)->toBe('Clinical finish');
+});
+
+test('it inserts valid current fixture events and skips invalid payloads', function () {
+    [$fixture, $homeTeam, $awayTeam] = createFixtureForFixtureEventsService();
+    $scorer = Player::query()->create([
+        'external_id' => 1000,
+        'display_name' => 'I. Saibari',
+    ]);
+    $assist = Player::query()->create([
+        'external_id' => 1001,
+        'display_name' => 'A. Ounahi',
+    ]);
+
+    app(FixtureEventsService::class)->storeFixtureEvents([
+        createApiFixtureEventPayload(
+            $homeTeam->external_id,
+            25,
+            1000,
+            'I. Saibari',
+            'Clinical finish',
+            1001,
+            'A. Ounahi',
+        ),
+        createApiFixtureEventPayload(
+            $awayTeam->external_id,
+            32,
+            null,
+            'Away player',
+            null,
+            null,
+            null,
+            'Card',
+            'Yellow Card',
+        ),
+        createInvalidApiFixtureEventPayload($homeTeam->external_id),
+    ], $fixture->id);
+
+    expect(FixtureEvent::query()->count())->toBe(2);
+
+    $goal = FixtureEvent::query()
+        ->where('type', 'Goal')
+        ->firstOrFail();
+    $card = FixtureEvent::query()
+        ->where('type', 'Card')
+        ->firstOrFail();
+
+    expect($goal->fixture_id)->toBe($fixture->id)
+        ->and($goal->team_id)->toBe($homeTeam->id)
+        ->and($goal->team_name)->toBe('Morocco')
+        ->and($goal->player_id)->toBe($scorer->id)
+        ->and($goal->player_name)->toBe('I. Saibari')
+        ->and($goal->assist_id)->toBe($assist->id)
+        ->and($goal->assist_name)->toBe('A. Ounahi')
+        ->and($goal->comments)->toBe('Clinical finish')
+        ->and($goal->event_key)->toBe(FixtureEvent::buildEventKey(
+            $fixture->id,
+            25,
+            null,
+            $homeTeam->id,
+            'Goal',
+            'Normal Goal',
+        ))
+        ->and($card->fixture_id)->toBe($fixture->id)
+        ->and($card->team_id)->toBe($awayTeam->id)
+        ->and($card->type)->toBe('Card')
+        ->and($card->detail)->toBe('Yellow Card')
+        ->and($card->player_id)->toBeNull();
 });
 
 function createFixtureForFixtureEventsService(): array
@@ -106,6 +172,10 @@ function createApiFixtureEventPayload(
     ?int $playerExternalId,
     ?string $playerName,
     ?string $comments,
+    ?int $assistExternalId = null,
+    ?string $assistName = null,
+    string $type = 'Goal',
+    string $detail = 'Normal Goal',
 ): array {
     return [
         'time' => [
@@ -121,11 +191,36 @@ function createApiFixtureEventPayload(
             'name' => $playerName,
         ],
         'assist' => [
+            'id' => $assistExternalId,
+            'name' => $assistName,
+        ],
+        'type' => $type,
+        'detail' => $detail,
+        'comments' => $comments,
+    ];
+}
+
+function createInvalidApiFixtureEventPayload(int $teamExternalId): array
+{
+    return [
+        'time' => [
+            'elapsed' => null,
+            'extra' => null,
+        ],
+        'team' => [
+            'id' => $teamExternalId,
+            'name' => 'Morocco',
+        ],
+        'player' => [
+            'id' => null,
+            'name' => null,
+        ],
+        'assist' => [
             'id' => null,
             'name' => null,
         ],
         'type' => 'Goal',
         'detail' => 'Normal Goal',
-        'comments' => $comments,
+        'comments' => null,
     ];
 }
