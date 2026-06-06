@@ -58,6 +58,7 @@ test('the leaderboards page shows the top 10 and current user standing', functio
             'user_id' => $user->id,
             'source' => PredictionTypes::User->value,
             'points' => 120 - ($index * 10),
+            'points_awarded_at' => now('UTC'),
         ]);
     });
 
@@ -80,6 +81,42 @@ test('the leaderboards page shows the top 10 and current user standing', functio
             ->where('currentUserPosition.totalPoints', 10)
             ->where('totalPlayers', 12),
         );
+});
+
+test('the leaderboards page ignores pending prediction points', function () {
+    $fixture = createLeaderboardFixture();
+
+    $validatedUser = User::factory()->create(['name' => 'Validated Player']);
+    $pendingUser = User::factory()->create(['name' => 'Pending Player']);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $validatedUser->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 12,
+        'points_awarded_at' => now('UTC'),
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $pendingUser->id,
+        'source' => PredictionTypes::User->value,
+        'points' => 20,
+        'points_awarded_at' => null,
+    ]);
+
+    $response = $this
+        ->actingAs($pendingUser)
+        ->get(route('leaderboards'));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('leaderboards')
+            ->where('globalLeaderboard.0.id', $validatedUser->id)
+            ->where('globalLeaderboard.0.totalPoints', 12)
+            ->where('currentUserPosition.id', $pendingUser->id)
+            ->where('currentUserPosition.totalPoints', 0));
 });
 
 test('the leaderboards page shows joined friends leagues for the current user', function () {
@@ -113,6 +150,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'user_id' => $leagueLeader->id,
         'source' => PredictionTypes::User->value,
         'points' => 25,
+        'points_awarded_at' => now('UTC'),
     ]);
 
     Prediction::create([
@@ -120,6 +158,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'user_id' => $currentUser->id,
         'source' => PredictionTypes::User->value,
         'points' => 18,
+        'points_awarded_at' => now('UTC'),
     ]);
 
     Prediction::create([
@@ -127,6 +166,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'user_id' => $thirdMember->id,
         'source' => PredictionTypes::User->value,
         'points' => 10,
+        'points_awarded_at' => now('UTC'),
     ]);
 
     $response = $this

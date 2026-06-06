@@ -7,6 +7,7 @@ import UserPredictionAiComparisonCard from '@/components/predictions/user-predic
 import UserPredictionHero from '@/components/predictions/user-prediction-hero';
 import UserPredictionSummaryCards from '@/components/predictions/user-prediction-summary-cards';
 import type { Match } from '@/types/match';
+import type { UserPredictionScoringPreview } from '@/types/prediction';
 import {
     hasMatchStarted,
     predictionScoreLabel,
@@ -14,11 +15,13 @@ import {
 
 interface Props {
     match: Match;
+    scoringPreview: UserPredictionScoringPreview | null;
     scoringGuideHref: string;
 }
 
 export default function UserPredictionDetail({
     match,
+    scoringPreview,
     scoringGuideHref,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
@@ -32,7 +35,11 @@ export default function UserPredictionDetail({
         <>
             <div className="space-y-4 sm:space-y-5">
                 <UserPredictionHero match={match} />
-                <UserPredictedScoreCard match={match} score={score} />
+                <UserPredictedScoreCard
+                    match={match}
+                    score={score}
+                    scoringPreview={scoringPreview}
+                />
                 <PredictionScoreBreakdown
                     predictedHomeScore={match.userPrediction?.homeScore ?? null}
                     predictedAwayScore={match.userPrediction?.awayScore ?? null}
@@ -40,11 +47,16 @@ export default function UserPredictionDetail({
                     actualAwayScore={match.score.fulltime.away}
                     pointsAwarded={match.userPrediction?.pointsAwarded ?? false}
                     awardedPoints={match.userPrediction?.points ?? null}
+                    scoringPreview={scoringPreview}
                     homeTeamName={match.homeTeam}
                     awayTeamName={match.awayTeam}
                     scoringGuideHref={scoringGuideHref}
                 />
-                <UserPredictionSummaryCards match={match} score={score} />
+                <UserPredictionSummaryCards
+                    match={match}
+                    score={score}
+                    scoringPreview={scoringPreview}
+                />
 
                 {hasAiComparison ? (
                     <UserPredictionAiComparisonCard matchId={match.id} />

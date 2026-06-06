@@ -4,6 +4,7 @@ import type {
     PointsStateFilter,
     PredictionStatusFilter,
 } from '@/types/prediction-filter';
+import type { PredictionScoreBreakdown } from '@/types/prediction-scoring';
 
 export interface PredictionPageProps {
     fixtures: {
@@ -23,7 +24,15 @@ export interface PredictionShowPageProps {
     match: Match;
     mode: PredictionTab;
     aiContext: AiPredictionContext;
+    scoringPreview: UserPredictionScoringPreview | null;
     scoringGuideHref: string;
+}
+
+export interface UserPredictionScoringPreview {
+    points: number;
+    maxPoints: number;
+    breakdown: PredictionScoreBreakdown;
+    helper: string;
 }
 
 export interface AiPredictionContext {

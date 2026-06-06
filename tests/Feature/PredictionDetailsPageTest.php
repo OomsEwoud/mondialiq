@@ -36,6 +36,7 @@ function createFixtureForPredictionDetails(): array
         'round_name' => 'Group Stage - 1',
         'season' => config('services.api_football.season'),
         'match_date' => '2026-06-11 21:00:00',
+        'status_short' => 'NS',
         'status_long' => 'Not Started',
     ]);
 
@@ -72,7 +73,111 @@ test('a user can view a dedicated prediction page', function () {
             ->where('match.userPrediction.label', 'Mexico')
             ->where('match.userPrediction.homeScore', 3)
             ->where('match.userPrediction.awayScore', 2)
-            ->where('match.userPrediction.confidence', 'low'));
+            ->where('match.userPrediction.confidence', 'low')
+            ->where('scoringPreview', null));
+});
+
+test('a pending user prediction page can show a scoring preview without persisting points', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam] = createFixtureForPredictionDetails();
+
+    $fixture->forceFill([
+        'status_short' => '1H',
+        'status_long' => 'First Half',
+        'fulltime_home_goals' => 1,
+        'fulltime_away_goals' => 0,
+    ])->save();
+
+    $prediction = Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $user->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::User->value,
+        'home_goals' => 2,
+        'away_goals' => 0,
+        'total_goals' => 2,
+        'confidence' => 'high',
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->get(route('predictions.mine.show', $fixture));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('prediction-show')
+            ->where('match.userPrediction.points', null)
+            ->where('match.userPrediction.pointsAwarded', false)
+            ->where('scoringPreview.points', 11)
+            ->where('scoringPreview.maxPoints', 20)
+            ->where('scoringPreview.breakdown.total', 11)
+            ->where('scoringPreview.breakdown.items.0.label', 'Correct outcome')
+            ->where('scoringPreview.breakdown.items.0.earned', true)
+            ->where('scoringPreview.breakdown.items.2.label', 'Home team goals')
+            ->where('scoringPreview.breakdown.items.2.earned', false)
+            ->where('scoringPreview.breakdown.items.3.label', 'Away team goals')
+            ->where('scoringPreview.breakdown.items.3.earned', true));
+
+    expect($prediction->refresh()->points)->toBeNull()
+        ->and($prediction->points_awarded_at)->toBeNull();
+});
+
+test('a pending user prediction page omits the scoring preview without score data', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam] = createFixtureForPredictionDetails();
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $user->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::User->value,
+        'home_goals' => 1,
+        'away_goals' => 0,
+        'total_goals' => 1,
+    ]);
+
+    $this
+        ->actingAs($user)
+        ->get(route('predictions.mine.show', $fixture))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('prediction-show')
+            ->where('scoringPreview', null));
+});
+
+test('a validated user prediction page keeps showing official stored points', function () {
+    $user = User::factory()->create();
+    [$fixture, $homeTeam] = createFixtureForPredictionDetails();
+
+    $fixture->forceFill([
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+        'fulltime_home_goals' => 1,
+        'fulltime_away_goals' => 0,
+    ])->save();
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $user->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::User->value,
+        'home_goals' => 1,
+        'away_goals' => 0,
+        'total_goals' => 1,
+        'points' => 20,
+        'points_awarded_at' => now('UTC'),
+    ]);
+
+    $this
+        ->actingAs($user)
+        ->get(route('predictions.mine.show', $fixture))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('prediction-show')
+            ->where('match.userPrediction.points', 20)
+            ->where('match.userPrediction.pointsAwarded', true)
+            ->where('scoringPreview', null));
 });
 
 test('a user can view a dedicated ai prediction page', function () {

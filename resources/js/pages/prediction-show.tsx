@@ -9,6 +9,7 @@ export default function PredictionShow({
     match,
     mode,
     aiContext,
+    scoringPreview,
     scoringGuideHref,
 }: Props) {
     const isAiMode = mode === 'ai';
@@ -33,6 +34,7 @@ export default function PredictionShow({
             ) : (
                 <UserPredictionDetail
                     match={match}
+                    scoringPreview={scoringPreview}
                     scoringGuideHref={scoringGuideHref}
                 />
             )}

@@ -47,7 +47,10 @@ class LeaderboardsController extends Controller
         return User::query()
             ->select(['id', 'name', 'avatar'])
             ->withCount('predictions')
-            ->withSum('predictions', 'points')
+            ->withSum([
+                'predictions as predictions_sum_points' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at'),
+            ], 'points')
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
             ->orderBy('name');
@@ -137,7 +140,10 @@ class LeaderboardsController extends Controller
     {
         return $scoreboard->users()
             ->select(['users.id', 'users.name'])
-            ->withSum('predictions', 'points')
+            ->withSum([
+                'predictions as predictions_sum_points' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at'),
+            ], 'points')
             ->withCount('predictions')
             ->withCount([
                 'predictions as scoring_predictions_count' => fn (Builder $query) => $query

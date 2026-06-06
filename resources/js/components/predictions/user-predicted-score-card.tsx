@@ -1,17 +1,25 @@
 import UserPredictionTeam from '@/components/matches/prediction/user-prediction-team';
 import { cn } from '@/lib/utils';
 import type { Match } from '@/types/match';
+import type { UserPredictionScoringPreview } from '@/types/prediction';
 
 interface Props {
     match: Match;
     score: string | null;
+    scoringPreview: UserPredictionScoringPreview | null;
 }
 
-export default function UserPredictedScoreCard({ match, score }: Props) {
+export default function UserPredictedScoreCard({
+    match,
+    score,
+    scoringPreview,
+}: Props) {
     const pointsAwarded = match.userPrediction?.pointsAwarded ?? false;
     const pointsLabel = pointsAwarded
         ? `${match.userPrediction?.points ?? 0}/20 earned`
-        : 'Points pending';
+        : scoringPreview
+          ? `Preview: ${scoringPreview.points}/${scoringPreview.maxPoints} pts`
+          : 'Awaiting validation';
 
     return (
         <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-xl shadow-cyan-950/8 sm:p-6">

@@ -15,7 +15,7 @@ export default function PredictionPointsBadge({ points }: Props) {
                     : 'border-slate-200 bg-slate-50 text-slate-500'
             }
         >
-            {hasPoints ? `${points}/20 pts` : 'Points pending'}
+            {hasPoints ? `${points}/20 pts` : 'Awaiting validation'}
         </Badge>
     );
 }

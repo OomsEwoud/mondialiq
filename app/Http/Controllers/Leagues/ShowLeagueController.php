@@ -60,7 +60,10 @@ class ShowLeagueController extends Controller
     {
         return $scoreboard->users()
             ->select(['users.id', 'users.name', 'users.avatar'])
-            ->withSum('predictions', 'points')
+            ->withSum([
+                'predictions as predictions_sum_points' => fn (Builder $query) => $query
+                    ->whereNotNull('points_awarded_at'),
+            ], 'points')
             ->withCount('predictions')
             ->withCount([
                 'predictions as scoring_predictions_count' => fn (Builder $query) => $query

@@ -38,7 +38,7 @@ const outcomeOptions: PredictionFilterOption<OutcomeFilter>[] = [
 
 const pointsStateOptions: PredictionFilterOption<PointsStateFilter>[] = [
     { label: 'All', value: 'all' },
-    { label: 'Points pending', value: 'points-pending' },
+    { label: 'Awaiting validation', value: 'points-pending' },
     { label: 'Points earned', value: 'points-earned' },
     { label: 'No points earned', value: 'no-points-earned' },
 ];

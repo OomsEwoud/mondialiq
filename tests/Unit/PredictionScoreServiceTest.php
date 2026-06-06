@@ -57,6 +57,34 @@ test('it awards each partial scoring rule independently', function (
     'correct draw has no separate draw bonus' => [1, 1, 2, 2, 12],
 ]);
 
+test('it exposes the scoring breakdown for a prediction', function () {
+    $breakdown = predictionScoreService()->breakdown(
+        predictedHomeScore: 2,
+        predictedAwayScore: 0,
+        actualHomeScore: 1,
+        actualAwayScore: 0,
+    );
+
+    expect($breakdown['total'])->toBe(11)
+        ->and($breakdown['exactScore'])->toBeFalse()
+        ->and($breakdown['items'])->toHaveCount(5)
+        ->and($breakdown['items'][0])->toMatchArray([
+            'label' => 'Correct outcome',
+            'points' => 8,
+            'earned' => true,
+        ])
+        ->and($breakdown['items'][2])->toMatchArray([
+            'label' => 'Home team goals',
+            'points' => 3,
+            'earned' => false,
+        ])
+        ->and($breakdown['items'][3])->toMatchArray([
+            'label' => 'Away team goals',
+            'points' => 3,
+            'earned' => true,
+        ]);
+});
+
 test('it always returns a score between zero and twenty for common football scores', function () {
     foreach (range(0, 6) as $predictedHomeScore) {
         foreach (range(0, 6) as $predictedAwayScore) {

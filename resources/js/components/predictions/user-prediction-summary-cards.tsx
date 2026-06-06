@@ -1,6 +1,7 @@
 import { Gauge, Goal, Medal, Trophy } from 'lucide-react';
 import PredictionSummaryCard from '@/components/predictions/prediction-summary-card';
 import type { Match } from '@/types/match';
+import type { UserPredictionScoringPreview } from '@/types/prediction';
 import {
     formatPredictedOutcome,
     formatUserPredictionConfidence,
@@ -9,9 +10,14 @@ import {
 interface Props {
     match: Match;
     score: string | null;
+    scoringPreview: UserPredictionScoringPreview | null;
 }
 
-export default function UserPredictionSummaryCards({ match, score }: Props) {
+export default function UserPredictionSummaryCards({
+    match,
+    score,
+    scoringPreview,
+}: Props) {
     const prediction = match.userPrediction;
     const confidence = formatUserPredictionConfidence(
         prediction?.confidence ?? null,
@@ -19,7 +25,14 @@ export default function UserPredictionSummaryCards({ match, score }: Props) {
     const pointsAwarded = prediction?.pointsAwarded ?? false;
     const pointsValue = pointsAwarded
         ? `${prediction?.points ?? 0}/20`
-        : 'Points pending';
+        : scoringPreview
+          ? `Preview: ${scoringPreview.points}/${scoringPreview.maxPoints}`
+          : 'Awaiting validation';
+    const pointsHelper = pointsAwarded
+        ? 'Official points after validation'
+        : scoringPreview
+          ? 'Preview only. Final points are calculated after validation.'
+          : 'Calculated after validation';
 
     return (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -43,11 +56,7 @@ export default function UserPredictionSummaryCards({ match, score }: Props) {
                 icon={Medal}
                 label={pointsAwarded ? 'Points earned' : 'Points state'}
                 value={pointsValue}
-                helper={
-                    pointsAwarded
-                        ? 'Based on the final score'
-                        : 'Calculated after validation'
-                }
+                helper={pointsHelper}
             />
         </section>
     );
