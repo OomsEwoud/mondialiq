@@ -2,13 +2,19 @@ import MatchCard from '@/components/matches/match-card';
 import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
 import type { Match } from '@/types/match';
 import { applyLiveFixtureToMatch } from '@/utils/live-fixtures';
+import { getMatchStatusKind } from '@/utils/match-status';
 
 interface Props {
     matches: Match[];
 }
 
 export default function MatchList({ matches }: Props) {
-    const { matches: liveMatches } = useLiveFixturesPolling([]);
+    const shouldPollLiveFixtures = matches.some(
+        (match) => getMatchStatusKind(match) === 'live',
+    );
+    const { matches: liveMatches } = useLiveFixturesPolling([], {
+        enabled: shouldPollLiveFixtures,
+    });
     const visibleMatches = matches.map((match) =>
         applyLiveFixtureToMatch(
             match,

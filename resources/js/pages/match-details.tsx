@@ -8,6 +8,7 @@ import BackButton from '@/components/navigation/back-button';
 import PageHead from '@/components/seo/page-head';
 import { useLiveFixturesPolling } from '@/hooks/use-live-fixtures-polling';
 import type { MatchDetails as MatchDetailsType } from '@/types/match-details';
+import { isLiveStatus } from '@/utils/match-status';
 
 interface Props {
     match: MatchDetailsType;
@@ -18,7 +19,9 @@ export default function MatchDetails({ match }: Props) {
         matches: liveMatches,
         lastUpdatedAt,
         hasPollingError,
-    } = useLiveFixturesPolling([]);
+    } = useLiveFixturesPolling([], {
+        enabled: isLiveStatus(match.status, match.statusShort),
+    });
     const pageTitle = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
     const liveMatch = liveMatches.find(
         (liveMatch) => liveMatch.id === match.id,

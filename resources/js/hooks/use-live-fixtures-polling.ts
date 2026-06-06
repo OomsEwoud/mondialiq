@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
 
+import { usePageVisibility } from '@/hooks/use-page-visibility';
 import { liveFixtures as liveFixturesRoute } from '@/routes/api';
 import type { LiveFixture, LiveFixturesResponse } from '@/types/live-fixture';
+
+const DEFAULT_POLLING_INTERVAL_MS = 60000;
+
+interface UseLiveFixturesPollingOptions {
+    enabled?: boolean;
+    intervalMs?: number;
+}
 
 interface UseLiveFixturesPollingResult {
     matches: LiveFixture[];
@@ -11,14 +19,22 @@ interface UseLiveFixturesPollingResult {
 
 export function useLiveFixturesPolling(
     initialMatches: LiveFixture[],
+    options: UseLiveFixturesPollingOptions = {},
 ): UseLiveFixturesPollingResult {
     const [matches, setMatches] = useState(initialMatches);
     const [lastUpdatedAt, setLastUpdatedAt] = useState<string | null>(
         latestUpdatedAt(initialMatches),
     );
     const [hasPollingError, setHasPollingError] = useState(false);
+    const isPageVisible = usePageVisibility();
+    const enabled = options.enabled ?? initialMatches.length > 0;
+    const intervalMs = options.intervalMs ?? DEFAULT_POLLING_INTERVAL_MS;
 
     useEffect(() => {
+        if (!enabled || !isPageVisible) {
+            return;
+        }
+
         const controller = new AbortController();
 
         const fetchLiveFixtures = async () => {
@@ -49,13 +65,13 @@ export function useLiveFixturesPolling(
 
         const interval = window.setInterval(() => {
             void fetchLiveFixtures();
-        }, 60000);
+        }, intervalMs);
 
         return () => {
             controller.abort();
             window.clearInterval(interval);
         };
-    }, []);
+    }, [enabled, intervalMs, isPageVisible]);
 
     return {
         matches,

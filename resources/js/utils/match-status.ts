@@ -43,10 +43,7 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
         return 'cancelled';
     }
 
-    if (
-        liveStatusCodes.includes(status) ||
-        liveStatuses.some((liveStatus) => status.includes(liveStatus))
-    ) {
+    if (isLiveStatus(match.status)) {
         return 'live';
     }
 
@@ -58,6 +55,21 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
     }
 
     return 'unknown';
+}
+
+export function isLiveStatus(
+    statusLong: string | null,
+    statusShort?: string | null,
+): boolean {
+    const statuses = [statusShort, statusLong]
+        .filter((status): status is string => status !== null)
+        .map((status) => status.trim().toLowerCase());
+
+    return statuses.some(
+        (status) =>
+            liveStatusCodes.includes(status) ||
+            liveStatuses.some((liveStatus) => status.includes(liveStatus)),
+    );
 }
 
 export function getMatchStatusLabel(match: Match): string {

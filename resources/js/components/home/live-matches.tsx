@@ -11,8 +11,12 @@ interface Props {
 }
 
 export default function LiveMatches({ initialMatches }: Props) {
-    const { matches, lastUpdatedAt, hasPollingError } =
-        useLiveFixturesPolling(initialMatches);
+    const { matches, lastUpdatedAt, hasPollingError } = useLiveFixturesPolling(
+        initialMatches,
+        {
+            enabled: initialMatches.length > 0,
+        },
+    );
     const visibleMatches = matches;
 
     return (
