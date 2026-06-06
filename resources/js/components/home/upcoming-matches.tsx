@@ -80,6 +80,11 @@ export default function UpcomingMatches({ matches }: Props) {
                                             currentTime,
                                         )}
                                     </span>
+                                    {match.hasLineups ? (
+                                        <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] leading-none font-black text-blue-800">
+                                            Lineup available
+                                        </span>
+                                    ) : null}
                                 </div>
                             </div>
 

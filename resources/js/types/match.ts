@@ -12,6 +12,7 @@ export interface UpcomingMatch {
     round: string;
     statusShort: string | null;
     statusLong: string | null;
+    hasLineups: boolean;
     predictionState: 'predicted' | 'missing' | null;
 }
 

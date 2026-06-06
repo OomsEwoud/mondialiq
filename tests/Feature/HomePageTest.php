@@ -34,6 +34,7 @@ test('the home page only shows future not started upcoming fixtures', function (
         'match_date' => now('UTC')->addHour()->format('Y-m-d H:i:s'),
         'status_short' => 'NS',
         'status_long' => 'Not Started',
+        'has_lineups' => true,
     ]);
 
     createHomeFixture($league, $homeTeam, $awayTeam, [
@@ -65,6 +66,7 @@ test('the home page only shows future not started upcoming fixtures', function (
             ->where('upcomingFixtures.0.id', $upcomingFixture->id)
             ->where('upcomingFixtures.0.statusShort', 'NS')
             ->where('upcomingFixtures.0.statusLong', 'Not Started')
+            ->where('upcomingFixtures.0.hasLineups', true)
             ->where('upcomingFixtures.0.predictionState', null)
             ->where('upcomingFixtures.0.kickoffAt', $upcomingFixture->kickoffAt()));
 });

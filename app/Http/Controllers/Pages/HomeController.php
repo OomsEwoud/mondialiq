@@ -60,6 +60,7 @@ class HomeController extends Controller
             'round' => $match->round_name,
             'statusShort' => $match->status_short,
             'statusLong' => $match->status_long,
+            'hasLineups' => $match->has_lineups,
             'predictionState' => $this->predictionState($match, $user),
         ];
     }
