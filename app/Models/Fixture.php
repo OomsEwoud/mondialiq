@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Fixture extends Model
 {
-    private const RECENT_DATA_SYNC_WINDOW_HOURS = 3;
     private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 15;
     private const PRE_MATCH_LINEUP_WINDOW_MINUTES = 90;
     private const POST_KICKOFF_LINEUP_WINDOW_MINUTES = 15;
@@ -117,22 +116,39 @@ class Fixture extends Model
 
     public function scopeInProgress(Builder $query): Builder
     {
-        return $query->whereIn('status_short', self::LIVE_STATUS_SHORTS);
+        return $query->where(fn (Builder $query) => $query
+            ->whereIn('status_short', self::LIVE_STATUS_SHORTS)
+            ->orWhereIn('status_long', [
+                'First Half',
+                'Halftime',
+                'Half Time',
+                'Second Half',
+                'Extra Time',
+                'Break Time',
+                'Penalty In Progress',
+                'Live',
+            ]));
     }
 
     public function scopeNotStarted(Builder $query): Builder
     {
-        return $query->where('status_short', self::NOT_STARTED_STATUS_SHORT);
+        return $query->where(fn (Builder $query) => $query
+            ->where('status_short', self::NOT_STARTED_STATUS_SHORT)
+            ->orWhere(fn (Builder $query) => $query
+                ->whereNull('status_short')
+                ->where('status_long', 'Not Started')));
     }
 
     public function scopeUpcomingNotStarted(Builder $query): Builder
     {
+        $now = now('UTC');
+
         foreach (self::UNAVAILABLE_UPCOMING_STATUS_LONG_PATTERNS as $statusPattern) {
             $query->where('status_long', 'not like', $statusPattern);
         }
 
         return $query
-            ->where('match_date', '>', now(self::DISPLAY_TIMEZONE)->format('Y-m-d H:i:s'))
+            ->where('match_date', '>', $now->format('Y-m-d H:i:s'))
             ->where(fn (Builder $query) => $query
                 ->where('status_short', self::NOT_STARTED_STATUS_SHORT)
                 ->orWhere(fn (Builder $query) => $query
@@ -145,33 +161,37 @@ class Fixture extends Model
 
     public function scopeFinished(Builder $query): Builder
     {
-        return $query->whereIn('status_short', self::FINISHED_STATUS_SHORTS);
+        return $query->where(fn (Builder $query) => $query
+            ->whereIn('status_short', self::FINISHED_STATUS_SHORTS)
+            ->orWhere('status_long', 'like', '%Finished%'));
     }
 
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
-        $now = now(self::DISPLAY_TIMEZONE);
-        $windowStart = $now->copy()->subHours(self::RECENT_DATA_SYNC_WINDOW_HOURS);
+        $now = now('UTC');
         $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
         $basicDataRetryCutoff = now('UTC')->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
 
-        return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $windowStart, $windowEnd) {
+        return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $now, $windowEnd) {
             $query
-                ->where(fn (Builder $query) => $query
+                ->where(fn (Builder $query) => $query->inProgress())
+                ->orWhere(fn (Builder $query) => $query
+                    ->notStarted()
+                    ->where('match_date', '>', $now->format('Y-m-d H:i:s'))
                     ->whereBetween('match_date', [
-                        $windowStart->format('Y-m-d H:i:s'),
+                        $now->format('Y-m-d H:i:s'),
                         $windowEnd->format('Y-m-d H:i:s'),
                     ])
                     ->where(fn (Builder $query) => $query
                         ->whereNull('fixture_basics_synced_at')
                         ->orWhere('fixture_basics_synced_at', '<=', $basicDataRetryCutoff)))
-                ->orWhere(fn (Builder $query) => $query->inProgress());
+                ->orWhere(fn (Builder $query) => $query->readyForFinalDataSync());
         });
     }
 
     public function scopeReadyForLineupSync(Builder $query): Builder
     {
-        $now = now(self::DISPLAY_TIMEZONE);
+        $now = now('UTC');
 
         return $query
             ->notStarted()
@@ -190,7 +210,7 @@ class Fixture extends Model
     {
         return $query
             ->finished()
-            ->where('match_date', '>=', now(self::DISPLAY_TIMEZONE)->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
+            ->where('match_date', '>=', now('UTC')->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
             ->where('final_data_sync_attempts', '<', self::MAX_FINAL_DATA_SYNC_ATTEMPTS)
             ->whereNull('final_data_synced_at');
     }
@@ -199,7 +219,7 @@ class Fixture extends Model
     {
         return $query
             ->finished()
-            ->where('match_date', '>=', now(self::DISPLAY_TIMEZONE)->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
+            ->where('match_date', '>=', now('UTC')->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
             ->where('player_stats_sync_attempts', '<', self::MAX_PLAYER_STATS_SYNC_ATTEMPTS)
             ->whereNull('player_stats_synced_at');
     }

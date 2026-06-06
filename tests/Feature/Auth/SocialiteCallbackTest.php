@@ -17,7 +17,7 @@ test('facebook callback with a provider error redirects to login', function () {
     $response
         ->assertRedirect(route('login'))
         ->assertSessionHasErrors([
-            'socialite' => 'Login met Facebook werd geannuleerd.',
+            'socialite' => 'Facebook login was cancelled.',
         ]);
 
     $this->assertGuest();
@@ -34,7 +34,7 @@ test('socialite callback without an authorization code redirects to login', func
     $response
         ->assertRedirect(route('login'))
         ->assertSessionHasErrors([
-            'socialite' => 'Social login kon niet worden voltooid. Probeer opnieuw.',
+            'socialite' => 'Social login could not be completed. Please try again.',
         ]);
 
     $this->assertGuest();

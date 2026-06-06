@@ -49,9 +49,10 @@ class AddFixtureLineups extends Command
 
         return self::SUCCESS;
     }
+
     private function lineupCandidates(): Collection
     {
-        $now = now('Europe/Brussels');
+        $now = now('UTC');
 
         return Fixture::query()
             ->whereNotNull('external_id')
@@ -99,8 +100,8 @@ class AddFixtureLineups extends Command
 
     private function syncLineups(Fixture $fixture): void
     {
-        $kickoffInMinutes = (int) now('Europe/Brussels')->diffInMinutes(
-            CarbonImmutable::parse($fixture->kickoffAt()),
+        $kickoffInMinutes = (int) now('UTC')->diffInMinutes(
+            CarbonImmutable::parse($fixture->match_date, 'UTC'),
             false,
         );
 

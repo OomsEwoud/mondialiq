@@ -151,12 +151,22 @@ class AddFixtureData extends Command
 
     private function isLive(Fixture $fixture): bool
     {
-        return in_array($fixture->status_short, Fixture::LIVE_STATUS_SHORTS, true);
+        return in_array($fixture->status_short, Fixture::LIVE_STATUS_SHORTS, true)
+            || in_array($fixture->status_long, [
+                'First Half',
+                'Halftime',
+                'Half Time',
+                'Second Half',
+                'Extra Time',
+                'Break Time',
+                'Penalty In Progress',
+                'Live',
+            ], true);
     }
 
     private function shouldSyncFinalData(Fixture $fixture): bool
     {
-        return in_array($fixture->status_short, Fixture::FINISHED_STATUS_SHORTS, true)
+        return $this->isFinished($fixture)
             && $fixture->final_data_synced_at === null
             && $fixture->final_data_sync_attempts < 3;
     }
@@ -167,10 +177,16 @@ class AddFixtureData extends Command
             return 'Not Started; only fixture basics synced';
         }
 
-        if (in_array($fixture->status_short, Fixture::FINISHED_STATUS_SHORTS, true)) {
+        if ($this->isFinished($fixture)) {
             return 'final data already synced or attempt limit reached';
         }
 
         return 'not live or finished';
+    }
+
+    private function isFinished(Fixture $fixture): bool
+    {
+        return in_array($fixture->status_short, Fixture::FINISHED_STATUS_SHORTS, true)
+            || str_contains($fixture->status_long ?? '', 'Finished');
     }
 }

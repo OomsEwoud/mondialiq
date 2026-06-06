@@ -28,28 +28,28 @@ test('the home page only shows future not started upcoming fixtures', function (
 
     $upcomingFixture = createHomeFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 101,
-        'match_date' => now('Europe/Brussels')->addHour()->format('Y-m-d H:i:s'),
+        'match_date' => now('UTC')->addHour()->format('Y-m-d H:i:s'),
         'status_short' => 'NS',
         'status_long' => 'Not Started',
     ]);
 
     createHomeFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 102,
-        'match_date' => now('Europe/Brussels')->subMinute()->format('Y-m-d H:i:s'),
+        'match_date' => now('UTC')->subMinute()->format('Y-m-d H:i:s'),
         'status_short' => 'NS',
         'status_long' => 'Not Started',
     ]);
 
     createHomeFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 103,
-        'match_date' => now('Europe/Brussels')->addMinutes(30)->format('Y-m-d H:i:s'),
+        'match_date' => now('UTC')->addMinutes(30)->format('Y-m-d H:i:s'),
         'status_short' => '1H',
         'status_long' => 'First Half',
     ]);
 
     createHomeFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 104,
-        'match_date' => now('Europe/Brussels')->addMinutes(45)->format('Y-m-d H:i:s'),
+        'match_date' => now('UTC')->addMinutes(45)->format('Y-m-d H:i:s'),
         'status_short' => 'CANC',
         'status_long' => 'Match Cancelled',
     ]);
@@ -74,7 +74,7 @@ function createHomeFixture(League $league, Team $homeTeam, Team $awayTeam, array
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => 2026,
-        'match_date' => $overrides['match_date'] ?? now('Europe/Brussels')->addDay()->format('Y-m-d H:i:s'),
+        'match_date' => $overrides['match_date'] ?? now('UTC')->addDay()->format('Y-m-d H:i:s'),
         'status_short' => $overrides['status_short'] ?? 'NS',
         'status_long' => $overrides['status_long'] ?? 'Not Started',
     ]);

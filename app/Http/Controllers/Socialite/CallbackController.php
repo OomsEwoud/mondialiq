@@ -70,7 +70,7 @@ class CallbackController extends Controller
 
         return $user ?? User::firstOrNew(['email' => $email]);
     }
-    
+
     private function userAttributes(User $user, SocialiteUser $newUser, string $provider, string $email): array
     {
         $attributes = [

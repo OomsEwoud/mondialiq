@@ -26,7 +26,7 @@ test('the world cup data sync command runs the configured imports in order', fun
         ['app:add-fixture-lineups', []],
         ['app:add-fixture-data', []],
         ['app:add-fixture-player-stats', []],
-        ['app:generate-ai-predictions', ['--days' => 14]],
+        ['app:generate-ai-predictions', ['--days' => 3]],
     ] as [$subCommand, $arguments]) {
         $command
             ->shouldReceive('call')

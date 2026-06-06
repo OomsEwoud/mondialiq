@@ -64,7 +64,7 @@ trait InteractsWithRelevantFixtures
             ->whereNotNull('away_team_id');
 
         if (! $force) {
-            $query->relevantForDataSync();
+            $query->upcomingNotStarted();
         }
 
         return $query->get(['id', 'home_team_id', 'away_team_id']);
