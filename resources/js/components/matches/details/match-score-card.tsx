@@ -16,14 +16,12 @@ const scoreRows: Array<[string, keyof MatchDetails['score']]> = [
 ];
 
 export default function MatchScoreCard({ match }: Props) {
-    const hasAnyScore = Object.values(match.score).some(hasScore);
-    const visibleScoreRows = scoreRows.filter(([, key]) => {
-        if (key === 'halftime' || key === 'fulltime') {
-            return true;
-        }
-
-        return hasScore(match.score[key]);
-    });
+    const visibleScoreRows = scoreRows.filter(([, key]) =>
+        shouldShowScoreRow(match, key),
+    );
+    const hasAnyScore = visibleScoreRows.some(([, key]) =>
+        hasScore(match.score[key]),
+    );
 
     return (
         <section className="rounded-[1.8rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
@@ -40,7 +38,7 @@ export default function MatchScoreCard({ match }: Props) {
                 ))}
             </div>
             {!hasAnyScore && (
-                <p className="mt-4 rounded-2xl border border-dashed border-cyan-100 bg-slate-50/80 px-4 py-4 text-sm font-medium leading-6 text-slate-500">
+                <p className="mt-4 rounded-2xl border border-dashed border-cyan-100 bg-slate-50/80 px-4 py-4 text-sm leading-6 font-medium text-slate-500">
                     Score details will appear once the match is played.
                 </p>
             )}
@@ -48,6 +46,52 @@ export default function MatchScoreCard({ match }: Props) {
     );
 }
 
+function shouldShowScoreRow(
+    match: MatchDetails,
+    key: keyof MatchDetails['score'],
+): boolean {
+    if (key === 'halftime') {
+        return isHalftimeScoreAvailable(match);
+    }
+
+    if (key === 'fulltime') {
+        return isFulltimeScoreAvailable(match);
+    }
+
+    return hasScore(match.score[key]);
+}
+
 function hasScore(score: MatchDetailsScoreLine): boolean {
     return score.home !== null && score.away !== null;
+}
+
+function isHalftimeScoreAvailable(match: MatchDetails): boolean {
+    const status = normalizedStatus(match);
+
+    return (
+        hasScore(match.score.halftime) &&
+        (['ht', '2h', 'et', 'bt', 'p', 'ft', 'aet', 'pen'].includes(status) ||
+            [
+                'half time',
+                'halftime',
+                'second half',
+                'extra time',
+                'break time',
+                'penalty',
+                'finished',
+            ].some((availableStatus) => status.includes(availableStatus)))
+    );
+}
+
+function isFulltimeScoreAvailable(match: MatchDetails): boolean {
+    const status = normalizedStatus(match);
+
+    return (
+        hasScore(match.score.fulltime) &&
+        (['ft', 'aet', 'pen'].includes(status) || status.includes('finished'))
+    );
+}
+
+function normalizedStatus(match: MatchDetails): string {
+    return (match.statusShort ?? match.status).trim().toLowerCase();
 }

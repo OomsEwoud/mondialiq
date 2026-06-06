@@ -66,6 +66,24 @@ test('the match detail page exposes empty availability when no players are missi
             ->where('match.availability.away', []));
 });
 
+test('the match detail page exposes the fixture short status', function () {
+    [$fixture] = createFixtureForMatchDetails();
+
+    $fixture->update([
+        'status_short' => 'HT',
+        'status_long' => 'Halftime',
+    ]);
+
+    $response = $this->get(route('matches.show', $fixture));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('match-details')
+            ->where('match.statusShort', 'HT')
+            ->where('match.status', 'Halftime'));
+});
+
 test('the match detail page exposes ai and current user prediction metadata', function () {
     $user = User::factory()->create();
     [$fixture, $homeTeam, $awayTeam] = createFixtureForMatchDetails();

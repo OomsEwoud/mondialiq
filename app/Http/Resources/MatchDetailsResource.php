@@ -28,6 +28,7 @@ class MatchDetailsResource extends JsonResource
             'dateValue' => $this->match_date->format('Y-m-d'),
             'time' => $this->match_date->format('H:i'),
             'kickoffAt' => $this->kickoffAt(),
+            'statusShort' => $this->status_short,
             'status' => $this->status_long,
             'elapsedTime' => $this->elapsed_time,
             'score' => $this->scoreAttributes(),

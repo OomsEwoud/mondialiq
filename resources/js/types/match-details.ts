@@ -73,6 +73,7 @@ export interface MatchDetails {
     dateValue: string;
     time: string;
     kickoffAt: string;
+    statusShort: string | null;
     status: string;
     elapsedTime: number | null;
     hasAiPrediction: boolean;
