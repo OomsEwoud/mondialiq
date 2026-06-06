@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PredictionTypes;
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,37 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+#[Fillable([
+    'external_id',
+    'league_id',
+    'home_team_id',
+    'away_team_id',
+    'venue_id',
+    'referee_id',
+    'round_name',
+    'season',
+    'match_date',
+    'status_short',
+    'status_long',
+    'elapsed_time',
+    'halftime_home_goals',
+    'halftime_away_goals',
+    'fulltime_home_goals',
+    'fulltime_away_goals',
+    'extratime_home_goals',
+    'extratime_away_goals',
+    'penalty_home_goals',
+    'penalty_away_goals',
+    'result',
+    'fixture_basics_synced_at',
+    'has_lineups',
+    'lineups_synced_at',
+    'lineup_sync_attempts',
+    'final_data_synced_at',
+    'final_data_sync_attempts',
+    'player_stats_synced_at',
+    'player_stats_sync_attempts',
+])]
 class Fixture extends Model
 {
     private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 15;
@@ -56,38 +88,6 @@ class Fixture extends Model
         '%Postpon%',
         '%Suspend%',
         '%Walk%',
-    ];
-
-    protected $fillable = [
-        'external_id',
-        'league_id',
-        'home_team_id',
-        'away_team_id',
-        'venue_id',
-        'referee_id',
-        'round_name',
-        'season',
-        'match_date',
-        'status_short',
-        'status_long',
-        'elapsed_time',
-        'halftime_home_goals',
-        'halftime_away_goals',
-        'fulltime_home_goals',
-        'fulltime_away_goals',
-        'extratime_home_goals',
-        'extratime_away_goals',
-        'penalty_home_goals',
-        'penalty_away_goals',
-        'result',
-        'fixture_basics_synced_at',
-        'has_lineups',
-        'lineups_synced_at',
-        'lineup_sync_attempts',
-        'final_data_synced_at',
-        'final_data_sync_attempts',
-        'player_stats_synced_at',
-        'player_stats_sync_attempts',
     ];
 
     protected function casts(): array

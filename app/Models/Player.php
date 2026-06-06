@@ -2,25 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'external_id',
+    'country_id',
+    'first_name',
+    'last_name',
+    'display_name',
+    'birth_date',
+    'photo_url',
+    'position',
+    'number',
+])]
 class Player extends Model
 {
-    protected $fillable = [
-        'external_id',
-        'country_id',
-        'first_name',
-        'last_name',
-        'display_name',
-        'birth_date',
-        'photo_url',
-        'position',
-        'number',
-    ];
-
     protected function casts(): array
     {
         return [

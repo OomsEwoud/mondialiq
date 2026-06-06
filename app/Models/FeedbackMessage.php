@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'user_id',
+    'category',
+    'subject',
+    'message',
+    'related_url',
+    'handled_at',
+    'handled_by',
+])]
 class FeedbackMessage extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'category',
-        'subject',
-        'message',
-        'related_url',
-        'handled_at',
-        'handled_by',
-    ];
-
     protected function casts(): array
     {
         return [

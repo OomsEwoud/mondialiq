@@ -3,29 +3,29 @@
 namespace App\Models;
 
 use App\Enums\PredictionTypes;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'fixture_id',
+    'user_id',
+    'winner_id',
+    'source',
+    'total_goals',
+    'home_goals',
+    'away_goals',
+    'confidence',
+    'advice',
+    'home_chance',
+    'draw_chance',
+    'away_chance',
+    'points',
+    'points_awarded_at',
+])]
 class Prediction extends Model
 {
-    protected $fillable = [
-        'fixture_id',
-        'user_id',
-        'winner_id',
-        'source',
-        'total_goals',
-        'home_goals',
-        'away_goals',
-        'confidence',
-        'advice',
-        'home_chance',
-        'draw_chance',
-        'away_chance',
-        'points',
-        'points_awarded_at',
-    ];
-
     protected function casts(): array
     {
         return [

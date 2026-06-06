@@ -2,26 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'team_a_id',
+    'team_b_id',
+    'pair_key',
+    'total_matches',
+    'team_a_wins',
+    'team_b_wins',
+    'draws',
+    'team_a_goals',
+    'team_b_goals',
+    'last_meeting_at',
+    'raw_data',
+    'fetched_at',
+])]
 class HeadToHead extends Model
 {
-    protected $fillable = [
-        'team_a_id',
-        'team_b_id',
-        'pair_key',
-        'total_matches',
-        'team_a_wins',
-        'team_b_wins',
-        'draws',
-        'team_a_goals',
-        'team_b_goals',
-        'last_meeting_at',
-        'raw_data',
-        'fetched_at',
-    ];
-
     protected function casts(): array
     {
         return [

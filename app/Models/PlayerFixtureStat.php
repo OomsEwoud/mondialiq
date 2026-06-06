@@ -2,49 +2,49 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'fixture_id',
+    'player_id',
+    'game_minutes',
+    'number',
+    'position',
+    'rating',
+    'is_captain',
+    'is_substitute',
+    'offsides',
+    'total_shots',
+    'shots_on_target',
+    'goals',
+    'goals_conceded',
+    'assists',
+    'saves',
+    'passes',
+    'key_passes',
+    'passes_accuracy',
+    'tackles',
+    'blocks',
+    'interceptions',
+    'duels',
+    'duels_won',
+    'dribbles_attempts',
+    'dribbles_success',
+    'dribbles_past',
+    'fouls_drawn',
+    'fouls_committed',
+    'yellow_cards',
+    'red_cards',
+    'penalties_won',
+    'penalties_committed',
+    'penalties_scored',
+    'penalties_missed',
+    'penalties_saved',
+])]
 class PlayerFixtureStat extends Model
 {
-    protected $fillable = [
-        'fixture_id',
-        'player_id',
-        'game_minutes',
-        'number',
-        'position',
-        'rating',
-        'is_captain',
-        'is_substitute',
-        'offsides',
-        'total_shots',
-        'shots_on_target',
-        'goals',
-        'goals_conceded',
-        'assists',
-        'saves',
-        'passes',
-        'key_passes',
-        'passes_accuracy',
-        'tackles',
-        'blocks',
-        'interceptions',
-        'duels',
-        'duels_won',
-        'dribbles_attempts',
-        'dribbles_success',
-        'dribbles_past',
-        'fouls_drawn',
-        'fouls_committed',
-        'yellow_cards',
-        'red_cards',
-        'penalties_won',
-        'penalties_committed',
-        'penalties_scored',
-        'penalties_missed',
-        'penalties_saved',
-    ];
-
     protected function casts(): array
     {
         return [

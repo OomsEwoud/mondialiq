@@ -2,24 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'fixture_id',
+    'external_bookmaker_id',
+    'bookmaker_name',
+    'external_bet_id',
+    'bet_name',
+    'bookmaker_id',
+    'bet_type_id',
+    'value',
+    'odd',
+    'api_updated_at',
+])]
 class FixtureOdd extends Model
 {
-    protected $fillable = [
-        'fixture_id',
-        'external_bookmaker_id',
-        'bookmaker_name',
-        'external_bet_id',
-        'bet_name',
-        'bookmaker_id',
-        'bet_type_id',
-        'value',
-        'odd',
-        'api_updated_at',
-    ];
-
     protected function casts(): array
     {
         return [

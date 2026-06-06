@@ -2,26 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[Fillable([
+    'name',
+    'description',
+    'icon',
+    'accent_color',
+    'cover_style',
+    'code',
+    'owner_id',
+    'reward_title',
+    'reward_description',
+    'visibility',
+    'is_active',
+])]
 class Scoreboard extends Model
 {
-    protected $fillable = [
-        'name',
-        'description',
-        'icon',
-        'accent_color',
-        'cover_style',
-        'code',
-        'owner_id',
-        'reward_title',
-        'reward_description',
-        'visibility',
-        'is_active',
-    ];
-
     protected function casts(): array
     {
         return [

@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'fixture_id',
+    'temperature',
+    'humidity',
+    'condition',
+])]
 class WeatherLog extends Model
 {
-    protected $fillable = [
-        'fixture_id',
-        'temperature',
-        'humidity',
-        'condition',
-    ];
-
     protected function casts(): array
     {
         return [

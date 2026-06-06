@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'external_id',
+    'name',
+    'city',
+    'country_id',
+    'capacity',
+    'photo_url',
+])]
 class Venue extends Model
 {
-    protected $fillable = [
-        'external_id',
-        'name',
-        'city',
-        'country_id',
-        'capacity',
-        'photo_url',
-    ];
-
     protected function casts(): array
     {
         return [
