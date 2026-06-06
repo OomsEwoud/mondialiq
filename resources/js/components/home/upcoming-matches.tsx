@@ -109,6 +109,20 @@ export default function UpcomingMatches({ matches }: Props) {
                                 </div>
                             </div>
 
+                            {match.predictionState ? (
+                                <div
+                                    className={
+                                        match.predictionState === 'predicted'
+                                            ? 'mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[11px] leading-none font-black tracking-wide text-emerald-800 uppercase'
+                                            : 'mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-none font-black tracking-wide text-amber-800 uppercase'
+                                    }
+                                >
+                                    {match.predictionState === 'predicted'
+                                        ? 'Prediction saved'
+                                        : 'Prediction missing'}
+                                </div>
+                            ) : null}
+
                             <div className="mt-3 border-t border-slate-200 pt-2">
                                 <Link
                                     href={showMatch.url(match.id)}

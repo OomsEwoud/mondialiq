@@ -1,8 +1,11 @@
 <?php
 
+use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\League;
+use App\Models\Prediction;
 use App\Models\Team;
+use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('the home page only shows future not started upcoming fixtures', function () {
@@ -62,7 +65,61 @@ test('the home page only shows future not started upcoming fixtures', function (
             ->where('upcomingFixtures.0.id', $upcomingFixture->id)
             ->where('upcomingFixtures.0.statusShort', 'NS')
             ->where('upcomingFixtures.0.statusLong', 'Not Started')
+            ->where('upcomingFixtures.0.predictionState', null)
             ->where('upcomingFixtures.0.kickoffAt', $upcomingFixture->kickoffAt()));
+});
+
+test('the home page marks upcoming matches as predicted or missing for the current user', function () {
+    $user = User::factory()->create();
+    $league = League::query()->create([
+        'external_id' => 1,
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 1001,
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 1002,
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    $predictedFixture = createHomeFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 201,
+        'match_date' => now('UTC')->addHour()->format('Y-m-d H:i:s'),
+    ]);
+    $missingFixture = createHomeFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 202,
+        'match_date' => now('UTC')->addHours(2)->format('Y-m-d H:i:s'),
+    ]);
+
+    Prediction::query()->create([
+        'fixture_id' => $predictedFixture->id,
+        'user_id' => $user->id,
+        'source' => PredictionTypes::User->value,
+        'winner_id' => $homeTeam->id,
+        'home_goals' => 2,
+        'away_goals' => 1,
+        'total_goals' => 3,
+    ]);
+
+    $this->actingAs($user)
+        ->get('/')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('home')
+            ->has('upcomingFixtures', 2)
+            ->where('upcomingFixtures.0.id', $predictedFixture->id)
+            ->where('upcomingFixtures.0.predictionState', 'predicted')
+            ->where('upcomingFixtures.1.id', $missingFixture->id)
+            ->where('upcomingFixtures.1.predictionState', 'missing'));
 });
 
 function createHomeFixture(League $league, Team $homeTeam, Team $awayTeam, array $overrides = []): Fixture
