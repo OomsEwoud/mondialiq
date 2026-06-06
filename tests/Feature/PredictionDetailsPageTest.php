@@ -38,6 +38,8 @@ function createFixtureForPredictionDetails(): array
         'match_date' => '2026-06-11 21:00:00',
         'status_short' => 'NS',
         'status_long' => 'Not Started',
+        'fulltime_home_goals' => null,
+        'fulltime_away_goals' => null,
     ]);
 
     return [$fixture, $homeTeam, $awayTeam];
@@ -119,7 +121,7 @@ test('a pending user prediction page can show a scoring preview without persisti
             ->where('scoringPreview.breakdown.items.3.label', 'Away team goals')
             ->where('scoringPreview.breakdown.items.3.earned', true));
 
-    expect($prediction->refresh()->points)->toBeNull()
+    expect($prediction->refresh()->points)->toBe(0)
         ->and($prediction->points_awarded_at)->toBeNull();
 });
 

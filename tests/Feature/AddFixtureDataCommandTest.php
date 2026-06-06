@@ -192,8 +192,6 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ]);
         $mock->shouldReceive('getFixtureStats')->once()->with($liveFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixtureEvents')->once()->with($liveFixture->external_id)->andReturn([]);
-        $mock->shouldReceive('getFixtureLineups')->once()->with($liveFixture->external_id)->andReturn([]);
-
         $mock->shouldReceive('getFixture')->once()->with($soonFixture->external_id)->andReturn([
             fixtureSyncPayload($soonFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
         ]);
@@ -224,6 +222,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
                     'status_short' => 'NS',
                     'status_long' => 'Not Started',
                     'elapsed_time' => null,
+                    'match_date' => now()->copy()->addMinutes(10),
                 ])->save();
             });
     });
@@ -238,8 +237,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         $mock->shouldNotReceive('storeFixtureEvents')->with([], $soonFixture->id);
     });
 
-    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture) {
-        $mock->shouldReceive('storeLineups')->once()->with([], $liveFixture->id)->andReturn(false);
+    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($soonFixture) {
         $mock->shouldReceive('storeLineups')->once()->with([], $soonFixture->id)->andReturn(false);
     });
 
@@ -250,7 +248,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ->expectsOutput(" - Fixture {$soonFixture->id} (external {$soonFixture->external_id}) geselecteerd [- | Not Started | elapsed -]")
         ->expectsOutput("Fixture {$liveFixture->id} oud [1H | First Half | elapsed 45]")
         ->expectsOutput("Calling endpoint /fixtures for fixture {$liveFixture->id}")
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$liveFixture->id}")
+        ->expectsOutput("Skipping lineups for fixture {$liveFixture->id}: live fixture is beyond the lineup sync window")
         ->expectsOutput("Fetching live data for fixture {$liveFixture->id}: status 2H 70'")
         ->expectsOutput("Calling endpoint /fixtures/statistics for fixture {$liveFixture->id}")
         ->expectsOutput("Calling endpoint /fixtures/events for fixture {$liveFixture->id}")

@@ -107,7 +107,7 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
 
     $syncedFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 503,
-        'match_date' => now()->copy()->addMinutes(60),
+        'match_date' => now()->copy()->addMinutes(42),
         'has_lineups' => true,
     ]);
 
@@ -132,9 +132,9 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
     $this->artisan('app:add-fixture-lineups')
         ->expectsOutput('Ophalen van lineups voor fixtures dicht bij de aftrap')
         ->expectsOutput('3 lineup kandidaten gevonden.')
+        ->expectsOutput("Skipping fixture {$recentlyCheckedFixture->external_id}: lineups checked recently; retry after 5 minutes")
         ->expectsOutput("Fetching lineups for fixture {$lineupFixture->id}: BRA vs ENG, kickoff in 40 minutes")
         ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$lineupFixture->id}")
-        ->expectsOutput("Skipping fixture {$recentlyCheckedFixture->external_id}: lineups checked recently; retry after 5 minutes")
         ->expectsOutput("Skipping fixture {$syncedFixture->external_id}: lineups already synced")
         ->expectsOutput('Lineup sync afgerond')
         ->assertSuccessful();
@@ -169,7 +169,7 @@ test('the add fixture lineups command retries later when lineups are unavailable
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 511,
-        'match_date' => now()->copy()->addMinutes(60),
+        'match_date' => now()->copy()->addMinutes(40),
     ]);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture) {

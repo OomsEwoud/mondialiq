@@ -37,8 +37,6 @@ class AddFixtureLineups extends Command
         $this->info("{$fixtures->count()} lineup kandidaten gevonden.");
 
         foreach ($fixtures as $fixture) {
-            $this->line("Fixture {$fixture->id} geselecteerd voor lineup check: {$fixture->lineupSyncReason()}");
-
             if ($this->shouldSkip($fixture)) {
                 continue;
             }

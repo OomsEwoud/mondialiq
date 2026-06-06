@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\PredictionTypes;
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -261,6 +262,10 @@ class Fixture extends Model
 
         $matchDate = $this->match_date->copy()->setTimezone('UTC');
 
+        if ($this->isLive()) {
+            return $this->isLiveWithinLineupWindow($matchDate);
+        }
+
         if ($this->isFinished()) {
             return ! $this->has_lineups
                 && $matchDate->betweenIncluded(
@@ -316,29 +321,6 @@ class Fixture extends Model
         return 'fixture is outside the lineup sync window';
     }
 
-    public function lineupSyncReason(): string
-    {
-        if ($this->isLive()) {
-            return 'live fixture';
-        }
-
-        if (! $this->match_date) {
-            return 'missing match date';
-        }
-
-        $matchDate = $this->match_date->copy()->setTimezone('UTC');
-
-        if ($this->isFinished() && ! $this->has_lineups && $matchDate->betweenIncluded(self::lineupSyncWindowStart(), now('UTC'))) {
-            return 'recent finished fixture without lineups';
-        }
-
-        if ($matchDate->isFuture() && $matchDate->betweenIncluded(now('UTC'), self::lineupSyncWindowEnd())) {
-            return 'fixture starts within lineup window';
-        }
-
-        return 'outside lineup sync window';
-    }
-
     public function isLive(): bool
     {
         return in_array($this->status_short, self::LIVE_STATUS_SHORTS, true)
@@ -389,6 +371,22 @@ class Fixture extends Model
             ->copy()
             ->setTimezone('UTC')
             ->isBefore(self::lineupSyncWindowStart());
+    }
+
+    private function isLiveWithinLineupWindow(CarbonInterface $matchDate): bool
+    {
+        if (! $this->isLive() || $this->isLivePastLineupWindow()) {
+            return false;
+        }
+
+        if (is_numeric($this->elapsed_time)) {
+            return (int) $this->elapsed_time <= self::POST_KICKOFF_LINEUP_WINDOW_MINUTES;
+        }
+
+        return $matchDate->betweenIncluded(
+            self::lineupSyncWindowStart(),
+            now('UTC'),
+        );
     }
 
     private function lineupRetryMinutes(): int

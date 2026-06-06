@@ -136,5 +136,6 @@ function createHomeFixture(League $league, Team $homeTeam, Team $awayTeam, array
         'match_date' => $overrides['match_date'] ?? now('UTC')->addDay()->format('Y-m-d H:i:s'),
         'status_short' => $overrides['status_short'] ?? 'NS',
         'status_long' => $overrides['status_long'] ?? 'Not Started',
+        'has_lineups' => $overrides['has_lineups'] ?? false,
     ]);
 }
