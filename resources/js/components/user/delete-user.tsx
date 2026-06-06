@@ -16,7 +16,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
-import type { User } from '@/types';
+import type { AccountUser } from '@/types';
 import {
     settingsDangerSectionClassName,
     settingsFieldClassName,
@@ -25,7 +25,7 @@ import {
 import { formatProviderName } from '@/utils/social-provider';
 
 type Props = {
-    user?: User;
+    user?: AccountUser;
 };
 
 export default function DeleteUser({ user }: Props) {

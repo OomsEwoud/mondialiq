@@ -14,6 +14,28 @@ test('profile page is displayed', function () {
     $response->assertOk();
 });
 
+test('profile page receives account specific user fields', function () {
+    $user = User::factory()->create([
+        'password' => null,
+        'social_provider' => 'google',
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->get(route('edit-account'));
+
+    $accountUser = $response->inertiaProps('accountUser');
+
+    expect($accountUser)->toMatchArray([
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'social_provider' => 'google',
+        'has_password' => false,
+        'is_sso_only' => true,
+    ])->toHaveKey('email_verified_at');
+});
+
 test('profile information can be updated', function () {
     $user = User::factory()->create();
 

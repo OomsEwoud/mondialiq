@@ -17,6 +17,7 @@ class EditAccountController extends Controller
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
             'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
+            'accountUser' => $this->accountUser($request),
         ];
 
         if (Features::canManageTwoFactorAuthentication()) {
@@ -30,5 +31,25 @@ class EditAccountController extends Controller
         }
 
         return Inertia::render('settings/profile', $props);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function accountUser(Request $request): array
+    {
+        $user = $request->user();
+        $hasPassword = filled($user->getAttribute('password'));
+
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatarUrl(),
+            'email_verified_at' => $user->email_verified_at?->toIso8601String(),
+            'social_provider' => $user->getAttribute('social_provider'),
+            'has_password' => $hasPassword,
+            'is_sso_only' => ! $hasPassword && filled($user->getAttribute('social_provider')),
+        ];
     }
 }

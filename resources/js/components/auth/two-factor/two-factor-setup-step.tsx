@@ -25,6 +25,7 @@ export default function TwoFactorSetupStep({
     const setupKey = manualSetupKey ?? '';
     const hasManualSetupKey = setupKey.length > 0;
     const IconComponent = copiedText === setupKey ? Check : Copy;
+    const qrCodeMarkup = qrCodeSvg ?? '';
     const showQrCode = Boolean(qrCodeSvg);
 
     return (
@@ -40,7 +41,7 @@ export default function TwoFactorSetupStep({
                                     <div
                                         className="aspect-square w-full rounded-lg bg-white p-2 [&_svg]:size-full"
                                         dangerouslySetInnerHTML={{
-                                            __html: qrCodeSvg,
+                                            __html: qrCodeMarkup,
                                         }}
                                     />
                                 ) : (

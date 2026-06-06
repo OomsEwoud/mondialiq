@@ -55,24 +55,10 @@ class HandleInertiaRequests extends Middleware
         }
 
         return [
-            ...$user->only([
-                'id',
-                'name',
-                'email',
-                'email_verified_at',
-                'social_provider',
-                'avatar_type',
-                'created_at',
-                'updated_at',
-            ]),
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
             'avatar' => $user->avatarUrl(),
-            'has_password' => $this->hasPassword($user),
-            'is_sso_only' => ! $this->hasPassword($user) && filled($user->getAttribute('social_provider')),
         ];
-    }
-
-    private function hasPassword(User $user): bool
-    {
-        return filled($user->getAttribute('password'));
     }
 }

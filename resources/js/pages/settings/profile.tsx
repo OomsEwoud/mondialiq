@@ -1,4 +1,4 @@
-import { Form, Link, usePage } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import {
     KeyRound,
     LockKeyhole,
@@ -28,6 +28,7 @@ import { useAvatarUpload } from '@/hooks/use-avatar-upload';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { disable, enable } from '@/routes/two-factor';
 import { send } from '@/routes/verification';
+import type { AccountUser } from '@/types';
 import {
     settingsFieldClassName,
     settingsLabelClassName,
@@ -36,6 +37,7 @@ import {
 } from '@/utils/settings-ui';
 
 type Props = {
+    accountUser: AccountUser;
     mustVerifyEmail: boolean;
     status?: string;
     canManageTwoFactor?: boolean;
@@ -49,13 +51,13 @@ const emailVerificationCardClassName =
     'rounded-[1.5rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] p-4 shadow-sm shadow-amber-950/5';
 
 export default function Profile({
+    accountUser,
     mustVerifyEmail,
     status,
     canManageTwoFactor = false,
     requiresConfirmation = false,
     twoFactorEnabled = false,
 }: Props) {
-    const { auth } = usePage().props;
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
     const [showSetupModal, setShowSetupModal] = useState(false);
@@ -82,11 +84,7 @@ export default function Profile({
         prevTwoFactorEnabled.current = twoFactorEnabled;
     }, [twoFactorEnabled, clearTwoFactorAuthData]);
 
-    if (!auth.user) {
-        return null;
-    }
-
-    const user = auth.user;
+    const user = accountUser;
     const isSsoOnly = user.is_sso_only;
     const needsEmailVerification =
         mustVerifyEmail && user.email_verified_at === null;

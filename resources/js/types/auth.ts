@@ -3,15 +3,14 @@ export type User = {
     name: string;
     email: string;
     avatar: string | null;
-    avatar_type: string | null;
+    [key: string]: unknown;
+};
+
+export type AccountUser = User & {
     email_verified_at: string | null;
     has_password: boolean;
     is_sso_only: boolean;
     social_provider: string | null;
-    two_factor_enabled?: boolean;
-    created_at: string;
-    updated_at: string;
-    [key: string]: unknown;
 };
 
 export type Auth = {
