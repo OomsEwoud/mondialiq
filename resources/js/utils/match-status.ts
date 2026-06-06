@@ -25,7 +25,7 @@ const liveStatuses = [
 const liveStatusCodes = ['1h', 'ht', '2h', 'et', 'bt', 'p', 'live'];
 
 export function getMatchStatusKind(match: Match): MatchStatusKind {
-    const status = match.status.toLowerCase();
+    const status = normalizeStatus(match.status);
 
     if (status.includes('finish')) {
         return 'finished';
@@ -58,12 +58,12 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
 }
 
 export function isLiveStatus(
-    statusLong: string | null,
-    statusShort?: string | null,
+    statusLong: string | null | undefined,
+    statusShort?: string | null | undefined,
 ): boolean {
     const statuses = [statusShort, statusLong]
-        .filter((status): status is string => status !== null)
-        .map((status) => status.trim().toLowerCase());
+        .filter((status): status is string => typeof status === 'string')
+        .map(normalizeStatus);
 
     return statuses.some(
         (status) =>
@@ -95,11 +95,11 @@ export function getMatchStatusLabel(match: Match): string {
 }
 
 export function getReadableLiveStatus(
-    statusLong: string | null,
-    statusShort?: string | null,
+    statusLong: string | null | undefined,
+    statusShort?: string | null | undefined,
 ): string {
     const status = statusLong || statusShort || 'Live';
-    const normalizedStatus = status.trim().toLowerCase();
+    const normalizedStatus = normalizeStatus(status);
 
     const readableStatuses: Record<string, string> = {
         '1h': 'First Half',
@@ -120,6 +120,10 @@ export function getReadableLiveStatus(
     };
 
     return readableStatuses[normalizedStatus] ?? status;
+}
+
+function normalizeStatus(status: string | null | undefined): string {
+    return status?.trim().toLowerCase() ?? '';
 }
 
 export function getLiveStatusLabel(
