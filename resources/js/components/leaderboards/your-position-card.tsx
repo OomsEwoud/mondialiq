@@ -54,7 +54,7 @@ export default function YourPositionCard({
             <CardContent className="px-5 pb-5 sm:px-6">
                 {currentUserPosition ? (
                     <div className="space-y-4">
-                        <div className="rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 px-5 py-5 text-white shadow-sm">
+                        <div className="rounded-xl bg-slate-900 px-5 py-5 text-white shadow-sm">
                             <p className="text-xs font-bold tracking-wide text-cyan-100 uppercase">
                                 Current rank
                             </p>

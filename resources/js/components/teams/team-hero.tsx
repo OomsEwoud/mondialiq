@@ -38,7 +38,7 @@ export default function TeamHero({ team }: Props) {
 
     return (
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-white/10 bg-gradient-to-br from-slate-900 to-slate-800 p-5 text-white sm:p-6">
+            <div className="border-b border-white/10 bg-slate-900 p-5 text-white sm:p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex min-w-0 items-center gap-4">
                         <span className="flex size-22 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white p-3 shadow-sm sm:size-24">

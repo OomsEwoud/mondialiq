@@ -45,7 +45,7 @@ export default function GroupTabs({
                             className={[
                                 'h-11 rounded-2xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-sm'
+                                    ? 'border-slate-900 bg-slate-900 text-white shadow-md'
                                     : 'border-transparent bg-white text-slate-600 hover:border-cyan-200 hover:bg-cyan-50',
                             ].join(' ')}
                         >

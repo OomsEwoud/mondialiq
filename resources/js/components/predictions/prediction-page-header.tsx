@@ -8,7 +8,7 @@ interface Props {
 
 export default function PredictionPageHeader({ scoringGuideHref }: Props) {
     return (
-        <section className="mb-5 overflow-hidden rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-800 p-6 shadow-lg sm:p-8">
+        <section className="mb-5 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
                     <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">

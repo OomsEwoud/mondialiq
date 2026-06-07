@@ -46,7 +46,7 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                 description="Browse the complete World Cup 2026 match schedule, filter fixtures by team, round, date and status, and open each match for details and predictions."
             />
 
-            <header className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
+            <header className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
                 <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                     World Cup 2026 schedule
                 </p>

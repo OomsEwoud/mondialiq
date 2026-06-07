@@ -2,7 +2,7 @@ import { Trophy } from 'lucide-react';
 
 export default function GroupPageHeader() {
     return (
-        <section className="mb-6 rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
+        <section className="mb-6 rounded-2xl border border-slate-700/50 bg-slate-900 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
             <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-slate-800 text-cyan-300 sm:size-14">
                 <Trophy size={22} />
             </div>

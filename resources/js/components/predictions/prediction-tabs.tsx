@@ -43,8 +43,8 @@ export default function PredictionTabs({ activeTab }: Props) {
                             className={cn(
                                 'flex min-h-13 items-center justify-center rounded-xl px-3 text-left transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'bg-white text-slate-900 shadow-sm ring-1 ring-slate-200'
-                                    : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm',
+                                    ? 'bg-slate-900 text-white shadow-md'
+                                    : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
                             )}
                         >
                             <span className="grid">
@@ -55,7 +55,7 @@ export default function PredictionTabs({ activeTab }: Props) {
                                     className={cn(
                                         'hidden text-xs font-medium sm:block',
                                         isActive
-                                            ? 'text-slate-500'
+                                            ? 'text-cyan-300'
                                             : 'text-slate-400',
                                     )}
                                 >

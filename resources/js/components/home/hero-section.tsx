@@ -13,7 +13,7 @@ const insightBadges = ['AI confidence', 'Market signals', 'Private leagues'];
 
 export default function HeroSection() {
     return (
-        <section className="overflow-hidden rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-800 shadow-lg">
+        <section className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 shadow-lg">
             <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:p-8 xl:p-10">
                 <div>
                     <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-slate-600/50 bg-slate-800/80 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 uppercase shadow-sm">

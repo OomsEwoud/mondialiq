@@ -24,7 +24,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const getInitials = useInitials();
 
     return (
-        <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
+        <div className="light min-h-screen w-full overflow-x-hidden bg-white font-sans text-slate-900">
             <header className="sticky top-0 z-50 border-b border-slate-700/50 bg-slate-900 shadow-sm">
                 <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
                     <Link

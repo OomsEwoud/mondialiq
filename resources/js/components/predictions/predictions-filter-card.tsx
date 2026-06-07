@@ -78,30 +78,24 @@ export default function PredictionsFilterCard({
     };
 
     return (
-        <section className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-5 shadow-sm sm:p-6">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                <div className="min-w-0">
-                    <p className={predictionFilterLabelClassName}>Filters</p>
-                    <h2 className="mt-1 text-2xl font-bold text-slate-900">
-                        Find predictions faster
-                    </h2>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+        <section className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm sm:p-6">
+            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <h2 className={predictionFilterLabelClassName}>Filters</h2>
+                    <p className="mt-1 text-sm text-slate-500">
                         Find predictions by match status, date, round or team.
                     </p>
                 </div>
-
-                <div className="flex flex-col gap-2 lg:items-end">
-                    {hasActiveFilters && (
-                        <button
-                            type="button"
-                            onClick={onClear}
-                            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
-                        >
-                            <X className="size-4" />
-                            Clear filters
-                        </button>
-                    )}
-                </div>
+                {hasActiveFilters && (
+                    <button
+                        type="button"
+                        onClick={onClear}
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                    >
+                        <X className="size-4" />
+                        Clear filters
+                    </button>
+                )}
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12 lg:items-end">

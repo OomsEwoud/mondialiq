@@ -33,7 +33,7 @@ export default function MatchStatusSegmentedFilter({
             <div
                 role="radiogroup"
                 aria-label="Match status"
-                className="grid grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-white p-1 shadow-sm sm:grid-cols-4"
+                className="grid grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-1.5 shadow-sm sm:grid-cols-4"
             >
                 {matchStatusOptions.map((option) => {
                     const selected = value === option.value;
@@ -46,10 +46,10 @@ export default function MatchStatusSegmentedFilter({
                             aria-checked={selected}
                             onClick={() => onChange(option.value)}
                             className={cn(
-                                'flex h-10 min-w-0 items-center justify-center rounded-2xl px-3 text-center text-sm leading-tight font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'flex h-10 min-w-0 items-center justify-center rounded-xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                                 selected
-                                    ? 'bg-cyan-50 text-cyan-700 shadow-sm ring-1 ring-cyan-200'
-                                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+                                    ? 'bg-slate-900 text-white shadow-md'
+                                    : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
                             )}
                         >
                             {option.label}

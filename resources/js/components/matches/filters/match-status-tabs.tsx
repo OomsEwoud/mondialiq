@@ -21,7 +21,7 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
         <div
             role="radiogroup"
             aria-label="Match status"
-            className="grid grid-cols-2 gap-1 rounded-2xl border border-white/80 bg-white/70 p-1 shadow-sm sm:grid-cols-5"
+            className="grid grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-1.5 shadow-sm sm:grid-cols-5"
         >
             {statusTabs.map((tab) => (
                 <button
@@ -31,10 +31,10 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
                     aria-checked={selected === tab.value}
                     onClick={() => onChange(tab.value)}
                     className={cn(
-                        'flex h-10 min-w-0 items-center justify-center rounded-2xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                        'flex h-10 min-w-0 items-center justify-center rounded-xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                         selected === tab.value
-                            ? 'bg-gradient-to-b from-cyan-50 to-cyan-50/60 text-cyan-700 shadow-sm ring-1 ring-cyan-300'
-                            : 'text-slate-600 hover:bg-white/80 hover:text-slate-900',
+                            ? 'bg-slate-900 text-white shadow-md'
+                            : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
                     )}
                 >
                     {tab.label}
