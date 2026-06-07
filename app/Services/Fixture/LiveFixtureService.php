@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 class LiveFixtureService
 {
     private const CACHE_KEY = 'live-fixtures';
+
     private const CACHE_TTL_SECONDS = 30;
 
     public function liveFixtures(): array

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\Console\Command\Command;
 use Throwable;
 
-trait InteractsWithRelevantFixtures 
+trait InteractsWithRelevantFixtures
 {
     protected function relevantFixturesForDataSync(): Collection
     {

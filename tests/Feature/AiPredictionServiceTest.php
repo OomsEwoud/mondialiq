@@ -4,13 +4,16 @@ use App\Enums\PredictionTypes;
 use App\Models\BetType;
 use App\Models\Bookmaker;
 use App\Models\Fixture;
+use App\Models\FixtureOdd;
 use App\Models\League;
+use App\Models\Prediction;
 use App\Models\Team;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\AiPredictionService;
 use App\Services\Prediction\OpenAiResponseClient;
 use Illuminate\Support\Facades\Log;
 use Mockery\MockInterface;
+
 use function Pest\Laravel\mock;
 
 test('it sends the built prompt to openai and stores the ai prediction', function () {
@@ -414,7 +417,7 @@ function createFixtureOdd(
         'name' => $betName,
     ]);
 
-    \App\Models\FixtureOdd::query()->create([
+    FixtureOdd::query()->create([
         'fixture_id' => $fixture->id,
         'external_bookmaker_id' => $externalBookmakerId,
         'bookmaker_name' => $bookmaker->name,
@@ -440,7 +443,7 @@ function seedApiPrediction(
     float $awayChance,
     float $confidence,
 ): void {
-    \App\Models\Prediction::query()->create([
+    Prediction::query()->create([
         'fixture_id' => $fixture->id,
         'user_id' => null,
         'winner_id' => null,

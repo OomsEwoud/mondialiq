@@ -15,8 +15,7 @@ class StoreLeagueController extends Controller
 {
     public function __construct(
         private readonly LeagueCodeGenerator $codeGenerator,
-    ) {
-    }
+    ) {}
 
     public function __invoke(StoreLeagueRequest $request): RedirectResponse
     {

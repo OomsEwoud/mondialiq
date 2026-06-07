@@ -28,8 +28,7 @@ class PlayerService
     public function __construct(
         private readonly CountryService $countryService,
         private readonly FootballApiService $api,
-    ) {
-    }
+    ) {}
 
     private function loadCountryCache(): void
     {
@@ -157,7 +156,7 @@ class PlayerService
 
         return $attributes;
     }
-    
+
     public function syncTeamPlayers(int $leagueId, int $season): void
     {
         $teamIds = Fixture::query()

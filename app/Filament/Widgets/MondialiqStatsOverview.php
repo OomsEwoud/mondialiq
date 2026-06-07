@@ -22,7 +22,7 @@ class MondialiqStatsOverview extends StatsOverviewWidget
 
     protected ?string $description = 'Key metrics for users, fixtures, predictions and feedback.';
 
-    protected int | array | null $columns = [
+    protected int|array|null $columns = [
         'md' => 2,
         'xl' => 5,
     ];

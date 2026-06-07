@@ -123,7 +123,7 @@ class ImportHeadToHeadData extends Command
             $this->error("Fout bij importeren van {$fixturePair['pair_key']}: {$exception->getMessage()}");
         }
     }
-    
+
     private function shouldSkipFreshPair(array $fixturePair, bool $force): bool
     {
         return ! $force && $this->headToHeadService->hasFreshData(

@@ -5,6 +5,7 @@ namespace App\Services\League;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\User;
+use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -159,7 +160,7 @@ class LeagueShowService
             return null;
         }
 
-        return \Carbon\Carbon::parse($user->predictions_max_updated_at)->diffForHumans();
+        return Carbon::parse($user->predictions_max_updated_at)->diffForHumans();
     }
 
     private function lastActivity(Collection $members): ?Prediction

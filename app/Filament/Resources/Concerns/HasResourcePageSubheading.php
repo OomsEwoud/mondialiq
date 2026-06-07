@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 trait HasResourcePageSubheading
 {
-    public function getSubheading(): string | Htmlable | null
+    public function getSubheading(): string|Htmlable|null
     {
         $resource = static::getResource();
 

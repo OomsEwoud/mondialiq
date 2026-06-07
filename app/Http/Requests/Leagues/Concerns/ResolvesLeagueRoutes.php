@@ -10,12 +10,14 @@ trait ResolvesLeagueRoutes
     private function league(): Scoreboard
     {
         $scoreboard = $this->route('scoreboard');
+
         return $scoreboard;
     }
 
     private function member(): User
     {
         $member = $this->route('member');
+
         return $member;
     }
 }

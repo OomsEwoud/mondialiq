@@ -21,8 +21,7 @@ class MatchesController extends Controller
         private readonly HelperService $helperService,
         private readonly FixturePaginationService $paginationService,
         private readonly WorldCupContext $worldCupContext,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request): Response
     {

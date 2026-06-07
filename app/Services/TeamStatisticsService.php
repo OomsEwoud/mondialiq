@@ -14,12 +14,12 @@ use Illuminate\Database\Eloquent\Builder;
 class TeamStatisticsService
 {
     private const REFRESH_HOURS_WITH_FIXTURE_TODAY = 24;
+
     private const REFRESH_DAYS_WITHOUT_FIXTURE_TODAY = 7;
 
     public function __construct(
         private readonly FootballApiService $api,
-    ) {
-    }
+    ) {}
 
     public function importForTeam(
         int $apiTeamId,

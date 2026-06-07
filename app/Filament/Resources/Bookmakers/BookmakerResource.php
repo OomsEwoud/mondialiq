@@ -22,9 +22,9 @@ class BookmakerResource extends Resource
 {
     protected static ?string $model = Bookmaker::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingStorefront;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Reference Data';
+    protected static string|UnitEnum|null $navigationGroup = 'Reference Data';
 
     protected static ?string $navigationLabel = 'Bookmakers';
 

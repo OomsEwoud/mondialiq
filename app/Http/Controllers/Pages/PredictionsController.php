@@ -18,8 +18,7 @@ class PredictionsController extends Controller
         private readonly FixturePaginationService $paginationService,
         private readonly PredictionFixtureQuery $predictionFixtureQuery,
         private readonly WorldCupContext $worldCupContext,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request): Response
     {

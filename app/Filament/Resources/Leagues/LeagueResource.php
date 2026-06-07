@@ -25,9 +25,9 @@ class LeagueResource extends Resource
 {
     protected static ?string $model = League::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTrophy;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTrophy;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Competition Data';
+    protected static string|UnitEnum|null $navigationGroup = 'Competition Data';
 
     protected static ?string $navigationLabel = 'Competitions';
 

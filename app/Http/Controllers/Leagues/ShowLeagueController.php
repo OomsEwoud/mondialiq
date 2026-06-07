@@ -13,8 +13,7 @@ class ShowLeagueController extends Controller
 {
     public function __construct(
         private readonly LeagueShowService $leagueShowService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, Scoreboard $scoreboard): Response
     {

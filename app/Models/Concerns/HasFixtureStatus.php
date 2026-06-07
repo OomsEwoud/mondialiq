@@ -2,8 +2,6 @@
 
 namespace App\Models\Concerns;
 
-use Carbon\CarbonImmutable;
-use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 
 trait HasFixtureStatus

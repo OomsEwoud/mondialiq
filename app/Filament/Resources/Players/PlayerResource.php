@@ -24,9 +24,9 @@ class PlayerResource extends Resource
 {
     protected static ?string $model = Player::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserGroup;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Management';
 
     protected static ?string $navigationLabel = 'Unassigned Players';
 
@@ -59,11 +59,11 @@ class PlayerResource extends Resource
             ->with('country');
     }
 
-    public static function getNavigationItemActiveRoutePattern(): string | array
+    public static function getNavigationItemActiveRoutePattern(): string|array
     {
         return [
-            static::getRouteBaseName() . '.index',
-            static::getRouteBaseName() . '.create',
+            static::getRouteBaseName().'.index',
+            static::getRouteBaseName().'.create',
         ];
     }
 

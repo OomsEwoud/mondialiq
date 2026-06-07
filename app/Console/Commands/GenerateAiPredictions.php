@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Fixture;
+use App\Services\Prediction\AiPredictionService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\Fixture;
-use App\Services\Prediction\AiPredictionService;
 
 #[Signature('app:generate-ai-predictions {--days=14} {--force}')]
 #[Description('Command description')]
@@ -17,6 +17,7 @@ class GenerateAiPredictions extends Command
     ) {
         parent::__construct();
     }
+
     public function handle()
     {
         $fixtures = Fixture::query()

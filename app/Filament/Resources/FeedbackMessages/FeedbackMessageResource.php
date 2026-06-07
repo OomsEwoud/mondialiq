@@ -21,9 +21,9 @@ class FeedbackMessageResource extends Resource
 {
     protected static ?string $model = FeedbackMessage::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Management';
 
     protected static ?string $navigationLabel = 'Feedback';
 

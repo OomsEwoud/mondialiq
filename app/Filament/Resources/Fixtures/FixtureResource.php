@@ -28,9 +28,9 @@ class FixtureResource extends Resource
 {
     protected static ?string $model = Fixture::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCalendarDays;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDays;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Match Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Match Management';
 
     protected static ?string $navigationLabel = 'Fixtures';
 

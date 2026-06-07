@@ -14,8 +14,7 @@ class MissingPlayersSummaryService
 
     public function __construct(
         private readonly PromptFormatter $formatter,
-    ) {
-    }
+    ) {}
 
     public function summarize(Fixture $fixture): array
     {

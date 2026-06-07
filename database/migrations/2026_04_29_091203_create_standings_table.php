@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('defensive_form')->nullable();
             $table->integer('goals_scored_last_5')->nullable();
             $table->integer('goals_conceded_last_5')->nullable();
-            $table->integer('season'); 
+            $table->integer('season');
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->foreignId('league_id')->constrained()->onDelete('cascade');
             $table->unique(['league_id', 'season', 'group_name', 'team_id']);

@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\HeadToHead;
 use App\Models\Fixture;
+use App\Models\HeadToHead;
 use App\Models\League;
 use App\Models\Team;
 use App\Services\HeadToHeadService;

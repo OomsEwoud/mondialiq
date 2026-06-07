@@ -11,8 +11,7 @@ class UserPredictionScoringService
 
     public function __construct(
         private readonly PredictionScoreService $predictionScoreService,
-    ) {
-    }
+    ) {}
 
     public function previewPoints(Fixture $fixture, Prediction $prediction): ?int
     {

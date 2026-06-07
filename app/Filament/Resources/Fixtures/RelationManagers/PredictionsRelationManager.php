@@ -167,8 +167,8 @@ class PredictionsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('source')
                     ->badge()
-                    ->formatStateUsing(fn (PredictionTypes | string | null $state): string => self::sourceLabel($state))
-                    ->color(fn (PredictionTypes | string | null $state): string => self::sourceColor($state)),
+                    ->formatStateUsing(fn (PredictionTypes|string|null $state): string => self::sourceLabel($state))
+                    ->color(fn (PredictionTypes|string|null $state): string => self::sourceColor($state)),
 
                 TextColumn::make('user.name')
                     ->label('User')
@@ -288,7 +288,7 @@ class PredictionsRelationManager extends RelationManager
             ->all();
     }
 
-    private static function sourceLabel(PredictionTypes | string | null $source): string
+    private static function sourceLabel(PredictionTypes|string|null $source): string
     {
         if ($source instanceof PredictionTypes) {
             return $source->label();
@@ -297,7 +297,7 @@ class PredictionsRelationManager extends RelationManager
         return PredictionTypes::tryFrom((string) $source)?->label() ?? '-';
     }
 
-    private static function sourceColor(PredictionTypes | string | null $source): string
+    private static function sourceColor(PredictionTypes|string|null $source): string
     {
         $value = $source instanceof PredictionTypes ? $source : PredictionTypes::tryFrom((string) $source);
 

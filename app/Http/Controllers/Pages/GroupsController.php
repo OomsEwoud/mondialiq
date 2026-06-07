@@ -17,8 +17,7 @@ class GroupsController extends Controller
     public function __construct(
         private readonly GroupStandingService $groupStandingService,
         private readonly WorldCupContext $worldCupContext,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): Response
     {
@@ -52,7 +51,7 @@ class GroupsController extends Controller
             ->orderBy('rank')
             ->get();
     }
-    
+
     private function worldCupGroupNames(): array
     {
         return collect(range('A', 'L'))

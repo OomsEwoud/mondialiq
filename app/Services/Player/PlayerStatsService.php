@@ -11,7 +11,9 @@ use Illuminate\Support\Collection;
 class PlayerStatsService
 {
     private ?Collection $leagues = null;
+
     private ?Collection $teams = null;
+
     private ?Collection $playerIds = null;
 
     private function getLeagues(): Collection

@@ -22,9 +22,9 @@ class VenueResource extends Resource
 {
     protected static ?string $model = Venue::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedMapPin;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMapPin;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Reference Data';
+    protected static string|UnitEnum|null $navigationGroup = 'Reference Data';
 
     protected static ?string $navigationLabel = 'Venues';
 

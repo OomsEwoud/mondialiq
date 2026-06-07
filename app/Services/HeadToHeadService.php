@@ -16,8 +16,7 @@ class HeadToHeadService
 
     public function __construct(
         private readonly FootballApiService $api,
-    ) {
-    }
+    ) {}
 
     public function makePairKey(int $teamAId, int $teamBId): string
     {

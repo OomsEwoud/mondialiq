@@ -16,6 +16,7 @@ use Laravel\Fortify\Fortify;
 class FortifyServiceProvider extends ServiceProvider
 {
     private const LOGIN_RATE_LIMIT_PER_MINUTE = 5;
+
     private const TWO_FACTOR_RATE_LIMIT_PER_MINUTE = 5;
 
     /**

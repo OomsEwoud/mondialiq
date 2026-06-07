@@ -7,14 +7,16 @@ use App\Models\Prediction;
 class ApiPredictionSummaryService
 {
     private const PREFIX_COMBO_WINNER = 'Combo Winner :';
+
     private const PREFIX_COMBO_DOUBLE_CHANCE = 'Combo Double chance :';
+
     private const PREFIX_WINNER = 'Winner :';
+
     private const PREFIX_DOUBLE_CHANCE = 'Double chance :';
 
     public function __construct(
         private readonly PromptFormatter $formatter,
-    ) {
-    }
+    ) {}
 
     public function summarize(Prediction $prediction): array
     {

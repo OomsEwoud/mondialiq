@@ -11,12 +11,19 @@ use Illuminate\Support\Collection;
 class FixtureOddsSummaryService
 {
     private const MARKET_MATCH_WINNER = 'Match Winner';
+
     private const MARKET_GOALS_OVER_UNDER = 'Goals Over/Under';
+
     private const MARKET_BOTH_TEAMS_SCORE = 'Both Teams Score';
+
     private const MARKET_EXACT_SCORE = 'Exact Score';
+
     private const MARKET_TOTAL_HOME = 'Total - Home';
+
     private const MARKET_TOTAL_AWAY = 'Total - Away';
+
     private const MARKET_HOME_EXACT_GOALS = 'Home Team Exact Goals Number';
+
     private const MARKET_AWAY_EXACT_GOALS = 'Away Team Exact Goals Number';
 
     private const IMPORTANT_MARKETS = [
@@ -32,8 +39,7 @@ class FixtureOddsSummaryService
 
     public function __construct(
         private readonly PromptFormatter $formatter,
-    ) {
-    }
+    ) {}
 
     public function summarize(Fixture|int $fixture): array
     {

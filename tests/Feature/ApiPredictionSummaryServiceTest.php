@@ -44,7 +44,7 @@ test('it parses combo double chance advice with under goals', function () {
 });
 
 test('it handles null fields safely', function () {
-    $summary = app(ApiPredictionSummaryService::class)->summarize(new Prediction());
+    $summary = app(ApiPredictionSummaryService::class)->summarize(new Prediction);
 
     expect($summary)->toBe([
         'api_advice' => null,

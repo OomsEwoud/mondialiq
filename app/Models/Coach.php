@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class Coach extends Model
 {
-    
     protected function casts(): array
     {
         return [

@@ -16,8 +16,7 @@ class AiPredictionService
         private readonly AiPredictionPromptBuilder $promptBuilder,
         private readonly OpenAiResponseClient $openAi,
         private readonly AiPredictionPayloadValidator $payloadValidator,
-    ) {
-    }
+    ) {}
 
     public function predict(Fixture $fixture): Prediction
     {

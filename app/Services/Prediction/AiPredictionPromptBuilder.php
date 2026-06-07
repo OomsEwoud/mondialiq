@@ -20,8 +20,7 @@ class AiPredictionPromptBuilder
 
     public function __construct(
         private readonly PredictionContextService $predictionContextService,
-    ) {
-    }
+    ) {}
 
     public function build(Fixture $fixture): string
     {

@@ -8,13 +8,19 @@ use Illuminate\Database\Eloquent\Builder;
 class FixtureQuery
 {
     private const STATUS_ALL = 'all';
+
     private const STATUS_LIVE = 'live';
+
     private const STATUS_PLAYED = 'played';
+
     private const STATUS_UPCOMING = 'upcoming';
+
     private const DISPLAY_TIMEZONE = 'Europe/Brussels';
 
     private const FINISHED_STATUS_PATTERN = '%Finished%';
+
     private const LIVE_STATUS_SHORTS = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'];
+
     private const LIVE_STATUS_LONG_PATTERNS = [
         '%First Half%',
         '%Halftime%',
@@ -47,12 +53,13 @@ class FixtureQuery
             ->when($filters['team'] ?? null, $this->applyTeamFilter(...))
             ->when(
                 $status !== self::STATUS_ALL,
-                fn(Builder $query) => $this->applyStatusFilter($query, $status),
+                fn (Builder $query) => $this->applyStatusFilter($query, $status),
             )
             ->orderBy('match_date');
 
         return $query;
     }
+
     private function statusFilter(array $filters): string
     {
         $status = $filters['status'] ?? self::STATUS_ALL;
@@ -79,8 +86,8 @@ class FixtureQuery
     {
         return $query->where(function ($query) use ($team) {
             $query
-                ->whereHas('homeTeam', fn(Builder $query) => $this->applyTeamNameFilter($query, $team))
-                ->orWhereHas('awayTeam', fn(Builder $query) => $this->applyTeamNameFilter($query, $team));
+                ->whereHas('homeTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team))
+                ->orWhereHas('awayTeam', fn (Builder $query) => $this->applyTeamNameFilter($query, $team));
         });
     }
 
@@ -101,9 +108,9 @@ class FixtureQuery
 
     private function applyLiveStatusFilter(Builder $query): Builder
     {
-        return $query->where(fn($query) => $query
+        return $query->where(fn ($query) => $query
             ->whereIn('status_short', self::LIVE_STATUS_SHORTS)
-            ->orWhere(fn($query) => $this->applyStatusLongPatterns($query, self::LIVE_STATUS_LONG_PATTERNS)));
+            ->orWhere(fn ($query) => $this->applyStatusLongPatterns($query, self::LIVE_STATUS_LONG_PATTERNS)));
     }
 
     private function applyPlayedStatusFilter(Builder $query): Builder

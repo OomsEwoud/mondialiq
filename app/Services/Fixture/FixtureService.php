@@ -15,8 +15,7 @@ class FixtureService
 {
     public function __construct(
         private readonly UserPredictionScoringService $userPredictionScoringService,
-    ) {
-    }
+    ) {}
 
     public function storeFixtures(array $fixtures): void
     {

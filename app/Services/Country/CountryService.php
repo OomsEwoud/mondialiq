@@ -68,7 +68,7 @@ class CountryService
             'name' => $countryName,
         ];
     }
-    
+
     private function countryAttributes(array $countryData): array
     {
         return [

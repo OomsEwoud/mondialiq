@@ -29,8 +29,7 @@ class PredictionContextService
         private readonly HeadToHeadSummaryService $headToHeadSummaryService,
         private readonly MissingPlayersSummaryService $missingPlayersSummaryService,
         private readonly PromptFormatter $formatter,
-    ) {
-    }
+    ) {}
 
     public function summarize(Fixture $fixture): array
     {

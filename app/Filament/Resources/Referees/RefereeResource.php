@@ -23,9 +23,9 @@ class RefereeResource extends Resource
 {
     protected static ?string $model = Referee::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedIdentification;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Reference Data';
+    protected static string|UnitEnum|null $navigationGroup = 'Reference Data';
 
     protected static ?string $navigationLabel = 'Referees';
 

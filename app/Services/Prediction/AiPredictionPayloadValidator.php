@@ -12,8 +12,7 @@ class AiPredictionPayloadValidator
         private readonly AiPredictionOutcomeHelper $outcomeHelper,
         private readonly FixtureOddsSummaryService $fixtureOddsSummaryService,
         private readonly ApiPredictionSummaryService $apiPredictionSummaryService,
-    ) {
-    }
+    ) {}
 
     public function validateAiPredictionPayload(Fixture $fixture, array $payload): array
     {
@@ -93,7 +92,7 @@ class AiPredictionPayloadValidator
         return $validated;
     }
 
-    public function makeScoreCompatibleWithOutcome(string $outcome,?int $homeScore,?int $awayScore,array $context): array 
+    public function makeScoreCompatibleWithOutcome(string $outcome, ?int $homeScore, ?int $awayScore, array $context): array
     {
         $marketScore = $this->parseMarketMostLikelyScore(
             Arr::get($context, 'market_odds.most_likely_score'),

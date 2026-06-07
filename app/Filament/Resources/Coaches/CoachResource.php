@@ -22,9 +22,9 @@ class CoachResource extends Resource
 {
     protected static ?string $model = Coach::class;
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedUser;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Management';
 
     protected static ?string $navigationLabel = 'Unassigned Coaches';
 

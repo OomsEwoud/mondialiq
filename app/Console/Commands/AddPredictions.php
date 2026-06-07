@@ -52,6 +52,7 @@ class AddPredictions extends Command
 
         if ($failed > 0) {
             $this->error("Er zijn {$failed} voorspellingen niet gesynchroniseerd vanwege fouten.");
+
             return self::FAILURE;
         }
 

@@ -37,7 +37,7 @@ class GenerateAiPrediction extends Command
         if ($this->option('dry-run')) {
             return $this->showDryRun($fixture);
         }
-        
+
         try {
             $prediction = $this->aiPredictionService->predict($fixture);
         } catch (Throwable $exception) {

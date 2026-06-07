@@ -51,7 +51,7 @@ return new class extends Migration
             $table->integer('penalties_committed')->default(0)->nullable();
             $table->integer('penalties_scored')->default(0)->nullable();
             $table->integer('penalties_missed')->default(0)->nullable();
-            $table->integer('penalties_saved')->default(0)->nullable(); 
+            $table->integer('penalties_saved')->default(0)->nullable();
             $table->unique(['player_id', 'league_id', 'season']);
             $table->timestamps();
         });

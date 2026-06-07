@@ -34,7 +34,7 @@ return new class extends Migration
             $table->integer('penalty_away_goals')->default(0)->nullable();
             $table->string('result')->nullable();
             $table->index('match_date');
-            $table->index('league_id');  
+            $table->index('league_id');
             $table->index(['home_team_id', 'away_team_id']);
             $table->timestamps();
         });

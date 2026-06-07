@@ -19,8 +19,7 @@ class PredictionDetailsController extends Controller
         private readonly FixtureOddsSummaryService $oddsSummaryService,
         private readonly ApiPredictionSummaryService $apiPredictionSummaryService,
         private readonly UserPredictionScoringService $userPredictionScoringService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, Fixture $fixture): Response
     {

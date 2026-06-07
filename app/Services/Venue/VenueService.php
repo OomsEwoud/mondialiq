@@ -12,8 +12,7 @@ class VenueService
 {
     public function __construct(
         private readonly FootballApiService $footballApiService,
-    ) {
-    }
+    ) {}
 
     public function storeVenues(array $venuesData, ?Collection $countries = null): void
     {

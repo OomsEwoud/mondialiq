@@ -13,17 +13,24 @@ use RuntimeException;
 
 class FootballApiService
 {
-    use FixtureEndpoints, MetadataEndpoints, TeamEndpoints, OddsEndpoint;
+    use FixtureEndpoints, MetadataEndpoints, OddsEndpoint, TeamEndpoints;
 
     private const string API_KEY_HEADER = 'x-apisports-key';
+
     private const int CONNECT_TIMEOUT_SECONDS = 5;
+
     private const int REQUEST_TIMEOUT_SECONDS = 20;
+
     private const int RETRY_TIMES = 2;
+
     private const int RETRY_SLEEP_MILLISECONDS = 500;
+
     private const int RATE_LIMIT_SLEEP_SECONDS = 10;
+
     private const int RATE_LIMIT_RETRY_TIMES = 3;
 
     private readonly string $baseUrl;
+
     private readonly string $apiKey;
 
     public function __construct()

@@ -7,6 +7,7 @@ use App\Services\Apis\FootballApiService;
 use App\Services\Prediction\AiPredictionPromptBuilder;
 use App\Services\Prediction\PredictionContextService;
 use Mockery\MockInterface;
+
 use function Pest\Laravel\mock;
 
 test('it builds a prompt with all prediction context sections', function () {

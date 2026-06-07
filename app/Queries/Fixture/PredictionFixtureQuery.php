@@ -9,8 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class PredictionFixtureQuery
 {
     private const POINTS_STATE_ALL = 'all';
+
     private const POINTS_STATE_PENDING = 'points-pending';
+
     private const POINTS_STATE_EARNED = 'points-earned';
+
     private const POINTS_STATE_NO_POINTS = 'no-points-earned';
 
     public function applyMode(Builder $query, string $mode, ?User $user, array $filters = []): Builder

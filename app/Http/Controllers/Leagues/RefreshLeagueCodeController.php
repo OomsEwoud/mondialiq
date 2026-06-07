@@ -13,8 +13,7 @@ class RefreshLeagueCodeController extends Controller
 {
     public function __construct(
         private readonly LeagueCodeGenerator $codeGenerator,
-    ) {
-    }
+    ) {}
 
     public function __invoke(RefreshLeagueCodeRequest $request, Scoreboard $scoreboard): RedirectResponse
     {

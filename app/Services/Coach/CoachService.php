@@ -16,8 +16,7 @@ class CoachService
     public function __construct(
         private readonly FootballApiService $api,
         private readonly CountryService $countryService,
-    ) {
-    }
+    ) {}
 
     private function loadCountryCache(): void
     {

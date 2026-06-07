@@ -128,5 +128,5 @@ test('it gives exactly twenty only for exact score predictions in common footbal
 
 function predictionScoreService(): PredictionScoreService
 {
-    return new PredictionScoreService();
+    return new PredictionScoreService;
 }

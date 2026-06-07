@@ -12,8 +12,7 @@ class StoreMatchPredictionController extends Controller
 {
     public function __construct(
         private readonly UserPredictionService $userPredictionService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(StoreMatchPredictionRequest $request, Fixture $fixture): RedirectResponse
     {

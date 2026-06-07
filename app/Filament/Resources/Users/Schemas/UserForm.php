@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\Select;
 use Illuminate\Support\Facades\Auth;
 
 class UserForm
@@ -30,7 +30,7 @@ class UserForm
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
-                    ->visible(fn() => Auth::user()?->hasRole('super_admin')),
+                    ->visible(fn () => Auth::user()?->hasRole('super_admin')),
             ]);
     }
 }

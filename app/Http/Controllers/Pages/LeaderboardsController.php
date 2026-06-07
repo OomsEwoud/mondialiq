@@ -13,8 +13,7 @@ class LeaderboardsController extends Controller
 {
     public function __construct(
         private readonly LeaderboardService $leaderboardService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request): Response
     {
