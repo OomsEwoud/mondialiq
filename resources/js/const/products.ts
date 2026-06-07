@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
-import { BrainCircuit, Trophy } from 'lucide-react';
-import { leaderboards, predictions } from '@/routes';
+import { Activity, BrainCircuit, Trophy } from 'lucide-react';
+import { leaderboards, matches, predictions } from '@/routes';
 
 export type ProductCard = {
     title: string;
@@ -30,5 +30,14 @@ export const products: ProductCard[] = [
         cta: 'Start playing',
         href: leaderboards.url(),
         icon: Trophy,
+    },
+    {
+        title: 'Live Match Center',
+        description:
+            'Follow fixtures, live scores, lineups and match events in one focused match view.',
+        badge: 'LIVE DATA',
+        cta: 'Explore matches',
+        href: matches.url(),
+        icon: Activity,
     },
 ];

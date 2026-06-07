@@ -17,13 +17,13 @@ export default function PlatformOverview() {
                     </h2>
                 </div>
                 <p className="max-w-xl text-sm leading-6 text-cyan-600 sm:text-base">
-                    Public model predictions and personal prediction games stay
-                    clearly separate, so you always know what is AI and what is
-                    yours.
+                    Public model predictions, live match data and personal
+                    prediction games stay clearly separate, so you always know
+                    what is AI, what is live data and what is yours.
                 </p>
             </header>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                 {products.map((product) => (
                     <Link
                         key={product.title}
