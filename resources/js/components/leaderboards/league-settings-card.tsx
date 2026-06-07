@@ -574,8 +574,8 @@ export default function LeagueSettingsCard({
                                 </div>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">
                                     Boosted predictions let members use one of
-                                    their limited boosts on a prediction they are
-                                    confident about. If the prediction is
+                                    their limited boosts on a prediction they
+                                    are confident about. If the prediction is
                                     correct and the confidence is high enough,
                                     they receive bonus points.
                                 </p>

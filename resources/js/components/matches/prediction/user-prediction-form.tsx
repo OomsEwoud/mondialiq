@@ -44,11 +44,11 @@ export default function UserPredictionForm({
             return;
         }
 
-        setData({
+        setData((prevData) => ({
             ...initialPredictionFormData(match),
             scoreboard_id: scoreboardId ? String(scoreboardId) : '',
-            is_boosted: data.is_boosted && scoreboardId !== undefined,
-        });
+            is_boosted: prevData.is_boosted && scoreboardId !== undefined,
+        }));
         clearErrors();
     }, [clearErrors, match, open, setData, scoreboardId]);
 
@@ -115,7 +115,9 @@ export default function UserPredictionForm({
                             }
                             className={
                                 'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 ' +
-                                (data.is_boosted ? 'bg-cyan-500' : 'bg-slate-300')
+                                (data.is_boosted
+                                    ? 'bg-cyan-500'
+                                    : 'bg-slate-300')
                             }
                         >
                             <span
