@@ -44,10 +44,10 @@ export default function DeleteUser({ user }: Props) {
                     <AlertTriangle className="size-5" />
                 </span>
                 <div>
-                    <p className="mb-1 text-xs font-black tracking-[0.18em] text-red-500 uppercase">
+                    <p className="mb-1 text-xs font-bold tracking-wide text-red-500 uppercase">
                         Danger zone
                     </p>
-                    <h2 className="text-xl font-black tracking-tight text-blue-950">
+                    <h2 className="text-xl font-bold tracking-tight text-slate-900">
                         Delete account
                     </h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
@@ -57,7 +57,7 @@ export default function DeleteUser({ user }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4 rounded-[1.6rem] border border-red-200 bg-white p-4 shadow-sm shadow-red-950/5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 rounded-2xl border border-red-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm font-semibold text-red-700">
                     Only continue if you are completely sure.
                 </p>
@@ -66,13 +66,13 @@ export default function DeleteUser({ user }: Props) {
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
-                            className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 sm:w-auto"
+                            className="w-full rounded-2xl bg-red-600 font-bold text-white shadow-sm hover:bg-red-700 sm:w-auto"
                             onClick={() => setConfirmationText('')}
                         >
                             Delete account
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-[1.8rem] border-red-100">
+                    <DialogContent className="rounded-2xl border-red-100">
                         <DialogTitle>
                             Are you sure you want to delete your account?
                         </DialogTitle>
@@ -162,7 +162,7 @@ export default function DeleteUser({ user }: Props) {
                                                     resetAndClearErrors();
                                                     setConfirmationText('');
                                                 }}
-                                                className="w-full rounded-2xl font-black sm:w-auto"
+                                                className="w-full rounded-2xl font-bold sm:w-auto"
                                             >
                                                 Cancel
                                             </Button>
@@ -174,7 +174,7 @@ export default function DeleteUser({ user }: Props) {
                                                 processing ||
                                                 confirmationText !== 'DELETE'
                                             }
-                                            className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                                            className="w-full rounded-2xl bg-red-600 font-bold text-white shadow-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                                             data-test="confirm-delete-user-button"
                                         >
                                             Delete account

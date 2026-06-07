@@ -29,7 +29,7 @@ export default function Pagination({ links }: Props) {
                 const className = cn(
                     'inline-flex min-h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                     link.active
-                        ? 'border-cyan-200 bg-cyan-50 text-cyan-700 shadow-sm shadow-blue-950/5'
+                        ? 'border-cyan-200 bg-cyan-50 text-cyan-700 shadow-sm'
                         : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-950',
                     !link.url &&
                         'cursor-not-allowed bg-slate-50 text-slate-400 opacity-100 hover:bg-slate-50 hover:text-slate-400',

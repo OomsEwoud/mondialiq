@@ -21,7 +21,7 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                 <Button
                     type="button"
                     variant="outline"
-                    className="justify-center rounded-xl border-slate-200 bg-white px-5 font-black text-slate-700 shadow-none hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300"
+                    className="justify-center rounded-xl border-slate-200 bg-white px-5 font-bold text-slate-700 shadow-none hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300"
                     onClick={openPredictionModal}
                 >
                     Edit prediction
@@ -29,7 +29,7 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
 
                 <Button
                     asChild
-                    className="justify-center rounded-xl bg-blue-950 px-5 font-black text-white shadow-sm shadow-blue-950/10 hover:bg-blue-900 focus-visible:ring-cyan-300"
+                    className="justify-center rounded-xl bg-blue-950 px-5 font-bold text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300"
                 >
                     <Link href={showMyPrediction.url(match.id)}>
                         {viewLabel}

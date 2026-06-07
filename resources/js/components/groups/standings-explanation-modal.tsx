@@ -77,18 +77,18 @@ export default function StandingsExplanationModal({
 }: Props) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-h-[90vh] overflow-y-auto rounded-[2rem] border-cyan-100 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.18),transparent_18rem),radial-gradient(circle_at_bottom_left,rgba(29,78,216,0.08),transparent_20rem),linear-gradient(180deg,rgba(255,255,255,0.995),rgba(248,250,252,0.985))] p-0 shadow-2xl shadow-cyan-950/15 sm:max-w-5xl">
-                <div className="border-b border-cyan-100/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(240,249,255,0.96))] px-5 py-6 sm:px-7 sm:py-7">
+            <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-0 shadow-sm sm:max-w-5xl">
+                <div className="border-b border-slate-200 bg-gradient-to-b from-white to-slate-50/70 px-5 py-6 sm:px-7 sm:py-7">
                     <DialogHeader className="gap-3 pr-8 text-left">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                             <div className="min-w-0">
-                                <div className="flex size-14 items-center justify-center rounded-[1.35rem] bg-cyan-50 text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                                <div className="flex size-14 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 shadow-sm">
                                     <Trophy className="size-6" />
                                 </div>
-                                <p className="mt-4 text-xs font-black tracking-[0.24em] text-cyan-700 uppercase">
+                                <p className="mt-4 text-xs font-bold tracking-wide text-cyan-600 uppercase">
                                     Group Standings
                                 </p>
-                                <DialogTitle className="mt-2 text-4xl font-black tracking-tight text-blue-950 sm:text-5xl">
+                                <DialogTitle className="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
                                     How standings work
                                 </DialogTitle>
                                 <DialogDescription className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
@@ -111,14 +111,14 @@ export default function StandingsExplanationModal({
                 </div>
 
                 <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
-                    <section className="rounded-[1.8rem] border border-cyan-100 bg-white p-5 shadow-sm shadow-cyan-950/5">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                         <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                 <ListOrdered className="size-5" />
                             </span>
                             <div>
                                 <SectionEyebrow>Group format</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                     How group standings work
                                 </h2>
                                 <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">
@@ -130,14 +130,14 @@ export default function StandingsExplanationModal({
                         </div>
                     </section>
 
-                    <section className="rounded-[1.8rem] border border-cyan-100 bg-white p-5 shadow-sm shadow-cyan-950/5">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                         <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                 <Trophy className="size-5" />
                             </span>
                             <div className="min-w-0">
                                 <SectionEyebrow>Points</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                     Points system
                                 </h2>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -151,13 +151,13 @@ export default function StandingsExplanationModal({
                             {pointsRules.map((rule) => (
                                 <div
                                     key={rule.label}
-                                    className="rounded-[1.45rem] border border-cyan-100 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.08),transparent_10rem),linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.98))] p-4 shadow-sm shadow-cyan-950/5"
+                                    className="rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
                                     <div className="flex items-center justify-between gap-3">
-                                        <h3 className="text-lg font-black text-blue-950">
+                                        <h3 className="text-lg font-bold text-slate-900">
                                             {rule.label}
                                         </h3>
-                                        <span className="rounded-full border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-xs font-black text-cyan-800">
+                                        <span className="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700">
                                             {rule.points}
                                         </span>
                                     </div>
@@ -169,14 +169,14 @@ export default function StandingsExplanationModal({
                         </div>
                     </section>
 
-                    <section className="rounded-[1.8rem] border border-cyan-100 bg-white p-5 shadow-sm shadow-cyan-950/5">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                         <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                 <CircleHelp className="size-5" />
                             </span>
                             <div>
                                 <SectionEyebrow>Columns</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                     Table columns
                                 </h2>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -190,9 +190,9 @@ export default function StandingsExplanationModal({
                             {tableColumns.map(([code, meaning]) => (
                                 <div
                                     key={code}
-                                    className="rounded-[1.3rem] border border-slate-200 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 shadow-sm shadow-cyan-950/5"
+                                    className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
-                                    <p className="text-2xl font-black text-blue-950">
+                                    <p className="text-2xl font-bold text-slate-900">
                                         {code}
                                     </p>
                                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -203,14 +203,14 @@ export default function StandingsExplanationModal({
                         </div>
                     </section>
 
-                    <section className="rounded-[1.8rem] border border-cyan-100 bg-white p-5 shadow-sm shadow-cyan-950/5">
+                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                         <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                 <ShieldCheck className="size-5" />
                             </span>
                             <div>
                                 <SectionEyebrow>Qualification</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                     Qualification
                                 </h2>
                                 <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -224,17 +224,17 @@ export default function StandingsExplanationModal({
                             {qualificationRules.map((rule) => (
                                 <div
                                     key={rule.label}
-                                    className="rounded-[1.45rem] border border-slate-200 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 shadow-sm shadow-cyan-950/5"
+                                    className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
                                     <div className="flex items-center justify-between gap-3">
-                                        <p className="text-lg font-black text-blue-950">
+                                        <p className="text-lg font-bold text-slate-900">
                                             {rule.label}
                                         </p>
                                         <span
                                             className={
                                                 rule.tone === 'qualified'
-                                                    ? 'rounded-full border border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,1),rgba(209,250,229,0.82))] px-3 py-1 text-xs font-black text-emerald-800'
-                                                    : 'rounded-full border border-rose-200 bg-[linear-gradient(180deg,rgba(255,241,242,1),rgba(254,205,211,0.78))] px-3 py-1 text-xs font-black text-rose-700'
+                                                    ? 'rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800'
+                                                    : 'rounded-full border border-rose-200 bg-rose-50 px-3 py-1 text-xs font-bold text-rose-700'
                                             }
                                         >
                                             {rule.status}
@@ -248,17 +248,17 @@ export default function StandingsExplanationModal({
                         </div>
                     </section>
 
-                    <section className="overflow-hidden rounded-[1.8rem] border border-cyan-100 bg-white shadow-sm shadow-cyan-950/5">
-                        <div className="border-b border-cyan-100 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.12),transparent_14rem),linear-gradient(180deg,rgba(248,255,255,0.94),rgba(255,255,255,0.98))] p-5">
+                    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <div className="border-b border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5">
                             <div className="flex items-start gap-3">
-                                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
                                     <CheckCircle2 className="size-5" />
                                 </span>
                                 <div>
                                     <SectionEyebrow>
                                         Cross-group ranking
                                     </SectionEyebrow>
-                                    <h2 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                                    <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                         Best 3rd ranking
                                     </h2>
                                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
@@ -272,8 +272,8 @@ export default function StandingsExplanationModal({
                         </div>
 
                         <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-                            <div className="rounded-[1.45rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,255,255,0.98),rgba(255,255,255,0.98))] p-4 shadow-sm shadow-cyan-950/5">
-                                <p className="text-sm font-black tracking-[0.16em] text-cyan-700 uppercase">
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                                <p className="text-sm font-bold tracking-wide text-cyan-600 uppercase">
                                     Quick view
                                 </p>
                                 <div className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
@@ -292,12 +292,12 @@ export default function StandingsExplanationModal({
                                 </div>
                             </div>
 
-                            <div className="rounded-[1.45rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,255,255,0.98),rgba(255,255,255,0.98))] p-4 shadow-sm shadow-cyan-950/5">
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                                 <div className="mb-3 flex items-center justify-between gap-3">
-                                    <p className="text-sm font-black text-blue-950">
+                                    <p className="text-sm font-bold text-slate-900">
                                         12 third-placed teams
                                     </p>
-                                    <p className="text-xs font-black tracking-[0.18em] text-slate-400 uppercase">
+                                    <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                                         Top 8 advance
                                     </p>
                                 </div>
@@ -307,8 +307,8 @@ export default function StandingsExplanationModal({
                                             <div
                                                 className={
                                                     rank <= 8
-                                                        ? 'flex items-center justify-between rounded-2xl border border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,1),rgba(209,250,229,0.82))] px-3 py-2 text-sm font-black text-emerald-800 shadow-sm shadow-emerald-950/5'
-                                                        : 'flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-black text-slate-600'
+                                                        ? 'flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-bold text-emerald-800 shadow-sm'
+                                                        : 'flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-bold text-slate-600'
                                                 }
                                             >
                                                 <span>Rank #{rank}</span>
@@ -319,7 +319,7 @@ export default function StandingsExplanationModal({
                                                 </span>
                                             </div>
                                             {rank === 8 && (
-                                                <div className="my-2 flex items-center gap-3 text-[11px] font-black tracking-[0.18em] text-amber-600 uppercase">
+                                                <div className="my-2 flex items-center gap-3 text-xs font-bold tracking-wide text-amber-600 uppercase">
                                                     <span className="h-px flex-1 bg-amber-200" />
                                                     <span>Cutoff line</span>
                                                     <span className="h-px flex-1 bg-amber-200" />
@@ -339,7 +339,7 @@ export default function StandingsExplanationModal({
 
 function SectionEyebrow({ children }: { children: string }) {
     return (
-        <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+        <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
             {children}
         </p>
     );
@@ -347,11 +347,11 @@ function SectionEyebrow({ children }: { children: string }) {
 
 function HeroStat({ label, value }: { label: string; value: string }) {
     return (
-        <div className="rounded-[1.25rem] border border-cyan-100 bg-white/85 px-3 py-3 text-left shadow-sm shadow-cyan-950/5 backdrop-blur">
-            <p className="text-[11px] font-black tracking-[0.16em] text-slate-400 uppercase">
+        <div className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3 text-left shadow-sm ">
+            <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                 {label}
             </p>
-            <p className="mt-1 text-sm leading-5 font-black text-blue-950">
+            <p className="mt-1 text-sm leading-5 font-bold text-slate-900">
                 {value}
             </p>
         </div>
@@ -360,8 +360,8 @@ function HeroStat({ label, value }: { label: string; value: string }) {
 
 function MiniInfoCard({ title, body }: { title: string; body: string }) {
     return (
-        <div className="rounded-[1.2rem] border border-slate-200 bg-white p-4 shadow-sm shadow-cyan-950/5">
-            <p className="text-sm font-black text-blue-950">{title}</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <p className="text-sm font-bold text-slate-900">{title}</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
         </div>
     );

@@ -37,11 +37,11 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
             <CardHeader className="gap-2 px-4 py-5 sm:px-5">
                 <div className="flex items-center gap-2 text-red-700">
                     <AlertTriangle className="size-4" />
-                    <p className="text-xs font-black tracking-[0.16em] uppercase">
+                    <p className="text-xs font-semibold tracking-wide uppercase">
                         Danger zone
                     </p>
                 </div>
-                <CardTitle className="text-xl font-black text-red-950">
+                <CardTitle className="text-xl font-semibold text-red-950">
                     Delete group
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-red-900/80">
@@ -55,14 +55,14 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                         <Button
                             type="button"
                             variant="destructive"
-                            className="h-11 w-full rounded-xl bg-red-600 px-5 font-black text-white hover:bg-red-700 focus-visible:ring-red-200"
+                            className="h-11 w-full rounded-xl bg-red-600 px-5 font-semibold text-white hover:bg-red-700 focus-visible:ring-red-200"
                         >
                             <Trash2 className="size-4" />
                             Delete group
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                        <DialogTitle className="text-blue-950">
+                        <DialogTitle className="text-slate-900">
                             Delete {leagueName}?
                         </DialogTitle>
                         <DialogDescription className="text-sm leading-6 text-slate-600">
@@ -71,7 +71,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                             from leaderboards.
                         </DialogDescription>
                         <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
-                            Type <span className="font-black">DELETE</span> to
+                            Type <span className="font-semibold">DELETE</span> to
                             confirm this permanent action.
                         </div>
 
@@ -87,7 +87,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                     <div className="space-y-2">
                                         <Label
                                             htmlFor="delete-league-confirm"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
                                         >
                                             Confirmation
                                         </Label>
@@ -110,7 +110,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                             <Button
                                                 type="button"
                                                 variant="secondary"
-                                                className="rounded-xl font-black"
+                                                className="rounded-xl font-semibold"
                                             >
                                                 Cancel
                                             </Button>
@@ -120,7 +120,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                             type="submit"
                                             variant="destructive"
                                             disabled={processing || !canDelete}
-                                            className="rounded-xl bg-red-600 font-black text-white hover:bg-red-700 focus-visible:ring-red-200"
+                                            className="rounded-xl bg-red-600 font-semibold text-white hover:bg-red-700 focus-visible:ring-red-200"
                                         >
                                             {processing && <Spinner />}
                                             <Trash2 className="size-4" />

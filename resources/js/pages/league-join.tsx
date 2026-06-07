@@ -45,20 +45,20 @@ export default function LeagueJoin({
                 <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-black text-slate-700 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-black text-slate-700 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
                     </Link>
 
                     <div className="mt-6 max-w-2xl">
-                        <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700">
+                        <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600">
                             <Ticket className="size-6" />
                         </div>
-                        <p className="text-xs font-black tracking-[0.22em] text-cyan-600 uppercase">
+                        <p className="text-xs font-black tracking-wide text-cyan-600 uppercase">
                             Prediction Groups
                         </p>
-                        <h1 className="mt-2 text-3xl font-black text-blue-950 sm:text-4xl">
+                        <h1 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
                             Join with an invite code
                         </h1>
                         <p className="mt-3 text-sm leading-6 text-slate-500 sm:text-base">
@@ -73,7 +73,7 @@ export default function LeagueJoin({
 
                 <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
                     <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                        <CardTitle className="text-2xl font-black text-blue-950">
+                        <CardTitle className="text-2xl font-black text-slate-900">
                             Invite code
                         </CardTitle>
                         <CardDescription className="text-sm leading-6 text-slate-500">
@@ -82,7 +82,7 @@ export default function LeagueJoin({
                     </CardHeader>
                     <CardContent className="px-4 pb-5 sm:px-6">
                         <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-                            <p className="text-sm font-black text-blue-950">
+                            <p className="text-sm font-black text-slate-900">
                                 You can join up to {maxLeagueCount} prediction
                                 groups.
                             </p>

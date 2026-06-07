@@ -26,7 +26,7 @@ export default function GroupTabs({
     ];
 
     return (
-        <div className="overflow-x-auto rounded-[1.75rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.92))] p-2.5 shadow-xl shadow-cyan-950/8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-2.5 shadow-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div
                 role="tablist"
                 aria-label="World Cup groups"
@@ -43,10 +43,10 @@ export default function GroupTabs({
                             role="tab"
                             aria-selected={isActive}
                             className={[
-                                'h-11 rounded-2xl border px-3 text-sm font-black shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'h-11 rounded-2xl border px-3 text-sm font-bold shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'border-cyan-300 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.9))] text-cyan-800 shadow-cyan-950/10'
-                                    : 'border-white/90 bg-white/80 text-slate-600 shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
+                                    ? 'border-cyan-300 bg-gradient-to-b from-cyan-50 to-cyan-50/60 text-cyan-700 shadow-sm'
+                                    : 'border-white/90 bg-white/80 text-slate-600 shadow-sm hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
                             ].join(' ')}
                         >
                             {tab.label}

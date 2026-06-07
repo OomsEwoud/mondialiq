@@ -48,7 +48,7 @@ type Props = {
 const fieldErrorWrapperClassName = 'min-h-10';
 const fieldErrorClassName = 'leading-5';
 const emailVerificationCardClassName =
-    'rounded-[1.5rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] p-4 shadow-sm shadow-amber-950/5';
+    'rounded-2xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] p-4 shadow-sm';
 
 export default function Profile({
     accountUser,
@@ -233,7 +233,7 @@ export default function Profile({
                                                 <Link
                                                     href={send()}
                                                     as="button"
-                                                    className="text-sm font-black text-blue-950 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
+                                                    className="text-sm font-black text-slate-900 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
                                                 >
                                                     Resend verification email
                                                 </Link>
@@ -429,7 +429,7 @@ export default function Profile({
                                 <div>
                                     <div className="mb-2 flex items-center gap-2">
                                         <LockKeyhole className="size-4 text-cyan-500" />
-                                        <p className="text-sm font-black text-blue-950">
+                                        <p className="text-sm font-black text-slate-900">
                                             2FA status
                                         </p>
                                     </div>
@@ -453,7 +453,7 @@ export default function Profile({
                                                 variant="destructive"
                                                 type="submit"
                                                 disabled={processing}
-                                                className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-red-950/15 hover:bg-red-700 sm:w-auto"
+                                                className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-sm hover:bg-red-700 sm:w-auto"
                                             >
                                                 Disable 2FA
                                             </Button>

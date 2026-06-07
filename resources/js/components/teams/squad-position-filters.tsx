@@ -27,13 +27,13 @@ export default function SquadPositionFilters({
             <div
                 className={cn(
                     isDesktop
-                        ? 'rounded-[1.45rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-2.5 shadow-lg shadow-cyan-950/6'
+                        ? 'rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-2.5 shadow-sm'
                         : 'flex gap-2',
                 )}
             >
                 {isDesktop && (
                     <div className="px-2 pb-2">
-                        <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                        <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
                             Positions
                         </p>
                     </div>
@@ -50,12 +50,12 @@ export default function SquadPositionFilters({
                             aria-pressed={isActive}
                             onClick={() => onChange(filter.key)}
                             className={cn(
-                                'border px-3 text-sm font-black shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2',
+                                'border px-3 text-sm font-bold shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2',
                                 isDesktop
                                     ? 'mb-1 h-11 w-full justify-start rounded-2xl'
                                     : 'h-9 shrink-0 rounded-full',
                                 isActive
-                                    ? 'border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] text-cyan-700 hover:bg-cyan-50 hover:text-cyan-700'
+                                    ? 'border-cyan-200 bg-cyan-50 text-cyan-600 hover:bg-cyan-50 hover:text-cyan-600'
                                     : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                             )}
                         >

@@ -16,7 +16,7 @@ type Props = {
 };
 
 const emptyStateButtonClassName =
-    'h-10 w-full rounded-xl px-4 font-black sm:w-auto';
+    'h-10 w-full rounded-xl px-4 font-bold sm:w-auto';
 
 export default function LeaderboardEmptyState({
     title,
@@ -36,10 +36,10 @@ export default function LeaderboardEmptyState({
                 className,
             )}
         >
-            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 shadow-sm ring-1 ring-cyan-100">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 shadow-sm ring-1 ring-slate-200">
                 <Trophy className="size-5" />
             </div>
-            <h3 className="mt-4 text-lg font-black text-blue-950">{title}</h3>
+            <h3 className="mt-4 text-lg font-bold text-slate-900">{title}</h3>
             <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
                 {description}
             </p>
@@ -70,7 +70,7 @@ export default function LeaderboardEmptyState({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 sm:w-auto"
+                                className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 sm:w-auto"
                             >
                                 <Link href={secondaryActionHref}>
                                     <LogIn className="size-4" />
@@ -84,7 +84,7 @@ export default function LeaderboardEmptyState({
                                 type="button"
                                 disabled
                                 variant="outline"
-                                className="h-10 w-full rounded-xl px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-xl px-4 font-bold sm:w-auto"
                             >
                                 <LogIn className="size-4" />
                                 {secondaryActionLabel}

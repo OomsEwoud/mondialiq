@@ -15,14 +15,14 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
     const isMine = mode === 'mine';
 
     return (
-        <article className="group rounded-[1.7rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-4 shadow-lg shadow-cyan-950/6 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-xl hover:shadow-cyan-950/10 sm:p-5">
+        <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div className="grid min-w-0 gap-4">
                     <span
                         className={
                             isMine
-                                ? 'w-fit rounded-full border border-slate-200 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(241,245,249,0.92))] px-3 py-1 text-[11px] font-black tracking-[0.16em] text-slate-700 uppercase'
-                                : 'w-fit rounded-full border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-[11px] font-black tracking-[0.16em] text-cyan-800 uppercase'
+                                ? 'w-fit rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase'
+                                : 'w-fit rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-700 uppercase'
                         }
                     >
                         {isMine ? 'Personal pick' : 'AI report'}

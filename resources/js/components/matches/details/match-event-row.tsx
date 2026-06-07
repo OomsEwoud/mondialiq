@@ -15,7 +15,7 @@ export default function MatchEventRow({ event }: Props) {
 
     return (
         <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
-            <span className="w-12 shrink-0 text-sm font-black text-blue-600">
+            <span className="w-12 shrink-0 text-sm font-bold text-blue-600">
                 {minute}
             </span>
             <img

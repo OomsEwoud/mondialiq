@@ -50,13 +50,13 @@ export default function MatchFilters({
     };
 
     return (
-        <section className="mb-6 rounded-[1.75rem] border border-cyan-200/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(240,249,255,0.92))] p-4 shadow-xl shadow-cyan-950/8 backdrop-blur sm:p-6">
+        <section className="mb-6 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm sm:p-6">
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-sm font-black tracking-[0.16em] text-blue-950 uppercase">
+                    <h2 className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         Filters
                     </h2>
-                    <p className="mt-1 text-sm text-slate-600">
+                    <p className="mt-1 text-sm text-slate-500">
                         Fine-tune the schedule by status, round, date or team.
                     </p>
                 </div>
@@ -64,7 +64,7 @@ export default function MatchFilters({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex h-10 items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-all hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <X size={15} />
                         Clear
@@ -72,8 +72,8 @@ export default function MatchFilters({
                 )}
             </div>
 
-            <div className="mb-5 border-b border-cyan-100/70 pb-5">
-                <p className="mb-2 text-[11px] font-black tracking-[0.16em] text-slate-500 uppercase">
+            <div className="mb-5 border-b border-slate-200 pb-5">
+                <p className="mb-2 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                     Match status
                 </p>
                 <MatchStatusTabs

@@ -22,14 +22,14 @@ export default function SettingsSection({
         <section className={settingsSectionClassName}>
             <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex gap-3 sm:gap-4">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100 sm:size-12">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200 sm:size-12">
                         <Icon className="size-5" />
                     </span>
                     <div>
-                        <p className="mb-1 text-xs font-black tracking-[0.18em] text-cyan-600 uppercase">
+                        <p className="mb-1 text-xs font-bold tracking-wide text-slate-600 uppercase">
                             {eyebrow}
                         </p>
-                        <h2 className="text-xl font-black tracking-tight text-blue-950 sm:text-2xl">
+                        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
                             {title}
                         </h2>
                         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">

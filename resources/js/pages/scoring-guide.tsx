@@ -25,7 +25,7 @@ const scoringRules = [
         points: 8,
         description:
             'Correctly predict home win, draw, or away win when the exact score is not right.',
-        accent: 'bg-cyan-50 text-cyan-800',
+        accent: 'bg-cyan-50 text-cyan-700',
     },
     {
         label: 'Goal difference',
@@ -101,14 +101,14 @@ export default function ScoringGuide() {
                 <BackButton fallbackHref={predictions.url()} />
             </div>
 
-            <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-6 text-center shadow-2xl shadow-cyan-950/8 sm:p-8">
-                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+            <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-6 text-center shadow-sm sm:p-8">
+                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
                     <Calculator className="size-5" />
                 </div>
-                <p className="text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+                <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                     Prediction scoring
                 </p>
-                <h1 className="mt-2 text-4xl font-black tracking-tight text-blue-950 sm:text-5xl">
+                <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
                     How scoring works
                 </h1>
                 <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
@@ -117,25 +117,25 @@ export default function ScoringGuide() {
                     reward close predictions.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-                    <span className="rounded-full border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-xs font-black text-cyan-700 shadow-sm shadow-cyan-950/5">
+                    <span className="rounded-full border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-xs font-semibold text-cyan-600 shadow-sm">
                         Max 20 points
                     </span>
-                    <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-black text-slate-700 shadow-sm shadow-cyan-950/5">
+                    <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
                         Confidence does not affect points
                     </span>
                 </div>
             </section>
 
-            <section className="mt-5 rounded-[1.85rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+            <section className="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-xl shadow-sm sm:p-6">
                 <div className="grid gap-5 lg:grid-cols-[auto_1fr] lg:items-start">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] text-white shadow-lg shadow-blue-950/20">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg shadow-sm">
                         <BadgeCheck className="size-5" />
                     </div>
                     <div>
-                        <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                             Validation
                         </p>
-                        <h2 className="mt-1 text-2xl font-black text-blue-950">
+                        <h2 className="mt-1 text-2xl font-semibold text-slate-900">
                             When points are awarded
                         </h2>
                         <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
@@ -148,7 +148,7 @@ export default function ScoringGuide() {
                             {validationPoints.map((point) => (
                                 <div
                                     key={point}
-                                    className="rounded-2xl border border-cyan-100 bg-cyan-50/60 p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm shadow-cyan-950/5"
+                                    className="rounded-2xl border border-slate-200 bg-cyan-50/60 p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm"
                                 >
                                     {point}
                                 </div>
@@ -159,16 +159,16 @@ export default function ScoringGuide() {
             </section>
 
             <section className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
-                <article className="rounded-[1.85rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+                <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-xl shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] text-white shadow-lg shadow-blue-950/20">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg shadow-sm">
                             <Trophy className="size-5" />
                         </div>
                         <div>
-                            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 Rules
                             </p>
-                            <h2 className="mt-1 text-2xl font-black text-blue-950">
+                            <h2 className="mt-1 text-2xl font-semibold text-slate-900">
                                 Points breakdown
                             </h2>
                         </div>
@@ -178,11 +178,11 @@ export default function ScoringGuide() {
                         {scoringRules.map((rule) => (
                             <div
                                 key={rule.label}
-                                className="h-full rounded-[1.35rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 shadow-sm shadow-cyan-950/5"
+                                className="h-full rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                             >
                                 <div className="flex h-full items-start justify-between gap-3">
                                     <div>
-                                        <h3 className="text-sm font-black text-blue-950">
+                                        <h3 className="text-sm font-semibold text-slate-900">
                                             {rule.label}
                                         </h3>
                                         <p className="mt-1 text-sm leading-5 text-slate-600">
@@ -192,8 +192,8 @@ export default function ScoringGuide() {
                                     <span
                                         className={
                                             rule.isMaximum
-                                                ? 'shrink-0 rounded-full bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] px-3 py-1 text-sm font-black text-white shadow-sm shadow-blue-950/20'
-                                                : 'shrink-0 rounded-full border border-cyan-100 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-sm font-black text-cyan-800 shadow-sm shadow-cyan-950/5'
+                                                ? 'shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white shadow-sm'
+                                                : 'shrink-0 rounded-full border border-slate-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-3 py-1 text-sm font-semibold text-cyan-700 shadow-sm'
                                         }
                                     >
                                         +{rule.points}
@@ -204,16 +204,16 @@ export default function ScoringGuide() {
                     </div>
                 </article>
 
-                <aside className="rounded-[1.85rem] border border-cyan-200/70 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(236,254,255,0.88))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+                <aside className="rounded-2xl border border-slate-200 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(236,254,255,0.88))] p-5 shadow-xl shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-600 shadow-sm ring-slate-200">
                             <Scale className="size-5" />
                         </div>
                         <div>
-                            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 Fairness
                             </p>
-                            <h2 className="mt-1 text-2xl font-black text-blue-950">
+                            <h2 className="mt-1 text-2xl font-semibold text-slate-900">
                                 Simple by design
                             </h2>
                         </div>
@@ -222,9 +222,9 @@ export default function ScoringGuide() {
                         {fairnessPoints.map((point) => (
                             <div
                                 key={point}
-                                className="flex gap-3 rounded-2xl border border-white/80 bg-white/80 p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm shadow-cyan-950/5"
+                                className="flex gap-3 rounded-2xl border border-white/80 bg-white/80 p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm"
                             >
-                                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cyan-700" />
+                                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cyan-600" />
                                 <span>{point}</span>
                             </div>
                         ))}
@@ -232,16 +232,16 @@ export default function ScoringGuide() {
                 </aside>
             </section>
 
-            <section className="mt-5 rounded-[1.85rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+            <section className="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-xl shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                         <Goal className="size-5" />
                     </div>
                     <div>
-                        <p className="text-xs font-black tracking-[0.18em] text-cyan-600 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                             Examples
                         </p>
-                        <h2 className="mt-1 text-2xl font-black text-blue-950">
+                        <h2 className="mt-1 text-2xl font-semibold text-slate-900">
                             Real scoring examples
                         </h2>
                     </div>
@@ -251,21 +251,21 @@ export default function ScoringGuide() {
                     {examples.map((example) => (
                         <article
                             key={`${example.finalScore}-${example.prediction}`}
-                            className="rounded-[1.35rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 shadow-sm shadow-cyan-950/5"
+                            className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                         >
                             <div className="flex items-start justify-between gap-3">
                                 <div>
-                                    <p className="text-xs font-black tracking-[0.18em] text-slate-500 uppercase">
+                                    <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
                                         Final {example.finalScore}
                                     </p>
-                                    <h3 className="mt-1 text-lg font-black text-blue-950">
+                                    <h3 className="mt-1 text-lg font-semibold text-slate-900">
                                         Prediction {example.prediction}
                                     </h3>
                                     <p className="mt-2 text-sm leading-5 text-slate-600">
                                         {example.explanation}
                                     </p>
                                 </div>
-                                <span className="shrink-0 rounded-full bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] px-3 py-1 text-sm font-black text-white shadow-sm shadow-blue-950/20">
+                                <span className="shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white shadow-sm">
                                     {example.points}/20
                                 </span>
                             </div>
@@ -274,13 +274,13 @@ export default function ScoringGuide() {
                 </div>
             </section>
 
-            <section className="mt-5 rounded-[1.85rem] border border-cyan-100 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.14),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-cyan-950/8 sm:p-6">
+            <section className="mt-5 rounded-2xl border border-slate-200 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.14),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-sm sm:p-6">
                 <div className="grid gap-4 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-600 shadow-sm ring-slate-200">
                         <BadgeCheck className="size-5" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-black text-blue-950">
+                        <h2 className="text-xl font-semibold text-slate-900">
                             Ready to make predictions?
                         </h2>
                         <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -291,14 +291,14 @@ export default function ScoringGuide() {
                     <div className="flex flex-col gap-2 sm:flex-row lg:justify-end">
                         <Link
                             href={predictions.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] px-4 py-2.5 text-sm font-black text-white shadow-lg shadow-blue-950/20 transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sm transition  focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <Calculator className="size-4" />
                             Go to predictions
                         </Link>
                         <Link
                             href={matches.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <CalendarDays className="size-4" />
                             View matches

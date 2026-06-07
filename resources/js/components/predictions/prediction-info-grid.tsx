@@ -24,12 +24,12 @@ export default function PredictionInfoGrid() {
             {infoItems.map((item) => (
                 <article
                     key={item.title}
-                    className="rounded-[1.6rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94))] p-5 shadow-lg shadow-cyan-950/6 backdrop-blur"
+                    className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm "
                 >
-                    <p className="mb-4 text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+                    <p className="mb-4 text-xs font-bold tracking-wide text-cyan-600 uppercase">
                         {item.metric}
                     </p>
-                    <h2 className="text-xl font-black text-blue-950">
+                    <h2 className="text-xl font-bold text-slate-900">
                         {item.title}
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-slate-600">

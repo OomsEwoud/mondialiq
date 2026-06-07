@@ -40,7 +40,7 @@ export default function LeagueOnboardingCard({
     return (
         <Card className="gap-0 rounded-2xl border-cyan-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 py-0 shadow-sm">
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
-                <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
                     What next?
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-600">
@@ -49,13 +49,13 @@ export default function LeagueOnboardingCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-700">
+                    <div className="flex items-center gap-2 text-cyan-600">
                         <Share2 className="size-4" />
-                        <p className="text-xs font-black tracking-[0.16em] uppercase">
+                        <p className="text-xs font-bold tracking-wide uppercase">
                             Step 1
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-black text-blue-950">
+                    <p className="mt-2 text-sm font-bold text-slate-900">
                         Invite more friends into the group.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -66,7 +66,7 @@ export default function LeagueOnboardingCard({
                         type="button"
                         variant="outline"
                         onClick={openInviteTools}
-                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300 sm:w-auto"
+                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         Open invite tools
                         <ArrowRight className="size-4" />
@@ -74,13 +74,13 @@ export default function LeagueOnboardingCard({
                 </div>
 
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-700">
+                    <div className="flex items-center gap-2 text-cyan-600">
                         <Target className="size-4" />
-                        <p className="text-xs font-black tracking-[0.16em] uppercase">
+                        <p className="text-xs font-bold tracking-wide uppercase">
                             Step 2
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-black text-blue-950">
+                    <p className="mt-2 text-sm font-bold text-slate-900">
                         Make your next prediction.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -89,7 +89,7 @@ export default function LeagueOnboardingCard({
                     </p>
                     <Button
                         asChild
-                        className="mt-3 h-10 w-full rounded-xl bg-blue-950 px-4 font-black text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
+                        className="mt-3 h-10 w-full rounded-xl bg-blue-950 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         <Link href={matches.url()}>
                             Explore matches
@@ -99,13 +99,13 @@ export default function LeagueOnboardingCard({
                 </div>
 
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-700">
+                    <div className="flex items-center gap-2 text-cyan-600">
                         <Trophy className="size-4" />
-                        <p className="text-xs font-black tracking-[0.16em] uppercase">
+                        <p className="text-xs font-bold tracking-wide uppercase">
                             Step 3
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-black text-blue-950">
+                    <p className="mt-2 text-sm font-bold text-slate-900">
                         Track how your picks stack up.
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -115,7 +115,7 @@ export default function LeagueOnboardingCard({
                     <Button
                         asChild
                         variant="outline"
-                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-cyan-300 sm:w-auto"
+                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         <Link href={predictions.url()}>
                             Open my predictions

@@ -51,7 +51,7 @@ const errorConfig: Record<number, ErrorConfig> = {
         title: 'You do not have permission to view this page.',
     },
     404: {
-        accent: 'text-cyan-700',
+        accent: 'text-cyan-600',
         action: {
             href: matches.url(),
             icon: CalendarDays,
@@ -108,7 +108,7 @@ const errorConfig: Record<number, ErrorConfig> = {
 };
 
 const fallbackConfig: ErrorConfig = {
-    accent: 'text-cyan-700',
+    accent: 'text-cyan-600',
     action: {
         href: matches.url(),
         icon: CalendarDays,
@@ -152,26 +152,26 @@ export default function ErrorPage({ status }: ErrorPageProps) {
             </Head>
 
             <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
-                <header className="border-b border-cyan-200/10 bg-[#141c69] shadow-lg shadow-blue-950/10">
+                <header className="border-b border-cyan-200/10 bg-[#141c69] shadow-lg shadow-sm">
                     <div className="mx-auto flex h-16 w-full max-w-6xl items-center px-5 sm:px-6">
                         <Link
                             href={home.url()}
-                            className="rounded-full focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
+                            className="rounded-lg focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
                         >
-                            <AppLogo textClassName="text-white" />
+                            <AppLogo textClassName="text-cyan-300" />
                         </Link>
                     </div>
                 </header>
 
                 <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center px-5 py-8 sm:px-6 lg:py-12">
-                    <section className="w-full overflow-hidden rounded-[2rem] border border-cyan-200/30 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_52%,#eef7ff_100%)] shadow-2xl shadow-cyan-950/8">
+                    <section className="w-full overflow-hidden rounded-2xl border border-cyan-200/30 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_52%,#eef7ff_100%)] shadow-2xl shadow-sm">
                         <div className="grid min-h-[62vh] gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:p-10">
                             <div className="min-w-0">
-                                <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                                <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-white text-cyan-600 shadow-sm ring-slate-200">
                                     <StatusIcon className="size-6" />
                                 </div>
 
-                                <p className="text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+                                <p className="text-xs font-black tracking-wide text-cyan-600 uppercase">
                                     {config.kicker}
                                 </p>
                                 <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -183,7 +183,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                     >
                                         {status}
                                     </span>
-                                    <h1 className="max-w-2xl text-3xl leading-tight font-black tracking-tight text-blue-950 sm:text-4xl">
+                                    <h1 className="max-w-2xl text-3xl leading-tight font-black tracking-tight text-slate-900 sm:text-4xl">
                                         {config.title}
                                     </h1>
                                 </div>
@@ -207,7 +207,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                         type="button"
                                         variant="outline"
                                         onClick={goBack}
-                                        className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                        className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
                                     >
                                         <ArrowLeft className="size-4" />
                                         Go back
@@ -220,7 +220,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                             onClick={() =>
                                                 window.location.reload()
                                             }
-                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
                                         >
                                             <RefreshCcw className="size-4" />
                                             Refresh page
@@ -231,7 +231,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                         <Button
                                             asChild
                                             variant="outline"
-                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
                                         >
                                             <Link href={config.action.href}>
                                                 <ActionIcon className="size-4" />
@@ -242,8 +242,8 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                 </div>
                             </div>
 
-                            <aside className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-xl ring-1 shadow-cyan-950/8 ring-cyan-100/50">
-                                <p className="text-xs font-black tracking-[0.18em] text-slate-400 uppercase">
+                            <aside className="rounded-2xl border border-white/80 bg-white/80 p-5 shadow-xl ring-1 shadow-sm ring-slate-200/50">
+                                <p className="text-xs font-black tracking-wide text-slate-400 uppercase">
                                     Match report
                                 </p>
                                 <div className="mt-4 grid gap-3">
@@ -279,7 +279,7 @@ function StatusPill({ label, value }: { label: string; value: string }) {
             <p className="text-xs font-black tracking-widest text-slate-400 uppercase">
                 {label}
             </p>
-            <p className="mt-1 text-sm font-black text-blue-950">{value}</p>
+            <p className="mt-1 text-sm font-black text-slate-900">{value}</p>
         </div>
     );
 }

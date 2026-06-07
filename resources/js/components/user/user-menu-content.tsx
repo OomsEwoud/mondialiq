@@ -16,7 +16,7 @@ type Props = {
 };
 
 const menuItemClassName =
-    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-blue-950 transition-colors focus:bg-cyan-50 focus:text-blue-950';
+    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-900 transition-colors focus:bg-cyan-50 focus:text-slate-900';
 const menuLinkClassName = 'flex w-full cursor-pointer items-center gap-2';
 
 export function UserMenuContent({ user }: Props) {

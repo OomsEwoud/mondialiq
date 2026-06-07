@@ -26,7 +26,7 @@ export default function CalendarGrid({
     onClose,
 }: Props) {
     return (
-        <div className="absolute top-full left-0 z-20 mt-2 w-[19rem] rounded-xl border border-slate-200 bg-white p-3 shadow-lg shadow-blue-950/10">
+        <div className="absolute top-full left-0 z-20 mt-2 w-[19rem] rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
             <div className="mb-3 flex items-center justify-between">
                 <button
                     type="button"
@@ -36,7 +36,7 @@ export default function CalendarGrid({
                 >
                     <ChevronLeft size={16} />
                 </button>
-                <span className="text-sm font-bold text-slate-950">
+                <span className="text-sm font-semibold text-slate-950">
                     {new Intl.DateTimeFormat('en-GB', {
                         month: 'long',
                         year: 'numeric',
@@ -52,7 +52,7 @@ export default function CalendarGrid({
                 </button>
             </div>
 
-            <div className="mb-2 grid grid-cols-7 text-center text-[11px] font-bold tracking-wide text-slate-400 uppercase">
+            <div className="mb-2 grid grid-cols-7 text-center text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                 {weekDays.map((day) => (
                     <span key={day}>{day}</span>
                 ))}
@@ -105,7 +105,7 @@ export default function CalendarGrid({
                 <button
                     type="button"
                     onClick={onClose}
-                    className="text-sm font-medium text-cyan-700 transition-colors hover:text-cyan-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                    className="text-sm font-medium text-slate-600 transition-colors hover:text-cyan-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                 >
                     Close
                 </button>

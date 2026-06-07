@@ -20,24 +20,24 @@ export default function AiProbabilityCard({
     return (
         <div
             className={cn(
-                'rounded-[1.35rem] border p-4 shadow-sm shadow-cyan-950/5',
+                'rounded-2xl border p-4 shadow-sm',
                 isHighest
-                    ? 'border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,0.86),rgba(255,255,255,0.98))]'
-                    : 'border-slate-200 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))]',
+                    ? 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white'
+                    : 'border-slate-200 bg-gradient-to-b from-white to-slate-50/60',
             )}
         >
             <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
-                    <p className="truncate text-sm font-black text-blue-950">
+                    <p className="truncate text-sm font-bold text-slate-900">
                         {label}
                     </p>
                     {isHighest ? (
-                        <span className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-[10px] font-black tracking-[0.12em] text-cyan-700 uppercase">
+                        <span className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-bold tracking-wide text-cyan-600 uppercase">
                             Highest
                         </span>
                     ) : null}
                 </div>
-                <p className="shrink-0 text-sm font-black text-blue-950">
+                <p className="shrink-0 text-sm font-bold text-slate-900">
                     {percentage}
                 </p>
             </div>

@@ -22,7 +22,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
     return (
         <section className="grid gap-4 md:grid-cols-3">
             <AiPredictionSummaryCard icon={Trophy} label="Predicted outcome">
-                <p className="text-2xl leading-tight font-black text-blue-950">
+                <p className="text-2xl leading-tight font-bold text-slate-900">
                     {predictedOutcome}
                 </p>
                 <p className="mt-2 text-xs font-bold text-cyan-700">
@@ -32,7 +32,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
 
             <AiPredictionSummaryCard icon={Gauge} label="Confidence">
                 <div className="flex items-end justify-between gap-3">
-                    <p className="text-2xl leading-tight font-black text-blue-950">
+                    <p className="text-2xl leading-tight font-bold text-slate-900">
                         {confidence.value}
                     </p>
                     <p className="pb-1 text-xs font-bold text-slate-500">
@@ -61,7 +61,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
             </AiPredictionSummaryCard>
 
             <AiPredictionSummaryCard icon={Goal} label="Expected score">
-                <p className="text-3xl leading-none font-black text-blue-950">
+                <p className="text-3xl leading-none font-bold text-slate-900">
                     {expectedScore}
                 </p>
                 <p className="mt-2 text-xs font-bold text-slate-500">

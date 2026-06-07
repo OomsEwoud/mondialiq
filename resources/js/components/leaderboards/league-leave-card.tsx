@@ -32,7 +32,7 @@ export default function LeagueLeaveCard({
                     type="button"
                     variant="outline"
                     className={cn(
-                        'h-11 rounded-lg border-rose-200 bg-white/92 px-5 font-black text-rose-900 shadow-sm backdrop-blur-sm hover:bg-rose-50',
+                        'h-11 rounded-lg border-rose-200 bg-white/92 px-5 font-bold text-rose-900 shadow-sm  hover:bg-rose-50',
                         className,
                     )}
                 >
@@ -41,7 +41,7 @@ export default function LeagueLeaveCard({
                 </Button>
             </DialogTrigger>
             <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                <DialogTitle className="text-blue-950">
+                <DialogTitle className="text-slate-900">
                     Leave {leagueName}?
                 </DialogTitle>
                 <DialogDescription className="text-sm leading-6 text-slate-600">
@@ -62,7 +62,7 @@ export default function LeagueLeaveCard({
                                 <Button
                                     type="button"
                                     variant="secondary"
-                                    className="rounded-lg font-black"
+                                    className="rounded-lg font-bold"
                                 >
                                     Cancel
                                 </Button>
@@ -72,7 +72,7 @@ export default function LeagueLeaveCard({
                                 type="submit"
                                 variant="destructive"
                                 disabled={processing}
-                                className="rounded-lg font-black"
+                                className="rounded-lg font-bold"
                             >
                                 {processing && <Spinner />}
                                 <LogOut className="size-4" />

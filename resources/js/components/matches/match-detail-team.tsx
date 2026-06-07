@@ -23,7 +23,7 @@ export default function MatchDetailTeam({
         <Link
             href={showTeam.url(id)}
             aria-label={`View ${name} team details`}
-            className={`group flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-white focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
+            className={`group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
         >
             <img
                 src={logo}
@@ -35,7 +35,7 @@ export default function MatchDetailTeam({
                 <p className="font-bold text-slate-800 transition-colors group-hover:text-cyan-700">
                     {name}
                 </p>
-                <span className="mt-0.5 hidden items-center gap-1 text-[10px] font-bold text-slate-400 transition-colors group-hover:text-cyan-700 sm:inline-flex">
+                <span className="mt-0.5 hidden items-center gap-1 text-xs font-bold text-slate-400 transition-colors group-hover:text-cyan-700 sm:inline-flex">
                     View team
                     <ArrowUpRight className="h-3 w-3" />
                 </span>

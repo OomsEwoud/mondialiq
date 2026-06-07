@@ -47,13 +47,13 @@ export default function UpcomingMatches({ matches }: Props) {
     }, []);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm shadow-blue-950/5 backdrop-blur">
+        <section className="rounded-2xl border border-cyan-200/60 bg-gradient-to-b from-white to-cyan-50/30 p-4 shadow-sm">
             <header className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                    <p className="text-[11px] font-black tracking-widest text-cyan-600 uppercase">
+                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         Schedule
                     </p>
-                    <h2 className="text-base font-black text-slate-950">
+                    <h2 className="text-base font-semibold text-slate-900">
                         Upcoming matches
                     </h2>
                 </div>
@@ -64,24 +64,24 @@ export default function UpcomingMatches({ matches }: Props) {
                     {visibleMatches.map((match) => (
                         <article
                             key={match.id}
-                            className="rounded-2xl border border-slate-200 bg-slate-50/80 p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:bg-white hover:shadow-md"
+                            className="rounded-lg border border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white p-3 transition-shadow hover:shadow-sm"
                         >
                             <div className="mb-3 flex items-center justify-between gap-3">
-                                <span className="text-[11px] font-bold tracking-wide text-slate-500 uppercase">
+                                <span className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                     Matchday
                                 </span>
                                 <div className="flex flex-wrap justify-end gap-1.5">
-                                    <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[10px] leading-none font-black text-blue-950">
+                                    <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-slate-800">
                                         {formatKickoffDateTime(match.kickoffAt)}
                                     </span>
-                                    <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] leading-none font-black text-emerald-700">
+                                    <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
                                         {kickoffCountdown(
                                             match.kickoffAt,
                                             currentTime,
                                         )}
                                     </span>
                                     {match.hasLineups ? (
-                                        <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] leading-none font-black text-blue-800">
+                                        <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
                                             Lineup available
                                         </span>
                                     ) : null}
@@ -95,11 +95,11 @@ export default function UpcomingMatches({ matches }: Props) {
                                         alt={match.homeTeam}
                                         className="h-8 w-8 shrink-0 rounded-full bg-white object-contain ring-1 ring-slate-200"
                                     />
-                                    <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-800">
+                                    <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800">
                                         {match.homeTeamShort}
                                     </span>
                                 </div>
-                                <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black text-slate-400 ring-1 ring-slate-200">
+                                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
                                     vs
                                 </span>
                                 <div className="flex min-w-0 flex-row-reverse items-center gap-2 text-right">
@@ -108,7 +108,7 @@ export default function UpcomingMatches({ matches }: Props) {
                                         alt={match.awayTeam}
                                         className="h-8 w-8 shrink-0 rounded-full bg-white object-contain ring-1 ring-slate-200"
                                     />
-                                    <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-black text-slate-800">
+                                    <span className="min-w-0 truncate rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800">
                                         {match.awayTeamShort}
                                     </span>
                                 </div>
@@ -118,8 +118,8 @@ export default function UpcomingMatches({ matches }: Props) {
                                 <div
                                     className={
                                         match.predictionState === 'predicted'
-                                            ? 'mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[11px] leading-none font-black tracking-wide text-emerald-800 uppercase'
-                                            : 'mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-none font-black tracking-wide text-amber-800 uppercase'
+                                            ? 'mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold tracking-wide text-emerald-800 uppercase'
+                                            : 'mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold tracking-wide text-amber-800 uppercase'
                                     }
                                 >
                                     {match.predictionState === 'predicted'
@@ -131,7 +131,7 @@ export default function UpcomingMatches({ matches }: Props) {
                             <div className="mt-3 border-t border-slate-200 pt-2">
                                 <Link
                                     href={showMatch.url(match.id)}
-                                    className="inline-flex items-center gap-1.5 rounded-full px-0.5 text-xs font-black text-blue-950 transition-colors hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    className="inline-flex items-center gap-1.5 rounded-lg px-1 text-xs font-semibold text-slate-600 transition-colors hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                                 >
                                     View match details
                                     <ArrowRight className="h-3.5 w-3.5" />
@@ -141,20 +141,20 @@ export default function UpcomingMatches({ matches }: Props) {
                     ))}
                 </div>
             ) : (
-                <div className="flex min-h-44 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-4 py-8 text-center">
-                    <span className="flex size-11 items-center justify-center rounded-xl bg-cyan-50 text-cyan-700">
+                <div className="flex min-h-44 flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">
+                    <span className="flex size-11 items-center justify-center rounded-lg bg-cyan-50 text-slate-600">
                         <CalendarClock className="size-5" />
                     </span>
-                    <h3 className="mt-3 text-sm font-black text-blue-950">
+                    <h3 className="mt-3 text-sm font-semibold text-slate-900">
                         No upcoming matches right now
                     </h3>
-                    <p className="mt-1 max-w-sm text-sm leading-6 font-medium text-slate-500">
+                    <p className="mt-1 max-w-sm text-sm leading-6 font-medium text-slate-600">
                         The schedule is clear for the moment. Check all matches
                         to review fixtures, results and predictions.
                     </p>
                     <Link
                         href={matchesRoute.url()}
-                        className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-black text-blue-950 transition-colors hover:bg-slate-100 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="mt-4 inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         View all matches
                         <ArrowRight className="h-3.5 w-3.5" />

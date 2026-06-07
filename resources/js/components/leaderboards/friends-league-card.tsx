@@ -46,7 +46,7 @@ export default function FriendsLeagueCard({ league }: Props) {
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
-        <Card className="overflow-hidden rounded-[1.7rem] border-cyan-100 bg-white shadow-lg shadow-cyan-950/6 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl">
             <div
                 className={getLeagueBrandBannerClass(
                     league.accentColor,
@@ -54,14 +54,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                 )}
             >
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/18 text-2xl shadow-sm backdrop-blur-sm">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/18 text-2xl shadow-sm ">
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-xs font-black tracking-[0.18em] text-white/80 uppercase">
+                        <p className="text-xs font-bold tracking-wide text-white/80 uppercase">
                             Prediction group
                         </p>
-                        <p className="truncate text-lg font-black text-white">
+                        <p className="truncate text-lg font-bold text-white">
                             {league.name}
                         </p>
                     </div>
@@ -70,7 +70,7 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardHeader className="gap-3 border-b border-slate-200 px-4 py-4 sm:px-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                        <CardTitle className="truncate text-lg font-black text-blue-950">
+                        <CardTitle className="truncate text-lg font-bold text-slate-900">
                             {league.name}
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm text-slate-500">
@@ -84,14 +84,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.memberAvatars.map((member) => (
                                 <Avatar
                                     key={member.id}
-                                    className="size-8 rounded-full shadow-sm ring-2 shadow-blue-950/10 ring-white"
+                                    className="size-8 rounded-full shadow-sm ring-2 shadow-sm ring-white"
                                 >
                                     <AvatarImage
                                         src={member.avatar ?? undefined}
                                         alt={member.name}
                                         className="object-cover"
                                     />
-                                    <AvatarFallback className="bg-blue-950 text-[10px] font-black text-white">
+                                    <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
                                         {getInitials(member.name)}
                                     </AvatarFallback>
                                 </Avatar>
@@ -134,10 +134,10 @@ export default function FriendsLeagueCard({ league }: Props) {
                         !performanceLabel && 'text-slate-400',
                     )}
                 >
-                    <p className="text-xs font-black tracking-[0.18em] text-slate-500 uppercase">
+                    <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
                         Group pace
                     </p>
-                    <p className="mt-1.5 text-sm font-semibold text-blue-950">
+                    <p className="mt-1.5 text-sm font-semibold text-slate-900">
                         {performanceLabel ?? 'No scoring data yet'}
                     </p>
                 </div>
@@ -145,7 +145,7 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
-                    className="h-10 w-full rounded-2xl px-4 font-black"
+                    className="h-10 w-full rounded-2xl px-4 font-bold"
                 >
                     <Link href={league.href}>View group</Link>
                 </Button>
@@ -155,7 +155,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-2xl px-4 font-black',
+                            'h-10 w-full rounded-2xl px-4 font-bold',
                             palette.button,
                         )}
                     >
@@ -168,14 +168,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                     <LeagueLeaveCard
                         leagueId={league.id}
                         leagueName={league.name}
-                        className="h-10 w-full rounded-2xl border-rose-200 bg-white px-4 font-black text-rose-900 hover:bg-rose-50"
+                        className="h-10 w-full rounded-2xl border-rose-200 bg-white px-4 font-bold text-rose-900 hover:bg-rose-50"
                     />
                 ) : (
                     <Button
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-2xl px-4 font-black"
+                        className="h-10 w-full rounded-2xl px-4 font-bold"
                     >
                         Group action
                     </Button>

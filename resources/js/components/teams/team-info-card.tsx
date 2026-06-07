@@ -10,8 +10,8 @@ export default function TeamInfoCard({ team }: Props) {
     const foundedLabel = team.foundedAt ? String(team.foundedAt) : 'TBC';
 
     return (
-        <section className="rounded-[1.8rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8">
-            <h2 className="mb-5 text-2xl font-black text-blue-950">Team info</h2>
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
+            <h2 className="mb-5 text-2xl font-bold text-slate-900">Team info</h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <TeamInfoItem
                     icon={<Hash />}

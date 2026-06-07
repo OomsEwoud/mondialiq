@@ -68,7 +68,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     return (
         <>
-            <div className="sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-lg shadow-blue-950/10 backdrop-blur-xl">
+            <div className="sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-sm -xl">
                 <div className="mx-auto flex h-16 items-center px-4 sm:px-6 md:max-w-7xl lg:px-8">
                     <AppHeaderMobileNav items={navigationItems} />
 
@@ -96,14 +96,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 alt={user.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="rounded-lg bg-cyan-100 text-blue-950">
+                                            <AvatarFallback className="rounded-lg bg-cyan-100 text-slate-900">
                                                 {getInitials(user.name)}
                                             </AvatarFallback>
                                         </Avatar>
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-xl shadow-blue-950/10"
+                                    className="w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-sm"
                                     align="end"
                                 >
                                     <UserMenuContent user={user} />
@@ -116,7 +116,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 </div>
             </div>
             {showBreadcrumbs && (
-                <div className="flex w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
+                <div className="flex w-full border-b border-slate-200/80 bg-white/80 -xl">
                     <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-slate-500 sm:px-6 md:max-w-7xl lg:px-8">
                         <Breadcrumbs breadcrumbs={breadcrumbs} />
                     </div>

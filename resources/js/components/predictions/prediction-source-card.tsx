@@ -6,12 +6,12 @@ interface Props {
 
 export default function PredictionSourceCard({ title, subtitle, rows }: Props) {
     return (
-        <article className="h-full rounded-[1.75rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-lg shadow-cyan-950/6 sm:p-6">
+        <article className="h-full rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
             <div>
-                <p className="text-[11px] font-black tracking-[0.18em] text-cyan-700 uppercase">
+                <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
                     Data signal
                 </p>
-                <h3 className="mt-2 text-xl font-black text-blue-950">
+                <h3 className="mt-2 text-xl font-bold text-slate-900">
                     {title}
                 </h3>
                 <p className="mt-1 text-sm font-medium text-slate-500">
@@ -27,7 +27,7 @@ export default function PredictionSourceCard({ title, subtitle, rows }: Props) {
                         <dt className="text-sm font-medium text-slate-500">
                             {label}
                         </dt>
-                        <dd className="min-w-0 text-right text-sm font-black break-words text-blue-950">
+                        <dd className="min-w-0 text-right text-sm font-bold break-words text-slate-900">
                             {value}
                         </dd>
                     </div>

@@ -40,16 +40,16 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                 <div className="border-b border-slate-100 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-5 py-4 sm:px-6">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <p className="text-xs font-black tracking-[0.24em] text-cyan-600 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                 {headerLabel}
                             </p>
-                            <h1 className="mt-1 text-2xl font-black text-blue-950 sm:text-3xl">
+                            <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
                                 {match.homeTeam} vs {match.awayTeam}
                             </h1>
                         </div>
 
                         <div className="text-left sm:text-right">
-                            <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 {match.round}
                             </p>
                             <p className="mt-1 text-sm font-medium text-slate-600">
@@ -70,10 +70,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                 />
 
                                 <div className="text-center">
-                                    <p className="text-[11px] font-black tracking-[0.24em] text-slate-400 uppercase">
+                                    <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                         Predicted score
                                     </p>
-                                    <p className="mt-2 text-3xl font-black text-blue-950">
+                                    <p className="mt-2 text-3xl font-semibold text-slate-900">
                                         {score ?? '-'}
                                     </p>
                                 </div>
@@ -94,10 +94,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                         <Trophy className="size-4" />
                                     </span>
                                     <div>
-                                        <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                        <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                             Predicted winner
                                         </p>
-                                        <p className="mt-1 text-base font-bold text-blue-950">
+                                        <p className="mt-1 text-base font-semibold text-slate-900">
                                             {activePredictionLabel}
                                         </p>
                                     </div>
@@ -105,14 +105,14 @@ export default function PredictionDetailHero({ match, mode }: Props) {
 
                                 {activePredictionConfidence && (
                                     <div className="flex items-start gap-3 text-left">
-                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-700">
+                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-slate-600">
                                             <Gauge className="size-4" />
                                         </span>
                                         <div>
-                                            <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                                 Chance
                                             </p>
-                                            <p className="mt-1 text-base font-bold text-blue-950 capitalize">
+                                            <p className="mt-1 text-base font-semibold text-slate-900 capitalize">
                                                 {activePredictionConfidence}{' '}
                                                 confidence
                                             </p>
@@ -126,7 +126,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                             <Sparkles className="size-4" />
                                         </span>
                                         <div>
-                                            <p className="text-[11px] font-black tracking-[0.18em] text-slate-400 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                                 AI insight
                                             </p>
                                             <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
@@ -143,7 +143,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
                             <Button
                                 type="button"
-                                className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-blue-950"
+                                className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-slate-900"
                                 onClick={openPredictionModal}
                             >
                                 <PencilLine className="h-4 w-4" />

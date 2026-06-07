@@ -36,8 +36,8 @@ export default function MatchDataTabs({ match }: Props) {
     const [activeTab, setActiveTab] = useState<MatchDataTab>('events');
 
     return (
-        <section className="overflow-hidden rounded-[1.85rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] shadow-xl shadow-cyan-950/8">
-            <div className="border-b border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(241,245,249,0.95))] p-1.5">
+        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
+            <div className="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white p-1.5">
                 <div
                     role="tablist"
                     aria-label="Match data"
@@ -55,9 +55,9 @@ export default function MatchDataTabs({ match }: Props) {
                                 aria-selected={isActive}
                                 onClick={() => setActiveTab(tab.value)}
                                 className={cn(
-                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-2xl px-2 text-xs font-black transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
+                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-2xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
                                     isActive
-                                        ? 'bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] text-white shadow-lg shadow-blue-950/18'
+                                        ? 'bg-slate-900 text-white shadow-sm'
                                         : 'bg-white/90 text-slate-600 hover:bg-white hover:text-slate-900',
                                 )}
                             >

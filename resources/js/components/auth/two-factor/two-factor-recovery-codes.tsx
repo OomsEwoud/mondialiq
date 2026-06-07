@@ -55,7 +55,7 @@ export default function TwoFactorRecoveryCodes({
     return (
         <div className={settingsSubtlePanelClassName}>
             <div className="mb-4">
-                <h3 className="flex items-center gap-2 text-sm font-black text-blue-950">
+                <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                     <LockKeyhole
                         className="size-4 text-cyan-500"
                         aria-hidden="true"
@@ -93,7 +93,7 @@ export default function TwoFactorRecoveryCodes({
                                 variant="secondary"
                                 type="submit"
                                 disabled={processing}
-                                className="rounded-lg font-black"
+                                className="rounded-lg font-bold"
                                 aria-describedby="regenerate-warning"
                             >
                                 <RefreshCw /> Regenerate codes

@@ -17,18 +17,18 @@ export function UserInfo({
 
     return (
         <>
-            <Avatar className="h-8 w-8 overflow-hidden rounded-full border border-cyan-100">
+            <Avatar className="h-8 w-8 overflow-hidden rounded-full border border-slate-200">
                 <AvatarImage
                     src={user.avatar ?? undefined}
                     alt={user.name}
                     className="object-cover"
                 />
-                <AvatarFallback className="rounded-lg bg-cyan-100 font-black text-blue-950">
+                <AvatarFallback className="rounded-lg bg-cyan-100 font-bold text-slate-900">
                     {getInitials(user.name)}
                 </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-black text-blue-950">
+                <span className="truncate font-bold text-slate-900">
                     {user.name}
                 </span>
                 {showEmail && (

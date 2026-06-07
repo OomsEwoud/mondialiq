@@ -24,7 +24,7 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
         <section className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 className="text-2xl font-black text-blue-950">
+                    <h2 className="text-2xl font-bold text-slate-900">
                         Data signals
                     </h2>
                     <p className="text-sm font-medium text-slate-500">
@@ -32,7 +32,7 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
                     </p>
                 </div>
                 {signalsDiffer ? (
-                    <span className="w-fit rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-black tracking-[0.12em] text-cyan-700 uppercase">
+                    <span className="w-fit rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold tracking-wide text-cyan-600 uppercase">
                         Signals differ
                     </span>
                 ) : null}

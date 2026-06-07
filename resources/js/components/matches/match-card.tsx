@@ -14,22 +14,22 @@ export default function MatchCard({ match }: Props) {
     const [showDetails, setShowDetails] = useState(false);
 
     return (
-        <article className="rounded-[1.75rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.96))] p-4 shadow-lg shadow-cyan-950/6 transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-2xl hover:shadow-cyan-950/10 sm:p-6">
+        <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
             <MatchSummary match={match} />
-            <div className="mt-4 flex flex-col gap-3 border-t border-cyan-100/70 pt-4 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs font-black text-slate-500">
+            <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-slate-500">
                     <span className="flex min-w-0 items-center gap-1.5">
-                        <Trophy className="size-3.5 shrink-0 text-cyan-700" />
+                        <Trophy className="size-3.5 shrink-0 text-slate-600" />
                         <span className="truncate">{match.round}</span>
                     </span>
-                    <span className="hidden text-cyan-200 sm:inline">/</span>
+                    <span className="hidden text-slate-300 sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <CalendarDays className="size-3.5 text-cyan-700" />
+                        <CalendarDays className="size-3.5 text-slate-600" />
                         {match.date}
                     </span>
-                    <span className="hidden text-cyan-200 sm:inline">/</span>
+                    <span className="hidden text-slate-300 sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <Clock className="size-3.5 text-cyan-700" />
+                        <Clock className="size-3.5 text-slate-600" />
                         {match.time}
                     </span>
                 </div>

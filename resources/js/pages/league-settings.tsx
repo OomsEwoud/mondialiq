@@ -61,13 +61,13 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             <div className="mb-3 flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-3xl shadow-sm backdrop-blur-sm">
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className="text-xs font-black tracking-[0.22em] text-white uppercase">
+                            <p className="text-xs font-black tracking-wide text-white uppercase">
                                 Prediction group settings
                             </p>
                             <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
                                 Manage {league.name}
                             </h1>
-                            <p className="mt-3 text-sm leading-6 text-white/90 sm:text-base">
+                            <p className="mt-3 text-sm leading-6 text-cyan-300 sm:text-base">
                                 Update group details, manage member access, and
                                 keep invite controls tidy from one owner
                                 dashboard.
@@ -77,14 +77,14 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                         <div className="flex flex-wrap gap-2 lg:justify-end">
                             <Badge
                                 variant="outline"
-                                className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                className="rounded-lg border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                             >
                                 <Users className="size-3.5" />
                                 {league.membersCount} {memberLabel}
                             </Badge>
                             <Badge
                                 variant="outline"
-                                className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                className="rounded-lg border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                             >
                                 {league.visibility === 'private'
                                     ? 'Private group'
@@ -93,7 +93,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             {!league.isActive && (
                                 <Badge
                                     variant="outline"
-                                    className="rounded-full border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                    className="rounded-lg border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                                 >
                                     Invites closed
                                 </Badge>

@@ -11,10 +11,10 @@ export default function PlayerPositionGroup({ group, compactHeader }: Props) {
         <section>
             {!compactHeader && (
                 <div className="mb-4 flex items-center justify-between gap-3 border-b border-slate-100 pb-2">
-                    <h3 className="text-sm font-black tracking-[0.14em] text-blue-950 uppercase">
+                    <h3 className="text-sm font-bold tracking-wide text-slate-900 uppercase">
                         {group.label}
                     </h3>
-                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-black text-slate-500">
+                    <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-500">
                         {group.players.length}
                     </span>
                 </div>

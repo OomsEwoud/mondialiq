@@ -15,7 +15,7 @@ export default function PredictionMatchSummary({ match }: Props) {
                     logo={match.homeTeamLogo}
                     name={match.homeTeam}
                 />
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-black text-slate-500">
+                <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-600">
                     VS
                 </span>
                 <TeamCodeLink
@@ -27,11 +27,11 @@ export default function PredictionMatchSummary({ match }: Props) {
                 />
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-left">
-                <p className="text-xs font-black tracking-[0.14em] text-slate-500 uppercase">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-left">
+                <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                     {match.round}
                 </p>
-                <p className="mt-0.5 text-sm font-semibold text-blue-950">
+                <p className="mt-0.5 text-sm font-semibold text-slate-900">
                     {match.date} &middot; {match.time}
                 </p>
             </div>

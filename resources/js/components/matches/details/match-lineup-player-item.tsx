@@ -42,11 +42,11 @@ export default function MatchLineupPlayerItem({
                             className="object-cover"
                         />
                     ) : null}
-                    <AvatarFallback className="bg-blue-950 text-[11px] font-black text-white">
+                    <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
                         {getInitials(player.name)}
                     </AvatarFallback>
                 </Avatar>
-                <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-white bg-slate-900 px-1 text-[10px] font-black text-white shadow-sm">
+                <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-white bg-slate-900 px-1 text-xs font-bold text-white shadow-sm">
                     {player.number ?? '-'}
                 </span>
             </div>
@@ -61,7 +61,7 @@ export default function MatchLineupPlayerItem({
                     </p>
                     {player.isCaptain ? (
                         <span
-                            className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-950 text-[10px] font-black text-white"
+                            className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-950 text-xs font-bold text-white"
                             title="Captain"
                             aria-label="Captain"
                         >
@@ -71,7 +71,7 @@ export default function MatchLineupPlayerItem({
                 </div>
                 <span
                     className={cn(
-                        'mt-1 inline-flex max-w-full rounded-full px-2 py-0.5 text-[11px] font-bold',
+                        'mt-1 inline-flex max-w-full rounded-full px-2 py-0.5 text-xs font-bold',
                         isStarting
                             ? 'bg-slate-100 text-slate-500'
                             : 'bg-slate-50 text-slate-400',

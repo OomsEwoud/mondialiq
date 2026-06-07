@@ -14,7 +14,7 @@ export function AppShell({ children, variant = 'sidebar' }: Props) {
 
     if (isHeaderVariant) {
         return (
-            <div className="min-h-screen w-full bg-[radial-gradient(circle_at_top_left,rgba(103,232,249,0.16),transparent_34rem),linear-gradient(180deg,#f8fafc_0%,#eef6fb_44%,#f8fafc_100%)] text-slate-950">
+            <div className="min-h-screen w-full bg-slate-50 text-slate-950">
                 <div className="flex min-h-screen w-full flex-col">
                     {children}
                 </div>

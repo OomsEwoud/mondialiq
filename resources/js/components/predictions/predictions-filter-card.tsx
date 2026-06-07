@@ -78,11 +78,11 @@ export default function PredictionsFilterCard({
     };
 
     return (
-        <section className="mb-5 rounded-[1.7rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.95))] p-5 shadow-lg shadow-cyan-950/6 backdrop-blur sm:p-6">
+        <section className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                 <div className="min-w-0">
                     <p className={predictionFilterLabelClassName}>Filters</p>
-                    <h2 className="mt-1 text-2xl font-black text-blue-950">
+                    <h2 className="mt-1 text-2xl font-bold text-slate-900">
                         Find predictions faster
                     </h2>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -95,7 +95,7 @@ export default function PredictionsFilterCard({
                         <button
                             type="button"
                             onClick={onClear}
-                            className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                         >
                             <X className="size-4" />
                             Clear filters

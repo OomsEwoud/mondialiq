@@ -29,7 +29,7 @@ export default function TeamCodeLink({
                     className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
                 />
             )}
-            <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-black text-slate-700">
+            <span className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-bold text-slate-700">
                 {code}
             </span>
             {reverse && (

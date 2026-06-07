@@ -25,7 +25,7 @@ export default function PredictionScoreFields({
     return (
         <div className="grid gap-2.5">
             <div>
-                <h3 className="text-sm font-black text-slate-900">
+                <h3 className="text-sm font-bold text-slate-900">
                     Score prediction
                 </h3>
                 <p className="mt-1 text-xs leading-5 text-slate-500">

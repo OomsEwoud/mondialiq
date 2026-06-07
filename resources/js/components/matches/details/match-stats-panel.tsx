@@ -41,7 +41,7 @@ export default function MatchStatsPanel({ match }: Props) {
             <div className="flex flex-col gap-4">
                 {groupedStats.map(({ category, stats }) => (
                     <section key={category} className="flex flex-col gap-2">
-                            <h3 className="px-1 text-xs font-black tracking-wide text-slate-400 uppercase">
+                            <h3 className="px-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 {category}
                             </h3>
                             <div className="flex flex-col gap-2">

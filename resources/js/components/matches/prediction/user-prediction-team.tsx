@@ -25,7 +25,7 @@ export default function UserPredictionTeam({
                 className="h-8 w-8 shrink-0 object-contain sm:h-9 sm:w-9"
             />
             <div className="min-w-0">
-                <p className="truncate text-sm font-black text-slate-900">
+                <p className="truncate text-sm font-bold text-slate-900">
                     {code}
                 </p>
                 <p className="truncate text-xs font-medium text-slate-500">

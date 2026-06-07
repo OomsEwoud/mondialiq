@@ -3,13 +3,13 @@ import { contact } from '@/routes';
 
 export default function Footer() {
     return (
-        <footer className="mt-12 w-full overflow-x-hidden border-t border-slate-200/80 bg-white/85 px-6 py-10 backdrop-blur">
-            <div className="mx-auto w-full max-w-7xl min-w-0">
+        <footer className="mt-12 w-full overflow-x-hidden border-t border-slate-200 bg-white px-6 py-10">
+            <div className="mx-auto w-full max-w-5xl min-w-0">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                     <div className="col-span-1 md:col-span-2">
                         <div className="mb-4 flex items-center gap-2">
                             <AppLogo
-                                markClassName="h-7 w-7 rounded-md text-xs shadow-none"
+                                markClassName="h-7 w-7 rounded-lg text-xs shadow-none"
                                 textClassName="text-lg"
                             />
                         </div>
@@ -21,23 +21,24 @@ export default function Footer() {
                             lose.
                         </p>
                     </div>
-                    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-1">
-                        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                            <h4 className="mb-1 text-xs font-bold tracking-wider text-slate-400 uppercase">
+                    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
+                        <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                            <h4 className="mb-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 Timezone
                             </h4>
-                            <p className="text-sm font-semibold text-slate-700">
+                            <p className="text-sm font-semibold text-slate-600">
                                 Europe / Brussels (GMT+2)
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-cyan-200 bg-cyan-50/70 px-4 py-3">
-                            <h4 className="mb-1 text-xs font-bold tracking-wider text-slate-400 uppercase">
+                        <div className="rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3">
+                            <h4 className="mb-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 Responsible Gaming
                             </h4>
                             <a
                                 href="https://www.begambleaware.org"
                                 target="_blank"
-                                className="text-sm font-black text-cyan-800 hover:underline focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                                rel="noopener noreferrer"
+                                className="text-sm font-semibold text-slate-600 hover:underline focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                             >
                                 BeGambleAware.org
                             </a>
@@ -45,27 +46,27 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 md:flex-row">
-                    <p className="text-xs text-slate-400">
-                        © {new Date().getFullYear()} MondialIQ. All rights
+                <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-6 md:flex-row">
+                    <p className="text-xs text-slate-600">
+                        &copy; {new Date().getFullYear()} MondialIQ. All rights
                         reserved.
                     </p>
                     <div className="flex flex-wrap justify-center gap-5">
                         <a
                             href="#"
-                            className="text-xs text-slate-400 transition-colors hover:text-slate-600"
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
                         >
                             Privacy Policy
                         </a>
                         <a
                             href="#"
-                            className="text-xs text-slate-400 transition-colors hover:text-slate-600"
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
                         >
                             Terms of Service
                         </a>
                         <a
                             href={contact.url()}
-                            className="text-xs text-slate-400 transition-colors hover:text-slate-600"
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
                         >
                             Contact
                         </a>

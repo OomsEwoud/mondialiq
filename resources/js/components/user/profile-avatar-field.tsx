@@ -47,12 +47,12 @@ export default function ProfileAvatarField({
                         alt={user.name}
                         className="object-cover"
                     />
-                    <AvatarFallback className="bg-cyan-100 text-lg font-black text-blue-950">
+                    <AvatarFallback className="bg-cyan-100 text-lg font-bold text-slate-900">
                         {getInitials(user.name)}
                     </AvatarFallback>
                 </Avatar>
                 <div>
-                    <p className="text-sm font-black text-blue-950">
+                    <p className="text-sm font-bold text-slate-900">
                         Profile photo
                     </p>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -74,14 +74,14 @@ export default function ProfileAvatarField({
                 />
                 <label
                     htmlFor="avatar"
-                    className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm shadow-cyan-950/5 transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
+                    className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
                 >
                     <span className="flex min-w-0 items-center gap-3">
-                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-blue-950 ring-1 ring-cyan-200/70">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-slate-900 ring-1 ring-cyan-200/70">
                             <ImagePlus className="size-5" />
                         </span>
                         <span className="min-w-0">
-                            <span className="block text-sm font-black text-blue-950">
+                            <span className="block text-sm font-bold text-slate-900">
                                 Choose image
                             </span>
                             <span className="block truncate text-xs font-semibold text-slate-500">

@@ -53,7 +53,7 @@ export default function AppHeaderMobileNav({ items }: Props) {
                                     className={cn(
                                         'flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors',
                                         isActive
-                                            ? 'bg-cyan-300 text-blue-950'
+                                            ? 'bg-cyan-300 text-slate-900'
                                             : 'text-blue-100 hover:bg-white/10 hover:text-white',
                                     )}
                                 >

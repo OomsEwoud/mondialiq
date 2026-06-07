@@ -8,7 +8,7 @@ interface Props {
 export default function MatchStatsCard({ match }: Props) {
     return (
         <section className="rounded-xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-black text-blue-950">
+            <h2 className="mb-4 text-lg font-bold text-slate-900">
                 Team stats
             </h2>
             {match.stats.length > 0 ? (

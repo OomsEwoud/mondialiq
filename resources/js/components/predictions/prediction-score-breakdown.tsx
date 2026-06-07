@@ -45,19 +45,19 @@ export default function PredictionScoreBreakdown({
 
     if (!pointsAwarded || missingScoreContext) {
         return (
-            <section className="rounded-[1.9rem] border border-cyan-200/70 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.16),transparent_18rem),linear-gradient(180deg,rgba(248,255,255,0.98),rgba(239,246,255,0.9))] p-5 shadow-xl shadow-cyan-950/8">
+            <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="flex items-start gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-slate-600 shadow-sm ring-slate-200">
                             <Trophy className="size-5" />
                         </div>
                         <div>
-                            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                 {hasScoringPreview
                                     ? 'Provisional scoring preview'
                                     : 'Scoring state'}
                             </p>
-                            <h3 className="mt-2 text-xl font-black text-blue-950">
+                            <h3 className="mt-2 text-xl font-bold text-slate-900">
                                 {pointsAwarded
                                     ? `${awardedPoints ?? 0}/20 official points`
                                     : pendingTitle}
@@ -71,13 +71,13 @@ export default function PredictionScoreBreakdown({
                     </div>
 
                     {pointsAwarded || hasScoringPreview ? (
-                        <div className="rounded-[1.6rem] border border-cyan-200 bg-white px-5 py-4 text-center shadow-lg shadow-cyan-950/6">
-                            <div className="text-3xl font-black text-blue-950">
+                        <div className="rounded-2xl border border-cyan-200 bg-white px-5 py-4 text-center shadow-sm">
+                            <div className="text-3xl font-semibold text-slate-900">
                                 {pointsAwarded
                                     ? (awardedPoints ?? 0)
                                     : (preview?.points ?? 0)}
                             </div>
-                            <div className="text-xs font-black tracking-wide text-cyan-700 uppercase">
+                            <div className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                 {pointsAwarded
                                     ? 'official points'
                                     : 'preview points'}
@@ -88,8 +88,8 @@ export default function PredictionScoreBreakdown({
 
                 {preview ? (
                     preview.breakdown.exactScore ? (
-                        <div className="mt-5 rounded-2xl border border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,1),rgba(209,250,229,0.82))] p-4 shadow-sm shadow-emerald-950/5">
-                            <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
+                        <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-emerald-800">
                                 <CheckCircle2 className="size-4" />
                                 Perfect prediction preview
                             </div>
@@ -106,8 +106,8 @@ export default function PredictionScoreBreakdown({
                                     className={cn(
                                         'rounded-2xl border p-4 shadow-sm transition-colors',
                                         item.earned
-                                            ? 'border-cyan-100 bg-cyan-50/70 shadow-cyan-950/5'
-                                            : 'border-slate-200 bg-slate-50/70 shadow-cyan-950/5',
+                                            ? 'border-slate-200 bg-cyan-50/70 shadow-sm'
+                                            : 'border-slate-200 bg-slate-50/70 shadow-sm',
                                     )}
                                 >
                                     <div className="flex items-start justify-between gap-3">
@@ -117,7 +117,7 @@ export default function PredictionScoreBreakdown({
                                                     'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full',
                                                     item.earned
                                                         ? 'bg-cyan-500 text-white'
-                                                        : 'bg-slate-200 text-slate-400',
+                                                        : 'bg-slate-200 text-slate-600',
                                                 )}
                                             >
                                                 {item.earned ? (
@@ -127,7 +127,7 @@ export default function PredictionScoreBreakdown({
                                                 )}
                                             </div>
                                             <div>
-                                                <h4 className="text-sm font-black text-blue-950">
+                                                <h4 className="text-sm font-semibold text-slate-900">
                                                     {item.label}
                                                 </h4>
                                                 <p className="mt-1 text-sm leading-5 text-slate-600">
@@ -137,10 +137,10 @@ export default function PredictionScoreBreakdown({
                                         </div>
                                         <div
                                             className={cn(
-                                                'shrink-0 rounded-full px-3 py-1 text-sm font-black',
+                                                'shrink-0 rounded-full px-3 py-1 text-sm font-semibold',
                                                 item.earned
                                                     ? 'bg-blue-950 text-white'
-                                                    : 'bg-white text-slate-400 ring-1 ring-slate-200',
+                                                    : 'bg-white text-slate-600 ring-1 ring-slate-200',
                                             )}
                                         >
                                             +{item.points}
@@ -152,28 +152,28 @@ export default function PredictionScoreBreakdown({
                     )
                 ) : (
                     <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
-                            <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
+                        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                 Exact score
                             </p>
-                            <p className="mt-1 text-sm font-semibold text-slate-700">
+                            <p className="mt-1 text-sm font-semibold text-slate-600">
                                 Can earn the full 20 possible points.
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
-                            <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
+                        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                 Partial score
                             </p>
-                            <p className="mt-1 text-sm font-semibold text-slate-700">
+                            <p className="mt-1 text-sm font-semibold text-slate-600">
                                 Outcome, goal difference, team goals and total
                                 goals can still score.
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-cyan-100 bg-white/90 p-4 shadow-sm shadow-cyan-950/5">
-                            <p className="text-xs font-black tracking-[0.16em] text-slate-400 uppercase">
+                        <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm">
+                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                                 Confidence
                             </p>
-                            <p className="mt-1 text-sm font-semibold text-slate-700">
+                            <p className="mt-1 text-sm font-semibold text-slate-600">
                                 Stored only, no multiplier.
                             </p>
                         </div>
@@ -182,7 +182,7 @@ export default function PredictionScoreBreakdown({
 
                 <Link
                     href={scoringGuideHref}
-                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                 >
                     <Info className="size-4" />
                     How scoring works
@@ -200,27 +200,27 @@ export default function PredictionScoreBreakdown({
     const officialPoints = awardedPoints ?? score.total;
 
     return (
-        <section className="rounded-[1.9rem] border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] p-5 shadow-xl shadow-cyan-950/8">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-start gap-3">
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-slate-600 ring-1 ring-slate-200">
                         <Calculator className="size-5" />
                     </div>
                     <div>
-                        <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
                             Points earned
                         </p>
-                        <h3 className="mt-2 text-2xl font-black text-blue-950">
+                        <h3 className="mt-2 text-2xl font-bold text-slate-900">
                             {officialPoints}/20 official points
                         </h3>
                         <p className="mt-2 text-sm leading-6 text-slate-600">
                             Your prediction was{' '}
-                            <span className="font-bold text-slate-900">
+                            <span className="font-semibold text-slate-900">
                                 {homeTeamName} {predictedHomeScore}-
                                 {predictedAwayScore} {awayTeamName}
                             </span>
                             . The final score was{' '}
-                            <span className="font-bold text-slate-900">
+                            <span className="font-semibold text-slate-900">
                                 {actualHomeScore}-{actualAwayScore}
                             </span>
                             .
@@ -228,19 +228,19 @@ export default function PredictionScoreBreakdown({
                     </div>
                 </div>
 
-                <div className="rounded-[1.6rem] border border-cyan-200 bg-[linear-gradient(180deg,rgba(236,254,255,1),rgba(207,250,254,0.88))] px-5 py-4 text-center shadow-lg shadow-cyan-950/6">
-                    <div className="text-3xl font-black text-blue-950">
+                <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-5 py-4 text-center shadow-sm">
+                    <div className="text-3xl font-semibold text-slate-900">
                         {officialPoints}
                     </div>
-                    <div className="text-xs font-black tracking-wide text-cyan-700 uppercase">
+                    <div className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         official points
                     </div>
                 </div>
             </div>
 
             {score.exactScore ? (
-                <div className="mt-5 rounded-2xl border border-emerald-200 bg-[linear-gradient(180deg,rgba(236,253,245,1),rgba(209,250,229,0.82))] p-4 shadow-sm shadow-emerald-950/5">
-                    <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
+                <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+                    <div className="flex items-center gap-2 text-sm font-semibold text-emerald-800">
                         <CheckCircle2 className="size-4" />
                         Perfect prediction
                     </div>
@@ -257,8 +257,8 @@ export default function PredictionScoreBreakdown({
                             className={cn(
                                 'rounded-2xl border p-4 shadow-sm transition-colors',
                                 item.earned
-                                    ? 'border-cyan-100 bg-cyan-50/70 shadow-cyan-950/5'
-                                    : 'border-slate-200 bg-slate-50/70 shadow-cyan-950/5',
+                                    ? 'border-slate-200 bg-cyan-50/70 shadow-sm'
+                                    : 'border-slate-200 bg-slate-50/70 shadow-sm',
                             )}
                         >
                             <div className="flex items-start justify-between gap-3">
@@ -268,7 +268,7 @@ export default function PredictionScoreBreakdown({
                                             'mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full',
                                             item.earned
                                                 ? 'bg-cyan-500 text-white'
-                                                : 'bg-slate-200 text-slate-400',
+                                                : 'bg-slate-200 text-slate-600',
                                         )}
                                     >
                                         {item.earned ? (
@@ -278,7 +278,7 @@ export default function PredictionScoreBreakdown({
                                         )}
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-black text-blue-950">
+                                        <h4 className="text-sm font-semibold text-slate-900">
                                             {item.label}
                                         </h4>
                                         <p className="mt-1 text-sm leading-5 text-slate-600">
@@ -288,10 +288,10 @@ export default function PredictionScoreBreakdown({
                                 </div>
                                 <div
                                     className={cn(
-                                        'shrink-0 rounded-full px-3 py-1 text-sm font-black',
+                                        'shrink-0 rounded-full px-3 py-1 text-sm font-semibold',
                                         item.earned
                                             ? 'bg-blue-950 text-white'
-                                            : 'bg-white text-slate-400 ring-1 ring-slate-200',
+                                            : 'bg-white text-slate-600 ring-1 ring-slate-200',
                                     )}
                                 >
                                     +{item.points}
@@ -302,9 +302,9 @@ export default function PredictionScoreBreakdown({
                 </div>
             )}
 
-            <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-cyan-100 bg-[linear-gradient(180deg,rgba(248,250,252,1),rgba(255,255,255,0.96))] p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h4 className="text-sm font-black text-blue-950">
+                    <h4 className="text-sm font-semibold text-slate-900">
                         How points are calculated
                     </h4>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -315,7 +315,7 @@ export default function PredictionScoreBreakdown({
                 </div>
                 <Link
                     href={scoringGuideHref}
-                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm shadow-cyan-950/5 transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                     <Info className="size-4" />
                     View guide

@@ -30,8 +30,8 @@ export default function UserPredictionSummary({
             <Badge
                 className={
                     aiMode
-                        ? 'rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 text-cyan-800'
-                        : 'rounded-full border-slate-200 bg-slate-50 px-3 py-1 text-slate-800'
+                        ? 'rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 font-medium text-cyan-700'
+                        : 'rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-medium text-slate-800'
                 }
             >
                 {aiMode ? 'Predicted outcome' : 'Prediction'}:{' '}
@@ -39,13 +39,13 @@ export default function UserPredictionSummary({
             </Badge>
 
             {score && (
-                <Badge className="rounded-full border-slate-200 bg-slate-50 px-3 py-1 text-slate-700">
+                <Badge className="rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-medium text-slate-700">
                     Score: {score}
                 </Badge>
             )}
 
             {prediction.confidence && (
-                <Badge className="rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 text-cyan-800 capitalize">
+                <Badge className="rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 font-medium text-cyan-700 capitalize">
                     {prediction.confidence} confidence
                 </Badge>
             )}

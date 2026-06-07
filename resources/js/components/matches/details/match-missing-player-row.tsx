@@ -27,7 +27,7 @@ export default function MatchMissingPlayerRow({ player }: Props) {
                         className="object-cover"
                     />
                 ) : null}
-                <AvatarFallback className="bg-blue-950 text-[11px] font-black text-white">
+                <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
                     {getInitials(player.name)}
                 </AvatarFallback>
             </Avatar>
@@ -35,14 +35,14 @@ export default function MatchMissingPlayerRow({ player }: Props) {
             <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2">
                     <p
-                        className="min-w-0 truncate text-sm font-black text-slate-800"
+                        className="min-w-0 truncate text-sm font-bold text-slate-800"
                         title={player.name}
                     >
                         {player.name}
                     </p>
                     <span
                         className={cn(
-                            'shrink-0 rounded-full px-2 py-0.5 text-[11px] font-black',
+                            'shrink-0 rounded-full px-2 py-0.5 text-xs font-bold',
                             typeLabel === 'Questionable'
                                 ? 'bg-cyan-50 text-cyan-700'
                                 : 'bg-amber-50 text-amber-700',

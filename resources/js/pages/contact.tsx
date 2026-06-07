@@ -37,16 +37,16 @@ export default function Contact({ categories }: ContactPageProps) {
             />
 
             <div className="space-y-6">
-                <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-6 shadow-2xl shadow-cyan-950/8 sm:p-8">
+                <section className="overflow-hidden rounded-2xl border border-slate-200 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-6 shadow-2xl shadow-sm sm:p-8">
                     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                         <div className="max-w-3xl">
-                            <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-700 shadow-sm ring-1 shadow-cyan-950/5 ring-cyan-100">
+                            <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-white text-cyan-600 shadow-sm ring-slate-200">
                                 <LifeBuoy className="size-5" />
                             </div>
-                            <p className="text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+                            <p className="text-xs font-black tracking-wide text-cyan-600 uppercase">
                                 Support
                             </p>
-                            <h1 className="mt-2 text-4xl font-black tracking-tight text-blue-950 sm:text-5xl">
+                            <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
                                 Contact & feedback
                             </h1>
                             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
@@ -55,16 +55,16 @@ export default function Contact({ categories }: ContactPageProps) {
                                 MondialiQ.
                             </p>
                         </div>
-                        <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm shadow-cyan-950/5">
+                        <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm">
                             Reports are linked to your MondialIQ account.
                         </div>
                     </div>
                 </section>
 
                 {user ? (
-                    <Card className="rounded-[1.85rem] border-cyan-100 bg-white shadow-xl shadow-cyan-950/8">
+                    <Card className="rounded-2xl border-slate-200 bg-white shadow-xl shadow-sm">
                         <CardHeader className="gap-2 px-5 py-5 sm:px-6">
-                            <CardTitle className="text-2xl font-black text-blue-950">
+                            <CardTitle className="text-2xl font-black text-slate-900">
                                 Send a report
                             </CardTitle>
                             <CardDescription className="max-w-2xl text-sm leading-6 text-slate-500">
@@ -206,14 +206,14 @@ export default function Contact({ categories }: ContactPageProps) {
                         </CardContent>
                     </Card>
                 ) : (
-                    <Card className="rounded-[1.85rem] border-cyan-100 bg-white shadow-xl shadow-cyan-950/8">
+                    <Card className="rounded-2xl border-slate-200 bg-white shadow-xl shadow-sm">
                         <CardContent className="px-5 py-6 sm:px-6">
                             <div className="grid gap-5 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-                                <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100">
+                                <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                     <Lock className="size-5" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-black text-blue-950">
+                                    <h2 className="text-xl font-black text-slate-900">
                                         Log in to submit feedback
                                     </h2>
                                     <p className="mt-2 text-sm leading-6 text-slate-600">

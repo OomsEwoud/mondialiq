@@ -45,12 +45,12 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
     };
 
     return (
-        <div className="relative grid gap-2 text-[11px] font-black tracking-[0.14em] text-slate-500 uppercase">
+        <div className="relative grid gap-2 text-xs font-bold tracking-wide text-slate-500 uppercase">
             Team
             <div className="relative">
                 <Search
                     aria-hidden
-                    className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-cyan-700"
+                    className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-cyan-600"
                 />
                 <input
                     ref={inputRef}
@@ -65,7 +65,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                         setActiveIndex(0);
                     }}
                     onKeyDown={handleKeyDown}
-                    className="h-12 w-full rounded-2xl border border-cyan-100 bg-white/90 px-4 pr-11 pl-11 text-sm font-semibold text-slate-800 normal-case shadow-sm shadow-cyan-950/5 transition-all outline-none placeholder:text-slate-400 hover:border-cyan-200 hover:bg-white focus:border-cyan-300 focus:ring-4 focus:ring-cyan-100"
+                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 pr-11 pl-11 text-sm font-semibold text-slate-800 normal-case shadow-sm transition-all outline-none placeholder:text-slate-400 hover:border-cyan-200 hover:bg-white focus:border-cyan-300 focus:ring-4 focus:ring-slate-200"
                 />
                 {selected && (
                     <button
@@ -79,7 +79,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                 )}
             </div>
             {open && matches.length > 0 && (
-                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-2xl border border-cyan-100 bg-white/98 py-1.5 shadow-xl shadow-cyan-950/12 backdrop-blur">
+                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/98 py-1.5 shadow-sm ">
                     {matches.map((team, index) => (
                         <button
                             key={team}
@@ -93,7 +93,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                             className={[
                                 'block w-full px-4 py-2.5 text-left text-sm font-semibold normal-case transition-colors',
                                 index === safeIndex
-                                    ? 'bg-cyan-50 text-cyan-800'
+                                    ? 'bg-cyan-50 text-cyan-700'
                                     : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
                             ].join(' ')}
                         >

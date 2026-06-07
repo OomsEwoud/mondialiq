@@ -23,7 +23,7 @@ export default function AiPredictionReportActions({
             <Button
                 asChild
                 variant="outline"
-                className="w-full justify-center border-slate-200 bg-white text-slate-700 shadow-sm shadow-cyan-950/5 hover:bg-slate-100 hover:text-blue-950 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
+                className="w-full justify-center border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
             >
                 <Link href={matches.url()}>
                     <ArrowLeft className="size-4" />
@@ -34,7 +34,7 @@ export default function AiPredictionReportActions({
             {canMakePrediction ? (
                 <Button
                     type="button"
-                    className="w-full justify-center bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] text-white shadow-lg shadow-blue-950/20 hover:brightness-105 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
+                    className="w-full justify-center bg-slate-900 text-white shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
                     onClick={onPredictionClick}
                 >
                     <PencilLine className="size-4" />

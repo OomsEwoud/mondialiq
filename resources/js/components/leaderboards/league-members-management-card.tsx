@@ -47,22 +47,22 @@ export default function LeagueMembersManagementCard({
             <CardHeader className="gap-3 px-4 py-5 sm:px-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <div className="flex items-center gap-2 text-cyan-700">
+                        <div className="flex items-center gap-2 text-cyan-600">
                             <ShieldCheck className="size-4" />
-                            <p className="text-xs font-black tracking-[0.16em] uppercase">
+                            <p className="text-xs font-bold tracking-wide uppercase">
                                 Member management
                             </p>
                         </div>
-                        <CardTitle className="mt-2 text-2xl font-black text-blue-950">
+                        <CardTitle className="mt-2 text-2xl font-bold text-slate-900">
                             Team access
                         </CardTitle>
                     </div>
 
                     <Badge
                         variant="outline"
-                        className="w-fit rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-black text-slate-700"
+                        className="w-fit rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-bold text-slate-700"
                     >
-                        <Users className="size-3.5 text-cyan-700" />
+                        <Users className="size-3.5 text-cyan-600" />
                         {members.length}{' '}
                         {members.length === 1 ? 'member' : 'members'}
                     </Badge>
@@ -76,11 +76,11 @@ export default function LeagueMembersManagementCard({
                 {showOnlyOwnerState && (
                     <div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-3">
                         <div className="flex gap-3">
-                            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-cyan-700 shadow-sm">
+                            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white text-cyan-600 shadow-sm">
                                 <Users className="size-4" />
                             </span>
                             <div>
-                                <p className="text-sm font-black text-cyan-950">
+                                <p className="text-sm font-bold text-cyan-950">
                                     Invite friends to fill this group.
                                 </p>
                                 <p className="mt-1 text-sm leading-6 text-cyan-900">
@@ -109,24 +109,24 @@ export default function LeagueMembersManagementCard({
                                     alt={member.name}
                                     className="object-cover"
                                 />
-                                <AvatarFallback className="bg-blue-950 text-xs font-black text-white">
+                                <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
                                     {getInitials(member.name)}
                                 </AvatarFallback>
                             </Avatar>
 
                             <div className="min-w-0">
                                 <div className="flex flex-wrap items-center gap-2">
-                                    <p className="truncate text-sm font-black text-blue-950 sm:text-base">
+                                    <p className="truncate text-sm font-bold text-slate-900 sm:text-base">
                                         {member.name}
                                     </p>
                                     {member.isOwner && (
-                                        <Badge className="rounded-full bg-amber-400 px-2 py-0.5 text-[11px] font-black text-amber-950">
+                                        <Badge className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-amber-950">
                                             <Crown className="size-3" />
                                             Owner
                                         </Badge>
                                     )}
                                     {member.isCurrentUser && (
-                                        <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-[11px] font-black text-blue-950">
+                                        <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-slate-900">
                                             You
                                         </Badge>
                                     )}
@@ -147,14 +147,14 @@ export default function LeagueMembersManagementCard({
                                             <Button
                                                 type="button"
                                                 variant="outline"
-                                                className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-black text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
+                                                className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-bold text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
                                             >
                                                 <ShieldPlus className="size-4" />
                                                 Make owner
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                            <DialogTitle className="text-blue-950">
+                                            <DialogTitle className="text-slate-900">
                                                 Transfer ownership to{' '}
                                                 {member.name}?
                                             </DialogTitle>
@@ -165,7 +165,7 @@ export default function LeagueMembersManagementCard({
                                                 member, but owner controls move
                                                 to them.
                                             </DialogDescription>
-                                            <div className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
+                                            <div className="rounded-2xl border border-slate-200 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
                                                 After this transfer, use the
                                                 regular group page as a normal
                                                 member. Only the new owner will
@@ -191,7 +191,7 @@ export default function LeagueMembersManagementCard({
                                                             <Button
                                                                 type="button"
                                                                 variant="secondary"
-                                                                className="rounded-lg font-black"
+                                                                className="rounded-lg font-bold"
                                                             >
                                                                 Cancel
                                                             </Button>
@@ -202,7 +202,7 @@ export default function LeagueMembersManagementCard({
                                                             disabled={
                                                                 processing
                                                             }
-                                                            className="rounded-lg font-black"
+                                                            className="rounded-lg font-bold"
                                                         >
                                                             {processing && (
                                                                 <Spinner />
@@ -223,14 +223,14 @@ export default function LeagueMembersManagementCard({
                                             <Button
                                                 type="button"
                                                 variant="destructive"
-                                                className="h-10 w-full rounded-xl bg-red-600 px-4 font-black hover:bg-red-700 focus-visible:ring-red-200"
+                                                className="h-10 w-full rounded-xl bg-red-600 px-4 font-bold hover:bg-red-700 focus-visible:ring-red-200"
                                             >
                                                 <UserMinus className="size-4" />
                                                 Remove member
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                            <DialogTitle className="text-blue-950">
+                                            <DialogTitle className="text-slate-900">
                                                 Remove {member.name} from this
                                                 group?
                                             </DialogTitle>
@@ -260,7 +260,7 @@ export default function LeagueMembersManagementCard({
                                                             <Button
                                                                 type="button"
                                                                 variant="secondary"
-                                                                className="rounded-lg font-black"
+                                                                className="rounded-lg font-bold"
                                                             >
                                                                 Cancel
                                                             </Button>
@@ -272,7 +272,7 @@ export default function LeagueMembersManagementCard({
                                                             disabled={
                                                                 processing
                                                             }
-                                                            className="rounded-lg font-black"
+                                                            className="rounded-lg font-bold"
                                                         >
                                                             {processing && (
                                                                 <Spinner />
@@ -289,7 +289,7 @@ export default function LeagueMembersManagementCard({
                                     </Dialog>
                                 </div>
                             ) : (
-                                <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-black text-amber-900">
+                                <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-bold text-amber-900">
                                     Protected role
                                 </Badge>
                             )}

@@ -28,7 +28,7 @@ interface EventStyle {
 const eventStyles: Record<MatchEventKind, EventStyle> = {
     goal: {
         marker: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-        card: 'border-emerald-100 bg-emerald-50/60 shadow-emerald-950/5',
+        card: 'border-emerald-100 bg-emerald-50/60 shadow-sm',
         label: 'text-emerald-700',
     },
     penalty: {
@@ -74,7 +74,7 @@ export default function MatchEventTimelineItem({
 
     return (
         <div className="grid grid-cols-[2.75rem_1.75rem_minmax(0,1fr)] gap-2 sm:grid-cols-[3.25rem_2rem_minmax(0,1fr)] sm:gap-3">
-            <div className="pt-3 text-right text-xs font-black text-blue-700 tabular-nums sm:text-sm">
+            <div className="pt-3 text-right text-xs font-bold text-blue-700 tabular-nums sm:text-sm">
                 {formatMinute(event)}
             </div>
 
@@ -113,7 +113,7 @@ export default function MatchEventTimelineItem({
                         <div className="flex min-w-0 items-center gap-2">
                             <p
                                 className={cn(
-                                    'truncate text-sm font-black',
+                                    'truncate text-sm font-bold',
                                     style.label,
                                 )}
                             >

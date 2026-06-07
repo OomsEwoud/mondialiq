@@ -35,13 +35,13 @@ export default function MatchStatRow({ stat }: Props) {
             )}
         >
             <div className="grid grid-cols-[4.25rem_minmax(0,1fr)_4.25rem] items-center gap-2 sm:grid-cols-[5.5rem_minmax(0,1fr)_5.5rem] sm:gap-3">
-                <span className="min-w-0 truncate text-left font-black text-blue-950">
+                <span className="min-w-0 truncate text-left font-bold text-slate-900">
                     {homeValue}
                 </span>
                 <p className="min-w-0 truncate text-center font-bold text-slate-700">
                     {formatStatLabel(stat.name)}
                 </p>
-                <span className="min-w-0 truncate text-right font-black text-blue-950">
+                <span className="min-w-0 truncate text-right font-bold text-slate-900">
                     {awayValue}
                 </span>
             </div>

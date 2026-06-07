@@ -11,7 +11,7 @@ export default function NavApp({ onNavigate }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <nav className="flex w-full flex-col items-start gap-1.5 md:w-auto md:flex-row md:items-center md:gap-1">
+        <nav aria-label="Main" className="flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5">
             {navItems.map(({ label, href }) => {
                 const isActive = isCurrentOrParentUrl(href);
                 const url = toUrl(href);
@@ -23,10 +23,10 @@ export default function NavApp({ onNavigate }: Props) {
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(
-                            'group relative flex w-auto items-center rounded-xl px-3 py-2 text-sm font-semibold transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none md:justify-center md:rounded-full md:px-4',
+                            'relative flex w-auto items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none md:rounded-full md:px-4',
                             isActive
-                                ? 'bg-cyan-400/15 text-cyan-200 ring-1 ring-cyan-200/15'
-                                : 'text-blue-100 hover:bg-white/5 hover:text-white',
+                                ? 'bg-slate-800 text-white'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white',
                         )}
                     >
                         <span

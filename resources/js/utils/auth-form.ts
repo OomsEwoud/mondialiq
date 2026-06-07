@@ -1,5 +1,5 @@
 export const authFieldLabelClass =
-    'text-xs font-black tracking-widest text-slate-500 uppercase';
+    'text-xs font-semibold tracking-wide text-slate-500 uppercase';
 
 export const authInputClass =
     'auth-input h-11 rounded-lg shadow-none focus-visible:border-cyan-400 focus-visible:ring-cyan-200';

@@ -19,7 +19,7 @@ export default function TeamDetails({ team }: Props) {
             />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:gap-6 lg:py-8">
-                <BackButton className="w-fit rounded-2xl border border-cyan-100 bg-white/95 text-slate-700 shadow-lg shadow-cyan-950/6 hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
+                <BackButton className="w-fit rounded-2xl border border-slate-200 bg-white/95 text-slate-700 shadow-lg shadow-sm hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
                 <TeamHero team={team} />
                 <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                     <TeamInfoCard team={team} />

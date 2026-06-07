@@ -34,8 +34,8 @@ export default function MatchDetailsHero({
         : getLiveStatusLabel(match.status, null, match.elapsedTime);
 
     return (
-        <section className="overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.18),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef7ff_100%)] p-5 shadow-2xl shadow-cyan-950/8 sm:p-6 lg:p-7">
-            <p className="mb-5 text-center text-xs font-black tracking-[0.22em] text-cyan-700 uppercase">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-cyan-50/40 p-5 shadow-sm sm:p-6 lg:p-7">
+            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                 {match.round}
             </p>
 
@@ -49,7 +49,7 @@ export default function MatchDetailsHero({
                 <div className="text-center">
                     {isLive && (
                         <div className="mb-3 flex justify-center">
-                            <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-[linear-gradient(180deg,rgba(254,242,242,1),rgba(254,202,202,0.82))] px-3 py-1 text-[10px] font-black tracking-[0.16em] text-red-700 uppercase shadow-sm shadow-red-950/10">
+                            <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold tracking-wide text-red-700 uppercase">
                                 <span className="relative flex h-2 w-2">
                                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
                                     <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
@@ -58,14 +58,14 @@ export default function MatchDetailsHero({
                             </span>
                         </div>
                     )}
-                    <p className="text-3xl font-black text-blue-950 tabular-nums sm:text-4xl">
+                    <p className="text-3xl font-semibold text-slate-900 tabular-nums sm:text-4xl">
                         {scoreLabel}
                     </p>
-                    <p className="mt-3 inline-flex rounded-full border border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,1),rgba(241,245,249,0.92))] px-3 py-1 text-[10px] font-black tracking-[0.16em] text-slate-600 uppercase shadow-sm shadow-cyan-950/5 sm:text-xs">
+                    <p className="mt-3 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         {statusLabel}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
-                        <p className="mt-2 text-[10px] font-bold tracking-wide text-slate-400 uppercase">
+                        <p className="mt-2 text-xs font-semibold tracking-wide text-slate-600">
                             {lastUpdatedAt &&
                                 `Updated ${formatUpdatedTime(lastUpdatedAt)}`}
                             {hasPollingError &&

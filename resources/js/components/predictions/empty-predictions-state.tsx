@@ -12,11 +12,11 @@ export default function EmptyPredictionsState({ mode, message }: Props) {
     const isAiMode = mode === 'ai';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white/90 px-5 py-10 text-center shadow-sm shadow-blue-950/5 backdrop-blur">
-            <p className="text-xs font-black tracking-[0.18em] text-cyan-700 uppercase">
+        <section className="rounded-2xl border border-slate-200 bg-white px-5 py-10 text-center shadow-sm">
+            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                 Empty board
             </p>
-            <h2 className="text-lg font-black text-slate-950">
+            <h2 className="text-lg font-bold text-slate-900">
                 {isAiMode
                     ? 'AI predictions are warming up'
                     : 'Your prediction board is empty'}
@@ -29,7 +29,7 @@ export default function EmptyPredictionsState({ mode, message }: Props) {
             <Link
                 href={matches()}
                 aria-label="View matches to explore prediction opportunities"
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-blue-950 px-5 py-2.5 text-sm font-black text-white transition-colors hover:bg-blue-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
                 View matches
                 <ArrowRight className="h-4 w-4" />

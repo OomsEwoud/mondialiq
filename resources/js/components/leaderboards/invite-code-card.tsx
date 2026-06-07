@@ -95,7 +95,7 @@ export default function InviteCodeCard({
             className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm"
         >
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
-                <CardTitle className="text-xl font-black text-blue-950">
+                <CardTitle className="text-xl font-bold text-slate-900">
                     Invite teammates
                 </CardTitle>
                 <CardDescription className="text-sm leading-6 text-slate-500">
@@ -106,13 +106,13 @@ export default function InviteCodeCard({
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 {isSmallLeague && (
                     <div className="rounded-2xl border border-cyan-200 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-4 py-3">
-                        <div className="flex items-center gap-2 text-cyan-700">
+                        <div className="flex items-center gap-2 text-cyan-600">
                             <Sparkles className="size-4" />
-                            <p className="text-xs font-black tracking-[0.16em] uppercase">
+                            <p className="text-xs font-bold tracking-wide uppercase">
                                 Invite your friends
                             </p>
                         </div>
-                        <p className="mt-2 text-sm font-black text-blue-950">
+                        <p className="mt-2 text-sm font-bold text-slate-900">
                             This group is just getting started.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -124,12 +124,12 @@ export default function InviteCodeCard({
 
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <div className="flex items-center gap-2 text-slate-500">
-                        <Ticket className="size-4 text-cyan-600" />
-                        <p className="text-xs font-black tracking-[0.16em] uppercase">
+                        <Ticket className="size-4 text-slate-600" />
+                        <p className="text-xs font-bold tracking-wide uppercase">
                             Invite code
                         </p>
                     </div>
-                    <p className="mt-3 overflow-hidden font-mono text-2xl font-black tracking-widest text-blue-950 sm:text-3xl">
+                    <p className="mt-3 overflow-hidden font-mono text-2xl font-bold tracking-wide text-slate-900 sm:text-3xl">
                         {code}
                     </p>
                     <p className="mt-2 text-xs leading-5 text-slate-500">
@@ -141,7 +141,7 @@ export default function InviteCodeCard({
                 <div className="grid gap-2">
                     <Button
                         type="button"
-                        className="h-10 w-full rounded-xl bg-blue-950 px-4 font-black text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
+                        className="h-10 w-full rounded-xl bg-blue-950 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={shareInvite}
                     >
@@ -152,7 +152,7 @@ export default function InviteCodeCard({
                         type="button"
                         variant="outline"
                         aria-label="Copy invite code"
-                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyCode}
                     >
@@ -168,7 +168,7 @@ export default function InviteCodeCard({
                         type="button"
                         variant="outline"
                         aria-label="Copy invite link"
-                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800"
+                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyJoinLink}
                     >

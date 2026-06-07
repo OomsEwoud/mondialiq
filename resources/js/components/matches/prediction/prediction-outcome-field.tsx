@@ -20,7 +20,7 @@ export default function PredictionOutcomeField({
 }: Props) {
     return (
         <div className="grid gap-2.5">
-            <Label className="text-sm font-black text-slate-900">
+            <Label className="text-sm font-bold text-slate-900">
                 Match outcome
             </Label>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">

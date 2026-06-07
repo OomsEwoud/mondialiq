@@ -81,13 +81,13 @@ export default function UserPredictionForm({
                 onChange={(confidence) => setData('confidence', confidence)}
             />
 
-            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4 backdrop-blur sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
+            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4  sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
                 <Button
                     type="button"
                     variant="outline"
                     disabled={processing}
                     onClick={onCancel}
-                    className="h-11 rounded-xl border-slate-200 bg-white font-black text-slate-700 hover:bg-slate-50"
+                    className="h-11 rounded-xl border-slate-200 bg-white font-bold text-slate-700 hover:bg-slate-50"
                 >
                     Cancel
                 </Button>
@@ -96,7 +96,7 @@ export default function UserPredictionForm({
                     disabled={
                         processing || predictionLocked || data.outcome === ''
                     }
-                    className="h-11 rounded-xl bg-blue-950 px-5 font-black text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="h-11 rounded-xl bg-blue-950 px-5 font-bold text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {predictionLocked
                         ? 'Predictions closed'

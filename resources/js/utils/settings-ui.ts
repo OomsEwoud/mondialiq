@@ -2,7 +2,7 @@ export const settingsFieldClassName =
     'h-12 rounded-2xl border-slate-200 bg-white text-slate-900 shadow-sm shadow-cyan-950/5 placeholder:text-slate-500 focus-visible:border-cyan-300 focus-visible:ring-cyan-200';
 
 export const settingsLabelClassName =
-    'text-xs font-black tracking-[0.18em] text-slate-500 uppercase';
+    'text-xs font-semibold tracking-wide text-slate-500 uppercase';
 
 export const settingsPrimaryButtonClassName =
     'h-11 w-full rounded-2xl bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] px-5 font-black text-white shadow-lg shadow-blue-950/20 hover:brightness-105 focus-visible:ring-cyan-300 sm:w-auto';

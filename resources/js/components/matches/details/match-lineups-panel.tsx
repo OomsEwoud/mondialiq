@@ -14,7 +14,7 @@ export default function MatchLineupsPanel({ match }: Props) {
     if (!hasLineups) {
         return (
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm font-medium text-slate-500">
-                <span className="flex size-10 items-center justify-center rounded-full bg-white text-cyan-600 ring-1 ring-slate-200">
+                <span className="flex size-10 items-center justify-center rounded-full bg-white text-slate-600 ring-1 ring-slate-200">
                     <UsersRound className="size-4" />
                 </span>
                 <p>No lineups available yet for this match.</p>

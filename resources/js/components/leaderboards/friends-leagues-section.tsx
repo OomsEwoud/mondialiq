@@ -30,11 +30,11 @@ export default function FriendsLeaguesSection({
     const hasReachedLeagueLimit = currentLeagueCount >= maxLeagueCount;
 
     return (
-        <Card className="overflow-hidden rounded-[1.9rem] border-cyan-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.99),rgba(248,250,252,0.96))] shadow-xl shadow-cyan-950/8">
+        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
             <CardHeader className="gap-4 border-b border-slate-200 px-5 py-5 sm:px-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <CardTitle className="text-xl font-black text-blue-950 sm:text-2xl">
+                        <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
                             Prediction Groups
                         </CardTitle>
                         <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
@@ -50,7 +50,7 @@ export default function FriendsLeaguesSection({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-10 w-full rounded-2xl border-slate-200 bg-white px-4 font-black text-slate-700 shadow-sm shadow-cyan-950/5 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-800 sm:w-auto"
+                                className="h-10 w-full rounded-2xl border-slate-200 bg-white px-4 font-bold text-slate-700 shadow-sm hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 sm:w-auto"
                             >
                                 <Link href={joinLeagueHref}>
                                     <LogIn className="size-4" />
@@ -62,7 +62,7 @@ export default function FriendsLeaguesSection({
                                 type="button"
                                 disabled
                                 variant="outline"
-                                className="h-10 w-full rounded-2xl px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-2xl px-4 font-bold sm:w-auto"
                             >
                                 <LogIn className="size-4" />
                                 Join group
@@ -71,7 +71,7 @@ export default function FriendsLeaguesSection({
                         {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
-                                className="h-10 w-full rounded-2xl bg-[linear-gradient(135deg,#16255f_0%,#21326e_100%)] px-4 font-black text-white shadow-lg shadow-blue-950/20 hover:brightness-105 focus-visible:ring-cyan-300 sm:w-auto"
+                                className="h-10 w-full rounded-2xl bg-slate-900 px-4 font-bold text-white shadow-sm focus-visible:ring-cyan-300 sm:w-auto"
                             >
                                 <Link href={createLeagueHref}>
                                     <Plus className="size-4" />
@@ -82,7 +82,7 @@ export default function FriendsLeaguesSection({
                             <Button
                                 type="button"
                                 disabled
-                                className="h-10 w-full rounded-2xl px-4 font-black sm:w-auto"
+                                className="h-10 w-full rounded-2xl px-4 font-bold sm:w-auto"
                             >
                                 <Plus className="size-4" />
                                 Create group
@@ -91,8 +91,8 @@ export default function FriendsLeaguesSection({
                     </div>
                 </div>
                 {hasReachedLeagueLimit && (
-                    <div className="rounded-[1.5rem] border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] px-4 py-4 shadow-sm shadow-amber-950/5">
-                        <p className="text-sm font-black text-amber-900">
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 shadow-sm">
+                        <p className="text-sm font-bold text-amber-900">
                             You reached the prediction group limit.
                         </p>
                         <p className="mt-1 text-sm leading-6 text-amber-800">

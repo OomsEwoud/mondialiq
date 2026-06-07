@@ -28,7 +28,7 @@ export default function PredictionConfidenceField({
 }: Props) {
     return (
         <div className="grid gap-2.5">
-            <Label className="text-sm font-black text-slate-900">
+            <Label className="text-sm font-bold text-slate-900">
                 Confidence
             </Label>
             <div
@@ -56,12 +56,12 @@ export default function PredictionConfidenceField({
                             )}
                         >
                             <span className="grid gap-0.5 text-left">
-                                <span className="text-sm font-black">
+                                <span className="text-sm font-bold">
                                     {option.label}
                                 </span>
                                 <span
                                     className={cn(
-                                        'text-[11px] font-medium',
+                                        'text-xs font-medium',
                                         isSelected
                                             ? 'text-cyan-100'
                                             : 'text-slate-500',

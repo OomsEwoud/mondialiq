@@ -74,7 +74,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                 >
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-blue-950/25 px-3.5 py-2 text-sm font-black text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-blue-950/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
+                        className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-blue-950/25 px-3.5 py-2 text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-blue-950/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
@@ -85,14 +85,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-white/22 text-2xl shadow-sm ring-1 ring-white/20 backdrop-blur-sm sm:size-14 sm:text-3xl">
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className="text-xs font-black tracking-[0.22em] text-white/90 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                                 Prediction Group
                             </p>
-                            <h1 className="mt-2 text-3xl font-black text-white sm:text-4xl">
+                            <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">
                                 {league.name}
                             </h1>
                             {league.description && (
-                                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90 sm:text-base">
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-cyan-300 sm:text-base">
                                     {league.description}
                                 </p>
                             )}
@@ -106,7 +106,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                             'shadow-sm ring-1 ring-white/10',
                                             stat.label === 'Your rank' &&
                                                 league.currentUserRank &&
-                                                'border-white bg-white text-blue-950',
+                                                'border-white bg-white text-slate-900',
                                         )}
                                     >
                                         <stat.icon className="size-3.5 shrink-0" />
@@ -131,7 +131,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     asChild
                                     variant="outline"
                                     className={cn(
-                                        'h-11 w-full rounded-xl bg-white/90 px-5 font-black text-blue-950 shadow-sm backdrop-blur-sm hover:bg-white focus-visible:ring-cyan-300 sm:w-auto',
+                                        'h-11 w-full rounded-xl bg-white/90 px-5 font-semibold text-slate-900 shadow-sm backdrop-blur-sm hover:bg-white focus-visible:ring-cyan-300 sm:w-auto',
                                         palette.button,
                                     )}
                                 >
@@ -150,16 +150,16 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
                     <div className="space-y-6">
                         {(league.rewardTitle || league.rewardDescription) && (
-                            <section className="rounded-2xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(254,243,199,0.72))] p-5 shadow-sm shadow-amber-950/5">
+                            <section className="rounded-2xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(254,243,199,0.72))] p-5 shadow-sm">
                                 <div className="flex items-start gap-3">
                                     <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-amber-700 shadow-sm ring-1 ring-amber-100">
                                         <Gift className="size-5" />
                                     </span>
                                     <div className="min-w-0">
-                                        <p className="text-xs font-black tracking-[0.18em] text-amber-700 uppercase">
+                                        <p className="text-xs font-semibold tracking-wide text-amber-700 uppercase">
                                             Optional reward
                                         </p>
-                                        <h2 className="mt-1 text-xl font-black text-amber-950">
+                                        <h2 className="mt-1 text-xl font-semibold text-amber-950">
                                             {league.rewardTitle ??
                                                 'Reward available'}
                                         </h2>

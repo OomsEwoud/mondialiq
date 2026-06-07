@@ -18,7 +18,7 @@ export default function TeamStandingLink({ id, code, logo, name }: Props) {
             className="group flex min-w-0 cursor-pointer items-center gap-3 rounded-2xl px-2 py-2 transition-all hover:bg-cyan-50/60 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
             <TeamCodeBadge code={code} logo={logo} />
-            <span className="truncate text-sm font-black text-slate-900 transition-colors group-hover:text-cyan-700 sm:text-base">
+            <span className="truncate text-sm font-bold text-slate-900 transition-colors group-hover:text-cyan-700 sm:text-base">
                 {name}
             </span>
         </Link>

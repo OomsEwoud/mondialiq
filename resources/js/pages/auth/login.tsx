@@ -63,7 +63,7 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-blue-950',
+            'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-slate-900',
         iconClassName: 'bg-white ring-slate-200',
     },
     {
@@ -82,16 +82,16 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-blue-200 bg-blue-50 text-blue-950 hover:border-blue-300 hover:bg-blue-100',
+            'border-blue-200 bg-blue-50 text-slate-900 hover:border-blue-300 hover:bg-blue-100',
         iconClassName: 'bg-white ring-blue-100',
     },
 ] satisfies SocialProvider[];
 
 const socialDividerLabelClass =
-    'text-xs font-black tracking-widest text-slate-400 uppercase';
+    'text-xs font-semibold tracking-widest text-slate-400 uppercase';
 const rememberMeContainerClass =
     'flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3';
-const socialButtonBaseClass = 'h-12 rounded-lg font-black shadow-none';
+const socialButtonBaseClass = 'h-12 rounded-lg font-semibold shadow-none';
 
 export default function Login({
     status,
@@ -178,7 +178,7 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className="border-slate-300 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500 data-[state=checked]:text-blue-950"
+                                    className="border-slate-300 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500 data-[state=checked]:text-slate-900"
                                 />
                                 <Label
                                     htmlFor="remember"

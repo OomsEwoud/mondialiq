@@ -17,7 +17,7 @@ export default function MatchPredictionActions({ match }: Props) {
         <div className="mt-3 border-t border-slate-200 pt-3">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
+                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         Match actions
                     </p>
                     <p className="mt-1 text-sm text-slate-600">

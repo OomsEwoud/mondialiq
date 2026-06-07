@@ -9,9 +9,9 @@ type Props = {
     showText?: boolean;
 };
 
-const logoMarkClassName = 'h-10 w-10 rounded-xl shadow-lg shadow-blue-900/20';
+const logoMarkClassName = 'h-10 w-10 rounded-xl shadow-sm';
 
-const logoTextClassName = 'text-xl font-black tracking-tight text-slate-900';
+const logoTextClassName = 'text-xl font-bold tracking-tight text-slate-900';
 
 export default function AppLogo({
     className,

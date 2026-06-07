@@ -23,7 +23,7 @@ function Toaster({ ...props }: ToasterProps) {
                     toast: 'rounded-lg border shadow-lg',
                     success:
                         'border-green-700 bg-green-600 text-white shadow-xl shadow-green-950/30',
-                    title: 'font-black',
+                    title: 'font-bold',
                     icon: 'size-6',
                 },
             }}

@@ -20,7 +20,7 @@ export default function MatchLineupTeamCard({ team, lineup }: Props) {
                         className="size-8 shrink-0 object-contain"
                     />
                     <div className="min-w-0">
-                        <h3 className="truncate text-sm font-black text-blue-950">
+                        <h3 className="truncate text-sm font-bold text-slate-900">
                             {team.name}
                         </h3>
                         <p className="text-xs font-bold text-slate-400">
@@ -28,7 +28,7 @@ export default function MatchLineupTeamCard({ team, lineup }: Props) {
                         </p>
                     </div>
                 </div>
-                <span className="rounded-md border border-blue-100 bg-white px-2.5 py-1 text-xs font-black text-blue-700">
+                <span className="rounded-md border border-blue-100 bg-white px-2.5 py-1 text-xs font-bold text-blue-700">
                     {lineup.formation ?? '-'}
                 </span>
             </div>
