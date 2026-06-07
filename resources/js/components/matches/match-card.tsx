@@ -19,17 +19,17 @@ export default function MatchCard({ match }: Props) {
             <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-slate-500">
                     <span className="flex min-w-0 items-center gap-1.5">
-                        <Trophy className="size-3.5 shrink-0 text-slate-600" />
+                        <Trophy className="size-3.5 shrink-0 text-cyan-600" />
                         <span className="truncate">{match.round}</span>
                     </span>
                     <span className="hidden text-slate-300 sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <CalendarDays className="size-3.5 text-slate-600" />
+                        <CalendarDays className="size-3.5 text-cyan-600" />
                         {match.date}
                     </span>
                     <span className="hidden text-slate-300 sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <Clock className="size-3.5 text-slate-600" />
+                        <Clock className="size-3.5 text-cyan-600" />
                         {match.time}
                     </span>
                 </div>

@@ -46,13 +46,17 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                 description="Browse the complete World Cup 2026 match schedule, filter fixtures by team, round, date and status, and open each match for details and predictions."
             />
 
-            <header className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.22),transparent_24rem),linear-gradient(135deg,#0b1748_0%,#14236f_58%,#0e7490_150%)] px-6 py-8 text-center shadow-2xl shadow-sm sm:mb-8 sm:px-8 sm:py-10">
+            <header className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
                 <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                     World Cup 2026 schedule
                 </p>
-                <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
                     All Matches
                 </h1>
+                <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-300">
+                    Browse the complete match schedule, filter by team, round or
+                    date, and open each fixture for details and predictions.
+                </p>
             </header>
 
             <MatchFilters
