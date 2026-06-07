@@ -6,6 +6,10 @@ import PredictionUserActions from '@/components/predictions/prediction-user-acti
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
+import {
+    aiPredictionScoreLabel,
+    predictionScoreLabel,
+} from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -15,6 +19,11 @@ interface Props {
 
 export default function PredictionCard({ match, actionLabel, mode }: Props) {
     const isMine = mode === 'mine';
+    const prediction = isMine ? match.userPrediction : match.aiPrediction;
+    const rawScore = isMine
+        ? predictionScoreLabel(match)
+        : aiPredictionScoreLabel(match);
+    const score = rawScore?.replace(/\s*-\s*/, ' - ');
 
     return (
         <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
@@ -47,9 +56,15 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                                 {match.homeTeamShort}
                             </span>
                         </Link>
-                        <span className="text-sm font-semibold text-slate-400">
-                            vs
-                        </span>
+                        {score ? (
+                            <span className="rounded-lg border border-slate-200 bg-slate-100 px-2.5 py-1 text-sm font-bold whitespace-nowrap text-slate-800 shadow-sm">
+                                {score}
+                            </span>
+                        ) : (
+                            <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                                vs
+                            </span>
+                        )}
                         <Link
                             href={showTeam.url(match.awayTeamId)}
                             className="group flex min-w-0 flex-row-reverse items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
@@ -63,6 +78,13 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                                 {match.awayTeamShort}
                             </span>
                         </Link>
+                        {prediction?.confidence && (
+                            <span className="ml-2 shrink-0 rounded-full border border-cyan-200/80 bg-cyan-50 px-2.5 py-1 text-xs font-bold text-cyan-700 capitalize">
+                                {/^\d+$/.test(prediction.confidence)
+                                    ? `${prediction.confidence}% confidence`
+                                    : `${prediction.confidence} confidence`}
+                            </span>
+                        )}
                     </div>
                     <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-slate-500">
                         <span className="flex items-center gap-1.5">
