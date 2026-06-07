@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Predictions;
 
+use App\Models\Scoreboard;
+use App\Models\ScoreboardPrediction;
 use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,12 +23,17 @@ class StoreMatchPredictionRequest extends FormRequest
             'home_score' => ['nullable', 'integer', 'min:0', 'max:99'],
             'away_score' => ['nullable', 'integer', 'min:0', 'max:99'],
             'confidence' => ['nullable', Rule::in(['low', 'medium', 'high'])],
+            'scoreboard_id' => ['nullable', 'integer', 'exists:scoreboards,id'],
+            'is_boosted' => ['nullable', 'boolean'],
         ];
     }
 
     public function after(): array
     {
-        return [$this->validatePredictionRules(...)];
+        return [
+            $this->validatePredictionRules(...),
+            $this->validateBoostRules(...),
+        ];
     }
 
     private function validatePredictionRules(Validator $validator): void
@@ -42,6 +49,70 @@ class StoreMatchPredictionRequest extends FormRequest
 
         if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {
             $this->validateScoreMatchesOutcome($validator);
+        }
+    }
+
+    private function validateBoostRules(Validator $validator): void
+    {
+        if (! $this->boolean('is_boosted')) {
+            return;
+        }
+
+        $scoreboardId = $this->integer('scoreboard_id');
+
+        if ($scoreboardId === 0) {
+            $validator->errors()->add(
+                'is_boosted',
+                'A boosted prediction requires a leaderboard context.',
+            );
+
+            return;
+        }
+
+        $scoreboard = Scoreboard::find($scoreboardId);
+
+        if ($scoreboard === null) {
+            return;
+        }
+
+        if (! ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {
+            $validator->errors()->add(
+                'is_boosted',
+                'Boosted predictions are not enabled for this leaderboard.',
+            );
+
+            return;
+        }
+
+        $userId = (int) $this->user()->id;
+        $fixture = $this->route('fixture');
+
+        $alreadyBoosted = ScoreboardPrediction::query()
+            ->where('scoreboard_id', $scoreboardId)
+            ->whereHas('prediction', fn ($q) => $q
+                ->where('user_id', $userId)
+                ->where('fixture_id', $fixture?->id)
+            )
+            ->where('is_boosted', true)
+            ->exists();
+
+        if ($alreadyBoosted) {
+            return;
+        }
+
+        $boostedCount = ScoreboardPrediction::query()
+            ->where('scoreboard_id', $scoreboardId)
+            ->whereHas('prediction', fn ($q) => $q->where('user_id', $userId))
+            ->where('is_boosted', true)
+            ->count();
+
+        $limit = (int) $scoreboard->scoringRule('boosted_predictions_limit', 3);
+
+        if ($boostedCount >= $limit) {
+            $validator->errors()->add(
+                'is_boosted',
+                "You have already used all {$limit} boosted predictions in this leaderboard.",
+            );
         }
     }
 

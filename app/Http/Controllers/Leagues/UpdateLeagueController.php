@@ -24,6 +24,12 @@ class UpdateLeagueController extends Controller
             'cover_style',
         ]));
 
+        $scoringRules = $request->validatedScoringRules();
+
+        if ($scoringRules !== null) {
+            $scoreboard->update(['scoring_rules' => $scoringRules]);
+        }
+
         Inertia::flash('toast', [
             'type' => 'success',
             'message' => __('Prediction group updated.'),

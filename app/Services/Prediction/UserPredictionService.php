@@ -5,14 +5,40 @@ namespace App\Services\Prediction;
 use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\Prediction;
+use App\Models\ScoreboardPrediction;
 
 class UserPredictionService
 {
     public function store(Fixture $fixture, int $userId, array $data): Prediction
     {
-        return Prediction::query()->updateOrCreate(
+        $prediction = Prediction::query()->updateOrCreate(
             $this->predictionIdentity($fixture, $userId),
             $this->predictionAttributes($fixture, $data),
+        );
+
+        $this->syncBoost($prediction, $data);
+
+        return $prediction;
+    }
+
+    private function syncBoost(Prediction $prediction, array $data): void
+    {
+        $scoreboardId = $data['scoreboard_id'] ?? null;
+
+        if ($scoreboardId === null) {
+            return;
+        }
+
+        $isBoosted = (bool) ($data['is_boosted'] ?? false);
+
+        ScoreboardPrediction::updateOrCreate(
+            [
+                'scoreboard_id' => (int) $scoreboardId,
+                'prediction_id' => $prediction->id,
+            ],
+            [
+                'is_boosted' => $isBoosted,
+            ],
         );
     }
 
