@@ -24,6 +24,7 @@ use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
 use App\Http\Controllers\Pages\PredictionDetailsController;
 use App\Http\Controllers\Pages\PredictionsController;
+use App\Http\Controllers\Pages\PrivacyController;
 use App\Http\Controllers\Pages\ScoringGuideController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
@@ -39,6 +40,7 @@ Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 Route::get('/scoring', ScoringGuideController::class)->name('scoring');
 Route::get('/contact', ContactController::class)->name('contact');
+Route::get('/privacy', PrivacyController::class)->name('privacy');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
     ->middleware('throttle:social-auth')
     ->name('auth.redirect');

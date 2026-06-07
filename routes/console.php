@@ -48,5 +48,6 @@ Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasPlaye
 Schedule::command('app:add-fixture-player-stats')->daily()->skip($hasPlayerStatsCandidate)->withoutOverlapping();
 
 Schedule::command('app:generate-ai-predictions --days=3')->everySixHours()->withoutOverlapping();
+Schedule::command('app:add-odds')->everySixHours()->withoutOverlapping();
 
 Schedule::command('predictions:validate')->everyFourHours()->withoutOverlapping();

@@ -1,0 +1,100 @@
+You are integrating Atbound visitor-tracking into this codebase.
+
+GOAL: enable cookieless first-party visitor tracking (pageviews,
+engaged-pageviews >=15s, section views, scroll milestones, interaction
+clicks, outbound link clicks, PDF downloads and form starts) across this
+site. Sessions get retroactively linked to a Contact when
+that visitor later submits an Atbound form on any page.
+
+ALREADY INSTALLED CHECK:
+If you find a <script src=".../embed/atbound.js" data-site="..."> in
+the layout, Atbound is already active — tracking auto-fires the moment
+the script loads. STOP here, no changes needed.
+
+INSTALL — add ONCE to the shared layout/head of the entire site:
+
+   <script src="https://atbound.com/embed/atbound.js?v=e0f5e015"
+           data-site="2b1b0060-1422-4874-865b-50155b3e8b37" async></script>
+
+CONSTRAINTS:
+- ONE script tag per page, total. Do NOT load it conditionally per route
+  — that breaks retroactive identity resolution at form-submit time.
+- Do NOT load it only on landing pages. Every tracked page builds the
+  visitor's journey-history that gets linked when a form is later submitted.
+- Do NOT replace `async` with `defer`. Defer waits for HTML parsing and
+  delays the first pageview event by hundreds of milliseconds.
+- Do NOT self-host or proxy the loader. The provided URL has a
+  content-hash cache-buster that updates only when Atbound ships a fix
+  — self-hosting silently misses security patches.
+- Do NOT wrap in Google Tag Manager. The loader needs first-party cookies
+  (`_atb_v`, `_atb_c`) set from the Atbound origin; loading via GTM
+  defeats third-party-cookie blocking protections.
+
+SEMANTIC TAGGING FOR SALES INTELLIGENCE:
+Keep setup light. Atbound already auto-captures pageviews, engaged time,
+sections, clicks, downloads and forms. Your job is only to add a few stable
+labels where the code already reveals buying intent, so the lead timeline can
+say "Clicked Plan demo on Pricing" instead of "Clicked button".
+
+ATTRIBUTE CONTRACT:
+- `data-atb-section="Human section name"` on primary page sections. Use names a
+  salesperson understands: Hero, Pricing, Services, Cases, Contact.
+- `data-atb-cta="machine_intent"` on high-intent CTA links/buttons such as demo,
+  quote, contact, pricing, booking and trial actions. Use stable snake_case
+  values like `demo_request`, `quote_request`, `contact_sales`.
+- `data-atb-label="Human label"` on tracked elements when the visible text is
+  vague, dynamic, icon-only, translated elsewhere, or too long. This is the UI
+  label shown in Atbound timelines.
+- `data-atb-track="category"` + optional `data-atb-label="Human label"` on
+  important non-CTA interactions such as project cards, case-study links,
+  downloads, mailto/tel/WhatsApp links and product cards.
+- `data-atb-skip` on utility UI that should not appear in a sales journey:
+  menu toggles, cookie banners, close buttons, search controls, theme toggles,
+  carousel arrows and pagination.
+
+TAGGING RULES:
+- Tag only the highest-value 3-8 interactions per main page. Do not annotate
+  every link, nav item or repeated card.
+- Prefer existing shared Button/Link/Card components when they already forward
+  arbitrary attributes; otherwise tag concrete usage sites. Do not create a
+  new tracking abstraction unless this codebase already has that pattern.
+- Keep existing markup, styling, behavior, accessibility attributes and tests
+  intact.
+- After editing, summarize which layouts/components/pages were changed and
+  list any important CTA you intentionally left untagged.
+
+FRAMEWORK NOTES (apply only the relevant one for this codebase):
+- Next.js (app router): use <Script strategy="afterInteractive"> in app/layout.tsx
+- Nuxt 3: register via app.head.script in nuxt.config.ts
+- Astro: <script is:inline src="..."> in src/layouts/Layout.astro
+- WordPress: wp_enqueue_script() in functions.php with in_footer=false
+- Vanilla / static HTML: paste the loader into the layout's <head>
+
+CONTENT-SECURITY-POLICY (only if the site sends a CSP header):
+Whitelist the loader origin under both `script-src` and `connect-src`
+directives. Without `connect-src` the script loads but the POSTs to
+/api/track are silently blocked and no events arrive in the dashboard.
+
+COOKIE BANNER (only if this site has one):
+Add data-require-consent="1" to the script tag, and call
+window.Atbound.grantConsent() from the banner's "accept" handler.
+Without consent the loader stays inert (no tracking, no _atb_v cookie).
+The loader also auto-honors browser DNT and Sec-GPC — do NOT strip
+those checks.
+
+VERIFY when done:
+1. Browser DevTools → Network → request to atbound.js returns 200
+2. After page load, the Network panel shows a POST to /api/track with a
+   `pageview` event in the request body
+3. Atbound dashboard → "Bezoekers" tab shows your session within
+   ~10 seconds of loading the page
+
+SITE ANALYSIS CONTEXT:
+Use these analyzer findings as concrete targets. Do not tag unrelated elements.
+Recommended installation path (client_rendered): Client-side routes en componenten. De crawler ziet vooral een JavaScript shell. Laat de AI-agent routes, layouts en gedeelde componenten in de codebase inspecteren.
+Important: the analyzer found pages that look client-side rendered. It does not execute JavaScript, so inspect routes/components directly before deciding that no CTA or section exists.
+- /: Gebruik de AI-agent prompt in de codebase of controleer een server-rendered route; deze crawler voert geen JavaScript uit.
+
+Missing Atbound tags to add: 0.
+
+When done, run the site locally and verify Atbound sees labeled clicks, sections and pageviews.

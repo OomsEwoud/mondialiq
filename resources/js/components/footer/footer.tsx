@@ -1,7 +1,21 @@
 import AppLogo from '@/components/app/app-logo';
-import { contact } from '@/routes';
+import { contact, privacy } from '@/routes';
+
+declare global {
+    interface Window {
+        Atbound?: {
+            showConsentBanner: () => void;
+        };
+    }
+}
 
 export default function Footer() {
+    const openCookieBanner = (): void => {
+        if (typeof window !== 'undefined' && window.Atbound?.showConsentBanner) {
+            window.Atbound.showConsentBanner();
+        }
+    };
+
     return (
         <footer className="mt-12 w-full overflow-x-hidden border-t border-slate-200 bg-white px-6 py-10">
             <div className="mx-auto w-full max-w-5xl min-w-0">
@@ -53,20 +67,21 @@ export default function Footer() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-5">
                         <a
-                            href="#"
-                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
+                            href={privacy.url()}
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                         >
-                            Privacy Policy
+                            Privacy & cookiebeleid
                         </a>
-                        <a
-                            href="#"
-                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
+                        <button
+                            type="button"
+                            onClick={openCookieBanner}
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                         >
-                            Terms of Service
-                        </a>
+                            Cookievoorkeuren
+                        </button>
                         <a
                             href={contact.url()}
-                            className="text-xs text-slate-600 transition-colors hover:text-slate-600"
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                         >
                             Contact
                         </a>

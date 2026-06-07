@@ -1,0 +1,17 @@
+function getCookie(name) {
+  return document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(`${name}=`))
+    ?.split('=')[1];
+}
+
+fetch('https://atbound.com/api/forms/mijn-formulier/submit', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    site: '2b1b0060-1422-4874-865b-50155b3e8b37',
+    visitor_token: decodeURIComponent(getCookie('_atb_v') || ''),
+    fields: { email: form.email.value, naam: form.naam.value },
+    consent: form.consent.checked,
+  })
+});
