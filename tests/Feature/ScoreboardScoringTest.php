@@ -583,7 +583,7 @@ test('boosted bonus is not applied when boosted predictions are disabled', funct
 });
 
 test('prediction score service supports custom scoring rules', function () {
-    $service = new PredictionScoreService();
+    $service = new PredictionScoreService;
 
     $rules = [
         'exact_score_points' => 10,

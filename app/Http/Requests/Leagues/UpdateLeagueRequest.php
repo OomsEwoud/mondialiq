@@ -49,7 +49,7 @@ class UpdateLeagueRequest extends FormRequest
             return null;
         }
 
-        return [
+        $result = [
             'exact_score_points' => (int) ($rules['exact_score_points'] ?? 10),
             'correct_result_points' => (int) ($rules['correct_result_points'] ?? 5),
             'correct_goal_difference_points' => (int) ($rules['correct_goal_difference_points'] ?? 3),
@@ -60,5 +60,7 @@ class UpdateLeagueRequest extends FormRequest
             'boosted_confidence_threshold' => (int) ($rules['boosted_confidence_threshold'] ?? 70),
             'boosted_prediction_bonus_points' => (int) ($rules['boosted_prediction_bonus_points'] ?? 2),
         ];
+
+        return $result;
     }
 }

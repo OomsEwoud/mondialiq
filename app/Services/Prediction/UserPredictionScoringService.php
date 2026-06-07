@@ -4,7 +4,6 @@ namespace App\Services\Prediction;
 
 use App\Models\Fixture;
 use App\Models\Prediction;
-use App\Models\Scoreboard;
 use App\Models\ScoreboardPrediction;
 
 class UserPredictionScoringService
