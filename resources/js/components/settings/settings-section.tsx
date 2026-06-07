@@ -20,22 +20,20 @@ export default function SettingsSection({
 }: Props) {
     return (
         <section className={settingsSectionClassName}>
-            <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex gap-3 sm:gap-4">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200 sm:size-12">
-                        <Icon className="size-5" />
-                    </span>
-                    <div>
-                        <p className="mb-1 text-xs font-bold tracking-wide text-slate-600 uppercase">
-                            {eyebrow}
-                        </p>
-                        <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-                            {title}
-                        </h2>
-                        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                            {description}
-                        </p>
-                    </div>
+            <div className="mb-5 flex items-center gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
+                    <Icon className="size-5" />
+                </span>
+                <div>
+                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                        {eyebrow}
+                    </p>
+                    <h2 className="mt-1 text-xl font-bold text-slate-900">
+                        {title}
+                    </h2>
+                    <p className="mt-1 text-sm text-slate-500">
+                        {description}
+                    </p>
                 </div>
             </div>
             {children}

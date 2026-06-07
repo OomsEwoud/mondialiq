@@ -48,7 +48,7 @@ type Props = {
 const fieldErrorWrapperClassName = 'min-h-10';
 const fieldErrorClassName = 'leading-5';
 const emailVerificationCardClassName =
-    'rounded-2xl border border-amber-200 bg-[linear-gradient(180deg,rgba(255,251,235,1),rgba(253,230,138,0.5))] p-4 shadow-sm';
+    'rounded-xl border border-amber-200 bg-amber-50 p-4';
 
 export default function Profile({
     accountUser,
@@ -221,11 +221,11 @@ export default function Profile({
                                         <div className="flex gap-3">
                                             <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
                                             <div className="space-y-2">
-                                                <p className="text-sm font-black text-amber-900">
+                                                <p className="text-sm font-bold text-amber-900">
                                                     Your email address is
                                                     unverified.
                                                 </p>
-                                                <p className="text-sm leading-6 text-amber-800">
+                                                <p className="text-sm leading-6 text-amber-700">
                                                     Verify your email to keep
                                                     all account features
                                                     available.
@@ -233,7 +233,7 @@ export default function Profile({
                                                 <Link
                                                     href={send()}
                                                     as="button"
-                                                    className="text-sm font-black text-slate-900 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
+                                                    className="text-sm font-bold text-slate-900 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
                                                 >
                                                     Resend verification email
                                                 </Link>
@@ -429,7 +429,7 @@ export default function Profile({
                                 <div>
                                     <div className="mb-2 flex items-center gap-2">
                                         <LockKeyhole className="size-4 text-cyan-500" />
-                                        <p className="text-sm font-black text-slate-900">
+                                        <p className="text-sm font-bold text-slate-900">
                                             2FA status
                                         </p>
                                     </div>
@@ -453,7 +453,7 @@ export default function Profile({
                                                 variant="destructive"
                                                 type="submit"
                                                 disabled={processing}
-                                                className="w-full rounded-2xl bg-red-600 font-black text-white shadow-lg shadow-sm hover:bg-red-700 sm:w-auto"
+                                                className="w-full rounded-lg bg-red-600 font-semibold text-white shadow-sm hover:bg-red-700 sm:w-auto"
                                             >
                                                 Disable 2FA
                                             </Button>
