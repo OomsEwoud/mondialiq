@@ -1,3 +1,5 @@
+import type { Match } from './match';
+
 export interface LeagueMember {
     id: number;
     rank: number;
@@ -69,6 +71,9 @@ export interface LeagueDetails {
     lastActivityLabel: string | null;
     members: LeagueMember[];
     currentUserRank: number | null;
+    boostedPredictionsEnabled: boolean;
+    boostsRemaining: number | null;
+    upcomingFixtures: Match[];
 }
 
 export interface LeagueJoinPageProps {

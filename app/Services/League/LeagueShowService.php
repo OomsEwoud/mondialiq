@@ -2,8 +2,11 @@
 
 namespace App\Services\League;
 
+use App\Http\Resources\FixtureResource;
+use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
+use App\Models\ScoreboardPrediction;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -43,6 +46,10 @@ class LeagueShowService
         $leader = $members->first();
         $currentUser = $members->firstWhere('isCurrentUser', true);
         $lastActivity = $this->lastActivity($members);
+        $boostedEnabled = (bool) $scoreboard->scoringRule('boosted_predictions_enabled', false);
+        $boostsRemaining = $boostedEnabled
+            ? $this->boostsRemaining($scoreboard, $user)
+            : null;
 
         return [
             'id' => $scoreboard->id,
@@ -61,6 +68,9 @@ class LeagueShowService
             'settingsHref' => $user->can('manage', $scoreboard)
                 ? route('leagues.settings', $scoreboard)
                 : null,
+            'membersHref' => $user->can('manage', $scoreboard)
+                ? route('leagues.members', $scoreboard)
+                : null,
             'canManage' => $user->can('manage', $scoreboard),
             'canLeave' => $user->can('leave', $scoreboard),
             'membersCount' => $members->count(),
@@ -73,6 +83,9 @@ class LeagueShowService
                 : null,
             'members' => $members,
             'currentUserRank' => $currentUser['rank'] ?? null,
+            'boostedPredictionsEnabled' => $boostedEnabled,
+            'boostsRemaining' => $boostsRemaining,
+            'upcomingFixtures' => $this->upcomingFixtures($user),
         ];
     }
 
@@ -218,5 +231,38 @@ class LeagueShowService
             'label' => 'Looking for lift',
             'tone' => 'cold',
         ];
+    }
+
+    private function boostsRemaining(Scoreboard $scoreboard, User $user): int
+    {
+        $limit = (int) $scoreboard->scoringRule('boosted_predictions_limit', 3);
+
+        $used = ScoreboardPrediction::query()
+            ->where('scoreboard_id', $scoreboard->id)
+            ->whereHas('prediction', fn ($q) => $q->where('user_id', $user->id))
+            ->where('is_boosted', true)
+            ->count();
+
+        return max($limit - $used, 0);
+    }
+
+    private function upcomingFixtures(User $user): array
+    {
+        $fixtures = Fixture::query()
+            ->with([
+                'homeTeam:id,name,code,logo_url',
+                'awayTeam:id,name,code,logo_url',
+            ])
+            ->with([
+                'userPredictions' => fn ($q) => $q
+                    ->whereBelongsTo($user)
+                    ->select(['id', 'fixture_id', 'user_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
+            ])
+            ->upcomingNotStarted()
+            ->orderBy('match_date')
+            ->take(10)
+            ->get();
+
+        return FixtureResource::collection($fixtures)->resolve();
     }
 }

@@ -13,6 +13,7 @@ import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
 import LeagueSnapshotCard from '@/components/leaderboards/league-snapshot-card';
+import LeagueUpcomingMatchesCard from '@/components/leaderboards/league-upcoming-matches-card';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
@@ -143,6 +144,15 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                         </div>
                     </div>
                 </section>
+
+                {league.upcomingFixtures.length > 0 && (
+                    <LeagueUpcomingMatchesCard
+                        fixtures={league.upcomingFixtures}
+                        scoreboardId={league.id}
+                        boostsRemaining={league.boostsRemaining}
+                        boostedEnabled={league.boostedPredictionsEnabled}
+                    />
+                )}
 
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.9fr)]">
                     <LeagueMembersCard members={league.members} />
