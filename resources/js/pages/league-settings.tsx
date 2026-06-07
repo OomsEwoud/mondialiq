@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
 import { ArrowLeft, Settings, Users } from 'lucide-react';
-import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
 import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
@@ -123,29 +122,20 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                     </Link>
                 )}
 
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px] xl:items-start">
-                    <LeagueSettingsCard
-                        leagueId={league.id}
-                        leagueName={league.name}
-                        leagueIcon={league.icon}
-                        leagueCode={league.code}
-                        description={league.description}
-                        rewardTitle={league.rewardTitle}
-                        rewardDescription={league.rewardDescription}
-                        visibility={league.visibility}
-                        isActive={league.isActive}
-                        accentColor={league.accentColor}
-                        coverStyle={league.coverStyle}
-                        scoringRules={league.scoringRules}
-                    />
-
-                    <aside className="space-y-6">
-                        <LeagueDangerZoneCard
-                            leagueId={league.id}
-                            leagueName={league.name}
-                        />
-                    </aside>
-                </div>
+                <LeagueSettingsCard
+                    leagueId={league.id}
+                    leagueName={league.name}
+                    leagueIcon={league.icon}
+                    leagueCode={league.code}
+                    description={league.description}
+                    rewardTitle={league.rewardTitle}
+                    rewardDescription={league.rewardDescription}
+                    visibility={league.visibility}
+                    isActive={league.isActive}
+                    accentColor={league.accentColor}
+                    coverStyle={league.coverStyle}
+                    scoringRules={league.scoringRules}
+                />
             </div>
         </>
     );
