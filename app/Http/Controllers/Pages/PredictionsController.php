@@ -88,7 +88,7 @@ class PredictionsController extends Controller
     private function fixtureQuery(string $status, string $date): Builder
     {
         return (new FixtureQuery(
-            $this->worldCupContext->leagueId(),
+            $this->worldCupContext->leagueIds(),
             $this->worldCupContext->season(),
         ))->build([
             'date' => $date,

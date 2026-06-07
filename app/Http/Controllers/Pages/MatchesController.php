@@ -82,7 +82,7 @@ class MatchesController extends Controller
     private function fixtureQuery(): FixtureQuery
     {
         return new FixtureQuery(
-            $this->worldCupContext->leagueId(),
+            $this->worldCupContext->leagueIds(),
             $this->worldCupContext->season(),
         );
     }

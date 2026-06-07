@@ -34,7 +34,7 @@ class FixtureQuery
     ];
 
     public function __construct(
-        private readonly int $leagueId,
+        private readonly array $leagueIds,
         private readonly int $season,
     ) {}
 
@@ -43,7 +43,7 @@ class FixtureQuery
         $status = $this->statusFilter($filters);
 
         $query = Fixture::query()
-            ->where('league_id', $this->leagueId)
+            ->whereIn('league_id', $this->leagueIds)
             ->where('season', $this->season)
             ->with(['homeTeam', 'awayTeam', 'apiPrediction']);
 
