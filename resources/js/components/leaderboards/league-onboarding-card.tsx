@@ -89,7 +89,7 @@ export default function LeagueOnboardingCard({
                     </p>
                     <Button
                         asChild
-                        className="mt-3 h-10 w-full rounded-xl bg-blue-950 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
+                        className="mt-3 h-10 w-full rounded-xl bg-slate-900 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
                     >
                         <Link href={matches.url()}>
                             Explore matches

@@ -62,7 +62,7 @@ export default function FriendsLeaguesSection({
                                 type="button"
                                 disabled
                                 variant="outline"
-                                className="h-10 w-full rounded-2xl px-4 font-bold sm:w-auto"
+                                className="h-10 w-full rounded-lg px-4 font-semibold sm:w-auto"
                             >
                                 <LogIn className="size-4" />
                                 Join group
@@ -82,7 +82,7 @@ export default function FriendsLeaguesSection({
                             <Button
                                 type="button"
                                 disabled
-                                className="h-10 w-full rounded-2xl px-4 font-bold sm:w-auto"
+                                className="h-10 w-full rounded-lg px-4 font-semibold sm:w-auto"
                             >
                                 <Plus className="size-4" />
                                 Create group

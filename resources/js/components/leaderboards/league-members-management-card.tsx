@@ -109,7 +109,7 @@ export default function LeagueMembersManagementCard({
                                     alt={member.name}
                                     className="object-cover"
                                 />
-                                <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
+                                <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
                                     {getInitials(member.name)}
                                 </AvatarFallback>
                             </Avatar>

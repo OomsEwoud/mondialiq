@@ -19,7 +19,7 @@ import type { LeagueJoinPageProps } from '@/types';
 const fieldClassName =
     'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
 const secondaryActionClassName =
-    'h-11 rounded-lg px-5 font-black text-slate-600';
+    'h-11 rounded-lg px-5 font-semibold text-slate-600';
 const inviteCodePlaceholder = 'ABCDEFGH';
 
 export default function LeagueJoin({
@@ -42,38 +42,38 @@ export default function LeagueJoin({
             />
 
             <div className="space-y-6">
-                <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+                <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-black text-slate-700 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
                     </Link>
 
                     <div className="mt-6 max-w-2xl">
-                        <div className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600">
+                        <div className="mb-3 flex size-12 items-center justify-center rounded-xl bg-slate-800 text-cyan-300">
                             <Ticket className="size-6" />
                         </div>
-                        <p className="text-xs font-black tracking-wide text-cyan-600 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                             Prediction Groups
                         </p>
-                        <h1 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
+                        <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                             Join with an invite code
                         </h1>
-                        <p className="mt-3 text-sm leading-6 text-slate-500 sm:text-base">
+                        <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
                             Enter the group code you received from a friend to
                             join their prediction ranking instantly.
                         </p>
-                        <p className="mt-4 text-sm font-semibold text-slate-600">
+                        <p className="mt-4 text-sm font-semibold text-slate-400">
                             {leagueCountLabel}
                         </p>
                     </div>
                 </section>
 
-                <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
+                <Card className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
                     <CardHeader className="gap-2 px-4 py-5 sm:px-6">
-                        <CardTitle className="text-2xl font-black text-slate-900">
+                        <CardTitle className="text-2xl font-bold text-slate-900">
                             Invite code
                         </CardTitle>
                         <CardDescription className="text-sm leading-6 text-slate-500">
@@ -81,8 +81,8 @@ export default function LeagueJoin({
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="px-4 pb-5 sm:px-6">
-                        <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-                            <p className="text-sm font-black text-slate-900">
+                        <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+                            <p className="text-sm font-bold text-slate-900">
                                 You can join up to {maxLeagueCount} prediction
                                 groups.
                             </p>
@@ -101,7 +101,7 @@ export default function LeagueJoin({
                                     <div className="flex min-w-0 flex-col gap-2">
                                         <Label
                                             htmlFor="code"
-                                            className="text-xs font-black tracking-widest text-slate-500 uppercase"
+                                            className="text-xs font-semibold tracking-wide text-slate-500 uppercase"
                                         >
                                             Group code
                                         </Label>
@@ -139,7 +139,7 @@ export default function LeagueJoin({
                                                 processing ||
                                                 hasReachedLeagueLimit
                                             }
-                                            className="h-11 rounded-lg px-5 font-black"
+                                            className="h-11 rounded-lg px-5 font-semibold"
                                         >
                                             <LogIn className="size-4" />
                                             Join group

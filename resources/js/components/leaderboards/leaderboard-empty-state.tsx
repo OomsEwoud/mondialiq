@@ -16,7 +16,7 @@ type Props = {
 };
 
 const emptyStateButtonClassName =
-    'h-10 w-full rounded-xl px-4 font-bold sm:w-auto';
+    'h-10 w-full rounded-lg px-4 font-semibold sm:w-auto';
 
 export default function LeaderboardEmptyState({
     title,
@@ -84,7 +84,7 @@ export default function LeaderboardEmptyState({
                                 type="button"
                                 disabled
                                 variant="outline"
-                                className="h-10 w-full rounded-xl px-4 font-bold sm:w-auto"
+                                className="h-10 w-full rounded-lg px-4 font-semibold sm:w-auto"
                             >
                                 <LogIn className="size-4" />
                                 {secondaryActionLabel}

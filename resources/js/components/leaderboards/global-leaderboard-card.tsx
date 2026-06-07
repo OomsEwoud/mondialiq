@@ -57,10 +57,10 @@ export default function GlobalLeaderboardCard({
                                     className={cn(
                                         'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-l-4 border-transparent px-5 py-4 transition-colors sm:px-6',
                                         isCurrentUser &&
-                                            'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200 ring-inset',
+                                            'border-cyan-200 bg-cyan-50/50',
                                         isTopThree &&
                                             !isCurrentUser &&
-                                            'bg-linear-to-r from-slate-50 to-white',
+                                            'bg-slate-50',
                                     )}
                                 >
                                     <div
@@ -80,7 +80,7 @@ export default function GlobalLeaderboardCard({
                                                 alt={leader.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
+                                            <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
                                                 {getInitials(leader.name)}
                                             </AvatarFallback>
                                         </Avatar>
@@ -91,7 +91,7 @@ export default function GlobalLeaderboardCard({
                                                     {leader.name}
                                                 </p>
                                                 {isCurrentUser && (
-                                                    <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-bold text-cyan-600 shadow-none">
+                                                    <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-semibold text-cyan-700 shadow-none">
                                                         You
                                                     </Badge>
                                                 )}

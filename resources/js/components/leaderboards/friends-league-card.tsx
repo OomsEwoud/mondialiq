@@ -46,7 +46,7 @@ export default function FriendsLeagueCard({ league }: Props) {
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-xl">
+        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
             <div
                 className={getLeagueBrandBannerClass(
                     league.accentColor,
@@ -54,7 +54,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                 )}
             >
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/18 text-2xl shadow-sm ">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm ">
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
@@ -91,7 +91,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                                         alt={member.name}
                                         className="object-cover"
                                     />
-                                    <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
+                                    <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
                                         {getInitials(member.name)}
                                     </AvatarFallback>
                                 </Avatar>
@@ -145,7 +145,7 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
-                    className="h-10 w-full rounded-2xl px-4 font-bold"
+                    className="h-10 w-full rounded-lg px-4 font-semibold"
                 >
                     <Link href={league.href}>View group</Link>
                 </Button>
@@ -155,7 +155,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-2xl px-4 font-bold',
+                            'h-10 w-full rounded-lg px-4 font-semibold',
                             palette.button,
                         )}
                     >
@@ -175,7 +175,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-2xl px-4 font-bold"
+                        className="h-10 w-full rounded-lg px-4 font-semibold"
                     >
                         Group action
                     </Button>

@@ -481,7 +481,7 @@ export default function LeagueSettingsCard({
                             >
                                 <Button
                                     disabled={processing || !canSubmit}
-                                    className="h-11 w-full rounded-xl bg-blue-950 px-5 font-semibold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 disabled:border disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-600 disabled:opacity-100"
+                                    className="h-11 w-full rounded-xl bg-slate-900 px-5 font-semibold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 disabled:border disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-600 disabled:opacity-100"
                                 >
                                     {processing && <Spinner />}
                                     <PencilLine className="size-4" />
@@ -565,7 +565,7 @@ export default function LeagueSettingsCard({
                                         <Button
                                             type="submit"
                                             disabled={processing}
-                                            className="rounded-xl bg-blue-950 font-semibold text-white hover:bg-blue-900"
+                                            className="rounded-xl bg-slate-900 font-semibold text-white hover:bg-blue-900"
                                         >
                                             {processing && <Spinner />}
                                             <RefreshCcw className="size-4" />

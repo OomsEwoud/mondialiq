@@ -68,7 +68,7 @@ export default function LeagueMembersCard({ members }: Props) {
                             className={cn(
                                 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 border-l-4 border-transparent px-4 py-3.5 sm:px-6',
                                 member.isCurrentUser &&
-                                    'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200 ring-inset',
+                                    'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200 ',
                             )}
                         >
                             <div
@@ -88,7 +88,7 @@ export default function LeagueMembersCard({ members }: Props) {
                                         alt={member.name}
                                         className="object-cover"
                                     />
-                                    <AvatarFallback className="bg-blue-950 text-xs font-bold text-white">
+                                    <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
                                         {getInitials(member.name)}
                                     </AvatarFallback>
                                 </Avatar>

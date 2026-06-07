@@ -44,7 +44,7 @@ export default function YourPositionCard({
                     {currentUserPosition && (
                         <Badge
                             variant="outline"
-                            className="rounded-full border-cyan-200 bg-cyan-50 px-2.5 py-1 font-bold text-cyan-600"
+                            className="rounded-full border-cyan-200 bg-cyan-50 px-2.5 py-1 font-semibold text-cyan-700"
                         >
                             Rank #{currentUserPosition.rank}
                         </Badge>
@@ -55,19 +55,19 @@ export default function YourPositionCard({
                 {currentUserPosition ? (
                     <div className="space-y-4">
                         <div className="rounded-xl bg-slate-900 px-5 py-5 text-white shadow-sm">
-                            <p className="text-xs font-bold tracking-wide text-cyan-100 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                                 Current rank
                             </p>
                             <p className="mt-2 text-4xl font-bold tracking-tight">
                                 #{currentUserPosition.rank}
                             </p>
-                            <p className="mt-2 text-sm text-cyan-100">
+                            <p className="mt-2 text-sm text-slate-300">
                                 Out of {totalPlayers}{' '}
                                 {totalPlayers === 1 ? 'player' : 'players'}
                             </p>
                             {pointsBehindLeader !== null && (
-                                <div className="mt-4 rounded-2xl border border-white/10 bg-white/10 px-3 py-2.5 ">
-                                    <p className="text-xs font-semibold text-cyan-50">
+                                <div className="mt-4 rounded-xl border border-white/10 bg-white/10 px-3 py-2.5">
+                                    <p className="text-xs font-semibold text-slate-300">
                                         {pointsBehindLeader === 0
                                             ? 'You are currently leading the table.'
                                             : `You are ${pointsBehindLeader} pts behind rank #1.`}

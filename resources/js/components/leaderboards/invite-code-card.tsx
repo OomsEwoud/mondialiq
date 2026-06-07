@@ -105,7 +105,7 @@ export default function InviteCodeCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 {isSmallLeague && (
-                    <div className="rounded-2xl border border-cyan-200 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-4 py-3">
+                    <div className="rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50/60 to-white px-4 py-3">
                         <div className="flex items-center gap-2 text-cyan-600">
                             <Sparkles className="size-4" />
                             <p className="text-xs font-bold tracking-wide uppercase">
@@ -141,7 +141,7 @@ export default function InviteCodeCard({
                 <div className="grid gap-2">
                     <Button
                         type="button"
-                        className="h-10 w-full rounded-xl bg-blue-950 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
+                        className="h-10 w-full rounded-xl bg-slate-900 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={shareInvite}
                     >
