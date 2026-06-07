@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureLineupService;
-use Carbon\CarbonImmutable;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -38,10 +37,6 @@ class AddFixtureLineups extends Command
         $this->info("{$fixtures->count()} lineup kandidaten gevonden.");
 
         foreach ($fixtures as $fixture) {
-            if ($this->shouldSkip($fixture)) {
-                continue;
-            }
-
             $this->syncLineups($fixture);
         }
 
@@ -76,65 +71,30 @@ class AddFixtureLineups extends Command
         ];
     }
 
-    private function shouldSkip(Fixture $fixture): bool
-    {
-        if (! $fixture->shouldSyncLineups()) {
-            $this->line("Skipping fixture {$fixture->external_id}: {$fixture->lineupSyncSkipReason()}");
-
-            return true;
-        }
-
-        return false;
-    }
-
     private function syncLineups(Fixture $fixture): void
     {
-        $this->line(sprintf(
-            'Fetching lineups for fixture %d: %s vs %s, kickoff in %d minutes',
-            $fixture->id,
-            $fixture->homeTeam?->code ?? $fixture->homeTeam?->name ?? 'home',
-            $fixture->awayTeam?->code ?? $fixture->awayTeam?->name ?? 'away',
-            $this->kickoffInMinutes($fixture),
-        ));
-        $this->line("Calling endpoint /fixtures/lineups for fixture {$fixture->id}");
-
         try {
             $lineups = $this->api->getFixtureLineups((int) $fixture->external_id);
             $hasLineups = $this->lineupService->storeLineups($lineups, $fixture->id);
 
-            $fixture->forceFill([
+            $fixture->update([
                 'has_lineups' => $hasLineups,
                 'lineups_synced_at' => now('Europe/Brussels'),
-                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
-            ])->save();
+                'lineup_sync_attempts' => ($fixture->lineup_sync_attempts ?? 0) + 1,
+            ]);
 
             if (! $hasLineups) {
                 $this->line("No lineups available for fixture {$fixture->id}; will retry later");
             }
         } catch (Throwable $exception) {
-            $fixture->forceFill([
+            $fixture->update([
                 'lineups_synced_at' => now('Europe/Brussels'),
-                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
-            ])->save();
+                'lineup_sync_attempts' => ($fixture->lineup_sync_attempts ?? 0) + 1,
+            ]);
 
             $this->error("Fout bij ophalen lineups voor fixture {$fixture->id}: {$exception->getMessage()}");
         }
 
         sleep(1);
-    }
-
-    private function kickoffInMinutes(Fixture $fixture): int
-    {
-        $matchDate = CarbonImmutable::createFromFormat(
-            'Y-m-d H:i:s',
-            $fixture->match_date->format('Y-m-d H:i:s'),
-            'Europe/Brussels',
-        );
-
-        if (! $matchDate instanceof CarbonImmutable) {
-            return 0;
-        }
-
-        return (int) now('Europe/Brussels')->diffInMinutes($matchDate, false);
     }
 }
