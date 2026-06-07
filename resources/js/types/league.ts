@@ -12,6 +12,7 @@ export interface LeagueMember {
     isCurrentUser: boolean;
     isOwner: boolean;
     canBeManaged: boolean;
+    isSystemUser: boolean;
     role?: string;
     joinedAt?: string | null;
     lastPredictionLabel?: string | null;

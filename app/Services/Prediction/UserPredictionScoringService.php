@@ -51,7 +51,7 @@ class UserPredictionScoringService
         if (! $this->hasFinishedStatus($fixture)) {
             return [
                 'scored' => 0,
-                'skipped' => $fixture->userPredictions()->whereNull('points_awarded_at')->count(),
+                'skipped' => $fixture->predictions()->whereNull('points_awarded_at')->count(),
                 'missing_final_score' => false,
             ];
         }
@@ -59,7 +59,7 @@ class UserPredictionScoringService
         if ($fixture->fulltime_home_goals === null || $fixture->fulltime_away_goals === null) {
             return [
                 'scored' => 0,
-                'skipped' => $fixture->userPredictions()->whereNull('points_awarded_at')->count(),
+                'skipped' => $fixture->predictions()->whereNull('points_awarded_at')->count(),
                 'missing_final_score' => true,
             ];
         }
@@ -67,7 +67,8 @@ class UserPredictionScoringService
         $scored = 0;
         $skipped = 0;
 
-        $fixture->userPredictions()
+        $fixture->predictions()
+            ->whereIn('source', ['user', 'ai'])
             ->whereNull('points_awarded_at')
             ->with(['user.scoreboards', 'fixture'])
             ->orderBy('id')
@@ -106,7 +107,7 @@ class UserPredictionScoringService
 
     public function syncScoreboardPredictions(Prediction $prediction): void
     {
-        if ($prediction->source->value !== 'user') {
+        if (! in_array($prediction->source->value, ['user', 'ai'], true)) {
             return;
         }
 
@@ -180,7 +181,7 @@ class UserPredictionScoringService
                 ->where('prediction_id', $prediction->id)
                 ->first();
 
-            $isBoosted = $scoreboardPrediction?->is_boosted ?? false;
+            $isBoosted = ! $user->is_system_user && ($scoreboardPrediction?->is_boosted ?? false);
             $bonus = 0;
 
             if ($isBoosted && ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {

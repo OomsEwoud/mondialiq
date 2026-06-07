@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Leagues;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class ShowLeagueMembersController extends Controller
         $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
 
         return $scoreboard->users()
-            ->select(['users.id', 'users.name', 'users.avatar'])
+            ->select(['users.id', 'users.name', 'users.avatar', 'users.is_system_user'])
             ->withSum([
                 'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
                     ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
@@ -89,11 +90,12 @@ class ShowLeagueMembersController extends Controller
             'totalPoints' => $user->predictions_sum_points ?? 0,
             'role' => $user->pivot->role ?? 'member',
             'joinedAt' => filled($user->pivot->joined_at)
-                ? \Carbon\Carbon::parse($user->pivot->joined_at)->toIso8601String()
+                ? Carbon::parse($user->pivot->joined_at)->toIso8601String()
                 : null,
             'isCurrentUser' => $user->id === $currentUser->id,
             'isOwner' => $user->id === $scoreboard->owner_id,
             'canBeManaged' => $user->id !== $scoreboard->owner_id,
+            'isSystemUser' => $user->is_system_user,
         ];
     }
 }

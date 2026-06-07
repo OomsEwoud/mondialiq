@@ -22,6 +22,8 @@ class ResetUserPassword implements ResetsUserPasswords
             'password' => $this->passwordRules(),
         ])->validate();
 
+        abort_if($user->is_system_user, 403, 'System accounts cannot reset their password.');
+
         $user->forceFill([
             'password' => $input['password'],
         ])->save();

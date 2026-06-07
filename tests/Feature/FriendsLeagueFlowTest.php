@@ -5,6 +5,7 @@ use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
+use App\Models\ScoreboardPrediction;
 use App\Models\Team;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -423,7 +424,7 @@ test('a league member can view the league detail page with rankings', function (
         $thirdMemberPrediction,
         $thirdMemberSecondPrediction,
     ] as $prediction) {
-        \App\Models\ScoreboardPrediction::create([
+        ScoreboardPrediction::create([
             'scoreboard_id' => $league->id,
             'prediction_id' => $prediction->id,
             'is_boosted' => false,

@@ -49,6 +49,7 @@ class LeaderboardService
     private function rankedUserQuery(): Builder
     {
         return User::query()
+            ->where('is_system_user', false)
             ->select(['id', 'name', 'avatar'])
             ->withCount('predictions')
             ->withSum([

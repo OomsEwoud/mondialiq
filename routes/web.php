@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Feedback\StoreFeedbackController;
+use App\Http\Controllers\Leagues\AddAiParticipantController;
 use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\DeleteLeagueController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
 use App\Http\Controllers\Leagues\LeaveLeagueController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
+use App\Http\Controllers\Leagues\RemoveAiParticipantController;
 use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
 use App\Http\Controllers\Leagues\ShowLeagueMembersController;
@@ -75,6 +77,10 @@ Route::middleware('auth')->group(function () {
             ->name('leagues.refresh-code');
         Route::post('/leagues/{scoreboard}/owner/{member}', TransferLeagueOwnershipController::class)
             ->name('leagues.owner.transfer');
+        Route::post('/leagues/{scoreboard}/ai-participant', AddAiParticipantController::class)
+            ->name('leagues.ai-participant.store');
+        Route::delete('/leagues/{scoreboard}/ai-participant', RemoveAiParticipantController::class)
+            ->name('leagues.ai-participant.destroy');
         Route::patch('/leagues/{scoreboard}', UpdateLeagueController::class)->name('leagues.update');
         Route::delete('/leagues/{scoreboard}/leave', LeaveLeagueController::class)->name('leagues.leave');
         Route::delete('/leagues/{scoreboard}', DeleteLeagueController::class)->name('leagues.destroy');

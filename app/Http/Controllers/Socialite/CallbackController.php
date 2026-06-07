@@ -30,6 +30,12 @@ class CallbackController extends Controller
 
         $user = $this->resolveUser($newUser, $provider, $email);
 
+        if ($user->is_system_user) {
+            return to_route('login')->withErrors([
+                'socialite' => 'This account cannot be used for login.',
+            ]);
+        }
+
         if (! $user->exists) {
             $user->password = null;
         }

@@ -1,4 +1,4 @@
-import { Crown, Users } from 'lucide-react';
+import { Bot, Crown, Users } from 'lucide-react';
 import {
     Avatar,
     AvatarFallback,
@@ -104,6 +104,12 @@ export default function LeagueMembersCard({ members }: Props) {
                                             <Badge className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700 shadow-none">
                                                 <Crown className="size-3" />
                                                 Host
+                                            </Badge>
+                                        )}
+                                        {member.isSystemUser && (
+                                            <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                                <Bot className="size-3" />
+                                                AI
                                             </Badge>
                                         )}
                                         {member.isCurrentUser && (

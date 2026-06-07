@@ -54,7 +54,7 @@ class Prediction extends Model
                 return;
             }
 
-            if ($prediction->source !== PredictionTypes::User) {
+            if (! in_array($prediction->source, [PredictionTypes::User, PredictionTypes::Ai], true)) {
                 return;
             }
 

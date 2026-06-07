@@ -99,7 +99,7 @@ class LeagueShowService
         $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
 
         return $scoreboard->users()
-            ->select(['users.id', 'users.name', 'users.avatar'])
+            ->select(['users.id', 'users.name', 'users.avatar', 'users.is_system_user'])
             ->withSum([
                 'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
                     ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
@@ -151,6 +151,7 @@ class LeagueShowService
             'isCurrentUser' => $user->id === $currentUser->id,
             'isOwner' => $user->id === $scoreboard->owner_id,
             'canBeManaged' => $user->id !== $scoreboard->owner_id,
+            'isSystemUser' => $user->is_system_user,
             'lastPredictionLabel' => $this->lastPredictionLabel($user),
             'form' => $this->buildFormSummary($recentPredictions),
         ];

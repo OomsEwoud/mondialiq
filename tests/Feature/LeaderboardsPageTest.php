@@ -5,6 +5,7 @@ use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
+use App\Models\ScoreboardPrediction;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -170,7 +171,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
     ]);
 
     foreach ([$leaderPrediction, $currentUserPrediction, $thirdMemberPrediction] as $prediction) {
-        \App\Models\ScoreboardPrediction::create([
+        ScoreboardPrediction::create([
             'scoreboard_id' => $friendsLeague->id,
             'prediction_id' => $prediction->id,
             'is_boosted' => false,

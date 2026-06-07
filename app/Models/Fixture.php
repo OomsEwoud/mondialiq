@@ -168,9 +168,18 @@ class Fixture extends Model
 
     public function aiPrediction(): HasOne
     {
+        $aiUserId = User::aiUser()?->id;
+
         return $this->hasOne(Prediction::class)
-            ->whereNull('user_id')
-            ->where('source', PredictionTypes::Ai->value);
+            ->where('source', PredictionTypes::Ai->value)
+            ->when($aiUserId, function ($query) use ($aiUserId) {
+                $query->where(function ($q) use ($aiUserId) {
+                    $q->whereNull('user_id')
+                        ->orWhere('user_id', $aiUserId);
+                });
+            }, function ($query) {
+                $query->whereNull('user_id');
+            });
     }
 
     public function fixtureOdds(): HasMany

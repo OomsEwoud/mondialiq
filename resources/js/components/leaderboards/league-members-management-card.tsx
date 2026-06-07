@@ -1,12 +1,17 @@
 import { Form } from '@inertiajs/react';
 import {
+    Bot,
     Crown,
+    Plus,
     Shield,
     ShieldCheck,
     ShieldPlus,
+    Trash2,
     UserMinus,
     Users,
 } from 'lucide-react';
+import AddAiParticipantController from '@/actions/App/Http/Controllers/Leagues/AddAiParticipantController';
+import RemoveAiParticipantController from '@/actions/App/Http/Controllers/Leagues/RemoveAiParticipantController';
 import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
 import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
 import {
@@ -48,6 +53,7 @@ export default function LeagueMembersManagementCard({
 }: Props) {
     const getInitials = useInitials();
     const showOnlyOwnerState = members.length <= 1;
+    const hasAiParticipant = members.some((m) => m.isSystemUser);
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -65,14 +71,37 @@ export default function LeagueMembersManagementCard({
                         </CardTitle>
                     </div>
 
-                    <Badge
-                        variant="outline"
-                        className="w-fit rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-bold text-slate-700"
-                    >
-                        <Users className="size-3.5 text-cyan-600" />
-                        {members.length}{' '}
-                        {members.length === 1 ? 'member' : 'members'}
-                    </Badge>
+                    <div className="flex flex-wrap items-center gap-2">
+                        {!hasAiParticipant && (
+                            <Form
+                                {...AddAiParticipantController.form({
+                                    scoreboard: leagueId,
+                                })}
+                                options={{ preserveScroll: true }}
+                            >
+                                {({ processing }) => (
+                                    <Button
+                                        type="submit"
+                                        disabled={processing}
+                                        variant="outline"
+                                        className="rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 font-bold text-cyan-700 hover:bg-cyan-100"
+                                    >
+                                        {processing && <Spinner />}
+                                        <Plus className="size-3.5" />
+                                        Add AI participant
+                                    </Button>
+                                )}
+                            </Form>
+                        )}
+                        <Badge
+                            variant="outline"
+                            className="w-fit rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-bold text-slate-700"
+                        >
+                            <Users className="size-3.5 text-cyan-600" />
+                            {members.length}{' '}
+                            {members.length === 1 ? 'member' : 'members'}
+                        </Badge>
+                    </div>
                 </div>
                 <CardDescription className="text-sm leading-6 text-slate-500">
                     Review members, transfer ownership, or remove access when a
@@ -106,7 +135,9 @@ export default function LeagueMembersManagementCard({
                             'flex flex-col gap-3 rounded-2xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between',
                             member.isOwner
                                 ? 'border-amber-200 bg-amber-50/70'
-                                : 'border-slate-200 bg-slate-50',
+                                : member.isSystemUser
+                                  ? 'border-emerald-200 bg-emerald-50/70'
+                                  : 'border-slate-200 bg-slate-50',
                         )}
                     >
                         <div className="flex min-w-0 items-center gap-3">
@@ -132,7 +163,14 @@ export default function LeagueMembersManagementCard({
                                             Owner
                                         </Badge>
                                     )}
+                                    {member.isSystemUser && (
+                                        <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white">
+                                            <Bot className="size-3" />
+                                            AI
+                                        </Badge>
+                                    )}
                                     {!member.isOwner &&
+                                        !member.isSystemUser &&
                                         member.role === 'admin' && (
                                             <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
                                                 <Shield className="size-3" />
@@ -140,6 +178,7 @@ export default function LeagueMembersManagementCard({
                                             </Badge>
                                         )}
                                     {!member.isOwner &&
+                                        !member.isSystemUser &&
                                         member.role !== 'admin' && (
                                             <Badge
                                                 variant="outline"
@@ -155,11 +194,13 @@ export default function LeagueMembersManagementCard({
                                     )}
                                 </div>
                                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                                    {member.joinedAt
-                                        ? `Joined ${new Date(member.joinedAt).toLocaleDateString()}.`
-                                        : member.canBeManaged
-                                          ? 'Can be transferred or removed.'
-                                          : 'Protected owner access.'}
+                                    {member.isSystemUser
+                                        ? 'Automated predictions participant.'
+                                        : member.joinedAt
+                                          ? `Joined ${new Date(member.joinedAt).toLocaleDateString()}.`
+                                          : member.canBeManaged
+                                            ? 'Can be transferred or removed.'
+                                            : 'Protected owner access.'}
                                 </p>
                             </div>
                         </div>
@@ -167,151 +208,225 @@ export default function LeagueMembersManagementCard({
                         <div className="w-full shrink-0 sm:w-auto">
                             {member.canBeManaged ? (
                                 <div className="grid gap-2 sm:min-w-52">
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                type="button"
-                                                variant="outline"
-                                                className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-bold text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
-                                            >
-                                                <ShieldPlus className="size-4" />
-                                                Make owner
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                            <DialogTitle className="text-slate-900">
-                                                Transfer ownership to{' '}
-                                                {member.name}?
-                                            </DialogTitle>
-                                            <DialogDescription className="text-sm leading-6 text-slate-600">
-                                                {member.name} will become the
-                                                new group owner immediately. You
-                                                will stay in the group as a
-                                                member, but owner controls move
-                                                to them.
-                                            </DialogDescription>
-                                            <div className="rounded-2xl border border-slate-200 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
-                                                After this transfer, use the
-                                                regular group page as a normal
-                                                member. Only the new owner will
-                                                keep access to this settings
-                                                page.
-                                            </div>
+                                    {!member.isSystemUser && (
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="outline"
+                                                    className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-bold text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
+                                                >
+                                                    <ShieldPlus className="size-4" />
+                                                    Make owner
+                                                </Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                                <DialogTitle className="text-slate-900">
+                                                    Transfer ownership to{' '}
+                                                    {member.name}?
+                                                </DialogTitle>
+                                                <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                    {member.name} will become the
+                                                    new group owner immediately.
+                                                    You will stay in the group as
+                                                    a member, but owner controls
+                                                    move to them.
+                                                </DialogDescription>
+                                                <div className="rounded-2xl border border-slate-200 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
+                                                    After this transfer, use the
+                                                    regular group page as a
+                                                    normal member. Only the new
+                                                    owner will keep access to
+                                                    this settings page.
+                                                </div>
 
-                                            <Form
-                                                {...TransferLeagueOwnershipController.form(
-                                                    {
-                                                        scoreboard: leagueId,
-                                                        member: member.id,
-                                                    },
-                                                )}
-                                                options={{
-                                                    preserveScroll: true,
-                                                }}
-                                                className="space-y-4"
-                                            >
-                                                {({ processing }) => (
-                                                    <DialogFooter className="gap-2">
-                                                        <DialogClose asChild>
+                                                <Form
+                                                    {...TransferLeagueOwnershipController.form(
+                                                        {
+                                                            scoreboard: leagueId,
+                                                            member: member.id,
+                                                        },
+                                                    )}
+                                                    options={{
+                                                        preserveScroll: true,
+                                                    }}
+                                                    className="space-y-4"
+                                                >
+                                                    {({ processing }) => (
+                                                        <DialogFooter className="gap-2">
+                                                            <DialogClose asChild>
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="secondary"
+                                                                    className="rounded-lg font-bold"
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                            </DialogClose>
+
                                                             <Button
-                                                                type="button"
-                                                                variant="secondary"
+                                                                type="submit"
+                                                                disabled={
+                                                                    processing
+                                                                }
                                                                 className="rounded-lg font-bold"
                                                             >
-                                                                Cancel
+                                                                {processing && (
+                                                                    <Spinner />
+                                                                )}
+                                                                <ShieldPlus className="size-4" />
+                                                                {processing
+                                                                    ? 'Transferring...'
+                                                                    : 'Confirm transfer'}
                                                             </Button>
-                                                        </DialogClose>
+                                                        </DialogFooter>
+                                                    )}
+                                                </Form>
+                                            </DialogContent>
+                                        </Dialog>
+                                    )}
 
-                                                        <Button
-                                                            type="submit"
-                                                            disabled={
-                                                                processing
-                                                            }
-                                                            className="rounded-lg font-bold"
-                                                        >
-                                                            {processing && (
-                                                                <Spinner />
-                                                            )}
-                                                            <ShieldPlus className="size-4" />
-                                                            {processing
-                                                                ? 'Transferring...'
-                                                                : 'Confirm transfer'}
-                                                        </Button>
-                                                    </DialogFooter>
-                                                )}
-                                            </Form>
-                                        </DialogContent>
-                                    </Dialog>
+                                    {member.isSystemUser ? (
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    className="h-10 w-full rounded-xl bg-red-600 px-4 font-bold hover:bg-red-700 focus-visible:ring-red-200"
+                                                >
+                                                    <Trash2 className="size-4" />
+                                                    Remove AI
+                                                </Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                                <DialogTitle className="text-slate-900">
+                                                    Remove AI participant from
+                                                    this group?
+                                                </DialogTitle>
+                                                <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                    The AI participant will be
+                                                    removed from the group
+                                                    immediately. Existing AI
+                                                    predictions stay recorded in
+                                                    the leaderboard.
+                                                </DialogDescription>
 
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button
-                                                type="button"
-                                                variant="destructive"
-                                                className="h-10 w-full rounded-xl bg-red-600 px-4 font-bold hover:bg-red-700 focus-visible:ring-red-200"
-                                            >
-                                                <UserMinus className="size-4" />
-                                                Remove member
-                                            </Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                            <DialogTitle className="text-slate-900">
-                                                Remove {member.name} from this
-                                                group?
-                                            </DialogTitle>
-                                            <DialogDescription className="text-sm leading-6 text-slate-600">
-                                                This removes their access to the
-                                                group immediately. Existing
-                                                predictions stay recorded, but
-                                                they will no longer appear as an
-                                                active member.
-                                            </DialogDescription>
+                                                <Form
+                                                    {...RemoveAiParticipantController.form(
+                                                        {
+                                                            scoreboard: leagueId,
+                                                        },
+                                                    )}
+                                                    options={{
+                                                        preserveScroll: true,
+                                                    }}
+                                                    className="space-y-4"
+                                                >
+                                                    {({ processing }) => (
+                                                        <DialogFooter className="gap-2">
+                                                            <DialogClose asChild>
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="secondary"
+                                                                    className="rounded-lg font-bold"
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                            </DialogClose>
 
-                                            <Form
-                                                {...RemoveLeagueMemberController.form(
-                                                    {
-                                                        scoreboard: leagueId,
-                                                        member: member.id,
-                                                    },
-                                                )}
-                                                options={{
-                                                    preserveScroll: true,
-                                                }}
-                                                className="space-y-4"
-                                            >
-                                                {({ processing }) => (
-                                                    <DialogFooter className="gap-2">
-                                                        <DialogClose asChild>
                                                             <Button
-                                                                type="button"
-                                                                variant="secondary"
+                                                                type="submit"
+                                                                variant="destructive"
+                                                                disabled={
+                                                                    processing
+                                                                }
                                                                 className="rounded-lg font-bold"
                                                             >
-                                                                Cancel
+                                                                {processing && (
+                                                                    <Spinner />
+                                                                )}
+                                                                <Trash2 className="size-4" />
+                                                                {processing
+                                                                    ? 'Removing...'
+                                                                    : 'Confirm remove'}
                                                             </Button>
-                                                        </DialogClose>
+                                                        </DialogFooter>
+                                                    )}
+                                                </Form>
+                                            </DialogContent>
+                                        </Dialog>
+                                    ) : (
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    className="h-10 w-full rounded-xl bg-red-600 px-4 font-bold hover:bg-red-700 focus-visible:ring-red-200"
+                                                >
+                                                    <UserMinus className="size-4" />
+                                                    Remove member
+                                                </Button>
+                                            </DialogTrigger>
+                                            <DialogContent className="border-slate-200 bg-white sm:max-w-md">
+                                                <DialogTitle className="text-slate-900">
+                                                    Remove {member.name} from
+                                                    this group?
+                                                </DialogTitle>
+                                                <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                    This removes their access to
+                                                    the group immediately.
+                                                    Existing predictions stay
+                                                    recorded, but they will no
+                                                    longer appear as an active
+                                                    member.
+                                                </DialogDescription>
 
-                                                        <Button
-                                                            type="submit"
-                                                            variant="destructive"
-                                                            disabled={
-                                                                processing
-                                                            }
-                                                            className="rounded-lg font-bold"
-                                                        >
-                                                            {processing && (
-                                                                <Spinner />
-                                                            )}
-                                                            <UserMinus className="size-4" />
-                                                            {processing
-                                                                ? 'Removing...'
-                                                                : 'Confirm remove'}
-                                                        </Button>
-                                                    </DialogFooter>
-                                                )}
-                                            </Form>
-                                        </DialogContent>
-                                    </Dialog>
+                                                <Form
+                                                    {...RemoveLeagueMemberController.form(
+                                                        {
+                                                            scoreboard: leagueId,
+                                                            member: member.id,
+                                                        },
+                                                    )}
+                                                    options={{
+                                                        preserveScroll: true,
+                                                    }}
+                                                    className="space-y-4"
+                                                >
+                                                    {({ processing }) => (
+                                                        <DialogFooter className="gap-2">
+                                                            <DialogClose asChild>
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="secondary"
+                                                                    className="rounded-lg font-bold"
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                            </DialogClose>
+
+                                                            <Button
+                                                                type="submit"
+                                                                variant="destructive"
+                                                                disabled={
+                                                                    processing
+                                                                }
+                                                                className="rounded-lg font-bold"
+                                                            >
+                                                                {processing && (
+                                                                    <Spinner />
+                                                                )}
+                                                                <UserMinus className="size-4" />
+                                                                {processing
+                                                                    ? 'Removing...'
+                                                                    : 'Confirm remove'}
+                                                            </Button>
+                                                        </DialogFooter>
+                                                    )}
+                                                </Form>
+                                            </DialogContent>
+                                        </Dialog>
+                                    )}
                                 </div>
                             ) : (
                                 <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-bold text-amber-900">

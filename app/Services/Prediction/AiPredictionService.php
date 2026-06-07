@@ -5,6 +5,7 @@ namespace App\Services\Prediction;
 use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\Prediction;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use RuntimeException;
 
@@ -48,9 +49,11 @@ class AiPredictionService
 
     private function predictionIdentity(Fixture $fixture): array
     {
+        $aiUser = User::aiUser();
+
         return [
             'fixture_id' => $fixture->id,
-            'user_id' => null,
+            'user_id' => $aiUser?->id,
             'source' => PredictionTypes::Ai->value,
         ];
     }
