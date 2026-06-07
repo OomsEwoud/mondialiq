@@ -28,7 +28,7 @@ export default function MatchMissingPlayersCard({ team, players }: Props) {
                         </p>
                     </div>
                 </div>
-                <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-cyan-600 shadow-sm">
+                <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm">
                     {players.length}
                 </span>
             </div>

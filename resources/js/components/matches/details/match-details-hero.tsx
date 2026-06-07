@@ -34,8 +34,8 @@ export default function MatchDetailsHero({
         : getLiveStatusLabel(match.status, null, match.elapsedTime);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-cyan-50/40 p-5 shadow-sm sm:p-6 lg:p-7">
-            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+        <section className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-5 shadow-lg sm:p-6 lg:p-7">
+            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                 {match.round}
             </p>
 
@@ -58,14 +58,14 @@ export default function MatchDetailsHero({
                             </span>
                         </div>
                     )}
-                    <p className="text-3xl font-semibold text-slate-900 tabular-nums sm:text-4xl">
+                    <p className="text-3xl font-semibold text-white tabular-nums sm:text-4xl">
                         {scoreLabel}
                     </p>
-                    <p className="mt-3 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                    <p className="mt-3 inline-flex rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                         {statusLabel}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
-                        <p className="mt-2 text-xs font-semibold tracking-wide text-slate-600">
+                        <p className="mt-2 text-xs font-semibold tracking-wide text-slate-400">
                             {lastUpdatedAt &&
                                 `Updated ${formatUpdatedTime(lastUpdatedAt)}`}
                             {hasPollingError &&

@@ -18,10 +18,10 @@ export default function MatchAvailabilitySection({ match }: Props) {
     const ReportIcon = hasMissingPlayers ? CircleAlert : ShieldCheck;
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm sm:p-6">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
+                    <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                         Squad availability
                     </p>
                     <h2 className="mt-1 text-2xl font-bold text-slate-900">
@@ -55,7 +55,7 @@ export default function MatchAvailabilitySection({ match }: Props) {
                     />
                 </div>
             ) : (
-                <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-gradient-to-b from-white to-slate-50/60 px-4 py-10 text-center text-sm font-medium text-slate-500">
+                <div className="mt-5 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm font-medium text-slate-500">
                     <span className="flex size-11 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                         <ShieldCheck className="size-4" />
                     </span>

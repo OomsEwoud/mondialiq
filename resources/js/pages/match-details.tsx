@@ -35,7 +35,7 @@ export default function MatchDetails({ match }: Props) {
             />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:gap-6 lg:py-8">
-                <BackButton className="w-fit rounded-2xl border border-slate-200 bg-white/95 text-slate-700 shadow-lg shadow-sm hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
+                <BackButton className="w-fit rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
 
                 <div className="flex flex-col gap-5 lg:gap-6">
                     <MatchDetailsHero

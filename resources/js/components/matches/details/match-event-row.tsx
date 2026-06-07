@@ -14,8 +14,8 @@ export default function MatchEventRow({ event }: Props) {
             .join(' · ') || event.team;
 
     return (
-        <div className="flex items-center gap-3 rounded-lg bg-slate-50 p-3">
-            <span className="w-12 shrink-0 text-sm font-bold text-blue-600">
+        <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm">
+            <span className="w-12 shrink-0 text-sm font-bold text-slate-400">
                 {minute}
             </span>
             <img

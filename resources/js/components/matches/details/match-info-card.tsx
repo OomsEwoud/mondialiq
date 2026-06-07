@@ -21,7 +21,7 @@ export default function MatchInfoCard({ match }: Props) {
     const seasonLabel = String(match.season);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm sm:p-6">
             <h2 className="mb-5 text-xl font-bold text-slate-900">
                 Match info
             </h2>

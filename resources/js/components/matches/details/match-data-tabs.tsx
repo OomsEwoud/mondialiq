@@ -55,10 +55,10 @@ export default function MatchDataTabs({ match }: Props) {
                                 aria-selected={isActive}
                                 onClick={() => setActiveTab(tab.value)}
                                 className={cn(
-                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-2xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
+                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
                                     isActive
-                                        ? 'bg-slate-900 text-white shadow-sm'
-                                        : 'bg-white/90 text-slate-600 hover:bg-white hover:text-slate-900',
+                                        ? 'bg-slate-900 text-white shadow-md'
+                                        : 'bg-white/90 text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
                                 )}
                             >
                                 <Icon className="size-4 shrink-0" />
