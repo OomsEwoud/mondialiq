@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureLineupService;
+use Carbon\CarbonImmutable;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -54,7 +55,7 @@ class AddFixtureLineups extends Command
         return Fixture::query()
             ->whereNotNull('external_id')
             ->with(['homeTeam:id,name,code', 'awayTeam:id,name,code'])
-            ->relevantForFixtureDataSync()
+            ->readyForLineupSync()
             ->orderBy('match_date')
             ->get($this->candidateColumns());
     }
@@ -103,7 +104,7 @@ class AddFixtureLineups extends Command
 
             $fixture->forceFill([
                 'has_lineups' => $hasLineups,
-                'lineups_synced_at' => now('UTC'),
+                'lineups_synced_at' => now('Europe/Brussels'),
                 'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
             ])->save();
 
@@ -112,7 +113,7 @@ class AddFixtureLineups extends Command
             }
         } catch (Throwable $exception) {
             $fixture->forceFill([
-                'lineups_synced_at' => now('UTC'),
+                'lineups_synced_at' => now('Europe/Brussels'),
                 'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
             ])->save();
 
@@ -124,6 +125,16 @@ class AddFixtureLineups extends Command
 
     private function kickoffInMinutes(Fixture $fixture): int
     {
-        return (int) now('UTC')->diffInMinutes($fixture->match_date->copy()->setTimezone('UTC'), false);
+        $matchDate = CarbonImmutable::createFromFormat(
+            'Y-m-d H:i:s',
+            $fixture->match_date->format('Y-m-d H:i:s'),
+            'Europe/Brussels',
+        );
+
+        if (! $matchDate instanceof CarbonImmutable) {
+            return 0;
+        }
+
+        return (int) now('Europe/Brussels')->diffInMinutes($matchDate, false);
     }
 }

@@ -11,7 +11,7 @@ use Mockery\MockInterface;
 afterEach(fn () => Carbon::setTestNow());
 
 test('the lineup sync scope extends the fixture data sync scope with the lineup window', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -71,8 +71,69 @@ test('the lineup sync scope extends the fixture data sync scope with the lineup 
     ]);
 });
 
+test('the lineup sync window uses Brussels time consistently', function () {
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
+
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'external_id' => 4951,
+        'name' => 'Brazil',
+        'code' => 'BRA',
+        'logo_url' => 'https://example.com/brazil.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'external_id' => 4952,
+        'name' => 'England',
+        'code' => 'ENG',
+        'logo_url' => 'https://example.com/england.png',
+    ]);
+
+    $withinFutureWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 495,
+        'match_date' => now()->copy()->addMinutes(45),
+    ]);
+
+    $beyondFutureWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 496,
+        'match_date' => now()->copy()->addMinutes(46),
+    ]);
+
+    $withinPastWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 497,
+        'match_date' => now()->copy()->subMinutes(15),
+        'status_short' => '1H',
+        'status_long' => 'First Half',
+        'elapsed_time' => 15,
+    ]);
+
+    $beyondPastWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 498,
+        'match_date' => now()->copy()->subMinutes(16),
+        'status_short' => '1H',
+        'status_long' => 'First Half',
+        'elapsed_time' => 16,
+    ]);
+
+    expect($withinFutureWindow->shouldSyncLineups())->toBeTrue();
+    expect($beyondFutureWindow->shouldSyncLineups())
+        ->toBeFalse()
+        ->and($beyondFutureWindow->lineupSyncSkipReason())
+        ->toBe('fixture starts too far in the future');
+    expect($withinPastWindow->shouldSyncLineups())->toBeTrue();
+    expect($beyondPastWindow->shouldSyncLineups())
+        ->toBeFalse()
+        ->and($beyondPastWindow->lineupSyncSkipReason())
+        ->toBe('live fixture is beyond the lineup sync window');
+});
+
 test('the add fixture lineups command only fetches lineups inside the retry window', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -145,7 +206,7 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
 });
 
 test('the add fixture lineups command retries later when lineups are unavailable', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -190,7 +251,7 @@ test('the add fixture lineups command retries later when lineups are unavailable
 });
 
 test('the add fixture lineups command fetches live fixtures shortly after kickoff', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -242,7 +303,7 @@ test('the add fixture lineups command fetches live fixtures shortly after kickof
 });
 
 test('the add fixture lineups command skips live fixtures beyond the lineup window', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -290,7 +351,7 @@ test('the add fixture lineups command skips live fixtures beyond the lineup wind
 });
 
 test('the add fixture lineups command keeps retrying after previous unavailable attempts', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -340,7 +401,7 @@ test('the add fixture lineups command keeps retrying after previous unavailable 
 });
 
 test('the add fixture lineups command retries quickly near kickoff after an unavailable check', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -389,7 +450,7 @@ test('the add fixture lineups command retries quickly near kickoff after an unav
 });
 
 test('the add fixture lineups command fetches recently finished fixtures that missed lineup sync', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),

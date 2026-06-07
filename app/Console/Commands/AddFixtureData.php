@@ -6,7 +6,6 @@ use App\Console\Commands\Concerns\InteractsWithRelevantFixtures;
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
-use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
 use App\Services\Fixture\LiveFixtureService;
@@ -14,8 +13,6 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
-use Throwable;
-
 #[Signature('app:add-fixture-data')]
 #[Description('Haal basis-, live- en finale data op voor relevante fixtures')]
 class AddFixtureData extends Command
@@ -27,7 +24,6 @@ class AddFixtureData extends Command
         private readonly FixtureService $fixtureService,
         private readonly FixtureStatsService $statsService,
         private readonly FixtureEventsService $eventsService,
-        private readonly FixtureLineupService $lineupService,
         private readonly LiveFixtureService $liveFixtureService,
     ) {
         parent::__construct();
@@ -89,8 +85,6 @@ class AddFixtureData extends Command
         $fixture->refresh();
         $this->liveFixtureService->forgetCache();
 
-        $this->syncLineupsWhenUseful($fixture, $externalFixtureId);
-
         if ($fixture->isLive()) {
             $this->syncLiveEndpoints($fixture, $externalFixtureId);
         } elseif ($this->shouldSyncFinalData($fixture)) {
@@ -109,39 +103,6 @@ class AddFixtureData extends Command
         ));
 
         sleep(1);
-    }
-
-    private function syncLineupsWhenUseful(Fixture $fixture, int $externalFixtureId): void
-    {
-        if (! $fixture->shouldSyncLineups()) {
-            $this->line("Skipping lineups for fixture {$fixture->id}: {$fixture->lineupSyncSkipReason()}");
-
-            return;
-        }
-
-        $this->line("Calling endpoint /fixtures/lineups for fixture {$fixture->id}");
-
-        try {
-            $lineups = $this->api->getFixtureLineups($externalFixtureId);
-            $hasLineups = $this->lineupService->storeLineups($lineups, $fixture->id);
-
-            $fixture->forceFill([
-                'has_lineups' => $hasLineups,
-                'lineups_synced_at' => now('UTC'),
-                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
-            ])->save();
-
-            if (! $hasLineups) {
-                $this->line("No lineups available for fixture {$fixture->id}; will retry later");
-            }
-        } catch (Throwable $exception) {
-            $fixture->forceFill([
-                'lineups_synced_at' => now('UTC'),
-                'lineup_sync_attempts' => $fixture->lineup_sync_attempts + 1,
-            ])->save();
-
-            $this->error("Fout bij ophalen lineups voor fixture {$fixture->id}: {$exception->getMessage()}");
-        }
     }
 
     private function syncLiveEndpoints(Fixture $fixture, int $externalFixtureId): void
