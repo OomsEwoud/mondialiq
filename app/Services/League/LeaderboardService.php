@@ -115,19 +115,24 @@ class LeaderboardService
 
     private function rankedLeagueMemberQuery(Scoreboard $scoreboard): BelongsToMany
     {
+        $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
+
         return $scoreboard->users()
             ->select(['users.id', 'users.name'])
             ->withSum([
-                'predictions as predictions_sum_points' => fn (Builder $query) => $query
-                    ->whereNotNull('points_awarded_at'),
-            ], 'points')
+                'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
+                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
+            ], 'scoreboard_predictions.points')
             ->withCount('predictions')
             ->withCount([
-                'predictions as scoring_predictions_count' => fn (Builder $query) => $query
-                    ->whereNotNull('points_awarded_at'),
-                'predictions as perfect_predictions_count' => fn (Builder $query) => $query
-                    ->whereNotNull('points_awarded_at')
-                    ->where('points', 20),
+                'scoreboardPredictions as scoring_predictions_count' => fn (Builder $query) => $query
+                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
+                'scoreboardPredictions as perfect_predictions_count' => fn (Builder $query) => $query
+                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                    ->whereNotNull('scoreboard_predictions.points_awarded_at')
+                    ->whereRaw('scoreboard_predictions.points >= ?', [$exactScorePoints]),
             ])
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')

@@ -22,27 +22,25 @@ return new class extends Migration
             $table->index('prediction_id');
         });
 
-        // Backfill scoreboard_predictions for existing user predictions and memberships
-        DB::statement(<<<SQL
-            INSERT INTO scoreboard_predictions (
-                scoreboard_id, prediction_id, is_boosted, points, points_awarded_at, created_at, updated_at
-            )
-            SELECT
-                uhs.scoreboard_id,
-                p.id,
-                0,
-                p.points,
-                p.points_awarded_at,
-                NOW(),
-                NOW()
-            FROM predictions p
-            INNER JOIN users_has_scoreboards uhs ON uhs.user_id = p.user_id
-            WHERE p.source = 'user'
-            ON DUPLICATE KEY UPDATE
-                points = VALUES(points),
-                points_awarded_at = VALUES(points_awarded_at),
-                updated_at = NOW()
-        SQL);
+        DB::table('predictions')
+            ->join('users_has_scoreboards', 'users_has_scoreboards.user_id', '=', 'predictions.user_id')
+            ->where('predictions.source', 'user')
+            ->select([
+                'users_has_scoreboards.scoreboard_id',
+                'predictions.id as prediction_id',
+            ])
+            ->selectRaw('0 as is_boosted')
+            ->selectRaw('predictions.points')
+            ->selectRaw('predictions.points_awarded_at')
+            ->selectRaw('? as created_at', [now()])
+            ->selectRaw('? as updated_at', [now()])
+            ->chunkById(500, function ($rows) {
+                $inserts = $rows->map(fn ($row) => (array) $row)->all();
+
+                if (! empty($inserts)) {
+                    DB::table('scoreboard_predictions')->insertOrIgnore($inserts);
+                }
+            }, 'predictions.id');
     }
 
     public function down(): void

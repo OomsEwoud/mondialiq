@@ -416,6 +416,22 @@ test('a league member can view the league detail page with rankings', function (
         'points_awarded_at' => now()->subMinutes(30),
     ]);
 
+    foreach ([
+        $leaderPrediction,
+        $leaderSecondPrediction,
+        $currentUserPrediction,
+        $thirdMemberPrediction,
+        $thirdMemberSecondPrediction,
+    ] as $prediction) {
+        \App\Models\ScoreboardPrediction::create([
+            'scoreboard_id' => $league->id,
+            'prediction_id' => $prediction->id,
+            'is_boosted' => false,
+            'points' => $prediction->points,
+            'points_awarded_at' => $prediction->points_awarded_at,
+        ]);
+    }
+
     $this->actingAs($currentUser)
         ->get(route('leagues.show', $league))
         ->assertOk()
@@ -448,7 +464,7 @@ test('a league member can view the league detail page with rankings', function (
             ))
             ->where('league.members.0.name', 'League Captain')
             ->where('league.members.0.scoringPredictionsCount', 2)
-            ->where('league.members.0.perfectPredictionsCount', 0)
+            ->where('league.members.0.perfectPredictionsCount', 2)
             ->where('league.members.0.lastPredictionLabel', now()->subHours(3)->diffForHumans())
             ->where('league.members.0.gapToAbove', null)
             ->where('league.members.0.form.label', 'Hot streak')
@@ -462,7 +478,7 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.members.1.gapToAbove', 28)
             ->where('league.members.1.form.label', 'Hot streak')
             ->where('league.members.2.scoringPredictionsCount', 2)
-            ->where('league.members.2.perfectPredictionsCount', 0)
+            ->where('league.members.2.perfectPredictionsCount', 1)
             ->where('league.members.2.gapToAbove', 10)
             ->where('league.members.2.form.label', 'Chasing momentum'),
         );

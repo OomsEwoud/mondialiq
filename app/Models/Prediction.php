@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PredictionTypes;
+use App\Services\Prediction\UserPredictionScoringService;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,25 @@ class Prediction extends Model
             'points' => 'integer',
             'points_awarded_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function (Prediction $prediction): void {
+            if ($prediction->points_awarded_at === null) {
+                return;
+            }
+
+            if (! $prediction->wasRecentlyCreated && ! $prediction->wasChanged('points_awarded_at')) {
+                return;
+            }
+
+            if ($prediction->source !== PredictionTypes::User) {
+                return;
+            }
+
+            app(UserPredictionScoringService::class)->syncScoreboardPredictions($prediction);
+        });
     }
 
     public function fixture(): BelongsTo

@@ -145,7 +145,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         $thirdMember->id,
     ]);
 
-    Prediction::create([
+    $leaderPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $leagueLeader->id,
         'source' => PredictionTypes::User->value,
@@ -153,7 +153,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'points_awarded_at' => now('UTC'),
     ]);
 
-    Prediction::create([
+    $currentUserPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $currentUser->id,
         'source' => PredictionTypes::User->value,
@@ -161,13 +161,23 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'points_awarded_at' => now('UTC'),
     ]);
 
-    Prediction::create([
+    $thirdMemberPrediction = Prediction::create([
         'fixture_id' => $fixture->id,
         'user_id' => $thirdMember->id,
         'source' => PredictionTypes::User->value,
         'points' => 10,
         'points_awarded_at' => now('UTC'),
     ]);
+
+    foreach ([$leaderPrediction, $currentUserPrediction, $thirdMemberPrediction] as $prediction) {
+        \App\Models\ScoreboardPrediction::create([
+            'scoreboard_id' => $friendsLeague->id,
+            'prediction_id' => $prediction->id,
+            'is_boosted' => false,
+            'points' => $prediction->points,
+            'points_awarded_at' => $prediction->points_awarded_at,
+        ]);
+    }
 
     $response = $this
         ->actingAs($currentUser)

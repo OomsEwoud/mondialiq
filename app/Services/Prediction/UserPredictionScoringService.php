@@ -70,35 +70,31 @@ class UserPredictionScoringService
 
         $fixture->userPredictions()
             ->whereNull('points_awarded_at')
-            ->with(['user.scoreboards'])
+            ->with(['user.scoreboards', 'fixture'])
             ->orderBy('id')
             ->get()
-            ->each(function (Prediction $prediction) use ($fixture, &$scored, &$skipped): void {
+            ->each(function (Prediction $prediction) use (&$scored, &$skipped): void {
                 if ($prediction->home_goals === null || $prediction->away_goals === null) {
                     $prediction->forceFill([
                         'points' => 0,
                         'points_awarded_at' => now('UTC'),
                     ])->save();
 
-                    $this->scoreScoreboardPredictions($prediction, $fixture, 0);
                     $skipped++;
 
                     return;
                 }
 
-                $globalPoints = $this->predictionScoreService->calculate(
-                    (int) $prediction->home_goals,
-                    (int) $prediction->away_goals,
-                    $fixture->fulltime_home_goals,
-                    $fixture->fulltime_away_goals,
-                );
-
                 $prediction->forceFill([
-                    'points' => $globalPoints,
+                    'points' => $this->predictionScoreService->calculate(
+                        (int) $prediction->home_goals,
+                        (int) $prediction->away_goals,
+                        $prediction->fixture->fulltime_home_goals,
+                        $prediction->fixture->fulltime_away_goals,
+                    ),
                     'points_awarded_at' => now('UTC'),
                 ])->save();
 
-                $this->scoreScoreboardPredictions($prediction, $fixture, $globalPoints);
                 $scored++;
             });
 
@@ -109,7 +105,48 @@ class UserPredictionScoringService
         ];
     }
 
-    private function scoreScoreboardPredictions(Prediction $prediction, Fixture $fixture, int $globalPoints): void
+    public function syncScoreboardPredictions(Prediction $prediction): void
+    {
+        if ($prediction->source->value !== 'user') {
+            return;
+        }
+
+        if ($prediction->points_awarded_at === null) {
+            return;
+        }
+
+        $fixture = $prediction->fixture;
+        $user = $prediction->user;
+
+        if ($fixture === null || $user === null) {
+            return;
+        }
+
+        if (! $this->hasFinishedStatus($fixture)) {
+            return;
+        }
+
+        if ($fixture->fulltime_home_goals === null || $fixture->fulltime_away_goals === null) {
+            return;
+        }
+
+        if ($prediction->home_goals === null || $prediction->away_goals === null) {
+            $this->writeScoreboardPoints($prediction, $fixture, 0);
+
+            return;
+        }
+
+        $globalPoints = $this->predictionScoreService->calculate(
+            (int) $prediction->home_goals,
+            (int) $prediction->away_goals,
+            $fixture->fulltime_home_goals,
+            $fixture->fulltime_away_goals,
+        );
+
+        $this->writeScoreboardPoints($prediction, $fixture, $globalPoints);
+    }
+
+    private function writeScoreboardPoints(Prediction $prediction, Fixture $fixture, int $globalPoints): void
     {
         $user = $prediction->user;
 
@@ -124,71 +161,62 @@ class UserPredictionScoringService
         }
 
         foreach ($scoreboards as $scoreboard) {
-            $this->updateScoreboardPrediction($prediction, $fixture, $scoreboard, $globalPoints);
-        }
-    }
+            $rules = $scoreboard->scoring_rules ?? [];
+            $hasCustomRules = ! empty($rules);
 
-    private function updateScoreboardPrediction(
-        Prediction $prediction,
-        Fixture $fixture,
-        Scoreboard $scoreboard,
-        int $globalPoints,
-    ): void {
-        $rules = $scoreboard->scoring_rules ?? [];
-        $hasCustomRules = ! empty($rules);
+            if ($hasCustomRules) {
+                $basePoints = $this->predictionScoreService->calculateWithRules(
+                    (int) $prediction->home_goals,
+                    (int) $prediction->away_goals,
+                    $fixture->fulltime_home_goals,
+                    $fixture->fulltime_away_goals,
+                    $rules,
+                );
+            } else {
+                $basePoints = $globalPoints;
+            }
 
-        if ($hasCustomRules) {
-            $basePoints = $this->predictionScoreService->calculateWithRules(
-                (int) $prediction->home_goals,
-                (int) $prediction->away_goals,
-                $fixture->fulltime_home_goals,
-                $fixture->fulltime_away_goals,
-                $rules,
-            );
-        } else {
-            $basePoints = $globalPoints;
-        }
+            $scoreboardPrediction = ScoreboardPrediction::query()
+                ->where('scoreboard_id', $scoreboard->id)
+                ->where('prediction_id', $prediction->id)
+                ->first();
 
-        $scoreboardPrediction = ScoreboardPrediction::query()
-            ->where('scoreboard_id', $scoreboard->id)
-            ->where('prediction_id', $prediction->id)
-            ->first();
+            $isBoosted = $scoreboardPrediction?->is_boosted ?? false;
+            $bonus = 0;
 
-        $isBoosted = $scoreboardPrediction?->is_boosted ?? false;
-        $bonus = 0;
+            if ($isBoosted && ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {
+                $breakdown = $this->predictionScoreService->breakdownWithRules(
+                    (int) $prediction->home_goals,
+                    (int) $prediction->away_goals,
+                    $fixture->fulltime_home_goals,
+                    $fixture->fulltime_away_goals,
+                    $rules,
+                );
 
-        if ($isBoosted && ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {
-            $breakdown = $this->predictionScoreService->breakdownWithRules(
-                (int) $prediction->home_goals,
-                (int) $prediction->away_goals,
-                $fixture->fulltime_home_goals,
-                $fixture->fulltime_away_goals,
-                $rules,
-            );
+                if ($breakdown['correctOutcome']) {
+                    $confidenceValue = $this->numericConfidence($prediction->confidence);
+                    $threshold = (int) $scoreboard->scoringRule('boosted_confidence_threshold', 70);
 
-            if ($breakdown['correctOutcome']) {
-                $confidenceValue = $this->numericConfidence($prediction->confidence);
-                $threshold = (int) $scoreboard->scoringRule('boosted_confidence_threshold', 70);
-
-                if ($confidenceValue !== null && $confidenceValue >= $threshold) {
-                    $bonus = (int) $scoreboard->scoringRule('boosted_prediction_bonus_points', 2);
+                    if ($confidenceValue !== null && $confidenceValue >= $threshold) {
+                        $bonus = (int) $scoreboard->scoringRule('boosted_prediction_bonus_points', 2);
+                    }
                 }
             }
-        }
 
-        if ($scoreboardPrediction === null) {
-            ScoreboardPrediction::create([
-                'scoreboard_id' => $scoreboard->id,
-                'prediction_id' => $prediction->id,
-                'is_boosted' => $isBoosted,
-                'points' => $basePoints + $bonus,
-                'points_awarded_at' => now('UTC'),
-            ]);
-        } else {
-            $scoreboardPrediction->forceFill([
-                'points' => $basePoints + $bonus,
-                'points_awarded_at' => now('UTC'),
-            ])->save();
+            if ($scoreboardPrediction === null) {
+                ScoreboardPrediction::create([
+                    'scoreboard_id' => $scoreboard->id,
+                    'prediction_id' => $prediction->id,
+                    'is_boosted' => $isBoosted,
+                    'points' => $basePoints + $bonus,
+                    'points_awarded_at' => now('UTC'),
+                ]);
+            } else {
+                $scoreboardPrediction->forceFill([
+                    'points' => $basePoints + $bonus,
+                    'points_awarded_at' => now('UTC'),
+                ])->save();
+            }
         }
     }
 
