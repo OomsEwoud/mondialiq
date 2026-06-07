@@ -27,7 +27,7 @@ export default function AiProbabilityBreakdown({ match }: Props) {
           ]
         : [];
     const highestValue = Math.max(
-        ...probabilities.map((probability) => probability.value ?? -1),
+        ...probabilities.map((p) => p.value ?? -1),
     );
 
     if (probabilities.length === 0) {
@@ -36,18 +36,18 @@ export default function AiProbabilityBreakdown({ match }: Props) {
 
     return (
         <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
-            <div className="flex items-start justify-between gap-3">
-                <div>
-                    <h2 className="text-2xl font-bold text-slate-900">
-                        Probability breakdown
-                    </h2>
-                    <p className="mt-1 text-sm font-medium text-slate-500">
-                        Estimated outcome chances, not certainties.
-                    </p>
-                </div>
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-slate-600 ring-1 ring-slate-200">
+            <div className="flex items-center gap-3">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white">
                     <BarChart3 className="size-5" />
                 </span>
+                <div>
+                    <h2 className="text-xl font-bold text-slate-900">
+                        Probability breakdown
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                        Estimated outcome chances
+                    </p>
+                </div>
             </div>
 
             <div className="mt-5 grid gap-3">

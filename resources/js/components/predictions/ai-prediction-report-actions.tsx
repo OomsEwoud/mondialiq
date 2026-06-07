@@ -1,7 +1,5 @@
-import { Link } from '@inertiajs/react';
-import { ArrowLeft, PencilLine } from 'lucide-react';
+import { PencilLine } from 'lucide-react';
 import { Button } from '@/components/ui/forms/button';
-import { matches } from '@/routes';
 
 interface Props {
     canMakePrediction: boolean;
@@ -14,33 +12,24 @@ export default function AiPredictionReportActions({
     hasUserPrediction,
     onPredictionClick,
 }: Props) {
+    if (!canMakePrediction) {
+        return null;
+    }
+
     const predictionActionLabel = hasUserPrediction
         ? 'Edit your prediction'
         : 'Make your prediction';
 
     return (
-        <section className="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
+        <div className="flex justify-end">
             <Button
-                asChild
-                variant="outline"
-                className="w-full justify-center border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
+                type="button"
+                className="bg-slate-900 text-white shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
+                onClick={onPredictionClick}
             >
-                <Link href={matches.url()}>
-                    <ArrowLeft className="size-4" />
-                    Back to matches
-                </Link>
+                <PencilLine className="size-4" />
+                {predictionActionLabel}
             </Button>
-
-            {canMakePrediction ? (
-                <Button
-                    type="button"
-                    className="w-full justify-center bg-slate-900 text-white shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
-                    onClick={onPredictionClick}
-                >
-                    <PencilLine className="size-4" />
-                    {predictionActionLabel}
-                </Button>
-            ) : null}
-        </section>
+        </div>
     );
 }

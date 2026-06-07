@@ -16,44 +16,57 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
     const confidenceValue = Number.isNaN(numericConfidence)
         ? null
         : Math.max(0, Math.min(100, Math.round(numericConfidence)));
-    const predictedOutcome = prediction?.label ?? 'Outcome not available';
-    const expectedScore = score ?? 'Score prediction not available';
+    const confidenceLabel =
+        confidenceValue !== null
+            ? confidenceValue >= 70
+                ? 'High confidence'
+                : confidenceValue >= 40
+                  ? 'Moderate confidence'
+                  : 'Low confidence'
+            : null;
+    const confidenceColor =
+        confidenceValue !== null
+            ? confidenceValue >= 70
+                ? 'bg-emerald-500'
+                : confidenceValue >= 40
+                  ? 'bg-cyan-500'
+                  : 'bg-amber-400'
+            : 'bg-slate-300';
 
     return (
         <section className="grid gap-4 md:grid-cols-3">
             <AiPredictionSummaryCard icon={Trophy} label="Predicted outcome">
-                <p className="text-2xl leading-tight font-bold text-slate-900">
-                    {predictedOutcome}
+                <p className="text-2xl font-bold text-slate-900">
+                    {prediction?.label ?? 'N/A'}
                 </p>
-                <p className="mt-2 text-xs font-bold text-cyan-700">
-                    AI model pick
-                </p>
+                <p className="mt-1 text-sm text-slate-500">Model pick</p>
             </AiPredictionSummaryCard>
 
             <AiPredictionSummaryCard icon={Gauge} label="Confidence">
-                <div className="flex items-end justify-between gap-3">
-                    <p className="text-2xl leading-tight font-bold text-slate-900">
-                        {confidence.value}
+                <div className="flex items-end justify-between gap-2">
+                    <p className="text-2xl font-bold text-slate-900">
+                        {confidenceValue ?? '—'}%
                     </p>
-                    <p className="pb-1 text-xs font-bold text-slate-500">
-                        {confidence.label}
-                    </p>
+                    {confidenceLabel && (
+                        <p
+                            className={cn(
+                                'pb-0.5 text-xs font-bold',
+                                confidenceValue! >= 70 && 'text-emerald-600',
+                                confidenceValue! >= 40 &&
+                                    confidenceValue! < 70 &&
+                                    'text-cyan-600',
+                                confidenceValue! < 40 && 'text-amber-600',
+                            )}
+                        >
+                            {confidenceLabel}
+                        </p>
+                    )}
                 </div>
-                <div className="mt-4 h-2.5 rounded-full bg-slate-100">
+                <div className="mt-3 h-3 rounded-full bg-slate-100">
                     <div
                         className={cn(
-                            'h-2.5 rounded-full shadow-sm',
-                            confidenceValue === null && 'bg-slate-300',
-                            confidenceValue !== null &&
-                                confidenceValue < 40 &&
-                                'bg-amber-300',
-                            confidenceValue !== null &&
-                                confidenceValue >= 40 &&
-                                confidenceValue < 70 &&
-                                'bg-cyan-400',
-                            confidenceValue !== null &&
-                                confidenceValue >= 70 &&
-                                'bg-emerald-400',
+                            'h-3 rounded-full transition-all',
+                            confidenceColor,
                         )}
                         style={{ width: `${confidenceValue ?? 0}%` }}
                     />
@@ -61,10 +74,10 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
             </AiPredictionSummaryCard>
 
             <AiPredictionSummaryCard icon={Goal} label="Expected score">
-                <p className="text-3xl leading-none font-bold text-slate-900">
-                    {expectedScore}
+                <p className="text-2xl font-bold text-slate-900">
+                    {score ?? 'N/A'}
                 </p>
-                <p className="mt-2 text-xs font-bold text-slate-500">
+                <p className="mt-1 text-sm text-slate-500">
                     Projected final score
                 </p>
             </AiPredictionSummaryCard>

@@ -21,24 +21,24 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
     }
 
     return (
-        <section className="space-y-4">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-900">
+                    <h2 className="text-xl font-bold text-slate-900">
                         Data signals
                     </h2>
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm text-slate-500">
                         Market and API views are separate inputs for the model.
                     </p>
                 </div>
-                {signalsDiffer ? (
-                    <span className="w-fit rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold tracking-wide text-cyan-600 uppercase">
-                        Signals differ
+                {signalsDiffer && (
+                    <span className="w-fit rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                        Mixed signals
                     </span>
-                ) : null}
+                )}
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="mt-4 grid gap-4 lg:grid-cols-2">
                 {hasMarket && <MarketSourceCard marketOdds={marketOdds} />}
                 {apiPrediction && (
                     <ApiSourceCard apiPrediction={apiPrediction} />
