@@ -112,22 +112,6 @@ export interface LeagueSettingsPageProps {
     >;
 }
 
-export interface LeagueMemberManagement {
-    id: number;
-    rank: number;
-    name: string;
-    avatar: string | null;
-    predictionsCount: number;
-    scoringPredictionsCount: number;
-    perfectPredictionsCount: number;
-    totalPoints: number;
-    role: string;
-    joinedAt: string | null;
-    isCurrentUser: boolean;
-    isOwner: boolean;
-    canBeManaged: boolean;
-}
-
 export interface LeagueMembersPageProps {
     league: Pick<
         LeagueDetails,
@@ -141,5 +125,5 @@ export interface LeagueMembersPageProps {
         | 'showHref'
         | 'membersCount'
     >;
-    members: LeagueMemberManagement[];
+    members: LeagueMember[];
 }

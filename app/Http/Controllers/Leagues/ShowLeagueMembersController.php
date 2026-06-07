@@ -43,7 +43,6 @@ class ShowLeagueMembersController extends Controller
 
         return $scoreboard->users()
             ->select(['users.id', 'users.name', 'users.avatar'])
-            ->withPivot(['role', 'joined_at'])
             ->withSum([
                 'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
                     ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
@@ -89,7 +88,9 @@ class ShowLeagueMembersController extends Controller
             'perfectPredictionsCount' => $user->perfect_predictions_count,
             'totalPoints' => $user->predictions_sum_points ?? 0,
             'role' => $user->pivot->role ?? 'member',
-            'joinedAt' => $user->pivot->joined_at?->toIso8601String(),
+            'joinedAt' => filled($user->pivot->joined_at)
+                ? \Carbon\Carbon::parse($user->pivot->joined_at)->toIso8601String()
+                : null,
             'isCurrentUser' => $user->id === $currentUser->id,
             'isOwner' => $user->id === $scoreboard->owner_id,
             'canBeManaged' => $user->id !== $scoreboard->owner_id,
