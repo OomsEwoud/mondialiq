@@ -23,7 +23,9 @@ export default function Chances({ homeWin, draw, awayWin }: Props) {
                     <p className="text-xs font-medium text-slate-600 uppercase">
                         Draw
                     </p>
-                    <p className="text-2xl font-semibold text-slate-600">{draw}%</p>
+                    <p className="text-2xl font-semibold text-slate-600">
+                        {draw}%
+                    </p>
                 </div>
                 <div className="rounded-lg bg-blue-50 p-3 text-center">
                     <p className="text-xs font-medium text-blue-400 uppercase">

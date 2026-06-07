@@ -24,7 +24,7 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                     disabled={locked}
                     className={
                         locked
-                            ? 'inline-flex items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500 cursor-not-allowed'
+                            ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500'
                             : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
                     }
                 >
@@ -82,12 +82,12 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                     <Trophy className="size-3.5 text-cyan-400" />
                     {match.round}
                 </span>
-                <span className="hidden sm:inline text-slate-600">|</span>
+                <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
                     <CalendarDays className="size-3.5 text-cyan-400" />
                     {match.date}
                 </span>
-                <span className="hidden sm:inline text-slate-600">|</span>
+                <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
                     <Clock className="size-3.5 text-cyan-400" />
                     {match.time}

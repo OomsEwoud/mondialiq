@@ -5,12 +5,14 @@ import { sortLineupPlayersByPosition } from '@/utils/match-lineup';
 type Props = {
     title: string;
     players: MatchDetailsLineupPlayer[];
+    teamName: string;
     isStarting?: boolean;
 };
 
 export default function MatchLineupPlayerGroup({
     title,
     players,
+    teamName,
     isStarting = false,
 }: Props) {
     const sortedPlayers = sortLineupPlayersByPosition(players);
@@ -26,6 +28,7 @@ export default function MatchLineupPlayerGroup({
                         <MatchLineupPlayerItem
                             key={player.id}
                             player={player}
+                            teamName={teamName}
                             isStarting={isStarting}
                         />
                     ))}

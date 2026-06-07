@@ -24,9 +24,7 @@ export default function PredictionSummaryCard({
                 </p>
             </div>
             <p className="mt-3 text-2xl font-bold text-slate-900">{value}</p>
-            {helper && (
-                <p className="mt-1 text-sm text-slate-500">{helper}</p>
-            )}
+            {helper && <p className="mt-1 text-sm text-slate-500">{helper}</p>}
         </article>
     );
 }

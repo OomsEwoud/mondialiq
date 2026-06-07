@@ -68,7 +68,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     return (
         <>
-            <div className="sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-sm -xl">
+            <div className="-xl sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-sm">
                 <div className="mx-auto flex h-16 items-center px-4 sm:px-6 md:max-w-7xl lg:px-8">
                     <AppHeaderMobileNav items={navigationItems} />
 
@@ -116,7 +116,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 </div>
             </div>
             {showBreadcrumbs && (
-                <div className="flex w-full border-b border-slate-200/80 bg-white/80 -xl">
+                <div className="-xl flex w-full border-b border-slate-200/80 bg-white/80">
                     <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-slate-500 sm:px-6 md:max-w-7xl lg:px-8">
                         <Breadcrumbs breadcrumbs={breadcrumbs} />
                     </div>

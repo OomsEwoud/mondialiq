@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\FixtureEvent;
 use App\Models\FixturePlayer;
 use App\Models\Player;
+use App\Models\PlayerFixtureStat;
 use App\Models\Prediction;
 use App\Models\Team;
 use Illuminate\Http\Request;
@@ -237,17 +238,75 @@ class MatchDetailsResource extends JsonResource
             ->where('is_captain', true)
             ->pluck('player_id');
 
+        $playerStatsByPlayerId = $this->playerFixtureStats->keyBy('player_id');
+
         return $players
             ->values()
-            ->map(fn (FixturePlayer $fixturePlayer) => [
-                'id' => $fixturePlayer->id,
-                'playerId' => $fixturePlayer->player_id,
-                'name' => $fixturePlayer->player?->display_name ?? 'Unknown player',
-                'number' => $fixturePlayer->jersey_number,
-                'position' => $fixturePlayer->position,
-                'photo' => $fixturePlayer->player?->photo_url,
-                'isCaptain' => $captainPlayerIds->contains($fixturePlayer->player_id),
-            ]);
+            ->map(function (FixturePlayer $fixturePlayer) use ($captainPlayerIds, $playerStatsByPlayerId) {
+                $stats = $playerStatsByPlayerId->get($fixturePlayer->player_id);
+
+                return [
+                    'id' => $fixturePlayer->id,
+                    'playerId' => $fixturePlayer->player_id,
+                    'name' => $fixturePlayer->player?->display_name ?? 'Unknown player',
+                    'number' => $fixturePlayer->jersey_number,
+                    'position' => $fixturePlayer->position,
+                    'photo' => $fixturePlayer->player?->photo_url,
+                    'isCaptain' => $captainPlayerIds->contains($fixturePlayer->player_id),
+                    'stats' => $stats ? $this->playerStatsAttributes($stats) : null,
+                ];
+            });
+    }
+
+    private function playerStatsAttributes(PlayerFixtureStat $stats): ?array
+    {
+        $hasStats = $stats->game_minutes !== null
+            || $stats->rating !== null
+            || $stats->goals !== null
+            || $stats->assists !== null
+            || $stats->total_shots !== null
+            || $stats->shots_on_target !== null
+            || $stats->passes !== null
+            || $stats->key_passes !== null
+            || $stats->passes_accuracy !== null
+            || $stats->tackles !== null
+            || $stats->interceptions !== null
+            || $stats->duels !== null
+            || $stats->duels_won !== null
+            || $stats->dribbles_attempts !== null
+            || $stats->dribbles_success !== null
+            || $stats->fouls_drawn !== null
+            || $stats->fouls_committed !== null
+            || $stats->yellow_cards !== null
+            || $stats->red_cards !== null
+            || $stats->saves !== null;
+
+        if (! $hasStats) {
+            return null;
+        }
+
+        return [
+            'minutes' => $stats->game_minutes,
+            'rating' => $stats->rating,
+            'goals' => $stats->goals,
+            'assists' => $stats->assists,
+            'shotsTotal' => $stats->total_shots,
+            'shotsOnTarget' => $stats->shots_on_target,
+            'passesTotal' => $stats->passes,
+            'keyPasses' => $stats->key_passes,
+            'passAccuracy' => $stats->passes_accuracy,
+            'tackles' => $stats->tackles,
+            'interceptions' => $stats->interceptions,
+            'duelsTotal' => $stats->duels,
+            'duelsWon' => $stats->duels_won,
+            'dribblesAttempts' => $stats->dribbles_attempts,
+            'dribblesSuccess' => $stats->dribbles_success,
+            'foulsDrawn' => $stats->fouls_drawn,
+            'foulsCommitted' => $stats->fouls_committed,
+            'yellowCards' => $stats->yellow_cards,
+            'redCards' => $stats->red_cards,
+            'saves' => $stats->saves,
+        ];
     }
 
     private function sortLineupPlayers(Collection $players): Collection

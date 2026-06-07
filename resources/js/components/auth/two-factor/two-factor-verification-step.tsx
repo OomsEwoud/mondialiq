@@ -21,7 +21,10 @@ export default function TwoFactorVerificationStep({ onClose, onBack }: Props) {
     const [code, setCode] = useState<string>('');
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
     const isCodeComplete = code.length === OTP_MAX_LENGTH;
-    const otpSlots = Array.from({ length: OTP_MAX_LENGTH }, (_, index) => index);
+    const otpSlots = Array.from(
+        { length: OTP_MAX_LENGTH },
+        (_, index) => index,
+    );
 
     useEffect(() => {
         const animationFrame = requestAnimationFrame(() => {

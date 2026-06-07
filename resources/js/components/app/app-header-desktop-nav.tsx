@@ -14,8 +14,7 @@ type Props = {
     items: NavItem[];
 };
 
-const activeItemStyles =
-    'border-cyan-300/40 bg-white/12 text-white shadow-sm';
+const activeItemStyles = 'border-cyan-300/40 bg-white/12 text-white shadow-sm';
 
 export default function AppHeaderDesktopNav({ items }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();

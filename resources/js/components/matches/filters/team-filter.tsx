@@ -79,7 +79,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                 )}
             </div>
             {open && matches.length > 0 && (
-                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/98 py-1.5 shadow-sm ">
+                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/98 py-1.5 shadow-sm">
                     {matches.map((team, index) => (
                         <button
                             key={team}

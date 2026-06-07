@@ -71,8 +71,8 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                             from leaderboards.
                         </DialogDescription>
                         <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
-                            Type <span className="font-semibold">DELETE</span> to
-                            confirm this permanent action.
+                            Type <span className="font-semibold">DELETE</span>{' '}
+                            to confirm this permanent action.
                         </div>
 
                         <Form

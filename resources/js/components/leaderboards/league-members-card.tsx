@@ -68,7 +68,7 @@ export default function LeagueMembersCard({ members }: Props) {
                             className={cn(
                                 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 border-l-4 border-transparent px-4 py-3.5 sm:px-6',
                                 member.isCurrentUser &&
-                                    'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200 ',
+                                    'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200',
                             )}
                         >
                             <div

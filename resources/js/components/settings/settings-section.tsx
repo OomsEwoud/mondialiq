@@ -31,9 +31,7 @@ export default function SettingsSection({
                     <h2 className="mt-1 text-xl font-bold text-slate-900">
                         {title}
                     </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                        {description}
-                    </p>
+                    <p className="mt-1 text-sm text-slate-500">{description}</p>
                 </div>
             </div>
             {children}

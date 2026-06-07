@@ -59,7 +59,7 @@ export default function HeroSection() {
                     </div>
                 </div>
 
-                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-3 shadow-sm  sm:p-4">
+                <div className="rounded-2xl border border-slate-700/50 bg-slate-800/40 p-3 shadow-sm sm:p-4">
                     <div className="rounded-xl border border-slate-700/40 bg-slate-900/60 p-4">
                         <div className="flex items-center justify-between gap-3">
                             <div>

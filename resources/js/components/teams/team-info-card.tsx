@@ -11,7 +11,9 @@ export default function TeamInfoCard({ team }: Props) {
 
     return (
         <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
-            <h2 className="mb-5 text-2xl font-bold text-slate-900">Team info</h2>
+            <h2 className="mb-5 text-2xl font-bold text-slate-900">
+                Team info
+            </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <TeamInfoItem
                     icon={<Hash />}

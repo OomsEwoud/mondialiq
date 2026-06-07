@@ -74,7 +74,7 @@ export default function GlobalLeaderboardCard({
                                     </div>
 
                                     <div className="flex min-w-0 items-center gap-3">
-                                        <Avatar className="size-11 rounded-2xl ring-1 ring-slate-200 shadow-sm">
+                                        <Avatar className="size-11 rounded-2xl shadow-sm ring-1 ring-slate-200">
                                             <AvatarImage
                                                 src={leader.avatar ?? undefined}
                                                 alt={leader.name}

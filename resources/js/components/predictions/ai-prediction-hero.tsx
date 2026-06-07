@@ -1,5 +1,11 @@
 import { Link } from '@inertiajs/react';
-import { CalendarDays, Clock, PencilLine, Sparkles, Trophy } from 'lucide-react';
+import {
+    CalendarDays,
+    Clock,
+    PencilLine,
+    Sparkles,
+    Trophy,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
@@ -80,12 +86,12 @@ export default function AiPredictionHero({
                     <Trophy className="size-3.5 text-cyan-400" />
                     {match.round}
                 </span>
-                <span className="hidden sm:inline text-slate-600">|</span>
+                <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
                     <CalendarDays className="size-3.5 text-cyan-400" />
                     {match.date}
                 </span>
-                <span className="hidden sm:inline text-slate-600">|</span>
+                <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
                     <Clock className="size-3.5 text-cyan-400" />
                     {match.time}

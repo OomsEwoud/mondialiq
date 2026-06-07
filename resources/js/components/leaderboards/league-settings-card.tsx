@@ -170,7 +170,7 @@ export default function LeagueSettingsCard({
                                     Live preview
                                 </p>
                                 <div className="mt-3 flex items-center gap-3">
-                                    <div className="flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm ">
+                                    <div className="flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm">
                                         <span aria-hidden="true">{icon}</span>
                                     </div>
                                     <div className="min-w-0">

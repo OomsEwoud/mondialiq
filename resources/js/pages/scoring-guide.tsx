@@ -29,7 +29,8 @@ const scoringRules = [
     {
         label: 'Goal difference',
         points: 4,
-        description: 'Your predicted goal difference matches the real goal difference.',
+        description:
+            'Your predicted goal difference matches the real goal difference.',
     },
     {
         label: 'Home goals',

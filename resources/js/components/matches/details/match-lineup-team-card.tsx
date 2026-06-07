@@ -37,11 +37,13 @@ export default function MatchLineupTeamCard({ team, lineup }: Props) {
                 <MatchLineupPlayerGroup
                     title="Starting XI"
                     players={lineup.starters}
+                    teamName={team.name}
                     isStarting
                 />
                 <MatchLineupPlayerGroup
                     title="Substitutes"
                     players={lineup.substitutes}
+                    teamName={team.name}
                 />
             </div>
         </section>

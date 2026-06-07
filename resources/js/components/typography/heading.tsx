@@ -17,7 +17,9 @@ export default function Heading({
         <header className={cn(!isSmall && 'mb-8 space-y-0.5')}>
             <h2
                 className={cn(
-                    isSmall ? 'mb-0.5 text-base font-medium' : 'text-xl font-semibold tracking-tight',
+                    isSmall
+                        ? 'mb-0.5 text-base font-medium'
+                        : 'text-xl font-semibold tracking-tight',
                 )}
             >
                 {title}

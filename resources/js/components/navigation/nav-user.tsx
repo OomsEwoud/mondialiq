@@ -21,7 +21,11 @@ export function NavUser() {
     const { state } = useSidebar();
     const isMobile = useIsMobile();
     const user = auth.user;
-    const menuSide = isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom';
+    const menuSide = isMobile
+        ? 'bottom'
+        : state === 'collapsed'
+          ? 'left'
+          : 'bottom';
 
     if (!user) {
         return (

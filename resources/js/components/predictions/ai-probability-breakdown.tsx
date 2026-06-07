@@ -26,9 +26,7 @@ export default function AiProbabilityBreakdown({ match }: Props) {
               },
           ]
         : [];
-    const highestValue = Math.max(
-        ...probabilities.map((p) => p.value ?? -1),
-    );
+    const highestValue = Math.max(...probabilities.map((p) => p.value ?? -1));
 
     if (probabilities.length === 0) {
         return null;

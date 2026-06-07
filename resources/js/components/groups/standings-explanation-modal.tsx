@@ -347,7 +347,7 @@ function SectionEyebrow({ children }: { children: string }) {
 
 function HeroStat({ label, value }: { label: string; value: string }) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3 text-left shadow-sm ">
+        <div className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3 text-left shadow-sm">
             <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                 {label}
             </p>

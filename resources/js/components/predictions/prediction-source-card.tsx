@@ -10,12 +10,8 @@ export default function PredictionSourceCard({ title, subtitle, rows }: Props) {
             <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                 Data signal
             </p>
-            <h3 className="mt-2 text-xl font-bold text-slate-900">
-                {title}
-            </h3>
-            <p className="mt-1 text-sm text-slate-500">
-                {subtitle}
-            </p>
+            <h3 className="mt-2 text-xl font-bold text-slate-900">{title}</h3>
+            <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
             <dl className="mt-5 space-y-3">
                 {rows.map(([label, value]) => (
                     <div

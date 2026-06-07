@@ -51,7 +51,7 @@ export default function ActivePlayersGrid({ players }: Props) {
     const showGroupHeaders = activeFilter === 'all';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-xl shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm shadow-xl sm:p-6">
             <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">

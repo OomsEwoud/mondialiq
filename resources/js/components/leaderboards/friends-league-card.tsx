@@ -54,7 +54,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                 )}
             >
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm ">
+                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm">
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
@@ -84,7 +84,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                             {league.memberAvatars.map((member) => (
                                 <Avatar
                                     key={member.id}
-                                    className="size-8 rounded-full shadow-sm ring-2 shadow-sm ring-white"
+                                    className="size-8 rounded-full shadow-sm ring-2 ring-white"
                                 >
                                     <AvatarImage
                                         src={member.avatar ?? undefined}

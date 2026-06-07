@@ -11,7 +11,10 @@ export default function NavApp({ onNavigate }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <nav aria-label="Main" className="flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5">
+        <nav
+            aria-label="Main"
+            className="flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5"
+        >
             {navItems.map(({ label, href }) => {
                 const isActive = isCurrentOrParentUrl(href);
                 const url = toUrl(href);

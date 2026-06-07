@@ -81,7 +81,7 @@ export default function UserPredictionForm({
                 onChange={(confidence) => setData('confidence', confidence)}
             />
 
-            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4  sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
+            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4 sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
                 <Button
                     type="button"
                     variant="outline"

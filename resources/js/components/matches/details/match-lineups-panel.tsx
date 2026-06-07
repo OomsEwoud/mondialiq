@@ -1,5 +1,5 @@
-import MatchLineupTeamCard from '@/components/matches/details/match-lineup-team-card';
 import { UsersRound } from 'lucide-react';
+import MatchLineupTeamCard from '@/components/matches/details/match-lineup-team-card';
 import type { MatchDetails } from '@/types/match-details';
 import { hasLineupData } from '@/utils/match-lineup';
 

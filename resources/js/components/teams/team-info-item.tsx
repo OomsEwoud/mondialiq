@@ -13,7 +13,9 @@ export default function TeamInfoItem({ icon, label, value }: Props) {
                 {icon}
             </span>
             <div className="min-w-0">
-                <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">{label}</p>
+                <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
+                    {label}
+                </p>
                 <p className="truncate text-sm font-bold text-slate-700">
                     {value}
                 </p>

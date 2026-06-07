@@ -42,7 +42,7 @@ export default function UserPredictedScoreCard({
                 <p className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-600">
                     {pointsLabel}
                 </p>
-                <p className="mt-4 text-5xl font-bold tabular-nums tracking-tight text-slate-900 sm:text-6xl">
+                <p className="mt-4 text-5xl font-bold tracking-tight text-slate-900 tabular-nums sm:text-6xl">
                     {score ?? '—'}
                 </p>
                 <p className="mt-2 text-xs font-semibold tracking-wide text-slate-500 uppercase">

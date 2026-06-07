@@ -18,13 +18,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/navigation/sidebar';
-import {
-    groups,
-    home,
-    leaderboards,
-    matches,
-    predictions,
-} from '@/routes';
+import { groups, home, leaderboards, matches, predictions } from '@/routes';
 import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [

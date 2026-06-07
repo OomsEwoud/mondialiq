@@ -36,6 +36,29 @@ export interface MatchDetailsStat {
     away: number | null;
 }
 
+export interface MatchDetailsLineupPlayerStats {
+    minutes: number | null;
+    rating: number | null;
+    goals: number | null;
+    assists: number | null;
+    shotsTotal: number | null;
+    shotsOnTarget: number | null;
+    passesTotal: number | null;
+    keyPasses: number | null;
+    passAccuracy: number | null;
+    tackles: number | null;
+    interceptions: number | null;
+    duelsTotal: number | null;
+    duelsWon: number | null;
+    dribblesAttempts: number | null;
+    dribblesSuccess: number | null;
+    foulsDrawn: number | null;
+    foulsCommitted: number | null;
+    yellowCards: number | null;
+    redCards: number | null;
+    saves: number | null;
+}
+
 export interface MatchDetailsLineupPlayer {
     id: number;
     playerId: number;
@@ -44,6 +67,7 @@ export interface MatchDetailsLineupPlayer {
     position: string | null;
     photo: string | null;
     isCaptain: boolean;
+    stats: MatchDetailsLineupPlayerStats | null;
 }
 
 export interface MatchDetailsLineupTeam {

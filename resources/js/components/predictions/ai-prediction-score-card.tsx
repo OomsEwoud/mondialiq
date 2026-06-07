@@ -51,7 +51,7 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                     <Sparkles className="size-3" />
                     AI prediction
                 </p>
-                <p className="mt-4 text-5xl font-bold tabular-nums tracking-tight text-slate-900 sm:text-6xl">
+                <p className="mt-4 text-5xl font-bold tracking-tight text-slate-900 tabular-nums sm:text-6xl">
                     {score ?? 'N/A'}
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-cyan-200" />

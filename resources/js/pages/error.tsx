@@ -242,7 +242,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                 </div>
                             </div>
 
-                            <aside className="rounded-2xl border border-white/80 bg-white/80 p-5 shadow-xl ring-1 shadow-sm ring-slate-200/50">
+                            <aside className="rounded-2xl border border-white/80 bg-white/80 p-5 shadow-sm shadow-xl ring-1 ring-slate-200/50">
                                 <p className="text-xs font-black tracking-wide text-slate-400 uppercase">
                                     Match report
                                 </p>

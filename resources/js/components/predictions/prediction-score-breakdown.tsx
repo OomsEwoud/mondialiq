@@ -38,7 +38,9 @@ export default function PredictionScoreBreakdown({
     const hasScoringPreview = preview !== null;
 
     if (!pointsAwarded || missingScoreContext) {
-        const pointsValue = pointsAwarded ? awardedPoints : preview?.points ?? 0;
+        const pointsValue = pointsAwarded
+            ? awardedPoints
+            : (preview?.points ?? 0);
 
         return (
             <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">

@@ -1,5 +1,5 @@
-import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionUserActions from '@/components/predictions/prediction-user-actions';
@@ -47,7 +47,9 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                                 {match.homeTeamShort}
                             </span>
                         </Link>
-                        <span className="text-sm font-semibold text-slate-400">vs</span>
+                        <span className="text-sm font-semibold text-slate-400">
+                            vs
+                        </span>
                         <Link
                             href={showTeam.url(match.awayTeamId)}
                             className="group flex min-w-0 flex-row-reverse items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-slate-50"
@@ -67,12 +69,16 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                             <Trophy className="size-3.5 shrink-0 text-cyan-600" />
                             {match.round}
                         </span>
-                        <span className="hidden text-slate-300 sm:inline">/</span>
+                        <span className="hidden text-slate-300 sm:inline">
+                            /
+                        </span>
                         <span className="flex items-center gap-1.5">
                             <CalendarDays className="size-3.5 text-cyan-600" />
                             {match.date}
                         </span>
-                        <span className="hidden text-slate-300 sm:inline">/</span>
+                        <span className="hidden text-slate-300 sm:inline">
+                            /
+                        </span>
                         <span className="flex items-center gap-1.5">
                             <Clock className="size-3.5 text-cyan-600" />
                             {match.time}
@@ -95,4 +101,3 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
         </article>
     );
 }
-

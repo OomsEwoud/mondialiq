@@ -32,7 +32,7 @@ export default function LeagueLeaveCard({
                     type="button"
                     variant="outline"
                     className={cn(
-                        'h-11 rounded-lg border-rose-200 bg-white px-5 font-bold text-rose-900 shadow-sm  hover:bg-rose-50',
+                        'h-11 rounded-lg border-rose-200 bg-white px-5 font-bold text-rose-900 shadow-sm hover:bg-rose-50',
                         className,
                     )}
                 >
