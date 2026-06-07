@@ -72,12 +72,7 @@ trait HasFixtureSync
     {
         return $query
             ->lineupSyncWindow()
-            ->where('has_lineups', false)
-            ->where(
-                fn (Builder $query) => $query
-                    ->whereNull('lineups_synced_at')
-                    ->orWhere('lineups_synced_at', '<=', $this->lineupRetryCutoff()),
-            );
+            ->where('has_lineups', false);
     }
 
     public function scopeRelevantForLineupSync(Builder $query): Builder

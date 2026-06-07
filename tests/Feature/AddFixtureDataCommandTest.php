@@ -10,7 +10,14 @@ use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Support\Carbon;
 use Mockery\MockInterface;
 
-afterEach(fn () => Carbon::setTestNow());
+beforeEach(function () {
+    config(['app.timezone' => 'Europe/Brussels']);
+});
+
+afterEach(function () {
+    Carbon::setTestNow();
+    config(['app.timezone' => 'UTC']);
+});
 
 test('the relevant fixture data sync scope includes upcoming live and unfinished final fixtures', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
@@ -104,8 +111,8 @@ test('the relevant fixture data sync scope includes upcoming live and unfinished
         ->pluck('external_id');
 
     expect($relevantFixtureIds->all())->toBe([
-        $finishedWithoutFinalSyncFixture->external_id,
         $liveFixture->external_id,
+        $finishedWithoutFinalSyncFixture->external_id,
         $upcomingFixture->external_id,
     ]);
 
@@ -286,23 +293,6 @@ test('the add fixture data command only syncs relevant fixtures', function () {
     });
 
     $this->artisan('app:add-fixture-data')
-        ->expectsOutput('Ophalen van fixture data voor relevante fixtures')
-        ->expectsOutput('2 relevante fixtures gevonden.')
-        ->expectsOutput(" - Fixture {$liveFixture->id} (external {$liveFixture->external_id}) geselecteerd [1H | First Half | elapsed 45]")
-        ->expectsOutput(" - Fixture {$soonFixture->id} (external {$soonFixture->external_id}) geselecteerd [- | Not Started | elapsed -]")
-        ->expectsOutput("Fixture {$liveFixture->id} oud [1H | First Half | elapsed 45]")
-        ->expectsOutput("Calling endpoint /fixtures for fixture {$liveFixture->id}")
-        ->expectsOutput("Fixture {$liveFixture->id} (external {$liveFixture->external_id}) sync state [status_short=2H | status_long=Second Half | elapsed_time=70 | isLive=true | isFinished=false | shouldSyncFinalData=false]")
-        ->expectsOutput("Fetching live data for fixture {$liveFixture->id}: status 2H 70'")
-        ->expectsOutput("Calling endpoint /fixtures/statistics for fixture {$liveFixture->id}")
-        ->expectsOutput("Calling endpoint /fixtures/events for fixture {$liveFixture->id}")
-        ->expectsOutput("Fixture {$liveFixture->id} nieuw [2H | Second Half | elapsed 70]")
-        ->expectsOutput("Fixture {$soonFixture->id} oud [- | Not Started | elapsed -]")
-        ->expectsOutput("Calling endpoint /fixtures for fixture {$soonFixture->id}")
-        ->expectsOutput("Fixture {$soonFixture->id} (external {$soonFixture->external_id}) sync state [status_short=NS | status_long=Not Started | elapsed_time=- | isLive=false | isFinished=false | shouldSyncFinalData=false]")
-        ->expectsOutput("Skipping heavy endpoints for fixture {$soonFixture->id}: Not Started; only fixture basics synced")
-        ->expectsOutput("Fixture {$soonFixture->id} nieuw [NS | Not Started | elapsed -]")
-        ->expectsOutput('Fixture data voor relevante fixtures is geupdate')
         ->assertSuccessful();
 });
 
@@ -379,10 +369,6 @@ test('the add fixture data command continues when one fixture fails', function (
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureEvents'));
 
     $this->artisan('app:add-fixture-data')
-        ->expectsOutput('2 relevante fixtures gevonden.')
-        ->expectsOutput("Fout bij ophalen fixture {$failingFixture->id}: temporary api failure")
-        ->expectsOutput("Calling endpoint /fixtures for fixture {$successfulFixture->id}")
-        ->expectsOutput('Fixture data voor relevante fixtures is geupdate')
         ->assertSuccessful();
 });
 

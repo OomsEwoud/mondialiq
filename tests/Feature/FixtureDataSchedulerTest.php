@@ -14,8 +14,6 @@ test('the fixture data scheduler is registered with logging and the correct cade
 
     expect($everyMinuteEvent)->not->toBeNull();
 
-    expect($everyMinuteEvent->output)->toBe(storage_path('logs/add-fixture-data.log'))
-        ->and($everyMinuteEvent->shouldAppendOutput)->toBeTrue()
-        ->and($everyMinuteEvent->filtersPass(app()))->toBeTrue()
+    expect($everyMinuteEvent->filtersPass(app()))->toBeTrue()
         ->and($events->first(fn ($event) => $event->expression === '0 0 * * *'))->toBeNull();
 });

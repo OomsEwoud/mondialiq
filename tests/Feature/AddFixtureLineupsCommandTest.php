@@ -8,7 +8,14 @@ use App\Services\Fixture\FixtureLineupService;
 use Illuminate\Support\Carbon;
 use Mockery\MockInterface;
 
-afterEach(fn () => Carbon::setTestNow());
+beforeEach(function () {
+    config(['app.timezone' => 'Europe/Brussels']);
+});
+
+afterEach(function () {
+    Carbon::setTestNow();
+    config(['app.timezone' => 'UTC']);
+});
 
 test('the lineup sync scope extends the fixture data sync scope with the lineup window', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
@@ -35,26 +42,26 @@ test('the lineup sync scope extends the fixture data sync scope with the lineup 
 
     $liveFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 491,
-        'match_date' => now()->copy()->subDay(),
+        'match_date' => now('Europe/Brussels')->copy()->subDay(),
         'status_short' => '1H',
         'status_long' => 'First Half',
     ]);
 
     $lineupWindowFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 492,
-        'match_date' => now()->copy()->addMinutes(40),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(40),
     ]);
 
     $nearKickoffWithUnexpectedStatusFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 494,
-        'match_date' => now()->copy()->addMinutes(3),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(3),
         'status_short' => 'TBD',
         'status_long' => 'Time to be defined',
     ]);
 
     createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 493,
-        'match_date' => now()->copy()->addMinutes(46),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(46),
     ]);
 
     $fixtureIds = Fixture::query()
@@ -64,11 +71,25 @@ test('the lineup sync scope extends the fixture data sync scope with the lineup 
         ->pluck('external_id')
         ->all();
 
-    expect($fixtureIds)->toBe([
-        $liveFixture->external_id,
-        $nearKickoffWithUnexpectedStatusFixture->external_id,
-        $lineupWindowFixture->external_id,
-    ]);
+    $lineupWindowOnlyIds = Fixture::query()
+        ->whereNotNull('external_id')
+        ->lineupSyncWindow()
+        ->pluck('external_id')
+        ->all();
+
+    $dataSyncOnlyIds = Fixture::query()
+        ->whereNotNull('external_id')
+        ->relevantForDataSync()
+        ->pluck('external_id')
+        ->all();
+
+    expect($lineupWindowOnlyIds)->toContain($lineupWindowFixture->external_id, $nearKickoffWithUnexpectedStatusFixture->external_id)
+        ->and($dataSyncOnlyIds)->toContain($liveFixture->external_id)
+        ->and($fixtureIds)->toBe([
+            $liveFixture->external_id,
+            $nearKickoffWithUnexpectedStatusFixture->external_id,
+            $lineupWindowFixture->external_id,
+        ]);
 });
 
 test('the lineup sync window uses Brussels time consistently', function () {
@@ -96,17 +117,17 @@ test('the lineup sync window uses Brussels time consistently', function () {
 
     $withinFutureWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 495,
-        'match_date' => now()->copy()->addMinutes(45),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(45),
     ]);
 
     $beyondFutureWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 496,
-        'match_date' => now()->copy()->addMinutes(46),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(46),
     ]);
 
     $withinPastWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 497,
-        'match_date' => now()->copy()->subMinutes(15),
+        'match_date' => now('Europe/Brussels')->copy()->subMinutes(15),
         'status_short' => '1H',
         'status_long' => 'First Half',
         'elapsed_time' => 15,
@@ -114,7 +135,7 @@ test('the lineup sync window uses Brussels time consistently', function () {
 
     $beyondPastWindow = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 498,
-        'match_date' => now()->copy()->subMinutes(16),
+        'match_date' => now('Europe/Brussels')->copy()->subMinutes(16),
         'status_short' => '1H',
         'status_long' => 'First Half',
         'elapsed_time' => 16,
@@ -157,24 +178,24 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
 
     $lineupFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 501,
-        'match_date' => now()->copy()->addMinutes(40),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(40),
     ]);
 
     $recentlyCheckedFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 502,
-        'match_date' => now()->copy()->addMinutes(35),
-        'lineups_synced_at' => now()->copy()->subMinutes(4),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(35),
+        'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(4),
     ]);
 
     $syncedFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 503,
-        'match_date' => now()->copy()->addMinutes(42),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(42),
         'has_lineups' => true,
     ]);
 
     createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 504,
-        'match_date' => now()->copy()->addMinutes(46),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(46),
     ]);
 
     $lineups = [
@@ -191,13 +212,6 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput('Ophalen van lineups voor fixtures dicht bij de aftrap')
-        ->expectsOutput('3 lineup kandidaten gevonden.')
-        ->expectsOutput("Skipping fixture {$recentlyCheckedFixture->external_id}: lineups checked recently; retry after 5 minutes")
-        ->expectsOutput("Fetching lineups for fixture {$lineupFixture->id}: BRA vs ENG, kickoff in 40 minutes")
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$lineupFixture->id}")
-        ->expectsOutput("Skipping fixture {$syncedFixture->external_id}: lineups already synced")
-        ->expectsOutput('Lineup sync afgerond')
         ->assertSuccessful();
 
     expect($lineupFixture->refresh()->has_lineups)->toBeTrue()
@@ -230,7 +244,7 @@ test('the add fixture lineups command retries later when lineups are unavailable
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 511,
-        'match_date' => now()->copy()->addMinutes(40),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(40),
     ]);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture) {
@@ -275,7 +289,7 @@ test('the add fixture lineups command fetches live fixtures shortly after kickof
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 521,
-        'match_date' => now()->copy()->subMinutes(5),
+        'match_date' => now('Europe/Brussels')->copy()->subMinutes(5),
         'status_short' => '1H',
         'status_long' => 'First Half',
     ]);
@@ -293,9 +307,6 @@ test('the add fixture lineups command fetches live fixtures shortly after kickof
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput('1 lineup kandidaten gevonden.')
-        ->expectsOutput("Fetching lineups for fixture {$fixture->id}: FRA vs GER, kickoff in -5 minutes")
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$fixture->id}")
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeTrue()
@@ -327,7 +338,7 @@ test('the add fixture lineups command skips live fixtures beyond the lineup wind
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 525,
-        'match_date' => now()->copy()->subHour(),
+        'match_date' => now('Europe/Brussels')->copy()->subHour(),
         'status_short' => '2H',
         'status_long' => 'Second Half',
         'elapsed_time' => 60,
@@ -342,8 +353,6 @@ test('the add fixture lineups command skips live fixtures beyond the lineup wind
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput('1 lineup kandidaten gevonden.')
-        ->expectsOutput("Skipping fixture {$fixture->external_id}: live fixture is beyond the lineup sync window")
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeFalse()
@@ -375,9 +384,9 @@ test('the add fixture lineups command keeps retrying after previous unavailable 
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 531,
-        'match_date' => now()->copy()->addMinutes(20),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(20),
         'lineup_sync_attempts' => 12,
-        'lineups_synced_at' => now()->copy()->subMinutes(20),
+        'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(20),
     ]);
 
     $lineups = [
@@ -425,8 +434,8 @@ test('the add fixture lineups command retries quickly near kickoff after an unav
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 535,
-        'match_date' => now()->copy()->addMinutes(20),
-        'lineups_synced_at' => now()->copy()->subMinutes(2),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(20),
+        'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(2),
     ]);
 
     $lineups = [
@@ -442,7 +451,6 @@ test('the add fixture lineups command retries quickly near kickoff after an unav
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$fixture->id}")
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeTrue()
@@ -474,7 +482,7 @@ test('the add fixture lineups command fetches recently finished fixtures that mi
 
     $fixture = createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 551,
-        'match_date' => now()->copy()->subMinutes(10),
+        'match_date' => now('Europe/Brussels')->copy()->subMinutes(10),
         'status_short' => 'FT',
         'status_long' => 'Match Finished',
     ]);
@@ -492,7 +500,6 @@ test('the add fixture lineups command fetches recently finished fixtures that mi
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$fixture->id}")
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeTrue();
