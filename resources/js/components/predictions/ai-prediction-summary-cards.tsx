@@ -2,7 +2,6 @@ import { Gauge, Goal, Trophy } from 'lucide-react';
 import AiPredictionSummaryCard from '@/components/predictions/ai-prediction-summary-card';
 import { cn } from '@/lib/utils';
 import type { Match } from '@/types/match';
-import { formatAiConfidence } from '@/utils/ai-prediction';
 
 interface Props {
     match: Match;
@@ -11,7 +10,6 @@ interface Props {
 
 export default function AiPredictionSummaryCards({ match, score }: Props) {
     const prediction = match.aiPrediction;
-    const confidence = formatAiConfidence(prediction?.confidence);
     const numericConfidence = Number(prediction?.confidence);
     const confidenceValue = Number.isNaN(numericConfidence)
         ? null
