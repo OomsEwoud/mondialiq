@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
 import type { UserPredictionScoringPreview } from '@/types/prediction';
