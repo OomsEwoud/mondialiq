@@ -45,7 +45,8 @@ class TeamStatisticAttributesMapper
             'api_league_id' => $apiLeagueId,
             'season' => $season,
             'statistics_date' => $date,
-            'statistics_key' => "{$apiTeamId}-{$apiLeagueId}-{$season}-" . ($date ?? 'season'),
+            'statistics_key' => "{$apiTeamId}-{$apiLeagueId}-{$season}-".
+                ($date ?? 'season'),
         ];
     }
 
