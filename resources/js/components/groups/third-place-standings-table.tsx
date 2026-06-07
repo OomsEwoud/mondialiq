@@ -72,10 +72,10 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                             key={label}
                                             className="border-r border-slate-100 py-2.5 last:border-r-0"
                                         >
-                                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
                                                 {label}
                                             </p>
-                                            <p className="font-semibold text-slate-900">
+                                            <p className="font-bold text-slate-900">
                                                 {value}
                                             </p>
                                         </div>
@@ -84,7 +84,7 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                             </article>
 
                             {team.rank === QUALIFICATION_CUTOFF_RANK && (
-                                <div className="my-3 flex items-center gap-3 px-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                <div className="my-3 flex items-center gap-3 px-1 text-xs font-semibold tracking-wide text-amber-600 uppercase">
                                     <span className="h-px flex-1 bg-amber-200" />
                                     <span>Qualification cutoff</span>
                                     <span className="h-px flex-1 bg-amber-200" />
@@ -99,27 +99,27 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                 <table className="w-full min-w-[820px] border-collapse text-sm">
                     <thead className="bg-gradient-to-b from-slate-50 to-white text-xs text-slate-600 uppercase">
                         <tr>
-                            <th className="w-16 px-5 py-4 text-left font-semibold tracking-wide">
+                            <th className="w-16 px-5 py-4 text-left font-bold tracking-wide">
                                 #
                             </th>
-                            <th className="px-5 py-4 text-left font-semibold tracking-wide">
+                            <th className="px-5 py-4 text-left font-bold tracking-wide">
                                 Team
                             </th>
                             {stats.map((stat) => (
                                 <th
                                     key={stat.key}
-                                    className="w-20 px-4 py-4 text-center font-semibold tracking-wide"
+                                    className="w-20 px-4 py-4 text-center font-bold tracking-wide"
                                 >
                                     {stat.label}
                                 </th>
                             ))}
-                            <th className="w-24 px-4 py-4 text-center font-semibold tracking-wide">
+                            <th className="w-24 px-4 py-4 text-center font-bold tracking-wide">
                                 GD
                             </th>
-                            <th className="w-24 px-4 py-4 text-center font-semibold tracking-wide">
+                            <th className="w-24 px-4 py-4 text-center font-bold tracking-wide">
                                 Pts
                             </th>
-                            <th className="w-36 px-4 py-4 text-right font-semibold tracking-wide">
+                            <th className="w-36 px-4 py-4 text-right font-bold tracking-wide">
                                 Status
                             </th>
                         </tr>
@@ -140,7 +140,7 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                         )}
                                     >
                                         <td className="px-5 py-4">
-                                            <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200">
+                                            <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
                                                 {team.rank}
                                             </span>
                                         </td>
@@ -155,12 +155,12 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                         {stats.map((stat) => (
                                             <td
                                                 key={stat.key}
-                                                className="px-4 py-4 text-center font-semibold"
+                                                className="px-4 py-4 text-center font-bold"
                                             >
                                                 {team[stat.key]}
                                             </td>
                                         ))}
-                                        <td className="px-4 py-4 text-center font-semibold">
+                                        <td className="px-4 py-4 text-center font-bold">
                                             {formatGoalDifference(
                                                 team.goalDifference,
                                             )}

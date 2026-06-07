@@ -43,10 +43,10 @@ export default function GroupTabs({
                             role="tab"
                             aria-selected={isActive}
                             className={[
-                                'h-11 rounded-2xl border px-3 text-sm font-bold shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'h-11 rounded-2xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'border-cyan-300 bg-gradient-to-b from-cyan-50 to-cyan-50/60 text-cyan-700 shadow-sm'
-                                    : 'border-white/90 bg-white/80 text-slate-600 shadow-sm hover:border-cyan-200 hover:bg-cyan-50/70 hover:text-slate-900',
+                                    ? 'border-cyan-300 bg-cyan-50 text-cyan-700 shadow-sm'
+                                    : 'border-transparent bg-white text-slate-600 hover:border-cyan-200 hover:bg-cyan-50',
                             ].join(' ')}
                         >
                             {tab.label}

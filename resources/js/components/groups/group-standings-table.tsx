@@ -25,7 +25,7 @@ export function GroupStandingsTable({ teams }: Props) {
                     >
                         <div className="mb-3 flex items-center justify-between gap-3">
                             <div className="flex min-w-0 items-center gap-2">
-                                <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200">
+                                <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
                                     {team.rank}
                                 </span>
                                 <div className="min-w-0">
@@ -36,7 +36,7 @@ export function GroupStandingsTable({ teams }: Props) {
                                         name={team.name}
                                     />
                                     {team.rank <= 2 && (
-                                        <span className="mt-1 ml-1.5 inline-flex rounded-full border border-cyan-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 uppercase">
+                                        <span className="mt-1 ml-1.5 inline-flex rounded-full border border-cyan-200 bg-white px-2.5 py-1 text-xs font-semibold text-cyan-700 uppercase">
                                             Advances
                                         </span>
                                     )}
@@ -61,10 +61,10 @@ export function GroupStandingsTable({ teams }: Props) {
                                     key={label}
                                     className="border-r border-slate-100 py-2.5 last:border-r-0"
                                 >
-                                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                    <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
                                         {label}
                                     </p>
-                                    <p className="font-semibold text-slate-900">
+                                    <p className="font-bold text-slate-900">
                                         {value}
                                     </p>
                                 </div>
@@ -78,24 +78,24 @@ export function GroupStandingsTable({ teams }: Props) {
                 <table className="w-full min-w-[720px] border-collapse text-sm">
                     <thead className="bg-gradient-to-b from-slate-50 to-white text-xs text-slate-600 uppercase">
                         <tr>
-                            <th className="w-16 px-5 py-4 text-left font-semibold tracking-wide">
+                            <th className="w-16 px-5 py-4 text-left font-bold tracking-wide">
                                 #
                             </th>
-                            <th className="px-5 py-4 text-left font-semibold tracking-wide">
+                            <th className="px-5 py-4 text-left font-bold tracking-wide">
                                 Team
                             </th>
                             {stats.map((stat) => (
                                 <th
                                     key={stat.key}
-                                    className="w-20 px-4 py-4 text-center font-semibold tracking-wide"
+                                    className="w-20 px-4 py-4 text-center font-bold tracking-wide"
                                 >
                                     {stat.label}
                                 </th>
                             ))}
-                            <th className="w-24 px-4 py-4 text-center font-semibold tracking-wide">
+                            <th className="w-24 px-4 py-4 text-center font-bold tracking-wide">
                                 GD
                             </th>
-                            <th className="w-24 px-4 py-4 text-center font-semibold tracking-wide">
+                            <th className="w-24 px-4 py-4 text-center font-bold tracking-wide">
                                 Pts
                             </th>
                         </tr>
@@ -111,7 +111,7 @@ export function GroupStandingsTable({ teams }: Props) {
                                 )}
                             >
                                 <td className="px-5 py-4">
-                                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200">
+                                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
                                         {team.rank}
                                     </span>
                                 </td>
@@ -126,12 +126,12 @@ export function GroupStandingsTable({ teams }: Props) {
                                 {stats.map((stat) => (
                                     <td
                                         key={stat.key}
-                                        className="px-4 py-4 text-center font-semibold"
+                                        className="px-4 py-4 text-center font-bold"
                                     >
                                         {team[stat.key]}
                                     </td>
                                 ))}
-                                <td className="px-4 py-4 text-center font-semibold">
+                                <td className="px-4 py-4 text-center font-bold">
                                     {formatGoalDifference(team.goalDifference)}
                                 </td>
                                 <td className="px-4 py-4 text-center">
