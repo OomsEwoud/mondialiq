@@ -28,6 +28,18 @@ export type LeagueAccentColor =
 
 export type LeagueCoverStyle = 'stadium' | 'spotlight' | 'pitch' | 'night';
 
+export interface ScoringRules {
+    exact_score_points: number;
+    correct_result_points: number;
+    correct_goal_difference_points: number;
+    correct_home_goals_points: number;
+    correct_away_goals_points: number;
+    boosted_predictions_enabled: boolean;
+    boosted_predictions_limit: number;
+    boosted_confidence_threshold: number;
+    boosted_prediction_bonus_points: number;
+}
+
 export interface LeagueDetails {
     id: number;
     name: string;
@@ -40,6 +52,7 @@ export interface LeagueDetails {
     rewardDescription: string | null;
     visibility: 'private' | 'public';
     isActive: boolean;
+    scoringRules: ScoringRules;
     showHref?: string | null;
     joinHref: string;
     settingsHref?: string | null;
@@ -86,6 +99,7 @@ export interface LeagueSettingsPageProps {
         | 'rewardDescription'
         | 'visibility'
         | 'isActive'
+        | 'scoringRules'
         | 'showHref'
         | 'joinHref'
         | 'settingsHref'

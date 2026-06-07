@@ -21,12 +21,16 @@ interface Props {
     match: Match;
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    scoreboardId?: number;
+    boostsRemaining?: number | null;
 }
 
 export default function UserPredictionModal({
     match,
     open,
     onOpenChange,
+    scoreboardId,
+    boostsRemaining,
 }: Props) {
     const auth = usePage<{ auth: Auth }>().props.auth;
     const isEditing = Boolean(match.userPrediction);
@@ -103,6 +107,8 @@ export default function UserPredictionModal({
                                 open={open}
                                 onSaved={closeModal}
                                 onCancel={closeModal}
+                                scoreboardId={scoreboardId}
+                                boostsRemaining={boostsRemaining}
                             />
                         )}
                     </div>

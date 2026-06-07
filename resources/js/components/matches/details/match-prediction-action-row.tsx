@@ -8,9 +8,15 @@ import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
     match: MatchDetails;
+    scoreboardId?: number;
+    boostsRemaining?: number | null;
 }
 
-export default function MatchPredictionActionRow({ match }: Props) {
+export default function MatchPredictionActionRow({
+    match,
+    scoreboardId,
+    boostsRemaining,
+}: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const hasAiPrediction = Boolean(match.hasAiPrediction);
     const modalMatch = toPredictionMatch(match);
@@ -45,6 +51,8 @@ export default function MatchPredictionActionRow({ match }: Props) {
                 match={modalMatch}
                 open={predictionOpen}
                 onOpenChange={setPredictionOpen}
+                scoreboardId={scoreboardId}
+                boostsRemaining={boostsRemaining}
             />
         </section>
     );

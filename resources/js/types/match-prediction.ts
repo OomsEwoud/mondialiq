@@ -7,4 +7,6 @@ export type UserPredictionFormData = {
     home_score: string;
     away_score: string;
     confidence: PredictionConfidence | '';
+    scoreboard_id: string;
+    is_boosted: boolean;
 };

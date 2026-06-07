@@ -19,6 +19,8 @@ interface Props {
     open: boolean;
     onSaved: () => void;
     onCancel: () => void;
+    scoreboardId?: number;
+    boostsRemaining?: number | null;
 }
 
 export default function UserPredictionForm({
@@ -26,19 +28,29 @@ export default function UserPredictionForm({
     open,
     onSaved,
     onCancel,
+    scoreboardId,
+    boostsRemaining,
 }: Props) {
     const predictionLocked = isPredictionLocked(match);
     const { data, setData, post, processing, errors, clearErrors } =
-        useForm<UserPredictionFormData>(initialPredictionFormData(match));
+        useForm<UserPredictionFormData>({
+            ...initialPredictionFormData(match),
+            scoreboard_id: scoreboardId ? String(scoreboardId) : '',
+            is_boosted: false,
+        });
 
     useEffect(() => {
         if (!open) {
             return;
         }
 
-        setData(initialPredictionFormData(match));
+        setData({
+            ...initialPredictionFormData(match),
+            scoreboard_id: scoreboardId ? String(scoreboardId) : '',
+            is_boosted: data.is_boosted && scoreboardId !== undefined,
+        });
         clearErrors();
-    }, [clearErrors, match, open, setData]);
+    }, [clearErrors, match, open, setData, scoreboardId]);
 
     const submit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -52,6 +64,11 @@ export default function UserPredictionForm({
             onError: () => toast.error('Could not save prediction.'),
         });
     };
+
+    const showBoost =
+        scoreboardId !== undefined &&
+        typeof boostsRemaining === 'number' &&
+        boostsRemaining >= 0;
 
     return (
         <form onSubmit={submit} className="grid gap-4">
@@ -80,6 +97,54 @@ export default function UserPredictionForm({
                 error={errors.confidence}
                 onChange={(confidence) => setData('confidence', confidence)}
             />
+
+            {showBoost && typeof boostsRemaining === 'number' && (
+                <div className="rounded-2xl border border-slate-200 bg-cyan-50/60 p-4">
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            role="switch"
+                            aria-checked={data.is_boosted}
+                            disabled={
+                                predictionLocked ||
+                                processing ||
+                                (boostsRemaining === 0 && !data.is_boosted)
+                            }
+                            onClick={() =>
+                                setData('is_boosted', !data.is_boosted)
+                            }
+                            className={
+                                'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 ' +
+                                (data.is_boosted ? 'bg-cyan-500' : 'bg-slate-300')
+                            }
+                        >
+                            <span
+                                className={
+                                    'inline-block size-5 rounded-full bg-white shadow-sm transition-transform ' +
+                                    (data.is_boosted
+                                        ? 'translate-x-6'
+                                        : 'translate-x-1')
+                                }
+                            />
+                        </button>
+                        <div>
+                            <p className="text-sm font-semibold text-slate-900">
+                                Boost this prediction
+                            </p>
+                            <p className="text-xs text-slate-600">
+                                {boostsRemaining === 0 && !data.is_boosted
+                                    ? 'You have no boosts remaining in this leaderboard.'
+                                    : `${boostsRemaining} of ${boostsRemaining + (data.is_boosted ? 0 : 1)} boosts remaining`}
+                            </p>
+                        </div>
+                    </div>
+                    {errors.is_boosted && (
+                        <p className="mt-2 text-xs font-medium text-rose-600">
+                            {errors.is_boosted}
+                        </p>
+                    )}
+                </div>
+            )}
 
             <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4 sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
                 <Button

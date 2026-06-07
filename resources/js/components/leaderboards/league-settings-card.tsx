@@ -8,6 +8,8 @@ import {
     RefreshCcw,
     ShieldCheck,
     Sparkles,
+    Trophy,
+    Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/RefreshLeagueCodeController';
@@ -35,7 +37,11 @@ import {
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
 import { cn } from '@/lib/utils';
-import type { LeagueAccentColor, LeagueCoverStyle } from '@/types/league';
+import type {
+    LeagueAccentColor,
+    LeagueCoverStyle,
+    ScoringRules,
+} from '@/types/league';
 import {
     getLeagueBrandBannerClass,
     leagueAccentOptions,
@@ -55,10 +61,14 @@ type Props = {
     isActive: boolean;
     accentColor: LeagueAccentColor;
     coverStyle: LeagueCoverStyle;
+    scoringRules: ScoringRules;
 };
 
 const fieldClassName =
     'h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+
+const numberFieldClassName =
+    'h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
 
 export default function LeagueSettingsCard({
     leagueId,
@@ -72,6 +82,7 @@ export default function LeagueSettingsCard({
     isActive: initialIsActive,
     accentColor,
     coverStyle,
+    scoringRules: initialScoringRules,
 }: Props) {
     const [name, setName] = useState(leagueName);
     const [description, setDescription] = useState(initialDescription ?? '');
@@ -86,12 +97,36 @@ export default function LeagueSettingsCard({
     const [icon, setIcon] = useState(leagueIcon);
     const [accent, setAccent] = useState<LeagueAccentColor>(accentColor);
     const [cover, setCover] = useState<LeagueCoverStyle>(coverStyle);
+    const [scoringRules, setScoringRules] = useState<ScoringRules>({
+        ...initialScoringRules,
+    });
     const [refreshDialogOpen, setRefreshDialogOpen] = useState(false);
 
     const normalizedName = name.trim();
     const normalizedDescription = description.trim();
     const normalizedRewardTitle = rewardTitle.trim();
     const normalizedRewardDescription = rewardDescription.trim();
+
+    const scoringRulesChanged =
+        scoringRules.exact_score_points !==
+            initialScoringRules.exact_score_points ||
+        scoringRules.correct_result_points !==
+            initialScoringRules.correct_result_points ||
+        scoringRules.correct_goal_difference_points !==
+            initialScoringRules.correct_goal_difference_points ||
+        scoringRules.correct_home_goals_points !==
+            initialScoringRules.correct_home_goals_points ||
+        scoringRules.correct_away_goals_points !==
+            initialScoringRules.correct_away_goals_points ||
+        scoringRules.boosted_predictions_enabled !==
+            initialScoringRules.boosted_predictions_enabled ||
+        scoringRules.boosted_predictions_limit !==
+            initialScoringRules.boosted_predictions_limit ||
+        scoringRules.boosted_confidence_threshold !==
+            initialScoringRules.boosted_confidence_threshold ||
+        scoringRules.boosted_prediction_bonus_points !==
+            initialScoringRules.boosted_prediction_bonus_points;
+
     const hasChanges =
         normalizedName !== leagueName.trim() ||
         normalizedDescription !== (initialDescription ?? '').trim() ||
@@ -102,12 +137,21 @@ export default function LeagueSettingsCard({
         isActive !== initialIsActive ||
         icon !== leagueIcon ||
         accent !== accentColor ||
-        cover !== coverStyle;
+        cover !== coverStyle ||
+        scoringRulesChanged;
+
     const canSubmit = normalizedName.length > 0 && hasChanges;
     const updateIcon = (nextIcon: string) => setIcon(nextIcon);
     const updateAccent = (nextAccent: LeagueAccentColor) =>
         setAccent(nextAccent);
     const updateCover = (nextCover: LeagueCoverStyle) => setCover(nextCover);
+
+    const updateScoringRule = <K extends keyof ScoringRules>(
+        key: K,
+        value: ScoringRules[K],
+    ) => {
+        setScoringRules((prev) => ({ ...prev, [key]: value }));
+    };
 
     return (
         <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
@@ -158,6 +202,61 @@ export default function LeagueSettingsCard({
                                 type="hidden"
                                 name="cover_style"
                                 value={cover}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[exact_score_points]"
+                                value={scoringRules.exact_score_points}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[correct_result_points]"
+                                value={scoringRules.correct_result_points}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[correct_goal_difference_points]"
+                                value={
+                                    scoringRules.correct_goal_difference_points
+                                }
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[correct_home_goals_points]"
+                                value={scoringRules.correct_home_goals_points}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[correct_away_goals_points]"
+                                value={scoringRules.correct_away_goals_points}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[boosted_predictions_enabled]"
+                                value={
+                                    scoringRules.boosted_predictions_enabled
+                                        ? '1'
+                                        : '0'
+                                }
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[boosted_predictions_limit]"
+                                value={scoringRules.boosted_predictions_limit}
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[boosted_confidence_threshold]"
+                                value={
+                                    scoringRules.boosted_confidence_threshold
+                                }
+                            />
+                            <input
+                                type="hidden"
+                                name="scoring_rules[boosted_prediction_bonus_points]"
+                                value={
+                                    scoringRules.boosted_prediction_bonus_points
+                                }
                             />
 
                             <div
@@ -299,6 +398,314 @@ export default function LeagueSettingsCard({
                                         />
                                     </div>
                                 </div>
+                            </div>
+
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                <div className="flex items-center gap-2 text-slate-600">
+                                    <Trophy className="size-4" />
+                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                        Scoring settings
+                                    </Label>
+                                </div>
+                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                    These rules determine how points are
+                                    calculated inside this leaderboard.
+                                </p>
+                                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <div>
+                                        <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            Exact score
+                                        </Label>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            max={100}
+                                            value={
+                                                scoringRules.exact_score_points
+                                            }
+                                            onChange={(event) =>
+                                                updateScoringRule(
+                                                    'exact_score_points',
+                                                    parseInt(
+                                                        event.target.value,
+                                                        10,
+                                                    ) || 0,
+                                                )
+                                            }
+                                            className={numberFieldClassName}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[
+                                                    'scoring_rules.exact_score_points'
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            Correct result
+                                        </Label>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            max={100}
+                                            value={
+                                                scoringRules.correct_result_points
+                                            }
+                                            onChange={(event) =>
+                                                updateScoringRule(
+                                                    'correct_result_points',
+                                                    parseInt(
+                                                        event.target.value,
+                                                        10,
+                                                    ) || 0,
+                                                )
+                                            }
+                                            className={numberFieldClassName}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[
+                                                    'scoring_rules.correct_result_points'
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            Correct goal difference
+                                        </Label>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            max={100}
+                                            value={
+                                                scoringRules.correct_goal_difference_points
+                                            }
+                                            onChange={(event) =>
+                                                updateScoringRule(
+                                                    'correct_goal_difference_points',
+                                                    parseInt(
+                                                        event.target.value,
+                                                        10,
+                                                    ) || 0,
+                                                )
+                                            }
+                                            className={numberFieldClassName}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[
+                                                    'scoring_rules.correct_goal_difference_points'
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            Correct home goals
+                                        </Label>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            max={100}
+                                            value={
+                                                scoringRules.correct_home_goals_points
+                                            }
+                                            onChange={(event) =>
+                                                updateScoringRule(
+                                                    'correct_home_goals_points',
+                                                    parseInt(
+                                                        event.target.value,
+                                                        10,
+                                                    ) || 0,
+                                                )
+                                            }
+                                            className={numberFieldClassName}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[
+                                                    'scoring_rules.correct_home_goals_points'
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                            Correct away goals
+                                        </Label>
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            max={100}
+                                            value={
+                                                scoringRules.correct_away_goals_points
+                                            }
+                                            onChange={(event) =>
+                                                updateScoringRule(
+                                                    'correct_away_goals_points',
+                                                    parseInt(
+                                                        event.target.value,
+                                                        10,
+                                                    ) || 0,
+                                                )
+                                            }
+                                            className={numberFieldClassName}
+                                        />
+                                        <InputError
+                                            message={
+                                                errors[
+                                                    'scoring_rules.correct_away_goals_points'
+                                                ]
+                                            }
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                                <div className="flex items-center gap-2 text-slate-600">
+                                    <Zap className="size-4" />
+                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                        Boosted predictions
+                                    </Label>
+                                </div>
+                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                    Boosted predictions let members use one of
+                                    their limited boosts on a prediction they are
+                                    confident about. If the prediction is
+                                    correct and the confidence is high enough,
+                                    they receive bonus points.
+                                </p>
+                                <div className="mt-4 flex items-center gap-3">
+                                    <button
+                                        type="button"
+                                        role="switch"
+                                        aria-checked={
+                                            scoringRules.boosted_predictions_enabled
+                                        }
+                                        onClick={() =>
+                                            updateScoringRule(
+                                                'boosted_predictions_enabled',
+                                                !scoringRules.boosted_predictions_enabled,
+                                            )
+                                        }
+                                        className={cn(
+                                            'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors',
+                                            scoringRules.boosted_predictions_enabled
+                                                ? 'bg-cyan-500'
+                                                : 'bg-slate-300',
+                                        )}
+                                    >
+                                        <span
+                                            className={cn(
+                                                'inline-block size-5 rounded-full bg-white shadow-sm transition-transform',
+                                                scoringRules.boosted_predictions_enabled
+                                                    ? 'translate-x-6'
+                                                    : 'translate-x-1',
+                                            )}
+                                        />
+                                    </button>
+                                    <span className="text-sm font-semibold text-slate-900">
+                                        Enable boosted predictions
+                                    </span>
+                                </div>
+                                {scoringRules.boosted_predictions_enabled && (
+                                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                                        <div>
+                                            <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                Boosted predictions per user
+                                            </Label>
+                                            <Input
+                                                type="number"
+                                                min={0}
+                                                max={20}
+                                                value={
+                                                    scoringRules.boosted_predictions_limit
+                                                }
+                                                onChange={(event) =>
+                                                    updateScoringRule(
+                                                        'boosted_predictions_limit',
+                                                        parseInt(
+                                                            event.target.value,
+                                                            10,
+                                                        ) || 0,
+                                                    )
+                                                }
+                                                className={numberFieldClassName}
+                                            />
+                                            <InputError
+                                                message={
+                                                    errors[
+                                                        'scoring_rules.boosted_predictions_limit'
+                                                    ]
+                                                }
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                Required confidence threshold
+                                            </Label>
+                                            <Input
+                                                type="number"
+                                                min={0}
+                                                max={100}
+                                                value={
+                                                    scoringRules.boosted_confidence_threshold
+                                                }
+                                                onChange={(event) =>
+                                                    updateScoringRule(
+                                                        'boosted_confidence_threshold',
+                                                        parseInt(
+                                                            event.target.value,
+                                                            10,
+                                                        ) || 0,
+                                                    )
+                                                }
+                                                className={numberFieldClassName}
+                                            />
+                                            <InputError
+                                                message={
+                                                    errors[
+                                                        'scoring_rules.boosted_confidence_threshold'
+                                                    ]
+                                                }
+                                            />
+                                        </div>
+                                        <div>
+                                            <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                Boosted prediction bonus points
+                                            </Label>
+                                            <Input
+                                                type="number"
+                                                min={0}
+                                                max={100}
+                                                value={
+                                                    scoringRules.boosted_prediction_bonus_points
+                                                }
+                                                onChange={(event) =>
+                                                    updateScoringRule(
+                                                        'boosted_prediction_bonus_points',
+                                                        parseInt(
+                                                            event.target.value,
+                                                            10,
+                                                        ) || 0,
+                                                    )
+                                                }
+                                                className={numberFieldClassName}
+                                            />
+                                            <InputError
+                                                message={
+                                                    errors[
+                                                        'scoring_rules.boosted_prediction_bonus_points'
+                                                    ]
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid gap-3 sm:grid-cols-2">

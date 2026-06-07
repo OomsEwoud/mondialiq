@@ -9,9 +9,16 @@ import type { Match } from '@/types/match';
 interface Props {
     match: Match;
     viewLabel: string;
+    scoreboardId?: number;
+    boostsRemaining?: number | null;
 }
 
-export default function PredictionUserActions({ match, viewLabel }: Props) {
+export default function PredictionUserActions({
+    match,
+    viewLabel,
+    scoreboardId,
+    boostsRemaining,
+}: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const openPredictionModal = () => setPredictionOpen(true);
 
@@ -42,6 +49,8 @@ export default function PredictionUserActions({ match, viewLabel }: Props) {
                 match={match}
                 open={predictionOpen}
                 onOpenChange={setPredictionOpen}
+                scoreboardId={scoreboardId}
+                boostsRemaining={boostsRemaining}
             />
         </>
     );

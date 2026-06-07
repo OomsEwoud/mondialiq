@@ -121,6 +121,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             isActive={league.isActive}
                             accentColor={league.accentColor}
                             coverStyle={league.coverStyle}
+                            scoringRules={league.scoringRules}
                         />
 
                         <LeagueDangerZoneCard
