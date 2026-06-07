@@ -20,6 +20,6 @@ class RemoveLeagueMemberController extends Controller
             'message' => __('Member removed from the prediction group.'),
         ]);
 
-        return to_route('leagues.show', $scoreboard);
+        return to_route('leagues.members', $scoreboard);
     }
 }

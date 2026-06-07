@@ -612,18 +612,60 @@ test('a league owner can view the dedicated league settings page', function () {
             ->where('league.isActive', false)
             ->where('league.canManage', true)
             ->where('league.settingsHref', route('leagues.settings', $league))
+            ->where('league.membersHref', route('leagues.members', $league))
             ->where('league.membersCount', 2)
-            ->has('league.members', 2)
-            ->where('league.members', fn ($members) => collect($members)->contains(
-                fn (array $leagueMember) => $leagueMember['name'] === 'Owner Settings'
+            ->missing('league.members')
+        );
+});
+
+test('a league owner can view the dedicated league members page', function () {
+    $owner = User::factory()->create(['name' => 'Owner Members']);
+    $member = User::factory()->create(['name' => 'Managed Member']);
+
+    $league = Scoreboard::create([
+        'name' => 'Members League',
+        'code' => 'MEMBERS1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($owner)
+        ->get(route('leagues.members', $league))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-members')
+            ->where('league.id', $league->id)
+            ->where('league.name', 'Members League')
+            ->where('league.membersCount', 2)
+            ->has('members', 2)
+            ->where('members', fn ($members) => collect($members)->contains(
+                fn (array $leagueMember) => $leagueMember['name'] === 'Owner Members'
                     && $leagueMember['isOwner'] === true
                     && $leagueMember['canBeManaged'] === false
             ))
-            ->where('league.members', fn ($members) => collect($members)->contains(
+            ->where('members', fn ($members) => collect($members)->contains(
                 fn (array $leagueMember) => $leagueMember['name'] === 'Managed Member'
                     && $leagueMember['canBeManaged'] === true
             )),
         );
+});
+
+test('a non owner cannot view the dedicated league members page', function () {
+    $owner = User::factory()->create();
+    $member = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Protected Members League',
+        'code' => 'PROTECT1',
+        'owner_id' => $owner->id,
+    ]);
+
+    $league->users()->attach([$owner->id, $member->id]);
+
+    $this->actingAs($member)
+        ->get(route('leagues.members', $league))
+        ->assertForbidden();
 });
 
 test('a league owner cannot update branding with invalid options', function () {
@@ -806,7 +848,7 @@ test('a league owner can remove a member', function () {
             'scoreboard' => $league,
             'member' => $member,
         ]))
-        ->assertRedirect(route('leagues.show', $league))
+        ->assertRedirect(route('leagues.members', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'Member removed from the prediction group.',

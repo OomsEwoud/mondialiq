@@ -9,6 +9,7 @@ use App\Http\Controllers\Leagues\LeaveLeagueController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
+use App\Http\Controllers\Leagues\ShowLeagueMembersController;
 use App\Http\Controllers\Leagues\ShowLeagueSettingsController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/leagues/join', JoinLeaguePageController::class)->name('leagues.join');
     Route::get('/leagues/{scoreboard}', ShowLeagueController::class)->name('leagues.show');
     Route::get('/leagues/{scoreboard}/settings', ShowLeagueSettingsController::class)->name('leagues.settings');
+    Route::get('/leagues/{scoreboard}/members', ShowLeagueMembersController::class)->name('leagues.members');
     Route::post('/leagues', StoreLeagueController::class)->name('leagues.store');
     Route::post('/leagues/join', JoinLeagueController::class)->name('leagues.join.store');
 
