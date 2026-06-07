@@ -5,7 +5,6 @@ use App\Models\League;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
-use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Fixture\FixtureStatsService;
 use Illuminate\Support\Carbon;
@@ -13,8 +12,8 @@ use Mockery\MockInterface;
 
 afterEach(fn () => Carbon::setTestNow());
 
-test('the relevant fixture data sync scope includes fixtures inside the configured sync windows', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+test('the relevant fixture data sync scope includes upcoming live and unfinished final fixtures', function () {
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -36,15 +35,16 @@ test('the relevant fixture data sync scope includes fixtures inside the configur
         'logo_url' => 'https://example.com/portugal.png',
     ]);
 
-    $recentFixture = Fixture::create([
+    $finishedWithoutFinalSyncFixture = Fixture::create([
         'external_id' => 301,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subHours(2),
-        'status_long' => 'Finished',
+        'match_date' => now('Europe/Brussels')->subMinutes(20),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
     ]);
 
     $upcomingFixture = Fixture::create([
@@ -54,7 +54,7 @@ test('the relevant fixture data sync scope includes fixtures inside the configur
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 2',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addMinutes(10),
+        'match_date' => now('Europe/Brussels')->addMinutes(10),
         'status_long' => 'Not Started',
     ]);
 
@@ -65,71 +65,120 @@ test('the relevant fixture data sync scope includes fixtures inside the configur
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 3',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subDay(),
+        'match_date' => now('Europe/Brussels')->subDay(),
         'status_short' => '1H',
         'status_long' => 'First Half',
     ]);
 
-    $recentKnockoutFixture = Fixture::create([
+    $finishedSyncedFixture = Fixture::create([
         'external_id' => 304,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Round of 16',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subHours(2),
-        'status_long' => 'Finished',
+        'match_date' => now('Europe/Brussels')->subMinutes(30),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+        'final_data_synced_at' => now('Europe/Brussels')->subMinutes(5),
+        'final_data_sync_attempts' => 1,
     ]);
 
-    $upcomingKnockoutFixture = Fixture::create([
+    $finishedMaxAttemptsFixture = Fixture::create([
         'external_id' => 305,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Quarter-final',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addHour(),
-        'status_long' => 'Not Started',
+        'match_date' => now('Europe/Brussels')->subMinutes(40),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+        'final_data_sync_attempts' => 3,
     ]);
 
-    Fixture::create([
-        'external_id' => 306,
+    $relevantFixtureIds = Fixture::query()
+        ->whereNotNull('external_id')
+        ->relevantForFixtureDataSync()
+        ->orderBy('match_date')
+        ->pluck('external_id');
+
+    expect($relevantFixtureIds->all())->toBe([
+        $finishedWithoutFinalSyncFixture->external_id,
+        $liveFixture->external_id,
+        $upcomingFixture->external_id,
+    ]);
+
+    expect($relevantFixtureIds)
+        ->not->toContain($finishedSyncedFixture->external_id)
+        ->not->toContain($finishedMaxAttemptsFixture->external_id);
+});
+
+test('the relevant fixture data sync scope includes fixtures with in progress live statuses', function () {
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
+
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'external_id' => 903,
+        'name' => 'Mexico',
+        'code' => 'MEX',
+        'logo_url' => 'https://example.com/mexico.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'external_id' => 904,
+        'name' => 'Canada',
+        'code' => 'CAN',
+        'logo_url' => 'https://example.com/canada.png',
+    ]);
+
+    $fixture = Fixture::create([
+        'external_id' => 308,
         'league_id' => $league->id,
         'home_team_id' => $homeTeam->id,
         'away_team_id' => $awayTeam->id,
-        'round_name' => 'Semi-final',
+        'round_name' => 'Group Stage - Matchday 4',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subHours(13),
-        'status_long' => 'Finished',
-    ]);
-
-    Fixture::create([
-        'external_id' => 307,
-        'league_id' => $league->id,
-        'home_team_id' => $homeTeam->id,
-        'away_team_id' => $awayTeam->id,
-        'round_name' => 'Final',
-        'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addMinutes(121),
-        'status_long' => 'Not Started',
+        'match_date' => now('Europe/Brussels')->subMinutes(5),
+        'status_long' => 'Penalty In Progress',
     ]);
 
     $relevantFixtureIds = Fixture::query()
         ->whereNotNull('external_id')
         ->relevantForDataSync()
-        ->orderBy('match_date')
-        ->pluck('external_id');
+        ->pluck('external_id')
+        ->all();
 
-    expect($relevantFixtureIds->all())->toBe([
-        $liveFixture->external_id,
-        $recentFixture->external_id,
-        $recentKnockoutFixture->external_id,
-        $upcomingFixture->external_id,
-    ]);
+    expect($relevantFixtureIds)->toContain($fixture->external_id);
+});
+
+test('fixtures recognize the api football live and finished short statuses', function () {
+    foreach (['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE'] as $statusShort) {
+        $fixture = new Fixture([
+            'status_short' => $statusShort,
+            'status_long' => 'Not Started',
+        ]);
+
+        expect($fixture->isLive())->toBeTrue("Expected {$statusShort} to be live");
+    }
+
+    foreach (['FT', 'AET', 'PEN'] as $statusShort) {
+        $fixture = new Fixture([
+            'status_short' => $statusShort,
+            'status_long' => 'Not Started',
+        ]);
+
+        expect($fixture->isFinished())->toBeTrue("Expected {$statusShort} to be finished");
+    }
 });
 
 test('the add fixture data command only syncs relevant fixtures', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -158,7 +207,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->addMinutes(10),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(10),
         'status_long' => 'Not Started',
     ]);
 
@@ -169,7 +218,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 2',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->subDay(),
+        'match_date' => now('Europe/Brussels')->copy()->subDay(),
         'status_short' => '1H',
         'status_long' => 'First Half',
         'elapsed_time' => 45,
@@ -182,7 +231,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 3',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->addDay(),
+        'match_date' => now('Europe/Brussels')->copy()->addDay(),
         'status_long' => 'Not Started',
     ]);
 
@@ -195,7 +244,6 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         $mock->shouldReceive('getFixture')->once()->with($soonFixture->external_id)->andReturn([
             fixtureSyncPayload($soonFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
         ]);
-        $mock->shouldReceive('getFixtureLineups')->once()->with($soonFixture->external_id)->andReturn([]);
     });
 
     $this->mock(FixtureService::class, function (MockInterface $mock) use ($soonFixture, $liveFixture, $homeTeam, $awayTeam) {
@@ -222,7 +270,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
                     'status_short' => 'NS',
                     'status_long' => 'Not Started',
                     'elapsed_time' => null,
-                    'match_date' => now()->copy()->addMinutes(10),
+                    'match_date' => now('Europe/Brussels')->copy()->addMinutes(10),
                 ])->save();
             });
     });
@@ -237,10 +285,6 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         $mock->shouldNotReceive('storeFixtureEvents')->with([], $soonFixture->id);
     });
 
-    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($soonFixture) {
-        $mock->shouldReceive('storeLineups')->once()->with([], $soonFixture->id)->andReturn(false);
-    });
-
     $this->artisan('app:add-fixture-data')
         ->expectsOutput('Ophalen van fixture data voor relevante fixtures')
         ->expectsOutput('2 relevante fixtures gevonden.')
@@ -248,22 +292,102 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         ->expectsOutput(" - Fixture {$soonFixture->id} (external {$soonFixture->external_id}) geselecteerd [- | Not Started | elapsed -]")
         ->expectsOutput("Fixture {$liveFixture->id} oud [1H | First Half | elapsed 45]")
         ->expectsOutput("Calling endpoint /fixtures for fixture {$liveFixture->id}")
-        ->expectsOutput("Skipping lineups for fixture {$liveFixture->id}: live fixture is beyond the lineup sync window")
+        ->expectsOutput("Fixture {$liveFixture->id} (external {$liveFixture->external_id}) sync state [status_short=2H | status_long=Second Half | elapsed_time=70 | isLive=true | isFinished=false | shouldSyncFinalData=false]")
         ->expectsOutput("Fetching live data for fixture {$liveFixture->id}: status 2H 70'")
         ->expectsOutput("Calling endpoint /fixtures/statistics for fixture {$liveFixture->id}")
         ->expectsOutput("Calling endpoint /fixtures/events for fixture {$liveFixture->id}")
         ->expectsOutput("Fixture {$liveFixture->id} nieuw [2H | Second Half | elapsed 70]")
         ->expectsOutput("Fixture {$soonFixture->id} oud [- | Not Started | elapsed -]")
         ->expectsOutput("Calling endpoint /fixtures for fixture {$soonFixture->id}")
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$soonFixture->id}")
+        ->expectsOutput("Fixture {$soonFixture->id} (external {$soonFixture->external_id}) sync state [status_short=NS | status_long=Not Started | elapsed_time=- | isLive=false | isFinished=false | shouldSyncFinalData=false]")
         ->expectsOutput("Skipping heavy endpoints for fixture {$soonFixture->id}: Not Started; only fixture basics synced")
         ->expectsOutput("Fixture {$soonFixture->id} nieuw [NS | Not Started | elapsed -]")
         ->expectsOutput('Fixture data voor relevante fixtures is geupdate')
         ->assertSuccessful();
 });
 
+test('the add fixture data command continues when one fixture fails', function () {
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
+
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'external_id' => 1101,
+        'name' => 'Morocco',
+        'code' => 'MAR',
+        'logo_url' => 'https://example.com/morocco.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'external_id' => 1102,
+        'name' => 'Tunisia',
+        'code' => 'TUN',
+        'logo_url' => 'https://example.com/tunisia.png',
+    ]);
+
+    $failingFixture = Fixture::create([
+        'external_id' => 111,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(5),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
+    $successfulFixture = Fixture::create([
+        'external_id' => 112,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 2',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->copy()->addMinutes(10),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
+    $this->mock(FootballApiService::class, function (MockInterface $mock) use ($failingFixture, $successfulFixture, $homeTeam, $awayTeam) {
+        $mock->shouldReceive('getFixture')
+            ->once()
+            ->with($failingFixture->external_id)
+            ->andThrow(new RuntimeException('temporary api failure'));
+
+        $mock->shouldReceive('getFixture')
+            ->once()
+            ->with($successfulFixture->external_id)
+            ->andReturn([
+                fixtureSyncPayload($successfulFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
+            ]);
+    });
+
+    $this->mock(FixtureService::class, function (MockInterface $mock) use ($successfulFixture, $homeTeam, $awayTeam) {
+        $mock->shouldReceive('storeFixtures')
+            ->once()
+            ->with([
+                fixtureSyncPayload($successfulFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
+            ]);
+    });
+
+    $this->mock(FixtureStatsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureStats'));
+    $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureEvents'));
+
+    $this->artisan('app:add-fixture-data')
+        ->expectsOutput('2 relevante fixtures gevonden.')
+        ->expectsOutput("Fout bij ophalen fixture {$failingFixture->id}: temporary api failure")
+        ->expectsOutput("Calling endpoint /fixtures for fixture {$successfulFixture->id}")
+        ->expectsOutput('Fixture data voor relevante fixtures is geupdate')
+        ->assertSuccessful();
+});
+
 test('the add fixture data command fetches final data once for finished fixtures', function () {
-    Carbon::setTestNow('2026-06-12 20:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 20, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -292,7 +416,7 @@ test('the add fixture data command fetches final data once for finished fixtures
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->subHour(),
+        'match_date' => now('Europe/Brussels')->copy()->subHour(),
         'status_short' => 'FT',
         'status_long' => 'Match Finished',
         'elapsed_time' => 90,
@@ -305,11 +429,11 @@ test('the add fixture data command fetches final data once for finished fixtures
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 2',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->subHour(),
+        'match_date' => now('Europe/Brussels')->copy()->subHour(),
         'status_short' => 'FT',
         'status_long' => 'Match Finished',
         'elapsed_time' => 90,
-        'final_data_synced_at' => now()->copy()->subMinutes(5),
+        'final_data_synced_at' => now('Europe/Brussels')->copy()->subMinutes(5),
         'final_data_sync_attempts' => 1,
     ]);
 
@@ -334,6 +458,7 @@ test('the add fixture data command fetches final data once for finished fixtures
 
     $this->artisan('app:add-fixture-data')
         ->expectsOutput('1 relevante fixtures gevonden.')
+        ->expectsOutput("Fixture {$finishedFixture->id} (external {$finishedFixture->external_id}) sync state [status_short=FT | status_long=Match Finished | elapsed_time=90 | isLive=false | isFinished=true | shouldSyncFinalData=true]")
         ->expectsOutput("Fetching final data for fixture {$finishedFixture->id}: status FT")
         ->assertSuccessful();
 
@@ -342,7 +467,7 @@ test('the add fixture data command fetches final data once for finished fixtures
 });
 
 test('the add fixture data command returns early when no relevant fixtures are found', function () {
-    Carbon::setTestNow('2026-06-12 18:00:00');
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -371,13 +496,12 @@ test('the add fixture data command returns early when no relevant fixtures are f
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now()->copy()->addDay(),
+        'match_date' => now('Europe/Brussels')->copy()->addDay(),
         'status_long' => 'Not Started',
     ]);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) {
         $mock->shouldNotReceive('getFixture');
-        $mock->shouldNotReceive('getFixtureLineups');
         $mock->shouldNotReceive('getFixtureStats');
         $mock->shouldNotReceive('getFixtureEvents');
     });

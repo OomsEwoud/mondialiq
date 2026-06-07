@@ -13,11 +13,15 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
+
 #[Signature('app:add-fixture-data')]
 #[Description('Haal basis-, live- en finale data op voor relevante fixtures')]
 class AddFixtureData extends Command
 {
     use InteractsWithRelevantFixtures;
+
+    private const MAX_FINAL_DATA_SYNC_ATTEMPTS = 3;
 
     public function __construct(
         private readonly FootballApiService $api,
@@ -85,9 +89,34 @@ class AddFixtureData extends Command
         $fixture->refresh();
         $this->liveFixtureService->forgetCache();
 
+        $shouldSyncFinalData = $this->shouldSyncFinalData($fixture);
+
+        $this->line(sprintf(
+            'Fixture %d (external %d) sync state [status_short=%s | status_long=%s | elapsed_time=%s | isLive=%s | isFinished=%s | shouldSyncFinalData=%s]',
+            $fixture->id,
+            (int) $fixture->external_id,
+            $fixture->status_short ?? '-',
+            $fixture->status_long ?? '-',
+            $fixture->elapsed_time ?? '-',
+            $fixture->isLive() ? 'true' : 'false',
+            $fixture->isFinished() ? 'true' : 'false',
+            $shouldSyncFinalData ? 'true' : 'false',
+        ));
+
+        Log::info('app:add-fixture-data fixture sync decision', [
+            'fixture_id' => $fixture->id,
+            'external_id' => (int) $fixture->external_id,
+            'status_short' => $fixture->status_short,
+            'status_long' => $fixture->status_long,
+            'elapsed_time' => $fixture->elapsed_time,
+            'is_live' => $fixture->isLive(),
+            'is_finished' => $fixture->isFinished(),
+            'should_sync_final_data' => $shouldSyncFinalData,
+        ]);
+
         if ($fixture->isLive()) {
             $this->syncLiveEndpoints($fixture, $externalFixtureId);
-        } elseif ($this->shouldSyncFinalData($fixture)) {
+        } elseif ($shouldSyncFinalData) {
             $this->syncFinalEndpoints($fixture, $externalFixtureId);
         } else {
             $this->line("Skipping heavy endpoints for fixture {$fixture->id}: {$this->skipReason($fixture)}");
@@ -145,7 +174,7 @@ class AddFixtureData extends Command
 
         $fixture->forceFill([
             'final_data_synced_at' => now('UTC'),
-            'final_data_sync_attempts' => $fixture->final_data_sync_attempts + 1,
+            'final_data_sync_attempts' => ($fixture->final_data_sync_attempts ?? 0) + 1,
         ])->save();
     }
 
@@ -153,7 +182,7 @@ class AddFixtureData extends Command
     {
         return $fixture->isFinished()
             && $fixture->final_data_synced_at === null
-            && $fixture->final_data_sync_attempts < 3;
+            && (($fixture->final_data_sync_attempts ?? 0) < self::MAX_FINAL_DATA_SYNC_ATTEMPTS);
     }
 
     private function skipReason(Fixture $fixture): string

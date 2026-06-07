@@ -1,7 +1,10 @@
 <?php
 
 use App\Models\Fixture;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schedule;
+
+Log::info('routes/console.php loaded');
 
 $hasPlayerStatsCandidate = static fn (): bool => Fixture::query()
     ->whereNotNull('external_id')
@@ -26,6 +29,8 @@ Schedule::command('app:add-teams')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-players')->daily()->withoutOverlapping();
 
+Schedule::command('app:add-fixture-data')->everyMinute()->withoutOverlapping();
+
 Schedule::command('app:add-fixtures')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-fixtures')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
@@ -49,10 +54,6 @@ Schedule::command('app:add-coaches')->monthly()->withoutOverlapping();
 Schedule::command('app:add-venues')->monthly()->withoutOverlapping();
 
 Schedule::command('app:add-fixture-lineups')->everyTenMinutes()->when($hasLineupCandidate)->withoutOverlapping();
-
-Schedule::command('app:add-fixture-data')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
-
-Schedule::command('app:add-fixture-data')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
 Schedule::command('app:add-fixture-player-stats')->everyMinute()->when($hasPlayerStatsCandidate)->withoutOverlapping();
 

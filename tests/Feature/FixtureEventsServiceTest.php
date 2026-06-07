@@ -63,6 +63,37 @@ test('it does not wipe existing fixture events when the api response is empty', 
         ->and($event->comments)->toBe('Clinical finish');
 });
 
+test('it updates duplicate fixture events on repeated syncs without crashing', function () {
+    [$fixture, $homeTeam] = createFixtureForFixtureEventsService();
+    $player = Player::query()->create([
+        'external_id' => 1000,
+        'display_name' => 'I. Saibari',
+    ]);
+
+    app(FixtureEventsService::class)->storeFixtureEvents([
+        createApiFixtureEventPayload($homeTeam->external_id, 12, 1000, 'I. Saibari', 'Initial comment'),
+    ], $fixture->id);
+
+    app(FixtureEventsService::class)->storeFixtureEvents([
+        createApiFixtureEventPayload($homeTeam->external_id, 12, 1000, 'I. Saibari', 'Updated comment'),
+    ], $fixture->id);
+
+    expect(FixtureEvent::query()->count())->toBe(1);
+
+    $event = FixtureEvent::query()->firstOrFail();
+
+    expect($event->player_id)->toBe($player->id)
+        ->and($event->comments)->toBe('Updated comment')
+        ->and($event->event_key)->toBe(FixtureEvent::buildEventKey(
+            $fixture->id,
+            12,
+            null,
+            $homeTeam->id,
+            'Goal',
+            'Normal Goal',
+        ));
+});
+
 test('it inserts valid current fixture events and skips invalid payloads', function () {
     [$fixture, $homeTeam, $awayTeam] = createFixtureForFixtureEventsService();
     $scorer = Player::query()->create([

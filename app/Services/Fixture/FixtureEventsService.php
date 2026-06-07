@@ -27,9 +27,7 @@ class FixtureEventsService
             ->whereIn('external_id', $this->extractNumericIds($events, 'team.id'))
             ->pluck('id', 'external_id');
 
-        FixtureEvent::query()
-            ->where('fixture_id', $fixtureId)
-            ->delete();
+        $eventRecords = [];
 
         foreach ($events as $event) {
             $eventPayload = $this->eventPayload($event, $playerIds, $teamIds);
@@ -38,11 +36,41 @@ class FixtureEventsService
                 continue;
             }
 
-            FixtureEvent::query()->create([
-                ...$this->eventIdentity($fixtureId, $eventPayload),
+            $eventIdentity = $this->eventIdentity($fixtureId, $eventPayload);
+
+            $eventRecords[$eventIdentity['event_key']] = [
+                ...$eventIdentity,
                 ...$this->eventAttributes($eventPayload),
-            ]);
+            ];
         }
+
+        if ($eventRecords === []) {
+            return;
+        }
+
+        FixtureEvent::query()->upsert(
+            array_values($eventRecords),
+            ['fixture_id', 'event_key'],
+            [
+                'team_id',
+                'team_name',
+                'time_elapsed',
+                'extra_time',
+                'type',
+                'detail',
+                'player_id',
+                'player_name',
+                'assist_id',
+                'assist_name',
+                'comments',
+                'updated_at',
+            ],
+        );
+
+        FixtureEvent::query()
+            ->where('fixture_id', $fixtureId)
+            ->whereNotIn('event_key', array_keys($eventRecords))
+            ->delete();
     }
 
     private function eventPayload(array $event, Collection $playerIds, Collection $teamIds): ?array

@@ -59,7 +59,7 @@ test('the lineup sync scope extends the fixture data sync scope with the lineup 
 
     $fixtureIds = Fixture::query()
         ->whereNotNull('external_id')
-        ->relevantForFixtureDataSync()
+        ->relevantForLineupSync()
         ->orderBy('match_date')
         ->pluck('external_id')
         ->all();

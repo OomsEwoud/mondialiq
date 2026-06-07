@@ -89,6 +89,19 @@ class Fixture extends Model
         '%Suspend%',
         '%Walk%',
     ];
+    private const LIVE_STATUS_LONG_PATTERNS = [
+        '%First Half%',
+        '%Halftime%',
+        '%Half Time%',
+        '%Second Half%',
+        '%Extra Time%',
+        '%Break Time%',
+        '%Penalty%',
+        '%In Progress%',
+        '%Suspended%',
+        '%Interrupted%',
+        '%Live%',
+    ];
     private const UNAVAILABLE_LINEUP_STATUS_SHORTS = [
         'CANC',
         'PST',
@@ -127,16 +140,7 @@ class Fixture extends Model
     {
         return $query->where(fn (Builder $query) => $query
             ->whereIn('status_short', self::LIVE_STATUS_SHORTS)
-            ->orWhereIn('status_long', [
-                'First Half',
-                'Halftime',
-                'Half Time',
-                'Second Half',
-                'Extra Time',
-                'Break Time',
-                'Penalty In Progress',
-                'Live',
-            ]));
+            ->orWhere(fn (Builder $query) => $this->statusLongMatches($query, self::LIVE_STATUS_LONG_PATTERNS)));
     }
 
     public function scopeNotStarted(Builder $query): Builder
@@ -177,9 +181,9 @@ class Fixture extends Model
 
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
-        $now = now('UTC');
+        $now = now(self::MATCH_TIMEZONE);
         $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
-        $basicDataRetryCutoff = now('UTC')->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
+        $basicDataRetryCutoff = now(self::MATCH_TIMEZONE)->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
 
         return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $now, $windowEnd) {
             $query
@@ -200,9 +204,7 @@ class Fixture extends Model
 
     public function scopeRelevantForFixtureDataSync(Builder $query): Builder
     {
-        return $query->where(fn (Builder $query) => $query
-            ->relevantForDataSync()
-            ->orWhere(fn (Builder $query) => $query->lineupSyncWindow()));
+        return $query->relevantForDataSync();
     }
 
     public function scopeReadyForLineupSync(Builder $query): Builder
@@ -324,16 +326,7 @@ class Fixture extends Model
     public function isLive(): bool
     {
         return in_array($this->status_short, self::LIVE_STATUS_SHORTS, true)
-            || in_array($this->status_long, [
-                'First Half',
-                'Halftime',
-                'Half Time',
-                'Second Half',
-                'Extra Time',
-                'Break Time',
-                'Penalty In Progress',
-                'Live',
-            ], true);
+            || $this->statusLongMatchesValue($this->status_long);
     }
 
     public function isNotStarted(): bool
@@ -351,6 +344,37 @@ class Fixture extends Model
     private function isKnownUnavailableForLineups(): bool
     {
         return in_array($this->status_short, self::UNAVAILABLE_LINEUP_STATUS_SHORTS, true);
+    }
+
+    private function statusLongMatches(Builder $query, array $patterns): Builder
+    {
+        return $query->where(function (Builder $query) use ($patterns) {
+            foreach ($patterns as $index => $pattern) {
+                if ($index === 0) {
+                    $query->where('status_long', 'like', $pattern);
+                    continue;
+                }
+
+                $query->orWhere('status_long', 'like', $pattern);
+            }
+        });
+    }
+
+    private function statusLongMatchesValue(?string $statusLong): bool
+    {
+        if ($statusLong === null) {
+            return false;
+        }
+
+        foreach (self::LIVE_STATUS_LONG_PATTERNS as $pattern) {
+            $needle = trim($pattern, '%');
+
+            if (str_contains($statusLong, $needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function isLivePastLineupWindow(): bool
@@ -456,8 +480,10 @@ class Fixture extends Model
     {
         return $query
             ->finished()
-            ->where('match_date', '>=', now('UTC')->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
-            ->where('final_data_sync_attempts', '<', self::MAX_FINAL_DATA_SYNC_ATTEMPTS)
+            ->where('match_date', '>=', now(self::MATCH_TIMEZONE)->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)->format('Y-m-d H:i:s'))
+            ->where(fn (Builder $query) => $query
+                ->whereNull('final_data_sync_attempts')
+                ->orWhere('final_data_sync_attempts', '<', self::MAX_FINAL_DATA_SYNC_ATTEMPTS))
             ->whereNull('final_data_synced_at');
     }
 
