@@ -18,6 +18,8 @@ trait HasFixtureSync
 
     private const BASIC_DATA_RETRY_MINUTES = 60;
 
+    private const RECENTLY_STARTED_SYNC_WINDOW_HOURS = 3;
+
     private const RECENT_FINAL_SYNC_WINDOW_HOURS = 6;
 
     private const MAX_FINAL_DATA_SYNC_ATTEMPTS = 3;
@@ -41,8 +43,9 @@ trait HasFixtureSync
         $now = now(self::MATCH_TIMEZONE);
         $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
         $basicDataRetryCutoff = now(self::MATCH_TIMEZONE)->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
+        $recentlyStartedStart = $now->copy()->subHours(self::RECENTLY_STARTED_SYNC_WINDOW_HOURS);
 
-        return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $now, $windowEnd) {
+        return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $now, $windowEnd, $recentlyStartedStart) {
             $query
                 ->where(fn (Builder $query) => $query->inProgress())
                 ->orWhere(
@@ -52,6 +55,19 @@ trait HasFixtureSync
                         ->whereBetween('match_date', [
                             $now->format('Y-m-d H:i:s'),
                             $windowEnd->format('Y-m-d H:i:s'),
+                        ])
+                        ->where(
+                            fn (Builder $query) => $query
+                                ->whereNull('fixture_basics_synced_at')
+                                ->orWhere('fixture_basics_synced_at', '<=', $basicDataRetryCutoff),
+                        ),
+                )
+                ->orWhere(
+                    fn (Builder $query) => $query
+                        ->notStarted()
+                        ->whereBetween('match_date', [
+                            $recentlyStartedStart->format('Y-m-d H:i:s'),
+                            $now->format('Y-m-d H:i:s'),
                         ])
                         ->where(
                             fn (Builder $query) => $query

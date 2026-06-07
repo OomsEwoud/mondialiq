@@ -104,6 +104,30 @@ test('the relevant fixture data sync scope includes upcoming live and unfinished
         'final_data_sync_attempts' => 3,
     ]);
 
+    $recentlyStartedNsFixture = Fixture::create([
+        'external_id' => 306,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Semi-final',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->subMinutes(10),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
+    $farPastNsFixture = Fixture::create([
+        'external_id' => 307,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Round of 32',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->subHours(4),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
     $relevantFixtureIds = Fixture::query()
         ->whereNotNull('external_id')
         ->relevantForFixtureDataSync()
@@ -113,12 +137,73 @@ test('the relevant fixture data sync scope includes upcoming live and unfinished
     expect($relevantFixtureIds->all())->toBe([
         $liveFixture->external_id,
         $finishedWithoutFinalSyncFixture->external_id,
+        $recentlyStartedNsFixture->external_id,
         $upcomingFixture->external_id,
     ]);
 
     expect($relevantFixtureIds)
         ->not->toContain($finishedSyncedFixture->external_id)
-        ->not->toContain($finishedMaxAttemptsFixture->external_id);
+        ->not->toContain($finishedMaxAttemptsFixture->external_id)
+        ->not->toContain($farPastNsFixture->external_id);
+});
+
+test('recently started ns fixtures respect the basic data retry cutoff', function () {
+    Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
+
+    $league = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'external_id' => 908,
+        'name' => 'Brazil',
+        'code' => 'BRA',
+        'logo_url' => 'https://example.com/brazil.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'external_id' => 909,
+        'name' => 'Argentina',
+        'code' => 'ARG',
+        'logo_url' => 'https://example.com/argentina.png',
+    ]);
+
+    $recentlyStartedSyncedRecently = Fixture::create([
+        'external_id' => 310,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 5',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->subMinutes(10),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+        'fixture_basics_synced_at' => now('Europe/Brussels')->subMinutes(5),
+    ]);
+
+    $recentlyStartedSyncedLongAgo = Fixture::create([
+        'external_id' => 311,
+        'league_id' => $league->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 6',
+        'season' => config('services.api_football.season'),
+        'match_date' => now('Europe/Brussels')->subMinutes(20),
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+        'fixture_basics_synced_at' => now('Europe/Brussels')->subMinutes(70),
+    ]);
+
+    $relevantFixtureIds = Fixture::query()
+        ->whereNotNull('external_id')
+        ->relevantForDataSync()
+        ->pluck('external_id')
+        ->all();
+
+    expect($relevantFixtureIds)->not->toContain($recentlyStartedSyncedRecently->external_id)
+        ->toContain($recentlyStartedSyncedLongAgo->external_id);
 });
 
 test('the relevant fixture data sync scope includes fixtures with in progress live statuses', function () {
