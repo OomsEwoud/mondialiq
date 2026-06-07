@@ -1,5 +1,5 @@
-import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import PredictionStatusAction from '@/components/predictions/prediction-status-action';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionUserActions from '@/components/predictions/prediction-user-actions';

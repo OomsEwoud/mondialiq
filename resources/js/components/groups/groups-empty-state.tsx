@@ -1,5 +1,5 @@
-import { ArrowRight, TableProperties } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { ArrowRight, TableProperties } from 'lucide-react';
 import { matches } from '@/routes';
 
 export default function GroupsEmptyState() {

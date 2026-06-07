@@ -1,9 +1,9 @@
 import { BarChart3, ListTree, UsersRound } from 'lucide-react';
 import { useState } from 'react';
 
-import MatchDataTabPanel from '@/components/matches/details/match-data-tab-panel';
-import { cn } from '@/lib/utils';
 import type { MatchDataTab } from '@/components/matches/details/match-data-tab-panel';
+import { cn } from '@/lib/utils';
+import MatchDataTabPanel from '@/components/matches/details/match-data-tab-panel';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {

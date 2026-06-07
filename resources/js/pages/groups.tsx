@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import GroupPageHeader from '@/components/groups/group-page-header';
 import GroupPanel from '@/components/groups/group-panel';
-import StandingsExplanationModal from '@/components/groups/standings-explanation-modal';
 import GroupTabs, { THIRD_PLACE_TAB_ID } from '@/components/groups/group-tabs';
 import GroupsEmptyState from '@/components/groups/groups-empty-state';
+import StandingsExplanationModal from '@/components/groups/standings-explanation-modal';
 import ThirdPlacePanel from '@/components/groups/third-place-panel';
 import PageHead from '@/components/seo/page-head';
 import type { ThirdPlaceRanking, WorldCupGroup } from '@/types/group';
