@@ -1,10 +1,7 @@
 <?php
 
 use App\Models\Fixture;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schedule;
-
-Log::info('routes/console.php loaded');
 
 $hasPlayerStatsCandidate = static fn (): bool => Fixture::query()
     ->whereNotNull('external_id')

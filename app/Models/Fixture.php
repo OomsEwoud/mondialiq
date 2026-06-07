@@ -48,7 +48,7 @@ class Fixture extends Model
 {
     private const UPCOMING_DATA_SYNC_WINDOW_MINUTES = 15;
     private const LINEUP_SYNC_BEFORE_KICKOFF_MINUTES = 45;
-    private const LINEUP_SYNC_AFTER_KICKOFF_MINUTES = 30;
+    private const LINEUP_SYNC_AFTER_KICKOFF_MINUTES = 15;
     private const LINEUP_RETRY_MINUTES = 15;
     private const BASIC_DATA_RETRY_MINUTES = 60;
     private const RECENT_FINAL_SYNC_WINDOW_HOURS = 6;
