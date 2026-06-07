@@ -6,27 +6,19 @@ use App\Models\BetType;
 use App\Models\Bookmaker;
 use App\Models\FixtureOdd;
 use Carbon\CarbonImmutable;
-use Throwable;
 
 class FixtureOddsService
 {
-    private const IMPORTANT_MARKETS = [
-        'Match Winner',
-        'Goals Over/Under',
-        'Both Teams Score',
-        'Exact Score',
-        'Total - Home',
-        'Total - Away',
-        'Home Team Exact Goals Number',
-        'Away Team Exact Goals Number',
-    ];
+    public function __construct(
+        private readonly FixtureOddsPayloadNormalizer $normalizer,
+    ) {}
 
     public function storeFixtureOdds(array $oddsResponse, int $fixtureId): array
     {
         $summary = $this->emptySummary();
 
         foreach ($oddsResponse as $fixtureOdds) {
-            $apiUpdatedAt = $this->apiUpdatedAt(data_get($fixtureOdds, 'update'));
+            $apiUpdatedAt = $this->normalizer->apiUpdatedAt(data_get($fixtureOdds, 'update'));
             $bookmakers = data_get($fixtureOdds, 'bookmakers', []);
 
             if (! is_iterable($bookmakers)) {
@@ -49,7 +41,7 @@ class FixtureOddsService
     private function storeBookmakerOdds(mixed $bookmakerData, int $fixtureId, ?CarbonImmutable $apiUpdatedAt): array
     {
         $summary = $this->emptySummary();
-        $bookmakerPayload = $this->bookmakerPayload($bookmakerData);
+        $bookmakerPayload = $this->normalizer->bookmakerPayload($bookmakerData);
 
         if ($bookmakerPayload === null) {
             $summary['skipped']++;
@@ -91,7 +83,7 @@ class FixtureOddsService
         ?CarbonImmutable $apiUpdatedAt,
     ): array {
         $summary = $this->emptySummary();
-        $betPayload = $this->betPayload($betData);
+        $betPayload = $this->normalizer->betPayload($betData);
 
         if ($betPayload === null) {
             $summary['skipped']++;
@@ -138,7 +130,7 @@ class FixtureOddsService
         string $betName,
         ?CarbonImmutable $apiUpdatedAt,
     ): array {
-        $valuePayload = $this->valuePayload($valueData);
+        $valuePayload = $this->normalizer->valuePayload($valueData);
 
         if ($valuePayload === null) {
             return $this->skippedSummary();
@@ -150,53 +142,6 @@ class FixtureOddsService
         );
 
         return $this->storedSummary();
-    }
-
-    private function bookmakerPayload(mixed $bookmakerData): ?array
-    {
-        $externalBookmakerId = data_get($bookmakerData, 'id');
-        $bookmakerName = data_get($bookmakerData, 'name');
-
-        if (! is_numeric($externalBookmakerId) || blank($bookmakerName)) {
-            return null;
-        }
-
-        return [
-            'external_id' => (int) $externalBookmakerId,
-            'name' => (string) $bookmakerName,
-            'bets' => data_get($bookmakerData, 'bets', []),
-        ];
-    }
-
-    private function betPayload(mixed $betData): ?array
-    {
-        $externalBetId = data_get($betData, 'id');
-        $betName = data_get($betData, 'name');
-
-        if (! is_numeric($externalBetId) || blank($betName) || ! $this->isImportantMarket((string) $betName)) {
-            return null;
-        }
-
-        return [
-            'external_id' => (int) $externalBetId,
-            'name' => (string) $betName,
-            'values' => data_get($betData, 'values', []),
-        ];
-    }
-
-    private function valuePayload(mixed $valueData): ?array
-    {
-        $value = data_get($valueData, 'value');
-        $odd = $this->normalizeOdd(data_get($valueData, 'odd'));
-
-        if (! is_scalar($value) || blank($value) || $odd === null) {
-            return null;
-        }
-
-        return [
-            'value' => (string) $value,
-            'odd' => $odd,
-        ];
     }
 
     private function fixtureOddIdentity(int $fixtureId, int $externalBookmakerId, int $externalBetId, string $value): array
@@ -257,34 +202,5 @@ class FixtureOddsService
         $summary['skipped'] += $addition['skipped'];
 
         return $summary;
-    }
-
-    private function isImportantMarket(string $betName): bool
-    {
-        return in_array($betName, self::IMPORTANT_MARKETS, true);
-    }
-
-    private function normalizeOdd(mixed $odd): ?float
-    {
-        if (! is_numeric($odd)) {
-            return null;
-        }
-
-        $normalizedOdd = (float) $odd;
-
-        return $normalizedOdd > 0 ? $normalizedOdd : null;
-    }
-
-    private function apiUpdatedAt(?string $updatedAt): ?CarbonImmutable
-    {
-        if (blank($updatedAt)) {
-            return null;
-        }
-
-        try {
-            return CarbonImmutable::parse($updatedAt);
-        } catch (Throwable) {
-            return null;
-        }
     }
 }
