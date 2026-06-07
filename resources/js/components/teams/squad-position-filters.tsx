@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/forms/button';
-import { squadPositionFilters } from '@/const/team-squad';
 import type { SquadPositionFilter } from '@/const/team-squad';
+import { squadPositionFilters } from '@/const/team-squad';
 import { cn } from '@/lib/utils';
 
 interface Props {
