@@ -80,7 +80,7 @@ test('the leaderboards page shows the top 10 and current user standing', functio
             ->where('currentUserPosition.id', $currentUser->id)
             ->where('currentUserPosition.rank', 12)
             ->where('currentUserPosition.totalPoints', 10)
-            ->where('totalPlayers', 12),
+            ->where('totalPlayers', 13),
         );
 });
 

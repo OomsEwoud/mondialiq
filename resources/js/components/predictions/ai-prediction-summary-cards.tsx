@@ -1,4 +1,4 @@
-import { Gauge, Goal, Trophy } from 'lucide-react';
+import { Gauge, Goal, Medal, Trophy } from 'lucide-react';
 import AiPredictionSummaryCard from '@/components/predictions/ai-prediction-summary-card';
 import { cn } from '@/lib/utils';
 import type { Match } from '@/types/match';
@@ -31,8 +31,16 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                   : 'bg-amber-400'
             : 'bg-slate-300';
 
+    const pointsAwarded = prediction?.pointsAwarded ?? false;
+    const pointsValue = pointsAwarded
+        ? `${prediction?.points ?? 0}/20`
+        : 'Awaiting validation';
+    const pointsHelper = pointsAwarded
+        ? 'Official points after validation'
+        : 'Calculated after validation';
+
     return (
-        <section className="grid gap-4 md:grid-cols-3">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <AiPredictionSummaryCard icon={Trophy} label="Predicted outcome">
                 <p className="text-2xl font-bold text-slate-900">
                     {prediction?.label ?? 'N/A'}
@@ -78,6 +86,16 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                 <p className="mt-1 text-sm text-slate-500">
                     Projected final score
                 </p>
+            </AiPredictionSummaryCard>
+
+            <AiPredictionSummaryCard
+                icon={Medal}
+                label={pointsAwarded ? 'Points earned' : 'Points state'}
+            >
+                <p className="text-2xl font-bold text-slate-900">
+                    {pointsValue}
+                </p>
+                <p className="mt-1 text-sm text-slate-500">{pointsHelper}</p>
             </AiPredictionSummaryCard>
         </section>
     );

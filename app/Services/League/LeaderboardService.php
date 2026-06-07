@@ -49,8 +49,7 @@ class LeaderboardService
     private function rankedUserQuery(): Builder
     {
         return User::query()
-            ->where('is_system_user', false)
-            ->select(['id', 'name', 'avatar'])
+            ->select(['id', 'name', 'avatar', 'is_system_user'])
             ->withCount('predictions')
             ->withSum([
                 'predictions as predictions_sum_points' => fn (Builder $query) => $query
@@ -70,6 +69,7 @@ class LeaderboardService
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,
             'totalPoints' => $user->predictions_sum_points ?? 0,
+            'isSystemUser' => $user->is_system_user,
         ];
     }
 

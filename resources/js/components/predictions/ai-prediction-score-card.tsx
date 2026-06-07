@@ -19,6 +19,10 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
               : null;
     const homeIsWinner = prediction?.winnerId === match.homeTeamId;
     const awayIsWinner = prediction?.winnerId === match.awayTeamId;
+    const pointsAwarded = prediction?.pointsAwarded ?? false;
+    const pointsLabel = pointsAwarded
+        ? `${prediction?.points ?? 0}/20 pts`
+        : 'Awaiting validation';
 
     return (
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.2fr_1fr] lg:items-center">
@@ -55,13 +59,21 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                     {score ?? 'N/A'}
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-cyan-200" />
+                <p
+                    className={cn(
+                        'mt-4 text-sm font-bold',
+                        pointsAwarded ? 'text-emerald-700' : 'text-slate-500',
+                    )}
+                >
+                    {pointsLabel}
+                </p>
                 {predictedWinner && prediction?.outcome !== 'draw' && (
-                    <p className="mt-4 text-sm font-bold text-emerald-700">
+                    <p className="mt-1 text-sm font-bold text-emerald-700">
                         {predictedWinner} to win
                     </p>
                 )}
                 {prediction?.outcome === 'draw' && (
-                    <p className="mt-4 text-sm font-bold text-slate-500">
+                    <p className="mt-1 text-sm font-bold text-slate-500">
                         Draw predicted
                     </p>
                 )}

@@ -303,7 +303,7 @@ test('ai user appears in league members with system user flag', function () {
         );
 });
 
-test('ai user is excluded from global leaderboard', function () {
+test('ai user is included in global leaderboard', function () {
     $fixture = createAiFixture();
 
     $user = User::factory()->create();
@@ -332,8 +332,11 @@ test('ai user is excluded from global leaderboard', function () {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->where('totalPlayers', 1)
-            ->has('globalLeaderboard', 1)
-            ->where('globalLeaderboard.0.id', $user->id)
+            ->where('totalPlayers', 2)
+            ->has('globalLeaderboard', 2)
+            ->where('globalLeaderboard.0.id', $aiUser->id)
+            ->where('globalLeaderboard.0.isSystemUser', true)
+            ->where('globalLeaderboard.1.id', $user->id)
+            ->where('globalLeaderboard.1.isSystemUser', false)
         );
 });

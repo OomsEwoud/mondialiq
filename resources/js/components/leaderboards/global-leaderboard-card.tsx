@@ -1,3 +1,4 @@
+import { Bot } from 'lucide-react';
 import LeaderboardEmptyState from '@/components/leaderboards/leaderboard-empty-state';
 import {
     Avatar,
@@ -93,6 +94,12 @@ export default function GlobalLeaderboardCard({
                                                 {isCurrentUser && (
                                                     <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-semibold text-cyan-700 shadow-none">
                                                         You
+                                                    </Badge>
+                                                )}
+                                                {leader.isSystemUser && (
+                                                    <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                                        <Bot className="size-3" />
+                                                        AI
                                                     </Badge>
                                                 )}
                                             </div>

@@ -7,6 +7,7 @@ export interface LeaderboardEntry {
     avatar: string | null;
     predictionsCount: number;
     totalPoints: number;
+    isSystemUser: boolean;
 }
 
 export interface JoinedLeague {
