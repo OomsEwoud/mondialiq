@@ -10,12 +10,13 @@ class PredictionScoreService
         int $actualHomeScore,
         int $actualAwayScore,
     ): int {
-        return $this->breakdown(
+        return $this->calculateWithRules(
             $predictedHomeScore,
             $predictedAwayScore,
             $actualHomeScore,
             $actualAwayScore,
-        )['total'];
+            $this->defaultRules(),
+        );
     }
 
     public function breakdown(
@@ -24,7 +25,40 @@ class PredictionScoreService
         int $actualHomeScore,
         int $actualAwayScore,
     ): array {
-        // Exact scores are capped immediately at the maximum match score.
+        return $this->breakdownWithRules(
+            $predictedHomeScore,
+            $predictedAwayScore,
+            $actualHomeScore,
+            $actualAwayScore,
+            $this->defaultRules(),
+        );
+    }
+
+    public function calculateWithRules(
+        int $predictedHomeScore,
+        int $predictedAwayScore,
+        int $actualHomeScore,
+        int $actualAwayScore,
+        array $rules,
+    ): int {
+        return $this->breakdownWithRules(
+            $predictedHomeScore,
+            $predictedAwayScore,
+            $actualHomeScore,
+            $actualAwayScore,
+            $rules,
+        )['total'];
+    }
+
+    public function breakdownWithRules(
+        int $predictedHomeScore,
+        int $predictedAwayScore,
+        int $actualHomeScore,
+        int $actualAwayScore,
+        array $rules,
+    ): array {
+        $exactScorePoints = $rules['exact_score_points'] ?? 20;
+
         if ($predictedHomeScore === $actualHomeScore && $predictedAwayScore === $actualAwayScore) {
             return [
                 'exactScore' => true,
@@ -33,12 +67,12 @@ class PredictionScoreService
                 'correctHomeGoals' => true,
                 'correctAwayGoals' => true,
                 'correctTotalGoals' => true,
-                'total' => 20,
+                'total' => $exactScorePoints,
                 'items' => [
                     [
                         'label' => 'Exact score',
                         'description' => 'You predicted the full-time score perfectly.',
-                        'points' => 20,
+                        'points' => $exactScorePoints,
                         'earned' => true,
                     ],
                 ],
@@ -55,6 +89,7 @@ class PredictionScoreService
         $correctTotalGoals = $this->getTotalGoals($predictedHomeScore, $predictedAwayScore)
             === $this->getTotalGoals($actualHomeScore, $actualAwayScore);
         $items = $this->scoreItems(
+            rules: $rules,
             correctOutcome: $correctOutcome,
             correctGoalDifference: $correctGoalDifference,
             correctHomeGoals: $correctHomeGoals,
@@ -69,8 +104,19 @@ class PredictionScoreService
             'correctHomeGoals' => $correctHomeGoals,
             'correctAwayGoals' => $correctAwayGoals,
             'correctTotalGoals' => $correctTotalGoals,
-            'total' => min($this->earnedPoints($items), 20),
+            'total' => min($this->earnedPoints($items), $exactScorePoints),
             'items' => $items,
+        ];
+    }
+
+    private function defaultRules(): array
+    {
+        return [
+            'exact_score_points' => 20,
+            'correct_result_points' => 8,
+            'correct_goal_difference_points' => 4,
+            'correct_home_goals_points' => 3,
+            'correct_away_goals_points' => 3,
         ];
     }
 
@@ -94,6 +140,7 @@ class PredictionScoreService
     }
 
     private function scoreItems(
+        array $rules,
         bool $correctOutcome,
         bool $correctGoalDifference,
         bool $correctHomeGoals,
@@ -104,25 +151,25 @@ class PredictionScoreService
             [
                 'label' => 'Correct outcome',
                 'description' => 'Correct winner or correctly predicted a draw.',
-                'points' => 8,
+                'points' => $rules['correct_result_points'] ?? 8,
                 'earned' => $correctOutcome,
             ],
             [
                 'label' => 'Goal difference',
                 'description' => 'Correct goal difference between both teams.',
-                'points' => 4,
+                'points' => $rules['correct_goal_difference_points'] ?? 4,
                 'earned' => $correctGoalDifference,
             ],
             [
                 'label' => 'Home team goals',
                 'description' => 'Correct amount of goals for the home team.',
-                'points' => 3,
+                'points' => $rules['correct_home_goals_points'] ?? 3,
                 'earned' => $correctHomeGoals,
             ],
             [
                 'label' => 'Away team goals',
                 'description' => 'Correct amount of goals for the away team.',
-                'points' => 3,
+                'points' => $rules['correct_away_goals_points'] ?? 3,
                 'earned' => $correctAwayGoals,
             ],
             [
