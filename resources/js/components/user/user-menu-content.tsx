@@ -16,8 +16,8 @@ type Props = {
 };
 
 const menuItemClassName =
-    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-900 transition-colors focus:bg-cyan-50 focus:text-slate-900';
-const menuLinkClassName = 'flex w-full cursor-pointer items-center gap-2';
+    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-700 transition-colors hover:bg-cyan-50 hover:text-slate-900 focus:bg-cyan-50 focus:text-slate-900';
+const menuLinkClassName = 'flex w-full cursor-pointer items-center gap-2.5';
 
 export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
@@ -30,11 +30,11 @@ export function UserMenuContent({ user }: Props) {
     return (
         <>
             <DropdownMenuLabel className="p-0 font-normal">
-                <div className="rounded-lg bg-slate-50 px-3 py-3 text-left text-sm">
+                <div className="rounded-lg bg-slate-50 px-3 py-3">
                     <UserInfo user={user} showEmail={true} />
                 </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="my-2 bg-slate-200" />
+            <DropdownMenuSeparator className="my-2 bg-slate-100" />
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
@@ -43,7 +43,7 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <UserRound className="size-4 text-cyan-500" />
+                        <UserRound className="size-4 text-cyan-600" />
                         Profile settings
                     </Link>
                 </DropdownMenuItem>
@@ -54,7 +54,7 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <BarChart3 className="size-4 text-cyan-500" />
+                        <BarChart3 className="size-4 text-cyan-600" />
                         My predictions
                     </Link>
                 </DropdownMenuItem>
@@ -65,15 +65,15 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <Medal className="size-4 text-cyan-500" />
+                        <Medal className="size-4 text-cyan-600" />
                         Leaderboards
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator className="my-2 bg-slate-200" />
+            <DropdownMenuSeparator className="my-2 bg-slate-100" />
             <DropdownMenuItem
                 asChild
-                className="cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-600 transition-colors focus:bg-red-50 focus:text-red-600"
+                className="cursor-pointer rounded-lg px-3 py-2 font-semibold text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600 focus:bg-red-50 focus:text-red-600"
             >
                 <Link
                     className={menuLinkClassName}
