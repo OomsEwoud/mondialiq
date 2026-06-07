@@ -6,14 +6,17 @@ export function initialPredictionFormData(
 ): UserPredictionFormData {
     return {
         outcome: match.userPrediction?.outcome ?? '',
-        home_score: predictionScoreValue(match.userPrediction?.homeScore),
-        away_score: predictionScoreValue(match.userPrediction?.awayScore),
+        home_score: predictionScoreValue(match.userPrediction?.homeScore, '0'),
+        away_score: predictionScoreValue(match.userPrediction?.awayScore, '0'),
         confidence: match.userPrediction?.confidence ?? '',
     };
 }
 
-export function predictionScoreValue(score: number | null | undefined): string {
-    return score === null || score === undefined ? '' : String(score);
+export function predictionScoreValue(
+    score: number | null | undefined,
+    fallback = '0',
+): string {
+    return score === null || score === undefined ? fallback : String(score);
 }
 
 export function hasMatchStarted(match: Match): boolean {

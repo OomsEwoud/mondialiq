@@ -40,7 +40,6 @@ const pointsStateOptions: PredictionFilterOption<PointsStateFilter>[] = [
     { label: 'All', value: 'all' },
     { label: 'Awaiting validation', value: 'points-pending' },
     { label: 'Points earned', value: 'points-earned' },
-    { label: 'No points earned', value: 'no-points-earned' },
 ];
 
 const confidenceSortOptions: PredictionFilterOption<ConfidenceSort>[] = [
