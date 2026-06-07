@@ -4,16 +4,20 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 
 interface Props {
+    className?: string;
     onNavigate?: () => void;
 }
 
-export default function NavApp({ onNavigate }: Props) {
+export default function NavApp({ className, onNavigate }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
         <nav
             aria-label="Main"
-            className="flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5"
+            className={cn(
+                'flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5',
+                className,
+            )}
         >
             {navItems.map(({ label, href }) => {
                 const isActive = isCurrentOrParentUrl(href);

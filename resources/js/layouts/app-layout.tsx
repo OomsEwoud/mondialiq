@@ -36,7 +36,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             markClassName="transition-transform group-hover:scale-105"
                         />
                     </Link>
-                    <NavApp />
+                    <NavApp className="hidden md:flex" />
                     <div className="flex items-center gap-2 sm:gap-3">
                         {auth.user ? (
                             <DropdownMenu>
