@@ -27,7 +27,9 @@ const topRankStyles: Record<number, string> = {
     3: 'border-cyan-200 bg-cyan-50 text-cyan-600',
 };
 
-const formToneStyles: Record<LeagueMember['form']['tone'], string> = {
+type FormTone = 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
+
+const formToneStyles: Record<FormTone, string> = {
     hot: 'bg-emerald-100 text-emerald-800',
     steady: 'bg-cyan-100 text-cyan-700',
     chasing: 'bg-amber-100 text-amber-800',
@@ -109,21 +111,24 @@ export default function LeagueMembersCard({ members }: Props) {
                                                 You
                                             </Badge>
                                         )}
-                                        <Badge
-                                            className={cn(
-                                                'rounded-full px-2 py-0.5 text-xs font-bold',
-                                                formToneStyles[
-                                                    member.form.tone
-                                                ],
-                                            )}
-                                        >
-                                            {member.form.label}
-                                        </Badge>
+                                        {member.form && (
+                                            <Badge
+                                                className={cn(
+                                                    'rounded-full px-2 py-0.5 text-xs font-bold',
+                                                    formToneStyles[
+                                                        member.form.tone
+                                                    ],
+                                                )}
+                                            >
+                                                {member.form.label}
+                                            </Badge>
+                                        )}
                                     </div>
                                     <div className="mt-2 flex flex-wrap gap-2">
                                         <StatPill
                                             label={
-                                                member.gapToAbove === null
+                                                member.gapToAbove === null ||
+                                                member.gapToAbove === undefined
                                                     ? 'Leading'
                                                     : `${member.gapToAbove} pts to above`
                                             }

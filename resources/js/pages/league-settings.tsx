@@ -1,7 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { ArrowLeft, Users } from 'lucide-react';
+import { ArrowLeft, Settings, Users } from 'lucide-react';
 import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
-import LeagueMembersManagementCard from '@/components/leaderboards/league-members-management-card';
 import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
@@ -22,7 +21,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
         <>
             <PageHead
                 title={`${league.name} settings`}
-                description={`Manage ${league.name} prediction group members, reward, invite settings and owner controls on MondialIQ.`}
+                description={`Manage ${league.name} prediction group reward, invite settings and owner controls on MondialIQ.`}
                 noIndex
             />
 
@@ -68,9 +67,8 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                                 Manage {league.name}
                             </h1>
                             <p className="mt-3 text-sm leading-6 text-cyan-300 sm:text-base">
-                                Update group details, manage member access, and
-                                keep invite controls tidy from one owner
-                                dashboard.
+                                Update group details, invite controls, and
+                                scoring rules from one owner dashboard.
                             </p>
                         </div>
 
@@ -90,40 +88,58 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                                     ? 'Private group'
                                     : 'Public group'}
                             </Badge>
-                            {!league.isActive && (
+                            {!league.isActive ? (
                                 <Badge
                                     variant="outline"
                                     className="rounded-lg border-white/30 bg-white/20 px-3 py-1.5 font-black text-white shadow-sm"
                                 >
                                     Invites closed
                                 </Badge>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </section>
 
+                {league.membersHref && (
+                    <Link
+                        href={league.membersHref}
+                        className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50/50 sm:px-6"
+                    >
+                        <div className="flex items-center gap-4">
+                            <span className="flex size-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 shadow-sm">
+                                <Users className="size-5" />
+                            </span>
+                            <div>
+                                <p className="text-sm font-bold text-slate-900">
+                                    Manage members
+                                </p>
+                                <p className="text-xs text-slate-500">
+                                    {league.membersCount} {memberLabel} ·
+                                    review, transfer ownership, or remove access
+                                </p>
+                            </div>
+                        </div>
+                        <Settings className="size-5 text-slate-400" />
+                    </Link>
+                )}
+
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_400px] xl:items-start">
-                    <LeagueMembersManagementCard
+                    <LeagueSettingsCard
                         leagueId={league.id}
-                        members={league.members}
+                        leagueName={league.name}
+                        leagueIcon={league.icon}
+                        leagueCode={league.code}
+                        description={league.description}
+                        rewardTitle={league.rewardTitle}
+                        rewardDescription={league.rewardDescription}
+                        visibility={league.visibility}
+                        isActive={league.isActive}
+                        accentColor={league.accentColor}
+                        coverStyle={league.coverStyle}
+                        scoringRules={league.scoringRules}
                     />
 
                     <aside className="space-y-6">
-                        <LeagueSettingsCard
-                            leagueId={league.id}
-                            leagueName={league.name}
-                            leagueIcon={league.icon}
-                            leagueCode={league.code}
-                            description={league.description}
-                            rewardTitle={league.rewardTitle}
-                            rewardDescription={league.rewardDescription}
-                            visibility={league.visibility}
-                            isActive={league.isActive}
-                            accentColor={league.accentColor}
-                            coverStyle={league.coverStyle}
-                            scoringRules={league.scoringRules}
-                        />
-
                         <LeagueDangerZoneCard
                             leagueId={league.id}
                             leagueName={league.name}

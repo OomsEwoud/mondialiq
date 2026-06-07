@@ -10,9 +10,11 @@ export interface LeagueMember {
     isCurrentUser: boolean;
     isOwner: boolean;
     canBeManaged: boolean;
-    lastPredictionLabel: string | null;
-    gapToAbove: number | null;
-    form: {
+    role?: string;
+    joinedAt?: string | null;
+    lastPredictionLabel?: string | null;
+    gapToAbove?: number | null;
+    form?: {
         label: string;
         tone: 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
     };
@@ -56,6 +58,7 @@ export interface LeagueDetails {
     showHref?: string | null;
     joinHref: string;
     settingsHref?: string | null;
+    membersHref?: string | null;
     canManage: boolean;
     canLeave: boolean;
     membersCount: number;
@@ -103,8 +106,40 @@ export interface LeagueSettingsPageProps {
         | 'showHref'
         | 'joinHref'
         | 'settingsHref'
+        | 'membersHref'
         | 'canManage'
         | 'membersCount'
-        | 'members'
     >;
+}
+
+export interface LeagueMemberManagement {
+    id: number;
+    rank: number;
+    name: string;
+    avatar: string | null;
+    predictionsCount: number;
+    scoringPredictionsCount: number;
+    perfectPredictionsCount: number;
+    totalPoints: number;
+    role: string;
+    joinedAt: string | null;
+    isCurrentUser: boolean;
+    isOwner: boolean;
+    canBeManaged: boolean;
+}
+
+export interface LeagueMembersPageProps {
+    league: Pick<
+        LeagueDetails,
+        | 'id'
+        | 'name'
+        | 'icon'
+        | 'accentColor'
+        | 'coverStyle'
+        | 'code'
+        | 'settingsHref'
+        | 'showHref'
+        | 'membersCount'
+    >;
+    members: LeagueMemberManagement[];
 }

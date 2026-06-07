@@ -1,5 +1,12 @@
 import { Form } from '@inertiajs/react';
-import { Crown, ShieldCheck, ShieldPlus, UserMinus, Users } from 'lucide-react';
+import {
+    Crown,
+    Shield,
+    ShieldCheck,
+    ShieldPlus,
+    UserMinus,
+    Users,
+} from 'lucide-react';
 import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
 import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
 import {
@@ -125,6 +132,22 @@ export default function LeagueMembersManagementCard({
                                             Owner
                                         </Badge>
                                     )}
+                                    {!member.isOwner &&
+                                        member.role === 'admin' && (
+                                            <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
+                                                <Shield className="size-3" />
+                                                Admin
+                                            </Badge>
+                                        )}
+                                    {!member.isOwner &&
+                                        member.role !== 'admin' && (
+                                            <Badge
+                                                variant="outline"
+                                                className="rounded-full border-slate-200 bg-white px-2 py-0.5 text-xs font-bold text-slate-600"
+                                            >
+                                                Member
+                                            </Badge>
+                                        )}
                                     {member.isCurrentUser && (
                                         <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-slate-900">
                                             You
@@ -132,9 +155,11 @@ export default function LeagueMembersManagementCard({
                                     )}
                                 </div>
                                 <p className="mt-1 text-xs leading-5 text-slate-500">
-                                    {member.canBeManaged
-                                        ? 'Can be transferred or removed.'
-                                        : 'Protected owner access.'}
+                                    {member.joinedAt
+                                        ? `Joined ${new Date(member.joinedAt).toLocaleDateString()}.`
+                                        : member.canBeManaged
+                                          ? 'Can be transferred or removed.'
+                                          : 'Protected owner access.'}
                                 </p>
                             </div>
                         </div>
