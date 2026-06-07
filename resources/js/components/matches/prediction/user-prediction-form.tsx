@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import type * as React from 'react';
 import { toast } from 'sonner';
 import PredictionConfidenceField from '@/components/matches/prediction/prediction-confidence-field';
-import PredictionOutcomeField from '@/components/matches/prediction/prediction-outcome-field';
 import PredictionScoreFields from '@/components/matches/prediction/prediction-score-fields';
 import { Button } from '@/components/ui/forms/button';
 import { store as storePrediction } from '@/routes/matches/prediction';
@@ -65,6 +64,26 @@ export default function UserPredictionForm({
         });
     };
 
+    useEffect(() => {
+        if (data.home_score === '' || data.away_score === '') {
+            return;
+        }
+
+        const home = parseInt(data.home_score, 10);
+        const away = parseInt(data.away_score, 10);
+
+        if (Number.isNaN(home) || Number.isNaN(away)) {
+            return;
+        }
+
+        const derived: 'home' | 'draw' | 'away' =
+            home > away ? 'home' : home < away ? 'away' : 'draw';
+
+        if (data.outcome !== derived) {
+            setData('outcome', derived);
+        }
+    }, [data.home_score, data.away_score, data.outcome, setData]);
+
     const showBoost =
         scoreboardId !== undefined &&
         typeof boostsRemaining === 'number' &&
@@ -72,14 +91,6 @@ export default function UserPredictionForm({
 
     return (
         <form onSubmit={submit} className="grid gap-4">
-            <PredictionOutcomeField
-                match={match}
-                value={data.outcome}
-                disabled={predictionLocked || processing}
-                error={errors.outcome}
-                onChange={(outcome) => setData('outcome', outcome)}
-            />
-
             <PredictionScoreFields
                 match={match}
                 homeScore={data.home_score}

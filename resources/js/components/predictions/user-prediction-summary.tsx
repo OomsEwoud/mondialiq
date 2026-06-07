@@ -52,8 +52,6 @@ export default function UserPredictionSummary({
                 </Badge>
             )}
 
-
-
             {aiMode && finishedFixture && actualScore && (
                 <>
                     <Badge className="rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-medium text-slate-700">

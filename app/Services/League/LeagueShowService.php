@@ -65,6 +65,7 @@ class LeagueShowService
             'isActive' => $scoreboard->is_active,
             'showHref' => route('leagues.show', $scoreboard),
             'joinHref' => route('leagues.join', ['code' => $scoreboard->code]),
+            'predictHref' => route('leagues.predict', $scoreboard),
             'settingsHref' => $user->can('manage', $scoreboard)
                 ? route('leagues.settings', $scoreboard)
                 : null,

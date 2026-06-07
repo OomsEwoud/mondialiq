@@ -60,6 +60,7 @@ export interface LeagueDetails {
     scoringRules: ScoringRules;
     showHref?: string | null;
     joinHref: string;
+    predictHref?: string | null;
     settingsHref?: string | null;
     membersHref?: string | null;
     canManage: boolean;

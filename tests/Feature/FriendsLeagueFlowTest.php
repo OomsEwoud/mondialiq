@@ -1117,3 +1117,70 @@ test('a non member cannot view a private league detail page', function () {
         ->get(route('leagues.show', $league))
         ->assertForbidden();
 });
+
+test('a league member can view the league predict page with upcoming matches', function () {
+    $dbLeague = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $homeTeam = Team::create([
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    $currentUser = User::factory()->create(['name' => 'Current Player']);
+
+    $league = Scoreboard::create([
+        'name' => 'Friends League',
+        'icon' => '🔥',
+        'accent_color' => 'amber',
+        'cover_style' => 'night',
+        'code' => 'FRIENDS1',
+    ]);
+
+    $league->users()->attach([
+        $currentUser->id,
+    ]);
+
+    $fixture = Fixture::create([
+        'external_id' => 999,
+        'league_id' => $dbLeague->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => now()->addDays(2)->toDateTimeString(),
+        'status_long' => 'Not Started',
+    ]);
+
+    $this->actingAs($currentUser)
+        ->get(route('leagues.predict', $league))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('league-predict')
+            ->where('league.name', 'Friends League')
+            ->where('league.upcomingFixtures.0.homeTeamShort', 'BEL')
+        );
+});
+
+test('a non member cannot view a private league predict page', function () {
+    $user = User::factory()->create();
+
+    $league = Scoreboard::create([
+        'name' => 'Private League',
+        'code' => 'PRIVATE1',
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('leagues.predict', $league))
+        ->assertForbidden();
+});

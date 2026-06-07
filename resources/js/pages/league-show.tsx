@@ -13,7 +13,6 @@ import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
 import LeagueMembersCard from '@/components/leaderboards/league-members-card';
 import LeagueOnboardingCard from '@/components/leaderboards/league-onboarding-card';
 import LeagueSnapshotCard from '@/components/leaderboards/league-snapshot-card';
-import LeagueUpcomingMatchesCard from '@/components/leaderboards/league-upcoming-matches-card';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
@@ -141,18 +140,21 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     </Link>
                                 </Button>
                             )}
+
+                            {league.predictHref && (
+                                <Button
+                                    asChild
+                                    className="h-11 w-full rounded-lg bg-slate-900 px-5 font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:ring-cyan-300 sm:w-auto"
+                                >
+                                    <Link href={league.predictHref}>
+                                        <Target className="size-4" />
+                                        Predict matches
+                                    </Link>
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </section>
-
-                {league.upcomingFixtures.length > 0 && (
-                    <LeagueUpcomingMatchesCard
-                        fixtures={league.upcomingFixtures}
-                        scoreboardId={league.id}
-                        boostsRemaining={league.boostsRemaining}
-                        boostedEnabled={league.boostedPredictionsEnabled}
-                    />
-                )}
 
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.9fr)]">
                     <LeagueMembersCard members={league.members} />
