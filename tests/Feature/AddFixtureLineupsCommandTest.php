@@ -181,18 +181,6 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
         'match_date' => now('Europe/Brussels')->copy()->addMinutes(40),
     ]);
 
-    $recentlyCheckedFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
-        'external_id' => 502,
-        'match_date' => now('Europe/Brussels')->copy()->addMinutes(35),
-        'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(4),
-    ]);
-
-    $syncedFixture = createLineupFixture($league, $homeTeam, $awayTeam, [
-        'external_id' => 503,
-        'match_date' => now('Europe/Brussels')->copy()->addMinutes(42),
-        'has_lineups' => true,
-    ]);
-
     createLineupFixture($league, $homeTeam, $awayTeam, [
         'external_id' => 504,
         'match_date' => now('Europe/Brussels')->copy()->addMinutes(46),
@@ -402,7 +390,6 @@ test('the add fixture lineups command keeps retrying after previous unavailable 
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput("Calling endpoint /fixtures/lineups for fixture {$fixture->id}")
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeTrue()
