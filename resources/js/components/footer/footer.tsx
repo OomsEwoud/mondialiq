@@ -73,14 +73,14 @@ export default function Footer() {
                             href={privacy.url()}
                             className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                         >
-                            Privacy & cookiebeleid
+                            Privacy & Cookie Policy
                         </a>
                         <button
                             type="button"
                             onClick={openCookieBanner}
                             className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
                         >
-                            Cookievoorkeuren
+                            Cookie Preferences
                         </button>
                         <a
                             href={contact.url()}
