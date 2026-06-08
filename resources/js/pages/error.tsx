@@ -29,6 +29,7 @@ type ErrorAction = {
 
 type ErrorConfig = {
     accent: string;
+    accentBg: string;
     action?: ErrorAction;
     description: string;
     icon: typeof Home;
@@ -39,6 +40,7 @@ type ErrorConfig = {
 const errorConfig: Record<number, ErrorConfig> = {
     403: {
         accent: 'text-amber-600',
+        accentBg: 'bg-amber-50 ring-amber-200',
         action: {
             href: predictions.url(),
             icon: Sparkles,
@@ -52,6 +54,7 @@ const errorConfig: Record<number, ErrorConfig> = {
     },
     404: {
         accent: 'text-cyan-600',
+        accentBg: 'bg-cyan-50 ring-cyan-200',
         action: {
             href: matches.url(),
             icon: CalendarDays,
@@ -65,6 +68,7 @@ const errorConfig: Record<number, ErrorConfig> = {
     },
     419: {
         accent: 'text-blue-700',
+        accentBg: 'bg-blue-50 ring-blue-200',
         description:
             'Your session expired. Please refresh and try again before submitting your next prediction.',
         icon: TimerReset,
@@ -73,6 +77,7 @@ const errorConfig: Record<number, ErrorConfig> = {
     },
     429: {
         accent: 'text-orange-600',
+        accentBg: 'bg-orange-50 ring-orange-200',
         action: {
             href: matches.url(),
             icon: CalendarDays,
@@ -86,6 +91,7 @@ const errorConfig: Record<number, ErrorConfig> = {
     },
     500: {
         accent: 'text-red-600',
+        accentBg: 'bg-red-50 ring-red-200',
         action: {
             href: predictions.url(),
             icon: Sparkles,
@@ -98,7 +104,8 @@ const errorConfig: Record<number, ErrorConfig> = {
         title: 'Something went wrong on our side.',
     },
     503: {
-        accent: 'text-slate-700',
+        accent: 'text-slate-600',
+        accentBg: 'bg-slate-50 ring-slate-200',
         description:
             'MondialIQ is temporarily unavailable. We are tuning the platform for the next prediction window.',
         icon: ShieldAlert,
@@ -109,6 +116,7 @@ const errorConfig: Record<number, ErrorConfig> = {
 
 const fallbackConfig: ErrorConfig = {
     accent: 'text-cyan-600',
+    accentBg: 'bg-cyan-50 ring-cyan-200',
     action: {
         href: matches.url(),
         icon: CalendarDays,
@@ -151,51 +159,52 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                 />
             </Head>
 
-            <div className="light min-h-screen w-full overflow-x-hidden bg-slate-50 font-sans text-slate-900">
-                <header className="border-b border-cyan-200/10 bg-[#141c69] shadow-lg shadow-sm">
-                    <div className="mx-auto flex h-16 w-full max-w-6xl items-center px-5 sm:px-6">
+            <div className="flex min-h-screen flex-col bg-slate-50">
+                <header className="border-b border-slate-200 bg-white shadow-sm">
+                    <div className="mx-auto flex h-16 w-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
                         <Link
                             href={home.url()}
-                            className="rounded-lg focus-visible:ring-2 focus-visible:ring-cyan-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#141c69] focus-visible:outline-none"
+                            className="rounded-lg focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:outline-none"
                         >
-                            <AppLogo textClassName="text-cyan-300" />
+                            <AppLogo />
                         </Link>
                     </div>
                 </header>
 
-                <main className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-6xl items-center px-5 py-8 sm:px-6 lg:py-12">
-                    <section className="w-full overflow-hidden rounded-2xl border border-cyan-200/30 bg-[radial-gradient(circle_at_top_right,rgba(103,232,249,0.2),transparent_24rem),linear-gradient(135deg,#ffffff_0%,#f8fbff_52%,#eef7ff_100%)] shadow-2xl shadow-sm">
-                        <div className="grid min-h-[62vh] gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:p-10">
-                            <div className="min-w-0">
-                                <div className="mb-6 flex size-14 items-center justify-center rounded-2xl bg-white text-cyan-600 shadow-sm ring-slate-200">
-                                    <StatusIcon className="size-6" />
+                <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 lg:py-12">
+                    <div className="w-full max-w-2xl">
+                        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 sm:p-8">
+                            <div className="flex flex-col items-start gap-6">
+                                <div
+                                    className={cn(
+                                        'flex size-14 items-center justify-center rounded-2xl ring-1 shadow-sm',
+                                        config.accentBg,
+                                    )}
+                                >
+                                    <StatusIcon className={cn('size-6', config.accent)} />
                                 </div>
 
-                                <p className="text-xs font-black tracking-wide text-cyan-600 uppercase">
-                                    {config.kicker}
-                                </p>
-                                <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end">
-                                    <span
+                                <div className="min-w-0">
+                                    <p
                                         className={cn(
-                                            'text-6xl leading-none font-black tracking-tight sm:text-7xl',
+                                            'text-xs font-bold tracking-wide uppercase',
                                             config.accent,
                                         )}
                                     >
-                                        {status}
-                                    </span>
-                                    <h1 className="max-w-2xl text-3xl leading-tight font-black tracking-tight text-slate-900 sm:text-4xl">
+                                        {config.kicker}
+                                    </p>
+                                    <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
                                         {config.title}
                                     </h1>
+                                    <p className="mt-3 max-w-lg text-sm leading-7 text-slate-600 sm:text-base">
+                                        {config.description}
+                                    </p>
                                 </div>
 
-                                <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
-                                    {config.description}
-                                </p>
-
-                                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                                <div className="flex w-full flex-wrap gap-3">
                                     <Button
                                         asChild
-                                        className="h-11 rounded-full px-5 font-black"
+                                        className="h-11 rounded-xl px-5 text-sm font-semibold"
                                     >
                                         <Link href={home.url()}>
                                             <Home className="size-4" />
@@ -207,7 +216,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                         type="button"
                                         variant="outline"
                                         onClick={goBack}
-                                        className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                                        className="h-11 rounded-xl border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                                     >
                                         <ArrowLeft className="size-4" />
                                         Go back
@@ -220,7 +229,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                             onClick={() =>
                                                 window.location.reload()
                                             }
-                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                                            className="h-11 rounded-xl border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                                         >
                                             <RefreshCcw className="size-4" />
                                             Refresh page
@@ -231,7 +240,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                         <Button
                                             asChild
                                             variant="outline"
-                                            className="h-11 rounded-full border-slate-200 bg-white px-5 font-black text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                                            className="h-11 rounded-xl border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                                         >
                                             <Link href={config.action.href}>
                                                 <ActionIcon className="size-4" />
@@ -242,11 +251,11 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                 </div>
                             </div>
 
-                            <aside className="rounded-2xl border border-white/80 bg-white/80 p-5 shadow-sm shadow-xl ring-1 ring-slate-200/50">
-                                <p className="text-xs font-black tracking-wide text-slate-400 uppercase">
-                                    Match report
+                            <div className="mt-8 border-t border-slate-100 pt-6">
+                                <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
+                                    Details
                                 </p>
-                                <div className="mt-4 grid gap-3">
+                                <div className="mt-4 grid gap-3 sm:grid-cols-3">
                                     <StatusPill
                                         label="Status"
                                         value={`${status}`}
@@ -264,9 +273,9 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                                         }
                                     />
                                 </div>
-                            </aside>
+                            </div>
                         </div>
-                    </section>
+                    </div>
                 </main>
             </div>
         </>
@@ -276,10 +285,10 @@ export default function ErrorPage({ status }: ErrorPageProps) {
 function StatusPill({ label, value }: { label: string; value: string }) {
     return (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-            <p className="text-xs font-black tracking-widest text-slate-400 uppercase">
+            <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                 {label}
             </p>
-            <p className="mt-1 text-sm font-black text-slate-900">{value}</p>
+            <p className="mt-1 text-sm font-bold text-slate-900">{value}</p>
         </div>
     );
 }
