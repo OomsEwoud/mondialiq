@@ -4,9 +4,11 @@ import {
     ListOrdered,
     ShieldCheck,
     Trophy,
+    XIcon,
 } from 'lucide-react';
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogHeader,
@@ -77,28 +79,35 @@ export default function StandingsExplanationModal({
 }: Props) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-0 shadow-sm sm:max-w-5xl">
-                <div className="border-b border-slate-200 bg-gradient-to-b from-white to-slate-50/70 px-5 py-6 sm:px-7 sm:py-7">
-                    <DialogHeader className="gap-3 pr-8 text-left">
-                        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <DialogContent
+                hideCloseButton
+                className="max-h-[85vh] overflow-y-auto rounded-3xl border border-slate-200 bg-white p-0 shadow-xl shadow-slate-200/60 sm:max-w-4xl"
+            >
+                <DialogClose className="absolute top-5 right-5 z-10 flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none">
+                    <XIcon className="size-5" />
+                    <span className="sr-only">Close</span>
+                </DialogClose>
+
+                <div className="border-b border-slate-100 bg-gradient-to-b from-white to-slate-50/70 px-6 py-8 sm:px-8 sm:py-10">
+                    <DialogHeader className="gap-3 text-left">
+                        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div className="min-w-0">
-                                <div className="flex size-14 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 shadow-sm">
+                                <div className="flex size-14 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 shadow-sm ring-1 ring-slate-200">
                                     <Trophy className="size-6" />
                                 </div>
                                 <p className="mt-4 text-xs font-bold tracking-wide text-cyan-600 uppercase">
                                     Group Standings
                                 </p>
-                                <DialogTitle className="mt-2 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+                                <DialogTitle className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
                                     How standings work
                                 </DialogTitle>
-                                <DialogDescription className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+                                <DialogDescription className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
                                     A clear guide to points, table columns,
-                                    qualification rules and third-place rankings
-                                    on the World Cup 2026 standings page.
+                                    qualification rules and third-place rankings.
                                 </DialogDescription>
                             </div>
 
-                            <div className="grid gap-2 sm:grid-cols-3 lg:max-w-md lg:min-w-[22rem]">
+                            <div className="grid gap-2 sm:grid-cols-3 lg:max-w-sm lg:min-w-[18rem]">
                                 <HeroStat label="Groups" value="12" />
                                 <HeroStat label="Teams each" value="4" />
                                 <HeroStat
@@ -110,51 +119,34 @@ export default function StandingsExplanationModal({
                     </DialogHeader>
                 </div>
 
-                <div className="space-y-5 px-5 py-5 sm:px-6 sm:py-6">
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
-                                <ListOrdered className="size-5" />
-                            </span>
-                            <div>
-                                <SectionEyebrow>Group format</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                                    How group standings work
-                                </h2>
-                                <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">
-                                    Each World Cup group contains four teams.
-                                    Teams are ranked by their match results
-                                    during the group stage.
-                                </p>
-                            </div>
-                        </div>
-                    </section>
+                <div className="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
+                    <SectionCard
+                        icon={<ListOrdered className="size-5" />}
+                        eyebrow="Group format"
+                        title="How group standings work"
+                    >
+                        <p className="text-sm leading-6 text-slate-600 sm:text-base">
+                            Each World Cup group contains four teams. Teams are
+                            ranked by their match results during the group stage.
+                        </p>
+                    </SectionCard>
 
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
-                                <Trophy className="size-5" />
-                            </span>
-                            <div className="min-w-0">
-                                <SectionEyebrow>Points</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                                    Points system
-                                </h2>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    Teams earn points from every group-stage
-                                    match.
-                                </p>
-                            </div>
-                        </div>
-
+                    <SectionCard
+                        icon={<Trophy className="size-5" />}
+                        eyebrow="Points"
+                        title="Points system"
+                    >
+                        <p className="text-sm leading-6 text-slate-600">
+                            Teams earn points from every group-stage match.
+                        </p>
                         <div className="mt-5 grid gap-3 sm:grid-cols-3">
                             {pointsRules.map((rule) => (
                                 <div
                                     key={rule.label}
-                                    className="rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
+                                    className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
                                     <div className="flex items-center justify-between gap-3">
-                                        <h3 className="text-lg font-bold text-slate-900">
+                                        <h3 className="text-lg font-bold text-slate-950">
                                             {rule.label}
                                         </h3>
                                         <span className="rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700">
@@ -167,32 +159,23 @@ export default function StandingsExplanationModal({
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </SectionCard>
 
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
-                                <CircleHelp className="size-5" />
-                            </span>
-                            <div>
-                                <SectionEyebrow>Columns</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                                    Table columns
-                                </h2>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    These short labels help you read the table
-                                    quickly.
-                                </p>
-                            </div>
-                        </div>
-
+                    <SectionCard
+                        icon={<CircleHelp className="size-5" />}
+                        eyebrow="Columns"
+                        title="Table columns"
+                    >
+                        <p className="text-sm leading-6 text-slate-600">
+                            These short labels help you read the table quickly.
+                        </p>
                         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                             {tableColumns.map(([code, meaning]) => (
                                 <div
                                     key={code}
                                     className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
-                                    <p className="text-2xl font-bold text-slate-900">
+                                    <p className="text-2xl font-bold text-slate-950">
                                         {code}
                                     </p>
                                     <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -201,25 +184,17 @@ export default function StandingsExplanationModal({
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </SectionCard>
 
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <div className="flex items-start gap-3">
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
-                                <ShieldCheck className="size-5" />
-                            </span>
-                            <div>
-                                <SectionEyebrow>Qualification</SectionEyebrow>
-                                <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
-                                    Qualification
-                                </h2>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
-                                    Group position decides whether a team keeps
-                                    going or leaves the tournament.
-                                </p>
-                            </div>
-                        </div>
-
+                    <SectionCard
+                        icon={<ShieldCheck className="size-5" />}
+                        eyebrow="Qualification"
+                        title="Qualification"
+                    >
+                        <p className="text-sm leading-6 text-slate-600">
+                            Group position decides whether a team keeps going or
+                            leaves the tournament.
+                        </p>
                         <div className="mt-5 grid gap-3 lg:grid-cols-3">
                             {qualificationRules.map((rule) => (
                                 <div
@@ -227,7 +202,7 @@ export default function StandingsExplanationModal({
                                     className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm"
                                 >
                                     <div className="flex items-center justify-between gap-3">
-                                        <p className="text-lg font-bold text-slate-900">
+                                        <p className="text-lg font-bold text-slate-950">
                                             {rule.label}
                                         </p>
                                         <span
@@ -246,32 +221,32 @@ export default function StandingsExplanationModal({
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </SectionCard>
 
                     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                        <div className="border-b border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5">
+                        <div className="border-b border-slate-100 bg-gradient-to-b from-white to-slate-50/60 p-6">
                             <div className="flex items-start gap-3">
-                                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600">
+                                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
                                     <CheckCircle2 className="size-5" />
                                 </span>
                                 <div>
-                                    <SectionEyebrow>
+                                    <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
                                         Cross-group ranking
-                                    </SectionEyebrow>
-                                    <h2 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
+                                    </p>
+                                    <h2 className="mt-1 text-2xl font-bold text-slate-950 sm:text-3xl">
                                         Best 3rd ranking
                                     </h2>
                                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
                                         The Best 3rd ranking compares all teams
-                                        that finish third in their group. The
-                                        top eight in that ranking advance to the
-                                        Round of 32.
+                                        that finish third in their group. The top
+                                        eight in that ranking advance to the Round
+                                        of 32.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+                        <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
                             <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                                 <p className="text-sm font-bold tracking-wide text-cyan-600 uppercase">
                                     Quick view
@@ -294,7 +269,7 @@ export default function StandingsExplanationModal({
 
                             <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                                 <div className="mb-3 flex items-center justify-between gap-3">
-                                    <p className="text-sm font-bold text-slate-900">
+                                    <p className="text-sm font-bold text-slate-950">
                                         12 third-placed teams
                                     </p>
                                     <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
@@ -337,21 +312,44 @@ export default function StandingsExplanationModal({
     );
 }
 
-function SectionEyebrow({ children }: { children: string }) {
+function SectionCard({
+    icon,
+    eyebrow,
+    title,
+    children,
+}: {
+    icon: React.ReactNode;
+    eyebrow: string;
+    title: string;
+    children: React.ReactNode;
+}) {
     return (
-        <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
-            {children}
-        </p>
+        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-start gap-3">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-600 ring-1 ring-slate-200">
+                    {icon}
+                </span>
+                <div className="min-w-0">
+                    <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
+                        {eyebrow}
+                    </p>
+                    <h2 className="mt-1 text-2xl font-bold text-slate-950 sm:text-3xl">
+                        {title}
+                    </h2>
+                    <div className="mt-2">{children}</div>
+                </div>
+            </div>
+        </section>
     );
 }
 
 function HeroStat({ label, value }: { label: string; value: string }) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3 text-left shadow-sm">
+        <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm">
             <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
                 {label}
             </p>
-            <p className="mt-1 text-sm leading-5 font-bold text-slate-900">
+            <p className="mt-1 text-sm leading-5 font-bold text-slate-950">
                 {value}
             </p>
         </div>
@@ -360,8 +358,8 @@ function HeroStat({ label, value }: { label: string; value: string }) {
 
 function MiniInfoCard({ title, body }: { title: string; body: string }) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p className="text-sm font-bold text-slate-900">{title}</p>
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm">
+            <p className="text-sm font-bold text-slate-950">{title}</p>
             <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
         </div>
     );
