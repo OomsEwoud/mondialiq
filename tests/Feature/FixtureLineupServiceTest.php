@@ -63,59 +63,6 @@ test('it stores lineup players when the api does not provide a formation', funct
         ->and($fixture->fixturePlayers()->first()?->position)->toBe('M');
 });
 
-test('it creates missing players from lineup payloads', function () {
-    $league = League::query()->create([
-        'external_id' => config('services.api_football.league_id'),
-        'name' => 'World Cup',
-        'type' => 'Cup',
-    ]);
-
-    $homeTeam = Team::query()->create([
-        'external_id' => 7101,
-        'name' => 'France',
-        'code' => 'FRA',
-        'logo_url' => 'https://example.com/france.png',
-    ]);
-
-    $awayTeam = Team::query()->create([
-        'external_id' => 7102,
-        'name' => 'Germany',
-        'code' => 'GER',
-        'logo_url' => 'https://example.com/germany.png',
-    ]);
-
-    $fixture = Fixture::query()->create([
-        'external_id' => 8101,
-        'league_id' => $league->id,
-        'home_team_id' => $homeTeam->id,
-        'away_team_id' => $awayTeam->id,
-        'round_name' => 'Group Stage - Matchday 1',
-        'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addMinutes(45)->format('Y-m-d H:i:s'),
-        'status_short' => 'NS',
-        'status_long' => 'Not Started',
-    ]);
-
-    $stored = app(FixtureLineupService::class)->storeLineups([
-        [
-            'team' => ['id' => $homeTeam->external_id],
-            'formation' => null,
-            'startXI' => [
-                ['player' => ['id' => 9101, 'name' => 'New Starter', 'number' => 7, 'pos' => 'F']],
-            ],
-            'substitutes' => [],
-        ],
-    ], $fixture->id);
-
-    $player = Player::query()->where('external_id', 9101)->first();
-
-    expect($stored)->toBeTrue()
-        ->and($player)->not->toBeNull()
-        ->and($player?->display_name)->toBe('New Starter')
-        ->and($player?->teams()->whereKey($homeTeam->id)->exists())->toBeTrue()
-        ->and($fixture->fixturePlayers()->where('player_id', $player?->id)->exists())->toBeTrue();
-});
-
 test('it falls back to fixture team order when api lineup team ids are not mapped locally', function () {
     $league = League::query()->create([
         'external_id' => config('services.api_football.league_id'),

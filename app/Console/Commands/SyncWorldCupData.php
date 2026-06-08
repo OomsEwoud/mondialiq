@@ -25,7 +25,6 @@ class SyncWorldCupData extends Command
         ['command' => 'app:add-odds', 'arguments' => ['--days' => 90]],
         ['command' => 'app:add-predictions'],
 
-        ['command' => 'app:add-missing-players'],
         ['command' => 'app:import-head-to-head', 'arguments' => ['--force' => true]],
         ['command' => 'app:import-team-statistics', 'arguments' => ['--force' => true]],
         ['command' => 'app:add-fixture-lineups'],

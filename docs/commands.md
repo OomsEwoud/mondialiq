@@ -112,12 +112,6 @@ Haal spelerstatistieken op voor relevante fixtures:
 php artisan app:add-fixture-player-stats
 ```
 
-Haal missing players/injuries op:
-
-```bash
-php artisan app:add-missing-players
-```
-
 ## Odds En API Predictions
 
 Haal bookmakers op:

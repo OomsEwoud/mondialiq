@@ -27,8 +27,6 @@ test('it builds a prompt with all prediction context sections', function () {
         '- Belgium: 2nd, 18 points, +8 goal difference',
         'Head-to-head summary:',
         '- Total meetings: 8',
-        'Missing players summary:',
-        '- Netherlands: 1 missing player',
     ]));
 
     $prompt = app(AiPredictionPromptBuilder::class)->build($fixture);
@@ -38,8 +36,7 @@ test('it builds a prompt with all prediction context sections', function () {
         ->and($prompt)->toContain('API prediction summary:')
         ->and($prompt)->toContain('Team statistics summary:')
         ->and($prompt)->toContain('Standings summary:')
-        ->and($prompt)->toContain('Head-to-head summary:')
-        ->and($prompt)->toContain('Missing players summary:');
+        ->and($prompt)->toContain('Head-to-head summary:');
 });
 
 test('it separates instructions from fixture context', function () {
@@ -95,7 +92,7 @@ test('it includes prediction guidance', function () {
 
     expect($prompt)->toContain('Treat market odds as the strongest external signal.')
         ->and($prompt)->toContain('Treat API predictions as a secondary signal.')
-        ->and($prompt)->toContain('Use team stats, standings, head-to-head and missing players as supporting context.')
+        ->and($prompt)->toContain('Use team stats, standings and head-to-head as supporting context.')
         ->and($prompt)->toContain('Do not assume the listed home team has home advantage.')
         ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
@@ -121,7 +118,7 @@ test('it handles missing context safely', function () {
         '- API prediction data not available.',
         'Standings data not available.',
         'Head-to-head data not available.',
-        'No missing players reported.',
+
     ]));
 
     $prompt = app(AiPredictionPromptBuilder::class)->build($fixture);
@@ -129,8 +126,7 @@ test('it handles missing context safely', function () {
     expect($prompt)->toContain('Home win probability: not available')
         ->and($prompt)->toContain('API prediction data not available.')
         ->and($prompt)->toContain('Standings data not available.')
-        ->and($prompt)->toContain('Head-to-head data not available.')
-        ->and($prompt)->toContain('No missing players reported.');
+        ->and($prompt)->toContain('Head-to-head data not available.');
 });
 
 test('it does not call external football api services', function () {

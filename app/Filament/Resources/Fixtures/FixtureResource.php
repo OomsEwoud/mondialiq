@@ -9,7 +9,6 @@ use App\Filament\Resources\Fixtures\RelationManagers\FixtureEventsRelationManage
 use App\Filament\Resources\Fixtures\RelationManagers\FixtureOddsRelationManager;
 use App\Filament\Resources\Fixtures\RelationManagers\FixturePlayersRelationManager;
 use App\Filament\Resources\Fixtures\RelationManagers\FixtureStatsRelationManager;
-use App\Filament\Resources\Fixtures\RelationManagers\MissingPlayersRelationManager;
 use App\Filament\Resources\Fixtures\RelationManagers\PredictionsRelationManager;
 use App\Filament\Resources\Fixtures\Schemas\FixtureForm;
 use App\Filament\Resources\Fixtures\Tables\FixturesTable;
@@ -64,7 +63,6 @@ class FixtureResource extends Resource
         return [
             FixturePlayersRelationManager::class,
             FixtureEventsRelationManager::class,
-            MissingPlayersRelationManager::class,
             FixtureStatsRelationManager::class,
             FixtureOddsRelationManager::class,
             PredictionsRelationManager::class,

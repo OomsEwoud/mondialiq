@@ -28,8 +28,6 @@ Schedule::command('app:add-fixture-data')->everyMinute()->withoutOverlapping();
 Schedule::command('app:add-fixtures')->everyMinute()->when($hasActiveOrSoonFixture)->withoutOverlapping();
 Schedule::command('app:add-fixtures')->daily()->skip($hasActiveOrSoonFixture)->withoutOverlapping();
 
-Schedule::command('app:add-missing-players')->daily()->withoutOverlapping();
-
 if (now()->between('2026-06-11', '2026-07-20')) {
     Schedule::command('app:add-standings')->hourly()->withoutOverlapping();
 } else {

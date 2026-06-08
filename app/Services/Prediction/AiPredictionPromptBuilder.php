@@ -52,7 +52,7 @@ class AiPredictionPromptBuilder
             'Important guidance:',
             '- Treat market odds as the strongest external signal.',
             '- Treat API predictions as a secondary signal.',
-            '- Use team stats, standings, head-to-head and missing players as supporting context.',
+            '- Use team stats, standings and head-to-head as supporting context.',
             '- Do not assume the listed home team has home advantage. In finals and neutral-venue matches, home/away is usually administrative.',
             '- For World Cup matches, only host nations should receive a home-country advantage; other listed home teams should not.',
             '- If market odds and API prediction disagree, mention the disagreement.',

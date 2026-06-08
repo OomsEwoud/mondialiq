@@ -9,7 +9,6 @@ use App\Models\Venue;
 use App\Services\Prediction\ApiPredictionSummaryService;
 use App\Services\Prediction\FixtureOddsSummaryService;
 use App\Services\Prediction\HeadToHeadSummaryService;
-use App\Services\Prediction\MissingPlayersSummaryService;
 use App\Services\Prediction\PredictionContextService;
 use App\Services\Prediction\StandingsSummaryService;
 use App\Services\Prediction\TeamStatsSummaryService;
@@ -42,7 +41,6 @@ test('it builds context when all sources exist', function () {
         ->and($context['team_statistics'])->toBe(['home_team' => ['form' => 'WWDWL']])
         ->and($context['standings'])->toBe(['home_team' => ['rank' => 2]])
         ->and($context['head_to_head'])->toBe(['total_meetings' => 8])
-        ->and($context['missing_players'])->toBe(['home_missing_count' => 1])
         ->and($context['guidance'])->toHaveCount(4);
 });
 
@@ -95,7 +93,6 @@ test('prompt block contains all available sections', function () {
         ->and($promptBlock)->toContain('Team statistics summary:')
         ->and($promptBlock)->toContain('Standings summary:')
         ->and($promptBlock)->toContain('Head-to-head summary:')
-        ->and($promptBlock)->toContain('Missing players summary:')
         ->and($promptBlock)->toContain('Guidance:')
         ->and($promptBlock)->toContain('If sources disagree, explain the disagreement.');
 });
@@ -177,14 +174,6 @@ function mockPredictionContextSummaryServices(bool $expectApiPrediction = true):
         $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
             'Head-to-head summary:',
             '- Total meetings: '.($expectApiPrediction ? '8' : 'not available'),
-        ]));
-    });
-
-    mock(MissingPlayersSummaryService::class, function (MockInterface $mock) {
-        $mock->shouldReceive('summarize')->andReturn(['home_missing_count' => 1]);
-        $mock->shouldReceive('promptBlock')->andReturn(implode(PHP_EOL, [
-            'Missing players summary:',
-            '- Liverpool: 1 missing player',
         ]));
     });
 }

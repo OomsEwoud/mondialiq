@@ -26,8 +26,6 @@ class MatchDetailsController extends Controller
             'lineups',
             'fixturePlayers.player',
             'playerFixtureStats',
-            'missingPlayers.country',
-            'missingPlayers.teams',
         ]);
         $this->loadPredictionRelations($fixture, $request->user());
 

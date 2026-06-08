@@ -21,7 +21,6 @@ class SyncAllData extends Command
         'app:add-predictions',
         'app:add-coaches',
         'app:add-venues',
-        'app:add-missing-players',
         'app:import-head-to-head',
         'app:import-team-statistics',
         'app:add-fixture-lineups',

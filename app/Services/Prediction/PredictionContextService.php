@@ -17,7 +17,7 @@ class PredictionContextService
     private const GUIDANCE_LINES = [
         'Market odds are the strongest external signal.',
         'API predictions are a secondary signal.',
-        'Team stats, standings, head-to-head and missing players provide context.',
+        'Team stats, standings and head-to-head provide context.',
         'If sources disagree, explain the disagreement.',
     ];
 
@@ -27,7 +27,6 @@ class PredictionContextService
         private readonly TeamStatsSummaryService $teamStatsSummaryService,
         private readonly StandingsSummaryService $standingsSummaryService,
         private readonly HeadToHeadSummaryService $headToHeadSummaryService,
-        private readonly MissingPlayersSummaryService $missingPlayersSummaryService,
         private readonly PromptFormatter $formatter,
     ) {}
 
@@ -45,7 +44,6 @@ class PredictionContextService
             'team_statistics' => $this->teamStatsSummaryService->summarize($fixture),
             'standings' => $this->standingsSummaryService->summarize($fixture),
             'head_to_head' => $this->headToHeadSummaryService->summarize($fixture),
-            'missing_players' => $this->missingPlayersSummaryService->summarize($fixture),
             'guidance' => self::GUIDANCE_LINES,
         ];
     }
@@ -62,7 +60,6 @@ class PredictionContextService
             $this->teamStatsSummaryService->promptBlock($fixture),
             $this->standingsSummaryService->promptBlock($fixture),
             $this->headToHeadSummaryService->promptBlock($fixture),
-            $this->missingPlayersSummaryService->promptBlock($fixture),
         ];
 
         if ($includeGuidance) {

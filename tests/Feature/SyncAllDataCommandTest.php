@@ -19,7 +19,7 @@ test('the all data sync command runs the configured commands in order', function
         'app:add-predictions',
         'app:add-coaches',
         'app:add-venues',
-        'app:add-missing-players',
+
         'app:import-head-to-head',
         'app:import-team-statistics',
         'app:add-fixture-lineups',

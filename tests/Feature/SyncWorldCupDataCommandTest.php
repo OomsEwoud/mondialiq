@@ -20,7 +20,7 @@ test('the world cup data sync command runs the configured imports in order', fun
         ['app:add-bookmakers', []],
         ['app:add-odds', ['--days' => 90]],
         ['app:add-predictions', []],
-        ['app:add-missing-players', []],
+
         ['app:import-head-to-head', ['--force' => true]],
         ['app:import-team-statistics', ['--force' => true]],
         ['app:add-fixture-lineups', []],

@@ -43,10 +43,6 @@ class MatchDetailsResource extends JsonResource
                 'home' => $this->lineupForTeam($this->home_team_id),
                 'away' => $this->lineupForTeam($this->away_team_id),
             ],
-            'availability' => [
-                'home' => $this->availabilityForTeam($this->home_team_id),
-                'away' => $this->availabilityForTeam($this->away_team_id),
-            ],
         ];
     }
 
@@ -193,25 +189,6 @@ class MatchDetailsResource extends JsonResource
                 'away' => $stats->firstWhere('team_id', $this->away_team_id)?->value,
             ])
             ->values();
-    }
-
-    private function availabilityForTeam(int $teamId): array
-    {
-        return $this->missingPlayers
-            ->filter(fn (Player $player): bool => $player->teams->contains('id', $teamId))
-            ->sortBy(fn (Player $player): string => $this->playerName($player))
-            ->values()
-            ->map(fn (Player $player) => [
-                'id' => $player->id,
-                'name' => $this->playerName($player),
-                'photo' => $player->photo_url,
-                'number' => $player->number,
-                'position' => $player->position,
-                'country' => $player->country?->name,
-                'type' => $player->pivot?->type,
-                'reason' => $player->pivot?->reason,
-            ])
-            ->all();
     }
 
     private function lineupForTeam(int $teamId): array

@@ -103,18 +103,6 @@ class Fixture extends Model
         return $this->hasOne(WeatherLog::class);
     }
 
-    public function missingPlayers(): BelongsToMany
-    {
-        return $this->belongsToMany(Player::class, 'missing_players')
-            ->withPivot(['type', 'reason'])
-            ->withTimestamps();
-    }
-
-    public function missingPlayerRecords(): HasMany
-    {
-        return $this->hasMany(MissingPlayer::class);
-    }
-
     public function fixturePlayers(): HasMany
     {
         return $this->hasMany(FixturePlayer::class);
