@@ -2,7 +2,6 @@ import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import MatchDetailsPanel from '@/components/matches/match-details-panel';
 import MatchDetailsToggle from '@/components/matches/match-details-toggle';
-import MatchStatusBadges from '@/components/matches/match-status-badges';
 import MatchSummary from '@/components/matches/match-summary';
 import type { Match } from '@/types/match';
 
@@ -33,7 +32,6 @@ export default function MatchCard({ match }: Props) {
                         {match.time}
                     </span>
                 </div>
-                <MatchStatusBadges match={match} />
             </div>
             <MatchDetailsToggle
                 expanded={showDetails}

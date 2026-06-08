@@ -11,7 +11,10 @@ declare global {
 
 export default function Footer() {
     const openCookieBanner = (): void => {
-        if (typeof window !== 'undefined' && window.Atbound?.showConsentBanner) {
+        if (
+            typeof window !== 'undefined' &&
+            window.Atbound?.showConsentBanner
+        ) {
             window.Atbound.showConsentBanner();
         }
     };

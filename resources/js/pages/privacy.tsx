@@ -58,8 +58,9 @@ export default function Privacy() {
                                         Verwerkingsverantwoordelijke
                                     </h3>
                                     <p>
-                                        MondialIQ is de verwerkingsverantwoordelijke
-                                        voor de persoonsgegevens die via deze website
+                                        MondialIQ is de
+                                        verwerkingsverantwoordelijke voor de
+                                        persoonsgegevens die via deze website
                                         worden verzameld.
                                     </p>
                                 </div>
@@ -69,8 +70,8 @@ export default function Privacy() {
                                         Welke gegevens verzamelen we?
                                     </h3>
                                     <p>
-                                        We verzamelen alleen gegevens die nodig zijn
-                                        om de dienst te leveren:
+                                        We verzamelen alleen gegevens die nodig
+                                        zijn om de dienst te leveren:
                                     </p>
                                     <ul className="mt-2 list-disc space-y-1 pl-5">
                                         <li>
@@ -78,12 +79,13 @@ export default function Privacy() {
                                             (bij registratie of sociale login).
                                         </li>
                                         <li>
-                                            Voorspellingen: je wedstrijdvoorspellingen
-                                            worden gekoppeld aan je account.
+                                            Voorspellingen: je
+                                            wedstrijdvoorspellingen worden
+                                            gekoppeld aan je account.
                                         </li>
                                         <li>
-                                            Feedback: wanneer je een melding indient
-                                            via het contactformulier.
+                                            Feedback: wanneer je een melding
+                                            indient via het contactformulier.
                                         </li>
                                     </ul>
                                 </div>
@@ -93,11 +95,11 @@ export default function Privacy() {
                                         Rechtsgrond
                                     </h3>
                                     <p>
-                                        De verwerking is gebaseerd op uitvoering van
-                                        de overeenkomst (Art. 6 lid 1 b AVG) en,
-                                        waar van toepassing, toestemming (Art. 6 lid
-                                        1 a AVG) voor optionele functionaliteit zoals
-                                        cookies.
+                                        De verwerking is gebaseerd op uitvoering
+                                        van de overeenkomst (Art. 6 lid 1 b AVG)
+                                        en, waar van toepassing, toestemming
+                                        (Art. 6 lid 1 a AVG) voor optionele
+                                        functionaliteit zoals cookies.
                                     </p>
                                 </div>
 
@@ -108,8 +110,8 @@ export default function Privacy() {
                                     <p>
                                         Je hebt het recht op inzage, correctie,
                                         verwijdering, beperking van verwerking,
-                                        dataportabiliteit en bezwaar. Stuur een verzoek
-                                        via het contactformulier.
+                                        dataportabiliteit en bezwaar. Stuur een
+                                        verzoek via het contactformulier.
                                     </p>
                                 </div>
 
@@ -119,9 +121,9 @@ export default function Privacy() {
                                     </h3>
                                     <p>
                                         We bewaren je gegevens niet langer dan
-                                        nodig. Accountgegevens worden bewaard zolang
-                                        je account actief is. Feedback wordt na
-                                        afhandeling verwijderd.
+                                        nodig. Accountgegevens worden bewaard
+                                        zolang je account actief is. Feedback
+                                        wordt na afhandeling verwijderd.
                                     </p>
                                 </div>
                             </CardContent>
@@ -136,7 +138,7 @@ export default function Privacy() {
                                     </p>
                                 </div>
                                 <CardTitle className="text-2xl font-bold text-slate-900">
-                                Cookies en tracking
+                                    Cookies en tracking
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-5 px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-6">
@@ -145,11 +147,11 @@ export default function Privacy() {
                                         Functionele cookies
                                     </h3>
                                     <p>
-                                        Deze cookies zijn strikt noodzakelijk voor
-                                        het functioneren van de website (bijv.
-                                        sessiebeheer, beveiliging, CSRF-bescherming).
-                                        Ze worden geplaatst zonder voorafgaande
-                                        toestemming.
+                                        Deze cookies zijn strikt noodzakelijk
+                                        voor het functioneren van de website
+                                        (bijv. sessiebeheer, beveiliging,
+                                        CSRF-bescherming). Ze worden geplaatst
+                                        zonder voorafgaande toestemming.
                                     </p>
                                 </div>
 
@@ -159,9 +161,10 @@ export default function Privacy() {
                                     </h3>
                                     <p>
                                         We gebruiken Atbound voor statistische
-                                        analyse van bezoekersgedrag. Deze cookies
-                                        worden pas geplaatst nadat je actief
-                                        toestemming hebt gegeven via de cookiebanner.
+                                        analyse van bezoekersgedrag. Deze
+                                        cookies worden pas geplaatst nadat je
+                                        actief toestemming hebt gegeven via de
+                                        cookiebanner.
                                     </p>
                                 </div>
 
@@ -171,10 +174,10 @@ export default function Privacy() {
                                     </h3>
                                     <p>
                                         Momenteel plaatst MondialIQ geen
-                                        marketing- of advertentiecookies van derden.
-                                        Mocht dit in de toekomst veranderen, dan wordt
-                                        dit altijd vooraf via de cookiebanner
-                                        aangevraagd.
+                                        marketing- of advertentiecookies van
+                                        derden. Mocht dit in de toekomst
+                                        veranderen, dan wordt dit altijd vooraf
+                                        via de cookiebanner aangevraagd.
                                     </p>
                                 </div>
 
@@ -183,10 +186,10 @@ export default function Privacy() {
                                         Cookievoorkeuren aanpassen
                                     </h3>
                                     <p>
-                                        Je kunt je cookievoorkeuren op elk moment
-                                        wijzigen of intrekken via de knop
-                                        &quot;Cookievoorkeuren&quot; in de footer van
-                                        elke pagina.
+                                        Je kunt je cookievoorkeuren op elk
+                                        moment wijzigen of intrekken via de knop
+                                        &quot;Cookievoorkeuren&quot; in de
+                                        footer van elke pagina.
                                     </p>
                                 </div>
                             </CardContent>
@@ -209,27 +212,27 @@ export default function Privacy() {
                             <CardContent className="space-y-4 px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-6">
                                 <ul className="space-y-3">
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
                                             1
                                         </span>
                                         <span>
                                             We verzamelen alleen minimale
-                                            persoonsgegevens die nodig zijn voor de
-                                            dienst.
+                                            persoonsgegevens die nodig zijn voor
+                                            de dienst.
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
                                             2
                                         </span>
                                         <span>
-                                            Functionele cookies zijn altijd actief;
-                                            analytische cookies vereisen
+                                            Functionele cookies zijn altijd
+                                            actief; analytische cookies vereisen
                                             toestemming.
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
                                             3
                                         </span>
                                         <span>
@@ -238,21 +241,21 @@ export default function Privacy() {
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
                                             4
                                         </span>
                                         <span>
-                                            Je kunt je account en gegevens op elk
-                                            moment laten verwijderen.
+                                            Je kunt je account en gegevens op
+                                            elk moment laten verwijderen.
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-xs font-bold">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
                                             5
                                         </span>
                                         <span>
-                                            Geen marketingcookies zonder expliciete
-                                            toestemming.
+                                            Geen marketingcookies zonder
+                                            expliciete toestemming.
                                         </span>
                                     </li>
                                 </ul>

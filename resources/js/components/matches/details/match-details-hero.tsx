@@ -1,7 +1,6 @@
 import MatchDetailsTeamBlock from '@/components/matches/details/match-details-team-block';
 import type { LiveFixture } from '@/types/live-fixture';
 import type { MatchDetails } from '@/types/match-details';
-import { getLiveStatusLabel } from '@/utils/match-status';
 
 interface Props {
     match: MatchDetails;
@@ -25,13 +24,6 @@ export default function MatchDetailsHero({
     const hasScore = score.home !== null && score.away !== null;
     const scoreLabel = hasScore ? `${score.home} - ${score.away}` : 'vs';
     const isLive = liveMatch !== undefined || isLiveStatus(match.status);
-    const statusLabel = liveMatch
-        ? getLiveStatusLabel(
-              liveMatch.status_long ?? match.status,
-              liveMatch.status_short,
-              liveMatch.elapsed_time ?? match.elapsedTime,
-          )
-        : getLiveStatusLabel(match.status, null, match.elapsedTime);
 
     return (
         <section className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-5 shadow-lg sm:p-6 lg:p-7">
@@ -60,9 +52,6 @@ export default function MatchDetailsHero({
                     )}
                     <p className="text-3xl font-semibold text-white tabular-nums sm:text-4xl">
                         {scoreLabel}
-                    </p>
-                    <p className="mt-3 inline-flex rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300 uppercase">
-                        {statusLabel}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
                         <p className="mt-2 text-xs font-semibold tracking-wide text-slate-400">

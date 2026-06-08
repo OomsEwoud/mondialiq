@@ -226,11 +226,12 @@ export default function LeagueMembersManagementCard({
                                                     {member.name}?
                                                 </DialogTitle>
                                                 <DialogDescription className="text-sm leading-6 text-slate-600">
-                                                    {member.name} will become the
-                                                    new group owner immediately.
-                                                    You will stay in the group as
-                                                    a member, but owner controls
-                                                    move to them.
+                                                    {member.name} will become
+                                                    the new group owner
+                                                    immediately. You will stay
+                                                    in the group as a member,
+                                                    but owner controls move to
+                                                    them.
                                                 </DialogDescription>
                                                 <div className="rounded-2xl border border-slate-200 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
                                                     After this transfer, use the
@@ -243,7 +244,8 @@ export default function LeagueMembersManagementCard({
                                                 <Form
                                                     {...TransferLeagueOwnershipController.form(
                                                         {
-                                                            scoreboard: leagueId,
+                                                            scoreboard:
+                                                                leagueId,
                                                             member: member.id,
                                                         },
                                                     )}
@@ -254,7 +256,9 @@ export default function LeagueMembersManagementCard({
                                                 >
                                                     {({ processing }) => (
                                                         <DialogFooter className="gap-2">
-                                                            <DialogClose asChild>
+                                                            <DialogClose
+                                                                asChild
+                                                            >
                                                                 <Button
                                                                     type="button"
                                                                     variant="secondary"
@@ -314,7 +318,8 @@ export default function LeagueMembersManagementCard({
                                                 <Form
                                                     {...RemoveAiParticipantController.form(
                                                         {
-                                                            scoreboard: leagueId,
+                                                            scoreboard:
+                                                                leagueId,
                                                         },
                                                     )}
                                                     options={{
@@ -324,7 +329,9 @@ export default function LeagueMembersManagementCard({
                                                 >
                                                     {({ processing }) => (
                                                         <DialogFooter className="gap-2">
-                                                            <DialogClose asChild>
+                                                            <DialogClose
+                                                                asChild
+                                                            >
                                                                 <Button
                                                                     type="button"
                                                                     variant="secondary"
@@ -384,7 +391,8 @@ export default function LeagueMembersManagementCard({
                                                 <Form
                                                     {...RemoveLeagueMemberController.form(
                                                         {
-                                                            scoreboard: leagueId,
+                                                            scoreboard:
+                                                                leagueId,
                                                             member: member.id,
                                                         },
                                                     )}
@@ -395,7 +403,9 @@ export default function LeagueMembersManagementCard({
                                                 >
                                                     {({ processing }) => (
                                                         <DialogFooter className="gap-2">
-                                                            <DialogClose asChild>
+                                                            <DialogClose
+                                                                asChild
+                                                            >
                                                                 <Button
                                                                     type="button"
                                                                     variant="secondary"

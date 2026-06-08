@@ -10,6 +10,10 @@ interface Props {
 export default function MatchStatusBadge({ match }: Props) {
     const kind = getMatchStatusKind(match);
 
+    if (kind === 'live') {
+        return null;
+    }
+
     return (
         <Badge
             className={cn(
@@ -18,7 +22,6 @@ export default function MatchStatusBadge({ match }: Props) {
                     'border-emerald-200 bg-emerald-50 text-emerald-700',
                 kind === 'upcoming' &&
                     'border-cyan-200 bg-cyan-50 text-cyan-700',
-                kind === 'live' && 'border-red-200 bg-red-50 text-red-700',
                 kind === 'postponed' &&
                     'border-amber-200 bg-amber-50 text-amber-700',
                 kind === 'cancelled' &&
