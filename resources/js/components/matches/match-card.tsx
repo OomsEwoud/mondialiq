@@ -1,4 +1,4 @@
-import { CalendarDays, Clock, Trophy } from 'lucide-react';
+import { CalendarDays, CheckCircle2, Clock, Sparkles, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import MatchDetailsPanel from '@/components/matches/match-details-panel';
 import MatchDetailsToggle from '@/components/matches/match-details-toggle';
@@ -30,6 +30,16 @@ export default function MatchCard({ match }: Props) {
                     <span className="flex items-center gap-1.5">
                         <Clock className="size-3.5 text-cyan-600" />
                         {match.time}
+                    </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500">
+                    <span className="flex items-center gap-1.5" title={match.hasAiPrediction ? 'AI prediction available' : 'AI prediction pending'}>
+                        <Sparkles className={`size-3.5 ${match.hasAiPrediction ? 'text-cyan-500' : 'text-slate-400'}`} />
+                        {match.hasAiPrediction ? 'AI prediction available' : 'AI pending'}
+                    </span>
+                    <span className="flex items-center gap-1.5" title={match.userPrediction ? `Predicted: ${match.userPrediction.label}` : 'No prediction placed'}>
+                        <CheckCircle2 className={`size-3.5 ${match.userPrediction ? 'text-emerald-500' : 'text-slate-400'}`} />
+                        {match.userPrediction ? `Predicted: ${match.userPrediction.label}` : 'No prediction'}
                     </span>
                 </div>
             </div>
