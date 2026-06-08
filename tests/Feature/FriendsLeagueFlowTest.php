@@ -1168,7 +1168,7 @@ test('a league member can view the league predict page with upcoming matches', f
         ->assertInertia(fn (Assert $page) => $page
             ->component('league-predict')
             ->where('league.name', 'Friends League')
-            ->where('league.upcomingFixtures.0.homeTeamShort', 'BEL')
+            ->where('fixtures.data.0.homeTeamShort', 'BEL')
         );
 });
 

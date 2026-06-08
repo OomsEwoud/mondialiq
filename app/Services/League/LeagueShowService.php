@@ -2,7 +2,6 @@
 
 namespace App\Services\League;
 
-use App\Http\Resources\FixtureResource;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
@@ -86,7 +85,6 @@ class LeagueShowService
             'currentUserRank' => $currentUser['rank'] ?? null,
             'boostedPredictionsEnabled' => $boostedEnabled,
             'boostsRemaining' => $boostsRemaining,
-            'upcomingFixtures' => $this->upcomingFixtures($user),
         ];
     }
 
@@ -248,9 +246,9 @@ class LeagueShowService
         return max($limit - $used, 0);
     }
 
-    private function upcomingFixtures(User $user): array
+    public function upcomingFixturesQuery(User $user): Builder
     {
-        $fixtures = Fixture::query()
+        return Fixture::query()
             ->with([
                 'homeTeam:id,name,code,logo_url',
                 'awayTeam:id,name,code,logo_url',
@@ -260,11 +258,7 @@ class LeagueShowService
                     ->whereBelongsTo($user)
                     ->select(['id', 'fixture_id', 'user_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
             ])
-            ->upcomingNotStarted()
-            ->orderBy('match_date')
-            ->take(10)
-            ->get();
-
-        return FixtureResource::collection($fixtures)->resolve();
+            ->notStarted()
+            ->orderBy('match_date');
     }
 }

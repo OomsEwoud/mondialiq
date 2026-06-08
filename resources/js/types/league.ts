@@ -75,7 +75,14 @@ export interface LeagueDetails {
     currentUserRank: number | null;
     boostedPredictionsEnabled: boolean;
     boostsRemaining: number | null;
-    upcomingFixtures: Match[];
+}
+
+export interface LeaguePredictPageProps {
+    league: LeagueDetails;
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
 }
 
 export interface LeagueJoinPageProps {

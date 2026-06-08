@@ -1,16 +1,20 @@
 import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import LeagueUpcomingMatchesCard from '@/components/leaderboards/league-upcoming-matches-card';
+import Pagination from '@/components/navigation/pagination';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { cn } from '@/lib/utils';
-import type { LeagueDetailsPageProps } from '@/types/league';
+import type { LeaguePredictPageProps } from '@/types/league';
 import {
     getLeagueBrandBannerClass,
     getLeagueBrandPalette,
 } from '@/utils/league-branding';
 
-export default function LeaguePredict({ league }: LeagueDetailsPageProps) {
+export default function LeaguePredict({
+    league,
+    fixtures,
+}: LeaguePredictPageProps) {
     const palette = getLeagueBrandPalette(league.accentColor);
 
     return (
@@ -71,11 +75,13 @@ export default function LeaguePredict({ league }: LeagueDetailsPageProps) {
                 </section>
 
                 <LeagueUpcomingMatchesCard
-                    fixtures={league.upcomingFixtures}
+                    fixtures={fixtures.data}
                     scoreboardId={league.id}
                     boostsRemaining={league.boostsRemaining}
                     boostedEnabled={league.boostedPredictionsEnabled}
                 />
+
+                <Pagination links={fixtures.links} />
             </div>
         </>
     );

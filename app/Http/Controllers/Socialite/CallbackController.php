@@ -44,7 +44,7 @@ class CallbackController extends Controller
 
         Auth::login($user);
 
-        return to_route('home');
+        return redirect()->intended(config('fortify.home', '/'));
     }
 
     private function failedCallbackRedirect(Request $request, string $provider): ?RedirectResponse
