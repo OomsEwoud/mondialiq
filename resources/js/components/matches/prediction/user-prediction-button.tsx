@@ -45,8 +45,8 @@ export default function UserPredictionButton({ match, onClick }: Props) {
             variant={predictionAllowed ? 'default' : 'outline'}
             className={
                 predictionAllowed
-                    ? 'justify-center rounded-xl bg-blue-950 text-white shadow-sm hover:bg-blue-900 focus-visible:ring-cyan-300'
-                    : 'justify-center rounded-xl border-amber-200 bg-amber-50 text-amber-800 shadow-none hover:bg-amber-100 hover:text-amber-900 focus-visible:ring-cyan-300'
+                    ? 'justify-center rounded-xl bg-indigo-700 text-white shadow-sm hover:bg-indigo-800 focus-visible:ring-indigo-300'
+                    : 'justify-center rounded-xl border-amber-200 bg-amber-50 text-amber-800 shadow-none hover:bg-amber-100 hover:text-amber-900 focus-visible:ring-indigo-300'
             }
         >
             <Icon className="h-4 w-4" />

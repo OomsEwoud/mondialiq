@@ -45,7 +45,7 @@ export default function UserPredictionModal({
             <DialogContent className="flex max-h-[90vh] min-h-0 flex-col gap-0 overflow-hidden rounded-2xl border-slate-200 bg-white p-0 shadow-sm sm:max-w-3xl">
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-5 pb-4 sm:px-6 sm:pt-6">
                     <DialogHeader className="gap-3 pr-8 text-left">
-                        <span className="w-fit rounded-full border border-slate-200 bg-cyan-50 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                        <span className="w-fit rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold tracking-wide text-indigo-600 uppercase">
                             Personal pick
                         </span>
                         <div className="grid gap-2">
@@ -77,7 +77,7 @@ export default function UserPredictionModal({
                             </div>
                         )}
 
-                        <div className="rounded-2xl border border-slate-200 bg-cyan-50/60 p-3 text-sm text-slate-600">
+                        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-3 text-sm text-slate-600">
                             <div className="flex flex-wrap items-center gap-2">
                                 <span className="font-semibold text-slate-900">
                                     Current pick:

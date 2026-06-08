@@ -40,23 +40,27 @@ export default function UserPredictionSummaryCards({
                 icon={Trophy}
                 label="Predicted outcome"
                 value={formatPredictedOutcome(prediction?.label)}
+                variant="user"
             />
             <PredictionSummaryCard
                 icon={Gauge}
                 label="Confidence"
                 value={confidence.value}
                 helper="Saved for context, not used for points"
+                variant="user"
             />
             <PredictionSummaryCard
                 icon={Goal}
                 label="Predicted score"
                 value={score ?? 'No score predicted'}
+                variant="user"
             />
             <PredictionSummaryCard
                 icon={Medal}
                 label={pointsAwarded ? 'Points earned' : 'Points state'}
                 value={pointsValue}
                 helper={pointsHelper}
+                variant="user"
             />
         </section>
     );

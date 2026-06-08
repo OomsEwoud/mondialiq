@@ -21,7 +21,7 @@ export default function AiPredictionHero({
     onPredictionClick,
 }: Props) {
     return (
-        <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+        <section className="rounded-2xl border border-cyan-900/40 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950 p-6 shadow-lg sm:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                     AI Prediction Report

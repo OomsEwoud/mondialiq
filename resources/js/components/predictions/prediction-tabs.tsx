@@ -54,9 +54,11 @@ export default function PredictionTabs({ activeTab }: Props) {
                                 <span
                                     className={cn(
                                         'hidden text-xs font-medium sm:block',
-                                        isActive
-                                            ? 'text-cyan-300'
-                                            : 'text-slate-400',
+                                        isActive && tab.value === 'ai' &&
+                                            'text-cyan-300',
+                                        isActive && tab.value === 'mine' &&
+                                            'text-cyan-300',
+                                        !isActive && 'text-slate-400',
                                     )}
                                 >
                                     {tab.sublabel}

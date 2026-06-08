@@ -4,6 +4,7 @@ import PredictionStatusAction from '@/components/predictions/prediction-status-a
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionUserActions from '@/components/predictions/prediction-user-actions';
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
+import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
 import {
@@ -29,11 +30,7 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
         <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
             <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span
-                    className={
-                        isMine
-                            ? 'rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700'
-                            : 'rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700'
-                    }
+                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
                 >
                     {isMine ? 'Personal pick' : 'AI report'}
                 </span>
@@ -52,7 +49,14 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                                 alt={match.homeTeam}
                                 className="size-10 shrink-0 object-contain"
                             />
-                            <span className="text-base font-bold text-slate-900 group-hover:text-cyan-700">
+                            <span
+                                className={cn(
+                                    'text-base font-bold text-slate-900',
+                                    isMine
+                                        ? 'group-hover:text-indigo-700'
+                                        : 'group-hover:text-cyan-700',
+                                )}
+                            >
                                 {match.homeTeamShort}
                             </span>
                         </Link>
@@ -74,12 +78,19 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                                 alt={match.awayTeam}
                                 className="size-10 shrink-0 object-contain"
                             />
-                            <span className="text-base font-bold text-slate-900 group-hover:text-cyan-700">
+                            <span
+                                className={cn(
+                                    'text-base font-bold text-slate-900',
+                                    isMine
+                                        ? 'group-hover:text-indigo-700'
+                                        : 'group-hover:text-cyan-700',
+                                )}
+                            >
                                 {match.awayTeamShort}
                             </span>
                         </Link>
                         {prediction?.confidence && (
-                            <span className="ml-2 shrink-0 rounded-full border border-cyan-200/80 bg-cyan-50 px-2.5 py-1 text-xs font-bold text-cyan-700 capitalize">
+                            <span className="ml-2 shrink-0 rounded-full border border-slate-200/80 bg-slate-50 px-2.5 py-1 text-xs font-bold capitalize text-slate-600">
                                 {/^\d+$/.test(prediction.confidence)
                                     ? `${prediction.confidence}% confidence`
                                     : `${prediction.confidence} confidence`}

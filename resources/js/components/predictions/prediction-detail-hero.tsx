@@ -3,6 +3,7 @@ import { useState } from 'react';
 import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
 import UserPredictionTeam from '@/components/matches/prediction/user-prediction-team';
 import type { PredictionTab } from '@/components/predictions/prediction-tabs';
+import { predictionAccent } from '@/components/predictions/prediction-variants';
 import { Button } from '@/components/ui/forms/button';
 import type { Match } from '@/types/match';
 import {
@@ -18,6 +19,7 @@ interface Props {
 export default function PredictionDetailHero({ match, mode }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const isAiPrediction = mode === 'ai';
+    const accent = predictionAccent[isAiPrediction ? 'ai' : 'user'];
     const userPrediction = match.userPrediction;
     const aiPrediction = match.aiPrediction;
     const activePrediction = isAiPrediction
@@ -37,7 +39,13 @@ export default function PredictionDetailHero({ match, mode }: Props) {
     return (
         <>
             <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div className="border-b border-slate-100 bg-linear-to-r from-cyan-50 via-white to-blue-50 px-5 py-4 sm:px-6">
+                <div
+                    className={`border-b border-slate-100 px-5 py-4 sm:px-6 ${
+                        isAiPrediction
+                            ? 'bg-linear-to-r from-cyan-50 via-white to-blue-50'
+                            : 'bg-linear-to-r from-indigo-50 via-white to-violet-50'
+                    }`}
+                >
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
@@ -49,7 +57,9 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                         </div>
 
                         <div className="text-left sm:text-right">
-                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                            <p
+                                className={`text-xs font-semibold tracking-wide uppercase ${accent.text}`}
+                            >
                                 {match.round}
                             </p>
                             <p className="mt-1 text-sm font-medium text-slate-600">
@@ -90,7 +100,9 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                         <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-start gap-3 text-left">
-                                    <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
+                                    <span
+                                        className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full ${accent.iconWrapRound}`}
+                                    >
                                         <Trophy className="size-4" />
                                     </span>
                                     <div>
@@ -105,7 +117,9 @@ export default function PredictionDetailHero({ match, mode }: Props) {
 
                                 {activePredictionConfidence && (
                                     <div className="flex items-start gap-3 text-left">
-                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-slate-600">
+                                        <span
+                                            className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full ${accent.iconWrapRound}`}
+                                        >
                                             <Gauge className="size-4" />
                                         </span>
                                         <div>
@@ -122,7 +136,9 @@ export default function PredictionDetailHero({ match, mode }: Props) {
 
                                 {showAiInsight && (
                                     <div className="flex items-start gap-3 text-left">
-                                        <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-900">
+                                        <span
+                                            className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full ${accent.iconWrapRound}`}
+                                        >
                                             <Sparkles className="size-4" />
                                         </span>
                                         <div>
@@ -143,7 +159,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
                             <Button
                                 type="button"
-                                className="justify-center bg-blue-950 text-white hover:bg-cyan-500 hover:text-slate-900"
+                                className={`justify-center ${accent.bg} border ${accent.border} ${accent.text} hover:opacity-90`}
                                 onClick={openPredictionModal}
                             >
                                 <PencilLine className="h-4 w-4" />

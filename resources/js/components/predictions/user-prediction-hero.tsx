@@ -13,9 +13,9 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
     const locked = hasMatchStarted(match);
 
     return (
-        <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+        <section className="rounded-2xl border border-indigo-900/60 bg-gradient-to-br from-indigo-950 via-indigo-950/90 to-slate-900 p-6 shadow-lg sm:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                <p className="text-xs font-semibold tracking-wide text-indigo-300 uppercase">
                     My Prediction
                 </p>
                 <button
@@ -25,7 +25,7 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                     className={
                         locked
                             ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500'
-                            : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
+                            : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
                     }
                 >
                     <PencilLine className="size-4" />
@@ -43,13 +43,13 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                         alt={match.homeTeam}
                         className="size-16 shrink-0 object-contain"
                     />
-                    <span className="text-sm font-bold text-white group-hover:text-cyan-300">
+                    <span className="text-sm font-bold text-white group-hover:text-indigo-300">
                         {match.homeTeamShort}
                     </span>
                 </Link>
 
                 <div className="text-center">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-cyan-300">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-indigo-300">
                         <Trophy className="size-3.5" />
                         Your pick
                     </span>
@@ -67,7 +67,7 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                         alt={match.awayTeam}
                         className="size-16 shrink-0 object-contain"
                     />
-                    <span className="text-sm font-bold text-white group-hover:text-cyan-300">
+                    <span className="text-sm font-bold text-white group-hover:text-indigo-300">
                         {match.awayTeamShort}
                     </span>
                 </Link>
@@ -79,20 +79,21 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
 
             <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-slate-400">
                 <span className="flex items-center gap-1.5">
-                    <Trophy className="size-3.5 text-cyan-400" />
+                    <Trophy className="size-3.5 text-indigo-400" />
                     {match.round}
                 </span>
                 <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
-                    <CalendarDays className="size-3.5 text-cyan-400" />
+                    <CalendarDays className="size-3.5 text-indigo-400" />
                     {match.date}
                 </span>
                 <span className="hidden text-slate-600 sm:inline">|</span>
                 <span className="flex items-center gap-1.5">
-                    <Clock className="size-3.5 text-cyan-400" />
+                    <Clock className="size-3.5 text-indigo-400" />
                     {match.time}
                 </span>
             </div>
         </section>
     );
 }
+

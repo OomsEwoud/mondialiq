@@ -110,7 +110,7 @@ export default function UserPredictionForm({
             />
 
             {showBoost && typeof boostsRemaining === 'number' && (
-                <div className="rounded-2xl border border-slate-200 bg-cyan-50/60 p-4">
+                <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
@@ -127,7 +127,7 @@ export default function UserPredictionForm({
                             className={
                                 'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 ' +
                                 (data.is_boosted
-                                    ? 'bg-cyan-500'
+                                    ? 'bg-indigo-500'
                                     : 'bg-slate-300')
                             }
                         >
