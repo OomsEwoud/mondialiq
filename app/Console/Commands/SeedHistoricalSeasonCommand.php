@@ -123,7 +123,6 @@ class SeedHistoricalSeasonCommand extends Command
         $this->info('Teams opgeslagen.');
     }
 
-    private function importFixtures(int $leagueId, int $season): void
     private function importFixtures(int $leagueId, int $season): array
     {
         $this->info('Fixtures ophalen...');

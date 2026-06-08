@@ -18,7 +18,6 @@ class FixtureService
         private readonly UserPredictionScoringService $userPredictionScoringService,
     ) {}
 
-    public function storeFixtures(array $fixtures): void
     public function storeFixtures(array $fixtures): array
     {
         $leagueIds = League::query()->pluck('id', 'external_id');
