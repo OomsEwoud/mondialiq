@@ -2,6 +2,7 @@
 
 namespace App\Services\Fixture;
 
+use App\Models\Country;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Referee;
@@ -18,14 +19,17 @@ class FixtureService
     ) {}
 
     public function storeFixtures(array $fixtures): void
+    public function storeFixtures(array $fixtures): array
     {
         $leagueIds = League::query()->pluck('id', 'external_id');
-        $teamIds = Team::query()->pluck('id', 'external_id');
+        $stats = ['imported' => 0, 'skipped' => 0, 'lazy_teams_created' => 0];
 
         foreach ($fixtures as $fixture) {
-            $identity = $this->fixtureIdentity($fixture, $leagueIds, $teamIds);
+            $identity = $this->fixtureIdentity($fixture, $leagueIds, $stats);
 
             if ($identity === null) {
+                $stats['skipped']++;
+
                 continue;
             }
 
@@ -35,26 +39,82 @@ class FixtureService
             );
 
             $this->scoreUserPredictions($storedFixture);
+            $stats['imported']++;
         }
+
+        return $stats;
     }
 
-    private function fixtureIdentity(array $fixture, Collection $leagueIds, Collection $teamIds): ?array
+    private function fixtureIdentity(array $fixture, Collection $leagueIds, array &$stats): ?array
     {
         $externalId = data_get($fixture, 'fixture.id');
         $leagueId = $leagueIds[data_get($fixture, 'league.id')] ?? null;
-        $homeTeamId = $teamIds[data_get($fixture, 'teams.home.id')] ?? null;
-        $awayTeamId = $teamIds[data_get($fixture, 'teams.away.id')] ?? null;
 
-        if (! is_numeric($externalId) || $leagueId === null || $homeTeamId === null || $awayTeamId === null) {
+        $homeTeam = $this->resolveTeamFromPayload(data_get($fixture, 'teams.home'));
+        $awayTeam = $this->resolveTeamFromPayload(data_get($fixture, 'teams.away'));
+
+        if (! is_numeric($externalId) || $leagueId === null || $homeTeam === null || $awayTeam === null) {
             return null;
+        }
+
+        if ($homeTeam->wasRecentlyCreated) {
+            $stats['lazy_teams_created']++;
+        }
+
+        if ($awayTeam->wasRecentlyCreated) {
+            $stats['lazy_teams_created']++;
         }
 
         return [
             'external_id' => (int) $externalId,
             'league_id' => (int) $leagueId,
-            'home_team_id' => (int) $homeTeamId,
-            'away_team_id' => (int) $awayTeamId,
+            'home_team_id' => $homeTeam->id,
+            'away_team_id' => $awayTeam->id,
         ];
+    }
+
+    private function resolveTeamFromPayload(?array $teamData): ?Team
+    {
+        if (empty($teamData) || empty($teamData['id'])) {
+            return null;
+        }
+
+        $externalId = (int) $teamData['id'];
+
+        $team = Team::query()->where('external_id', $externalId)->first();
+
+        if ($team) {
+            $update = [];
+
+            if (blank($team->name) && filled($teamData['name'])) {
+                $update['name'] = $teamData['name'];
+            }
+
+            if (blank($team->logo_url) && filled($teamData['logo'])) {
+                $update['logo_url'] = $teamData['logo'];
+            }
+
+            if (! empty($update)) {
+                $team->update($update);
+            }
+
+            return $team;
+        }
+
+        $attributes = [
+            'external_id' => $externalId,
+            'name' => $teamData['name'] ?? 'Unknown team',
+            'logo_url' => $teamData['logo'] ?? null,
+        ];
+
+        if (! empty($teamData['country'])) {
+            $country = Country::query()->firstOrCreate(
+                ['name' => $teamData['country']],
+            );
+            $attributes['country_id'] = $country->id;
+        }
+
+        return Team::query()->create($attributes);
     }
 
     private function fixtureUpdateIdentity(array $identity): array

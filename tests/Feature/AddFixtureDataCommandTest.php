@@ -344,12 +344,14 @@ test('the add fixture data command only syncs relevant fixtures', function () {
             ->with([
                 fixtureSyncPayload($liveFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, '2H', 'Second Half', 70),
             ])
-            ->andReturnUsing(function () use ($liveFixture): void {
+            ->andReturnUsing(function () use ($liveFixture): array {
                 $liveFixture->forceFill([
                     'status_short' => '2H',
                     'status_long' => 'Second Half',
                     'elapsed_time' => 70,
                 ])->save();
+
+                return ['imported' => 1, 'skipped' => 0, 'lazy_teams_created' => 0];
             });
 
         $mock->shouldReceive('storeFixtures')
@@ -357,13 +359,15 @@ test('the add fixture data command only syncs relevant fixtures', function () {
             ->with([
                 fixtureSyncPayload($soonFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
             ])
-            ->andReturnUsing(function () use ($soonFixture): void {
+            ->andReturnUsing(function () use ($soonFixture): array {
                 $soonFixture->forceFill([
                     'status_short' => 'NS',
                     'status_long' => 'Not Started',
                     'elapsed_time' => null,
                     'match_date' => now('Europe/Brussels')->copy()->addMinutes(10),
                 ])->save();
+
+                return ['imported' => 1, 'skipped' => 0, 'lazy_teams_created' => 0];
             });
     });
 
@@ -447,7 +451,8 @@ test('the add fixture data command continues when one fixture fails', function (
             ->once()
             ->with([
                 fixtureSyncPayload($successfulFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'NS', 'Not Started', null),
-            ]);
+            ])
+            ->andReturn(['imported' => 1, 'skipped' => 0, 'lazy_teams_created' => 0]);
     });
 
     $this->mock(FixtureStatsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureStats'));
@@ -521,7 +526,8 @@ test('the add fixture data command fetches final data once for finished fixtures
             ->once()
             ->with([
                 fixtureSyncPayload($finishedFixture->external_id, 2026, $homeTeam->external_id, $awayTeam->external_id, 'FT', 'Match Finished', 90),
-            ]);
+            ])
+            ->andReturn(['imported' => 1, 'skipped' => 0, 'lazy_teams_created' => 0]);
     });
 
     $this->mock(FixtureStatsService::class, fn (MockInterface $mock) => $mock->shouldReceive('storeFixtureStats')->once()->with([], $finishedFixture->id));

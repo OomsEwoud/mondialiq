@@ -263,6 +263,81 @@ test('it allows a fixture to transition from live to full time on a later sync',
         ->and($fixture->fulltime_away_goals)->toBe(1);
 });
 
+test('it lazily creates missing teams from fixture payload', function () {
+    $league = League::query()->create([
+        'external_id' => 39,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $payload = fixturePayloadWithTeams(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: 99,
+        homeTeamName: 'Lazy Home FC',
+        homeTeamLogo: 'https://example.com/lazy-home.png',
+        awayTeamId: 98,
+        awayTeamName: 'Lazy Away FC',
+        awayTeamLogo: 'https://example.com/lazy-away.png',
+    );
+
+    $stats = app(FixtureService::class)->storeFixtures([$payload]);
+
+    $fixture = Fixture::query()->firstOrFail();
+    $teams = Team::query()->get();
+
+    expect($teams)->toHaveCount(2)
+        ->and($fixture->homeTeam->name)->toBe('Lazy Home FC')
+        ->and($fixture->homeTeam->logo_url)->toBe('https://example.com/lazy-home.png')
+        ->and($fixture->awayTeam->name)->toBe('Lazy Away FC')
+        ->and($fixture->awayTeam->logo_url)->toBe('https://example.com/lazy-away.png')
+        ->and($stats['imported'])->toBe(1)
+        ->and($stats['skipped'])->toBe(0)
+        ->and($stats['lazy_teams_created'])->toBe(2);
+});
+
+test('it updates existing team name and logo when empty and fixture payload provides them', function () {
+    $league = League::query()->create([
+        'external_id' => 39,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $existingTeam = Team::query()->create([
+        'external_id' => 55,
+        'name' => '',
+        'logo_url' => '',
+    ]);
+
+    $newTeam = Team::query()->create([
+        'external_id' => 56,
+        'name' => 'Already Known',
+        'logo_url' => 'https://example.com/known.png',
+    ]);
+
+    $payload = fixturePayloadWithTeams(
+        fixtureId: 1001,
+        leagueId: $league->external_id,
+        homeTeamId: $existingTeam->external_id,
+        homeTeamName: 'Updated Name',
+        homeTeamLogo: 'https://example.com/updated.png',
+        awayTeamId: $newTeam->external_id,
+        awayTeamName: 'Should Not Change',
+        awayTeamLogo: 'https://example.com/should-not-change.png',
+    );
+
+    $stats = app(FixtureService::class)->storeFixtures([$payload]);
+
+    $existingTeam->refresh();
+    $newTeam->refresh();
+
+    expect($existingTeam->name)->toBe('Updated Name')
+        ->and($existingTeam->logo_url)->toBe('https://example.com/updated.png')
+        ->and($newTeam->name)->toBe('Already Known')
+        ->and($newTeam->logo_url)->toBe('https://example.com/known.png')
+        ->and($stats['lazy_teams_created'])->toBe(0);
+});
+
 function fixturePayloadWithVenue(
     int $fixtureId,
     int $leagueId,
@@ -295,6 +370,58 @@ function fixturePayloadWithVenue(
         'teams' => [
             'home' => ['id' => $homeTeamId],
             'away' => ['id' => $awayTeamId],
+        ],
+        'score' => [
+            'halftime' => ['home' => null, 'away' => null],
+            'fulltime' => ['home' => null, 'away' => null],
+            'extratime' => ['home' => null, 'away' => null],
+            'penalty' => ['home' => null, 'away' => null],
+        ],
+    ];
+}
+
+function fixturePayloadWithTeams(
+    int $fixtureId,
+    int $leagueId,
+    int $homeTeamId,
+    string $homeTeamName,
+    ?string $homeTeamLogo,
+    int $awayTeamId,
+    string $awayTeamName,
+    ?string $awayTeamLogo,
+): array {
+    return [
+        'fixture' => [
+            'id' => $fixtureId,
+            'referee' => null,
+            'date' => '2026-06-12T18:00:00+00:00',
+            'venue' => [
+                'id' => 0,
+                'name' => 'Test Venue',
+                'city' => 'Test City',
+            ],
+            'status' => [
+                'short' => 'NS',
+                'long' => 'Not Started',
+                'elapsed' => null,
+            ],
+        ],
+        'league' => [
+            'id' => $leagueId,
+            'season' => 2026,
+            'round' => 'Regular Season - 1',
+        ],
+        'teams' => [
+            'home' => [
+                'id' => $homeTeamId,
+                'name' => $homeTeamName,
+                'logo' => $homeTeamLogo,
+            ],
+            'away' => [
+                'id' => $awayTeamId,
+                'name' => $awayTeamName,
+                'logo' => $awayTeamLogo,
+            ],
         ],
         'score' => [
             'halftime' => ['home' => null, 'away' => null],

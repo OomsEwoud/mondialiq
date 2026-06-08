@@ -72,7 +72,7 @@ class SeedHistoricalSeasonCommand extends Command
             $teamsImported = true;
         }
 
-        $this->importFixtures($leagueId, $season);
+        $fixtureStats = $this->importFixtures($leagueId, $season);
 
         $fixtures = $this->resolveFixtures($leagueId, $season, $onlyFinished);
 
@@ -95,10 +95,12 @@ class SeedHistoricalSeasonCommand extends Command
         $this->newLine();
         $this->info('Import samenvatting');
         $this->line('Teams geïmporteerd: '.($teamsImported ? 'ja' : 'nee (overgeslagen)'));
-        $this->line('Fixtures gevonden: '.$fixtureSummary['found']);
-        $this->line('Fixtures verwerkt: '.$fixtureSummary['processed']);
-        $this->line('Fixtures overgeslagen: '.$fixtureSummary['skipped']);
-        $this->line('Fouten: '.$fixtureSummary['errors']);
+        $this->line('Teams lazy aangemaakt: '.$fixtureStats['lazy_teams_created']);
+        $this->line('Fixtures gevonden: '.($fixtureStats['imported'] + $fixtureStats['skipped']));
+        $this->line('Fixtures verwerkt: '.$fixtureStats['imported']);
+        $this->line('Fixtures overgeslagen: '.$fixtureStats['skipped']);
+        $this->line('Per-fixture verwerkt: '.$fixtureSummary['processed']);
+        $this->line('Per-fixture fouten: '.$fixtureSummary['errors']);
         $this->line('Standings geïmporteerd: '.($standingsImported ? 'ja' : 'nee'));
 
         return self::SUCCESS;
@@ -122,6 +124,7 @@ class SeedHistoricalSeasonCommand extends Command
     }
 
     private function importFixtures(int $leagueId, int $season): void
+    private function importFixtures(int $leagueId, int $season): array
     {
         $this->info('Fixtures ophalen...');
 
@@ -130,15 +133,21 @@ class SeedHistoricalSeasonCommand extends Command
         if (empty($fixtures)) {
             $this->warn('Geen fixtures ontvangen van de API.');
 
-            return;
+            return ['imported' => 0, 'skipped' => 0, 'lazy_teams_created' => 0];
         }
 
         $this->info(count($fixtures).' fixtures ontvangen, opslaan...');
-        $this->fixtureService->storeFixtures($fixtures);
+        $stats = $this->fixtureService->storeFixtures($fixtures);
         $this->info('Fixtures opgeslagen.');
+
+        if ($stats['lazy_teams_created'] > 0) {
+            $this->warn($stats['lazy_teams_created'].' team(s) lazy aangemaakt uit fixture data.');
+        }
+
+        return $stats;
     }
 
-    private function resolveFixtures(int $leagueId,int $season,bool $onlyFinished,): Collection 
+    private function resolveFixtures(int $leagueId, int $season, bool $onlyFinished): Collection
     {
         $this->info('Lokale fixtures opzoeken...');
 
