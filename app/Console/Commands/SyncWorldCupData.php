@@ -30,7 +30,6 @@ class SyncWorldCupData extends Command
         ['command' => 'app:add-fixture-lineups'],
         ['command' => 'app:add-fixture-data'],
         ['command' => 'app:add-fixture-player-stats'],
-        ['command' => 'app:generate-ai-predictions', 'arguments' => ['--days' => 3]],
     ];
 
     public function handle(): int
