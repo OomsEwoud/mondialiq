@@ -43,7 +43,7 @@ class PlayerService
         $this->playersCountryFilled = 0;
         $this->playersMissingCountry = 0;
     }
-    
+
     public function stats(): array
     {
         return [
