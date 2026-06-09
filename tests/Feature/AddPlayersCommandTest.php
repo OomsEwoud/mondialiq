@@ -27,6 +27,11 @@ test('the add players command syncs squads for the configured league and season'
     $this->mock(PlayerService::class, function (MockInterface $mock) use ($players) {
         $mock->shouldReceive('storePlayers')->once()->with($players);
         $mock->shouldReceive('syncTeamPlayers')->once()->with(1, 2026);
+        $mock->shouldReceive('stats')->once()->andReturn([
+            'processed' => 0,
+            'country_filled' => 0,
+            'missing_country' => 0,
+        ]);
     });
 
     $this->mock(PlayerStatsService::class, function (MockInterface $mock) use ($players) {
@@ -52,6 +57,11 @@ test('the add players command still syncs squads when league season players are 
     $this->mock(PlayerService::class, function (MockInterface $mock) {
         $mock->shouldNotReceive('storePlayers');
         $mock->shouldReceive('syncTeamPlayers')->once()->with(1, 2026);
+        $mock->shouldReceive('stats')->once()->andReturn([
+            'processed' => 0,
+            'country_filled' => 0,
+            'missing_country' => 0,
+        ]);
     });
 
     $this->mock(PlayerStatsService::class, function (MockInterface $mock) {

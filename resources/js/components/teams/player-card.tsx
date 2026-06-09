@@ -1,8 +1,10 @@
+import { Link } from '@inertiajs/react';
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from '@/components/ui/display/avatar';
+import { show as showPlayer } from '@/routes/players';
 import type { TeamDetailsPlayer } from '@/types/team-details';
 import {
     formatPositionLabel,
@@ -20,7 +22,10 @@ export default function PlayerCard({ player }: Props) {
         getPersonInitials(player.name) || player.number || '-';
 
     return (
-        <div className="flex min-h-28 min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-3 shadow-lg shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-xl">
+        <Link
+            href={showPlayer.url(player.id)}
+            className="flex min-h-28 min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-3 shadow-lg shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+        >
             <div className="relative shrink-0">
                 <Avatar className="size-16 rounded-2xl border border-white shadow-sm ring-1 ring-slate-200">
                     {player.photo ? (
@@ -56,6 +61,6 @@ export default function PlayerCard({ player }: Props) {
                     {player.country ?? 'Country TBC'}
                 </p>
             </div>
-        </div>
+        </Link>
     );
 }
