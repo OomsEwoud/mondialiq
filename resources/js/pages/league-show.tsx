@@ -22,11 +22,13 @@ import type { LeagueDetailsPageProps } from '@/types/league';
 import {
     getLeagueBrandBannerClass,
     getLeagueBrandPalette,
+    getLeagueHeroPalette,
 } from '@/utils/league-branding';
 
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
     const host = league.members.find((member) => member.isOwner);
     const palette = getLeagueBrandPalette(league.accentColor);
+    const heroPalette = getLeagueHeroPalette(league.accentColor);
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
     const hostName = host?.name;
     const heroStats = [
@@ -74,7 +76,10 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                 >
                     <Link
                         href={leaderboards.url()}
-                        className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                        className={cn(
+                            'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                            heroPalette.ring,
+                        )}
                     >
                         <ArrowLeft className="size-4" />
                         Back to leaderboards
@@ -82,10 +87,16 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
 
                     <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
                         <div className="max-w-3xl">
-                            <div className="mb-3 flex size-12 items-center justify-center rounded-xl bg-slate-800/50 text-2xl shadow-sm sm:size-14 sm:text-3xl">
+                            <div className={cn(
+                                'mb-3 flex size-12 items-center justify-center rounded-xl bg-slate-800/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
+                                heroPalette.badgeBorder,
+                            )}>
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                            <p className={cn(
+                                'text-xs font-semibold tracking-wide uppercase',
+                                heroPalette.label,
+                            )}>
                                 Prediction Group
                             </p>
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
@@ -102,13 +113,18 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                         key={stat.label}
                                         variant="outline"
                                         className={cn(
-                                            'min-w-0 justify-start rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1.5 text-xs font-semibold text-slate-200',
-                                            stat.label === 'Your rank' &&
-                                                league.currentUserRank &&
-                                                'border-white bg-white text-slate-900',
+                                            'w-full justify-center rounded-full px-3 py-1.5 text-xs font-semibold',
+                                            heroPalette.badgeBorder,
+                                            heroPalette.badgeBg,
+                                            heroPalette.badgeText,
                                         )}
                                     >
-                                        <stat.icon className="size-3.5 shrink-0" />
+                                        <stat.icon
+                                            className={cn(
+                                                'size-3.5 shrink-0',
+                                                heroPalette.icon,
+                                            )}
+                                        />
                                         <span className="truncate">
                                             {stat.label}: {stat.value}
                                         </span>
@@ -130,8 +146,9 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                     asChild
                                     variant="outline"
                                     className={cn(
-                                        'h-11 w-full rounded-lg bg-white px-5 font-semibold text-slate-900 shadow-sm hover:bg-slate-100 focus-visible:ring-cyan-300 sm:w-auto',
-                                        palette.button,
+                                        'h-11 w-full rounded-lg bg-transparent px-5 font-semibold shadow-sm sm:w-auto',
+                                        heroPalette.outlineButton,
+                                        heroPalette.ring,
                                     )}
                                 >
                                     <Link href={league.settingsHref}>
@@ -144,7 +161,11 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             {league.predictHref && (
                                 <Button
                                     asChild
-                                    className="h-11 w-full rounded-lg bg-slate-900 px-5 font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:ring-cyan-300 sm:w-auto"
+                                    className={cn(
+                                        'h-11 w-full rounded-lg px-5 font-semibold shadow-sm sm:w-auto',
+                                        heroPalette.primaryButton,
+                                        heroPalette.ring,
+                                    )}
                                 >
                                     <Link href={league.predictHref}>
                                         <Target className="size-4" />

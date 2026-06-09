@@ -124,6 +124,85 @@ export function getLeagueCoverClass(coverStyle: LeagueCoverStyle) {
     return coverClasses[coverStyle] ?? coverClasses[defaultCoverStyle];
 }
 
+const heroPalettes: Record<
+    LeagueAccentColor,
+    {
+        label: string;
+        icon: string;
+        badgeBorder: string;
+        badgeBg: string;
+        badgeText: string;
+        primaryButton: string;
+        outlineButton: string;
+        ring: string;
+    }
+> = {
+    cyan: {
+        label: 'text-cyan-300',
+        icon: 'text-cyan-300',
+        badgeBorder: 'border-cyan-400/20',
+        badgeBg: 'bg-cyan-950/30',
+        badgeText: 'text-cyan-100',
+        primaryButton: 'bg-cyan-600 hover:bg-cyan-500 text-white',
+        outlineButton: 'border-cyan-400/30 text-cyan-100 hover:bg-cyan-900/30',
+        ring: 'ring-cyan-300',
+    },
+    emerald: {
+        label: 'text-emerald-300',
+        icon: 'text-emerald-300',
+        badgeBorder: 'border-emerald-400/20',
+        badgeBg: 'bg-emerald-950/30',
+        badgeText: 'text-emerald-100',
+        primaryButton: 'bg-emerald-600 hover:bg-emerald-500 text-white',
+        outlineButton: 'border-emerald-400/30 text-emerald-100 hover:bg-emerald-900/30',
+        ring: 'ring-emerald-300',
+    },
+    amber: {
+        label: 'text-amber-300',
+        icon: 'text-amber-300',
+        badgeBorder: 'border-amber-400/20',
+        badgeBg: 'bg-amber-950/30',
+        badgeText: 'text-amber-100',
+        primaryButton: 'bg-amber-600 hover:bg-amber-500 text-white',
+        outlineButton: 'border-amber-400/30 text-amber-100 hover:bg-amber-900/30',
+        ring: 'ring-amber-300',
+    },
+    rose: {
+        label: 'text-rose-300',
+        icon: 'text-rose-300',
+        badgeBorder: 'border-rose-400/20',
+        badgeBg: 'bg-rose-950/30',
+        badgeText: 'text-rose-100',
+        primaryButton: 'bg-rose-600 hover:bg-rose-500 text-white',
+        outlineButton: 'border-rose-400/30 text-rose-100 hover:bg-rose-900/30',
+        ring: 'ring-rose-300',
+    },
+    violet: {
+        label: 'text-violet-300',
+        icon: 'text-violet-300',
+        badgeBorder: 'border-violet-400/20',
+        badgeBg: 'bg-violet-950/30',
+        badgeText: 'text-violet-100',
+        primaryButton: 'bg-violet-600 hover:bg-violet-500 text-white',
+        outlineButton: 'border-violet-400/30 text-violet-100 hover:bg-violet-900/30',
+        ring: 'ring-violet-300',
+    },
+    blue: {
+        label: 'text-blue-300',
+        icon: 'text-blue-300',
+        badgeBorder: 'border-blue-400/20',
+        badgeBg: 'bg-blue-950/30',
+        badgeText: 'text-blue-100',
+        primaryButton: 'bg-blue-600 hover:bg-blue-500 text-white',
+        outlineButton: 'border-blue-400/30 text-blue-100 hover:bg-blue-900/30',
+        ring: 'ring-blue-300',
+    },
+};
+
+export function getLeagueHeroPalette(accentColor: LeagueAccentColor) {
+    return heroPalettes[accentColor] ?? heroPalettes[defaultAccentColor];
+}
+
 export function getLeagueBrandBannerClass(
     accentColor: LeagueAccentColor,
     coverStyle: LeagueCoverStyle,
