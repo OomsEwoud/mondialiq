@@ -54,5 +54,11 @@ class AddPlayers extends Command
         }
 
         $this->service->syncTeamPlayers($leagueId, $season);
+
+        $stats = $this->service->stats();
+
+        $this->info('Spelers verwerkt: '.$stats['processed']);
+        $this->info('Country ingevuld via team: '.$stats['country_filled']);
+        $this->info('Spelers zonder country: '.$stats['missing_country']);
     }
 }
