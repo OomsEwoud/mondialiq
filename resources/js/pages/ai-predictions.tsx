@@ -1,16 +1,13 @@
 import { router } from '@inertiajs/react';
+import { Bot } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
-import PredictionInfoGrid from '@/components/predictions/prediction-info-grid';
 import PredictionList from '@/components/predictions/prediction-list';
-import PredictionPageHeader from '@/components/predictions/prediction-page-header';
-import PredictionTabs from '@/components/predictions/prediction-tabs';
-import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
-import { predictions as predictionsRoute } from '@/routes';
-import type { PredictionPageProps as Props } from '@/types/prediction';
+import { predictions as aiPredictionsRoute } from '@/routes/ai';
+import type { AiPredictionsPageProps as Props } from '@/types/prediction';
 import type {
     PredictionFilters,
     PredictionStatusFilter,
@@ -22,11 +19,10 @@ import {
     sortByConfidence,
 } from '@/utils/prediction-filters';
 
-export default function Predictions({
+export default function AiPredictions({
+    aiUser,
     fixtures,
     filters: initialFilters,
-    mode,
-    scoringGuideHref,
 }: Props) {
     const defaultFilters = {
         ...defaultPredictionFilters,
@@ -34,30 +30,20 @@ export default function Predictions({
         status: initialFilters.status,
         pointsState: initialFilters.pointsState,
     };
-    const [filtersByMode, setFiltersByMode] = useState<
-        Record<PredictionTab, PredictionFilters>
-    >({
-        ai: defaultFilters,
-        mine: defaultFilters,
-        user: defaultFilters,
-    });
-    const filters = filtersByMode[mode];
+    const [filters, setFilters] = useState<PredictionFilters>(defaultFilters);
 
     const filteredFixtures = useMemo(() => {
         const matches = fixtures.data.filter((match) =>
-            matchesFilters(mode, match, filters),
+            matchesFilters('ai', match, filters),
         );
 
-        return sortByConfidence(mode, matches, filters.confidenceSort);
-    }, [fixtures.data, filters, mode]);
+        return sortByConfidence('ai', matches, filters.confidenceSort);
+    }, [fixtures.data, filters]);
     const hasActiveFilters = hasActivePredictionFilters(filters);
     const hasFilteredResults = filteredFixtures.length > 0;
     const hasNoFilteredResults = hasActiveFilters && !hasFilteredResults;
     const clearFilters = () => {
-        setFiltersByMode((current) => ({
-            ...current,
-            [mode]: defaultPredictionFilters,
-        }));
+        setFilters(defaultPredictionFilters);
 
         if (
             filters.date !== '' ||
@@ -65,9 +51,7 @@ export default function Predictions({
             filters.pointsState !== 'all'
         ) {
             router.get(
-                predictionsRoute.url({
-                    query: { mode },
-                }),
+                aiPredictionsRoute.url(),
                 {},
                 {
                     preserveScroll: true,
@@ -77,43 +61,18 @@ export default function Predictions({
         }
     };
 
-    const syncedQueryFilters = (
-        nextFilters: PredictionFilters,
-    ): Record<string, string> => ({
-        mode,
-        ...(nextFilters.date === '' ? {} : { date: nextFilters.date }),
-        ...(nextFilters.status === 'all' ? {} : { status: nextFilters.status }),
-        ...(nextFilters.pointsState === 'all'
-            ? {}
-            : { pointsState: nextFilters.pointsState }),
-    });
-
     const updateFilter = <K extends keyof PredictionFilters>(
         key: K,
         value: PredictionFilters[K],
     ) => {
-        setFiltersByMode((current) => ({
+        setFilters((current) => ({
             ...current,
-            [mode]: {
-                ...current[mode],
-                [key]: value,
-            },
+            [key]: value,
         }));
 
-        if (
-            key === 'date' ||
-            key === 'status' ||
-            key === 'pointsState'
-        ) {
-            const nextFilters = {
-                ...filters,
-                [key]: value,
-            };
-
+        if (key === 'date' || key === 'status' || key === 'pointsState') {
             router.get(
-                predictionsRoute.url({
-                    query: syncedQueryFilters(nextFilters),
-                }),
+                aiPredictionsRoute.url(),
                 {},
                 {
                     preserveScroll: true,
@@ -129,15 +88,10 @@ export default function Predictions({
             status: 'all' as const,
         };
 
-        setFiltersByMode((current) => ({
-            ...current,
-            [mode]: nextFilters,
-        }));
+        setFilters(nextFilters);
 
         router.get(
-            predictionsRoute.url({
-                query: syncedQueryFilters(nextFilters),
-            }),
+            aiPredictionsRoute.url(),
             {},
             {
                 preserveScroll: true,
@@ -155,15 +109,10 @@ export default function Predictions({
             status,
         };
 
-        setFiltersByMode((current) => ({
-            ...current,
-            [mode]: nextFilters,
-        }));
+        setFilters(nextFilters);
 
         router.get(
-            predictionsRoute.url({
-                query: syncedQueryFilters(nextFilters),
-            }),
+            aiPredictionsRoute.url(),
             {},
             {
                 preserveScroll: true,
@@ -172,19 +121,41 @@ export default function Predictions({
         );
     };
 
+    const pageTitle = 'MondialiQ AI Predictions';
+    const pageDescription = "Explore MondialiQ AI's World Cup predictions and match insights.";
+    const emptyMessage = 'No AI predictions available yet.';
+
     return (
         <>
             <PageHead
-                title="Predictions"
-                description="Compare AI-powered football predictions with your own World Cup 2026 picks, confidence levels and scoring progress."
+                title={pageTitle}
+                description={pageDescription}
             />
 
             <div className="mx-auto max-w-7xl">
-                <PredictionPageHeader scoringGuideHref={scoringGuideHref} />
-                <PredictionInfoGrid />
-                <PredictionTabs activeTab={mode} />
+                <div className="mb-6 flex items-center gap-3">
+                    {aiUser.avatar ? (
+                        <img
+                            src={aiUser.avatar}
+                            alt={aiUser.name}
+                            className="size-10 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm"
+                        />
+                    ) : (
+                        <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm">
+                            <Bot className="size-5" />
+                        </div>
+                    )}
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                            {pageTitle}
+                        </h1>
+                        <p className="mt-1 text-sm text-slate-500">
+                            {pageDescription}
+                        </p>
+                    </div>
+                </div>
+
                 <PredictionsFilterCard
-                    mode={mode}
                     filters={filters}
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}
@@ -197,17 +168,9 @@ export default function Predictions({
                 ) : (
                     <PredictionList
                         matches={filteredFixtures}
-                        mode={mode}
-                        emptyMessage={
-                            mode === 'mine'
-                                ? 'You have not predicted any matches yet.'
-                                : 'No AI predictions available yet.'
-                        }
-                        actionLabel={
-                            mode === 'mine'
-                                ? 'View prediction'
-                                : 'View insights'
-                        }
+                        mode="ai"
+                        emptyMessage={emptyMessage}
+                        actionLabel="See insights"
                     />
                 )}
                 <Pagination links={fixtures.links} />

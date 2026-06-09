@@ -72,9 +72,10 @@ export default function UserPredictionSummary({
                 </>
             )}
 
-            {!aiMode && (
-                <PredictionPointsBadge points={prediction.points ?? null} />
-            )}
+            <PredictionPointsBadge
+                points={prediction.points ?? null}
+                pointsAwarded={prediction.pointsAwarded}
+            />
         </div>
     );
 }

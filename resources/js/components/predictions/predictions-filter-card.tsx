@@ -3,7 +3,7 @@ import { predictionFilterLabelClassName } from '@/components/predictions/filters
 import FilterSelect from '@/components/predictions/filters/filter-select';
 import MatchStatusSegmentedFilter from '@/components/predictions/filters/match-status-segmented-filter';
 import SearchInput from '@/components/predictions/filters/search-input';
-import type { PredictionTab } from '@/components/predictions/prediction-tabs';
+
 import type {
     ConfidenceSort,
     OutcomeFilter,
@@ -17,7 +17,6 @@ import { toDateKey } from '@/utils/date';
 type MatchStatusSegmentValue = PredictionStatusFilter | 'today';
 
 interface Props {
-    mode: PredictionTab;
     filters: PredictionFilters;
     hasActiveFilters: boolean;
     onChange: <K extends keyof PredictionFilters>(
@@ -38,8 +37,8 @@ const outcomeOptions: PredictionFilterOption<OutcomeFilter>[] = [
 
 const pointsStateOptions: PredictionFilterOption<PointsStateFilter>[] = [
     { label: 'All', value: 'all' },
+    { label: 'Points awarded', value: 'points-earned' },
     { label: 'Awaiting validation', value: 'points-pending' },
-    { label: 'Points earned', value: 'points-earned' },
 ];
 
 const confidenceSortOptions: PredictionFilterOption<ConfidenceSort>[] = [
@@ -49,7 +48,6 @@ const confidenceSortOptions: PredictionFilterOption<ConfidenceSort>[] = [
 ];
 
 export default function PredictionsFilterCard({
-    mode,
     filters,
     hasActiveFilters,
     onChange,
@@ -57,7 +55,6 @@ export default function PredictionsFilterCard({
     onMatchStatusChange,
     onClear,
 }: Props) {
-    const isMine = mode === 'mine';
     const today = toDateKey(new Date());
     const matchStatusValue: MatchStatusSegmentValue =
         filters.date === today ? 'today' : filters.status;
@@ -110,28 +107,26 @@ export default function PredictionsFilterCard({
                     onChange={updateMatchStatus}
                 />
                 <FilterSelect
-                    className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
+                    className="lg:col-span-4"
                     label="Outcome"
                     value={filters.outcome}
                     options={outcomeOptions}
                     onChange={(value) => onChange('outcome', value)}
                 />
                 <FilterSelect
-                    className={isMine ? 'lg:col-span-4' : 'lg:col-span-6'}
+                    className="lg:col-span-4"
                     label="Confidence"
                     value={filters.confidenceSort}
                     options={confidenceSortOptions}
                     onChange={(value) => onChange('confidenceSort', value)}
                 />
-                {isMine && (
-                    <FilterSelect
-                        className="lg:col-span-4"
-                        label="Points state"
-                        value={filters.pointsState}
-                        options={pointsStateOptions}
-                        onChange={(value) => onChange('pointsState', value)}
-                    />
-                )}
+                <FilterSelect
+                    className="lg:col-span-4"
+                    label="Points state"
+                    value={filters.pointsState}
+                    options={pointsStateOptions}
+                    onChange={(value) => onChange('pointsState', value)}
+                />
             </div>
         </section>
     );

@@ -445,6 +445,87 @@ function createPredictionsPageUserPrediction(User $user, Fixture $fixture, array
     ]);
 }
 
+test('ai predictions can be filtered by points state', function (string $pointsState) {
+    [$league, $homeTeam, $awayTeam] = createPredictionsPageContext();
+
+    $pendingFixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 60,
+        'match_date' => now('Europe/Brussels')->subDay()->format('Y-m-d H:i:s'),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+    ]);
+    $earnedFixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 61,
+        'match_date' => now('Europe/Brussels')->subDays(2)->format('Y-m-d H:i:s'),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+    ]);
+    $zeroPointsFixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 62,
+        'match_date' => now('Europe/Brussels')->subDays(3)->format('Y-m-d H:i:s'),
+        'status_short' => 'FT',
+        'status_long' => 'Match Finished',
+    ]);
+
+    createPredictionsPageAiPrediction($pendingFixture);
+    createPredictionsPageAiPrediction($earnedFixture)->update([
+        'points' => 12,
+        'points_awarded_at' => now('UTC'),
+    ]);
+    createPredictionsPageAiPrediction($zeroPointsFixture)->update([
+        'points' => 0,
+        'points_awarded_at' => now('UTC'),
+    ]);
+
+    $fixtureIds = [
+        'points-pending' => $pendingFixture->id,
+        'points-earned' => $earnedFixture->id,
+        'no-points-earned' => $zeroPointsFixture->id,
+    ];
+
+    $response = $this->get(route('predictions', [
+        'mode' => 'ai',
+        'pointsState' => $pointsState,
+    ]));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('predictions')
+            ->where('mode', 'ai')
+            ->where('filters.pointsState', $pointsState)
+            ->has('fixtures.data', 1)
+            ->where('fixtures.data.0.id', $fixtureIds[$pointsState]),
+        );
+})->with([
+    'pending' => 'points-pending',
+    'earned' => 'points-earned',
+    'zero points' => 'no-points-earned',
+]);
+
+test('ai predictions overview page shows ai predictions', function () {
+    [$league, $homeTeam, $awayTeam] = createPredictionsPageContext();
+    $fixture = createPredictionsPageFixture($league, $homeTeam, $awayTeam, [
+        'external_id' => 80,
+        'match_date' => '2026-06-12 20:00:00',
+        'status_long' => 'Not Started',
+    ]);
+
+    createPredictionsPageAiPrediction($fixture);
+
+    $response = $this->get(route('ai.predictions'));
+
+    $response
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('ai-predictions')
+            ->has('fixtures.data', 1)
+            ->where('fixtures.data.0.id', $fixture->id)
+            ->where('fixtures.data.0.homeTeam', 'Belgium')
+            ->where('fixtures.data.0.awayTeam', 'Netherlands'),
+        );
+});
+
 test('guest users do not see mine predictions results', function () {
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),

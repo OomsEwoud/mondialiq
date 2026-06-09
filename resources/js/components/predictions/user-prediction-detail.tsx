@@ -6,7 +6,10 @@ import UserPredictionAiComparisonCard from '@/components/predictions/user-predic
 import UserPredictionHero from '@/components/predictions/user-prediction-hero';
 import UserPredictionSummaryCards from '@/components/predictions/user-prediction-summary-cards';
 import type { Match } from '@/types/match';
-import type { PredictionOwner, UserPredictionScoringPreview } from '@/types/prediction';
+import type {
+    PredictionOwner,
+    UserPredictionScoringPreview,
+} from '@/types/prediction';
 import { predictionScoreLabel } from '@/utils/match-prediction';
 
 interface Props {
@@ -37,7 +40,6 @@ export default function UserPredictionDetail({
                 <UserPredictedScoreCard
                     match={match}
                     score={score}
-                    scoringPreview={scoringPreview}
                     owner={owner}
                 />
                 <UserPredictionSummaryCards

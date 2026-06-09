@@ -39,6 +39,24 @@ export interface UserPredictionsPageProps {
     scoringGuideHref: string;
 }
 
+export interface AiPredictionsPageProps {
+    aiUser: {
+        id: number;
+        name: string;
+        avatar: string | null;
+    };
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        date: string;
+        status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
+    };
+    scoringGuideHref: string;
+}
+
 export interface PredictionOwner {
     id: number;
     name: string;

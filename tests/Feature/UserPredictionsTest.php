@@ -267,7 +267,7 @@ test('leaderboard includes public predictions href for public users', function (
             ->has('globalLeaderboard', 2)
             ->where('globalLeaderboard.0.predictionsArePublic', true)
             ->where('globalLeaderboard.0.publicPredictionsHref', route('users.predictions', $user))
-            ->where('globalLeaderboard.1.publicPredictionsHref', null),
+            ->where('globalLeaderboard.1.publicPredictionsHref', route('ai.predictions')),
         );
 });
 
@@ -297,6 +297,6 @@ test('leaderboard excludes public predictions href for private users', function 
             ->has('globalLeaderboard', 2)
             ->where('globalLeaderboard.0.predictionsArePublic', false)
             ->where('globalLeaderboard.0.publicPredictionsHref', null)
-            ->where('globalLeaderboard.1.publicPredictionsHref', null),
+            ->where('globalLeaderboard.1.publicPredictionsHref', route('ai.predictions')),
         );
 });

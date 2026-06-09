@@ -35,7 +35,7 @@ export default function PredictionCard({ match, actionLabel, mode, userId }: Pro
                 <span
                     className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
                 >
-                    {isMine ? 'Personal pick' : isUser ? 'User pick' : 'AI report'}
+                    {isMine ? 'Personal pick' : isUser ? 'User pick' : 'AI pick'}
                 </span>
                 <UserPredictionSummary match={match} aiMode={!isMine && !isUser} />
             </div>

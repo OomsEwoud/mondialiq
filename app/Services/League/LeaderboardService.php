@@ -85,7 +85,7 @@ class LeaderboardService
     private function publicPredictionsHref(User $user): ?string
     {
         if ($user->is_system_user) {
-            return null;
+            return route('ai.predictions');
         }
 
         if (! $user->predictionsArePublic()) {

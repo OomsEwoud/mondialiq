@@ -12,31 +12,35 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class UserPredictionsController extends Controller
+class AiPredictionsController extends Controller
 {
     public function __construct(
         private readonly FixturePaginationService $paginationService,
         private readonly WorldCupContext $worldCupContext,
     ) {}
 
-    public function __invoke(Request $request, User $user): Response
+    public function __invoke(Request $request): Response
     {
-        $viewer = $request->user();
+        $aiUser = User::aiUser();
 
-        if ($viewer?->id !== $user->id) {
-            abort_unless($user->allowsPublicPredictionViewing(), 403);
+        if ($aiUser === null) {
+            abort(404);
         }
 
         $status = $this->statusFilter($request);
         $date = $this->dateFilter($request);
         $pointsState = $this->pointsStateFilter($request);
         $fixtureQuery = $this->fixtureQuery($status, $date);
-        $this->applyUserPredictions($fixtureQuery, $user, $viewer, $pointsState);
+        $this->applyAiPredictions($fixtureQuery, $pointsState);
 
         $fixtures = $this->paginationService->paginate($fixtureQuery);
 
-        return Inertia::render('user-predictions', [
-            'user' => $this->userProps($user, $viewer),
+        return Inertia::render('ai-predictions', [
+            'aiUser' => [
+                'id' => $aiUser->id,
+                'name' => $aiUser->name,
+                'avatar' => $aiUser->avatarUrl(),
+            ],
             'fixtures' => $fixtures,
             'filters' => [
                 'date' => $date,
@@ -47,46 +51,25 @@ class UserPredictionsController extends Controller
         ]);
     }
 
-    private function userProps(User $user, ?User $viewer): array
+    private function applyAiPredictions(Builder $query, string $pointsState): void
     {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'avatar' => $user->avatarUrl(),
-            'isViewer' => $viewer?->id === $user->id,
-        ];
-    }
-
-    private function applyUserPredictions(Builder $query, User $user, ?User $viewer, string $pointsState): void
-    {
-        $query->whereHas('predictions', function (Builder $query) use ($user, $viewer) {
-            $query->where('user_id', $user->id)
-                ->where('source', 'user')
-                ->visibleFor($viewer);
+        $query->whereHas('aiPrediction', function (Builder $query) use ($pointsState) {
+            if ($pointsState !== 'all') {
+                match ($pointsState) {
+                    'points-pending' => $query->pointsPending(),
+                    'points-earned' => $query->pointsEarned(),
+                    'no-points-earned' => $query->noPointsEarned(),
+                    default => null,
+                };
+            }
         });
 
         $query->with([
             'homeTeam',
             'awayTeam',
             'apiPrediction',
-            'userPredictions' => function ($query) use ($user, $viewer) {
-                $query->where('user_id', $user->id)
-                    ->where('source', 'user')
-                    ->visibleFor($viewer)
-                    ->with('winner');
-            },
+            'aiPrediction',
         ]);
-
-        if ($pointsState !== 'all') {
-            $query->whereHas('predictions', function (Builder $query) use ($user, $viewer, $pointsState) {
-                $query->where('user_id', $user->id)
-                    ->where('source', 'user')
-                    ->visibleFor($viewer)
-                    ->when($pointsState === 'points-pending', fn (Builder $q) => $q->pointsPending())
-                    ->when($pointsState === 'points-earned', fn (Builder $q) => $q->pointsEarned())
-                    ->when($pointsState === 'no-points-earned', fn (Builder $q) => $q->noPointsEarned());
-            });
-        }
     }
 
     private function statusFilter(Request $request): string

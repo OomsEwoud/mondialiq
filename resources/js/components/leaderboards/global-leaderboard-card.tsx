@@ -138,10 +138,14 @@ export default function GlobalLeaderboardCard({
                                                 className="mt-2 h-auto px-0 py-0 text-xs font-semibold text-cyan-600 hover:bg-transparent hover:text-cyan-700"
                                             >
                                                 <Link
-                                                    href={leader.publicPredictionsHref}
+                                                    href={
+                                                        leader.publicPredictionsHref
+                                                    }
                                                 >
                                                     <Eye className="mr-1 size-3.5" />
-                                                    See predictions
+                                                    {leader.isSystemUser
+                                                        ? 'See AI predictions'
+                                                        : 'See predictions'}
                                                 </Link>
                                             </Button>
                                         )}

@@ -19,17 +19,23 @@ class PredictionFixtureQuery
     public function applyMode(Builder $query, string $mode, ?User $user, array $filters = []): Builder
     {
         if ($mode === 'ai') {
-            return $this->withAiPredictions($query);
+            return $this->withAiPredictions($query, $filters);
         }
 
         return $this->withUserPredictions($query, $user, $filters);
     }
 
-    private function withAiPredictions(Builder $query): Builder
+    private function withAiPredictions(Builder $query, array $filters): Builder
     {
+        $pointsState = $this->pointsStateFilter($filters);
+
         return $query
             ->with('aiPrediction')
-            ->whereHas('aiPrediction');
+            ->whereHas('aiPrediction', function (Builder $query) use ($pointsState) {
+                if ($pointsState !== self::POINTS_STATE_ALL) {
+                    $this->applyPointsStateFilter($query, $pointsState);
+                }
+            });
     }
 
     private function withUserPredictions(Builder $query, ?User $user, array $filters): Builder

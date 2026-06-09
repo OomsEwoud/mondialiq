@@ -1,27 +1,17 @@
 import { Link } from '@inertiajs/react';
+import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
-import type { PredictionOwner, UserPredictionScoringPreview } from '@/types/prediction';
+import type { PredictionOwner } from '@/types/prediction';
 
 interface Props {
     match: Match;
     score: string | null;
-    scoringPreview: UserPredictionScoringPreview | null;
     owner: PredictionOwner;
 }
 
-export default function UserPredictedScoreCard({
-    match,
-    score,
-    scoringPreview,
-    owner,
-}: Props) {
+export default function UserPredictedScoreCard({ match, score, owner }: Props) {
     const pointsAwarded = match.userPrediction?.pointsAwarded ?? false;
-    const pointsLabel = pointsAwarded
-        ? `${match.userPrediction?.points ?? 0}/20 pts`
-        : scoringPreview
-          ? `Preview: ${scoringPreview.points}/${scoringPreview.maxPoints}`
-          : 'Awaiting validation';
     const scoreLabel = owner.canEdit ? 'Your prediction' : 'Predicted score';
 
     return (
@@ -41,9 +31,13 @@ export default function UserPredictedScoreCard({
             </Link>
 
             <div className="rounded-2xl border border-indigo-200 bg-gradient-to-b from-indigo-50/40 to-white px-6 py-6 text-center shadow-md sm:px-10 sm:py-8">
-                <p className="inline-flex rounded-full border border-indigo-200 bg-white px-3 py-1 text-xs font-semibold text-indigo-700">
-                    {pointsLabel}
-                </p>
+                <div className="flex justify-center">
+                    <PredictionPointsBadge
+                        points={match.userPrediction?.points ?? null}
+                        pointsAwarded={pointsAwarded}
+                        variant="indigo"
+                    />
+                </div>
                 <p className="mt-4 text-5xl font-bold tracking-tight text-slate-900 tabular-nums sm:text-6xl">
                     {score ?? '—'}
                 </p>

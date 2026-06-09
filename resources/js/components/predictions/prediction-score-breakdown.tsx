@@ -1,7 +1,11 @@
 import { Link } from '@inertiajs/react';
 import { Calculator, CheckCircle2, Circle, Info } from 'lucide-react';
+import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { cn } from '@/lib/utils';
-import type { PredictionOwner, UserPredictionScoringPreview } from '@/types/prediction';
+import type {
+    PredictionOwner,
+    UserPredictionScoringPreview,
+} from '@/types/prediction';
 import { calculatePredictionScore } from '@/utils/prediction-scoring';
 
 interface Props {
@@ -49,9 +53,17 @@ export default function PredictionScoreBreakdown({
                         <Calculator className="size-5" />
                     </span>
                     <div>
-                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                            {hasScoringPreview ? 'Scoring preview' : 'Scoring'}
-                        </p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                {hasScoringPreview
+                                    ? 'Scoring preview'
+                                    : 'Scoring'}
+                            </p>
+                            <PredictionPointsBadge
+                                points={awardedPoints}
+                                pointsAwarded={pointsAwarded}
+                            />
+                        </div>
                         <h2 className="mt-1 text-xl font-bold text-slate-900">
                             {pointsAwarded
                                 ? `${awardedPoints}/20 official points`
@@ -141,9 +153,15 @@ export default function PredictionScoreBreakdown({
                     <Calculator className="size-5" />
                 </span>
                 <div>
-                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                        Points earned
-                    </p>
+                    <div className="flex items-center gap-2">
+                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                            Points earned
+                        </p>
+                        <PredictionPointsBadge
+                            points={officialPoints}
+                            pointsAwarded={pointsAwarded}
+                        />
+                    </div>
                     <h2 className="mt-1 text-xl font-bold text-slate-900">
                         {officialPoints}/20 official points
                     </h2>
