@@ -1,5 +1,5 @@
 import AppLogo from '@/components/app/app-logo';
-import { contact, privacy } from '@/routes';
+import { contact, howItWorks, privacy } from '@/routes';
 
 declare global {
     interface Window {
@@ -69,6 +69,12 @@ export default function Footer() {
                         reserved.
                     </p>
                     <div className="flex flex-wrap justify-center gap-5">
+                        <a
+                            href={howItWorks.url()}
+                            className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                        >
+                            How It Works
+                        </a>
                         <a
                             href={privacy.url()}
                             className="text-xs text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"

@@ -20,6 +20,7 @@ use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Pages\ContactController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
+use App\Http\Controllers\Pages\HowItWorksController;
 use App\Http\Controllers\Pages\LeaderboardsController;
 use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
@@ -42,6 +43,7 @@ Route::get('/players/{player}', PlayerDetailsController::class)->name('players.s
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
 Route::get('/scoring', ScoringGuideController::class)->name('scoring');
+Route::get('/how-it-works', HowItWorksController::class)->name('how-it-works');
 Route::get('/contact', ContactController::class)->name('contact');
 Route::get('/privacy', PrivacyController::class)->name('privacy');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
