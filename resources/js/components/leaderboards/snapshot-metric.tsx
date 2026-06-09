@@ -1,10 +1,12 @@
 import type { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type SnapshotMetricProps = {
     icon: LucideIcon;
     label: string;
     value: string;
     helper?: string;
+    iconClassName?: string;
 };
 
 export default function SnapshotMetric({
@@ -12,11 +14,12 @@ export default function SnapshotMetric({
     label,
     value,
     helper,
+    iconClassName,
 }: SnapshotMetricProps) {
     return (
         <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
             <div className="flex items-center gap-2 text-slate-500">
-                <Icon className="size-4 text-slate-600" />
+                <Icon className={cn('size-4', iconClassName ?? 'text-slate-600')} />
                 <p className="text-xs font-bold tracking-wide uppercase">
                     {label}
                 </p>

@@ -16,31 +16,25 @@ import {
 } from '@/components/ui/layout/card';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import type { LeagueMember } from '@/types/league';
+import type { LeagueAccentColor, LeagueMember } from '@/types/league';
+import {
+    getLeagueBrandPalette,
+    getLeagueHeroPalette,
+} from '@/utils/league-branding';
 import StatPill from './stat-pill';
 
 type Props = {
     members: LeagueMember[];
+    accentColor: LeagueAccentColor;
 };
 
-const topRankStyles: Record<number, string> = {
-    1: 'border-amber-200 bg-amber-50 text-amber-700',
-    2: 'border-slate-300 bg-slate-100 text-slate-700',
-    3: 'border-cyan-200 bg-cyan-50 text-cyan-600',
-};
-
-type FormTone = 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
-
-const formToneStyles: Record<FormTone, string> = {
-    hot: 'bg-emerald-100 text-emerald-800',
-    steady: 'bg-cyan-100 text-cyan-700',
-    chasing: 'bg-amber-100 text-amber-800',
-    cold: 'bg-rose-100 text-rose-800',
-    neutral: 'bg-slate-100 text-slate-700',
-};
-
-export default function LeagueMembersCard({ members }: Props) {
+export default function LeagueMembersCard({
+    members,
+    accentColor,
+}: Props) {
     const getInitials = useInitials();
+    const heroPalette = getLeagueHeroPalette(accentColor);
+    const brandPalette = getLeagueBrandPalette(accentColor);
     const memberLabel = members.length === 1 ? 'member' : 'members';
     const hasLowActivity =
         members.length <= 1 ||
@@ -59,7 +53,7 @@ export default function LeagueMembersCard({ members }: Props) {
                         </CardDescription>
                     </div>
                     <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-600">
-                        <Users className="size-3.5 text-slate-600" />
+                        <Users className={cn('size-3.5', heroPalette.icon)} />
                         {members.length} {memberLabel}
                     </span>
                 </div>
@@ -72,14 +66,20 @@ export default function LeagueMembersCard({ members }: Props) {
                             className={cn(
                                 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 border-l-4 border-transparent px-4 py-3.5 sm:px-6',
                                 member.isCurrentUser &&
-                                    'border-cyan-200 bg-cyan-50/50 ring-1 ring-slate-200',
+                                    cn(
+                                        'ring-1 ring-slate-200',
+                                        heroPalette.userHighlight,
+                                    ),
                             )}
                         >
                             <div
                                 className={cn(
-                                    'mt-1 flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-bold shadow-xs',
-                                    topRankStyles[member.rank] ??
-                                        'border-slate-200 bg-slate-50 text-slate-900',
+                                    'mt-1 flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-bold',
+                                    member.rank === 1
+                                        ? heroPalette.rankFirst
+                                        : member.rank <= 3
+                                            ? 'border-slate-300 bg-slate-100 text-slate-700'
+                                            : 'border-slate-200 bg-slate-50 text-slate-900',
                                 )}
                             >
                                 #{member.rank}
@@ -103,19 +103,26 @@ export default function LeagueMembersCard({ members }: Props) {
                                             {member.name}
                                         </p>
                                         {member.isOwner && (
-                                            <Badge className="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-bold text-amber-700 shadow-none">
+                                            <Badge className={cn(
+                                                'rounded-full px-2 py-0.5 text-xs font-bold shadow-none',
+                                                brandPalette.badge,
+                                            )}>
                                                 <Crown className="size-3" />
                                                 Host
                                             </Badge>
                                         )}
                                         {member.isSystemUser && (
-                                            <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                            <Badge className="rounded-full bg-slate-800 px-2 py-0.5 text-xs font-bold text-white shadow-none">
                                                 <Bot className="size-3" />
                                                 AI
                                             </Badge>
                                         )}
                                         {member.isCurrentUser && (
-                                            <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-bold text-cyan-600 shadow-none">
+                                            <Badge className={cn(
+                                                'rounded-full bg-white px-2 py-0.5 text-xs font-bold shadow-none',
+                                                brandPalette.border,
+                                                brandPalette.softText,
+                                            )}>
                                                 You
                                             </Badge>
                                         )}
@@ -123,9 +130,16 @@ export default function LeagueMembersCard({ members }: Props) {
                                             <Badge
                                                 className={cn(
                                                     'rounded-full px-2 py-0.5 text-xs font-bold',
-                                                    formToneStyles[
-                                                        member.form.tone
-                                                    ],
+                                                    (member.form.tone === 'hot' ||
+                                                        member.form.tone === 'chasing') &&
+                                                        cn(
+                                                            brandPalette.soft,
+                                                            brandPalette.softText,
+                                                        ),
+                                                    (member.form.tone === 'steady' ||
+                                                        member.form.tone === 'cold' ||
+                                                        member.form.tone === 'neutral') &&
+                                                        'bg-slate-100 text-slate-700',
                                                 )}
                                             >
                                                 {member.form.label}
@@ -142,15 +156,15 @@ export default function LeagueMembersCard({ members }: Props) {
                                             }
                                         />
                                         <StatPill
-                                            label={`${member.scoringPredictionsCount} validated picks`}
+                                            label={`${member.scoringPredictionsCount} validated`}
                                         />
                                         <StatPill
-                                            label={`${member.perfectPredictionsCount} perfect scores`}
+                                            label={`${member.perfectPredictionsCount} perfect`}
                                         />
                                         <StatPill
                                             label={
                                                 member.lastPredictionLabel
-                                                    ? `Last pick ${member.lastPredictionLabel}`
+                                                    ? `Last ${member.lastPredictionLabel}`
                                                     : 'No picks yet'
                                             }
                                         />
@@ -176,7 +190,10 @@ export default function LeagueMembersCard({ members }: Props) {
                                         asChild
                                         variant="ghost"
                                         size="sm"
-                                        className="mt-2 h-auto px-0 py-0 text-xs font-semibold text-cyan-600 hover:bg-transparent hover:text-cyan-700"
+                                        className={cn(
+                                            'mt-2 h-auto px-0 py-0 text-xs font-semibold hover:bg-transparent',
+                                            heroPalette.link,
+                                        )}
                                     >
                                         <Link href={member.predictionsHref}>
                                             <Eye className="mr-1 size-3.5" />
@@ -189,16 +206,20 @@ export default function LeagueMembersCard({ members }: Props) {
                     ))}
                 </div>
                 {hasLowActivity && (
-                    <div className="border-t border-slate-200 bg-cyan-50/40 px-4 py-3 sm:px-6">
-                        <div className="flex gap-3">
-                            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-600">
-                                <Users className="size-4" />
+                    <div className="border-t border-slate-200 bg-slate-50/60 px-4 py-5 sm:px-6">
+                        <div className="flex flex-col items-center gap-3 text-center">
+                            <span className={cn(
+                                'flex size-10 items-center justify-center rounded-full',
+                                heroPalette.inviteIcon,
+                            )}>
+                                <Users className="size-5" />
                             </span>
                             <div>
-                                <p className="text-sm leading-6 font-semibold text-slate-900">
-                                    Invite friends to fill the leaderboard. Once
-                                    members make predictions, the race will
-                                    appear here.
+                                <p className="text-sm font-bold text-slate-900">
+                                    Your group is ready.
+                                </p>
+                                <p className="mt-1 text-sm leading-6 text-slate-600">
+                                    Invite friends to start the race.
                                 </p>
                             </div>
                         </div>

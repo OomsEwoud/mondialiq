@@ -67,7 +67,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
             <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
                 <section
                     className={cn(
-                        'rounded-2xl p-4 shadow-sm sm:p-6 lg:p-8',
+                        'relative overflow-hidden rounded-2xl p-4 text-white shadow-sm ring-1 sm:p-6 lg:p-8',
                         getLeagueBrandBannerClass(
                             league.accentColor,
                             league.coverStyle,
@@ -178,29 +178,43 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                 </section>
 
                 <div className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.9fr)]">
-                    <LeagueMembersCard members={league.members} />
+                    <LeagueMembersCard
+                        members={league.members}
+                        accentColor={league.accentColor}
+                    />
 
                     <div className="space-y-6">
                         {(league.rewardTitle || league.rewardDescription) && (
-                            <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 shadow-sm">
+                            <section className={cn(
+                                'rounded-2xl p-5 shadow-sm',
+                                palette.border,
+                                palette.soft,
+                            )}>
                                 <div className="flex items-start gap-3">
-                                    <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-amber-600 shadow-sm ring-1 ring-amber-200">
+                                    <span className={cn(
+                                        'flex size-10 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm ring-1',
+                                        palette.ring,
+                                        palette.softText,
+                                    )}>
                                         <Gift className="size-5" />
                                     </span>
                                     <div className="min-w-0">
-                                        <p className="text-xs font-semibold tracking-wide text-amber-600 uppercase">
+                                        <p className={cn(
+                                            'text-xs font-semibold tracking-wide uppercase',
+                                            palette.softText,
+                                        )}>
                                             Optional reward
                                         </p>
-                                        <h2 className="mt-1 text-xl font-bold text-amber-900">
+                                        <h2 className="mt-1 text-xl font-bold text-slate-900">
                                             {league.rewardTitle ??
                                                 'Reward available'}
                                         </h2>
                                         {league.rewardDescription && (
-                                            <p className="mt-2 text-sm leading-6 text-amber-800">
+                                            <p className="mt-2 text-sm leading-6 text-slate-800">
                                                 {league.rewardDescription}
                                             </p>
                                         )}
-                                        <p className="mt-3 text-xs leading-5 font-medium text-amber-700">
+                                        <p className="mt-3 text-xs leading-5 font-medium text-slate-700">
                                             MondialIQ does not process payments
                                             or payouts. This is a social note
                                             from the group owner.
@@ -218,12 +232,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             code={league.code}
                             joinHref={league.joinHref}
                             membersCount={league.membersCount}
+                            accentColor={league.accentColor}
                         />
 
                         <LeagueOnboardingCard
                             leagueName={league.name}
                             membersCount={league.membersCount}
                             currentUserPoints={league.currentUserPoints}
+                            accentColor={league.accentColor}
                         />
                     </div>
                 </div>

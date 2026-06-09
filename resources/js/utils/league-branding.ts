@@ -61,6 +61,7 @@ const accentPalettes: Record<
         ring: string;
         badge: string;
         button: string;
+        border: string;
     }
 > = {
     cyan: {
@@ -69,6 +70,7 @@ const accentPalettes: Record<
         ring: 'ring-cyan-200',
         badge: 'border-cyan-200 bg-cyan-50 text-cyan-900',
         button: 'border-cyan-200 text-cyan-900 hover:bg-cyan-50',
+        border: 'border-cyan-200',
     },
     emerald: {
         soft: 'bg-emerald-50',
@@ -76,6 +78,7 @@ const accentPalettes: Record<
         ring: 'ring-emerald-200',
         badge: 'border-emerald-200 bg-emerald-50 text-emerald-900',
         button: 'border-emerald-200 text-emerald-900 hover:bg-emerald-50',
+        border: 'border-emerald-200',
     },
     amber: {
         soft: 'bg-amber-50',
@@ -83,6 +86,7 @@ const accentPalettes: Record<
         ring: 'ring-amber-200',
         badge: 'border-amber-200 bg-amber-50 text-amber-900',
         button: 'border-amber-200 text-amber-900 hover:bg-amber-50',
+        border: 'border-amber-200',
     },
     rose: {
         soft: 'bg-rose-50',
@@ -90,6 +94,7 @@ const accentPalettes: Record<
         ring: 'ring-rose-200',
         badge: 'border-rose-200 bg-rose-50 text-rose-900',
         button: 'border-rose-200 text-rose-900 hover:bg-rose-50',
+        border: 'border-rose-200',
     },
     violet: {
         soft: 'bg-violet-50',
@@ -97,6 +102,7 @@ const accentPalettes: Record<
         ring: 'ring-violet-200',
         badge: 'border-violet-200 bg-violet-50 text-violet-900',
         button: 'border-violet-200 text-violet-900 hover:bg-violet-50',
+        border: 'border-violet-200',
     },
     blue: {
         soft: 'bg-blue-50',
@@ -104,6 +110,7 @@ const accentPalettes: Record<
         ring: 'ring-blue-200',
         badge: 'border-blue-200 bg-blue-50 text-blue-900',
         button: 'border-blue-200 text-blue-900 hover:bg-blue-50',
+        border: 'border-blue-200',
     },
 };
 
@@ -135,6 +142,10 @@ const heroPalettes: Record<
         primaryButton: string;
         outlineButton: string;
         ring: string;
+        rankFirst: string;
+        userHighlight: string;
+        link: string;
+        inviteIcon: string;
     }
 > = {
     cyan: {
@@ -146,6 +157,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-cyan-600 hover:bg-cyan-500 text-white',
         outlineButton: 'border-cyan-400/30 text-cyan-100 hover:bg-cyan-900/30',
         ring: 'ring-cyan-300',
+        rankFirst: 'bg-cyan-500 text-white border-transparent',
+        userHighlight: 'border-cyan-200 bg-cyan-50/30',
+        link: 'text-cyan-600 hover:text-cyan-700',
+        inviteIcon: 'bg-cyan-100 text-cyan-600',
     },
     emerald: {
         label: 'text-emerald-300',
@@ -156,6 +171,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-emerald-600 hover:bg-emerald-500 text-white',
         outlineButton: 'border-emerald-400/30 text-emerald-100 hover:bg-emerald-900/30',
         ring: 'ring-emerald-300',
+        rankFirst: 'bg-emerald-500 text-white border-transparent',
+        userHighlight: 'border-emerald-200 bg-emerald-50/30',
+        link: 'text-emerald-600 hover:text-emerald-700',
+        inviteIcon: 'bg-emerald-100 text-emerald-600',
     },
     amber: {
         label: 'text-amber-300',
@@ -166,6 +185,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-amber-600 hover:bg-amber-500 text-white',
         outlineButton: 'border-amber-400/30 text-amber-100 hover:bg-amber-900/30',
         ring: 'ring-amber-300',
+        rankFirst: 'bg-amber-500 text-white border-transparent',
+        userHighlight: 'border-amber-200 bg-amber-50/30',
+        link: 'text-amber-600 hover:text-amber-700',
+        inviteIcon: 'bg-amber-100 text-amber-600',
     },
     rose: {
         label: 'text-rose-300',
@@ -176,6 +199,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-rose-600 hover:bg-rose-500 text-white',
         outlineButton: 'border-rose-400/30 text-rose-100 hover:bg-rose-900/30',
         ring: 'ring-rose-300',
+        rankFirst: 'bg-rose-500 text-white border-transparent',
+        userHighlight: 'border-rose-200 bg-rose-50/30',
+        link: 'text-rose-600 hover:text-rose-700',
+        inviteIcon: 'bg-rose-100 text-rose-600',
     },
     violet: {
         label: 'text-violet-300',
@@ -186,6 +213,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-violet-600 hover:bg-violet-500 text-white',
         outlineButton: 'border-violet-400/30 text-violet-100 hover:bg-violet-900/30',
         ring: 'ring-violet-300',
+        rankFirst: 'bg-violet-500 text-white border-transparent',
+        userHighlight: 'border-violet-200 bg-violet-50/30',
+        link: 'text-violet-600 hover:text-violet-700',
+        inviteIcon: 'bg-violet-100 text-violet-600',
     },
     blue: {
         label: 'text-blue-300',
@@ -196,6 +227,10 @@ const heroPalettes: Record<
         primaryButton: 'bg-blue-600 hover:bg-blue-500 text-white',
         outlineButton: 'border-blue-400/30 text-blue-100 hover:bg-blue-900/30',
         ring: 'ring-blue-300',
+        rankFirst: 'bg-blue-500 text-white border-transparent',
+        userHighlight: 'border-blue-200 bg-blue-50/30',
+        link: 'text-blue-600 hover:text-blue-700',
+        inviteIcon: 'bg-blue-100 text-blue-600',
     },
 };
 
