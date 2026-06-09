@@ -6,14 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\MatchDetailsResource;
 use App\Models\Fixture;
 use App\Models\User;
+use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MatchDetailsController extends Controller
 {
+    public function __construct(
+        private readonly WorldCupContext $worldCupContext,
+    ) {}
+
     public function __invoke(Fixture $fixture, Request $request): Response
     {
+        $this->ensureWorldCupFixture($fixture);
         $fixture->load([
             'homeTeam',
             'awayTeam',
@@ -45,5 +51,13 @@ class MatchDetailsController extends Controller
                     ->with('winner'),
             ]);
         }
+    }
+
+    private function ensureWorldCupFixture(Fixture $fixture): void
+    {
+        $isWorldCup = in_array($fixture->league_id, $this->worldCupContext->leagueIds(), true)
+            && $fixture->season === $this->worldCupContext->season();
+
+        abort_if(! $isWorldCup, 404);
     }
 }

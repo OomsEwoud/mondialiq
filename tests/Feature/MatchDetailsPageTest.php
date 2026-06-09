@@ -117,10 +117,46 @@ test('the match detail page exposes sorted fixture events with api minutes and f
             ->where('match.events.2.player', 'Late Scorer'));
 });
 
+test('the match detail page returns 404 for non world cup fixtures', function () {
+    $otherLeague = League::query()->create([
+        'external_id' => 9999,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 5001,
+        'name' => 'Home Team',
+        'code' => 'HOM',
+        'logo_url' => 'https://example.com/home.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 5002,
+        'name' => 'Away Team',
+        'code' => 'AWY',
+        'logo_url' => 'https://example.com/away.png',
+    ]);
+
+    $fixture = Fixture::query()->create([
+        'external_id' => 5003,
+        'league_id' => $otherLeague->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Round 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => '2026-06-12 20:00:00',
+        'status_long' => 'Not Started',
+    ]);
+
+    $this->get(route('matches.show', $fixture))
+        ->assertNotFound();
+});
+
 function createFixtureForMatchDetails(): array
 {
     $league = League::query()->create([
-        'external_id' => fake()->unique()->numberBetween(1000, 9999),
+        'external_id' => config('services.api_football.league_id'),
         'name' => 'World Cup',
         'type' => 'Cup',
     ]);

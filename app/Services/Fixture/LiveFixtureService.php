@@ -3,6 +3,7 @@
 namespace App\Services\Fixture;
 
 use App\Models\Fixture;
+use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Support\Facades\Cache;
 
 class LiveFixtureService
@@ -10,6 +11,10 @@ class LiveFixtureService
     private const CACHE_KEY = 'live-fixtures';
 
     private const CACHE_TTL_SECONDS = 30;
+
+    public function __construct(
+        private readonly WorldCupContext $worldCupContext,
+    ) {}
 
     public function liveFixtures(): array
     {
@@ -29,6 +34,8 @@ class LiveFixtureService
     {
         return Fixture::query()
             ->inProgress()
+            ->whereIn('league_id', $this->worldCupContext->leagueIds())
+            ->where('season', $this->worldCupContext->season())
             ->select([
                 'id',
                 'home_team_id',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Fixture;
 use App\Models\User;
 use App\Services\Fixture\LiveFixtureService;
+use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -14,6 +15,10 @@ use Inertia\Response;
 class HomeController extends Controller
 {
     private const UPCOMING_FIXTURE_LIMIT = 5;
+
+    public function __construct(
+        private readonly WorldCupContext $worldCupContext,
+    ) {}
 
     public function __invoke(
         Request $request,
@@ -37,6 +42,8 @@ class HomeController extends Controller
                     ->whereBelongsTo($user)
                     ->select(['id', 'fixture_id', 'user_id']),
             ]))
+            ->whereIn('league_id', $this->worldCupContext->leagueIds())
+            ->where('season', $this->worldCupContext->season())
             ->upcomingNotStarted()
             ->orderBy('match_date', 'asc')
             ->take(self::UPCOMING_FIXTURE_LIMIT)

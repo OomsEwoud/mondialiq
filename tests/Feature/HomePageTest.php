@@ -124,6 +124,51 @@ test('the home page marks upcoming matches as predicted or missing for the curre
             ->where('upcomingFixtures.1.predictionState', 'missing'));
 });
 
+test('the home page excludes non world cup upcoming fixtures', function () {
+    $worldCupLeague = League::query()->create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $otherLeague = League::query()->create([
+        'external_id' => 9999,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::query()->create([
+        'external_id' => 3001,
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::query()->create([
+        'external_id' => 3002,
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    $worldCupFixture = createHomeFixture($worldCupLeague, $homeTeam, $awayTeam, [
+        'external_id' => 301,
+        'match_date' => now('UTC')->addHour()->format('Y-m-d H:i:s'),
+    ]);
+
+    createHomeFixture($otherLeague, $homeTeam, $awayTeam, [
+        'external_id' => 302,
+        'match_date' => now('UTC')->addMinutes(30)->format('Y-m-d H:i:s'),
+    ]);
+
+    $this->get('/')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('home')
+            ->has('upcomingFixtures', 1)
+            ->where('upcomingFixtures.0.id', $worldCupFixture->id));
+});
+
 function createHomeFixture(League $league, Team $homeTeam, Team $awayTeam, array $overrides = []): Fixture
 {
     return Fixture::query()->create([

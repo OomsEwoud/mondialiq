@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\Prediction\ApiPredictionSummaryService;
 use App\Services\Prediction\FixtureOddsSummaryService;
 use App\Services\Prediction\UserPredictionScoringService;
+use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,6 +20,7 @@ class PredictionDetailsController extends Controller
         private readonly FixtureOddsSummaryService $oddsSummaryService,
         private readonly ApiPredictionSummaryService $apiPredictionSummaryService,
         private readonly UserPredictionScoringService $userPredictionScoringService,
+        private readonly WorldCupContext $worldCupContext,
     ) {}
 
     public function __invoke(Request $request, Fixture $fixture): Response
@@ -26,6 +28,7 @@ class PredictionDetailsController extends Controller
         $user = $request->user();
 
         abort_unless($user, 403);
+        $this->ensureWorldCupFixture($fixture);
 
         $this->loadFixture($fixture, $user);
         $mode = $this->predictionMode($request);
@@ -99,5 +102,13 @@ class PredictionDetailsController extends Controller
             'breakdown' => $breakdown,
             'helper' => 'Based on the current score. Official points are only awarded after validation.',
         ];
+    }
+
+    private function ensureWorldCupFixture(Fixture $fixture): void
+    {
+        $isWorldCup = in_array($fixture->league_id, $this->worldCupContext->leagueIds(), true)
+            && $fixture->season === $this->worldCupContext->season();
+
+        abort_if(! $isWorldCup, 404);
     }
 }

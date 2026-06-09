@@ -145,3 +145,66 @@ test('the live fixtures endpoint serves cached data for repeated requests', func
         ->assertSuccessful()
         ->assertJsonCount(0, 'data');
 });
+
+test('the live fixtures endpoint excludes non world cup fixtures', function () {
+    $worldCupLeague = League::create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+
+    $otherLeague = League::create([
+        'external_id' => 9999,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::create([
+        'external_id' => 3001,
+        'name' => 'Belgium',
+        'code' => 'BEL',
+        'logo_url' => 'https://example.com/belgium.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'external_id' => 3002,
+        'name' => 'Netherlands',
+        'code' => 'NED',
+        'logo_url' => 'https://example.com/netherlands.png',
+    ]);
+
+    $worldCupLiveFixture = Fixture::create([
+        'external_id' => 301,
+        'league_id' => $worldCupLeague->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Group Stage - Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => now()->subMinutes(30),
+        'status_short' => '2H',
+        'status_long' => 'Second Half',
+        'elapsed_time' => 70,
+        'fulltime_home_goals' => 1,
+        'fulltime_away_goals' => 0,
+    ]);
+
+    Fixture::create([
+        'external_id' => 302,
+        'league_id' => $otherLeague->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Round 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => now()->subMinutes(15),
+        'status_short' => '1H',
+        'status_long' => 'First Half',
+        'elapsed_time' => 22,
+        'fulltime_home_goals' => 0,
+        'fulltime_away_goals' => 0,
+    ]);
+
+    $this->getJson('/api/live-fixtures')
+        ->assertSuccessful()
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.id', $worldCupLiveFixture->id);
+});

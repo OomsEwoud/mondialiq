@@ -255,3 +255,51 @@ test('a user cannot view a dedicated prediction page for a fixture without any p
         ->get(route('predictions.mine.show', $fixture))
         ->assertNotFound();
 });
+
+test('a user gets 404 for a non world cup fixture prediction page', function () {
+    $user = User::factory()->create();
+
+    $otherLeague = League::create([
+        'external_id' => 9999,
+        'name' => 'Premier League',
+        'type' => 'League',
+    ]);
+
+    $homeTeam = Team::create([
+        'name' => 'Liverpool',
+        'code' => 'LIV',
+        'logo_url' => 'https://example.com/liverpool.png',
+    ]);
+
+    $awayTeam = Team::create([
+        'name' => 'Chelsea',
+        'code' => 'CHE',
+        'logo_url' => 'https://example.com/chelsea.png',
+    ]);
+
+    $fixture = Fixture::create([
+        'external_id' => 9001,
+        'league_id' => $otherLeague->id,
+        'home_team_id' => $homeTeam->id,
+        'away_team_id' => $awayTeam->id,
+        'round_name' => 'Matchday 1',
+        'season' => config('services.api_football.season'),
+        'match_date' => '2026-06-11 21:00:00',
+        'status_short' => 'NS',
+        'status_long' => 'Not Started',
+    ]);
+
+    Prediction::create([
+        'fixture_id' => $fixture->id,
+        'user_id' => $user->id,
+        'winner_id' => $homeTeam->id,
+        'source' => PredictionTypes::User->value,
+        'home_goals' => 2,
+        'away_goals' => 1,
+        'total_goals' => 3,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('predictions.mine.show', $fixture))
+        ->assertNotFound();
+});
