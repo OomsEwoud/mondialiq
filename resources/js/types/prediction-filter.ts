@@ -1,4 +1,4 @@
-export type PredictionFilterMode = 'ai' | 'mine';
+export type PredictionFilterMode = 'ai' | 'mine' | 'user';
 export type PredictionStatusFilter = 'all' | 'upcoming' | 'past';
 export type OutcomeFilter = 'all' | 'home' | 'draw' | 'away';
 export type PointsStateFilter =

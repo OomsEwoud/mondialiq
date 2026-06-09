@@ -1,18 +1,20 @@
 import { Link } from '@inertiajs/react';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
-import type { UserPredictionScoringPreview } from '@/types/prediction';
+import type { PredictionOwner, UserPredictionScoringPreview } from '@/types/prediction';
 
 interface Props {
     match: Match;
     score: string | null;
     scoringPreview: UserPredictionScoringPreview | null;
+    owner: PredictionOwner;
 }
 
 export default function UserPredictedScoreCard({
     match,
     score,
     scoringPreview,
+    owner,
 }: Props) {
     const pointsAwarded = match.userPrediction?.pointsAwarded ?? false;
     const pointsLabel = pointsAwarded
@@ -20,6 +22,7 @@ export default function UserPredictedScoreCard({
         : scoringPreview
           ? `Preview: ${scoringPreview.points}/${scoringPreview.maxPoints}`
           : 'Awaiting validation';
+    const scoreLabel = owner.canEdit ? 'Your prediction' : 'Predicted score';
 
     return (
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.2fr_1fr] lg:items-center">
@@ -46,7 +49,7 @@ export default function UserPredictedScoreCard({
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-indigo-200" />
                 <p className="mt-4 text-xs font-semibold tracking-wide text-indigo-600 uppercase">
-                    Your prediction
+                    {scoreLabel}
                 </p>
             </div>
 

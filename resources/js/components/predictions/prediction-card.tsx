@@ -5,6 +5,7 @@ import type { PredictionTab } from '@/components/predictions/prediction-tabs';
 import PredictionUserActions from '@/components/predictions/prediction-user-actions';
 import UserPredictionSummary from '@/components/predictions/user-prediction-summary';
 import { cn } from '@/lib/utils';
+import { show as showUserPrediction } from '@/routes/predictions/user';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
 import {
@@ -16,12 +17,14 @@ interface Props {
     match: Match;
     actionLabel: string;
     mode: PredictionTab;
+    userId?: number;
 }
 
-export default function PredictionCard({ match, actionLabel, mode }: Props) {
+export default function PredictionCard({ match, actionLabel, mode, userId }: Props) {
     const isMine = mode === 'mine';
-    const prediction = isMine ? match.userPrediction : match.aiPrediction;
-    const rawScore = isMine
+    const isUser = mode === 'user';
+    const prediction = isMine || isUser ? match.userPrediction : match.aiPrediction;
+    const rawScore = isMine || isUser
         ? predictionScoreLabel(match)
         : aiPredictionScoreLabel(match);
     const score = rawScore?.replace(/\s*-\s*/, ' - ');
@@ -32,9 +35,9 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                 <span
                     className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
                 >
-                    {isMine ? 'Personal pick' : 'AI report'}
+                    {isMine ? 'Personal pick' : isUser ? 'User pick' : 'AI report'}
                 </span>
-                <UserPredictionSummary match={match} aiMode={!isMine} />
+                <UserPredictionSummary match={match} aiMode={!isMine && !isUser} />
             </div>
 
             <div className="flex flex-col gap-4 border-t border-slate-200 pt-4 lg:flex-row lg:items-center lg:justify-between">
@@ -128,6 +131,11 @@ export default function PredictionCard({ match, actionLabel, mode }: Props) {
                     <PredictionStatusAction
                         matchId={match.id}
                         label={actionLabel}
+                        href={
+                            isUser && userId
+                                ? showUserPrediction.url({ fixture: match.id, user: userId })
+                                : undefined
+                        }
                     />
                 )}
             </div>

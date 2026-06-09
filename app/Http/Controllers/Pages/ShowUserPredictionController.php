@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PredictionDetailsController extends Controller
+class ShowUserPredictionController extends Controller
 {
     public function __construct(
         private readonly FixtureOddsSummaryService $oddsSummaryService,
@@ -21,54 +21,42 @@ class PredictionDetailsController extends Controller
         private readonly UserPredictionScoringService $userPredictionScoringService,
     ) {}
 
-    public function __invoke(Request $request, Fixture $fixture): Response
+    public function __invoke(Request $request, Fixture $fixture, User $user): Response
     {
-        $user = $request->user();
+        $viewer = $request->user();
 
-        abort_unless($user, 403);
+        if ($viewer?->id !== $user->id) {
+            abort_unless($user->allowsPublicPredictionViewing(), 403);
+        }
 
-        $this->loadFixture($fixture, $user);
-        $mode = $this->predictionMode($request);
-        $this->ensurePredictionIsAvailable($fixture, $mode);
+        $this->loadFixture($fixture, $user, $viewer);
+
+        abort_unless($fixture->userPredictions->isNotEmpty(), 404);
 
         return Inertia::render('prediction-show', [
             'match' => FixtureResource::make($fixture)->resolve(),
-            'mode' => $mode,
+            'mode' => 'mine',
             'aiContext' => $this->aiContext($fixture),
-            'scoringPreview' => $mode === 'mine' ? $this->scoringPreview($fixture) : null,
+            'scoringPreview' => $this->scoringPreview($fixture),
             'scoringGuideHref' => route('scoring'),
-            'owner' => $this->ownerProps($user, true),
-            'backHref' => $this->backHref($request, $user),
+            'owner' => $this->ownerProps($user, $viewer?->id === $user->id),
+            'backHref' => route('users.predictions', $user),
         ]);
     }
 
-    private function predictionMode(Request $request): string
-    {
-        return $request->route('predictionMode') === 'ai' ? 'ai' : 'mine';
-    }
-
-    private function loadFixture(Fixture $fixture, User $user): void
+    private function loadFixture(Fixture $fixture, User $user, ?User $viewer): void
     {
         $fixture->load([
             'homeTeam',
             'awayTeam',
-            'aiPrediction.winner',
             'apiPrediction',
-            'userPredictions' => fn ($query) => $query
-                ->whereBelongsTo($user)
-                ->with('winner'),
+            'userPredictions' => function ($query) use ($user, $viewer) {
+                $query->where('user_id', $user->id)
+                    ->where('source', 'user')
+                    ->visibleFor($viewer)
+                    ->with('winner');
+            },
         ]);
-    }
-
-    private function ensurePredictionIsAvailable(Fixture $fixture, string $mode): void
-    {
-        if ($mode === 'ai') {
-            abort_unless($fixture->aiPrediction !== null, 404);
-
-            return;
-        }
-
-        abort_unless($fixture->userPredictions->isNotEmpty(), 404);
     }
 
     private function aiContext(Fixture $fixture): array
@@ -103,9 +91,6 @@ class PredictionDetailsController extends Controller
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     private function ownerProps(User $user, bool $canEdit): array
     {
         return [
@@ -114,14 +99,5 @@ class PredictionDetailsController extends Controller
             'avatar' => $user->avatarUrl(),
             'canEdit' => $canEdit,
         ];
-    }
-
-    private function backHref(Request $request, User $user): string
-    {
-        if ($request->has('back')) {
-            return $request->string('back')->toString();
-        }
-
-        return route('predictions', ['mode' => $this->predictionMode($request)]);
     }
 }

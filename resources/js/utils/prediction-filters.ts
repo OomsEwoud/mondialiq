@@ -172,7 +172,7 @@ function getConfidenceValue(mode: PredictionFilterMode, match: Match): number {
         return -1;
     }
 
-    if (mode === 'mine') {
+    if (mode === 'mine' || mode === 'user') {
         return (
             {
                 low: 1,

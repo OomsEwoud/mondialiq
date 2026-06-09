@@ -8,6 +8,9 @@ export interface LeaderboardEntry {
     predictionsCount: number;
     totalPoints: number;
     isSystemUser: boolean;
+    showOnLeaderboards: boolean;
+    predictionsArePublic: boolean;
+    publicPredictionsHref: string | null;
 }
 
 export interface JoinedLeague {

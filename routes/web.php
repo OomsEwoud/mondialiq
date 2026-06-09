@@ -29,7 +29,9 @@ use App\Http\Controllers\Pages\PredictionDetailsController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\PrivacyController;
 use App\Http\Controllers\Pages\ScoringGuideController;
+use App\Http\Controllers\Pages\ShowUserPredictionController;
 use App\Http\Controllers\Pages\TeamDetailsController;
+use App\Http\Controllers\Pages\UserPredictionsController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
 use App\Http\Controllers\Socialite\RedirectController;
@@ -71,6 +73,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/predictions/{fixture}/my-prediction', PredictionDetailsController::class)
         ->defaults('predictionMode', 'mine')
         ->name('predictions.mine.show');
+    Route::get('/predictions/{fixture}/user/{user}', ShowUserPredictionController::class)
+        ->name('predictions.user.show');
+
+    Route::get('/users/{user}/predictions', UserPredictionsController::class)
+        ->name('users.predictions');
 
     Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::class)
         ->middleware('throttle:prediction-store')

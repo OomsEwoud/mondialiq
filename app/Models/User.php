@@ -73,6 +73,28 @@ class User extends Authenticatable implements FilamentUser
         ]);
     }
 
+    public function allowsPublicPredictionViewing(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->show_on_leaderboards && $preference->predictionsArePublic();
+    }
+
+    public function predictionsArePublic(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->predictionsArePublic();
+    }
+
     public function feedbackMessages(): HasMany
     {
         return $this->hasMany(FeedbackMessage::class);

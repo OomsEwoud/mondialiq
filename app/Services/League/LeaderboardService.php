@@ -55,6 +55,12 @@ class LeaderboardService
                 'predictions as predictions_sum_points' => fn (Builder $query) => $query
                     ->whereNotNull('points_awarded_at'),
             ], 'points')
+            ->where(function (Builder $query) {
+                $query->whereDoesntHave('preference')
+                    ->orWhereHas('preference', function (Builder $query) {
+                        $query->where('show_on_leaderboards', true);
+                    });
+            })
             ->orderByDesc('predictions_sum_points')
             ->orderByDesc('predictions_count')
             ->orderBy('name');
@@ -70,7 +76,23 @@ class LeaderboardService
             'predictionsCount' => $user->predictions_count,
             'totalPoints' => $user->predictions_sum_points ?? 0,
             'isSystemUser' => $user->is_system_user,
+            'showOnLeaderboards' => $user->preference?->show_on_leaderboards ?? true,
+            'predictionsArePublic' => $user->predictionsArePublic(),
+            'publicPredictionsHref' => $this->publicPredictionsHref($user),
         ];
+    }
+
+    private function publicPredictionsHref(User $user): ?string
+    {
+        if ($user->is_system_user) {
+            return null;
+        }
+
+        if (! $user->predictionsArePublic()) {
+            return null;
+        }
+
+        return route('users.predictions', $user);
     }
 
     private function mapJoinedLeague(Scoreboard $scoreboard, User $user): array

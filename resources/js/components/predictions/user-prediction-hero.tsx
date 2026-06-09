@@ -2,35 +2,42 @@ import { Link } from '@inertiajs/react';
 import { CalendarDays, Clock, PencilLine, Trophy } from 'lucide-react';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
+import type { PredictionOwner } from '@/types/prediction';
 import { hasMatchStarted } from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
+    owner: PredictionOwner;
     onEdit: () => void;
 }
 
-export default function UserPredictionHero({ match, onEdit }: Props) {
+export default function UserPredictionHero({ match, owner, onEdit }: Props) {
     const locked = hasMatchStarted(match);
+    const isOwn = owner.canEdit;
+    const heroLabel = isOwn ? 'My Prediction' : `${owner.name}'s prediction`;
+    const pickLabel = isOwn ? 'Your pick' : 'Their pick';
 
     return (
         <section className="rounded-2xl border border-indigo-900/60 bg-gradient-to-br from-indigo-950 via-indigo-950/90 to-slate-900 p-6 shadow-lg sm:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <p className="text-xs font-semibold tracking-wide text-indigo-300 uppercase">
-                    My Prediction
+                    {heroLabel}
                 </p>
-                <button
-                    type="button"
-                    onClick={onEdit}
-                    disabled={locked}
-                    className={
-                        locked
-                            ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500'
-                            : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
-                    }
-                >
-                    <PencilLine className="size-4" />
-                    {locked ? 'Predictions locked' : 'Edit prediction'}
-                </button>
+                {isOwn && (
+                    <button
+                        type="button"
+                        onClick={onEdit}
+                        disabled={locked}
+                        className={
+                            locked
+                                ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500'
+                                : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
+                        }
+                    >
+                        <PencilLine className="size-4" />
+                        {locked ? 'Predictions locked' : 'Edit prediction'}
+                    </button>
+                )}
             </div>
 
             <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-6">
@@ -51,7 +58,7 @@ export default function UserPredictionHero({ match, onEdit }: Props) {
                 <div className="text-center">
                     <span className="inline-flex items-center gap-2 rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-indigo-300">
                         <Trophy className="size-3.5" />
-                        Your pick
+                        {pickLabel}
                     </span>
                     <p className="mt-3 text-3xl font-bold text-white sm:text-4xl">
                         vs

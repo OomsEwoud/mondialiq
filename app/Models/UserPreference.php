@@ -37,4 +37,9 @@ class UserPreference extends Model
     {
         return $this->predictions_visibility === 'public';
     }
+
+    public function predictionsArePublic(): bool
+    {
+        return $this->predictions_visibility === 'public';
+    }
 }

@@ -8,6 +8,7 @@ interface Props {
     emptyMessage: string;
     actionLabel: string;
     mode: PredictionTab;
+    userId?: number;
 }
 
 export default function PredictionList({
@@ -15,6 +16,7 @@ export default function PredictionList({
     emptyMessage,
     actionLabel,
     mode,
+    userId,
 }: Props) {
     if (matches.length === 0) {
         return <EmptyPredictionsState mode={mode} message={emptyMessage} />;
@@ -28,6 +30,7 @@ export default function PredictionList({
                     match={match}
                     actionLabel={actionLabel}
                     mode={mode}
+                    userId={userId}
                 />
             ))}
         </div>
