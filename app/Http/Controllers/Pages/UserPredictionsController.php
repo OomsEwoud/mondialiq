@@ -54,6 +54,8 @@ class UserPredictionsController extends Controller
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'isViewer' => $viewer?->id === $user->id,
+            'predictionsCount' => $user->predictions()->where('source', 'user')->count(),
+            'totalPoints' => $user->predictions()->where('source', 'user')->whereNotNull('points_awarded_at')->sum('points') ?? 0,
         ];
     }
 

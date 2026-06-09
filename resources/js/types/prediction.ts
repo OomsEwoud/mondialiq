@@ -26,6 +26,8 @@ export interface UserPredictionsPageProps {
         name: string;
         avatar: string | null;
         isViewer: boolean;
+        predictionsCount: number;
+        totalPoints: number;
     };
     fixtures: {
         data: Match[];

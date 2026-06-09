@@ -5,6 +5,8 @@ import EmptyFilteredPredictionsState from '@/components/predictions/empty-filter
 import PredictionList from '@/components/predictions/prediction-list';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
+import { Badge } from '@/components/ui/feedback/badge';
+import { useInitials } from '@/hooks/use-initials';
 import { predictions as usersPredictions } from '@/routes/users';
 import type { UserPredictionsPageProps as Props } from '@/types/prediction';
 import type {
@@ -120,6 +122,7 @@ export default function UserPredictions({
         );
     };
 
+    const getInitials = useInitials();
     const pageTitle = user.isViewer
         ? 'My public predictions'
         : `${user.name}'s Predictions`;
@@ -138,21 +141,39 @@ export default function UserPredictions({
             />
 
             <div className="mx-auto max-w-7xl">
-                <div className="mb-6 flex items-center gap-3">
-                    {user.avatar && (
+                <div className="mb-6 flex items-center gap-4">
+                    {user.avatar ? (
                         <img
                             src={user.avatar}
                             alt={user.name}
-                            className="size-10 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm"
+                            className="size-14 rounded-full object-cover ring-2 ring-slate-200 shadow-sm sm:size-16"
                         />
+                    ) : (
+                        <div className="flex size-14 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-slate-200 ring-2 ring-slate-200 shadow-sm sm:size-16 sm:text-base">
+                            {getInitials(user.name)}
+                        </div>
                     )}
-                    <div>
-                        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                    <div className="min-w-0">
+                        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
                             {pageTitle}
                         </h1>
-                        <p className="mt-1 text-sm text-slate-500">
+                        <p className="mt-0.5 text-sm text-slate-500">
                             {pageDescription}
                         </p>
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <Badge className="rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-slate-700 shadow-none">
+                                {user.predictionsCount}{' '}
+                                {user.predictionsCount === 1
+                                    ? 'prediction'
+                                    : 'predictions'}
+                            </Badge>
+                            <Badge className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-0.5 text-xs font-semibold text-cyan-700 shadow-none">
+                                {user.totalPoints} points
+                            </Badge>
+                            <Badge className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 shadow-none">
+                                Public predictions
+                            </Badge>
+                        </div>
                     </div>
                 </div>
 

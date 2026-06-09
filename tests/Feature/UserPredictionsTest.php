@@ -67,7 +67,9 @@ test('a viewer can see public predictions of another user', function () {
             ->where('fixtures.data.0.userPrediction.homeScore', 2)
             ->where('fixtures.data.0.userPrediction.awayScore', 1)
             ->where('user.id', $owner->id)
-            ->where('user.isViewer', false),
+            ->where('user.isViewer', false)
+            ->where('user.predictionsCount', 1)
+            ->where('user.totalPoints', 0),
         );
 });
 
