@@ -5,6 +5,7 @@ import {
     MailWarning,
     ShieldCheck,
     UserRound,
+    Eye,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,6 +17,7 @@ import TwoFactorRecoveryCodes from '@/components/auth/two-factor/two-factor-reco
 import TwoFactorSetupModal from '@/components/auth/two-factor/two-factor-setup-modal';
 import InputError from '@/components/forms/input-error';
 import PageHead from '@/components/seo/page-head';
+import PredictionPreferencesSection from '@/components/settings/prediction-preferences-section';
 import SettingsSection from '@/components/settings/settings-section';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
@@ -28,7 +30,7 @@ import { useAvatarUpload } from '@/hooks/use-avatar-upload';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import { disable, enable } from '@/routes/two-factor';
 import { send } from '@/routes/verification';
-import type { AccountUser } from '@/types';
+import type { AccountUser, PredictionPreferences } from '@/types';
 import {
     settingsFieldClassName,
     settingsLabelClassName,
@@ -38,6 +40,7 @@ import {
 
 type Props = {
     accountUser: AccountUser;
+    predictionPreferences: PredictionPreferences;
     mustVerifyEmail: boolean;
     status?: string;
     canManageTwoFactor?: boolean;
@@ -52,6 +55,7 @@ const emailVerificationCardClassName =
 
 export default function Profile({
     accountUser,
+    predictionPreferences,
     mustVerifyEmail,
     status,
     canManageTwoFactor = false,
@@ -513,6 +517,27 @@ export default function Profile({
                         </div>
                     </SettingsSection>
                 )}
+
+                <SettingsSection
+                    icon={Eye}
+                    eyebrow="Predictions"
+                    title="Prediction Preferences"
+                    description="Control how your predictions are shared across MondialIQ."
+                >
+                    <PredictionPreferencesSection
+                        key={
+                            predictionPreferences.predictions_visibility +
+                            predictionPreferences.default_prediction_visibility +
+                            (predictionPreferences.show_on_leaderboards
+                                ? '1'
+                                : '0') +
+                            (predictionPreferences.allow_group_visibility
+                                ? '1'
+                                : '0')
+                        }
+                        preferences={predictionPreferences}
+                    />
+                </SettingsSection>
 
                 <DeleteUser user={user} />
             </div>

@@ -13,6 +13,13 @@ export type AccountUser = User & {
     social_provider: string | null;
 };
 
+export type PredictionPreferences = {
+    predictions_visibility: 'public' | 'private';
+    default_prediction_visibility: 'public' | 'private';
+    show_on_leaderboards: boolean;
+    allow_group_visibility: boolean;
+};
+
 export type Auth = {
     user: User | null;
 };
