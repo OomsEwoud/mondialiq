@@ -71,11 +71,11 @@ class ShowLeagueMemberPredictionsController extends Controller
             'homeTeam',
             'awayTeam',
             'apiPrediction',
-            'userPredictions' => function ($query) use ($user, $canViewPrivate) {
+            'userPredictions' => function ($query) use ($user, $canViewPrivate, $scoreboard) {
                 $query->where('user_id', $user->id)
                     ->where('source', 'user')
                     ->when(! $canViewPrivate, fn (Builder $q) => $q->where('visibility', 'public'))
-                    ->with('winner');
+                    ->with(['winner', 'scoreboardPredictions' => fn ($q) => $q->where('scoreboard_id', $scoreboard->id)]);
             },
         ]);
 
@@ -102,6 +102,9 @@ class ShowLeagueMemberPredictionsController extends Controller
             'id' => $scoreboard->id,
             'name' => $scoreboard->name,
             'showHref' => route('leagues.show', $scoreboard),
+            'accentColor' => $scoreboard->accent_color ?? 'cyan',
+            'coverStyle' => $scoreboard->cover_style ?? 'stadium',
+            'icon' => $scoreboard->icon ?? '🏆',
         ];
     }
 
@@ -113,7 +116,7 @@ class ShowLeagueMemberPredictionsController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
-            'isViewer' => false,
+            'isViewer' => $viewer->id === $user->id,
             'predictionsCount' => $user->predictions()
                 ->where('source', 'user')
                 ->whereHas('scoreboardPredictions', fn ($q) => $q->where('scoreboard_id', $scoreboard->id))

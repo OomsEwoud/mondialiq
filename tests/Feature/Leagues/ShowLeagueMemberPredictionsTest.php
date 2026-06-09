@@ -120,7 +120,7 @@ test('a league member can view their own predictions', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->component('league-member-predictions')
             ->where('member.name', 'Self Viewer')
-            ->where('member.isViewer', false)
+            ->where('member.isViewer', true)
             ->where('member.predictionsCount', 1)
             ->where('member.totalPoints', 20)
             ->has('fixtures.data', 1)

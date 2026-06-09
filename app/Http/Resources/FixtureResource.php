@@ -111,6 +111,9 @@ class FixtureResource extends JsonResource
             'points' => $prediction->awardedPoints(),
             'pointsAwarded' => $prediction->hasAwardedPoints(),
             'validatedAt' => $prediction->points_awarded_at?->toIso8601String(),
+            'isBoosted' => $prediction->relationLoaded('scoreboardPredictions')
+                ? ($prediction->scoreboardPredictions->first()?->is_boosted ?? false)
+                : false,
         ];
     }
 

@@ -55,6 +55,7 @@ export interface Match {
         pointsAwarded: boolean;
         validatedAt: string | null;
         advice: string | null;
+        isBoosted?: boolean;
     } | null;
     userPrediction?: {
         winnerId: number | null;
@@ -66,6 +67,7 @@ export interface Match {
         points: number | null;
         pointsAwarded: boolean;
         validatedAt: string | null;
+        isBoosted?: boolean;
     } | null;
 }
 
