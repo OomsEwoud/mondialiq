@@ -184,7 +184,6 @@ export default function Predictions({
                 <PredictionInfoGrid />
                 <PredictionTabs activeTab={mode} />
                 <PredictionsFilterCard
-                    mode={mode}
                     filters={filters}
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}

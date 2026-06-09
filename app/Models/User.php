@@ -84,6 +84,17 @@ class User extends Authenticatable implements FilamentUser
         return $preference->show_on_leaderboards && $preference->predictionsArePublic();
     }
 
+    public function allowsGroupPredictionViewing(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->allow_group_visibility;
+    }
+
     public function predictionsArePublic(): bool
     {
         $preference = $this->preference;

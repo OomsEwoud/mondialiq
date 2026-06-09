@@ -21,6 +21,7 @@ export interface LeagueMember {
         label: string;
         tone: 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
     };
+    predictionsHref?: string | null;
 }
 
 export type LeagueAccentColor =

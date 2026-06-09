@@ -1,10 +1,12 @@
-import { Bot, Crown, Users } from 'lucide-react';
+import { Link } from '@inertiajs/react';
+import { Bot, Crown, Eye, Users } from 'lucide-react';
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from '@/components/ui/display/avatar';
 import { Badge } from '@/components/ui/feedback/badge';
+import { Button } from '@/components/ui/forms/button';
 import {
     Card,
     CardContent,
@@ -169,6 +171,19 @@ export default function LeagueMembersCard({ members }: Props) {
                                 <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
                                     PTS
                                 </p>
+                                {member.predictionsHref && (
+                                    <Button
+                                        asChild
+                                        variant="ghost"
+                                        size="sm"
+                                        className="mt-2 h-auto px-0 py-0 text-xs font-semibold text-cyan-600 hover:bg-transparent hover:text-cyan-700"
+                                    >
+                                        <Link href={member.predictionsHref}>
+                                            <Eye className="mr-1 size-3.5" />
+                                            See predictions
+                                        </Link>
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     ))}

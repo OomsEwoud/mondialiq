@@ -153,6 +153,7 @@ class LeagueShowService
             'isSystemUser' => $user->is_system_user,
             'lastPredictionLabel' => $this->lastPredictionLabel($user),
             'form' => $this->buildFormSummary($recentPredictions),
+            'predictionsHref' => route('leagues.member.predictions', ['scoreboard' => $scoreboard, 'user' => $user]),
         ];
     }
 

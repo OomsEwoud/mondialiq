@@ -59,6 +59,32 @@ export interface AiPredictionsPageProps {
     scoringGuideHref: string;
 }
 
+export interface LeagueMemberPredictionsPageProps {
+    league: {
+        id: number;
+        name: string;
+        showHref: string;
+    };
+    member: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        isViewer: boolean;
+        predictionsCount: number;
+        totalPoints: number;
+    };
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        date: string;
+        status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
+    };
+    scoringGuideHref: string;
+}
+
 export interface PredictionOwner {
     id: number;
     name: string;
