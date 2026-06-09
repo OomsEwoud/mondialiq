@@ -23,6 +23,7 @@ import type { JoinedLeague } from '@/types/leaderboard';
 import {
     getLeagueBrandBannerClass,
     getLeagueBrandPalette,
+    getLeagueHeroPalette,
 } from '@/utils/league-branding';
 
 type Props = {
@@ -43,6 +44,7 @@ export default function FriendsLeagueCard({ league }: Props) {
         return null;
     })();
     const palette = getLeagueBrandPalette(league.accentColor);
+    const heroPalette = getLeagueHeroPalette(league.accentColor);
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
@@ -54,11 +56,17 @@ export default function FriendsLeagueCard({ league }: Props) {
                 )}
             >
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm">
+                    <div className={cn(
+                        'flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm ring-1',
+                        heroPalette.badgeBorder,
+                    )}>
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-xs font-bold tracking-wide text-white/80 uppercase">
+                        <p className={cn(
+                            'text-xs font-bold tracking-wide uppercase',
+                            heroPalette.label,
+                        )}>
                             Prediction group
                         </p>
                         <p className="truncate text-lg font-bold text-white">
@@ -104,7 +112,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                                 palette.badge,
                             )}
                         >
-                            <Users className="size-3.5" />
+                            <Users className={cn('size-3.5', heroPalette.icon)} />
                             {league.membersCount} {memberLabel}
                         </Badge>
                     </div>
@@ -120,11 +128,15 @@ export default function FriendsLeagueCard({ league }: Props) {
                                 ? `#${league.userRank}`
                                 : 'Unranked'
                         }
+                        iconClassName={heroPalette.icon}
+                        labelClassName={heroPalette.label}
                     />
                     <LeagueMetric
                         icon={Crown}
                         label="Current leader"
                         value={league.leaderName ?? 'TBD'}
+                        iconClassName={heroPalette.icon}
+                        labelClassName={heroPalette.label}
                     />
                 </div>
 
@@ -134,7 +146,10 @@ export default function FriendsLeagueCard({ league }: Props) {
                         !performanceLabel && 'text-slate-400',
                     )}
                 >
-                    <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
+                    <p className={cn(
+                        'text-xs font-bold tracking-wide uppercase',
+                        heroPalette.label,
+                    )}>
                         Group pace
                     </p>
                     <p className="mt-1.5 text-sm font-semibold text-slate-900">
@@ -145,7 +160,11 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
-                    className="h-10 w-full rounded-lg px-4 font-semibold"
+                    className={cn(
+                        'h-10 w-full rounded-lg px-4 font-semibold',
+                        heroPalette.primaryButton,
+                        heroPalette.ring,
+                    )}
                 >
                     <Link href={league.href}>View group</Link>
                 </Button>
