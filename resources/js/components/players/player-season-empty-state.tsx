@@ -8,11 +8,11 @@ export default function PlayerSeasonEmptyState() {
             </span>
             <div>
                 <p className="text-base font-bold text-slate-700">
-                    No season statistics available yet
+                    No World Cup 2026 statistics available yet for this player.
                 </p>
                 <p className="mt-1 text-sm text-slate-500">
                     Statistics will appear once the player has recorded match data
-                    for this tournament.
+                    for the World Cup 2026 tournament.
                 </p>
             </div>
         </div>
