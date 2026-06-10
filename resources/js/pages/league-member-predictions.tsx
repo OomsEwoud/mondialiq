@@ -1,6 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import { ArrowLeft, Crown, Target, Trophy, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import ShowLeagueMembersController from '@/actions/App/Http/Controllers/Leagues/ShowLeagueMembersController';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
 import PredictionList from '@/components/predictions/prediction-list';
@@ -202,7 +203,7 @@ export default function LeagueMemberPredictions({
 
                         <div className="flex items-center gap-3">
                             <Link
-                                href={route('leagues.members', league.id)}
+                                href={ShowLeagueMembersController.url({ scoreboard: league.id })}
                                 className={cn(
                                     'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
                                     getLeagueThemePalette(league.accentColor).buttonRing,

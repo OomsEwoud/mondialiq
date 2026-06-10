@@ -1,7 +1,5 @@
 import type {
     LeagueAccentColor,
-    LeagueMember,
-    ScoringRules,
 } from './league';
 
 export interface LeaderboardEntry {

@@ -10,7 +10,6 @@ import {
 import { cn } from '@/lib/utils';
 import type { LeagueDetails } from '@/types/league';
 import {
-    getLeagueThemeBannerClass,
     getLeagueThemePalette,
 } from '@/utils/league-branding';
 

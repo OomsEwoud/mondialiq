@@ -205,11 +205,13 @@ export function getLeagueThemePalette(accentColor: LeagueAccentColor | null | un
     if (!accentColor) {
         return leagueThemePalettes[defaultAccentColor];
     }
+
     return leagueThemePalettes[accentColor] ?? leagueThemePalettes[defaultAccentColor];
 }
 
 export function getLeagueThemeBannerClass(accentColor: LeagueAccentColor | null | undefined) {
     const palette = getLeagueThemePalette(accentColor);
+
     return cn(
         'relative overflow-hidden rounded-2xl text-white shadow-sm ring-1',
         palette.banner,

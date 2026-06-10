@@ -21,6 +21,13 @@ import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/forms/select';
 import { Textarea } from '@/components/ui/forms/textarea';
 import {
     Card,
@@ -155,7 +162,7 @@ export default function LeagueSettingsCard({
             <CardHeader className="gap-3 px-5 py-5">
                 <div className="flex items-start justify-between gap-3">
                     <div>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                             <ShieldCheck className="size-4" />
                             <p className="text-xs font-semibold tracking-wide uppercase">
                                 Owner controls
@@ -169,7 +176,7 @@ export default function LeagueSettingsCard({
                         className={cn(
                             'rounded-full border px-2.5 py-1 text-xs font-semibold',
                             hasChanges
-                                ? 'border-cyan-200 bg-cyan-50 text-cyan-700'
+                                ? cn(theme.softBorder, theme.softBg, theme.softText)
                                 : 'border-slate-200 bg-slate-50 text-slate-600',
                         )}
                     >
@@ -290,7 +297,7 @@ export default function LeagueSettingsCard({
 
                                     {/* Group profile */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <Layers className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Group profile
@@ -300,7 +307,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="league-name"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Group name
                                                 </Label>
@@ -329,7 +336,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="group-description"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Description
                                                 </Label>
@@ -363,14 +370,14 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Reward settings */}
-                                    <div className="rounded-2xl border border-cyan-100 bg-cyan-50/40 p-5">
-                                        <div className="flex items-center gap-2 text-cyan-700">
+                                    <div className={cn("rounded-2xl border p-5", theme.softBg, theme.softBorder)}>
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <Gift className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Reward settings
                                             </p>
                                         </div>
-                                        <p className="mt-2 text-sm leading-6 text-cyan-900/80">
+                                        <p className={cn("mt-2 text-sm leading-6", theme.softText)}>
                                             Rewards are social notes only.
                                             MondialIQ does not process payments
                                             or payouts.
@@ -379,7 +386,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="reward-title"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Reward title
                                                 </Label>
@@ -404,7 +411,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="reward-description"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Reward details
                                                 </Label>
@@ -431,7 +438,7 @@ export default function LeagueSettingsCard({
 
                                     {/* Scoring settings */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <Trophy className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Scoring settings
@@ -443,7 +450,7 @@ export default function LeagueSettingsCard({
                                         </p>
                                         <div className="mt-4 grid gap-4 sm:grid-cols-2">
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Exact score
                                                 </Label>
                                                 <Input
@@ -476,7 +483,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct result
                                                 </Label>
                                                 <Input
@@ -509,7 +516,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct goal difference
                                                 </Label>
                                                 <Input
@@ -542,7 +549,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct home goals
                                                 </Label>
                                                 <Input
@@ -575,7 +582,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct away goals
                                                 </Label>
                                                 <Input
@@ -612,7 +619,7 @@ export default function LeagueSettingsCard({
 
                                     {/* Boosted predictions */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <Zap className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Boosted predictions
@@ -661,106 +668,116 @@ export default function LeagueSettingsCard({
                                         </div>
                                         {scoringRules.boosted_predictions_enabled && (
                                             <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <div className="flex h-full flex-col justify-between gap-2">
+                                                    <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                         Boosted predictions per
                                                         user
                                                     </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={20}
-                                                        value={
-                                                            scoringRules.boosted_predictions_limit
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_predictions_limit',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_predictions_limit'
-                                                            ]
-                                                        }
-                                                    />
+                                                    <div>
+                                                        <Input
+                                                            type="number"
+                                                            min={0}
+                                                            max={20}
+                                                            value={
+                                                                scoringRules.boosted_predictions_limit
+                                                            }
+                                                            onChange={(event) =>
+                                                                updateScoringRule(
+                                                                    'boosted_predictions_limit',
+                                                                    parseInt(
+                                                                        event.target
+                                                                            .value,
+                                                                        10,
+                                                                    ) || 0,
+                                                                )
+                                                            }
+                                                            className={
+                                                                numberFieldClassName
+                                                            }
+                                                            disabled={
+                                                                !scoringRules.boosted_predictions_enabled
+                                                            }
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                errors[
+                                                                    'scoring_rules.boosted_predictions_limit'
+                                                                ]
+                                                            }
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <div className="flex h-full flex-col justify-between gap-2">
+                                                    <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                         Required confidence
                                                         threshold
                                                     </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={100}
-                                                        value={
-                                                            scoringRules.boosted_confidence_threshold
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_confidence_threshold',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_confidence_threshold'
-                                                            ]
-                                                        }
-                                                    />
+                                                    <div>
+                                                        <Select
+                                                            value={scoringRules.boosted_confidence_threshold?.toString()}
+                                                            onValueChange={(value) =>
+                                                                updateScoringRule(
+                                                                    'boosted_confidence_threshold',
+                                                                    parseInt(value, 10),
+                                                                )
+                                                            }
+                                                            disabled={!scoringRules.boosted_predictions_enabled}
+                                                        >
+                                                            <SelectTrigger className={numberFieldClassName}>
+                                                                <SelectValue placeholder="Select confidence" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="25">Low</SelectItem>
+                                                                <SelectItem value="50">Medium</SelectItem>
+                                                                <SelectItem value="100">High</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <InputError
+                                                            message={
+                                                                errors[
+                                                                    'scoring_rules.boosted_confidence_threshold'
+                                                                ]
+                                                            }
+                                                        />
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <div className="flex h-full flex-col justify-between gap-2">
+                                                    <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                         Bonus points
                                                     </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={100}
-                                                        value={
-                                                            scoringRules.boosted_prediction_bonus_points
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_prediction_bonus_points',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_prediction_bonus_points'
-                                                            ]
-                                                        }
-                                                    />
+                                                    <div>
+                                                        <Input
+                                                            type="number"
+                                                            min={0}
+                                                            max={100}
+                                                            value={
+                                                                scoringRules.boosted_prediction_bonus_points
+                                                            }
+                                                            onChange={(event) =>
+                                                                updateScoringRule(
+                                                                    'boosted_prediction_bonus_points',
+                                                                    parseInt(
+                                                                        event.target
+                                                                            .value,
+                                                                        10,
+                                                                    ) || 0,
+                                                                )
+                                                            }
+                                                            className={
+                                                                numberFieldClassName
+                                                            }
+                                                            disabled={
+                                                                !scoringRules.boosted_predictions_enabled
+                                                            }
+                                                        />
+                                                        <InputError
+                                                            message={
+                                                                errors[
+                                                                    'scoring_rules.boosted_prediction_bonus_points'
+                                                                ]
+                                                            }
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
@@ -771,17 +788,17 @@ export default function LeagueSettingsCard({
                                 <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
                                     {/* Access */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <ShieldCheck className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Access
+                                                Privacy
                                             </p>
                                         </div>
                                         <div className="mt-4 space-y-4">
                                             <div>
                                                 <Label
                                                     htmlFor="visibility"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Visibility
                                                 </Label>
@@ -817,7 +834,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="is-active"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Join status
                                                 </Label>
@@ -854,7 +871,7 @@ export default function LeagueSettingsCard({
 
                                     {/* Appearance */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <PaintBucket className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Group appearance
@@ -865,7 +882,7 @@ export default function LeagueSettingsCard({
                                         </p>
                                         <div className="mt-4 space-y-4">
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Group theme
                                                 </Label>
                                                 <div className="mt-2 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
@@ -943,7 +960,7 @@ export default function LeagueSettingsCard({
                                             </div>
 
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     League icon
                                                 </Label>
                                                 <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -964,7 +981,7 @@ export default function LeagueSettingsCard({
                                                                     'h-12 rounded-xl border-slate-200 text-2xl hover:bg-slate-50 focus-visible:ring-cyan-300',
                                                                     icon ===
                                                                         option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
+                                                                        cn(theme.softBorder, theme.softBg),
                                                                 )}
                                                             >
                                                                 <span aria-hidden="true">
@@ -986,8 +1003,8 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Invite code */}
-                                    <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-                                        <div className="flex items-center gap-2 text-amber-800">
+                                    <div className={cn("rounded-2xl border p-5", theme.softBg, theme.softBorder)}>
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <KeyRound className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Invite code
@@ -996,7 +1013,7 @@ export default function LeagueSettingsCard({
                                         <p className="mt-3 font-mono text-xl font-bold tracking-wide text-slate-900">
                                             {leagueCode}
                                         </p>
-                                        <p className="mt-1 text-xs leading-5 text-amber-900/70">
+                                        <p className={cn("mt-1 text-xs leading-5", theme.softText)}>
                                             Refreshing invalidates the old code
                                             for new joins. Existing members keep
                                             access.
