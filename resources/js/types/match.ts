@@ -14,6 +14,10 @@ export interface UpcomingMatch {
     statusLong: string | null;
     hasLineups: boolean;
     predictionState: 'predicted' | 'missing' | null;
+    userPrediction?: {
+        homeScore: number | null;
+        awayScore: number | null;
+    } | null;
 }
 
 export interface Match {

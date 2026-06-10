@@ -114,17 +114,25 @@ export default function UpcomingMatches({ matches }: Props) {
                                 </div>
                             </div>
 
-                            {match.predictionState ? (
-                                <div
-                                    className={
-                                        match.predictionState === 'predicted'
-                                            ? 'mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold tracking-wide text-emerald-800 uppercase'
-                                            : 'mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold tracking-wide text-amber-800 uppercase'
-                                    }
-                                >
-                                    {match.predictionState === 'predicted'
-                                        ? 'Prediction saved'
-                                        : 'Prediction missing'}
+                            {match.predictionState === 'predicted' ? (
+                                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
+                                    <span className="text-xs font-semibold tracking-wide text-emerald-800 uppercase">
+                                        Prediction saved
+                                    </span>
+                                    {match.userPrediction && (
+                                        <div className="flex items-center gap-1.5 text-xs text-emerald-900">
+                                            <span className="font-medium text-emerald-700">Your prediction:</span>
+                                            <span className="font-bold">{match.homeTeamShort}</span>
+                                            <span className="rounded bg-white px-1.5 py-0.5 font-bold shadow-sm ring-1 ring-emerald-200">
+                                                {match.userPrediction.homeScore ?? '-'} - {match.userPrediction.awayScore ?? '-'}
+                                            </span>
+                                            <span className="font-bold">{match.awayTeamShort}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : match.predictionState === 'missing' ? (
+                                <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold tracking-wide text-amber-800 uppercase">
+                                    Prediction missing
                                 </div>
                             ) : null}
 

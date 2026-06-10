@@ -40,7 +40,7 @@ class HomeController extends Controller
             ->when($user, fn ($query) => $query->with([
                 'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
-                    ->select(['id', 'fixture_id', 'user_id']),
+                    ->select(['id', 'fixture_id', 'user_id', 'home_goals', 'away_goals']),
             ]))
             ->whereIn('league_id', $this->worldCupContext->leagueIds())
             ->where('season', $this->worldCupContext->season())
@@ -69,6 +69,21 @@ class HomeController extends Controller
             'statusLong' => $match->status_long,
             'hasLineups' => $match->has_lineups,
             'predictionState' => $this->predictionState($match, $user),
+            'userPrediction' => $this->userPrediction($match, $user),
+        ];
+    }
+
+    private function userPrediction(Fixture $match, ?User $user): ?array
+    {
+        if (! $user || $match->userPredictions->isEmpty()) {
+            return null;
+        }
+
+        $prediction = $match->userPredictions->first();
+
+        return [
+            'homeScore' => $prediction->home_goals !== null ? (int) $prediction->home_goals : null,
+            'awayScore' => $prediction->away_goals !== null ? (int) $prediction->away_goals : null,
         ];
     }
 
