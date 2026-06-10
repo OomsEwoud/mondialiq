@@ -714,11 +714,11 @@ export default function LeagueSettingsCard({
                                                     </Label>
                                                     <div>
                                                         <Select
-                                                            value={scoringRules.boosted_confidence_threshold?.toString()}
+                                                            value={scoringRules.boosted_confidence_threshold || 'low'}
                                                             onValueChange={(value) =>
                                                                 updateScoringRule(
                                                                     'boosted_confidence_threshold',
-                                                                    parseInt(value, 10),
+                                                                    value as 'low' | 'medium' | 'high',
                                                                 )
                                                             }
                                                             disabled={!scoringRules.boosted_predictions_enabled}
@@ -727,9 +727,9 @@ export default function LeagueSettingsCard({
                                                                 <SelectValue placeholder="Select confidence" />
                                                             </SelectTrigger>
                                                             <SelectContent>
-                                                                <SelectItem value="25">Low</SelectItem>
-                                                                <SelectItem value="50">Medium</SelectItem>
-                                                                <SelectItem value="100">High</SelectItem>
+                                                                <SelectItem value="low">Low</SelectItem>
+                                                                <SelectItem value="medium">Medium</SelectItem>
+                                                                <SelectItem value="high">High</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <InputError

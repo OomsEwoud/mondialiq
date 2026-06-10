@@ -41,7 +41,7 @@ export interface ScoringRules {
     correct_away_goals_points: number;
     boosted_predictions_enabled: boolean;
     boosted_predictions_limit: number;
-    boosted_confidence_threshold: number;
+    boosted_confidence_threshold: 'low' | 'medium' | 'high';
     boosted_prediction_bonus_points: number;
 }
 

@@ -233,7 +233,7 @@ test('ai predictions do not receive boosted bonuses', function () {
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);

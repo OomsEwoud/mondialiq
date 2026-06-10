@@ -195,7 +195,8 @@ class UserPredictionScoringService
 
                 if ($breakdown['correctOutcome']) {
                     $confidenceValue = $this->numericConfidence($prediction->confidence);
-                    $threshold = (int) $scoreboard->scoringRule('boosted_confidence_threshold', 70);
+                    $thresholdString = $scoreboard->scoringRule('boosted_confidence_threshold', 'low');
+                    $threshold = $this->numericConfidence(is_string($thresholdString) ? $thresholdString : (string) $thresholdString);
 
                     if ($confidenceValue !== null && $confidenceValue >= $threshold) {
                         $bonus = (int) $scoreboard->scoringRule('boosted_prediction_bonus_points', 2);

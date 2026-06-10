@@ -60,7 +60,7 @@ class Scoreboard extends Model
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => false,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'low',
             'boosted_prediction_bonus_points' => 2,
         ];
 
