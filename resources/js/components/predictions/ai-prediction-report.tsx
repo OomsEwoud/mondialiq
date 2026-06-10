@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
+
 import AiPredictionAdviceCard from '@/components/predictions/ai-prediction-advice-card';
 import AiPredictionHero from '@/components/predictions/ai-prediction-hero';
 import AiPredictionScoreCard from '@/components/predictions/ai-prediction-score-card';
@@ -16,19 +15,13 @@ interface Props {
 }
 
 export default function AiPredictionReport({ match, aiContext }: Props) {
-    const [predictionOpen, setPredictionOpen] = useState(false);
     const prediction = match.aiPrediction;
-    const hasUserPrediction = Boolean(match.userPrediction);
     const score = aiPredictionScoreLabel(match);
 
     return (
         <>
             <div className="space-y-5">
-                <AiPredictionHero
-                    match={match}
-                    hasUserPrediction={hasUserPrediction}
-                    onPredictionClick={() => setPredictionOpen(true)}
-                />
+                <AiPredictionHero match={match} />
                 <AiPredictionSummaryCards match={match} score={score} />
                 <AiPredictionScoreCard match={match} score={score} />
                 <AiProbabilityBreakdown match={match} />
@@ -40,11 +33,6 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                 </p>
             </div>
 
-            <UserPredictionModal
-                match={match}
-                open={predictionOpen}
-                onOpenChange={setPredictionOpen}
-            />
         </>
     );
 }

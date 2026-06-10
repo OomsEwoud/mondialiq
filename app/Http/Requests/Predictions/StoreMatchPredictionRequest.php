@@ -40,11 +40,21 @@ class StoreMatchPredictionRequest extends FormRequest
     {
         $fixture = $this->route('fixture');
 
-        if ($fixture !== null && CarbonImmutable::parse($fixture->kickoffAt())->isPast()) {
-            $validator->errors()->add(
-                'outcome',
-                'Predictions are closed for matches that have already started.',
-            );
+        if ($fixture !== null) {
+            if (CarbonImmutable::parse($fixture->kickoffAt())->isPast()) {
+                $validator->errors()->add(
+                    'outcome',
+                    'Predictions are closed for matches that have already started.',
+                );
+            } else {
+                $prediction = $fixture->predictions()->where('user_id', $this->user()->id)->first();
+                if ($prediction !== null && $prediction->validated_at !== null) {
+                    $validator->errors()->add(
+                        'outcome',
+                        'This prediction has already been validated and cannot be edited.',
+                    );
+                }
+            }
         }
 
         if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {

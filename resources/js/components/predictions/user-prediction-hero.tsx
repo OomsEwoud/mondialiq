@@ -12,7 +12,9 @@ interface Props {
 }
 
 export default function UserPredictionHero({ match, owner, onEdit }: Props) {
-    const locked = hasMatchStarted(match);
+    const isStarted = hasMatchStarted(match);
+    const isValidated = Boolean(match.userPrediction?.validatedAt);
+    const locked = isStarted || isValidated;
     const isOwn = owner.canEdit;
     const heroLabel = isOwn ? 'My Prediction' : `${owner.name}'s prediction`;
     const pickLabel = isOwn ? 'Your pick' : 'Their pick';
@@ -35,7 +37,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         }
                     >
                         <PencilLine className="size-4" />
-                        {locked ? 'Predictions locked' : 'Edit prediction'}
+                        {locked ? 'Prediction locked' : 'Edit your prediction'}
                     </button>
                 )}
             </div>

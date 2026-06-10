@@ -152,7 +152,7 @@ class LeagueShowService
             'canBeManaged' => $user->id !== $scoreboard->owner_id,
             'isSystemUser' => $user->is_system_user,
             'lastPredictionLabel' => $this->lastPredictionLabel($user),
-            'form' => $this->buildFormSummary($recentPredictions),
+            'form' => $this->buildFormSummary($recentPredictions, $index === 0),
             'predictionsHref' => route('leagues.member.predictions', ['scoreboard' => $scoreboard, 'user' => $user]),
         ];
     }
@@ -196,7 +196,7 @@ class LeagueShowService
             ->first(['updated_at']);
     }
 
-    private function buildFormSummary(Collection $recentPredictions): array
+    private function buildFormSummary(Collection $recentPredictions, bool $isLeader = false): array
     {
         if ($recentPredictions->isEmpty()) {
             return [
@@ -223,8 +223,8 @@ class LeagueShowService
 
         if ($averagePoints > 0) {
             return [
-                'label' => 'Chasing momentum',
-                'tone' => 'chasing',
+                'label' => $isLeader ? 'Holding the lead' : 'Chasing momentum',
+                'tone' => $isLeader ? 'steady' : 'chasing',
             ];
         }
 

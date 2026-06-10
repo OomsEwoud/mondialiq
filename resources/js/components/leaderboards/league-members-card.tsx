@@ -86,6 +86,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                         'ring-1 ring-slate-200',
                                         theme.currentUserHighlight,
                                     ),
+                                member.isSystemUser && 'bg-slate-50/50',
                             )}
                         >
                             <div
@@ -203,35 +204,39 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                                 theme.softText,
                                             )}
                                         />
-                                        <StatPill
-                                            label={
-                                                member.lastPredictionLabel
-                                                    ? `Last ${member.lastPredictionLabel}`
-                                                    : 'No picks yet'
-                                            }
-                                            className={cn(
-                                                theme.softBg,
-                                                theme.softBorder,
-                                                theme.softText,
-                                            )}
-                                        />
                                     </div>
-                                    <p className="mt-2 text-xs font-medium text-slate-500 sm:text-sm">
-                                        {member.predictionsCount}{' '}
-                                        {member.predictionsCount === 1
-                                            ? 'prediction'
-                                            : 'predictions'}
-                                    </p>
+                                    <div className="mt-2 flex items-center gap-2 text-xs font-medium text-slate-500 sm:text-sm">
+                                        <p>
+                                            {member.predictionsCount}{' '}
+                                            {member.predictionsCount === 1
+                                                ? 'prediction'
+                                                : 'predictions'}
+                                        </p>
+                                        {member.lastPredictionLabel && (
+                                            <>
+                                                <span>•</span>
+                                                <p>Last {member.lastPredictionLabel}</p>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="text-right">
-                                <p className="text-2xl leading-none font-bold text-slate-900 sm:text-3xl">
-                                    {member.totalPoints}
-                                </p>
-                                <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
-                                    PTS
-                                </p>
+                            <div className="flex flex-col items-end">
+                                <div
+                                    className={cn(
+                                        'flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 sm:px-4',
+                                        theme.softBg,
+                                        theme.softBorder,
+                                    )}
+                                >
+                                    <p className="text-xl leading-none font-bold text-slate-900 sm:text-2xl">
+                                        {member.totalPoints}
+                                    </p>
+                                    <p className="mt-0.5 text-[10px] font-bold tracking-wide text-slate-500 uppercase">
+                                        PTS
+                                    </p>
+                                </div>
                                 {member.predictionsHref && (
                                     <Button
                                         asChild

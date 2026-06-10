@@ -2,7 +2,6 @@ import { Link } from '@inertiajs/react';
 import {
     CalendarDays,
     Clock,
-    PencilLine,
     Sparkles,
     Trophy,
 } from 'lucide-react';
@@ -11,29 +10,18 @@ import type { Match } from '@/types/match';
 
 interface Props {
     match: Match;
-    hasUserPrediction: boolean;
-    onPredictionClick: () => void;
 }
 
-export default function AiPredictionHero({
-    match,
-    hasUserPrediction,
-    onPredictionClick,
-}: Props) {
+export default function AiPredictionHero({ match }: Props) {
     return (
         <section className="rounded-2xl border border-cyan-900/40 bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950 p-6 shadow-lg sm:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
                     AI Prediction Report
                 </p>
-                <button
-                    type="button"
-                    onClick={onPredictionClick}
-                    className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
-                >
-                    <PencilLine className="size-4" />
-                    {hasUserPrediction ? 'Edit prediction' : 'Make prediction'}
-                </button>
+                <span className="inline-flex items-center gap-2 rounded-lg border border-cyan-800/50 bg-cyan-950/50 px-3 py-1.5 text-xs font-semibold text-cyan-400">
+                    Read-only AI analysis
+                </span>
             </div>
 
             <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-6">
