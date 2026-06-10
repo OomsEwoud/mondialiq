@@ -40,6 +40,7 @@ class HomeController extends Controller
             ->when($user, fn ($query) => $query->with([
                 'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
+                    ->whereNull('scoreboard_id')
                     ->select(['id', 'fixture_id', 'user_id', 'home_goals', 'away_goals']),
             ]))
             ->whereIn('league_id', $this->worldCupContext->leagueIds())

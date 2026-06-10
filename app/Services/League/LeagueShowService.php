@@ -23,7 +23,7 @@ class LeagueShowService
     public function members(Scoreboard $scoreboard, User $currentUser): Collection
     {
         $memberIds = $this->memberIds($scoreboard);
-        $recentPredictionsByUser = $this->recentPredictionsByUser($memberIds);
+        $recentPredictionsByUser = $this->recentPredictionsByUser($memberIds, $scoreboard);
 
         $users = $scoreboard->rankedUsers()
             ->get()
@@ -58,7 +58,7 @@ class LeagueShowService
     ): array {
         $leader = $members->first();
         $currentUser = $members->firstWhere('isCurrentUser', true);
-        $lastActivity = $this->lastActivity($members);
+        $lastActivity = $this->lastActivity($members, $scoreboard);
         $boostedEnabled = $scoreboard->boostedPredictionsEnabled();
         $boostsRemaining = $scoreboard->remainingBoostsFor($user);
         $boostsUsed = $scoreboard->usedBoostsFor($user);
@@ -109,10 +109,11 @@ class LeagueShowService
         return $scoreboard->users()->pluck('users.id');
     }
 
-    private function recentPredictionsByUser(Collection $memberIds): Collection
+    private function recentPredictionsByUser(Collection $memberIds, Scoreboard $scoreboard): Collection
     {
         return Prediction::query()
             ->whereIn('user_id', $memberIds)
+            ->where('scoreboard_id', $scoreboard->id)
             ->whereNotNull('points_awarded_at')
             ->orderByDesc('updated_at')
             ->get(['user_id', 'points', 'updated_at'])
@@ -154,7 +155,7 @@ class LeagueShowService
         return Carbon::parse($user->predictions_max_updated_at)->diffForHumans();
     }
 
-    private function lastActivity(Collection $members): ?Prediction
+    private function lastActivity(Collection $members, Scoreboard $scoreboard): ?Prediction
     {
         $memberIds = $members->pluck('id');
 
@@ -164,6 +165,7 @@ class LeagueShowService
 
         return Prediction::query()
             ->whereIn('user_id', $memberIds)
+            ->where('scoreboard_id', $scoreboard->id)
             ->latest('updated_at')
             ->first(['updated_at']);
     }
@@ -206,7 +208,7 @@ class LeagueShowService
         ];
     }
 
-    public function upcomingFixturesQuery(User $user): Builder
+    public function upcomingFixturesQuery(User $user, Scoreboard $scoreboard): Builder
     {
         return Fixture::query()
             ->with([
@@ -216,7 +218,8 @@ class LeagueShowService
             ->with([
                 'userPredictions' => fn ($q) => $q
                     ->whereBelongsTo($user)
-                    ->select(['id', 'fixture_id', 'user_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
+                    ->where('scoreboard_id', $scoreboard->id)
+                    ->select(['id', 'fixture_id', 'user_id', 'scoreboard_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
             ])
             ->whereIn('league_id', $this->worldCupContext->leagueIds())
             ->where('season', $this->worldCupContext->season())

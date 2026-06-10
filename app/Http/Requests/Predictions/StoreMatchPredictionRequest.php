@@ -53,7 +53,11 @@ class StoreMatchPredictionRequest extends FormRequest
                 return;
             }
 
-            $prediction = $fixture->predictions()->where('user_id', $user->id)->first();
+            $scoreboardId = $this->input('scoreboard_id');
+            $prediction = $fixture->predictions()
+                ->where('user_id', $user->id)
+                ->where('scoreboard_id', $scoreboardId)
+                ->first();
 
             if ($prediction) {
                 if ($user->cannot('update', $prediction)) {
@@ -115,6 +119,7 @@ class StoreMatchPredictionRequest extends FormRequest
             ->whereHas('prediction', fn ($q) => $q
                 ->where('user_id', $user->id)
                 ->where('fixture_id', $fixture?->id)
+                ->where('scoreboard_id', $scoreboardId)
             )
             ->where('is_boosted', true)
             ->exists();

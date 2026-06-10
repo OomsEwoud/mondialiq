@@ -64,6 +64,7 @@ class MatchesController extends Controller
             $fixturesQuery->with([
                 'userPredictions' => fn ($query) => $query
                     ->whereBelongsTo($user)
+                    ->whereNull('scoreboard_id')
                     ->with('winner'),
             ]);
         }

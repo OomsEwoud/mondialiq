@@ -54,8 +54,8 @@ class UserPredictionsController extends Controller
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'isViewer' => $viewer?->id === $user->id,
-            'predictionsCount' => $user->predictions()->where('source', 'user')->count(),
-            'totalPoints' => $user->predictions()->where('source', 'user')->whereNotNull('points_awarded_at')->sum('points') ?? 0,
+            'predictionsCount' => $user->predictions()->where('source', 'user')->whereNull('scoreboard_id')->count(),
+            'totalPoints' => $user->predictions()->where('source', 'user')->whereNull('scoreboard_id')->whereNotNull('points_awarded_at')->sum('points') ?? 0,
         ];
     }
 
@@ -64,6 +64,7 @@ class UserPredictionsController extends Controller
         $query->whereHas('predictions', function (Builder $query) use ($user, $viewer) {
             $query->where('user_id', $user->id)
                 ->where('source', 'user')
+                ->whereNull('scoreboard_id')
                 ->visibleFor($viewer);
         });
 
@@ -74,6 +75,7 @@ class UserPredictionsController extends Controller
             'userPredictions' => function ($query) use ($user, $viewer) {
                 $query->where('user_id', $user->id)
                     ->where('source', 'user')
+                    ->whereNull('scoreboard_id')
                     ->visibleFor($viewer)
                     ->with('winner');
             },
@@ -83,6 +85,7 @@ class UserPredictionsController extends Controller
             $query->whereHas('predictions', function (Builder $query) use ($user, $viewer, $pointsState) {
                 $query->where('user_id', $user->id)
                     ->where('source', 'user')
+                    ->whereNull('scoreboard_id')
                     ->visibleFor($viewer)
                     ->when($pointsState === 'points-pending', fn (Builder $q) => $q->pointsPending())
                     ->when($pointsState === 'points-earned', fn (Builder $q) => $q->pointsEarned())

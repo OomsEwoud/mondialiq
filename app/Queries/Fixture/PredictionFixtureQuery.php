@@ -71,6 +71,7 @@ class PredictionFixtureQuery
         return $query
             ->whereBelongsTo($user)
             ->where('source', 'user')
+            ->whereNull('scoreboard_id')
             ->when(
                 $pointsState !== self::POINTS_STATE_ALL,
                 fn (Builder|HasMany $query) => $this->applyPointsStateFilter($query, $pointsState),

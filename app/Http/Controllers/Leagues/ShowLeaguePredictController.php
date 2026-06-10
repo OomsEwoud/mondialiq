@@ -24,7 +24,7 @@ class ShowLeaguePredictController extends Controller
         $user = $request->user();
         $members = $this->leagueShowService->members($scoreboard, $user);
         $fixtures = $this->fixturePaginationService->paginate(
-            $this->leagueShowService->upcomingFixturesQuery($user),
+            $this->leagueShowService->upcomingFixturesQuery($user, $scoreboard),
         );
 
         return Inertia::render('league-predict', [

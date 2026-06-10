@@ -53,6 +53,7 @@ class ShowUserPredictionController extends Controller
             'userPredictions' => function ($query) use ($user, $viewer) {
                 $query->where('user_id', $user->id)
                     ->where('source', 'user')
+                    ->whereNull('scoreboard_id')
                     ->visibleFor($viewer)
                     ->with('winner');
             },

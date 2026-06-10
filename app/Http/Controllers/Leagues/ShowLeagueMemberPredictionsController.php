@@ -60,8 +60,9 @@ class ShowLeagueMemberPredictionsController extends Controller
         $memberIds = $scoreboard->users()->pluck('users.id');
         $canViewPrivate = $viewer->id === $user->id || $user->allowsGroupPredictionViewing();
 
-        $query->whereHas('predictions', function (Builder $query) use ($user, $canViewPrivate) {
+        $query->whereHas('predictions', function (Builder $query) use ($user, $canViewPrivate, $scoreboard) {
             $query->where('user_id', $user->id)
+                ->where('scoreboard_id', $scoreboard->id)
                 ->where('source', 'user')
                 ->when(! $canViewPrivate, fn (Builder $q) => $q->where('visibility', 'public'));
         });
@@ -72,6 +73,7 @@ class ShowLeagueMemberPredictionsController extends Controller
             'apiPrediction',
             'userPredictions' => function ($query) use ($user, $canViewPrivate, $scoreboard) {
                 $query->where('user_id', $user->id)
+                    ->where('scoreboard_id', $scoreboard->id)
                     ->where('source', 'user')
                     ->when(! $canViewPrivate, fn (Builder $q) => $q->where('visibility', 'public'))
                     ->with(['winner', 'scoreboardPredictions' => fn ($q) => $q->where('scoreboard_id', $scoreboard->id)]);
@@ -79,8 +81,9 @@ class ShowLeagueMemberPredictionsController extends Controller
         ]);
 
         if ($pointsState !== 'all') {
-            $query->whereHas('predictions', function (Builder $query) use ($user, $pointsState, $canViewPrivate) {
+            $query->whereHas('predictions', function (Builder $query) use ($user, $pointsState, $canViewPrivate, $scoreboard) {
                 $query->where('user_id', $user->id)
+                    ->where('scoreboard_id', $scoreboard->id)
                     ->where('source', 'user')
                     ->when(! $canViewPrivate, fn (Builder $q) => $q->where('visibility', 'public'))
                     ->when($pointsState === 'points-pending', fn (Builder $q) => $q->pointsPending())
@@ -115,16 +118,16 @@ class ShowLeagueMemberPredictionsController extends Controller
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'isViewer' => $viewer->id === $user->id,
-            'predictionsCount' => \DB::table('scoreboard_predictions')
-                ->join('predictions', 'predictions.id', '=', 'scoreboard_predictions.prediction_id')
-                ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                ->where('predictions.user_id', $user->id)
-                ->where('predictions.source', 'user')
-                ->when(! $canViewPrivate, fn ($q) => $q->where('predictions.visibility', 'public'))
+            'predictionsCount' => \DB::table('predictions')
+                ->where('scoreboard_id', $scoreboard->id)
+                ->where('user_id', $user->id)
+                ->where('source', 'user')
+                ->when(! $canViewPrivate, fn ($q) => $q->where('visibility', 'public'))
                 ->count(),
             'totalPoints' => \DB::table('scoreboard_predictions')
                 ->join('predictions', 'predictions.id', '=', 'scoreboard_predictions.prediction_id')
                 ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                ->where('predictions.scoreboard_id', $scoreboard->id)
                 ->where('predictions.user_id', $user->id)
                 ->where('predictions.source', 'user')
                 ->whereNotNull('scoreboard_predictions.points_awarded_at')

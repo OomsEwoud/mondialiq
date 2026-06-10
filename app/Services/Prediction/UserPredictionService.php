@@ -13,9 +13,10 @@ class UserPredictionService
     public function store(Fixture $fixture, int $userId, array $data): Prediction
     {
         $data['user_id'] = $userId;
+        $scoreboardId = $data['scoreboard_id'] ?? null;
 
         $prediction = Prediction::query()->updateOrCreate(
-            $this->predictionIdentity($fixture, $userId),
+            $this->predictionIdentity($fixture, $userId, $scoreboardId),
             $this->predictionAttributes($fixture, $data),
         );
 
@@ -45,11 +46,12 @@ class UserPredictionService
         );
     }
 
-    private function predictionIdentity(Fixture $fixture, int $userId): array
+    private function predictionIdentity(Fixture $fixture, int $userId, ?int $scoreboardId = null): array
     {
         return [
             'fixture_id' => $fixture->id,
             'user_id' => $userId,
+            'scoreboard_id' => $scoreboardId,
         ];
     }
 

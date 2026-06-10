@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'fixture_id',
     'user_id',
+    'scoreboard_id',
     'winner_id',
     'source',
     'visibility',
@@ -67,6 +68,11 @@ class Prediction extends Model
     public function fixture(): BelongsTo
     {
         return $this->belongsTo(Fixture::class);
+    }
+
+    public function scoreboard(): BelongsTo
+    {
+        return $this->belongsTo(Scoreboard::class);
     }
 
     public function scopePointsPending(Builder $query): Builder

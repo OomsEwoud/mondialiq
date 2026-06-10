@@ -59,6 +59,7 @@ class PredictionDetailsController extends Controller
             'apiPrediction',
             'userPredictions' => fn ($query) => $query
                 ->whereBelongsTo($user)
+                ->whereNull('scoreboard_id')
                 ->with('winner'),
         ]);
     }

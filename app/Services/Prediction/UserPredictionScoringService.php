@@ -154,9 +154,13 @@ class UserPredictionScoringService
             return;
         }
 
-        $scoreboards = $user->scoreboards;
+        if ($prediction->scoreboard_id === null) {
+            return;
+        }
 
-        if ($scoreboards === null || $scoreboards->isEmpty()) {
+        $scoreboards = $user->scoreboards()->where('scoreboards.id', $prediction->scoreboard_id)->get();
+
+        if ($scoreboards->isEmpty()) {
             return;
         }
 

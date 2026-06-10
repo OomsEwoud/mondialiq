@@ -150,8 +150,8 @@ export default function LeagueMemberPredictions({
         ? `Predictions shared in ${league.name}.`
         : `Predictions shared by ${member.name} in ${league.name}.`;
     const emptyMessage = member.isViewer
-        ? 'You have not made predictions in this group yet.'
-        : 'This member has not made predictions in this group yet.';
+        ? 'No predictions in this group yet. Predictions made outside this group are not shown here.'
+        : 'No predictions in this group yet. Predictions made outside this group are not shown here.';
 
     const heroStats = [
         {
