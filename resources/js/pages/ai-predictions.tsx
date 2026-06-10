@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react';
-import { Bot } from 'lucide-react';
+import { ArrowLeft, Bot } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
@@ -133,27 +133,60 @@ export default function AiPredictions({
             />
 
             <div className="mx-auto max-w-7xl">
-                <div className="mb-6 flex items-center gap-3">
-                    {aiUser.avatar ? (
-                        <img
-                            src={aiUser.avatar}
-                            alt={aiUser.name}
-                            className="size-10 rounded-xl object-cover ring-1 ring-slate-200 shadow-sm"
-                        />
-                    ) : (
-                        <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500 text-white shadow-sm">
-                            <Bot className="size-5" />
+                <section className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-5">
+                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-800/50 text-xl font-bold text-slate-200 shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
+                                {aiUser.avatar ? (
+                                    <img
+                                        src={aiUser.avatar}
+                                        alt={aiUser.name}
+                                        className="size-14 rounded-xl object-cover sm:size-16"
+                                    />
+                                ) : (
+                                    <span className="flex size-full items-center justify-center bg-emerald-500/20 text-emerald-400">
+                                        <Bot className="size-6 sm:size-8" />
+                                    </span>
+                                )}
+                            </div>
+
+                            <div>
+                                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                                    AI match insights
+                                </p>
+                                <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                                    {pageTitle}
+                                </h1>
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                                    {pageDescription}
+                                </p>
+
+                                <div className="mt-5 flex flex-wrap gap-2.5">
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        Data-driven insights
+                                    </span>
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        Machine learning
+                                    </span>
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        Match predictions
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    )}
-                    <div>
-                        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-                            {pageTitle}
-                        </h1>
-                        <p className="mt-1 text-sm text-slate-500">
-                            {pageDescription}
-                        </p>
+
+                        <div className="flex w-full sm:w-auto">
+                            <button
+                                type="button"
+                                onClick={() => window.history.back()}
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-5 py-3 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:w-auto"
+                            >
+                                <ArrowLeft className="size-4" />
+                                Back
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </section>
 
                 <PredictionsFilterCard
                     filters={filters}

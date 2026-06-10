@@ -6,7 +6,6 @@ import EmptyFilteredPredictionsState from '@/components/predictions/empty-filter
 import PredictionList from '@/components/predictions/prediction-list';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
-import { Badge } from '@/components/ui/feedback/badge';
 import { useInitials } from '@/hooks/use-initials';
 import { predictions as usersPredictions } from '@/routes/users';
 import type { UserPredictionsPageProps as Props } from '@/types/prediction';
@@ -142,52 +141,59 @@ export default function UserPredictions({
             />
 
             <div className="mx-auto max-w-7xl">
-                <div className="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex items-center gap-4">
-                        {user.avatar ? (
-                            <img
-                                src={user.avatar}
-                                alt={user.name}
-                                className="size-14 rounded-full object-cover ring-2 ring-slate-200 shadow-sm sm:size-16"
-                            />
-                        ) : (
-                            <div className="flex size-14 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-slate-200 ring-2 ring-slate-200 shadow-sm sm:size-16 sm:text-base">
-                                {getInitials(user.name)}
+                <section className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+                        <div className="flex flex-col sm:flex-row sm:items-start gap-5">
+                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-800/50 text-xl font-bold text-slate-200 shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
+                                {user.avatar ? (
+                                    <img
+                                        src={user.avatar}
+                                        alt={user.name}
+                                        className="size-14 rounded-xl object-cover sm:size-16"
+                                    />
+                                ) : (
+                                    <span>{getInitials(user.name)}</span>
+                                )}
                             </div>
-                        )}
-                        <div className="min-w-0">
-                            <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
-                                {pageTitle}
-                            </h1>
-                            <p className="mt-0.5 text-sm text-slate-500">
-                                {pageDescription}
-                            </p>
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
-                                <Badge className="rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-semibold text-slate-700 shadow-none">
-                                    {user.predictionsCount}{' '}
-                                    {user.predictionsCount === 1
-                                        ? 'prediction'
-                                        : 'predictions'}
-                                </Badge>
-                                <Badge className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-0.5 text-xs font-semibold text-cyan-700 shadow-none">
-                                    {user.totalPoints} points
-                                </Badge>
-                                <Badge className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 shadow-none">
-                                    Public predictions
-                                </Badge>
+
+                            <div>
+                                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                                    {user.isViewer ? 'My public predictions' : 'User predictions'}
+                                </p>
+                                <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                                    {pageTitle}
+                                </h1>
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                                    {pageDescription}
+                                </p>
+
+                                <div className="mt-5 flex flex-wrap gap-2.5">
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        {user.predictionsCount}{' '}
+                                        {user.predictionsCount === 1 ? 'prediction' : 'predictions'}
+                                    </span>
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        {user.totalPoints} points
+                                    </span>
+                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                        Public predictions
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button
-                        type="button"
-                        onClick={() => window.history.back()}
-                        className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
-                    >
-                        <ArrowLeft className="size-4" />
-                        Back
-                    </button>
-                </div>
+                        <div className="flex w-full sm:w-auto">
+                            <button
+                                type="button"
+                                onClick={() => window.history.back()}
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-5 py-3 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:w-auto"
+                            >
+                                <ArrowLeft className="size-4" />
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                </section>
 
                 <PredictionsFilterCard
                     filters={filters}
