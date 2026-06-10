@@ -69,7 +69,12 @@ it('prevents joining an inactive public group', function () {
 
     $response = $this->actingAs($user)->post(route('leagues.join-public', $scoreboard));
 
-    $response->assertForbidden();
+    $response->assertRedirect();
+    $response->assertSessionHas('inertia.flash_data.toast', [
+        'type' => 'error',
+        'message' => 'This prediction group is not accepting new members.',
+    ]);
+
     $this->assertDatabaseMissing('users_has_scoreboards', [
         'user_id' => $user->id,
         'scoreboard_id' => $scoreboard->id,
@@ -117,8 +122,8 @@ it('prevents a user from joining if they have reached the maximum group limit', 
 
     for ($i = 0; $i < LeagueMembershipLimit::MAX_LEAGUES_PER_USER; $i++) {
         $existingScoreboard = Scoreboard::create([
-            'name' => 'Existing Group ' . $i,
-            'code' => 'ABCDEFGH' . $i,
+            'name' => 'Existing Group '.$i,
+            'code' => 'ABCDEFGH'.$i,
             'owner_id' => $owner->id,
             'accent_color' => 'blue',
             'icon' => '🏆',

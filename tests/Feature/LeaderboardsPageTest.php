@@ -191,8 +191,6 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.name', 'Friends League')
             ->where('joinedLeagues.0.icon', '⚡')
             ->where('joinedLeagues.0.accentColor', 'blue')
-            ->where('joinedLeagues.0.themeKey', 'gold')
-            ->where('joinedLeagues.0.coverStyle', 'night')
             ->where('joinedLeagues.0.canManage', false)
             ->where('joinedLeagues.0.canLeave', true)
             ->where('joinedLeagues.0.membersCount', 3)

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Leagues;
 
+use App\Actions\League\CalculateRankingsAction;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
-use App\Support\Leagues\LeagueBranding;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Inertia\Inertia;
@@ -16,6 +14,10 @@ use Inertia\Response;
 
 class ShowLeagueMembersController extends Controller
 {
+    public function __construct(
+        private readonly CalculateRankingsAction $calculateRankings
+    ) {}
+
     public function __invoke(Request $request, Scoreboard $scoreboard): Response
     {
         $this->authorize('manage', $scoreboard);
@@ -38,50 +40,26 @@ class ShowLeagueMembersController extends Controller
         ]);
     }
 
-    private function rankedMemberQuery(Scoreboard $scoreboard): BelongsToMany
-    {
-        $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
-
-        return $scoreboard->users()
-            ->select(['users.id', 'users.name', 'users.avatar', 'users.is_system_user'])
-            ->withSum([
-                'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-            ], 'scoreboard_predictions.points')
-            ->withCount('predictions')
-            ->withCount([
-                'scoreboardPredictions as scoring_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-                'scoreboardPredictions as perfect_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at')
-                    ->whereRaw('scoreboard_predictions.points >= ?', [$exactScorePoints]),
-            ])
-            ->orderByDesc('predictions_sum_points')
-            ->orderByDesc('predictions_count')
-            ->orderBy('users.name');
-    }
-
     private function members(Scoreboard $scoreboard, User $currentUser): Collection
     {
-        return $this->rankedMemberQuery($scoreboard)
+        $users = $scoreboard->rankedUsers()
             ->get()
-            ->values()
-            ->map(fn (User $user, int $index) => $this->memberAttributes(
-                user: $user,
-                currentUser: $currentUser,
-                scoreboard: $scoreboard,
-                index: $index,
-            ));
+            ->values();
+
+        $rankedUsers = $this->calculateRankings->execute($users);
+
+        return $rankedUsers->map(fn (User $user) => $this->memberAttributes(
+            user: $user,
+            currentUser: $currentUser,
+            scoreboard: $scoreboard,
+        ));
     }
 
-    private function memberAttributes(User $user, User $currentUser, Scoreboard $scoreboard, int $index): array
+    private function memberAttributes(User $user, User $currentUser, Scoreboard $scoreboard): array
     {
         return [
             'id' => $user->id,
-            'rank' => $index + 1,
+            'rank' => $user->rank,
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,

@@ -65,4 +65,12 @@ class Player extends Model
             ->withPivot('is_active')
             ->withTimestamps();
     }
+
+    public function activeTeams(): BelongsToMany
+    {
+        return $this->teams()
+            ->wherePivot('is_active', true)
+            ->with('country')
+            ->orderBy('name');
+    }
 }

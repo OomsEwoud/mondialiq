@@ -2,40 +2,51 @@
 
 namespace App\Services\League;
 
+use App\Actions\League\CalculateRankingsAction;
 use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
-use App\Models\ScoreboardPrediction;
 use App\Models\User;
-use App\Support\Leagues\LeagueBranding;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 class LeagueShowService
 {
+    public function __construct(
+        private readonly CalculateRankingsAction $calculateRankings
+    ) {}
+
     public function members(Scoreboard $scoreboard, User $currentUser): Collection
     {
         $memberIds = $this->memberIds($scoreboard);
         $recentPredictionsByUser = $this->recentPredictionsByUser($memberIds);
 
-        $members = $this->rankedMemberQuery($scoreboard)
+        $users = $scoreboard->rankedUsers()
             ->get()
-            ->values()
-            ->map(
-                fn (User $user, int $index) => $this->memberAttributes(
-                    user: $user,
-                    currentUser: $currentUser,
-                    scoreboard: $scoreboard,
-                    recentPredictions: $recentPredictionsByUser->get($user->id, collect()),
-                    index: $index,
-                ),
-            )
             ->values();
 
-        return $this->withGapsToAbove($members);
+        $rankedUsers = $this->calculateRankings->execute($users);
+
+        $previousTotalPoints = null;
+
+        return $rankedUsers->map(function (User $user) use ($currentUser, $scoreboard, $recentPredictionsByUser, &$previousTotalPoints) {
+            $member = $this->memberAttributes(
+                user: $user,
+                currentUser: $currentUser,
+                scoreboard: $scoreboard,
+                recentPredictions: $recentPredictionsByUser->get($user->id, collect()),
+            );
+
+            $member['gapToAbove'] = $previousTotalPoints !== null
+                ? max($previousTotalPoints - ($member['totalPoints'] ?? 0), 0)
+                : null;
+
+            $previousTotalPoints = $member['totalPoints'] ?? 0;
+
+            return $member;
+        });
     }
 
     public function leagueAttributes(
@@ -46,16 +57,11 @@ class LeagueShowService
         $leader = $members->first();
         $currentUser = $members->firstWhere('isCurrentUser', true);
         $lastActivity = $this->lastActivity($members);
-        $boostedEnabled = (bool) $scoreboard->scoringRule('boosted_predictions_enabled', false);
-        $boostsRemaining = $boostedEnabled
-            ? $this->boostsRemaining($scoreboard, $user)
-            : null;
-        $boostsLimit = $boostedEnabled
-            ? (int) $scoreboard->scoringRule('boosted_predictions_limit', 3)
-            : null;
-        $boostedConfidenceThreshold = $boostedEnabled
-            ? $scoreboard->scoringRule('boosted_confidence_threshold', 'low')
-            : null;
+        $boostedEnabled = $scoreboard->boostedPredictionsEnabled();
+        $boostsRemaining = $scoreboard->remainingBoostsFor($user);
+        $boostsUsed = $scoreboard->usedBoostsFor($user);
+        $boostsLimit = $scoreboard->boostedPredictionsLimit();
+        $boostedConfidenceThreshold = $scoreboard->boostedConfidenceThreshold();
 
         return [
             'id' => $scoreboard->id,
@@ -101,33 +107,6 @@ class LeagueShowService
         return $scoreboard->users()->pluck('users.id');
     }
 
-    private function rankedMemberQuery(Scoreboard $scoreboard): BelongsToMany
-    {
-        $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
-
-        return $scoreboard->users()
-            ->select(['users.id', 'users.name', 'users.avatar', 'users.is_system_user'])
-            ->withSum([
-                'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-            ], 'scoreboard_predictions.points')
-            ->withCount('predictions')
-            ->withCount([
-                'scoreboardPredictions as scoring_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-                'scoreboardPredictions as perfect_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at')
-                    ->whereRaw('scoreboard_predictions.points >= ?', [$exactScorePoints]),
-            ])
-            ->withMax('predictions', 'updated_at')
-            ->orderByDesc('predictions_sum_points')
-            ->orderByDesc('predictions_count')
-            ->orderBy('users.name');
-    }
-
     private function recentPredictionsByUser(Collection $memberIds): Collection
     {
         return Prediction::query()
@@ -144,11 +123,10 @@ class LeagueShowService
         User $currentUser,
         Scoreboard $scoreboard,
         Collection $recentPredictions,
-        int $index,
     ): array {
         return [
             'id' => $user->id,
-            'rank' => $index + 1,
+            'rank' => $user->rank,
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,
@@ -160,25 +138,9 @@ class LeagueShowService
             'canBeManaged' => $user->id !== $scoreboard->owner_id,
             'isSystemUser' => $user->is_system_user,
             'lastPredictionLabel' => $this->lastPredictionLabel($user),
-            'form' => $this->buildFormSummary($recentPredictions, $index === 0),
+            'form' => $this->buildFormSummary($recentPredictions, $user->rank === 1),
             'predictionsHref' => route('leagues.member.predictions', ['scoreboard' => $scoreboard, 'user' => $user]),
         ];
-    }
-
-    private function withGapsToAbove(Collection $members): Collection
-    {
-        return $members
-            ->map(function (array $member, int $index) use ($members): array {
-                $memberAbove = $index > 0 ? $members[$index - 1] : null;
-
-                return [
-                    ...$member,
-                    'gapToAbove' => $memberAbove
-                        ? max(($memberAbove['totalPoints'] ?? 0) - ($member['totalPoints'] ?? 0), 0)
-                        : null,
-                ];
-            })
-            ->values();
     }
 
     private function lastPredictionLabel(User $user): ?string
@@ -240,19 +202,6 @@ class LeagueShowService
             'label' => 'Looking for lift',
             'tone' => 'cold',
         ];
-    }
-
-    private function boostsRemaining(Scoreboard $scoreboard, User $user): int
-    {
-        $limit = (int) $scoreboard->scoringRule('boosted_predictions_limit', 3);
-
-        $used = ScoreboardPrediction::query()
-            ->where('scoreboard_id', $scoreboard->id)
-            ->whereHas('prediction', fn ($q) => $q->where('user_id', $user->id))
-            ->where('is_boosted', true)
-            ->count();
-
-        return max($limit - $used, 0);
     }
 
     public function upcomingFixturesQuery(User $user): Builder

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
-use App\Support\Leagues\LeagueBranding;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;

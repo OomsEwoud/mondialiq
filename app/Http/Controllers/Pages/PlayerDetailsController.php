@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlayerDetailsResource;
 use App\Models\Player;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,10 +14,7 @@ class PlayerDetailsController extends Controller
     {
         $player->load([
             'country',
-            'teams' => fn (BelongsToMany $query) => $query
-                ->wherePivot('is_active', true)
-                ->with('country')
-                ->orderBy('name'),
+            'activeTeams',
             'playerSeasonStats.league',
         ]);
 

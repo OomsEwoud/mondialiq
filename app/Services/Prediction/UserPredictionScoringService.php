@@ -184,7 +184,7 @@ class UserPredictionScoringService
             $isBoosted = ! $user->is_system_user && ($scoreboardPrediction?->is_boosted ?? false);
             $bonus = 0;
 
-            if ($isBoosted && ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {
+            if ($isBoosted && $scoreboard->boostedPredictionsEnabled()) {
                 $breakdown = $this->predictionScoreService->breakdownWithRules(
                     (int) $prediction->home_goals,
                     (int) $prediction->away_goals,
@@ -195,8 +195,8 @@ class UserPredictionScoringService
 
                 if ($breakdown['correctOutcome']) {
                     $confidenceValue = $this->numericConfidence($prediction->confidence);
-                    $thresholdString = $scoreboard->scoringRule('boosted_confidence_threshold', 'low');
-                    $threshold = $this->numericConfidence(is_string($thresholdString) ? $thresholdString : (string) $thresholdString);
+                    $thresholdString = $scoreboard->boostedConfidenceThreshold();
+                    $threshold = $this->numericConfidence($thresholdString);
 
                     if ($confidenceValue !== null && $confidenceValue >= $threshold) {
                         $bonus = (int) $scoreboard->scoringRule('boosted_prediction_bonus_points', 2);

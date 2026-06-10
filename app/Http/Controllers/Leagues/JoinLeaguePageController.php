@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
+use App\Models\Scoreboard;
 use App\Support\Leagues\LeagueMembershipLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ class JoinLeaguePageController extends Controller
         $user = $request->user();
         $currentLeagueCount = $user?->scoreboards()->count() ?? 0;
 
-        $publicLeagues = \App\Models\Scoreboard::query()
+        $publicLeagues = Scoreboard::query()
             ->where('visibility', 'public')
             ->where('is_active', true)
             ->when($user, function ($query, $user) {

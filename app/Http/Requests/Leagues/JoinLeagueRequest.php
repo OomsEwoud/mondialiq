@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Leagues;
 
 use App\Models\Scoreboard;
-use App\Support\Leagues\LeagueMembershipLimit;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -45,24 +44,6 @@ class JoinLeagueRequest extends FormRequest
 
         if (! $league) {
             $validator->errors()->add('code', 'This invite code is invalid.');
-
-            return;
-        }
-
-        if (! $league->is_active) {
-            $validator->errors()->add('code', 'This prediction group is not accepting new members.');
-
-            return;
-        }
-
-        if ($this->user()->scoreboards()->count() >= LeagueMembershipLimit::MAX_LEAGUES_PER_USER) {
-            $validator->errors()->add('code', 'You can join up to 5 leagues.');
-
-            return;
-        }
-
-        if ($league->users()->whereKey($this->user()->id)->exists()) {
-            $validator->errors()->add('code', 'You already joined this league.');
         }
     }
 }

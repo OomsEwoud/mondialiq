@@ -151,4 +151,17 @@ class Prediction extends Model
 
         return $this->user_id === $viewer->id;
     }
+
+    public function isEditable(): bool
+    {
+        if ($this->hasAwardedPoints()) {
+            return false;
+        }
+
+        if ($this->fixture && $this->fixture->hasStarted()) {
+            return false;
+        }
+
+        return true;
+    }
 }

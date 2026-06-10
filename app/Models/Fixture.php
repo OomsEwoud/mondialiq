@@ -194,4 +194,37 @@ class Fixture extends Model
 
         return $kickoffAt->toIso8601String();
     }
+
+    public function hasStarted(): bool
+    {
+        return CarbonImmutable::parse($this->kickoffAt())->isPast();
+    }
+
+    public function loadMatchDetails(?User $user = null): self
+    {
+        $this->load([
+            'homeTeam',
+            'awayTeam',
+            'venue.country',
+            'referee',
+            'fixtureEvents.team',
+            'fixtureEvents.player',
+            'fixtureEvents.assist',
+            'fixtureStats.team',
+            'lineups',
+            'fixturePlayers.player',
+            'playerFixtureStats',
+            'aiPrediction',
+        ]);
+
+        if ($user) {
+            $this->load([
+                'userPredictions' => fn ($query) => $query
+                    ->whereBelongsTo($user)
+                    ->with('winner'),
+            ]);
+        }
+
+        return $this;
+    }
 }

@@ -2,21 +2,28 @@
 
 namespace App\Services\League;
 
+use App\Actions\League\CalculateRankingsAction;
 use App\Models\Scoreboard;
 use App\Models\User;
 use App\Support\Leagues\LeagueBranding;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 
 class LeaderboardService
 {
+    public function __construct(
+        private readonly CalculateRankingsAction $calculateRankings
+    ) {}
+
     public function globalLeaders(): Collection
     {
-        return $this->rankedUserQuery()
+        $users = $this->rankedUserQuery()
             ->get()
-            ->values()
-            ->map(fn (User $user, int $index) => $this->leaderAttributes($user, $index));
+            ->values();
+
+        $rankedUsers = $this->calculateRankings->execute($users);
+
+        return $rankedUsers->map(fn (User $user) => $this->leaderAttributes($user));
     }
 
     public function currentUserPosition(Collection $leaders, ?User $user): ?array
@@ -66,11 +73,11 @@ class LeaderboardService
             ->orderBy('name');
     }
 
-    private function leaderAttributes(User $user, int $index): array
+    private function leaderAttributes(User $user): array
     {
         return [
             'id' => $user->id,
-            'rank' => $index + 1,
+            'rank' => $user->rank,
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'predictionsCount' => $user->predictions_count,
@@ -116,9 +123,7 @@ class LeaderboardService
             'rewardDescription' => $scoreboard->reward_description,
             'visibility' => $scoreboard->visibility,
             'isActive' => $scoreboard->is_active,
-            'userRank' => $currentUserEntry
-                ? $rankings->search(fn (User $member) => $member->id === $user->id) + 1
-                : null,
+            'userRank' => $currentUserEntry?->rank,
             'leaderName' => $leader?->name,
             'points' => $currentUserEntry?->predictions_sum_points ?? 0,
             'predictionsCount' => $currentUserEntry?->predictions_count ?? 0,
@@ -131,35 +136,11 @@ class LeaderboardService
 
     private function leagueRankings(Scoreboard $scoreboard): Collection
     {
-        return $this->rankedLeagueMemberQuery($scoreboard)
+        $users = $scoreboard->rankedUsers()
             ->get()
             ->values();
-    }
 
-    private function rankedLeagueMemberQuery(Scoreboard $scoreboard): BelongsToMany
-    {
-        $exactScorePoints = (int) $scoreboard->scoringRule('exact_score_points', 20);
-
-        return $scoreboard->users()
-            ->select(['users.id', 'users.name'])
-            ->withSum([
-                'scoreboardPredictions as predictions_sum_points' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-            ], 'scoreboard_predictions.points')
-            ->withCount('predictions')
-            ->withCount([
-                'scoreboardPredictions as scoring_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at'),
-                'scoreboardPredictions as perfect_predictions_count' => fn (Builder $query) => $query
-                    ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
-                    ->whereNotNull('scoreboard_predictions.points_awarded_at')
-                    ->whereRaw('scoreboard_predictions.points >= ?', [$exactScorePoints]),
-            ])
-            ->orderByDesc('predictions_sum_points')
-            ->orderByDesc('predictions_count')
-            ->orderBy('users.name');
+        return $this->calculateRankings->execute($users);
     }
 
     private function memberAvatars(Scoreboard $scoreboard): Collection
