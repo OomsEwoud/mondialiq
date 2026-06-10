@@ -41,6 +41,18 @@ class StoreMatchPredictionRequest extends FormRequest
         $user = $this->user();
 
         if ($fixture !== null) {
+            $worldCupContext = app(\App\Support\WorldCup\WorldCupContext::class);
+            $isWorldCup = in_array($fixture->league_id, $worldCupContext->leagueIds(), true)
+                && $fixture->season === $worldCupContext->season();
+
+            if (! $isWorldCup) {
+                $validator->errors()->add(
+                    'outcome',
+                    'Predictions are only allowed for World Cup 2026 fixtures.',
+                );
+                return;
+            }
+
             $prediction = $fixture->predictions()->where('user_id', $user->id)->first();
 
             if ($prediction) {

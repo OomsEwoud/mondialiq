@@ -7,6 +7,7 @@ use App\Models\Fixture;
 use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\User;
+use App\Support\WorldCup\WorldCupContext;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,8 @@ use Illuminate\Support\Collection;
 class LeagueShowService
 {
     public function __construct(
-        private readonly CalculateRankingsAction $calculateRankings
+        private readonly CalculateRankingsAction $calculateRankings,
+        private readonly WorldCupContext $worldCupContext,
     ) {}
 
     public function members(Scoreboard $scoreboard, User $currentUser): Collection
@@ -216,6 +218,8 @@ class LeagueShowService
                     ->whereBelongsTo($user)
                     ->select(['id', 'fixture_id', 'user_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
             ])
+            ->whereIn('league_id', $this->worldCupContext->leagueIds())
+            ->where('season', $this->worldCupContext->season())
             ->upcomingNotStarted()
             ->orderBy('match_date');
     }
