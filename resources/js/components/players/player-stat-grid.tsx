@@ -21,8 +21,8 @@ export default function PlayerStatGrid({ title, icon, items }: Props) {
     }
 
     return (
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
-            <div className="mb-5 flex items-center gap-2 border-b border-slate-100 pb-3">
+        <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
+            <div className="mb-5 flex shrink-0 items-center gap-2 border-b border-slate-100 pb-3">
                 {icon}
                 <h3 className="text-xs font-bold tracking-widest text-slate-900 uppercase">
                     {title}
@@ -37,8 +37,8 @@ export default function PlayerStatGrid({ title, icon, items }: Props) {
                             : String(item.value);
 
                     return (
-                        <div key={item.label} className="flex flex-col gap-0.5">
-                            <p className="text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+                        <div key={item.label} className="flex h-full flex-col justify-between gap-1">
+                            <p className="text-[11px] font-semibold leading-tight tracking-wider text-slate-400 uppercase">
                                 {item.label}
                             </p>
                             <p
