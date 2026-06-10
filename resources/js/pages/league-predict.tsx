@@ -79,6 +79,7 @@ export default function LeaguePredict({
                     scoreboardId={league.id}
                     boostsRemaining={league.boostsRemaining}
                     boostsLimit={league.boostsLimit}
+                    boostedConfidenceThreshold={league.boostedConfidenceThreshold}
                     boostedEnabled={league.boostedPredictionsEnabled}
                 />
 

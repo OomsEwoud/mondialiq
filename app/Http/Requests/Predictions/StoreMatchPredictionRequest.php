@@ -124,6 +124,28 @@ class StoreMatchPredictionRequest extends FormRequest
                 "You have already used all {$limit} boosted predictions in this leaderboard.",
             );
         }
+
+        $thresholdString = $scoreboard->scoringRule('boosted_confidence_threshold', 'low');
+        $threshold = $this->numericConfidence(is_string($thresholdString) ? $thresholdString : (string) $thresholdString);
+        $userConfidenceString = $this->string('confidence')->toString();
+        $userConfidence = $this->numericConfidence($userConfidenceString);
+
+        if ($userConfidence < $threshold) {
+            $validator->errors()->add(
+                'confidence',
+                "A boosted prediction requires at least {$thresholdString} confidence.",
+            );
+        }
+    }
+
+    private function numericConfidence(?string $confidence): int
+    {
+        return match ($confidence) {
+            'high' => 100,
+            'medium' => 50,
+            'low' => 25,
+            default => 0,
+        };
     }
 
     private function validateScoreMatchesOutcome(Validator $validator): void

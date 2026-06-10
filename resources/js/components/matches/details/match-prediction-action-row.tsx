@@ -11,6 +11,7 @@ interface Props {
     scoreboardId?: number;
     boostsRemaining?: number | null;
     boostsLimit?: number | null;
+    boostedConfidenceThreshold?: string | null;
 }
 
 export default function MatchPredictionActionRow({
@@ -18,6 +19,7 @@ export default function MatchPredictionActionRow({
     scoreboardId,
     boostsRemaining,
     boostsLimit,
+    boostedConfidenceThreshold,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const hasAiPrediction = Boolean(match.hasAiPrediction);
@@ -56,6 +58,7 @@ export default function MatchPredictionActionRow({
                 scoreboardId={scoreboardId}
                 boostsRemaining={boostsRemaining}
                 boostsLimit={boostsLimit}
+                boostedConfidenceThreshold={boostedConfidenceThreshold}
             />
         </section>
     );

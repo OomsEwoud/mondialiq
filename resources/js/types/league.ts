@@ -75,6 +75,7 @@ export interface LeagueDetails {
     boostedPredictionsEnabled: boolean;
     boostsRemaining: number | null;
     boostsLimit: number | null;
+    boostedConfidenceThreshold: string | null;
 }
 
 export interface LeaguePredictPageProps {

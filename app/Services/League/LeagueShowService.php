@@ -53,6 +53,9 @@ class LeagueShowService
         $boostsLimit = $boostedEnabled
             ? (int) $scoreboard->scoringRule('boosted_predictions_limit', 3)
             : null;
+        $boostedConfidenceThreshold = $boostedEnabled
+            ? $scoreboard->scoringRule('boosted_confidence_threshold', 'low')
+            : null;
 
         return [
             'id' => $scoreboard->id,
@@ -89,6 +92,7 @@ class LeagueShowService
             'boostedPredictionsEnabled' => $boostedEnabled,
             'boostsRemaining' => $boostsRemaining,
             'boostsLimit' => $boostsLimit,
+            'boostedConfidenceThreshold' => $boostedConfidenceThreshold,
         ];
     }
 

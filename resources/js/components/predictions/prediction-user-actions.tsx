@@ -12,6 +12,7 @@ interface Props {
     scoreboardId?: number;
     boostsRemaining?: number | null;
     boostsLimit?: number | null;
+    boostedConfidenceThreshold?: string | null;
 }
 
 export default function PredictionUserActions({
@@ -20,6 +21,7 @@ export default function PredictionUserActions({
     scoreboardId,
     boostsRemaining,
     boostsLimit,
+    boostedConfidenceThreshold,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const openPredictionModal = () => setPredictionOpen(true);
@@ -54,6 +56,7 @@ export default function PredictionUserActions({
                 scoreboardId={scoreboardId}
                 boostsRemaining={boostsRemaining}
                 boostsLimit={boostsLimit}
+                boostedConfidenceThreshold={boostedConfidenceThreshold}
             />
         </>
     );

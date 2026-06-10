@@ -21,6 +21,7 @@ interface Props {
     scoreboardId?: number;
     boostsRemaining?: number | null;
     boostsLimit?: number | null;
+    boostedConfidenceThreshold?: string | null;
 }
 
 export default function UserPredictionForm({
@@ -31,6 +32,7 @@ export default function UserPredictionForm({
     scoreboardId,
     boostsRemaining,
     boostsLimit,
+    boostedConfidenceThreshold,
 }: Props) {
     const predictionLocked = isPredictionLocked(match);
     const { data, setData, post, processing, errors, clearErrors } =
@@ -90,6 +92,15 @@ export default function UserPredictionForm({
         scoreboardId !== undefined &&
         typeof boostsRemaining === 'number' &&
         boostsRemaining >= 0;
+
+    const numericConfidence = (conf: string) =>
+        conf === 'high' ? 100 : conf === 'medium' ? 50 : 25;
+
+    const meetsBoostThreshold =
+        !data.is_boosted ||
+        !boostedConfidenceThreshold ||
+        numericConfidence(data.confidence) >=
+            numericConfidence(boostedConfidenceThreshold);
 
     return (
         <form onSubmit={submit} className="grid gap-4">
@@ -158,6 +169,11 @@ export default function UserPredictionForm({
                             {errors.is_boosted}
                         </p>
                     )}
+                    {!meetsBoostThreshold && (
+                        <p className="mt-2 text-xs font-medium text-amber-600">
+                            A boosted prediction requires at least <span className="uppercase">{boostedConfidenceThreshold}</span> confidence.
+                        </p>
+                    )}
                 </div>
             )}
 
@@ -174,7 +190,7 @@ export default function UserPredictionForm({
                 <Button
                     type="submit"
                     disabled={
-                        processing || predictionLocked || data.outcome === ''
+                        processing || predictionLocked || data.outcome === '' || !meetsBoostThreshold
                     }
                     className="h-11 rounded-xl bg-blue-950 px-5 font-bold text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >
