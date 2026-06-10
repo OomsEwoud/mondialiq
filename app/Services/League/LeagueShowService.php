@@ -259,7 +259,7 @@ class LeagueShowService
                     ->whereBelongsTo($user)
                     ->select(['id', 'fixture_id', 'user_id', 'winner_id', 'home_goals', 'away_goals', 'confidence', 'points', 'points_awarded_at']),
             ])
-            ->notStarted()
+            ->upcomingNotStarted()
             ->orderBy('match_date');
     }
 }
