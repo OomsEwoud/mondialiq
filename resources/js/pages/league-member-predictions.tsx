@@ -1,7 +1,6 @@
 import { Link, router } from '@inertiajs/react';
 import { ArrowLeft, Crown, Target, Trophy, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import ShowLeagueMembersController from '@/actions/App/Http/Controllers/Leagues/ShowLeagueMembersController';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
 import PredictionList from '@/components/predictions/prediction-list';
@@ -33,6 +32,7 @@ export default function LeagueMemberPredictions({
     fixtures,
     filters: initialFilters,
 }: Props) {
+    const theme = getLeagueThemePalette(league.accentColor);
     const getInitials = useInitials();
     const defaultFilters = {
         ...defaultPredictionFilters,
@@ -183,10 +183,8 @@ export default function LeagueMemberPredictions({
             <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
                 <section
                     className={cn(
-                        'rounded-2xl p-4 shadow-sm sm:p-6 lg:p-8',
-                        getLeagueThemeBannerClass(
-                            league.accentColor,
-                        ),
+                        'relative overflow-hidden rounded-2xl p-4 text-white shadow-sm ring-1 sm:p-6 lg:p-8',
+                        getLeagueThemeBannerClass(league.accentColor),
                     )}
                 >
                     <div className="flex items-start justify-between">
@@ -194,7 +192,7 @@ export default function LeagueMemberPredictions({
                             href={league.showHref}
                             className={cn(
                                 'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
-                                getLeagueThemePalette(league.accentColor).buttonRing,
+                                theme.buttonRing,
                             )}
                         >
                             <ArrowLeft className="size-4" />
@@ -202,18 +200,12 @@ export default function LeagueMemberPredictions({
                         </Link>
 
                         <div className="flex items-center gap-3">
-                            <Link
-                                href={ShowLeagueMembersController.url({ scoreboard: league.id })}
+                            <div
                                 className={cn(
-                                    'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
-                                    getLeagueThemePalette(league.accentColor).buttonRing,
+                                    'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border bg-slate-800/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
+                                    theme.badgeBorder,
                                 )}
                             >
-                                <ArrowLeft className="size-4" />
-                                Back to members
-                            </Link>
-
-                            <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-800/50 shadow-sm ring-1 ring-slate-600/50 sm:size-14">
                                 {member.avatar ? (
                                     <img
                                         src={member.avatar}
@@ -234,7 +226,12 @@ export default function LeagueMemberPredictions({
 
                     <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
                         <div className="max-w-3xl">
-                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                            <p
+                                className={cn(
+                                    'text-xs font-semibold tracking-wide uppercase',
+                                    theme.accentText,
+                                )}
+                            >
                                 Group Member Predictions
                             </p>
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
@@ -252,13 +249,23 @@ export default function LeagueMemberPredictions({
                                 key={stat.label}
                                 variant="outline"
                                 className={cn(
-                                    'w-full justify-center rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1.5 text-xs font-semibold text-slate-200',
+                                    'w-full justify-center rounded-full px-3 py-1.5 text-xs font-semibold',
+                                    theme.badgeBorder,
+                                    theme.badgeBg,
+                                    theme.badgeText,
                                     stat.label === 'Role' &&
                                         member.isViewer &&
                                         'border-white bg-white text-slate-900',
                                 )}
                             >
-                                <stat.icon className="size-3.5 shrink-0" />
+                                <stat.icon
+                                    className={cn(
+                                        'mr-1.5 size-3.5 shrink-0',
+                                        stat.label === 'Role' && member.isViewer
+                                            ? 'text-slate-900'
+                                            : theme.iconColor,
+                                    )}
+                                />
                                 <span className="truncate">
                                     {stat.label}: {stat.value}
                                 </span>
