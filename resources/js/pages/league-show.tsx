@@ -6,7 +6,7 @@ import {
     Settings2,
     Target,
     Trophy,
-    Users,
+    Zap,
 } from 'lucide-react';
 import InviteCodeCard from '@/components/leaderboards/invite-code-card';
 import LeagueLeaveCard from '@/components/leaderboards/league-leave-card';
@@ -27,14 +27,8 @@ import {
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
     const host = league.members.find((member) => member.isOwner);
     const theme = getLeagueThemePalette(league.accentColor);
-    const memberLabel = league.membersCount === 1 ? 'member' : 'members';
     const hostName = host?.name;
     const heroStats = [
-        {
-            label: 'Members',
-            value: `${league.membersCount} ${memberLabel}`,
-            icon: Users,
-        },
         {
             label: 'Your rank',
             value: league.currentUserRank
@@ -43,15 +37,21 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
             icon: Trophy,
         },
         {
-            label: 'Predictions',
-            value: `${league.totalPredictions}`,
-            icon: Target,
-        },
-        {
             label: 'Host',
             value: hostName ?? 'TBD',
             icon: Crown,
         },
+        ...(league.scoringRules?.boosted_predictions_enabled &&
+        league.boostsRemaining !== null &&
+        league.boostsRemaining !== undefined
+            ? [
+                  {
+                      label: 'Boosts left',
+                      value: `${league.boostsRemaining}`,
+                      icon: Zap,
+                  },
+              ]
+            : []),
     ];
 
     return (
