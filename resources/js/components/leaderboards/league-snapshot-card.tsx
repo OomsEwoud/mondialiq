@@ -7,20 +7,37 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { cn } from '@/lib/utils';
 import type { LeagueDetails } from '@/types/league';
+import {
+    getLeagueThemePalette,
+} from '@/utils/league-branding';
 
 interface Props {
     league: LeagueDetails;
 }
 
 export default function LeagueSnapshotCard({ league }: Props) {
+    const theme = getLeagueThemePalette(league.accentColor);
+
     return (
-        <Card className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm">
+        <Card
+            className={cn(
+                'gap-0 rounded-2xl border py-0 shadow-sm',
+                theme.softBorder,
+                theme.softBg,
+            )}
+        >
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
-                <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
+                <CardTitle
+                    className={cn(
+                        'text-xl font-bold sm:text-2xl',
+                        theme.softText,
+                    )}
+                >
                     Group snapshot
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-slate-500">
+                <CardDescription className="text-sm leading-6 text-slate-600">
                     Quick overview of the current race.
                 </CardDescription>
             </CardHeader>
@@ -30,21 +47,33 @@ export default function LeagueSnapshotCard({ league }: Props) {
                     label="Current leader"
                     value={league.currentLeader ?? 'TBD'}
                     helper={`${league.leaderPoints} pts`}
+                    iconClassName={theme.iconColor}
+                    labelClassName={theme.darkAccent}
+                    className={cn(theme.softBg, theme.softBorder)}
                 />
                 <SnapshotMetric
                     icon={Users}
                     label="Members"
                     value={`${league.membersCount}`}
+                    iconClassName={theme.iconColor}
+                    labelClassName={theme.darkAccent}
+                    className={cn(theme.softBg, theme.softBorder)}
                 />
                 <SnapshotMetric
                     icon={Target}
                     label="Total predictions"
                     value={`${league.totalPredictions}`}
+                    iconClassName={theme.iconColor}
+                    labelClassName={theme.darkAccent}
+                    className={cn(theme.softBg, theme.softBorder)}
                 />
                 <SnapshotMetric
                     icon={Activity}
                     label="Last activity"
                     value={league.lastActivityLabel ?? 'No predictions yet'}
+                    iconClassName={theme.iconColor}
+                    labelClassName={theme.darkAccent}
+                    className={cn(theme.softBg, theme.softBorder)}
                 />
             </CardContent>
         </Card>

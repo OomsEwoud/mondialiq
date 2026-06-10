@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -55,6 +56,54 @@ class User extends Authenticatable implements FilamentUser
     public function predictions(): HasMany
     {
         return $this->hasMany(Prediction::class);
+    }
+
+    public function preference(): HasOne
+    {
+        return $this->hasOne(UserPreference::class);
+    }
+
+    public function userPreference(): UserPreference
+    {
+        return $this->preference ?? $this->preference()->create([
+            'predictions_visibility' => 'public',
+            'default_prediction_visibility' => 'public',
+            'show_on_leaderboards' => true,
+            'allow_group_visibility' => true,
+        ]);
+    }
+
+    public function allowsPublicPredictionViewing(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->show_on_leaderboards && $preference->predictionsArePublic();
+    }
+
+    public function allowsGroupPredictionViewing(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->allow_group_visibility;
+    }
+
+    public function predictionsArePublic(): bool
+    {
+        $preference = $this->preference;
+
+        if ($preference === null) {
+            return true;
+        }
+
+        return $preference->predictionsArePublic();
     }
 
     public function feedbackMessages(): HasMany

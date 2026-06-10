@@ -32,9 +32,8 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
         },
         {
             icon: <Clock className="size-5" />,
-            label: 'Minutes',
+            label: 'Total minutes played',
             value: stats.minutes,
-            suffix: 'min',
         },
         {
             icon: <Trophy className="size-5" />,
@@ -72,9 +71,8 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
         },
         {
             icon: <Clock className="size-5" />,
-            label: 'Minutes',
+            label: 'Total minutes played',
             value: stats.minutes,
-            suffix: 'min',
         },
         {
             icon: <Goal className="size-5" />,
@@ -136,21 +134,21 @@ return null;
                 return (
                     <div
                         key={item.label}
-                        className={`flex flex-col items-center gap-2 rounded-2xl border p-4 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+                        className={`flex h-full flex-col items-center rounded-2xl border p-4 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
                             item.highlight
                                 ? 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white'
                                 : 'border-slate-200 bg-gradient-to-b from-white to-slate-50/60'
                         }`}
                     >
                         <span
-                            className={`${
+                            className={`mb-2 shrink-0 ${
                                 item.highlight ? 'text-cyan-600' : 'text-slate-500'
                             }`}
                         >
                             {item.icon}
                         </span>
                         <p
-                            className={`text-2xl font-bold tabular-nums ${
+                            className={`mb-1 shrink-0 text-2xl font-bold tabular-nums ${
                                 item.highlight ? 'text-slate-900' : 'text-slate-700'
                             }`}
                         >
@@ -161,9 +159,11 @@ return null;
                                 </span>
                             ) : null}
                         </p>
-                        <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
-                            {item.label}
-                        </p>
+                        <div className="flex h-9 w-full items-start justify-center">
+                            <p className="text-xs leading-tight font-semibold tracking-wide text-slate-500 uppercase">
+                                {item.label}
+                            </p>
+                        </div>
                     </div>
                 );
             })}

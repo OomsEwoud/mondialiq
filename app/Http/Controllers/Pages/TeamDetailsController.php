@@ -7,7 +7,6 @@ use App\Http\Resources\TeamDetailsResource;
 use App\Models\Fixture;
 use App\Models\Team;
 use App\Support\WorldCup\WorldCupContext;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,18 +31,8 @@ class TeamDetailsController extends Controller
         $team->load([
             'country',
             'coach.country',
-            'players' => fn (BelongsToMany $query) => $this->activePlayersQuery($query),
+            'activePlayers',
         ]);
-    }
-
-    private function activePlayersQuery(BelongsToMany $query): BelongsToMany
-    {
-        return $query
-            ->wherePivot('is_active', true)
-            ->with('country')
-            ->orderBy('position')
-            ->orderBy('number')
-            ->orderBy('display_name');
     }
 
     private function ensureWorldCupTeam(Team $team): void

@@ -27,7 +27,6 @@ class StoreLeagueController extends Controller
                 'description' => $data['description'] ?? null,
                 'icon' => LeagueBranding::DEFAULT_ICON,
                 'accent_color' => LeagueBranding::DEFAULT_ACCENT_COLOR,
-                'cover_style' => LeagueBranding::DEFAULT_COVER_STYLE,
                 'code' => $this->codeGenerator->generate(),
                 'owner_id' => $request->user()->id,
                 'reward_title' => $data['reward_title'] ?? null,

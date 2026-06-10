@@ -15,9 +15,6 @@ export default function MatchDetailsPanel({ match }: Props) {
                     <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         Match details
                     </p>
-                    <h3 className="text-sm font-semibold text-slate-900">
-                        {match.homeTeamShort} vs {match.awayTeamShort}
-                    </h3>
                 </div>
             </div>
 

@@ -16,6 +16,11 @@ import type {
     MatchDetailsLineupPlayerStats,
 } from '@/types/match-details';
 import { formatLineupPositionLabel } from '@/utils/match-lineup';
+import {
+    PrimaryStatCard,
+    RatingStatCard,
+    SecondaryStatCard,
+} from './player-stat-card';
 
 type Props = {
     player: MatchDetailsLineupPlayer;
@@ -57,8 +62,8 @@ const STAT_SECTIONS: StatSectionConfig[] = [
         accentColor: 'bg-blue-500',
         stats: [
             { key: 'passesTotal', label: 'Passes' },
-            { key: 'keyPasses', label: 'Key passes' },
             { key: 'passAccuracy', label: 'Accuracy %' },
+            { key: 'keyPasses', label: 'Key passes' },
         ],
     },
     {
@@ -175,7 +180,34 @@ function extractSectionStats(
         const value = stats[stat.key];
 
         if (hasMeaningfulStatValue(value)) {
-            items.push({ label: stat.label, value: Number(value) });
+            let label = stat.label;
+
+            if (stat.key === 'passAccuracy') {
+                const total = stats.passesTotal;
+
+                if (hasMeaningfulStatValue(total) && value <= total) {
+                    label = 'Accurate passes';
+                } else {
+                    label = 'Accuracy %';
+                }
+            }
+
+            items.push({ label, value: Number(value) });
+        }
+    }
+
+    if (section.key === 'passing') {
+        const total = stats.passesTotal;
+        const accurate = stats.passAccuracy;
+        
+        if (
+            hasMeaningfulStatValue(total) &&
+            hasMeaningfulStatValue(accurate) &&
+            total > 0 &&
+            accurate <= total
+        ) {
+            const percentage = (accurate / total) * 100;
+            items.push({ label: 'Accuracy %', value: percentage });
         }
     }
 
@@ -237,51 +269,7 @@ function buildVisibleSections(
     return sections;
 }
 
-function PrimaryStatCard({
-    label,
-    value,
-    sublabel,
-    highlight,
-}: {
-    label: string;
-    value: string;
-    sublabel?: string;
-    highlight?: boolean;
-}) {
-    if (highlight) {
-        return (
-            <div className="flex flex-col items-center justify-center rounded-xl border-2 border-slate-200 bg-white p-3 text-center">
-                <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                    {label}
-                </span>
-                <span className="mt-1 text-2xl leading-none font-extrabold text-slate-800">
-                    {value}
-                </span>
-                {sublabel ? (
-                    <span className="mt-0.5 text-[10px] font-bold text-slate-400 uppercase">
-                        {sublabel}
-                    </span>
-                ) : null}
-            </div>
-        );
-    }
 
-    return (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-slate-100 bg-white p-3 text-center shadow-sm">
-            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                {label}
-            </span>
-            <span className="mt-1 text-xl leading-none font-extrabold text-slate-800">
-                {value}
-            </span>
-            {sublabel ? (
-                <span className="mt-0.5 text-[10px] font-bold text-slate-400 uppercase">
-                    {sublabel}
-                </span>
-            ) : null}
-        </div>
-    );
-}
 
 export default function MatchLineupPlayerModal({
     player,
@@ -370,45 +358,18 @@ export default function MatchLineupPlayerModal({
                             </div>
 
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                                {rating !== null && ratingStyles ? (
-                                    <div
-                                        className={cn(
-                                            'col-span-2 flex flex-col items-center justify-center rounded-xl border-2 p-4 text-center sm:col-span-1',
-                                            ratingStyles.card,
-                                        )}
-                                    >
-                                        <span
-                                            className={cn(
-                                                'text-[10px] font-bold tracking-wider uppercase opacity-80',
-                                                ratingStyles.label,
-                                            )}
-                                        >
-                                            Rating
-                                        </span>
-                                        <span
-                                            className={cn(
-                                                'mt-1 text-4xl leading-none font-extrabold',
-                                                ratingStyles.text,
-                                            )}
-                                        >
-                                            {rating.toFixed(1)}
-                                        </span>
-                                        <span
-                                            className={cn(
-                                                'mt-1 text-[10px] font-bold tracking-wide uppercase',
-                                                ratingStyles.subtext,
-                                            )}
-                                        >
-                                            {ratingLabel}
-                                        </span>
-                                    </div>
+                                {rating !== null && ratingStyles && ratingLabel !== null ? (
+                                    <RatingStatCard
+                                        rating={rating}
+                                        ratingLabel={ratingLabel}
+                                        ratingStyles={ratingStyles}
+                                    />
                                 ) : null}
 
                                 {minutes !== null ? (
                                     <PrimaryStatCard
-                                        label="Minutes"
+                                        label="Minutes played"
                                         value={String(minutes)}
-                                        sublabel="min played"
                                     />
                                 ) : null}
 
@@ -451,21 +412,15 @@ export default function MatchLineupPlayerModal({
                                                     {config.title}
                                                 </h4>
                                             </div>
-                                            <div className="flex flex-wrap gap-2">
+                                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                                 {items.map((stat) => (
-                                                    <div
+                                                    <SecondaryStatCard
                                                         key={stat.label}
-                                                        className="flex min-w-[72px] flex-col rounded-lg border border-slate-100 bg-white px-3 py-2 shadow-sm"
-                                                    >
-                                                        <span className="text-[10px] font-semibold tracking-wide text-slate-400 uppercase">
-                                                            {stat.label}
-                                                        </span>
-                                                        <span className="mt-0.5 text-base font-bold text-slate-800">
-                                                            {formatStatValue(
-                                                                stat.value,
-                                                            )}
-                                                        </span>
-                                                    </div>
+                                                        label={stat.label}
+                                                        value={formatStatValue(
+                                                            stat.value,
+                                                        )}
+                                                    />
                                                 ))}
                                             </div>
                                         </div>

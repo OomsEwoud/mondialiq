@@ -137,29 +137,33 @@ function matchesPointsState(
     match: Match,
     filter: PointsStateFilter,
 ): boolean {
-    if (mode === 'ai' || filter === 'all') {
+    if (filter === 'all') {
         return true;
     }
 
-    if (!match.userPrediction) {
+    const prediction = mode === 'ai'
+        ? match.aiPrediction
+        : match.userPrediction;
+
+    if (!prediction) {
         return false;
     }
 
     if (filter === 'points-earned') {
         return (
-            match.userPrediction.pointsAwarded &&
-            (match.userPrediction.points ?? 0) > 0
+            prediction.pointsAwarded &&
+            (prediction.points ?? 0) > 0
         );
     }
 
     if (filter === 'no-points-earned') {
         return (
-            match.userPrediction.pointsAwarded &&
-            (match.userPrediction.points ?? 0) <= 0
+            prediction.pointsAwarded &&
+            (prediction.points ?? 0) <= 0
         );
     }
 
-    return !match.userPrediction.pointsAwarded;
+    return !prediction.pointsAwarded;
 }
 
 function getConfidenceValue(mode: PredictionFilterMode, match: Match): number {
@@ -172,7 +176,7 @@ function getConfidenceValue(mode: PredictionFilterMode, match: Match): number {
         return -1;
     }
 
-    if (mode === 'mine') {
+    if (mode === 'mine' || mode === 'user') {
         return (
             {
                 low: 1,

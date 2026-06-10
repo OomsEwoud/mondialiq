@@ -20,6 +20,8 @@ interface Props {
     onCancel: () => void;
     scoreboardId?: number;
     boostsRemaining?: number | null;
+    boostsLimit?: number | null;
+    boostedConfidenceThreshold?: string | null;
 }
 
 export default function UserPredictionForm({
@@ -29,6 +31,8 @@ export default function UserPredictionForm({
     onCancel,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
+    boostedConfidenceThreshold,
 }: Props) {
     const predictionLocked = isPredictionLocked(match);
     const { data, setData, post, processing, errors, clearErrors } =
@@ -89,6 +93,15 @@ export default function UserPredictionForm({
         typeof boostsRemaining === 'number' &&
         boostsRemaining >= 0;
 
+    const numericConfidence = (conf: string) =>
+        conf === 'high' ? 100 : conf === 'medium' ? 50 : 25;
+
+    const meetsBoostThreshold =
+        !data.is_boosted ||
+        !boostedConfidenceThreshold ||
+        numericConfidence(data.confidence) >=
+            numericConfidence(boostedConfidenceThreshold);
+
     return (
         <form onSubmit={submit} className="grid gap-4">
             <PredictionScoreFields
@@ -147,13 +160,18 @@ export default function UserPredictionForm({
                             <p className="text-xs text-slate-600">
                                 {boostsRemaining === 0 && !data.is_boosted
                                     ? 'You have no boosts remaining in this leaderboard.'
-                                    : `${boostsRemaining} of ${boostsRemaining + (data.is_boosted ? 0 : 1)} boosts remaining`}
+                                    : `${boostsRemaining} of ${boostsLimit} boosts remaining`}
                             </p>
                         </div>
                     </div>
                     {errors.is_boosted && (
                         <p className="mt-2 text-xs font-medium text-rose-600">
                             {errors.is_boosted}
+                        </p>
+                    )}
+                    {!meetsBoostThreshold && (
+                        <p className="mt-2 text-xs font-medium text-amber-600">
+                            A boosted prediction requires at least <span className="uppercase">{boostedConfidenceThreshold}</span> confidence.
                         </p>
                     )}
                 </div>
@@ -172,7 +190,7 @@ export default function UserPredictionForm({
                 <Button
                     type="submit"
                     disabled={
-                        processing || predictionLocked || data.outcome === ''
+                        processing || predictionLocked || data.outcome === '' || !meetsBoostThreshold
                     }
                     className="h-11 rounded-xl bg-blue-950 px-5 font-bold text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >

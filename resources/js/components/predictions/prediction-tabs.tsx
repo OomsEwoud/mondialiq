@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
 import { predictions } from '@/routes';
 
-export type PredictionTab = 'ai' | 'mine';
+export type PredictionTab = 'ai' | 'mine' | 'user';
 
 interface Props {
     activeTab: PredictionTab;

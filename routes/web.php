@@ -6,20 +6,24 @@ use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\DeleteLeagueController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
+use App\Http\Controllers\Leagues\JoinPublicLeagueController;
 use App\Http\Controllers\Leagues\LeaveLeagueController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\RemoveAiParticipantController;
 use App\Http\Controllers\Leagues\RemoveLeagueMemberController;
 use App\Http\Controllers\Leagues\ShowLeagueController;
+use App\Http\Controllers\Leagues\ShowLeagueMemberPredictionsController;
 use App\Http\Controllers\Leagues\ShowLeagueMembersController;
 use App\Http\Controllers\Leagues\ShowLeaguePredictController;
 use App\Http\Controllers\Leagues\ShowLeagueSettingsController;
 use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
+use App\Http\Controllers\Pages\AiPredictionsController;
 use App\Http\Controllers\Pages\ContactController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
+use App\Http\Controllers\Pages\HowItWorksController;
 use App\Http\Controllers\Pages\LeaderboardsController;
 use App\Http\Controllers\Pages\MatchDetailsController;
 use App\Http\Controllers\Pages\MatchesController;
@@ -28,7 +32,9 @@ use App\Http\Controllers\Pages\PredictionDetailsController;
 use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\PrivacyController;
 use App\Http\Controllers\Pages\ScoringGuideController;
+use App\Http\Controllers\Pages\ShowUserPredictionController;
 use App\Http\Controllers\Pages\TeamDetailsController;
+use App\Http\Controllers\Pages\UserPredictionsController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
 use App\Http\Controllers\Socialite\CallbackController;
 use App\Http\Controllers\Socialite\RedirectController;
@@ -41,7 +47,9 @@ Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
 Route::get('/players/{player}', PlayerDetailsController::class)->name('players.show');
 Route::get('/groups', GroupsController::class)->name('groups');
 Route::get('/predictions', PredictionsController::class)->name('predictions');
+Route::get('/ai/predictions', AiPredictionsController::class)->name('ai.predictions');
 Route::get('/scoring', ScoringGuideController::class)->name('scoring');
+Route::get('/how-it-works', HowItWorksController::class)->name('how-it-works');
 Route::get('/contact', ContactController::class)->name('contact');
 Route::get('/privacy', PrivacyController::class)->name('privacy');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
@@ -59,9 +67,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/leagues/{scoreboard}', ShowLeagueController::class)->name('leagues.show');
     Route::get('/leagues/{scoreboard}/settings', ShowLeagueSettingsController::class)->name('leagues.settings');
     Route::get('/leagues/{scoreboard}/members', ShowLeagueMembersController::class)->name('leagues.members');
+    Route::get('/leagues/{scoreboard}/members/{user}/predictions', ShowLeagueMemberPredictionsController::class)->name('leagues.member.predictions');
     Route::get('/leagues/{scoreboard}/predict', ShowLeaguePredictController::class)->name('leagues.predict');
     Route::post('/leagues', StoreLeagueController::class)->name('leagues.store');
     Route::post('/leagues/join', JoinLeagueController::class)->name('leagues.join.store');
+    Route::post('/leagues/{scoreboard}/join-public', JoinPublicLeagueController::class)->name('leagues.join-public');
 
     Route::get('/predictions/{fixture}/ai', PredictionDetailsController::class)
         ->defaults('predictionMode', 'ai')
@@ -69,6 +79,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/predictions/{fixture}/my-prediction', PredictionDetailsController::class)
         ->defaults('predictionMode', 'mine')
         ->name('predictions.mine.show');
+    Route::get('/predictions/{fixture}/user/{user}', ShowUserPredictionController::class)
+        ->name('predictions.user.show');
+
+    Route::get('/users/{user}/predictions', UserPredictionsController::class)
+        ->name('users.predictions');
 
     Route::post('/matches/{fixture}/prediction', StoreMatchPredictionController::class)
         ->middleware('throttle:prediction-store')

@@ -6,19 +6,24 @@ import UserPredictionAiComparisonCard from '@/components/predictions/user-predic
 import UserPredictionHero from '@/components/predictions/user-prediction-hero';
 import UserPredictionSummaryCards from '@/components/predictions/user-prediction-summary-cards';
 import type { Match } from '@/types/match';
-import type { UserPredictionScoringPreview } from '@/types/prediction';
+import type {
+    PredictionOwner,
+    UserPredictionScoringPreview,
+} from '@/types/prediction';
 import { predictionScoreLabel } from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
     scoringPreview: UserPredictionScoringPreview | null;
     scoringGuideHref: string;
+    owner: PredictionOwner;
 }
 
 export default function UserPredictionDetail({
     match,
     scoringPreview,
     scoringGuideHref,
+    owner,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const hasAiComparison = Boolean(match.hasAiPrediction);
@@ -29,12 +34,13 @@ export default function UserPredictionDetail({
             <div className="space-y-5">
                 <UserPredictionHero
                     match={match}
+                    owner={owner}
                     onEdit={() => setPredictionOpen(true)}
                 />
                 <UserPredictedScoreCard
                     match={match}
                     score={score}
-                    scoringPreview={scoringPreview}
+                    owner={owner}
                 />
                 <UserPredictionSummaryCards
                     match={match}
@@ -52,6 +58,7 @@ export default function UserPredictionDetail({
                     homeTeamName={match.homeTeam}
                     awayTeamName={match.awayTeam}
                     scoringGuideHref={scoringGuideHref}
+                    owner={owner}
                 />
 
                 {hasAiComparison && (
@@ -59,7 +66,7 @@ export default function UserPredictionDetail({
                 )}
             </div>
 
-            {match.userPrediction && (
+            {owner.canEdit && match.userPrediction && (
                 <UserPredictionModal
                     match={match}
                     open={predictionOpen}

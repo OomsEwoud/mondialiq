@@ -4,7 +4,6 @@ namespace App\Http\Requests\Predictions;
 
 use App\Models\Scoreboard;
 use App\Models\ScoreboardPrediction;
-use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -39,12 +38,24 @@ class StoreMatchPredictionRequest extends FormRequest
     private function validatePredictionRules(Validator $validator): void
     {
         $fixture = $this->route('fixture');
+        $user = $this->user();
 
-        if ($fixture !== null && CarbonImmutable::parse($fixture->kickoffAt())->isPast()) {
-            $validator->errors()->add(
-                'outcome',
-                'Predictions are closed for matches that have already started.',
-            );
+        if ($fixture !== null) {
+            $prediction = $fixture->predictions()->where('user_id', $user->id)->first();
+
+            if ($prediction) {
+                if ($user->cannot('update', $prediction)) {
+                    $validator->errors()->add(
+                        'outcome',
+                        'This prediction can no longer be edited.',
+                    );
+                }
+            } elseif ($fixture->hasStarted()) {
+                $validator->errors()->add(
+                    'outcome',
+                    'Predictions are closed for matches that have already started.',
+                );
+            }
         }
 
         if (! $validator->errors()->has('home_score') && ! $validator->errors()->has('away_score')) {
@@ -75,7 +86,7 @@ class StoreMatchPredictionRequest extends FormRequest
             return;
         }
 
-        if (! ($scoreboard->scoringRule('boosted_predictions_enabled') ?? false)) {
+        if (! $scoreboard->boostedPredictionsEnabled()) {
             $validator->errors()->add(
                 'is_boosted',
                 'Boosted predictions are not enabled for this leaderboard.',
@@ -84,13 +95,13 @@ class StoreMatchPredictionRequest extends FormRequest
             return;
         }
 
-        $userId = (int) $this->user()->id;
+        $user = $this->user();
         $fixture = $this->route('fixture');
 
         $alreadyBoosted = ScoreboardPrediction::query()
             ->where('scoreboard_id', $scoreboardId)
             ->whereHas('prediction', fn ($q) => $q
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->where('fixture_id', $fixture?->id)
             )
             ->where('is_boosted', true)
@@ -100,20 +111,37 @@ class StoreMatchPredictionRequest extends FormRequest
             return;
         }
 
-        $boostedCount = ScoreboardPrediction::query()
-            ->where('scoreboard_id', $scoreboardId)
-            ->whereHas('prediction', fn ($q) => $q->where('user_id', $userId))
-            ->where('is_boosted', true)
-            ->count();
+        $remainingBoosts = $scoreboard->remainingBoostsFor($user);
 
-        $limit = (int) $scoreboard->scoringRule('boosted_predictions_limit', 3);
-
-        if ($boostedCount >= $limit) {
+        if ($remainingBoosts <= 0) {
+            $limit = $scoreboard->boostedPredictionsLimit();
             $validator->errors()->add(
                 'is_boosted',
                 "You have already used all {$limit} boosted predictions in this leaderboard.",
             );
         }
+
+        $thresholdString = $scoreboard->boostedConfidenceThreshold();
+        $threshold = $this->numericConfidence($thresholdString);
+        $userConfidenceString = $this->string('confidence')->toString();
+        $userConfidence = $this->numericConfidence($userConfidenceString);
+
+        if ($userConfidence < $threshold) {
+            $validator->errors()->add(
+                'confidence',
+                "A boosted prediction requires at least {$thresholdString} confidence.",
+            );
+        }
+    }
+
+    private function numericConfidence(?string $confidence): int
+    {
+        return match ($confidence) {
+            'high' => 100,
+            'medium' => 50,
+            'low' => 25,
+            default => 0,
+        };
     }
 
     private function validateScoreMatchesOutcome(Validator $validator): void

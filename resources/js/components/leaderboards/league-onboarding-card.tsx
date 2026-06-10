@@ -8,24 +8,30 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { cn } from '@/lib/utils';
 import { matches, predictions } from '@/routes';
+import type { LeagueAccentColor } from '@/types/league';
+import { getLeagueThemePalette } from '@/utils/league-branding';
 
 type Props = {
     leagueName: string;
     membersCount: number;
     currentUserPoints: number;
+    accentColor: LeagueAccentColor;
 };
 
 export default function LeagueOnboardingCard({
     leagueName,
     membersCount,
     currentUserPoints,
+    accentColor,
 }: Props) {
     const isNewLeague = membersCount <= 3;
     const needsFirstPrediction = currentUserPoints === 0;
     const description = isNewLeague
         ? `${leagueName} is still a fresh group. A few quick steps will make it feel competitive much faster.`
         : 'You are in the group. Now turn it into an active race.';
+    const theme = getLeagueThemePalette(accentColor);
 
     if (!isNewLeague && !needsFirstPrediction) {
         return null;
@@ -38,7 +44,13 @@ export default function LeagueOnboardingCard({
     };
 
     return (
-        <Card className="gap-0 rounded-2xl border-cyan-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 py-0 shadow-sm">
+        <Card
+            className={cn(
+                'gap-0 rounded-2xl border py-0 shadow-sm',
+                theme.softBorder,
+                theme.softBg,
+            )}
+        >
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
                 <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
                     What next?
@@ -49,7 +61,12 @@ export default function LeagueOnboardingCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-600">
+                    <div
+                        className={cn(
+                            'flex items-center gap-2',
+                            theme.softText,
+                        )}
+                    >
                         <Share2 className="size-4" />
                         <p className="text-xs font-bold tracking-wide uppercase">
                             Step 1
@@ -66,7 +83,10 @@ export default function LeagueOnboardingCard({
                         type="button"
                         variant="outline"
                         onClick={openInviteTools}
-                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300 sm:w-auto"
+                        className={cn(
+                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            theme.buttonRing,
+                        )}
                     >
                         Open invite tools
                         <ArrowRight className="size-4" />
@@ -74,7 +94,12 @@ export default function LeagueOnboardingCard({
                 </div>
 
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-600">
+                    <div
+                        className={cn(
+                            'flex items-center gap-2',
+                            theme.softText,
+                        )}
+                    >
                         <Target className="size-4" />
                         <p className="text-xs font-bold tracking-wide uppercase">
                             Step 2
@@ -89,7 +114,11 @@ export default function LeagueOnboardingCard({
                     </p>
                     <Button
                         asChild
-                        className="mt-3 h-10 w-full rounded-xl bg-slate-900 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 sm:w-auto"
+                        className={cn(
+                            'mt-3 h-10 w-full rounded-xl px-4 font-bold text-white sm:w-auto',
+                            theme.primaryButton,
+                            theme.buttonRing,
+                        )}
                     >
                         <Link href={matches.url()}>
                             Explore matches
@@ -99,7 +128,12 @@ export default function LeagueOnboardingCard({
                 </div>
 
                 <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
-                    <div className="flex items-center gap-2 text-cyan-600">
+                    <div
+                        className={cn(
+                            'flex items-center gap-2',
+                            theme.softText,
+                        )}
+                    >
                         <Trophy className="size-4" />
                         <p className="text-xs font-bold tracking-wide uppercase">
                             Step 3
@@ -115,7 +149,10 @@ export default function LeagueOnboardingCard({
                     <Button
                         asChild
                         variant="outline"
-                        className="mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300 sm:w-auto"
+                        className={cn(
+                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            theme.buttonRing,
+                        )}
                     >
                         <Link href={predictions.url()}>
                             Open my predictions

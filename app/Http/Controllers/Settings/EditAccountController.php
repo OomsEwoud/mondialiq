@@ -18,6 +18,7 @@ class EditAccountController extends Controller
             'status' => $request->session()->get('status'),
             'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
             'accountUser' => $this->accountUser($request),
+            'predictionPreferences' => $this->predictionPreferences($request),
         ];
 
         if (Features::canManageTwoFactorAuthentication()) {
@@ -50,6 +51,21 @@ class EditAccountController extends Controller
             'social_provider' => $user->getAttribute('social_provider'),
             'has_password' => $hasPassword,
             'is_sso_only' => ! $hasPassword && filled($user->getAttribute('social_provider')),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function predictionPreferences(Request $request): array
+    {
+        $preference = $request->user()->userPreference();
+
+        return [
+            'predictions_visibility' => $preference->predictions_visibility,
+            'default_prediction_visibility' => $preference->default_prediction_visibility,
+            'show_on_leaderboards' => $preference->show_on_leaderboards,
+            'allow_group_visibility' => $preference->allow_group_visibility,
         ];
     }
 }

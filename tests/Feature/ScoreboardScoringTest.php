@@ -75,7 +75,7 @@ test('a scoreboard has default scoring rules', function () {
         ->and($scoreboard->scoringRule('correct_away_goals_points'))->toBe(1)
         ->and($scoreboard->scoringRule('boosted_predictions_enabled'))->toBe(false)
         ->and($scoreboard->scoringRule('boosted_predictions_limit'))->toBe(3)
-        ->and($scoreboard->scoringRule('boosted_confidence_threshold'))->toBe(70)
+        ->and($scoreboard->scoringRule('boosted_confidence_threshold'))->toBe('low')
         ->and($scoreboard->scoringRule('boosted_prediction_bonus_points'))->toBe(2);
 });
 
@@ -96,7 +96,6 @@ test('an owner can update scoring rules', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 15,
                 'correct_result_points' => 7,
@@ -105,7 +104,7 @@ test('an owner can update scoring rules', function () {
                 'correct_away_goals_points' => 2,
                 'boosted_predictions_enabled' => false,
                 'boosted_predictions_limit' => 3,
-                'boosted_confidence_threshold' => 70,
+                'boosted_confidence_threshold' => 'medium',
                 'boosted_prediction_bonus_points' => 2,
             ],
         ])
@@ -134,7 +133,6 @@ test('an owner can update boosted prediction settings', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 10,
                 'correct_result_points' => 5,
@@ -143,7 +141,7 @@ test('an owner can update boosted prediction settings', function () {
                 'correct_away_goals_points' => 1,
                 'boosted_predictions_enabled' => true,
                 'boosted_predictions_limit' => 5,
-                'boosted_confidence_threshold' => 80,
+                'boosted_confidence_threshold' => 'high',
                 'boosted_prediction_bonus_points' => 3,
             ],
         ])
@@ -153,7 +151,7 @@ test('an owner can update boosted prediction settings', function () {
 
     expect($scoreboard->scoringRule('boosted_predictions_enabled'))->toBe(true)
         ->and($scoreboard->scoringRule('boosted_predictions_limit'))->toBe(5)
-        ->and($scoreboard->scoringRule('boosted_confidence_threshold'))->toBe(80)
+        ->and($scoreboard->scoringRule('boosted_confidence_threshold'))->toBe('high')
         ->and($scoreboard->scoringRule('boosted_prediction_bonus_points'))->toBe(3);
 });
 
@@ -176,7 +174,6 @@ test('a normal member cannot update scoring or boosted settings', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 99,
                 'correct_result_points' => 5,
@@ -185,7 +182,7 @@ test('a normal member cannot update scoring or boosted settings', function () {
                 'correct_away_goals_points' => 1,
                 'boosted_predictions_enabled' => true,
                 'boosted_predictions_limit' => 3,
-                'boosted_confidence_threshold' => 70,
+                'boosted_confidence_threshold' => 'medium',
                 'boosted_prediction_bonus_points' => 2,
             ],
         ])
@@ -271,7 +268,7 @@ test('boosted predictions can be enabled and disabled per leaderboard', function
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 2,
         ],
     ]);
@@ -287,7 +284,7 @@ test('boosted predictions can be enabled and disabled per leaderboard', function
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => false,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 2,
         ],
     ]);
@@ -309,7 +306,7 @@ test('user cannot exceed boosted prediction limit', function () {
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 2,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 2,
         ],
     ]);
@@ -360,7 +357,7 @@ test('boosted bonus is applied when prediction is correct and confidence is abov
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);
@@ -407,7 +404,7 @@ test('boosted bonus is not applied to wrong predictions', function () {
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);
@@ -454,7 +451,7 @@ test('boosted bonus is not applied when confidence is below threshold', function
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);
@@ -501,7 +498,7 @@ test('boosted bonus is not applied when prediction is not marked as boosted', fu
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);
@@ -548,7 +545,7 @@ test('boosted bonus is not applied when boosted predictions are disabled', funct
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => false,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 4,
         ],
     ]);
@@ -617,7 +614,7 @@ test('user prediction service stores boost status for a scoreboard', function ()
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 2,
         ],
     ]);
@@ -629,6 +626,7 @@ test('user prediction service stores boost status for a scoreboard', function ()
             'outcome' => 'home',
             'home_score' => 2,
             'away_score' => 1,
+            'confidence' => 'medium',
             'scoreboard_id' => $scoreboard->id,
             'is_boosted' => true,
         ])
@@ -665,7 +663,7 @@ test('editing a prediction preserves existing boost status', function () {
             'correct_away_goals_points' => 1,
             'boosted_predictions_enabled' => true,
             'boosted_predictions_limit' => 3,
-            'boosted_confidence_threshold' => 70,
+            'boosted_confidence_threshold' => 'medium',
             'boosted_prediction_bonus_points' => 2,
         ],
     ]);
@@ -692,6 +690,7 @@ test('editing a prediction preserves existing boost status', function () {
             'outcome' => 'home',
             'home_score' => 2,
             'away_score' => 1,
+            'confidence' => 'medium',
             'scoreboard_id' => $scoreboard->id,
             'is_boosted' => true,
         ])

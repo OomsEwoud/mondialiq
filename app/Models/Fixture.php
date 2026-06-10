@@ -7,6 +7,7 @@ use App\Models\Concerns\HasFixtureStatus;
 use App\Models\Concerns\HasFixtureSync;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -193,5 +194,52 @@ class Fixture extends Model
         }
 
         return $kickoffAt->toIso8601String();
+    }
+
+    public function hasStarted(): bool
+    {
+        return CarbonImmutable::parse($this->kickoffAt())->isPast();
+    }
+
+    public function loadMatchDetails(?User $user = null): self
+    {
+        $this->load([
+            'homeTeam',
+            'awayTeam',
+            'venue.country',
+            'referee',
+            'fixtureEvents.team',
+            'fixtureEvents.player',
+            'fixtureEvents.assist',
+            'fixtureStats.team',
+            'lineups',
+            'fixturePlayers.player',
+            'playerFixtureStats',
+            'aiPrediction',
+        ]);
+
+        if ($user) {
+            $this->load([
+                'userPredictions' => fn ($query) => $query
+                    ->whereBelongsTo($user)
+                    ->with('winner'),
+            ]);
+        }
+
+        return $this;
+    }
+
+    public function scopeNotFriendly(Builder $query): Builder
+    {
+        return $query->whereHas('league', function (Builder $q) {
+            $q->where('name', 'not like', '%Friendly%')
+                ->where('name', 'not like', '%Friendlies%')
+                ->where('type', '!=', 'Friendly');
+        });
+    }
+
+    public function scopeWorldCupDemoEligible(Builder $query): Builder
+    {
+        return $query->notFriendly();
     }
 }

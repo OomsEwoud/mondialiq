@@ -13,6 +13,8 @@ interface Props {
     fixtures: Match[];
     scoreboardId: number;
     boostsRemaining: number | null;
+    boostsLimit: number | null;
+    boostedConfidenceThreshold?: string | null;
     boostedEnabled: boolean;
 }
 
@@ -20,6 +22,8 @@ export default function LeagueUpcomingMatchesCard({
     fixtures,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
+    boostedConfidenceThreshold,
     boostedEnabled,
 }: Props) {
     const [openModalId, setOpenModalId] = useState<number | null>(null);
@@ -125,6 +129,8 @@ export default function LeagueUpcomingMatchesCard({
                     }
                     scoreboardId={scoreboardId}
                     boostsRemaining={boostsRemaining}
+                    boostsLimit={boostsLimit}
+                    boostedConfidenceThreshold={boostedConfidenceThreshold}
                 />
             )}
         </Card>

@@ -1,8 +1,7 @@
 import { cn } from '@/lib/utils';
-import type { LeagueAccentColor, LeagueCoverStyle } from '@/types/league';
+import type { LeagueAccentColor } from '@/types/league';
 
-const defaultAccentColor: LeagueAccentColor = 'cyan';
-const defaultCoverStyle: LeagueCoverStyle = 'stadium';
+const defaultAccentColor: LeagueAccentColor = 'amber';
 
 export const leagueIconOptions = [
     { value: '🏆', label: 'Trophy' },
@@ -13,124 +12,209 @@ export const leagueIconOptions = [
     { value: '🎯', label: 'Target' },
 ] as const;
 
-export const leagueAccentOptions: Array<{
-    value: LeagueAccentColor;
-    label: string;
-    dotClassName: string;
-}> = [
-    { value: 'cyan', label: 'Cyan', dotClassName: 'bg-cyan-400' },
-    { value: 'emerald', label: 'Emerald', dotClassName: 'bg-emerald-400' },
-    { value: 'amber', label: 'Amber', dotClassName: 'bg-amber-400' },
-    { value: 'rose', label: 'Rose', dotClassName: 'bg-rose-400' },
-    { value: 'violet', label: 'Violet', dotClassName: 'bg-violet-400' },
-    { value: 'blue', label: 'Blue', dotClassName: 'bg-blue-400' },
-] as const;
+export interface LeagueThemePalette {
+    banner: string;
+    bannerRing: string;
+    accentText: string;
+    darkAccent: string;
+    iconColor: string;
+    badgeBorder: string;
+    badgeBg: string;
+    badgeText: string;
+    primaryButton: string;
+    secondaryButton: string;
+    softBg: string;
+    softBorder: string;
+    softText: string;
+    rankFirst: string;
+    currentUserHighlight: string;
+    buttonRing: string;
+    inviteIcon: string;
+    link: string;
+}
 
-export const leagueCoverOptions: Array<{
-    value: LeagueCoverStyle;
-    label: string;
-    description: string;
-}> = [
-    {
-        value: 'stadium',
-        label: 'Stadium',
-        description: 'Bright matchday energy',
-    },
-    {
-        value: 'spotlight',
-        label: 'Spotlight',
-        description: 'Premium broadcast feel',
-    },
-    {
-        value: 'pitch',
-        label: 'Pitch',
-        description: 'Fresh tournament greens',
-    },
-    {
-        value: 'night',
-        label: 'Night',
-        description: 'Big game under lights',
-    },
-] as const;
-
-const accentPalettes: Record<
-    LeagueAccentColor,
-    {
-        soft: string;
-        softText: string;
-        ring: string;
-        badge: string;
-        button: string;
-    }
-> = {
-    cyan: {
-        soft: 'bg-cyan-50',
-        softText: 'text-cyan-700',
-        ring: 'ring-cyan-200',
-        badge: 'border-cyan-200 bg-cyan-50 text-cyan-900',
-        button: 'border-cyan-200 text-cyan-900 hover:bg-cyan-50',
-    },
-    emerald: {
-        soft: 'bg-emerald-50',
-        softText: 'text-emerald-700',
-        ring: 'ring-emerald-200',
-        badge: 'border-emerald-200 bg-emerald-50 text-emerald-900',
-        button: 'border-emerald-200 text-emerald-900 hover:bg-emerald-50',
-    },
+export const leagueThemePalettes: Record<LeagueAccentColor, LeagueThemePalette> = {
     amber: {
-        soft: 'bg-amber-50',
-        softText: 'text-amber-700',
-        ring: 'ring-amber-200',
-        badge: 'border-amber-200 bg-amber-50 text-amber-900',
-        button: 'border-amber-200 text-amber-900 hover:bg-amber-50',
-    },
-    rose: {
-        soft: 'bg-rose-50',
-        softText: 'text-rose-700',
-        ring: 'ring-rose-200',
-        badge: 'border-rose-200 bg-rose-50 text-rose-900',
-        button: 'border-rose-200 text-rose-900 hover:bg-rose-50',
-    },
-    violet: {
-        soft: 'bg-violet-50',
-        softText: 'text-violet-700',
-        ring: 'ring-violet-200',
-        badge: 'border-violet-200 bg-violet-50 text-violet-900',
-        button: 'border-violet-200 text-violet-900 hover:bg-violet-50',
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#78350f_45%,_#d97706_100%)]',
+        bannerRing: 'ring-amber-500/20',
+        accentText: 'text-amber-300',
+        darkAccent: 'text-amber-800',
+        iconColor: 'text-amber-300',
+        badgeBorder: 'border-amber-300/20',
+        badgeBg: 'bg-amber-950/30',
+        badgeText: 'text-amber-100',
+        primaryButton: 'bg-amber-600 hover:bg-amber-500 text-white',
+        secondaryButton: 'border-amber-300/40 text-amber-50 hover:bg-amber-900/25',
+        softBg: 'bg-amber-50',
+        softBorder: 'border-amber-200',
+        softText: 'text-amber-800',
+        rankFirst: 'border-amber-300 bg-amber-500 text-white',
+        currentUserHighlight: 'border-amber-200 bg-amber-50/70',
+        buttonRing: 'ring-amber-600',
+        inviteIcon: 'bg-amber-100 text-amber-700',
+        link: 'text-amber-700 hover:text-amber-800',
     },
     blue: {
-        soft: 'bg-blue-50',
-        softText: 'text-blue-700',
-        ring: 'ring-blue-200',
-        badge: 'border-blue-200 bg-blue-50 text-blue-900',
-        button: 'border-blue-200 text-blue-900 hover:bg-blue-50',
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#1e3a8a_45%,_#2563eb_100%)]',
+        bannerRing: 'ring-blue-500/20',
+        accentText: 'text-blue-300',
+        darkAccent: 'text-blue-700',
+        iconColor: 'text-blue-300',
+        badgeBorder: 'border-blue-300/20',
+        badgeBg: 'bg-blue-950/30',
+        badgeText: 'text-blue-100',
+        primaryButton: 'bg-blue-600 hover:bg-blue-500 text-white',
+        secondaryButton: 'border-blue-300/40 text-blue-50 hover:bg-blue-900/25',
+        softBg: 'bg-blue-50',
+        softBorder: 'border-blue-200',
+        softText: 'text-blue-800',
+        rankFirst: 'border-blue-300 bg-blue-600 text-white',
+        currentUserHighlight: 'border-blue-200 bg-blue-50/70',
+        buttonRing: 'ring-blue-600',
+        inviteIcon: 'bg-blue-100 text-blue-700',
+        link: 'text-blue-700 hover:text-blue-800',
+    },
+    violet: {
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#4c1d95_45%,_#7c3aed_100%)]',
+        bannerRing: 'ring-violet-500/20',
+        accentText: 'text-violet-300',
+        darkAccent: 'text-violet-700',
+        iconColor: 'text-violet-300',
+        badgeBorder: 'border-violet-300/20',
+        badgeBg: 'bg-violet-950/30',
+        badgeText: 'text-violet-100',
+        primaryButton: 'bg-violet-600 hover:bg-violet-500 text-white',
+        secondaryButton: 'border-violet-300/40 text-violet-50 hover:bg-violet-900/25',
+        softBg: 'bg-violet-50',
+        softBorder: 'border-violet-200',
+        softText: 'text-violet-800',
+        rankFirst: 'border-violet-300 bg-violet-600 text-white',
+        currentUserHighlight: 'border-violet-200 bg-violet-50/70',
+        buttonRing: 'ring-violet-600',
+        inviteIcon: 'bg-violet-100 text-violet-700',
+        link: 'text-violet-700 hover:text-violet-800',
+    },
+    emerald: {
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#064e3b_45%,_#059669_100%)]',
+        bannerRing: 'ring-emerald-500/20',
+        accentText: 'text-emerald-300',
+        darkAccent: 'text-emerald-700',
+        iconColor: 'text-emerald-300',
+        badgeBorder: 'border-emerald-300/20',
+        badgeBg: 'bg-emerald-950/30',
+        badgeText: 'text-emerald-100',
+        primaryButton: 'bg-emerald-600 hover:bg-emerald-500 text-white',
+        secondaryButton: 'border-emerald-300/40 text-emerald-50 hover:bg-emerald-900/25',
+        softBg: 'bg-emerald-50',
+        softBorder: 'border-emerald-200',
+        softText: 'text-emerald-800',
+        rankFirst: 'border-emerald-300 bg-emerald-600 text-white',
+        currentUserHighlight: 'border-emerald-200 bg-emerald-50/70',
+        buttonRing: 'ring-emerald-600',
+        inviteIcon: 'bg-emerald-100 text-emerald-700',
+        link: 'text-emerald-700 hover:text-emerald-800',
+    },
+    rose: {
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#881337_45%,_#be123c_100%)]',
+        bannerRing: 'ring-rose-500/20',
+        accentText: 'text-rose-300',
+        darkAccent: 'text-rose-800',
+        iconColor: 'text-rose-300',
+        badgeBorder: 'border-rose-300/20',
+        badgeBg: 'bg-rose-950/30',
+        badgeText: 'text-rose-100',
+        primaryButton: 'bg-rose-700 hover:bg-rose-600 text-white',
+        secondaryButton: 'border-rose-300/40 text-rose-50 hover:bg-rose-900/25',
+        softBg: 'bg-rose-50',
+        softBorder: 'border-rose-200',
+        softText: 'text-rose-900',
+        rankFirst: 'border-rose-300 bg-rose-700 text-white',
+        currentUserHighlight: 'border-rose-200 bg-rose-50/70',
+        buttonRing: 'ring-rose-700',
+        inviteIcon: 'bg-rose-100 text-rose-800',
+        link: 'text-rose-800 hover:text-rose-900',
+    },
+    cyan: {
+        banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#042f2e_45%,_#0f766e_100%)]',
+        bannerRing: 'ring-teal-500/20',
+        accentText: 'text-teal-300',
+        darkAccent: 'text-teal-800',
+        iconColor: 'text-teal-300',
+        badgeBorder: 'border-teal-300/20',
+        badgeBg: 'bg-teal-950/30',
+        badgeText: 'text-teal-100',
+        primaryButton: 'bg-teal-700 hover:bg-teal-600 text-white',
+        secondaryButton: 'border-teal-300/40 text-teal-50 hover:bg-teal-900/25',
+        softBg: 'bg-teal-50',
+        softBorder: 'border-teal-200',
+        softText: 'text-teal-900',
+        rankFirst: 'border-teal-300 bg-teal-700 text-white',
+        currentUserHighlight: 'border-teal-200 bg-teal-50/70',
+        buttonRing: 'ring-teal-700',
+        inviteIcon: 'bg-teal-100 text-teal-800',
+        link: 'text-teal-800 hover:text-teal-900',
     },
 };
 
-const coverClasses: Record<LeagueCoverStyle, string> = {
-    stadium:
-        'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.95),_rgba(255,255,255,0.5)_26%,_transparent_60%),linear-gradient(135deg,_#082f49_0%,_#0f766e_45%,_#38bdf8_100%)]',
-    spotlight:
-        'bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(255,255,255,0.1)_34%,_transparent_64%),linear-gradient(135deg,_#1e293b_0%,_#312e81_48%,_#0f766e_100%)]',
-    pitch: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.85),_rgba(255,255,255,0.08)_28%,_transparent_60%),linear-gradient(135deg,_#14532d_0%,_#15803d_46%,_#65a30d_100%)]',
-    night: 'bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.75),_rgba(255,255,255,0.08)_24%,_transparent_58%),linear-gradient(135deg,_#0f172a_0%,_#1d4ed8_42%,_#0f766e_100%)]',
-};
+export const leagueThemeOptions = [
+    {
+        value: 'amber',
+        title: 'Gold',
+        subtitle: 'World Cup',
+        description: 'Premium trophy feel.',
+        previewClassName: leagueThemePalettes.amber.banner,
+    },
+    {
+        value: 'blue',
+        title: 'Royal Blue',
+        subtitle: 'Classic',
+        description: 'Clean matchday look.',
+        previewClassName: leagueThemePalettes.blue.banner,
+    },
+    {
+        value: 'violet',
+        title: 'Purple',
+        subtitle: 'Night',
+        description: 'Bold night-match energy.',
+        previewClassName: leagueThemePalettes.violet.banner,
+    },
+    {
+        value: 'emerald',
+        title: 'Emerald',
+        subtitle: 'Pitch',
+        description: 'Fresh football pitch tones.',
+        previewClassName: leagueThemePalettes.emerald.banner,
+    },
+    {
+        value: 'rose',
+        title: 'Burgundy',
+        subtitle: 'Rivalry',
+        description: 'Intense rivalry styling.',
+        previewClassName: leagueThemePalettes.rose.banner,
+    },
+    {
+        value: 'cyan',
+        title: 'Teal',
+        subtitle: 'Stadium',
+        description: 'Modern stadium contrast.',
+        previewClassName: leagueThemePalettes.cyan.banner,
+    },
+] as const;
 
-export function getLeagueBrandPalette(accentColor: LeagueAccentColor) {
-    return accentPalettes[accentColor] ?? accentPalettes[defaultAccentColor];
+export function getLeagueThemePalette(accentColor: LeagueAccentColor | null | undefined): LeagueThemePalette {
+    if (!accentColor) {
+        return leagueThemePalettes[defaultAccentColor];
+    }
+
+    return leagueThemePalettes[accentColor] ?? leagueThemePalettes[defaultAccentColor];
 }
 
-export function getLeagueCoverClass(coverStyle: LeagueCoverStyle) {
-    return coverClasses[coverStyle] ?? coverClasses[defaultCoverStyle];
-}
+export function getLeagueThemeBannerClass(accentColor: LeagueAccentColor | null | undefined) {
+    const palette = getLeagueThemePalette(accentColor);
 
-export function getLeagueBrandBannerClass(
-    accentColor: LeagueAccentColor,
-    coverStyle: LeagueCoverStyle,
-) {
     return cn(
         'relative overflow-hidden rounded-2xl text-white shadow-sm ring-1',
-        getLeagueCoverClass(coverStyle),
-        getLeagueBrandPalette(accentColor).ring,
+        palette.banner,
+        palette.bannerRing,
     );
 }

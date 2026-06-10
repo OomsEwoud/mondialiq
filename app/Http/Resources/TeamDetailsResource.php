@@ -54,7 +54,7 @@ class TeamDetailsResource extends JsonResource
 
     private function activePlayerAttributes(): Collection
     {
-        return $this->players
+        return $this->activePlayers
             ->values()
             ->map(fn (Player $player) => $this->playerAttributes($player));
     }

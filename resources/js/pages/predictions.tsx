@@ -39,6 +39,7 @@ export default function Predictions({
     >({
         ai: defaultFilters,
         mine: defaultFilters,
+        user: defaultFilters,
     });
     const filters = filtersByMode[mode];
 
@@ -99,7 +100,11 @@ export default function Predictions({
             },
         }));
 
-        if (key === 'date' || key === 'status' || key === 'pointsState') {
+        if (
+            key === 'date' ||
+            key === 'status' ||
+            key === 'pointsState'
+        ) {
             const nextFilters = {
                 ...filters,
                 [key]: value,
@@ -179,7 +184,6 @@ export default function Predictions({
                 <PredictionInfoGrid />
                 <PredictionTabs activeTab={mode} />
                 <PredictionsFilterCard
-                    mode={mode}
                     filters={filters}
                     hasActiveFilters={hasActiveFilters}
                     onChange={updateFilter}

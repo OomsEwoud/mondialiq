@@ -23,6 +23,8 @@ interface Props {
     onOpenChange: (open: boolean) => void;
     scoreboardId?: number;
     boostsRemaining?: number | null;
+    boostsLimit?: number | null;
+    boostedConfidenceThreshold?: string | null;
 }
 
 export default function UserPredictionModal({
@@ -31,6 +33,8 @@ export default function UserPredictionModal({
     onOpenChange,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
+    boostedConfidenceThreshold,
 }: Props) {
     const auth = usePage<{ auth: Auth }>().props.auth;
     const isEditing = Boolean(match.userPrediction);
@@ -109,6 +113,8 @@ export default function UserPredictionModal({
                                 onCancel={closeModal}
                                 scoreboardId={scoreboardId}
                                 boostsRemaining={boostsRemaining}
+                                boostsLimit={boostsLimit}
+                                boostedConfidenceThreshold={boostedConfidenceThreshold}
                             />
                         )}
                     </div>

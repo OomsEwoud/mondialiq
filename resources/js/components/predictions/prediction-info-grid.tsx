@@ -5,7 +5,7 @@ import {
     ChevronDown,
     ChevronUp,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 const infoItems = [
@@ -35,26 +35,19 @@ const infoItems = [
 ];
 
 export default function PredictionInfoGrid() {
-    const [isExpanded, setIsExpanded] = useState(() => {
-        if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('predictions-info-expanded');
+    const [isExpanded, setIsExpanded] = useState(false);
 
-            return saved !== null ? saved === 'true' : true;
+    useEffect(() => {
+        const saved = localStorage.getItem('predictions-info-expanded');
+        if (saved !== null) {
+            setIsExpanded(saved === 'true');
         }
-
-        return true;
-    });
+    }, []);
 
     const toggleExpand = () => {
         const nextState = !isExpanded;
         setIsExpanded(nextState);
-
-        if (typeof window !== 'undefined') {
-            localStorage.setItem(
-                'predictions-info-expanded',
-                String(nextState),
-            );
-        }
+        localStorage.setItem('predictions-info-expanded', String(nextState));
     };
 
     return (

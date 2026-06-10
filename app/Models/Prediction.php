@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'user_id',
     'winner_id',
     'source',
+    'visibility',
     'total_goals',
     'home_goals',
     'away_goals',
@@ -32,6 +33,7 @@ class Prediction extends Model
     {
         return [
             'source' => PredictionTypes::class,
+            'visibility' => 'string',
             'total_goals' => 'float',
             'home_goals' => 'float',
             'away_goals' => 'float',
@@ -113,5 +115,65 @@ class Prediction extends Model
     public function scoreboardPredictions(): HasMany
     {
         return $this->hasMany(ScoreboardPrediction::class);
+    }
+
+    public function scopeVisibleFor(Builder $query, ?User $viewer): Builder
+    {
+        return $query->where(function (Builder $query) use ($viewer) {
+            $query->whereNull('visibility')
+                ->orWhere('visibility', 'public');
+
+            if ($viewer !== null) {
+                $query->orWhere('user_id', $viewer->id);
+            }
+        });
+    }
+
+    public function scopePrivateOnly(Builder $query): Builder
+    {
+        return $query->where('visibility', 'private');
+    }
+
+    public function isPrivate(): bool
+    {
+        return $this->visibility === 'private';
+    }
+
+    public function isVisibleTo(?User $viewer): bool
+    {
+        if (! $this->isPrivate()) {
+            return true;
+        }
+
+        if ($viewer === null) {
+            return false;
+        }
+
+        return $this->user_id === $viewer->id;
+    }
+
+    public function isEditable(): bool
+    {
+        if ($this->hasAwardedPoints()) {
+            return false;
+        }
+
+        if ($this->fixture && $this->fixture->hasStarted()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function scopeExcludeFriendlies(Builder $query): Builder
+    {
+        return $query->whereHas('fixture', function (Builder $q) {
+            $q->notFriendly();
+        });
+    }
+
+    public function scopeForWorldCupDemo(Builder $query): Builder
+    {
+        return $query->excludeFriendlies();
     }
 }

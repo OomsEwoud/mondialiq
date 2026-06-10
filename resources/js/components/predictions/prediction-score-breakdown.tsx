@@ -1,7 +1,11 @@
 import { Link } from '@inertiajs/react';
 import { Calculator, CheckCircle2, Circle, Info } from 'lucide-react';
+import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { cn } from '@/lib/utils';
-import type { UserPredictionScoringPreview } from '@/types/prediction';
+import type {
+    PredictionOwner,
+    UserPredictionScoringPreview,
+} from '@/types/prediction';
 import { calculatePredictionScore } from '@/utils/prediction-scoring';
 
 interface Props {
@@ -15,6 +19,7 @@ interface Props {
     homeTeamName: string;
     awayTeamName: string;
     scoringGuideHref: string;
+    owner: PredictionOwner;
 }
 
 export default function PredictionScoreBreakdown({
@@ -28,6 +33,7 @@ export default function PredictionScoreBreakdown({
     homeTeamName,
     awayTeamName,
     scoringGuideHref,
+    owner,
 }: Props) {
     const missingScoreContext =
         predictedHomeScore === null ||
@@ -36,6 +42,8 @@ export default function PredictionScoreBreakdown({
         actualAwayScore === null;
     const preview = pointsAwarded ? null : scoringPreview;
     const hasScoringPreview = preview !== null;
+    const isOwn = owner.canEdit;
+    const predictionPronoun = isOwn ? 'Your' : 'This';
 
     if (!pointsAwarded || missingScoreContext) {
         return (
@@ -45,9 +53,17 @@ export default function PredictionScoreBreakdown({
                         <Calculator className="size-5" />
                     </span>
                     <div>
-                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                            {hasScoringPreview ? 'Scoring preview' : 'Scoring'}
-                        </p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                {hasScoringPreview
+                                    ? 'Scoring preview'
+                                    : 'Scoring'}
+                            </p>
+                            <PredictionPointsBadge
+                                points={awardedPoints}
+                                pointsAwarded={pointsAwarded}
+                            />
+                        </div>
                         <h2 className="mt-1 text-xl font-bold text-slate-900">
                             {pointsAwarded
                                 ? `${awardedPoints}/20 official points`
@@ -62,8 +78,8 @@ export default function PredictionScoreBreakdown({
                     {preview
                         ? preview.helper
                         : pointsAwarded
-                          ? 'Your prediction has been validated but score details are incomplete.'
-                          : 'Your prediction can earn up to 20 points once the match finishes and scoring validation runs.'}
+                          ? `${predictionPronoun} prediction has been validated but score details are incomplete.`
+                          : `${predictionPronoun} prediction can earn up to 20 points once the match finishes and scoring validation runs.`}
                 </p>
 
                 {preview && (
@@ -128,6 +144,7 @@ export default function PredictionScoreBreakdown({
         actualAwayScore,
     });
     const officialPoints = awardedPoints ?? score.total;
+    const perfectLabel = isOwn ? 'You predicted' : `${owner.name} predicted`;
 
     return (
         <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
@@ -136,9 +153,15 @@ export default function PredictionScoreBreakdown({
                     <Calculator className="size-5" />
                 </span>
                 <div>
-                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                        Points earned
-                    </p>
+                    <div className="flex items-center gap-2">
+                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                            Points earned
+                        </p>
+                        <PredictionPointsBadge
+                            points={officialPoints}
+                            pointsAwarded={pointsAwarded}
+                        />
+                    </div>
                     <h2 className="mt-1 text-xl font-bold text-slate-900">
                         {officialPoints}/20 official points
                     </h2>
@@ -146,7 +169,7 @@ export default function PredictionScoreBreakdown({
             </div>
 
             <p className="mt-3 text-sm leading-6 text-slate-600">
-                Your prediction was{' '}
+                {predictionPronoun} prediction was{' '}
                 <strong>
                     {homeTeamName} {predictedHomeScore}-{predictedAwayScore}{' '}
                     {awayTeamName}
@@ -165,7 +188,7 @@ export default function PredictionScoreBreakdown({
                         Perfect prediction
                     </div>
                     <p className="mt-1 text-sm text-emerald-600">
-                        You predicted the exact score and earned the maximum 20
+                        {perfectLabel} the exact score and earned the maximum 20
                         points.
                     </p>
                 </div>

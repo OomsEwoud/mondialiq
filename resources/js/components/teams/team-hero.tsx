@@ -58,25 +58,12 @@ export default function TeamHero({ team }: Props) {
                             >
                                 {team.name}
                             </h1>
-                            <p className="mt-1 truncate text-sm font-bold text-cyan-100">
-                                {team.country?.name ?? 'Country TBC'}
-                            </p>
+                            {team.code ? (
+                                <p className="mt-1 text-sm font-bold tracking-wider text-cyan-100 uppercase">
+                                    {team.code}
+                                </p>
+                            ) : null}
                         </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 sm:justify-end">
-                        {team.country?.flag ? (
-                            <img
-                                src={team.country.flag}
-                                alt={team.country.name}
-                                className="h-11 w-16 shrink-0 rounded-xl border border-white/30 object-cover shadow-sm"
-                            />
-                        ) : null}
-                        {team.code ? (
-                            <span className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white">
-                                {team.code}
-                            </span>
-                        ) : null}
                     </div>
                 </div>
             </div>

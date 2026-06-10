@@ -20,12 +20,88 @@ export interface PredictionPageProps {
     scoringGuideHref: string;
 }
 
+export interface UserPredictionsPageProps {
+    user: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        isViewer: boolean;
+        predictionsCount: number;
+        totalPoints: number;
+    };
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        date: string;
+        status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
+    };
+    scoringGuideHref: string;
+}
+
+export interface AiPredictionsPageProps {
+    aiUser: {
+        id: number;
+        name: string;
+        avatar: string | null;
+    };
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        date: string;
+        status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
+    };
+    scoringGuideHref: string;
+}
+
+export interface LeagueMemberPredictionsPageProps {
+    league: {
+        id: number;
+        name: string;
+        showHref: string;
+        accentColor: 'cyan' | 'emerald' | 'amber' | 'rose' | 'violet' | 'blue';
+        icon: string;
+    };
+    member: {
+        id: number;
+        name: string;
+        avatar: string | null;
+        isViewer: boolean;
+        predictionsCount: number;
+        totalPoints: number;
+    };
+    fixtures: {
+        data: Match[];
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+    };
+    filters: {
+        date: string;
+        status: PredictionStatusFilter;
+        pointsState: PointsStateFilter;
+    };
+    scoringGuideHref: string;
+}
+
+export interface PredictionOwner {
+    id: number;
+    name: string;
+    avatar: string | null;
+    canEdit: boolean;
+}
+
 export interface PredictionShowPageProps {
     match: Match;
     mode: PredictionTab;
     aiContext: AiPredictionContext;
     scoringPreview: UserPredictionScoringPreview | null;
     scoringGuideHref: string;
+    owner: PredictionOwner;
+    backHref: string;
 }
 
 export interface UserPredictionScoringPreview {

@@ -7,12 +7,12 @@ import { cn } from '@/lib/utils';
 import { leaderboards } from '@/routes';
 import type { LeagueSettingsPageProps } from '@/types/league';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 
 export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
-    const palette = getLeagueBrandPalette(league.accentColor);
+    const theme = getLeagueThemePalette(league.accentColor);
     const backHref = league.showHref ?? leaderboards.url();
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
@@ -28,10 +28,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                 <section
                     className={cn(
                         'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7',
-                        getLeagueBrandBannerClass(
-                            league.accentColor,
-                            league.coverStyle,
-                        ),
+                        getLeagueThemeBannerClass(league.accentColor),
                     )}
                 >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -47,7 +44,9 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             variant="outline"
                             className={cn(
                                 'rounded-full px-2.5 py-1 font-semibold',
-                                palette.badge,
+                                theme.badgeBorder,
+                                theme.badgeBg,
+                                theme.badgeText,
                             )}
                         >
                             Owner page
@@ -65,7 +64,12 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                                 Manage {league.name}
                             </h1>
-                            <p className="mt-3 text-sm leading-6 text-cyan-300 sm:text-base">
+                            <p
+                                className={cn(
+                                    'mt-3 text-sm leading-6 sm:text-base',
+                                    theme.accentText,
+                                )}
+                            >
                                 Update group details, invite controls, and
                                 scoring rules from one owner dashboard.
                             </p>
@@ -133,7 +137,6 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                     visibility={league.visibility}
                     isActive={league.isActive}
                     accentColor={league.accentColor}
-                    coverStyle={league.coverStyle}
                     scoringRules={league.scoringRules}
                 />
             </div>

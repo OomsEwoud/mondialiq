@@ -85,6 +85,16 @@ class Team extends Model
             ->withTimestamps();
     }
 
+    public function activePlayers(): BelongsToMany
+    {
+        return $this->players()
+            ->wherePivot('is_active', true)
+            ->with('country')
+            ->orderBy('position')
+            ->orderBy('number')
+            ->orderBy('display_name');
+    }
+
     public function headToHeadsAsTeamA(): HasMany
     {
         return $this->hasMany(HeadToHead::class, 'team_a_id');

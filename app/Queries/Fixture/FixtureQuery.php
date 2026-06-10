@@ -33,10 +33,19 @@ class FixtureQuery
         '%Interrupted%',
     ];
 
+    private bool $demoEligible = false;
+
     public function __construct(
         private readonly array $leagueIds,
         private readonly int $season,
     ) {}
+
+    public function onlyWorldCupDemoEligible(): self
+    {
+        $this->demoEligible = true;
+
+        return $this;
+    }
 
     public function build(array $filters = []): Builder
     {
@@ -55,6 +64,7 @@ class FixtureQuery
                 $status !== self::STATUS_ALL,
                 fn (Builder $query) => $this->applyStatusFilter($query, $status),
             )
+            ->when($this->demoEligible, fn (Builder $query) => $query->worldCupDemoEligible())
             ->orderBy('match_date');
 
         return $query;

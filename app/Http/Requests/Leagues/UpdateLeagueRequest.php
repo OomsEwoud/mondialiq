@@ -27,7 +27,6 @@ class UpdateLeagueRequest extends FormRequest
             'is_active' => ['required', 'boolean'],
             'icon' => ['required', 'string', Rule::in(LeagueBranding::icons())],
             'accent_color' => ['required', 'string', Rule::in(LeagueBranding::accentColors())],
-            'cover_style' => ['required', 'string', Rule::in(LeagueBranding::coverStyles())],
             'scoring_rules' => ['nullable', 'array'],
             'scoring_rules.exact_score_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
             'scoring_rules.correct_result_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
@@ -36,7 +35,7 @@ class UpdateLeagueRequest extends FormRequest
             'scoring_rules.correct_away_goals_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
             'scoring_rules.boosted_predictions_enabled' => ['required_with:scoring_rules', 'boolean'],
             'scoring_rules.boosted_predictions_limit' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:20'],
-            'scoring_rules.boosted_confidence_threshold' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
+            'scoring_rules.boosted_confidence_threshold' => ['required_with:scoring_rules', 'string', 'in:low,medium,high'],
             'scoring_rules.boosted_prediction_bonus_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
         ];
     }
@@ -57,7 +56,7 @@ class UpdateLeagueRequest extends FormRequest
             'correct_away_goals_points' => (int) ($rules['correct_away_goals_points'] ?? 1),
             'boosted_predictions_enabled' => (bool) ($rules['boosted_predictions_enabled'] ?? false),
             'boosted_predictions_limit' => (int) ($rules['boosted_predictions_limit'] ?? 3),
-            'boosted_confidence_threshold' => (int) ($rules['boosted_confidence_threshold'] ?? 70),
+            'boosted_confidence_threshold' => (string) ($rules['boosted_confidence_threshold'] ?? 'low'),
             'boosted_prediction_bonus_points' => (int) ($rules['boosted_prediction_bonus_points'] ?? 2),
         ];
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\Settings\DeleteAccountController;
 use App\Http\Controllers\Settings\EditAccountController;
 use App\Http\Controllers\Settings\UpdateAccountController;
 use App\Http\Controllers\Settings\UpdatePasswordController;
+use App\Http\Controllers\Settings\UpdatePredictionPreferencesController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
@@ -11,6 +12,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/profile', EditAccountController::class)->name('edit-account');
     Route::patch('settings/profile', UpdateAccountController::class)->name('update-account');
+    Route::patch('settings/prediction-preferences', UpdatePredictionPreferencesController::class)
+        ->name('update-prediction-preferences');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

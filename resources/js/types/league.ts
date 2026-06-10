@@ -21,6 +21,7 @@ export interface LeagueMember {
         label: string;
         tone: 'hot' | 'steady' | 'chasing' | 'cold' | 'neutral';
     };
+    predictionsHref?: string | null;
 }
 
 export type LeagueAccentColor =
@@ -31,7 +32,6 @@ export type LeagueAccentColor =
     | 'violet'
     | 'blue';
 
-export type LeagueCoverStyle = 'stadium' | 'spotlight' | 'pitch' | 'night';
 
 export interface ScoringRules {
     exact_score_points: number;
@@ -41,7 +41,7 @@ export interface ScoringRules {
     correct_away_goals_points: number;
     boosted_predictions_enabled: boolean;
     boosted_predictions_limit: number;
-    boosted_confidence_threshold: number;
+    boosted_confidence_threshold: 'low' | 'medium' | 'high';
     boosted_prediction_bonus_points: number;
 }
 
@@ -51,7 +51,6 @@ export interface LeagueDetails {
     description: string | null;
     icon: string;
     accentColor: LeagueAccentColor;
-    coverStyle: LeagueCoverStyle;
     code: string;
     rewardTitle: string | null;
     rewardDescription: string | null;
@@ -75,6 +74,8 @@ export interface LeagueDetails {
     currentUserRank: number | null;
     boostedPredictionsEnabled: boolean;
     boostsRemaining: number | null;
+    boostsLimit: number | null;
+    boostedConfidenceThreshold: string | null;
 }
 
 export interface LeaguePredictPageProps {
@@ -85,11 +86,21 @@ export interface LeaguePredictPageProps {
     };
 }
 
+export interface PublicLeague {
+    id: number;
+    name: string;
+    description: string | null;
+    icon: string;
+    accent_color: LeagueAccentColor;
+    users_count: number;
+}
+
 export interface LeagueJoinPageProps {
     initialCode: string;
     currentLeagueCount: number;
     maxLeagueCount: number;
     hasReachedLeagueLimit: boolean;
+    publicLeagues: PublicLeague[];
 }
 
 export interface LeagueCreatePageProps {
@@ -110,7 +121,6 @@ export interface LeagueSettingsPageProps {
         | 'description'
         | 'icon'
         | 'accentColor'
-        | 'coverStyle'
         | 'code'
         | 'rewardTitle'
         | 'rewardDescription'
@@ -133,7 +143,6 @@ export interface LeagueMembersPageProps {
         | 'name'
         | 'icon'
         | 'accentColor'
-        | 'coverStyle'
         | 'code'
         | 'settingsHref'
         | 'showHref'

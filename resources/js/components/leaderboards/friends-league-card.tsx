@@ -21,8 +21,8 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { JoinedLeague } from '@/types/leaderboard';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 
 type Props = {
@@ -42,23 +42,28 @@ export default function FriendsLeagueCard({ league }: Props) {
 
         return null;
     })();
-    const palette = getLeagueBrandPalette(league.accentColor);
+    const theme = getLeagueThemePalette(league.accentColor);
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
-            <div
-                className={getLeagueBrandBannerClass(
-                    league.accentColor,
-                    league.coverStyle,
-                )}
-            >
+            <div className={getLeagueThemeBannerClass(league.accentColor)}>
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className="flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm">
+                    <div
+                        className={cn(
+                            'flex size-12 items-center justify-center rounded-2xl border bg-white/15 text-2xl shadow-sm ring-1',
+                            theme.badgeBorder,
+                        )}
+                    >
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-xs font-bold tracking-wide text-white/80 uppercase">
+                        <p
+                            className={cn(
+                                'text-xs font-bold tracking-wide uppercase',
+                                theme.accentText,
+                            )}
+                        >
                             Prediction group
                         </p>
                         <p className="truncate text-lg font-bold text-white">
@@ -101,10 +106,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                             variant="outline"
                             className={cn(
                                 'rounded-full px-2.5 py-1 font-semibold',
-                                palette.badge,
+                                theme.badgeBorder,
+                                theme.badgeBg,
+                                theme.badgeText,
                             )}
                         >
-                            <Users className="size-3.5" />
+                            <Users
+                                className={cn('size-3.5', theme.iconColor)}
+                            />
                             {league.membersCount} {memberLabel}
                         </Badge>
                     </div>
@@ -120,21 +129,34 @@ export default function FriendsLeagueCard({ league }: Props) {
                                 ? `#${league.userRank}`
                                 : 'Unranked'
                         }
+                        iconClassName={theme.iconColor}
+                        labelClassName={theme.darkAccent}
+                        className={cn(theme.softBg, theme.softBorder)}
                     />
                     <LeagueMetric
                         icon={Crown}
                         label="Current leader"
                         value={league.leaderName ?? 'TBD'}
+                        iconClassName={theme.iconColor}
+                        labelClassName={theme.darkAccent}
+                        className={cn(theme.softBg, theme.softBorder)}
                     />
                 </div>
 
                 <div
                     className={cn(
-                        'rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-3',
+                        'rounded-2xl border px-3.5 py-3',
+                        theme.softBg,
+                        theme.softBorder,
                         !performanceLabel && 'text-slate-400',
                     )}
                 >
-                    <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
+                    <p
+                        className={cn(
+                            'text-xs font-bold tracking-wide uppercase',
+                            theme.darkAccent,
+                        )}
+                    >
                         Group pace
                     </p>
                     <p className="mt-1.5 text-sm font-semibold text-slate-900">
@@ -145,7 +167,11 @@ export default function FriendsLeagueCard({ league }: Props) {
             <CardFooter className="grid gap-3 px-4 pt-0 pb-4 sm:grid-cols-2 sm:px-5">
                 <Button
                     asChild
-                    className="h-10 w-full rounded-lg px-4 font-semibold"
+                    className={cn(
+                        'h-10 w-full rounded-lg px-4 font-semibold',
+                        theme.primaryButton,
+                        theme.buttonRing,
+                    )}
                 >
                     <Link href={league.href}>View group</Link>
                 </Button>
@@ -155,8 +181,8 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-lg px-4 font-semibold',
-                            palette.button,
+                            'h-10 w-full rounded-lg bg-white px-4 font-semibold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
                         )}
                     >
                         <Link href={league.settingsHref}>
@@ -175,7 +201,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-semibold"
+                        className="h-10 w-full rounded-lg px-4 font-semibold text-slate-400"
                     >
                         Group action
                     </Button>

@@ -81,9 +81,9 @@ class MatchesController extends Controller
 
     private function fixtureQuery(): FixtureQuery
     {
-        return new FixtureQuery(
+        return (new FixtureQuery(
             $this->worldCupContext->leagueIds(),
             $this->worldCupContext->season(),
-        );
+        ))->onlyWorldCupDemoEligible();
     }
 }

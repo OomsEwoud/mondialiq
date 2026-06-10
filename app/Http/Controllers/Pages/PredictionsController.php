@@ -90,7 +90,7 @@ class PredictionsController extends Controller
         return (new FixtureQuery(
             $this->worldCupContext->leagueIds(),
             $this->worldCupContext->season(),
-        ))->build([
+        ))->onlyWorldCupDemoEligible()->build([
             'date' => $date,
             'status' => $status,
         ]);

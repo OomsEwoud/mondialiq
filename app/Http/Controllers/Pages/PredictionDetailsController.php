@@ -40,6 +40,8 @@ class PredictionDetailsController extends Controller
             'aiContext' => $this->aiContext($fixture),
             'scoringPreview' => $mode === 'mine' ? $this->scoringPreview($fixture) : null,
             'scoringGuideHref' => route('scoring'),
+            'owner' => $this->ownerProps($user, true),
+            'backHref' => $this->backHref($request, $user),
         ]);
     }
 
@@ -110,5 +112,27 @@ class PredictionDetailsController extends Controller
             && $fixture->season === $this->worldCupContext->season();
 
         abort_if(! $isWorldCup, 404);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function ownerProps(User $user, bool $canEdit): array
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'avatar' => $user->avatarUrl(),
+            'canEdit' => $canEdit,
+        ];
+    }
+
+    private function backHref(Request $request, User $user): string
+    {
+        if ($request->has('back')) {
+            return $request->string('back')->toString();
+        }
+
+        return route('predictions', ['mode' => $this->predictionMode($request)]);
     }
 }

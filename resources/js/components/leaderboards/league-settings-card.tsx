@@ -1,26 +1,24 @@
 import { Form } from '@inertiajs/react';
 import {
     AlertTriangle,
-    Gift,
     KeyRound,
-    Layers,
     PaintBucket,
     PencilLine,
     RefreshCcw,
     ShieldCheck,
     Trophy,
-    Zap,
 } from 'lucide-react';
 import { useState } from 'react';
 import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/RefreshLeagueCodeController';
 import UpdateLeagueController from '@/actions/App/Http/Controllers/Leagues/UpdateLeagueController';
 import InputError from '@/components/forms/input-error';
 import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
+import { Badge } from '@/components/ui/feedback/badge';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { Textarea } from '@/components/ui/forms/textarea';
+
 import {
     Card,
     CardContent,
@@ -40,15 +38,17 @@ import {
 import { cn } from '@/lib/utils';
 import type {
     LeagueAccentColor,
-    LeagueCoverStyle,
     ScoringRules,
 } from '@/types/league';
 import {
-    getLeagueBrandBannerClass,
-    leagueAccentOptions,
-    leagueCoverOptions,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
     leagueIconOptions,
+    leagueThemeOptions,
 } from '@/utils/league-branding';
+import BoostedPredictionSettings from './boosted-prediction-settings';
+import LeagueBrandingSettings from './league-branding-settings';
+import LeagueRewardSettings from './league-reward-settings';
 
 type Props = {
     leagueId: number;
@@ -61,7 +61,6 @@ type Props = {
     visibility: 'private' | 'public';
     isActive: boolean;
     accentColor: LeagueAccentColor;
-    coverStyle: LeagueCoverStyle;
     scoringRules: ScoringRules;
 };
 
@@ -82,7 +81,6 @@ export default function LeagueSettingsCard({
     visibility: initialVisibility,
     isActive: initialIsActive,
     accentColor,
-    coverStyle,
     scoringRules: initialScoringRules,
 }: Props) {
     const [name, setName] = useState(leagueName);
@@ -97,7 +95,6 @@ export default function LeagueSettingsCard({
     const [isActive, setIsActive] = useState(initialIsActive);
     const [icon, setIcon] = useState(leagueIcon);
     const [accent, setAccent] = useState<LeagueAccentColor>(accentColor);
-    const [cover, setCover] = useState<LeagueCoverStyle>(coverStyle);
     const [scoringRules, setScoringRules] = useState<ScoringRules>({
         ...initialScoringRules,
     });
@@ -138,14 +135,13 @@ export default function LeagueSettingsCard({
         isActive !== initialIsActive ||
         icon !== leagueIcon ||
         accent !== accentColor ||
-        cover !== coverStyle ||
         scoringRulesChanged;
 
     const canSubmit = normalizedName.length > 0 && hasChanges;
     const updateIcon = (nextIcon: string) => setIcon(nextIcon);
     const updateAccent = (nextAccent: LeagueAccentColor) =>
         setAccent(nextAccent);
-    const updateCover = (nextCover: LeagueCoverStyle) => setCover(nextCover);
+    const theme = getLeagueThemePalette(accent);
 
     const updateScoringRule = <K extends keyof ScoringRules>(
         key: K,
@@ -159,7 +155,7 @@ export default function LeagueSettingsCard({
             <CardHeader className="gap-3 px-5 py-5">
                 <div className="flex items-start justify-between gap-3">
                     <div>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                             <ShieldCheck className="size-4" />
                             <p className="text-xs font-semibold tracking-wide uppercase">
                                 Owner controls
@@ -173,7 +169,7 @@ export default function LeagueSettingsCard({
                         className={cn(
                             'rounded-full border px-2.5 py-1 text-xs font-semibold',
                             hasChanges
-                                ? 'border-cyan-200 bg-cyan-50 text-cyan-700'
+                                ? cn(theme.softBorder, theme.softBg, theme.softText)
                                 : 'border-slate-200 bg-slate-50 text-slate-600',
                         )}
                     >
@@ -197,11 +193,6 @@ export default function LeagueSettingsCard({
                                 type="hidden"
                                 name="accent_color"
                                 value={accent}
-                            />
-                            <input
-                                type="hidden"
-                                name="cover_style"
-                                value={cover}
                             />
                             <input
                                 type="hidden"
@@ -266,17 +257,19 @@ export default function LeagueSettingsCard({
                                     <div
                                         className={cn(
                                             'rounded-2xl border border-white/20 p-5 text-white shadow-sm',
-                                            getLeagueBrandBannerClass(
-                                                accent,
-                                                cover,
-                                            ),
+                                            getLeagueThemeBannerClass(accent),
                                         )}
                                     >
                                         <p className="text-xs font-semibold tracking-wide text-white uppercase">
                                             Live preview
                                         </p>
                                         <div className="mt-3 flex items-center gap-3">
-                                            <div className="flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm">
+                                            <div
+                                                className={cn(
+                                                    'flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm',
+                                                    theme.badgeBorder,
+                                                )}
+                                            >
                                                 <span aria-hidden="true">
                                                     {icon}
                                                 </span>
@@ -296,149 +289,30 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Group profile */}
-                                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
-                                            <Layers className="size-4" />
-                                            <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Group profile
-                                            </p>
-                                        </div>
-                                        <div className="mt-4 space-y-4">
-                                            <div>
-                                                <Label
-                                                    htmlFor="league-name"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
-                                                >
-                                                    Group name
-                                                </Label>
-                                                <Input
-                                                    id="league-name"
-                                                    name="name"
-                                                    value={name}
-                                                    onChange={(event) =>
-                                                        setName(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                    className={fieldClassName}
-                                                    placeholder="Your prediction group"
-                                                />
-                                                <p className="mt-1 text-xs text-slate-600">
-                                                    Give the group a name that
-                                                    members recognise instantly.
-                                                </p>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={errors.name}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Label
-                                                    htmlFor="group-description"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
-                                                >
-                                                    Description
-                                                </Label>
-                                                <Textarea
-                                                    id="group-description"
-                                                    name="description"
-                                                    value={description}
-                                                    onChange={(event) =>
-                                                        setDescription(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                    className="min-h-20 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
-                                                    placeholder="What is this prediction group about?"
-                                                />
-                                                <p className="mt-1 text-xs leading-5 text-slate-600">
-                                                    Short context for members.
-                                                    Keep it simple: classmates,
-                                                    work crew, family group, or
-                                                    matchday challenge.
-                                                </p>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={
-                                                            errors.description
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <LeagueBrandingSettings
+                                        name={name}
+                                        setName={setName}
+                                        description={description}
+                                        setDescription={setDescription}
+                                        errors={errors as Record<string, string>}
+                                        theme={theme}
+                                        fieldClassName={fieldClassName}
+                                    />
 
                                     {/* Reward settings */}
-                                    <div className="rounded-2xl border border-cyan-100 bg-cyan-50/40 p-5">
-                                        <div className="flex items-center gap-2 text-cyan-700">
-                                            <Gift className="size-4" />
-                                            <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Reward settings
-                                            </p>
-                                        </div>
-                                        <p className="mt-2 text-sm leading-6 text-cyan-900/80">
-                                            Rewards are social notes only.
-                                            MondialIQ does not process payments
-                                            or payouts.
-                                        </p>
-                                        <div className="mt-4 space-y-4">
-                                            <div>
-                                                <Label
-                                                    htmlFor="reward-title"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
-                                                >
-                                                    Reward title
-                                                </Label>
-                                                <Input
-                                                    id="reward-title"
-                                                    name="reward_title"
-                                                    value={rewardTitle}
-                                                    onChange={(event) =>
-                                                        setRewardTitle(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                    className={fieldClassName}
-                                                    placeholder="Winner gets pizza"
-                                                />
-                                                <InputError
-                                                    message={
-                                                        errors.reward_title
-                                                    }
-                                                />
-                                            </div>
-                                            <div>
-                                                <Label
-                                                    htmlFor="reward-description"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
-                                                >
-                                                    Reward details
-                                                </Label>
-                                                <Textarea
-                                                    id="reward-description"
-                                                    name="reward_description"
-                                                    value={rewardDescription}
-                                                    onChange={(event) =>
-                                                        setRewardDescription(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                    className="min-h-20 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
-                                                    placeholder="Example: €20 gift card, paid outside MondialIQ."
-                                                />
-                                                <InputError
-                                                    message={
-                                                        errors.reward_description
-                                                    }
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <LeagueRewardSettings
+                                        rewardTitle={rewardTitle}
+                                        setRewardTitle={setRewardTitle}
+                                        rewardDescription={rewardDescription}
+                                        setRewardDescription={setRewardDescription}
+                                        errors={errors as Record<string, string>}
+                                        theme={theme}
+                                        fieldClassName={fieldClassName}
+                                    />
 
                                     {/* Scoring settings */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <Trophy className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Scoring settings
@@ -450,7 +324,7 @@ export default function LeagueSettingsCard({
                                         </p>
                                         <div className="mt-4 grid gap-4 sm:grid-cols-2">
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Exact score
                                                 </Label>
                                                 <Input
@@ -483,7 +357,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct result
                                                 </Label>
                                                 <Input
@@ -516,7 +390,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct goal difference
                                                 </Label>
                                                 <Input
@@ -549,7 +423,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct home goals
                                                 </Label>
                                                 <Input
@@ -582,7 +456,7 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     Correct away goals
                                                 </Label>
                                                 <Input
@@ -618,177 +492,30 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Boosted predictions */}
-                                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
-                                            <Zap className="size-4" />
-                                            <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Boosted predictions
-                                            </p>
-                                        </div>
-                                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                                            Boosted predictions let members use
-                                            one of their limited boosts on a
-                                            prediction they are confident about.
-                                            If the prediction is correct and the
-                                            confidence is high enough, they
-                                            receive bonus points.
-                                        </p>
-                                        <div className="mt-4 flex items-center gap-3">
-                                            <button
-                                                type="button"
-                                                role="switch"
-                                                aria-checked={
-                                                    scoringRules.boosted_predictions_enabled
-                                                }
-                                                onClick={() =>
-                                                    updateScoringRule(
-                                                        'boosted_predictions_enabled',
-                                                        !scoringRules.boosted_predictions_enabled,
-                                                    )
-                                                }
-                                                className={cn(
-                                                    'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors',
-                                                    scoringRules.boosted_predictions_enabled
-                                                        ? 'bg-cyan-500'
-                                                        : 'bg-slate-300',
-                                                )}
-                                            >
-                                                <span
-                                                    className={cn(
-                                                        'inline-block size-5 rounded-full bg-white shadow-sm transition-transform',
-                                                        scoringRules.boosted_predictions_enabled
-                                                            ? 'translate-x-6'
-                                                            : 'translate-x-1',
-                                                    )}
-                                                />
-                                            </button>
-                                            <span className="text-sm font-semibold text-slate-900">
-                                                Enable boosted predictions
-                                            </span>
-                                        </div>
-                                        {scoringRules.boosted_predictions_enabled && (
-                                            <div className="mt-4 grid gap-4 sm:grid-cols-3">
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                        Boosted predictions per
-                                                        user
-                                                    </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={20}
-                                                        value={
-                                                            scoringRules.boosted_predictions_limit
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_predictions_limit',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_predictions_limit'
-                                                            ]
-                                                        }
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                        Required confidence
-                                                        threshold
-                                                    </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={100}
-                                                        value={
-                                                            scoringRules.boosted_confidence_threshold
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_confidence_threshold',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_confidence_threshold'
-                                                            ]
-                                                        }
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                        Bonus points
-                                                    </Label>
-                                                    <Input
-                                                        type="number"
-                                                        min={0}
-                                                        max={100}
-                                                        value={
-                                                            scoringRules.boosted_prediction_bonus_points
-                                                        }
-                                                        onChange={(event) =>
-                                                            updateScoringRule(
-                                                                'boosted_prediction_bonus_points',
-                                                                parseInt(
-                                                                    event.target
-                                                                        .value,
-                                                                    10,
-                                                                ) || 0,
-                                                            )
-                                                        }
-                                                        className={
-                                                            numberFieldClassName
-                                                        }
-                                                    />
-                                                    <InputError
-                                                        message={
-                                                            errors[
-                                                                'scoring_rules.boosted_prediction_bonus_points'
-                                                            ]
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
+                                    <BoostedPredictionSettings
+                                        scoringRules={scoringRules}
+                                        updateScoringRule={updateScoringRule}
+                                        errors={errors as Record<string, string>}
+                                        theme={theme}
+                                        numberFieldClassName={numberFieldClassName}
+                                    />
                                 </div>
 
                                 {/* Side column */}
                                 <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
                                     {/* Access */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <ShieldCheck className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Access
+                                                Privacy
                                             </p>
                                         </div>
                                         <div className="mt-4 space-y-4">
                                             <div>
                                                 <Label
                                                     htmlFor="visibility"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Visibility
                                                 </Label>
@@ -824,7 +551,7 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="is-active"
-                                                    className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
                                                 >
                                                     Join status
                                                 </Label>
@@ -861,18 +588,99 @@ export default function LeagueSettingsCard({
 
                                     {/* Appearance */}
                                     <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className="flex items-center gap-2 text-slate-600">
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <PaintBucket className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Appearance
+                                                Group appearance
                                             </p>
                                         </div>
+                                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                                            Choose a visual theme to give your leaderboard its own identity.
+                                        </p>
                                         <div className="mt-4 space-y-4">
                                             <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                    Group theme
+                                                </Label>
+                                                <div className="mt-2 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                                                    {leagueThemeOptions.map(
+                                                        (option) => {
+                                                            const isSelected =
+                                                                accent ===
+                                                                option.value;
+
+                                                            return (
+                                                                <Button
+                                                                    key={
+                                                                        option.value
+                                                                    }
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    aria-pressed={
+                                                                        isSelected
+                                                                    }
+                                                                    onClick={() =>
+                                                                        updateAccent(
+                                                                            option.value as LeagueAccentColor,
+                                                                        )
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-auto flex-col items-stretch justify-start overflow-hidden rounded-xl border-slate-200 p-0 text-left hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                                                                        isSelected &&
+                                                                            cn(
+                                                                                'border-slate-900/20',
+                                                                                'ring-2 ring-offset-2 ring-offset-white',
+                                                                                theme.buttonRing,
+                                                                            ),
+                                                                    )}
+                                                                >
+                                                                    <div
+                                                                        className={cn(
+                                                                            'relative h-16 w-full',
+                                                                            option.previewClassName,
+                                                                        )}
+                                                                    >
+                                                                        {isSelected && (
+                                                                            <Badge
+                                                                                className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-slate-900 shadow-none uppercase"
+                                                                            >
+                                                                                Active
+                                                                            </Badge>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex w-full items-start justify-between gap-3 px-3 py-3">
+                                                                        <div className="min-w-0 flex-1">
+                                                                            <p className="text-sm font-semibold text-slate-900">
+                                                                                {
+                                                                                    option.title
+                                                                                }{' '}
+                                                                                /{' '}
+                                                                                {
+                                                                                    option.subtitle
+                                                                                }
+                                                                            </p>
+                                                                            <p className="mt-1 whitespace-normal text-xs leading-5 text-slate-600">
+                                                                                {
+                                                                                    option.description
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </Button>
+                                                            );
+                                                        },
+                                                    )}
+                                                </div>
+                                                <InputError
+                                                    message={errors.accent_color}
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
                                                     League icon
                                                 </Label>
-                                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                                <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
                                                     {leagueIconOptions.map(
                                                         (option) => (
                                                             <Button
@@ -890,7 +698,7 @@ export default function LeagueSettingsCard({
                                                                     'h-12 rounded-xl border-slate-200 text-2xl hover:bg-slate-50 focus-visible:ring-cyan-300',
                                                                     icon ===
                                                                         option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
+                                                                        cn(theme.softBorder, theme.softBg),
                                                                 )}
                                                             >
                                                                 <span aria-hidden="true">
@@ -908,105 +716,12 @@ export default function LeagueSettingsCard({
                                                     />
                                                 </div>
                                             </div>
-                                            <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                    Accent color
-                                                </Label>
-                                                <div className="mt-2 grid grid-cols-2 gap-2">
-                                                    {leagueAccentOptions.map(
-                                                        (option) => (
-                                                            <Button
-                                                                key={
-                                                                    option.value
-                                                                }
-                                                                type="button"
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    updateAccent(
-                                                                        option.value,
-                                                                    )
-                                                                }
-                                                                className={cn(
-                                                                    'h-10 justify-start rounded-xl border-slate-200 px-3 font-semibold hover:bg-slate-50 focus-visible:ring-cyan-300',
-                                                                    accent ===
-                                                                        option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
-                                                                )}
-                                                            >
-                                                                <span
-                                                                    className={cn(
-                                                                        'size-3 rounded-full',
-                                                                        option.dotClassName,
-                                                                    )}
-                                                                />
-                                                                {option.label}
-                                                            </Button>
-                                                        ),
-                                                    )}
-                                                </div>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={
-                                                            errors.accent_color
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                    Cover style
-                                                </Label>
-                                                <div className="mt-2 grid gap-2">
-                                                    {leagueCoverOptions.map(
-                                                        (option) => (
-                                                            <Button
-                                                                key={
-                                                                    option.value
-                                                                }
-                                                                type="button"
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    updateCover(
-                                                                        option.value,
-                                                                    )
-                                                                }
-                                                                className={cn(
-                                                                    'h-auto items-start justify-start rounded-xl border-slate-200 px-4 py-3 text-left hover:bg-slate-50 focus-visible:ring-cyan-300',
-                                                                    cover ===
-                                                                        option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
-                                                                )}
-                                                            >
-                                                                <div>
-                                                                    <p className="font-semibold text-slate-900">
-                                                                        {
-                                                                            option.label
-                                                                        }
-                                                                    </p>
-                                                                    <p className="mt-1 text-xs leading-5 text-slate-600">
-                                                                        {
-                                                                            option.description
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                            </Button>
-                                                        ),
-                                                    )}
-                                                </div>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={
-                                                            errors.cover_style
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
 
                                     {/* Invite code */}
-                                    <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-                                        <div className="flex items-center gap-2 text-amber-800">
+                                    <div className={cn("rounded-2xl border p-5", theme.softBg, theme.softBorder)}>
+                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
                                             <KeyRound className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Invite code
@@ -1015,7 +730,7 @@ export default function LeagueSettingsCard({
                                         <p className="mt-3 font-mono text-xl font-bold tracking-wide text-slate-900">
                                             {leagueCode}
                                         </p>
-                                        <p className="mt-1 text-xs leading-5 text-amber-900/70">
+                                        <p className={cn("mt-1 text-xs leading-5", theme.softText)}>
                                             Refreshing invalidates the old code
                                             for new joins. Existing members keep
                                             access.

@@ -49,7 +49,7 @@ class PlayerDetailsResource extends JsonResource
 
     private function teamAttributes(): array
     {
-        return $this->teams
+        return $this->activeTeams
             ->values()
             ->map(fn ($team) => [
                 'id' => $team->id,

@@ -9,6 +9,9 @@ import {
     CardTitle,
 } from '@/components/ui/layout/card';
 import { useClipboard } from '@/hooks/use-clipboard';
+import { cn } from '@/lib/utils';
+import type { LeagueAccentColor } from '@/types/league';
+import { getLeagueThemePalette } from '@/utils/league-branding';
 
 type Props = {
     leagueName: string;
@@ -16,6 +19,7 @@ type Props = {
     code: string;
     joinHref: string;
     membersCount: number;
+    accentColor: LeagueAccentColor;
 };
 
 export default function InviteCodeCard({
@@ -24,11 +28,13 @@ export default function InviteCodeCard({
     code,
     joinHref,
     membersCount,
+    accentColor,
 }: Props) {
     const [copiedText, copy] = useClipboard();
     const isCopyingCode = copiedText === code;
     const isCopyingJoinLink = copiedText === joinHref;
     const isSmallLeague = membersCount <= 3;
+    const theme = getLeagueThemePalette(accentColor);
 
     const shareMessage = [
         `Join my MondialIQ prediction group ${leagueIcon} "${leagueName}".`,
@@ -105,8 +111,19 @@ export default function InviteCodeCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 {isSmallLeague && (
-                    <div className="rounded-2xl border border-cyan-200 bg-gradient-to-br from-cyan-50/60 to-white px-4 py-3">
-                        <div className="flex items-center gap-2 text-cyan-600">
+                    <div
+                        className={cn(
+                            'rounded-2xl border px-4 py-3',
+                            theme.softBorder,
+                            theme.softBg,
+                        )}
+                    >
+                        <div
+                            className={cn(
+                                'flex items-center gap-2',
+                                theme.softText,
+                            )}
+                        >
                             <Sparkles className="size-4" />
                             <p className="text-xs font-bold tracking-wide uppercase">
                                 Invite your friends
@@ -141,7 +158,11 @@ export default function InviteCodeCard({
                 <div className="grid gap-2">
                     <Button
                         type="button"
-                        className="h-10 w-full rounded-xl bg-slate-900 px-4 font-bold text-white hover:bg-blue-900 focus-visible:ring-cyan-300"
+                        className={cn(
+                            'h-10 w-full rounded-xl px-4 font-bold text-white focus-visible:ring-2',
+                            theme.primaryButton,
+                            theme.buttonRing,
+                        )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={shareInvite}
                     >
@@ -152,7 +173,10 @@ export default function InviteCodeCard({
                         type="button"
                         variant="outline"
                         aria-label="Copy invite code"
-                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                        className={cn(
+                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
+                        )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyCode}
                     >
@@ -168,7 +192,10 @@ export default function InviteCodeCard({
                         type="button"
                         variant="outline"
                         aria-label="Copy invite link"
-                        className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700"
+                        className={cn(
+                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
+                        )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyJoinLink}
                     >

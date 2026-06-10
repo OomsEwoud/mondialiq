@@ -1,3 +1,4 @@
+import { Zap } from 'lucide-react';
 import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { Badge } from '@/components/ui/feedback/badge';
 import type { Match } from '@/types/match';
@@ -72,9 +73,16 @@ export default function UserPredictionSummary({
                 </>
             )}
 
-            {!aiMode && (
-                <PredictionPointsBadge points={prediction.points ?? null} />
+            {prediction.isBoosted && (
+                <Badge className="rounded-full border-amber-200 bg-amber-50 px-3 py-1 font-medium text-amber-700">
+                    <Zap className="mr-1 size-3.5" />
+                    Boosted
+                </Badge>
             )}
+            <PredictionPointsBadge
+                points={prediction.points ?? null}
+                pointsAwarded={prediction.pointsAwarded}
+            />
         </div>
     );
 }

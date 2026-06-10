@@ -140,9 +140,6 @@ test('an authenticated user can create a prediction group with an optional rewar
     $this->assertDatabaseHas('scoreboards', [
         'name' => 'MondialIQ Crew',
         'owner_id' => $user->id,
-        'icon' => '🏆',
-        'accent_color' => 'cyan',
-        'cover_style' => 'stadium',
     ]);
 
     $this->assertDatabaseHas('users_has_scoreboards', [
@@ -321,7 +318,6 @@ test('a league member can view the league detail page with rankings', function (
         'name' => 'Friends League',
         'icon' => '🔥',
         'accent_color' => 'amber',
-        'cover_style' => 'night',
         'code' => 'FRIENDS1',
     ]);
 
@@ -430,7 +426,9 @@ test('a league member can view the league detail page with rankings', function (
             'is_boosted' => false,
             'points' => $prediction->points,
             'points_awarded_at' => $prediction->points_awarded_at,
-        ]);
+        ])->forceFill([
+            'updated_at' => $prediction->updated_at,
+        ])->saveQuietly();
     }
 
     $this->actingAs($currentUser)
@@ -442,7 +440,6 @@ test('a league member can view the league detail page with rankings', function (
             ->where('league.description', null)
             ->where('league.icon', '🔥')
             ->where('league.accentColor', 'amber')
-            ->where('league.coverStyle', 'night')
             ->where('league.code', 'FRIENDS1')
             ->where('league.rewardTitle', null)
             ->where('league.rewardDescription', null)
@@ -492,7 +489,6 @@ test('a league owner can update the league name', function () {
         'name' => 'Original League',
         'icon' => '🏆',
         'accent_color' => 'cyan',
-        'cover_style' => 'stadium',
         'code' => 'ORIGINL1',
         'owner_id' => $owner->id,
     ]);
@@ -509,7 +505,6 @@ test('a league owner can update the league name', function () {
             'is_active' => '0',
             'icon' => '⭐',
             'accent_color' => 'violet',
-            'cover_style' => 'spotlight',
         ])
         ->assertRedirect(route('leagues.settings', $league))
         ->assertSessionHas('inertia.flash_data.toast', [
@@ -522,7 +517,6 @@ test('a league owner can update the league name', function () {
         'name' => 'Updated League',
         'icon' => '⭐',
         'accent_color' => 'violet',
-        'cover_style' => 'spotlight',
         'owner_id' => $owner->id,
     ]);
 
@@ -544,7 +538,6 @@ test('a league owner sees manage controls on the league detail page', function (
         'name' => 'Managed League',
         'icon' => '🌍',
         'accent_color' => 'emerald',
-        'cover_style' => 'pitch',
         'code' => 'MANAGED1',
         'owner_id' => $owner->id,
     ]);
@@ -560,7 +553,6 @@ test('a league owner sees manage controls on the league detail page', function (
             ->where('league.name', 'Managed League')
             ->where('league.icon', '🌍')
             ->where('league.accentColor', 'emerald')
-            ->where('league.coverStyle', 'pitch')
             ->where('league.code', 'MANAGED1')
             ->where('league.canManage', true)
             ->where('league.canLeave', false)
@@ -584,7 +576,6 @@ test('a league owner can view the dedicated league settings page', function () {
         'description' => 'Settings description.',
         'icon' => '🎯',
         'accent_color' => 'rose',
-        'cover_style' => 'spotlight',
         'code' => 'SETTINGS',
         'owner_id' => $owner->id,
         'reward_title' => 'Settings reward',
@@ -605,7 +596,6 @@ test('a league owner can view the dedicated league settings page', function () {
             ->where('league.description', 'Settings description.')
             ->where('league.icon', '🎯')
             ->where('league.accentColor', 'rose')
-            ->where('league.coverStyle', 'spotlight')
             ->where('league.code', 'SETTINGS')
             ->where('league.rewardTitle', 'Settings reward')
             ->where('league.rewardDescription', 'Settings reward details.')
@@ -676,7 +666,6 @@ test('a league owner cannot update branding with invalid options', function () {
         'name' => 'Validation League',
         'icon' => '🏆',
         'accent_color' => 'cyan',
-        'cover_style' => 'stadium',
         'code' => 'VALID001',
         'owner_id' => $owner->id,
     ]);
@@ -693,9 +682,8 @@ test('a league owner cannot update branding with invalid options', function () {
             'is_active' => '1',
             'icon' => '💥',
             'accent_color' => 'pink',
-            'cover_style' => 'galaxy',
         ])
-        ->assertSessionHasErrors(['icon', 'accent_color', 'cover_style']);
+        ->assertSessionHasErrors(['icon', 'accent_color']);
 });
 
 test('a non owner cannot view the dedicated league settings page', function () {
@@ -1143,7 +1131,6 @@ test('a league member can view the league predict page with upcoming matches', f
         'name' => 'Friends League',
         'icon' => '🔥',
         'accent_color' => 'amber',
-        'cover_style' => 'night',
         'code' => 'FRIENDS1',
     ]);
 
