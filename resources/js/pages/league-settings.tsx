@@ -64,7 +64,12 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                                 Manage {league.name}
                             </h1>
-                            <p className="mt-3 text-sm leading-6 text-cyan-300 sm:text-base">
+                            <p
+                                className={cn(
+                                    'mt-3 text-sm leading-6 sm:text-base',
+                                    theme.accentText,
+                                )}
+                            >
                                 Update group details, invite controls, and
                                 scoring rules from one owner dashboard.
                             </p>
