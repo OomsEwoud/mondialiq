@@ -2,8 +2,8 @@ import type { PlayerDetailsSeasonStat } from '@/types/player-details';
 
 export function isGoalkeeper(position: string | null): boolean {
     if (!position) {
-return false;
-}
+        return false;
+    }
 
     const p = position.toLowerCase();
 
@@ -15,11 +15,26 @@ export function hasValue(value: number | null | undefined): boolean {
 }
 
 export function shouldShowAttacking(stat: PlayerDetailsSeasonStat): boolean {
-    const { totalShots, shotsOnTarget, goals, assists, dribblesSuccess, dribblesPast, penaltiesScored, penaltiesMissed } = stat;
+    const {
+        totalShots,
+        shotsOnTarget,
+        goals,
+        assists,
+        dribblesSuccess,
+        dribblesPast,
+        penaltiesScored,
+        penaltiesMissed,
+    } = stat;
 
     return [
-        totalShots, shotsOnTarget, goals, assists,
-        dribblesSuccess, dribblesPast, penaltiesScored, penaltiesMissed,
+        totalShots,
+        shotsOnTarget,
+        goals,
+        assists,
+        dribblesSuccess,
+        dribblesPast,
+        penaltiesScored,
+        penaltiesMissed,
     ].some(hasValue);
 }
 
@@ -30,23 +45,56 @@ export function shouldShowPassing(stat: PlayerDetailsSeasonStat): boolean {
 }
 
 export function shouldShowDefensive(stat: PlayerDetailsSeasonStat): boolean {
-    const { tackles, blocks, interceptions, totalDuels, duelsWon, foulsDrawn, foulsCommitted } = stat;
+    const {
+        tackles,
+        blocks,
+        interceptions,
+        totalDuels,
+        duelsWon,
+        foulsDrawn,
+        foulsCommitted,
+    } = stat;
 
-    return [tackles, blocks, interceptions, totalDuels, duelsWon, foulsDrawn, foulsCommitted].some(hasValue);
+    return [
+        tackles,
+        blocks,
+        interceptions,
+        totalDuels,
+        duelsWon,
+        foulsDrawn,
+        foulsCommitted,
+    ].some(hasValue);
 }
 
 export function shouldShowDiscipline(stat: PlayerDetailsSeasonStat): boolean {
-    const { yellowCards, yellowRedCards, redCards, penaltiesCommitted, penaltiesWon } = stat;
+    const {
+        yellowCards,
+        yellowRedCards,
+        redCards,
+        penaltiesCommitted,
+        penaltiesWon,
+    } = stat;
 
-    return [yellowCards, yellowRedCards, redCards, penaltiesCommitted, penaltiesWon].some(hasValue);
+    return [
+        yellowCards,
+        yellowRedCards,
+        redCards,
+        penaltiesCommitted,
+        penaltiesWon,
+    ].some(hasValue);
 }
 
-export function shouldShowGoalkeeping(stat: PlayerDetailsSeasonStat, position: string | null): boolean {
+export function shouldShowGoalkeeping(
+    stat: PlayerDetailsSeasonStat,
+    position: string | null,
+): boolean {
     if (!isGoalkeeper(position)) {
-return false;
-}
+        return false;
+    }
 
     const { saves, goalsConceded, penaltiesSaved, penaltiesMissed } = stat;
 
-    return [saves, goalsConceded, penaltiesSaved, penaltiesMissed].some(hasValue);
+    return [saves, goalsConceded, penaltiesSaved, penaltiesMissed].some(
+        hasValue,
+    );
 }

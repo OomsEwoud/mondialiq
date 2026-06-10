@@ -15,8 +15,8 @@ export default function EmptyPredictionsState({ mode, message }: Props) {
     const title = isAiMode
         ? 'AI predictions are warming up'
         : isUserMode
-            ? 'No predictions shared'
-            : 'Your prediction board is empty';
+          ? 'No predictions shared'
+          : 'Your prediction board is empty';
 
     const description = isAiMode
         ? 'Once model insights are available, you will see winner probabilities, score trends and confidence here.'

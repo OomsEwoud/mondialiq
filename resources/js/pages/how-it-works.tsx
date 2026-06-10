@@ -53,8 +53,7 @@ const scoringRules = [
     {
         label: 'Total goals',
         points: 2,
-        description:
-            'The total number of goals in the match is exactly right.',
+        description: 'The total number of goals in the match is exactly right.',
     },
 ];
 
@@ -193,9 +192,9 @@ export default function HowItWorks() {
                     </div>
                 </div>
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-                    MondialIQ is a World Cup 2026 prediction platform where users
-                    can follow matches, make predictions, compare them with
-                    AI-generated insights and compete in leaderboards or
+                    MondialIQ is a World Cup 2026 prediction platform where
+                    users can follow matches, make predictions, compare them
+                    with AI-generated insights and compete in leaderboards or
                     prediction groups.
                 </p>
             </section>
@@ -335,7 +334,9 @@ export default function HowItWorks() {
 
                     <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                         <p className="text-sm leading-6 text-slate-600">
-                            <strong className="text-slate-900">Exact score</strong>{' '}
+                            <strong className="text-slate-900">
+                                Exact score
+                            </strong>{' '}
                             always wins the full 20 points. If the score is not
                             exact, partial points reward close predictions. The
                             total is capped at 20 points.{' '}
@@ -437,8 +438,8 @@ export default function HowItWorks() {
                     friends and classmates to compete together. Scores are based
                     on validated prediction points. Private groups with invite
                     codes can be created so only invited members can join.
-                    Prediction groups can optionally enable custom scoring
-                    rules and boosted predictions for extra points.
+                    Prediction groups can optionally enable custom scoring rules
+                    and boosted predictions for extra points.
                 </p>
             </section>
 
@@ -483,8 +484,8 @@ export default function HowItWorks() {
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
                     Some statistics only become available close to kickoff or
                     after the match. Lineups, player stats and detailed match
-                    events depend on the external football data provider. If data
-                    is missing, MondialIQ shows empty states instead of
+                    events depend on the external football data provider. If
+                    data is missing, MondialIQ shows empty states instead of
                     unreliable information.
                 </p>
                 <div className="mt-4 grid gap-2.5 md:grid-cols-3">

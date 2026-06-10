@@ -119,10 +119,7 @@ export default function TwoFactorSettings({
                                 Continue setup
                             </Button>
                         ) : (
-                            <Form
-                                {...enable.form()}
-                                onSuccess={openSetupModal}
-                            >
+                            <Form {...enable.form()} onSuccess={openSetupModal}>
                                 {({ processing }) => (
                                     <Button
                                         type="submit"

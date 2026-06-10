@@ -32,7 +32,6 @@ export type LeagueAccentColor =
     | 'violet'
     | 'blue';
 
-
 export interface ScoringRules {
     exact_score_points: number;
     correct_result_points: number;

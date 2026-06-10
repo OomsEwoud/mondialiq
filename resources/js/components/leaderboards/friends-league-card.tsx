@@ -181,7 +181,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-lg bg-white px-4 font-semibold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-lg border-slate-200 bg-white px-4 font-semibold text-slate-900 hover:bg-slate-50',
                             theme.buttonRing,
                         )}
                     >

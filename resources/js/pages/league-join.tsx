@@ -65,7 +65,8 @@ export default function LeagueJoin({
                         </h1>
                         <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
                             Enter the group code you received from a friend to
-                            join their ranking, or browse open public groups below.
+                            join their ranking, or browse open public groups
+                            below.
                         </p>
                         <p className="mt-4 text-sm font-semibold text-slate-400">
                             {leagueCountLabel}
@@ -155,8 +156,13 @@ export default function LeagueJoin({
 
                 <div className="space-y-4 pt-4">
                     <div>
-                        <h2 className="text-2xl font-bold text-slate-900">Browse public groups</h2>
-                        <p className="mt-1 text-sm leading-6 text-slate-500">Join open prediction groups and compete with other fans instantly.</p>
+                        <h2 className="text-2xl font-bold text-slate-900">
+                            Browse public groups
+                        </h2>
+                        <p className="mt-1 text-sm leading-6 text-slate-500">
+                            Join open prediction groups and compete with other
+                            fans instantly.
+                        </p>
                     </div>
 
                     {publicLeagues.length === 0 ? (
@@ -164,8 +170,12 @@ export default function LeagueJoin({
                             <div className="mb-3 flex size-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                                 <Users className="size-6" />
                             </div>
-                            <h3 className="text-base font-bold text-slate-900">No public groups are open right now</h3>
-                            <p className="mt-1 text-sm text-slate-500">Try joining with an invite code instead.</p>
+                            <h3 className="text-base font-bold text-slate-900">
+                                No public groups are open right now
+                            </h3>
+                            <p className="mt-1 text-sm text-slate-500">
+                                Try joining with an invite code instead.
+                            </p>
                         </div>
                     ) : (
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

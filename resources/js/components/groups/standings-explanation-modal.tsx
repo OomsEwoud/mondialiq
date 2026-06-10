@@ -103,7 +103,8 @@ export default function StandingsExplanationModal({
                                 </DialogTitle>
                                 <DialogDescription className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
                                     A clear guide to points, table columns,
-                                    qualification rules and third-place rankings.
+                                    qualification rules and third-place
+                                    rankings.
                                 </DialogDescription>
                             </div>
 
@@ -127,7 +128,8 @@ export default function StandingsExplanationModal({
                     >
                         <p className="text-sm leading-6 text-slate-600 sm:text-base">
                             Each World Cup group contains four teams. Teams are
-                            ranked by their match results during the group stage.
+                            ranked by their match results during the group
+                            stage.
                         </p>
                     </SectionCard>
 
@@ -238,9 +240,9 @@ export default function StandingsExplanationModal({
                                     </h2>
                                     <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
                                         The Best 3rd ranking compares all teams
-                                        that finish third in their group. The top
-                                        eight in that ranking advance to the Round
-                                        of 32.
+                                        that finish third in their group. The
+                                        top eight in that ranking advance to the
+                                        Round of 32.
                                     </p>
                                 </div>
                             </div>

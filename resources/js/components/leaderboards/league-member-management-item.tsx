@@ -1,5 +1,12 @@
 import { Form } from '@inertiajs/react';
-import { Bot, Crown, Shield, ShieldPlus, Trash2, UserMinus } from 'lucide-react';
+import {
+    Bot,
+    Crown,
+    Shield,
+    ShieldPlus,
+    Trash2,
+    UserMinus,
+} from 'lucide-react';
 import RemoveAiParticipantController from '@/actions/App/Http/Controllers/Leagues/RemoveAiParticipantController';
 import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
 import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
@@ -78,21 +85,21 @@ export default function LeagueMemberManagementItem({
                         {!member.isOwner &&
                             !member.isSystemUser &&
                             member.role === 'admin' && (
-                            <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
-                                <Shield className="size-3" />
-                                Admin
-                            </Badge>
-                        )}
+                                <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
+                                    <Shield className="size-3" />
+                                    Admin
+                                </Badge>
+                            )}
                         {!member.isOwner &&
                             !member.isSystemUser &&
                             member.role !== 'admin' && (
-                            <Badge
-                                variant="outline"
-                                className="rounded-full border-slate-200 bg-white px-2 py-0.5 text-xs font-bold text-slate-600"
-                            >
-                                Member
-                            </Badge>
-                        )}
+                                <Badge
+                                    variant="outline"
+                                    className="rounded-full border-slate-200 bg-white px-2 py-0.5 text-xs font-bold text-slate-600"
+                                >
+                                    Member
+                                </Badge>
+                            )}
                         {member.isCurrentUser && (
                             <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-slate-900">
                                 You

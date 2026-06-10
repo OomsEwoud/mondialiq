@@ -89,12 +89,18 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
         {
             icon: <Crosshair className="size-5" />,
             label: 'Clean sheets',
-            value: stats.goalsConceded === 0 && stats.appearances && stats.appearances > 0
-                ? stats.appearances
-                : null,
-            suffix: stats.goalsConceded === 0 && stats.appearances && stats.appearances > 0
-                ? 'est.'
-                : undefined,
+            value:
+                stats.goalsConceded === 0 &&
+                stats.appearances &&
+                stats.appearances > 0
+                    ? stats.appearances
+                    : null,
+            suffix:
+                stats.goalsConceded === 0 &&
+                stats.appearances &&
+                stats.appearances > 0
+                    ? 'est.'
+                    : undefined,
         },
         {
             icon: <Shield className="size-5" />,
@@ -109,19 +115,24 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
 
     const visibleItems = items.filter((item) => {
         if (item.value === null || item.value === undefined) {
-return false;
-}
+            return false;
+        }
 
-        if (item.value === 0 && item.label !== 'Goals' && item.label !== 'Assists' && item.label !== 'Red cards') {
-return false;
-}
+        if (
+            item.value === 0 &&
+            item.label !== 'Goals' &&
+            item.label !== 'Assists' &&
+            item.label !== 'Red cards'
+        ) {
+            return false;
+        }
 
         return true;
     });
 
     if (visibleItems.length === 0) {
-return null;
-}
+        return null;
+    }
 
     return (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -142,14 +153,18 @@ return null;
                     >
                         <span
                             className={`mb-2 shrink-0 ${
-                                item.highlight ? 'text-cyan-600' : 'text-slate-500'
+                                item.highlight
+                                    ? 'text-cyan-600'
+                                    : 'text-slate-500'
                             }`}
                         >
                             {item.icon}
                         </span>
                         <p
                             className={`mb-1 shrink-0 text-2xl font-bold tabular-nums ${
-                                item.highlight ? 'text-slate-900' : 'text-slate-700'
+                                item.highlight
+                                    ? 'text-slate-900'
+                                    : 'text-slate-700'
                             }`}
                         >
                             {displayValue}

@@ -143,7 +143,9 @@ export default function BoostedPredictionSettings({
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="low">Low</SelectItem>
-                                    <SelectItem value="medium">Medium</SelectItem>
+                                    <SelectItem value="medium">
+                                        Medium
+                                    </SelectItem>
                                     <SelectItem value="high">High</SelectItem>
                                 </SelectContent>
                             </Select>

@@ -8,9 +8,19 @@ interface Props {
     className?: string;
 }
 
-export default function MatchInfoItem({ icon, label, value, className }: Props) {
+export default function MatchInfoItem({
+    icon,
+    label,
+    value,
+    className,
+}: Props) {
     return (
-        <div className={cn("flex min-w-0 items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm", className)}>
+        <div
+            className={cn(
+                'flex min-w-0 items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm',
+                className,
+            )}
+        >
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-blue-100 [&_svg]:h-4 [&_svg]:w-4">
                 {icon}
             </span>

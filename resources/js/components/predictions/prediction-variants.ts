@@ -34,7 +34,8 @@ export const predictionAccent = {
         /** Subtle hover bg on team cards */
         bgHover: 'hover:bg-cyan-50/30',
         /** Gradient card (score card center, etc.) */
-        gradientCard: 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white',
+        gradientCard:
+            'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white',
         /** Progress / toggle bar active color */
         progressBar: 'bg-cyan-500',
         /** Focus ring */

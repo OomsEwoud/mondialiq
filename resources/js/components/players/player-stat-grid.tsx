@@ -37,12 +37,15 @@ export default function PlayerStatGrid({ title, icon, items }: Props) {
                             : String(item.value);
 
                     return (
-                        <div key={item.label} className="flex h-full flex-col justify-between gap-1">
-                            <p className="text-[11px] font-semibold leading-tight tracking-wider text-slate-400 uppercase">
+                        <div
+                            key={item.label}
+                            className="flex h-full flex-col justify-between gap-1"
+                        >
+                            <p className="text-[11px] leading-tight font-semibold tracking-wider text-slate-400 uppercase">
                                 {item.label}
                             </p>
                             <p
-                                className={`text-xl font-bold tabular-nums tracking-tight ${
+                                className={`text-xl font-bold tracking-tight tabular-nums ${
                                     item.highlight
                                         ? 'text-slate-900'
                                         : 'text-slate-700'

@@ -54,9 +54,11 @@ export default function PredictionTabs({ activeTab }: Props) {
                                 <span
                                     className={cn(
                                         'hidden text-xs font-medium sm:block',
-                                        isActive && tab.value === 'ai' &&
+                                        isActive &&
+                                            tab.value === 'ai' &&
                                             'text-cyan-300',
-                                        isActive && tab.value === 'mine' &&
+                                        isActive &&
+                                            tab.value === 'mine' &&
                                             'text-cyan-300',
                                         !isActive && 'text-slate-400',
                                     )}

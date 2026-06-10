@@ -14,7 +14,10 @@ export default function PointsBadge({ points }: Props) {
                     : 'border-slate-200 bg-white text-slate-600',
             )}
         >
-            {points} <span className="ml-1 text-[11px] font-semibold uppercase opacity-75">pts</span>
+            {points}{' '}
+            <span className="ml-1 text-[11px] font-semibold uppercase opacity-75">
+                pts
+            </span>
         </span>
     );
 }

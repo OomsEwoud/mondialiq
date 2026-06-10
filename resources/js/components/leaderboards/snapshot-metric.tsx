@@ -22,7 +22,12 @@ export default function SnapshotMetric({
 }: SnapshotMetricProps) {
     return (
         <div className={cn('rounded-2xl border px-4 py-4', className)}>
-            <div className={cn('flex items-center gap-2 text-slate-500', labelClassName)}>
+            <div
+                className={cn(
+                    'flex items-center gap-2 text-slate-500',
+                    labelClassName,
+                )}
+            >
                 <Icon
                     className={cn('size-4', iconClassName ?? 'text-slate-600')}
                 />

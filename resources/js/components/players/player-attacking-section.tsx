@@ -34,7 +34,9 @@ export default function PlayerAttackingSection({ stats }: Props) {
         {
             label: 'Dribbles',
             value: stats.dribblesSuccess,
-            suffix: stats.dribblesAttempts ? `/ ${stats.dribblesAttempts}` : undefined,
+            suffix: stats.dribblesAttempts
+                ? `/ ${stats.dribblesAttempts}`
+                : undefined,
         },
         {
             label: 'Dribbled past',

@@ -20,24 +20,36 @@ interface Props {
     userId?: number;
 }
 
-export default function PredictionCard({ match, actionLabel, mode, userId }: Props) {
+export default function PredictionCard({
+    match,
+    actionLabel,
+    mode,
+    userId,
+}: Props) {
     const isMine = mode === 'mine';
     const isUser = mode === 'user';
-    const prediction = isMine || isUser ? match.userPrediction : match.aiPrediction;
-    const rawScore = isMine || isUser
-        ? predictionScoreLabel(match)
-        : aiPredictionScoreLabel(match);
+    const prediction =
+        isMine || isUser ? match.userPrediction : match.aiPrediction;
+    const rawScore =
+        isMine || isUser
+            ? predictionScoreLabel(match)
+            : aiPredictionScoreLabel(match);
     const score = rawScore?.replace(/\s*-\s*/, ' - ');
 
     return (
         <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
             <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span
-                    className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
-                >
-                    {isMine ? 'Personal pick' : isUser ? 'User pick' : 'AI pick'}
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+                    {isMine
+                        ? 'Personal pick'
+                        : isUser
+                          ? 'User pick'
+                          : 'AI pick'}
                 </span>
-                <UserPredictionSummary match={match} aiMode={!isMine && !isUser} />
+                <UserPredictionSummary
+                    match={match}
+                    aiMode={!isMine && !isUser}
+                />
             </div>
 
             <div className="flex flex-col gap-4 border-t border-slate-200 pt-4 lg:flex-row lg:items-center lg:justify-between">
@@ -93,7 +105,7 @@ export default function PredictionCard({ match, actionLabel, mode, userId }: Pro
                             </span>
                         </Link>
                         {prediction?.confidence && (
-                            <span className="ml-2 shrink-0 rounded-full border border-slate-200/80 bg-slate-50 px-2.5 py-1 text-xs font-bold capitalize text-slate-600">
+                            <span className="ml-2 shrink-0 rounded-full border border-slate-200/80 bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-600 capitalize">
                                 {/^\d+$/.test(prediction.confidence)
                                     ? `${prediction.confidence}% confidence`
                                     : `${prediction.confidence} confidence`}
@@ -133,7 +145,10 @@ export default function PredictionCard({ match, actionLabel, mode, userId }: Pro
                         label={actionLabel}
                         href={
                             isUser && userId
-                                ? showUserPrediction.url({ fixture: match.id, user: userId })
+                                ? showUserPrediction.url({
+                                      fixture: match.id,
+                                      user: userId,
+                                  })
                                 : undefined
                         }
                     />

@@ -199,7 +199,7 @@ function extractSectionStats(
     if (section.key === 'passing') {
         const total = stats.passesTotal;
         const accurate = stats.passAccuracy;
-        
+
         if (
             hasMeaningfulStatValue(total) &&
             hasMeaningfulStatValue(accurate) &&
@@ -268,8 +268,6 @@ function buildVisibleSections(
 
     return sections;
 }
-
-
 
 export default function MatchLineupPlayerModal({
     player,
@@ -358,7 +356,9 @@ export default function MatchLineupPlayerModal({
                             </div>
 
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                                {rating !== null && ratingStyles && ratingLabel !== null ? (
+                                {rating !== null &&
+                                ratingStyles &&
+                                ratingLabel !== null ? (
                                     <RatingStatCard
                                         rating={rating}
                                         ratingLabel={ratingLabel}

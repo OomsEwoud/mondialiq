@@ -1,4 +1,3 @@
-
 import AiPredictionAdviceCard from '@/components/predictions/ai-prediction-advice-card';
 import AiPredictionHero from '@/components/predictions/ai-prediction-hero';
 import AiPredictionScoreCard from '@/components/predictions/ai-prediction-score-card';
@@ -32,7 +31,6 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                     Predictions are data-driven insights, not certainties.
                 </p>
             </div>
-
         </>
     );
 }

@@ -135,15 +135,12 @@ export default function UserPredictions({
 
     return (
         <>
-            <PageHead
-                title={pageTitle}
-                description={pageDescription}
-            />
+            <PageHead title={pageTitle} description={pageDescription} />
 
             <div className="mx-auto max-w-7xl">
                 <section className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-                        <div className="flex flex-col sm:flex-row sm:items-start gap-5">
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                             <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-800/50 text-xl font-bold text-slate-200 shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
                                 {user.avatar ? (
                                     <img
@@ -158,7 +155,9 @@ export default function UserPredictions({
 
                             <div>
                                 <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
-                                    {user.isViewer ? 'My public predictions' : 'User predictions'}
+                                    {user.isViewer
+                                        ? 'My public predictions'
+                                        : 'User predictions'}
                                 </p>
                                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                                     {pageTitle}
@@ -170,7 +169,9 @@ export default function UserPredictions({
                                 <div className="mt-5 flex flex-wrap gap-2.5">
                                     <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
                                         {user.predictionsCount}{' '}
-                                        {user.predictionsCount === 1 ? 'prediction' : 'predictions'}
+                                        {user.predictionsCount === 1
+                                            ? 'prediction'
+                                            : 'predictions'}
                                     </span>
                                     <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
                                         {user.totalPoints} points

@@ -9,9 +9,7 @@ import {
 } from '@/components/ui/layout/card';
 import { cn } from '@/lib/utils';
 import type { LeagueDetails } from '@/types/league';
-import {
-    getLeagueThemePalette,
-} from '@/utils/league-branding';
+import { getLeagueThemePalette } from '@/utils/league-branding';
 
 interface Props {
     league: LeagueDetails;

@@ -54,21 +54,33 @@ export default function MatchCard({ match }: Props) {
                             ? 'AI prediction available'
                             : 'AI pending'}
                     </span>
-                    <span
-                        className="flex items-center gap-1.5"
-                        title={
-                            match.userPrediction
-                                ? `Predicted: ${match.userPrediction.label}`
-                                : 'No prediction placed'
-                        }
-                    >
-                        <CheckCircle2
-                            className={`size-3.5 ${match.userPrediction ? 'text-emerald-500' : 'text-slate-400'}`}
-                        />
-                        {match.userPrediction
-                            ? `Predicted: ${match.userPrediction.label}`
-                            : 'No prediction'}
-                    </span>
+                    {match.userPrediction ? (
+                        <div className="flex items-center gap-2">
+                            <span
+                                className="flex items-center gap-1.5"
+                                title={`Predicted: ${match.userPrediction.label}`}
+                            >
+                                <CheckCircle2 className="size-3.5 text-emerald-500" />
+                                Predicted: {match.userPrediction.label}
+                            </span>
+                            {match.userPrediction.homeScore !== null &&
+                                match.userPrediction.awayScore !== null && (
+                                    <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 shadow-sm">
+                                        Your score:{' '}
+                                        {match.userPrediction.homeScore} -{' '}
+                                        {match.userPrediction.awayScore}
+                                    </span>
+                                )}
+                        </div>
+                    ) : (
+                        <span
+                            className="flex items-center gap-1.5"
+                            title="No prediction placed"
+                        >
+                            <CheckCircle2 className="size-3.5 text-slate-400" />
+                            No prediction
+                        </span>
+                    )}
                 </div>
             </div>
             <MatchDetailsToggle

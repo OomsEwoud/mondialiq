@@ -9,7 +9,11 @@ interface Props {
     href?: string;
 }
 
-export default function PredictionStatusAction({ matchId, label, href }: Props) {
+export default function PredictionStatusAction({
+    matchId,
+    label,
+    href,
+}: Props) {
     return (
         <Button
             asChild

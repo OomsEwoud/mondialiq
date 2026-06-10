@@ -118,7 +118,11 @@ export default function Login({
                 {({ processing, errors }) => (
                     <>
                         {intended && (
-                            <input type="hidden" name="intended" value={intended} />
+                            <input
+                                type="hidden"
+                                name="intended"
+                                value={intended}
+                            />
                         )}
 
                         {showStatus && (

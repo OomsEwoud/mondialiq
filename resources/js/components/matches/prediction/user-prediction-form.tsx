@@ -171,7 +171,11 @@ export default function UserPredictionForm({
                     )}
                     {!meetsBoostThreshold && (
                         <p className="mt-2 text-xs font-medium text-amber-600">
-                            A boosted prediction requires at least <span className="uppercase">{boostedConfidenceThreshold}</span> confidence.
+                            A boosted prediction requires at least{' '}
+                            <span className="uppercase">
+                                {boostedConfidenceThreshold}
+                            </span>{' '}
+                            confidence.
                         </p>
                     )}
                 </div>
@@ -190,7 +194,10 @@ export default function UserPredictionForm({
                 <Button
                     type="submit"
                     disabled={
-                        processing || predictionLocked || data.outcome === '' || !meetsBoostThreshold
+                        processing ||
+                        predictionLocked ||
+                        data.outcome === '' ||
+                        !meetsBoostThreshold
                     }
                     className="h-11 rounded-xl bg-blue-950 px-5 font-bold text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
                 >

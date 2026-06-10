@@ -66,7 +66,9 @@ export default function UpdateProfileInformationForm({
                                 error={errors.avatar}
                                 onAvatarChange={avatarUpload.handleAvatarChange}
                                 previewUrl={avatarUpload.avatarPreview}
-                                selectedFileName={avatarUpload.selectedAvatarName}
+                                selectedFileName={
+                                    avatarUpload.selectedAvatarName
+                                }
                                 user={user}
                             />
 
@@ -111,7 +113,11 @@ export default function UpdateProfileInformationForm({
                                             autoComplete="username"
                                             placeholder="name@example.com"
                                         />
-                                        <div className={fieldErrorWrapperClassName}>
+                                        <div
+                                            className={
+                                                fieldErrorWrapperClassName
+                                            }
+                                        >
                                             <InputError
                                                 message={errors.email}
                                                 className={fieldErrorClassName}
@@ -127,7 +133,8 @@ export default function UpdateProfileInformationForm({
                                         <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
                                         <div className="space-y-2">
                                             <p className="text-sm font-bold text-amber-900">
-                                                Your email address is unverified.
+                                                Your email address is
+                                                unverified.
                                             </p>
                                             <p className="text-sm leading-6 text-amber-700">
                                                 Verify your email to keep all
@@ -140,7 +147,8 @@ export default function UpdateProfileInformationForm({
                                             >
                                                 Resend verification email
                                             </Link>
-                                            {status === 'verification-link-sent' && (
+                                            {status ===
+                                                'verification-link-sent' && (
                                                 <p className="text-sm font-semibold text-green-700">
                                                     A new verification link has
                                                     been sent.

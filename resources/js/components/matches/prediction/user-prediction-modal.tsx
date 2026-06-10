@@ -114,7 +114,9 @@ export default function UserPredictionModal({
                                 scoreboardId={scoreboardId}
                                 boostsRemaining={boostsRemaining}
                                 boostsLimit={boostsLimit}
-                                boostedConfidenceThreshold={boostedConfidenceThreshold}
+                                boostedConfidenceThreshold={
+                                    boostedConfidenceThreshold
+                                }
                             />
                         )}
                     </div>

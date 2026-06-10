@@ -121,12 +121,22 @@ export default function UpcomingMatches({ matches }: Props) {
                                     </span>
                                     {match.userPrediction && (
                                         <div className="flex items-center gap-1.5 text-xs text-emerald-900">
-                                            <span className="font-medium text-emerald-700">Your prediction:</span>
-                                            <span className="font-bold">{match.homeTeamShort}</span>
-                                            <span className="rounded bg-white px-1.5 py-0.5 font-bold shadow-sm ring-1 ring-emerald-200">
-                                                {match.userPrediction.homeScore ?? '-'} - {match.userPrediction.awayScore ?? '-'}
+                                            <span className="font-medium text-emerald-700">
+                                                Your prediction:
                                             </span>
-                                            <span className="font-bold">{match.awayTeamShort}</span>
+                                            <span className="font-bold">
+                                                {match.homeTeamShort}
+                                            </span>
+                                            <span className="rounded bg-white px-1.5 py-0.5 font-bold shadow-sm ring-1 ring-emerald-200">
+                                                {match.userPrediction
+                                                    .homeScore ?? '-'}{' '}
+                                                -{' '}
+                                                {match.userPrediction
+                                                    .awayScore ?? '-'}
+                                            </span>
+                                            <span className="font-bold">
+                                                {match.awayTeamShort}
+                                            </span>
                                         </div>
                                     )}
                                 </div>

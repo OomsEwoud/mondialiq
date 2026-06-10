@@ -122,20 +122,18 @@ export default function AiPredictions({
     };
 
     const pageTitle = 'MondialiQ AI Predictions';
-    const pageDescription = "Explore MondialiQ AI's World Cup predictions and match insights.";
+    const pageDescription =
+        "Explore MondialiQ AI's World Cup predictions and match insights.";
     const emptyMessage = 'No AI predictions available yet.';
 
     return (
         <>
-            <PageHead
-                title={pageTitle}
-                description={pageDescription}
-            />
+            <PageHead title={pageTitle} description={pageDescription} />
 
             <div className="mx-auto max-w-7xl">
                 <section className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-                        <div className="flex flex-col sm:flex-row sm:items-start gap-5">
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
                             <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-800/50 text-xl font-bold text-slate-200 shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
                                 {aiUser.avatar ? (
                                     <img

@@ -105,4 +105,3 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
         </section>
     );
 }
-

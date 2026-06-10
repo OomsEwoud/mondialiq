@@ -1,10 +1,4 @@
-import {
-    Calendar,
-    Flag,
-    MapPin,
-    Shield,
-    Shirt,
-} from 'lucide-react';
+import { Calendar, Flag, MapPin, Shield, Shirt } from 'lucide-react';
 import {
     Avatar,
     AvatarFallback,
@@ -43,7 +37,10 @@ export default function PlayerHero({ player }: Props) {
         },
         {
             icon: <MapPin className="size-3.5" />,
-            label: player.teams.length > 0 ? player.teams.map((t) => t.name).join(', ') : null,
+            label:
+                player.teams.length > 0
+                    ? player.teams.map((t) => t.name).join(', ')
+                    : null,
         },
     ];
 
@@ -112,7 +109,9 @@ export default function PlayerHero({ player }: Props) {
                             className="gap-1.5 rounded-full border-slate-200 bg-gradient-to-b from-white to-slate-50/60 px-3 py-1.5 font-bold text-slate-600 shadow-sm [&_svg]:text-slate-600"
                         >
                             {item.icon}
-                            <span className="max-w-44 truncate">{item.label}</span>
+                            <span className="max-w-44 truncate">
+                                {item.label}
+                            </span>
                         </Badge>
                     ))}
                 </div>

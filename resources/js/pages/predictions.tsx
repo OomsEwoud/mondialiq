@@ -100,11 +100,7 @@ export default function Predictions({
             },
         }));
 
-        if (
-            key === 'date' ||
-            key === 'status' ||
-            key === 'pointsState'
-        ) {
+        if (key === 'date' || key === 'status' || key === 'pointsState') {
             const nextFilters = {
                 ...filters,
                 [key]: value,

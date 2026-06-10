@@ -84,7 +84,7 @@ export default function LeagueOnboardingCard({
                         variant="outline"
                         onClick={openInviteTools}
                         className={cn(
-                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            'mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-900 hover:bg-slate-50 sm:w-auto',
                             theme.buttonRing,
                         )}
                     >
@@ -150,7 +150,7 @@ export default function LeagueOnboardingCard({
                         asChild
                         variant="outline"
                         className={cn(
-                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            'mt-3 h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-900 hover:bg-slate-50 sm:w-auto',
                             theme.buttonRing,
                         )}
                     >

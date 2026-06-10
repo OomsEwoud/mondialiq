@@ -27,7 +27,7 @@ export default function LeaguePredict({
             <div className="mx-auto max-w-7xl space-y-6">
                 <section
                     className={cn(
-                        'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7 relative',
+                        'relative rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7',
                         getLeagueThemeBannerClass(league.accentColor),
                     )}
                 >
@@ -79,7 +79,9 @@ export default function LeaguePredict({
                     scoreboardId={league.id}
                     boostsRemaining={league.boostsRemaining}
                     boostsLimit={league.boostsLimit}
-                    boostedConfidenceThreshold={league.boostedConfidenceThreshold}
+                    boostedConfidenceThreshold={
+                        league.boostedConfidenceThreshold
+                    }
                     boostedEnabled={league.boostedPredictionsEnabled}
                 />
 

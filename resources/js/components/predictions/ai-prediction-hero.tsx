@@ -1,10 +1,5 @@
 import { Link } from '@inertiajs/react';
-import {
-    CalendarDays,
-    Clock,
-    Sparkles,
-    Trophy,
-} from 'lucide-react';
+import { CalendarDays, Clock, Sparkles, Trophy } from 'lucide-react';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
 

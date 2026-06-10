@@ -215,7 +215,10 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                         {member.lastPredictionLabel && (
                                             <>
                                                 <span>•</span>
-                                                <p>Last {member.lastPredictionLabel}</p>
+                                                <p>
+                                                    Last{' '}
+                                                    {member.lastPredictionLabel}
+                                                </p>
                                             </>
                                         )}
                                     </div>

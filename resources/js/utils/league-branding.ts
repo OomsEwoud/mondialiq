@@ -33,7 +33,10 @@ export interface LeagueThemePalette {
     link: string;
 }
 
-export const leagueThemePalettes: Record<LeagueAccentColor, LeagueThemePalette> = {
+export const leagueThemePalettes: Record<
+    LeagueAccentColor,
+    LeagueThemePalette
+> = {
     amber: {
         banner: 'bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_40%),linear-gradient(135deg,_#0f172a_0%,_#78350f_45%,_#d97706_100%)]',
         bannerRing: 'ring-amber-500/20',
@@ -44,7 +47,8 @@ export const leagueThemePalettes: Record<LeagueAccentColor, LeagueThemePalette> 
         badgeBg: 'bg-amber-950/30',
         badgeText: 'text-amber-100',
         primaryButton: 'bg-amber-600 hover:bg-amber-500 text-white',
-        secondaryButton: 'border-amber-300/40 text-amber-50 hover:bg-amber-900/25',
+        secondaryButton:
+            'border-amber-300/40 text-amber-50 hover:bg-amber-900/25',
         softBg: 'bg-amber-50',
         softBorder: 'border-amber-200',
         softText: 'text-amber-800',
@@ -84,7 +88,8 @@ export const leagueThemePalettes: Record<LeagueAccentColor, LeagueThemePalette> 
         badgeBg: 'bg-violet-950/30',
         badgeText: 'text-violet-100',
         primaryButton: 'bg-violet-600 hover:bg-violet-500 text-white',
-        secondaryButton: 'border-violet-300/40 text-violet-50 hover:bg-violet-900/25',
+        secondaryButton:
+            'border-violet-300/40 text-violet-50 hover:bg-violet-900/25',
         softBg: 'bg-violet-50',
         softBorder: 'border-violet-200',
         softText: 'text-violet-800',
@@ -104,7 +109,8 @@ export const leagueThemePalettes: Record<LeagueAccentColor, LeagueThemePalette> 
         badgeBg: 'bg-emerald-950/30',
         badgeText: 'text-emerald-100',
         primaryButton: 'bg-emerald-600 hover:bg-emerald-500 text-white',
-        secondaryButton: 'border-emerald-300/40 text-emerald-50 hover:bg-emerald-900/25',
+        secondaryButton:
+            'border-emerald-300/40 text-emerald-50 hover:bg-emerald-900/25',
         softBg: 'bg-emerald-50',
         softBorder: 'border-emerald-200',
         softText: 'text-emerald-800',
@@ -201,15 +207,22 @@ export const leagueThemeOptions = [
     },
 ] as const;
 
-export function getLeagueThemePalette(accentColor: LeagueAccentColor | null | undefined): LeagueThemePalette {
+export function getLeagueThemePalette(
+    accentColor: LeagueAccentColor | null | undefined,
+): LeagueThemePalette {
     if (!accentColor) {
         return leagueThemePalettes[defaultAccentColor];
     }
 
-    return leagueThemePalettes[accentColor] ?? leagueThemePalettes[defaultAccentColor];
+    return (
+        leagueThemePalettes[accentColor] ??
+        leagueThemePalettes[defaultAccentColor]
+    );
 }
 
-export function getLeagueThemeBannerClass(accentColor: LeagueAccentColor | null | undefined) {
+export function getLeagueThemeBannerClass(
+    accentColor: LeagueAccentColor | null | undefined,
+) {
     const palette = getLeagueThemePalette(accentColor);
 
     return cn(

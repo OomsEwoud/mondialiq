@@ -68,7 +68,7 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
                     </div>
                 </div>
             </div>
-            
+
             <CardHeader className="gap-2 px-4 py-4 sm:px-5">
                 <CardTitle className="line-clamp-1 text-lg font-bold text-slate-900">
                     {league.name}
@@ -77,7 +77,7 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
                     {league.description || 'No description provided.'}
                 </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="mt-auto px-4 pb-5 sm:px-5">
                 <div className="mb-4 flex items-center justify-between">
                     <Badge
@@ -88,11 +88,11 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
                         {league.users_count} {memberLabel}
                     </Badge>
                 </div>
-                
+
                 <Button
                     onClick={joinLeague}
                     disabled={isJoining || isAtLimit}
-                    className="w-full h-10 rounded-lg font-semibold"
+                    className="h-10 w-full rounded-lg font-semibold"
                 >
                     <LogIn className="mr-2 size-4" />
                     {isJoining ? 'Joining...' : 'Join group'}

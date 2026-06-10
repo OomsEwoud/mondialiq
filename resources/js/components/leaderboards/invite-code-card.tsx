@@ -174,7 +174,7 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite code"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-900 hover:bg-slate-50',
                             theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}
@@ -193,7 +193,7 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite link"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-900 hover:bg-slate-50',
                             theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}

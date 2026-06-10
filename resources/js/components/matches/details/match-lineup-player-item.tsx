@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import MatchLineupPlayerModal from '@/components/matches/details/match-lineup-player-modal';
 import {

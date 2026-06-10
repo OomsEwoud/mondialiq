@@ -39,15 +39,23 @@ export default function PlayerDetails({ player }: Props) {
                 {hasSeasonStats ? (
                     <div className="flex flex-col gap-5">
                         {player.seasonStats.map((stat) => {
-                            const isGk = isGoalkeeper(stat.position ?? player.position);
+                            const isGk = isGoalkeeper(
+                                stat.position ?? player.position,
+                            );
                             const showAttacking = shouldShowAttacking(stat);
                             const showPassing = shouldShowPassing(stat);
                             const showDefensive = shouldShowDefensive(stat);
                             const showDiscipline = shouldShowDiscipline(stat);
-                            const showGoalkeeping = shouldShowGoalkeeping(stat, stat.position ?? player.position);
+                            const showGoalkeeping = shouldShowGoalkeeping(
+                                stat,
+                                stat.position ?? player.position,
+                            );
 
                             return (
-                                <div key={stat.id} className="flex flex-col gap-5">
+                                <div
+                                    key={stat.id}
+                                    className="flex flex-col gap-5"
+                                >
                                     <div className="flex items-center gap-3">
                                         {stat.league?.logo ? (
                                             <img
@@ -62,21 +70,44 @@ export default function PlayerDetails({ player }: Props) {
                                             </h2>
                                             <p className="text-xs font-semibold text-slate-500">
                                                 {stat.season} season
-                                                {stat.position ? ` · ${stat.position}` : ''}
+                                                {stat.position
+                                                    ? ` · ${stat.position}`
+                                                    : ''}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <PlayerSeasonOverview stats={stat} isGoalkeeper={isGk} />
+                                    <PlayerSeasonOverview
+                                        stats={stat}
+                                        isGoalkeeper={isGk}
+                                    />
 
                                     <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                        {showAttacking ? <PlayerAttackingSection stats={stat} /> : null}
-                                        {showPassing ? <PlayerPassingSection stats={stat} /> : null}
-                                        {showDefensive ? <PlayerDefensiveSection stats={stat} /> : null}
-                                        {showDiscipline ? <PlayerDisciplineSection stats={stat} /> : null}
+                                        {showAttacking ? (
+                                            <PlayerAttackingSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showPassing ? (
+                                            <PlayerPassingSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showDefensive ? (
+                                            <PlayerDefensiveSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showDiscipline ? (
+                                            <PlayerDisciplineSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
                                     </div>
 
-                                    {showGoalkeeping ? <PlayerGoalkeeperSection stats={stat} /> : null}
+                                    {showGoalkeeping ? (
+                                        <PlayerGoalkeeperSection stats={stat} />
+                                    ) : null}
                                 </div>
                             );
                         })}
