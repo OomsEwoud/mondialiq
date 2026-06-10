@@ -57,8 +57,8 @@ const STAT_SECTIONS: StatSectionConfig[] = [
         accentColor: 'bg-blue-500',
         stats: [
             { key: 'passesTotal', label: 'Passes' },
-            { key: 'keyPasses', label: 'Key passes' },
             { key: 'passAccuracy', label: 'Accuracy %' },
+            { key: 'keyPasses', label: 'Key passes' },
         ],
     },
     {
@@ -175,7 +175,34 @@ function extractSectionStats(
         const value = stats[stat.key];
 
         if (hasMeaningfulStatValue(value)) {
-            items.push({ label: stat.label, value: Number(value) });
+            let label = stat.label;
+
+            if (stat.key === 'passAccuracy') {
+                const total = stats.passesTotal;
+
+                if (hasMeaningfulStatValue(total) && value <= total) {
+                    label = 'Accurate passes';
+                } else {
+                    label = 'Accuracy %';
+                }
+            }
+
+            items.push({ label, value: Number(value) });
+        }
+    }
+
+    if (section.key === 'passing') {
+        const total = stats.passesTotal;
+        const accurate = stats.passAccuracy;
+        
+        if (
+            hasMeaningfulStatValue(total) &&
+            hasMeaningfulStatValue(accurate) &&
+            total > 0 &&
+            accurate <= total
+        ) {
+            const percentage = (accurate / total) * 100;
+            items.push({ label: 'Accuracy %', value: percentage });
         }
     }
 
@@ -406,9 +433,8 @@ export default function MatchLineupPlayerModal({
 
                                 {minutes !== null ? (
                                     <PrimaryStatCard
-                                        label="Minutes"
+                                        label="Minutes played"
                                         value={String(minutes)}
-                                        sublabel="min played"
                                     />
                                 ) : null}
 
@@ -451,13 +477,13 @@ export default function MatchLineupPlayerModal({
                                                     {config.title}
                                                 </h4>
                                             </div>
-                                            <div className="flex flex-wrap gap-2">
+                                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                                 {items.map((stat) => (
                                                     <div
                                                         key={stat.label}
-                                                        className="flex min-w-[72px] flex-col rounded-lg border border-slate-100 bg-white px-3 py-2 shadow-sm"
+                                                        className="flex min-h-[4.5rem] flex-col justify-center rounded-lg border border-slate-100 bg-white px-3 py-2 text-center shadow-sm"
                                                     >
-                                                        <span className="text-[10px] font-semibold tracking-wide text-slate-400 uppercase">
+                                                        <span className="text-[10px] leading-tight font-semibold tracking-wide text-slate-400 uppercase">
                                                             {stat.label}
                                                         </span>
                                                         <span className="mt-0.5 text-base font-bold text-slate-800">
