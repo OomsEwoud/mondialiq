@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+
 import { useState } from 'react';
 import MatchLineupPlayerModal from '@/components/matches/details/match-lineup-player-modal';
 import {
@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/display/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import { show as showPlayer } from '@/routes/players';
+
 import type { MatchDetailsLineupPlayer } from '@/types/match-details';
 import { formatLineupPositionLabel } from '@/utils/match-lineup';
 
@@ -104,14 +104,12 @@ export default function MatchLineupPlayerItem({
 
                 <div className="min-w-0 flex-1">
                     <div className="flex min-w-0 items-center gap-2">
-                        <Link
-                            href={showPlayer.url(player.playerId)}
-                            onClick={(e) => e.stopPropagation()}
-                            className="min-w-0 truncate text-sm font-bold text-slate-800 hover:text-cyan-600 hover:underline focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                        <span
+                            className="min-w-0 truncate text-sm font-bold text-slate-800"
                             title={player.name}
                         >
                             {player.name}
-                        </Link>
+                        </span>
                         {player.isCaptain ? (
                             <span
                                 className="flex size-5 shrink-0 items-center justify-center rounded-full bg-blue-950 text-xs font-bold text-white"
