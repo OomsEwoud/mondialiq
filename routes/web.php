@@ -6,6 +6,7 @@ use App\Http\Controllers\Leagues\CreateLeaguePageController;
 use App\Http\Controllers\Leagues\DeleteLeagueController;
 use App\Http\Controllers\Leagues\JoinLeagueController;
 use App\Http\Controllers\Leagues\JoinLeaguePageController;
+use App\Http\Controllers\Leagues\JoinPublicLeagueController;
 use App\Http\Controllers\Leagues\LeaveLeagueController;
 use App\Http\Controllers\Leagues\RefreshLeagueCodeController;
 use App\Http\Controllers\Leagues\RemoveAiParticipantController;
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/leagues/{scoreboard}/predict', ShowLeaguePredictController::class)->name('leagues.predict');
     Route::post('/leagues', StoreLeagueController::class)->name('leagues.store');
     Route::post('/leagues/join', JoinLeagueController::class)->name('leagues.join.store');
+    Route::post('/leagues/{scoreboard}/join-public', JoinPublicLeagueController::class)->name('leagues.join-public');
 
     Route::get('/predictions/{fixture}/ai', PredictionDetailsController::class)
         ->defaults('predictionMode', 'ai')

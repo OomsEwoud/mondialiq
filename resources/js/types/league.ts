@@ -84,11 +84,21 @@ export interface LeaguePredictPageProps {
     };
 }
 
+export interface PublicLeague {
+    id: number;
+    name: string;
+    description: string | null;
+    icon: string;
+    accent_color: LeagueAccentColor;
+    users_count: number;
+}
+
 export interface LeagueJoinPageProps {
     initialCode: string;
     currentLeagueCount: number;
     maxLeagueCount: number;
     hasReachedLeagueLimit: boolean;
+    publicLeagues: PublicLeague[];
 }
 
 export interface LeagueCreatePageProps {
