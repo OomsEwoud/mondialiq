@@ -78,6 +78,7 @@ export default function LeaguePredict({
                     fixtures={fixtures.data}
                     scoreboardId={league.id}
                     boostsRemaining={league.boostsRemaining}
+                    boostsLimit={league.boostsLimit}
                     boostedEnabled={league.boostedPredictionsEnabled}
                 />
 

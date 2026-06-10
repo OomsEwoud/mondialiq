@@ -46,8 +46,8 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
         league.boostsRemaining !== undefined
             ? [
                   {
-                      label: 'Boosts left',
-                      value: `${league.boostsRemaining}`,
+                      label: 'Boosts remaining',
+                      value: `${league.boostsRemaining} of ${league.boostsLimit}`,
                       icon: Zap,
                   },
               ]

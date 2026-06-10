@@ -20,6 +20,7 @@ interface Props {
     onCancel: () => void;
     scoreboardId?: number;
     boostsRemaining?: number | null;
+    boostsLimit?: number | null;
 }
 
 export default function UserPredictionForm({
@@ -29,6 +30,7 @@ export default function UserPredictionForm({
     onCancel,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
 }: Props) {
     const predictionLocked = isPredictionLocked(match);
     const { data, setData, post, processing, errors, clearErrors } =
@@ -147,7 +149,7 @@ export default function UserPredictionForm({
                             <p className="text-xs text-slate-600">
                                 {boostsRemaining === 0 && !data.is_boosted
                                     ? 'You have no boosts remaining in this leaderboard.'
-                                    : `${boostsRemaining} of ${boostsRemaining + (data.is_boosted ? 0 : 1)} boosts remaining`}
+                                    : `${boostsRemaining} of ${boostsLimit} boosts remaining`}
                             </p>
                         </div>
                     </div>

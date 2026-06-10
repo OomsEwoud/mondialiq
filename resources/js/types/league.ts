@@ -74,6 +74,7 @@ export interface LeagueDetails {
     currentUserRank: number | null;
     boostedPredictionsEnabled: boolean;
     boostsRemaining: number | null;
+    boostsLimit: number | null;
 }
 
 export interface LeaguePredictPageProps {

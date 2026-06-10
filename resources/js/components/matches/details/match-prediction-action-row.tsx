@@ -10,12 +10,14 @@ interface Props {
     match: MatchDetails;
     scoreboardId?: number;
     boostsRemaining?: number | null;
+    boostsLimit?: number | null;
 }
 
 export default function MatchPredictionActionRow({
     match,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const hasAiPrediction = Boolean(match.hasAiPrediction);
@@ -53,6 +55,7 @@ export default function MatchPredictionActionRow({
                 onOpenChange={setPredictionOpen}
                 scoreboardId={scoreboardId}
                 boostsRemaining={boostsRemaining}
+                boostsLimit={boostsLimit}
             />
         </section>
     );

@@ -11,6 +11,7 @@ interface Props {
     viewLabel: string;
     scoreboardId?: number;
     boostsRemaining?: number | null;
+    boostsLimit?: number | null;
 }
 
 export default function PredictionUserActions({
@@ -18,6 +19,7 @@ export default function PredictionUserActions({
     viewLabel,
     scoreboardId,
     boostsRemaining,
+    boostsLimit,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
     const openPredictionModal = () => setPredictionOpen(true);
@@ -51,6 +53,7 @@ export default function PredictionUserActions({
                 onOpenChange={setPredictionOpen}
                 scoreboardId={scoreboardId}
                 boostsRemaining={boostsRemaining}
+                boostsLimit={boostsLimit}
             />
         </>
     );

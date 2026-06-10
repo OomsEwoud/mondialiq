@@ -50,6 +50,9 @@ class LeagueShowService
         $boostsRemaining = $boostedEnabled
             ? $this->boostsRemaining($scoreboard, $user)
             : null;
+        $boostsLimit = $boostedEnabled
+            ? (int) $scoreboard->scoringRule('boosted_predictions_limit', 3)
+            : null;
 
         return [
             'id' => $scoreboard->id,
@@ -85,6 +88,7 @@ class LeagueShowService
             'currentUserRank' => $currentUser['rank'] ?? null,
             'boostedPredictionsEnabled' => $boostedEnabled,
             'boostsRemaining' => $boostsRemaining,
+            'boostsLimit' => $boostsLimit,
         ];
     }
 
