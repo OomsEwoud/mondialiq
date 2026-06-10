@@ -136,7 +136,6 @@ test('the leaderboards page shows joined friends leagues for the current user', 
         'name' => 'Friends League',
         'icon' => '⚡',
         'accent_color' => 'blue',
-        'cover_style' => 'night',
         'code' => 'FRIENDS1',
     ]);
 
@@ -192,6 +191,7 @@ test('the leaderboards page shows joined friends leagues for the current user', 
             ->where('joinedLeagues.0.name', 'Friends League')
             ->where('joinedLeagues.0.icon', '⚡')
             ->where('joinedLeagues.0.accentColor', 'blue')
+            ->where('joinedLeagues.0.themeKey', 'gold')
             ->where('joinedLeagues.0.coverStyle', 'night')
             ->where('joinedLeagues.0.canManage', false)
             ->where('joinedLeagues.0.canLeave', true)
@@ -222,7 +222,6 @@ test('the leaderboards page gives owners a settings action instead of leave', fu
         'name' => 'Owned League',
         'icon' => '🏆',
         'accent_color' => 'cyan',
-        'cover_style' => 'stadium',
         'code' => 'OWNED001',
         'owner_id' => $currentUser->id,
     ]);

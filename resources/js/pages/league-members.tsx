@@ -6,15 +6,15 @@ import { Badge } from '@/components/ui/feedback/badge';
 import { cn } from '@/lib/utils';
 import type { LeagueMembersPageProps } from '@/types/league';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 
 export default function LeagueMembers({
     league,
     members,
 }: LeagueMembersPageProps) {
-    const palette = getLeagueBrandPalette(league.accentColor);
+    const theme = getLeagueThemePalette(league.accentColor);
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
@@ -27,13 +27,7 @@ export default function LeagueMembers({
 
             <div className="mx-auto max-w-7xl space-y-6">
                 <section
-                    className={cn(
-                        'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7',
-                        getLeagueBrandBannerClass(
-                            league.accentColor,
-                            league.coverStyle,
-                        ),
-                    )}
+                    className={cn('relative', getLeagueThemeBannerClass(league.accentColor))}
                 >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <Link
@@ -48,7 +42,8 @@ export default function LeagueMembers({
                             variant="outline"
                             className={cn(
                                 'rounded-full px-2.5 py-1 font-semibold',
-                                palette.badge,
+                                theme.badgeBg,
+                                theme.badgeText,
                             )}
                         >
                             Owner page

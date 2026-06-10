@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Leagues;
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
 use App\Models\User;
+use App\Support\Leagues\LeagueBranding;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -28,7 +29,6 @@ class ShowLeagueMembersController extends Controller
                 'name' => $scoreboard->name,
                 'icon' => $scoreboard->icon,
                 'accentColor' => $scoreboard->accent_color,
-                'coverStyle' => $scoreboard->cover_style,
                 'code' => $scoreboard->code,
                 'settingsHref' => route('leagues.settings', $scoreboard),
                 'showHref' => route('leagues.show', $scoreboard),

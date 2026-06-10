@@ -32,7 +32,6 @@ export type LeagueAccentColor =
     | 'violet'
     | 'blue';
 
-export type LeagueCoverStyle = 'stadium' | 'spotlight' | 'pitch' | 'night';
 
 export interface ScoringRules {
     exact_score_points: number;
@@ -52,7 +51,6 @@ export interface LeagueDetails {
     description: string | null;
     icon: string;
     accentColor: LeagueAccentColor;
-    coverStyle: LeagueCoverStyle;
     code: string;
     rewardTitle: string | null;
     rewardDescription: string | null;
@@ -111,7 +109,6 @@ export interface LeagueSettingsPageProps {
         | 'description'
         | 'icon'
         | 'accentColor'
-        | 'coverStyle'
         | 'code'
         | 'rewardTitle'
         | 'rewardDescription'
@@ -134,7 +131,6 @@ export interface LeagueMembersPageProps {
         | 'name'
         | 'icon'
         | 'accentColor'
-        | 'coverStyle'
         | 'code'
         | 'settingsHref'
         | 'showHref'

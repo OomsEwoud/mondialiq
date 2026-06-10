@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
 use App\Models\Scoreboard;
+use App\Support\Leagues\LeagueBranding;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,7 +28,6 @@ class ShowLeagueSettingsController extends Controller
             'description' => $scoreboard->description,
             'icon' => $scoreboard->icon,
             'accentColor' => $scoreboard->accent_color,
-            'coverStyle' => $scoreboard->cover_style,
             'code' => $scoreboard->code,
             'rewardTitle' => $scoreboard->reward_title,
             'rewardDescription' => $scoreboard->reward_description,

@@ -27,7 +27,6 @@ class UpdateLeagueRequest extends FormRequest
             'is_active' => ['required', 'boolean'],
             'icon' => ['required', 'string', Rule::in(LeagueBranding::icons())],
             'accent_color' => ['required', 'string', Rule::in(LeagueBranding::accentColors())],
-            'cover_style' => ['required', 'string', Rule::in(LeagueBranding::coverStyles())],
             'scoring_rules' => ['nullable', 'array'],
             'scoring_rules.exact_score_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],
             'scoring_rules.correct_result_points' => ['required_with:scoring_rules', 'integer', 'min:0', 'max:100'],

@@ -7,6 +7,7 @@ type Props = {
     value: string;
     iconClassName?: string;
     labelClassName?: string;
+    className?: string;
 };
 
 export default function LeagueMetric({
@@ -15,12 +16,22 @@ export default function LeagueMetric({
     value,
     iconClassName,
     labelClassName,
+    className,
 }: Props) {
     return (
-        <div className="rounded-xl border border-slate-200 bg-white px-3.5 py-3 shadow-xs">
+        <div
+            className={cn('rounded-xl border px-3.5 py-3 shadow-xs', className)}
+        >
             <div className="flex items-center gap-2 text-slate-500">
-                <Icon className={cn('size-4', iconClassName ?? 'text-slate-600')} />
-                <p className={cn('text-xs font-bold tracking-wide uppercase', labelClassName)}>
+                <Icon
+                    className={cn('size-4', iconClassName ?? 'text-slate-600')}
+                />
+                <p
+                    className={cn(
+                        'text-xs font-bold tracking-wide uppercase',
+                        labelClassName,
+                    )}
+                >
                     {label}
                 </p>
             </div>

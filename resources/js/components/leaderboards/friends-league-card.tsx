@@ -21,9 +21,8 @@ import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
 import type { JoinedLeague } from '@/types/leaderboard';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
-    getLeagueHeroPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 
 type Props = {
@@ -43,30 +42,28 @@ export default function FriendsLeagueCard({ league }: Props) {
 
         return null;
     })();
-    const palette = getLeagueBrandPalette(league.accentColor);
-    const heroPalette = getLeagueHeroPalette(league.accentColor);
+    const theme = getLeagueThemePalette(league.accentColor);
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
         <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
-            <div
-                className={getLeagueBrandBannerClass(
-                    league.accentColor,
-                    league.coverStyle,
-                )}
-            >
+            <div className={getLeagueThemeBannerClass(league.accentColor)}>
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
-                    <div className={cn(
-                        'flex size-12 items-center justify-center rounded-2xl bg-white/15 text-2xl shadow-sm ring-1',
-                        heroPalette.badgeBorder,
-                    )}>
+                    <div
+                        className={cn(
+                            'flex size-12 items-center justify-center rounded-2xl border bg-white/15 text-2xl shadow-sm ring-1',
+                            theme.badgeBorder,
+                        )}
+                    >
                         <span aria-hidden="true">{league.icon}</span>
                     </div>
                     <div className="min-w-0">
-                        <p className={cn(
-                            'text-xs font-bold tracking-wide uppercase',
-                            heroPalette.label,
-                        )}>
+                        <p
+                            className={cn(
+                                'text-xs font-bold tracking-wide uppercase',
+                                theme.accentText,
+                            )}
+                        >
                             Prediction group
                         </p>
                         <p className="truncate text-lg font-bold text-white">
@@ -109,10 +106,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                             variant="outline"
                             className={cn(
                                 'rounded-full px-2.5 py-1 font-semibold',
-                                palette.badge,
+                                theme.badgeBorder,
+                                theme.badgeBg,
+                                theme.badgeText,
                             )}
                         >
-                            <Users className={cn('size-3.5', heroPalette.icon)} />
+                            <Users
+                                className={cn('size-3.5', theme.iconColor)}
+                            />
                             {league.membersCount} {memberLabel}
                         </Badge>
                     </div>
@@ -128,28 +129,34 @@ export default function FriendsLeagueCard({ league }: Props) {
                                 ? `#${league.userRank}`
                                 : 'Unranked'
                         }
-                        iconClassName={heroPalette.icon}
-                        labelClassName={heroPalette.label}
+                        iconClassName={theme.iconColor}
+                        labelClassName={theme.darkAccent}
+                        className={cn(theme.softBg, theme.softBorder)}
                     />
                     <LeagueMetric
                         icon={Crown}
                         label="Current leader"
                         value={league.leaderName ?? 'TBD'}
-                        iconClassName={heroPalette.icon}
-                        labelClassName={heroPalette.label}
+                        iconClassName={theme.iconColor}
+                        labelClassName={theme.darkAccent}
+                        className={cn(theme.softBg, theme.softBorder)}
                     />
                 </div>
 
                 <div
                     className={cn(
-                        'rounded-2xl border border-slate-200 bg-slate-50 px-3.5 py-3',
+                        'rounded-2xl border px-3.5 py-3',
+                        theme.softBg,
+                        theme.softBorder,
                         !performanceLabel && 'text-slate-400',
                     )}
                 >
-                    <p className={cn(
-                        'text-xs font-bold tracking-wide uppercase',
-                        heroPalette.label,
-                    )}>
+                    <p
+                        className={cn(
+                            'text-xs font-bold tracking-wide uppercase',
+                            theme.darkAccent,
+                        )}
+                    >
                         Group pace
                     </p>
                     <p className="mt-1.5 text-sm font-semibold text-slate-900">
@@ -162,8 +169,8 @@ export default function FriendsLeagueCard({ league }: Props) {
                     asChild
                     className={cn(
                         'h-10 w-full rounded-lg px-4 font-semibold',
-                        heroPalette.primaryButton,
-                        heroPalette.ring,
+                        theme.primaryButton,
+                        theme.buttonRing,
                     )}
                 >
                     <Link href={league.href}>View group</Link>
@@ -174,8 +181,8 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-lg px-4 font-semibold',
-                            palette.button,
+                            'h-10 w-full rounded-lg bg-white px-4 font-semibold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
                         )}
                     >
                         <Link href={league.settingsHref}>
@@ -194,7 +201,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-semibold"
+                        className="h-10 w-full rounded-lg px-4 font-semibold text-slate-400"
                     >
                         Group action
                     </Button>

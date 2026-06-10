@@ -1,6 +1,6 @@
+import { Zap } from 'lucide-react';
 import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
 import { Badge } from '@/components/ui/feedback/badge';
-import { Zap } from 'lucide-react';
 import type { Match } from '@/types/match';
 import {
     getActualScoreLabel,

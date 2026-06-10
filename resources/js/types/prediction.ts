@@ -65,7 +65,6 @@ export interface LeagueMemberPredictionsPageProps {
         name: string;
         showHref: string;
         accentColor: 'cyan' | 'emerald' | 'amber' | 'rose' | 'violet' | 'blue';
-        coverStyle: 'stadium' | 'spotlight' | 'pitch' | 'night';
         icon: string;
     };
     member: {

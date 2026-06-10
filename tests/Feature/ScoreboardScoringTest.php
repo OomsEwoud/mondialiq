@@ -96,7 +96,6 @@ test('an owner can update scoring rules', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 15,
                 'correct_result_points' => 7,
@@ -134,7 +133,6 @@ test('an owner can update boosted prediction settings', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 10,
                 'correct_result_points' => 5,
@@ -176,7 +174,6 @@ test('a normal member cannot update scoring or boosted settings', function () {
             'is_active' => true,
             'icon' => '⚡',
             'accent_color' => 'cyan',
-            'cover_style' => 'stadium',
             'scoring_rules' => [
                 'exact_score_points' => 99,
                 'correct_result_points' => 5,

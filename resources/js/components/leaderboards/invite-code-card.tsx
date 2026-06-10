@@ -8,13 +8,10 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
+import { useClipboard } from '@/hooks/use-clipboard';
 import { cn } from '@/lib/utils';
 import type { LeagueAccentColor } from '@/types/league';
-import { useClipboard } from '@/hooks/use-clipboard';
-import {
-    getLeagueBrandPalette,
-    getLeagueHeroPalette,
-} from '@/utils/league-branding';
+import { getLeagueThemePalette } from '@/utils/league-branding';
 
 type Props = {
     leagueName: string;
@@ -22,7 +19,7 @@ type Props = {
     code: string;
     joinHref: string;
     membersCount: number;
-    accentColor?: LeagueAccentColor;
+    accentColor: LeagueAccentColor;
 };
 
 export default function InviteCodeCard({
@@ -31,14 +28,13 @@ export default function InviteCodeCard({
     code,
     joinHref,
     membersCount,
-    accentColor = 'amber',
+    accentColor,
 }: Props) {
     const [copiedText, copy] = useClipboard();
     const isCopyingCode = copiedText === code;
     const isCopyingJoinLink = copiedText === joinHref;
     const isSmallLeague = membersCount <= 3;
-    const heroPalette = getLeagueHeroPalette(accentColor);
-    const brandPalette = getLeagueBrandPalette(accentColor);
+    const theme = getLeagueThemePalette(accentColor);
 
     const shareMessage = [
         `Join my MondialIQ prediction group ${leagueIcon} "${leagueName}".`,
@@ -115,15 +111,19 @@ export default function InviteCodeCard({
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
                 {isSmallLeague && (
-                    <div className={cn(
-                        'rounded-2xl bg-gradient-to-br px-4 py-3',
-                        brandPalette.border,
-                        brandPalette.soft,
-                    )}>
-                        <div className={cn(
-                            'flex items-center gap-2',
-                            brandPalette.softText,
-                        )}>
+                    <div
+                        className={cn(
+                            'rounded-2xl border px-4 py-3',
+                            theme.softBorder,
+                            theme.softBg,
+                        )}
+                    >
+                        <div
+                            className={cn(
+                                'flex items-center gap-2',
+                                theme.softText,
+                            )}
+                        >
                             <Sparkles className="size-4" />
                             <p className="text-xs font-bold tracking-wide uppercase">
                                 Invite your friends
@@ -160,8 +160,8 @@ export default function InviteCodeCard({
                         type="button"
                         className={cn(
                             'h-10 w-full rounded-xl px-4 font-bold text-white focus-visible:ring-2',
-                            heroPalette.primaryButton,
-                            heroPalette.ring,
+                            theme.primaryButton,
+                            theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={shareInvite}
@@ -174,8 +174,8 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite code"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold',
-                            heroPalette.outlineButton,
+                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyCode}
@@ -193,8 +193,8 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite link"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold',
-                            heroPalette.outlineButton,
+                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}
                         onClick={copyJoinLink}

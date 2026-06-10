@@ -1,11 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import {
-    ArrowLeft,
-    Crown,
-    Target,
-    Trophy,
-    Users,
-} from 'lucide-react';
+import { ArrowLeft, Crown, Target, Trophy, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import Pagination from '@/components/navigation/pagination';
 import EmptyFilteredPredictionsState from '@/components/predictions/empty-filtered-predictions-state';
@@ -22,8 +16,8 @@ import type {
     PredictionStatusFilter,
 } from '@/types/prediction-filter';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 import {
     defaultPredictionFilters,
@@ -39,7 +33,6 @@ export default function LeagueMemberPredictions({
     filters: initialFilters,
 }: Props) {
     const getInitials = useInitials();
-    const palette = getLeagueBrandPalette(league.accentColor);
     const defaultFilters = {
         ...defaultPredictionFilters,
         date: initialFilters.date,
@@ -184,45 +177,57 @@ export default function LeagueMemberPredictions({
 
     return (
         <>
-            <PageHead
-                title={pageTitle}
-                description={pageDescription}
-            />
+            <PageHead title={pageTitle} description={pageDescription} />
 
             <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
                 <section
                     className={cn(
                         'rounded-2xl p-4 shadow-sm sm:p-6 lg:p-8',
-                        getLeagueBrandBannerClass(
+                        getLeagueThemeBannerClass(
                             league.accentColor,
-                            league.coverStyle,
                         ),
                     )}
                 >
                     <div className="flex items-start justify-between">
                         <Link
                             href={league.showHref}
-                            className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                            className={cn(
+                                'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                                getLeagueThemePalette(league.accentColor).buttonRing,
+                            )}
                         >
                             <ArrowLeft className="size-4" />
                             Back to group
                         </Link>
 
-                        <div className="flex size-12 items-center justify-center overflow-hidden rounded-xl bg-slate-800/50 shadow-sm ring-1 ring-slate-600/50 sm:size-14">
-                            {member.avatar ? (
-                                <img
-                                    src={member.avatar}
-                                    alt={member.name}
-                                    className="size-12 rounded-xl object-cover sm:size-14"
-                                />
-                            ) : (
-                                <span
-                                    aria-hidden="true"
-                                    className="text-sm font-bold text-slate-200 sm:text-base"
-                                >
-                                    {getInitials(member.name)}
-                                </span>
-                            )}
+                        <div className="flex items-center gap-3">
+                            <Link
+                                href={route('leagues.members', league.id)}
+                                className={cn(
+                                    'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                                    getLeagueThemePalette(league.accentColor).buttonRing,
+                                )}
+                            >
+                                <ArrowLeft className="size-4" />
+                                Back to members
+                            </Link>
+
+                            <div className="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-800/50 shadow-sm ring-1 ring-slate-600/50 sm:size-14">
+                                {member.avatar ? (
+                                    <img
+                                        src={member.avatar}
+                                        alt={member.name}
+                                        className="size-12 rounded-xl object-cover sm:size-14"
+                                    />
+                                ) : (
+                                    <span
+                                        aria-hidden="true"
+                                        className="text-sm font-bold text-slate-200 sm:text-base"
+                                    >
+                                        {getInitials(member.name)}
+                                    </span>
+                                )}
+                            </div>
                         </div>
                     </div>
 

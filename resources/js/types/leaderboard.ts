@@ -1,4 +1,8 @@
-import type { LeagueAccentColor, LeagueCoverStyle } from '@/types/league';
+import type {
+    LeagueAccentColor,
+    LeagueMember,
+    ScoringRules,
+} from './league';
 
 export interface LeaderboardEntry {
     id: number;
@@ -24,7 +28,6 @@ export interface JoinedLeague {
         avatar: string | null;
     }>;
     accentColor: LeagueAccentColor;
-    coverStyle: LeagueCoverStyle;
     canManage: boolean;
     canLeave: boolean;
     membersCount: number;

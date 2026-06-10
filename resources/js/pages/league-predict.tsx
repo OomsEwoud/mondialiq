@@ -3,20 +3,18 @@ import { ArrowLeft } from 'lucide-react';
 import LeagueUpcomingMatchesCard from '@/components/leaderboards/league-upcoming-matches-card';
 import Pagination from '@/components/navigation/pagination';
 import PageHead from '@/components/seo/page-head';
-import { Badge } from '@/components/ui/feedback/badge';
 import { cn } from '@/lib/utils';
 import type { LeaguePredictPageProps } from '@/types/league';
 import {
-    getLeagueBrandBannerClass,
-    getLeagueBrandPalette,
-    getLeagueHeroPalette,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
 } from '@/utils/league-branding';
 
 export default function LeaguePredict({
     league,
     fixtures,
 }: LeaguePredictPageProps) {
-    const heroPalette = getLeagueHeroPalette(league.accentColor);
+    const theme = getLeagueThemePalette(league.accentColor);
 
     return (
         <>
@@ -29,11 +27,8 @@ export default function LeaguePredict({
             <div className="mx-auto max-w-7xl space-y-6">
                 <section
                     className={cn(
-                        'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7',
-                        getLeagueBrandBannerClass(
-                            league.accentColor,
-                            league.coverStyle,
-                        ),
+                        'rounded-2xl p-5 shadow-sm sm:p-6 lg:p-7 relative',
+                        getLeagueThemeBannerClass(league.accentColor),
                     )}
                 >
                     <div className="flex items-start justify-between">
@@ -41,7 +36,7 @@ export default function LeaguePredict({
                             href={league.showHref || '#'}
                             className={cn(
                                 'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
-                                heroPalette.ring,
+                                theme.buttonRing,
                             )}
                         >
                             <ArrowLeft className="size-4" />
@@ -51,16 +46,21 @@ export default function LeaguePredict({
 
                     <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
                         <div className="max-w-3xl">
-                            <div className={cn(
-                                'mb-3 flex size-14 items-center justify-center rounded-2xl border bg-white/20 text-3xl shadow-sm backdrop-blur-sm',
-                                heroPalette.badgeBorder,
-                            )}>
+                            <div
+                                className={cn(
+                                    'mb-3 flex size-14 items-center justify-center rounded-2xl border bg-white/20 text-3xl shadow-sm backdrop-blur-sm',
+                                    theme.badgeBg,
+                                    theme.badgeText,
+                                )}
+                            >
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className={cn(
-                                'text-xs font-black tracking-wide uppercase',
-                                heroPalette.label,
-                            )}>
+                            <p
+                                className={cn(
+                                    'text-xs font-black tracking-wide uppercase',
+                                    theme.badgeBg,
+                                )}
+                            >
                                 Predictions
                             </p>
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">

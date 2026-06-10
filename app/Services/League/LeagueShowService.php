@@ -7,6 +7,7 @@ use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\ScoreboardPrediction;
 use App\Models\User;
+use App\Support\Leagues\LeagueBranding;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,7 +57,6 @@ class LeagueShowService
             'description' => $scoreboard->description,
             'icon' => $scoreboard->icon,
             'accentColor' => $scoreboard->accent_color,
-            'coverStyle' => $scoreboard->cover_style,
             'code' => $scoreboard->code,
             'rewardTitle' => $scoreboard->reward_title,
             'rewardDescription' => $scoreboard->reward_description,

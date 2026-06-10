@@ -21,7 +21,6 @@ class UpdateLeagueController extends Controller
             'is_active',
             'icon',
             'accent_color',
-            'cover_style',
         ]));
 
         $scoringRules = $request->validatedScoringRules();

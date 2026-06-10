@@ -108,7 +108,7 @@ class LeaderboardService
             'icon' => $scoreboard->icon ?: LeagueBranding::DEFAULT_ICON,
             'memberAvatars' => $this->memberAvatars($scoreboard),
             'accentColor' => $scoreboard->accent_color ?: LeagueBranding::DEFAULT_ACCENT_COLOR,
-            'coverStyle' => $scoreboard->cover_style ?: LeagueBranding::DEFAULT_COVER_STYLE,
+            'code' => $scoreboard->code,
             'canManage' => $scoreboard->owner_id === $user->id,
             'canLeave' => $scoreboard->owner_id !== $user->id,
             'membersCount' => $scoreboard->users_count,

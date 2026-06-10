@@ -16,6 +16,7 @@ import RefreshLeagueCodeController from '@/actions/App/Http/Controllers/Leagues/
 import UpdateLeagueController from '@/actions/App/Http/Controllers/Leagues/UpdateLeagueController';
 import InputError from '@/components/forms/input-error';
 import LeagueDangerZoneCard from '@/components/leaderboards/league-danger-zone-card';
+import { Badge } from '@/components/ui/feedback/badge';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
@@ -40,14 +41,13 @@ import {
 import { cn } from '@/lib/utils';
 import type {
     LeagueAccentColor,
-    LeagueCoverStyle,
     ScoringRules,
 } from '@/types/league';
 import {
-    getLeagueBrandBannerClass,
-    leagueAccentOptions,
-    leagueCoverOptions,
+    getLeagueThemeBannerClass,
+    getLeagueThemePalette,
     leagueIconOptions,
+    leagueThemeOptions,
 } from '@/utils/league-branding';
 
 type Props = {
@@ -61,7 +61,6 @@ type Props = {
     visibility: 'private' | 'public';
     isActive: boolean;
     accentColor: LeagueAccentColor;
-    coverStyle: LeagueCoverStyle;
     scoringRules: ScoringRules;
 };
 
@@ -82,7 +81,6 @@ export default function LeagueSettingsCard({
     visibility: initialVisibility,
     isActive: initialIsActive,
     accentColor,
-    coverStyle,
     scoringRules: initialScoringRules,
 }: Props) {
     const [name, setName] = useState(leagueName);
@@ -97,7 +95,6 @@ export default function LeagueSettingsCard({
     const [isActive, setIsActive] = useState(initialIsActive);
     const [icon, setIcon] = useState(leagueIcon);
     const [accent, setAccent] = useState<LeagueAccentColor>(accentColor);
-    const [cover, setCover] = useState<LeagueCoverStyle>(coverStyle);
     const [scoringRules, setScoringRules] = useState<ScoringRules>({
         ...initialScoringRules,
     });
@@ -138,14 +135,13 @@ export default function LeagueSettingsCard({
         isActive !== initialIsActive ||
         icon !== leagueIcon ||
         accent !== accentColor ||
-        cover !== coverStyle ||
         scoringRulesChanged;
 
     const canSubmit = normalizedName.length > 0 && hasChanges;
     const updateIcon = (nextIcon: string) => setIcon(nextIcon);
     const updateAccent = (nextAccent: LeagueAccentColor) =>
         setAccent(nextAccent);
-    const updateCover = (nextCover: LeagueCoverStyle) => setCover(nextCover);
+    const theme = getLeagueThemePalette(accent);
 
     const updateScoringRule = <K extends keyof ScoringRules>(
         key: K,
@@ -197,11 +193,6 @@ export default function LeagueSettingsCard({
                                 type="hidden"
                                 name="accent_color"
                                 value={accent}
-                            />
-                            <input
-                                type="hidden"
-                                name="cover_style"
-                                value={cover}
                             />
                             <input
                                 type="hidden"
@@ -266,17 +257,19 @@ export default function LeagueSettingsCard({
                                     <div
                                         className={cn(
                                             'rounded-2xl border border-white/20 p-5 text-white shadow-sm',
-                                            getLeagueBrandBannerClass(
-                                                accent,
-                                                cover,
-                                            ),
+                                            getLeagueThemeBannerClass(accent),
                                         )}
                                     >
                                         <p className="text-xs font-semibold tracking-wide text-white uppercase">
                                             Live preview
                                         </p>
                                         <div className="mt-3 flex items-center gap-3">
-                                            <div className="flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm">
+                                            <div
+                                                className={cn(
+                                                    'flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm',
+                                                    theme.badgeBorder,
+                                                )}
+                                            >
                                                 <span aria-hidden="true">
                                                     {icon}
                                                 </span>
@@ -864,15 +857,96 @@ export default function LeagueSettingsCard({
                                         <div className="flex items-center gap-2 text-slate-600">
                                             <PaintBucket className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
-                                                Appearance
+                                                Group appearance
                                             </p>
                                         </div>
+                                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                                            Choose a visual theme to give your leaderboard its own identity.
+                                        </p>
                                         <div className="mt-4 space-y-4">
+                                            <div>
+                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                                                    Group theme
+                                                </Label>
+                                                <div className="mt-2 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                                                    {leagueThemeOptions.map(
+                                                        (option) => {
+                                                            const isSelected =
+                                                                accent ===
+                                                                option.value;
+
+                                                            return (
+                                                                <Button
+                                                                    key={
+                                                                        option.value
+                                                                    }
+                                                                    type="button"
+                                                                    variant="outline"
+                                                                    aria-pressed={
+                                                                        isSelected
+                                                                    }
+                                                                    onClick={() =>
+                                                                        updateAccent(
+                                                                            option.value as LeagueAccentColor,
+                                                                        )
+                                                                    }
+                                                                    className={cn(
+                                                                        'h-auto flex-col items-stretch justify-start overflow-hidden rounded-xl border-slate-200 p-0 text-left hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                                                                        isSelected &&
+                                                                            cn(
+                                                                                'border-slate-900/20',
+                                                                                'ring-2 ring-offset-2 ring-offset-white',
+                                                                                theme.buttonRing,
+                                                                            ),
+                                                                    )}
+                                                                >
+                                                                    <div
+                                                                        className={cn(
+                                                                            'relative h-16 w-full',
+                                                                            option.previewClassName,
+                                                                        )}
+                                                                    >
+                                                                        {isSelected && (
+                                                                            <Badge
+                                                                                className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-slate-900 shadow-none uppercase"
+                                                                            >
+                                                                                Active
+                                                                            </Badge>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex w-full items-start justify-between gap-3 px-3 py-3">
+                                                                        <div className="min-w-0 flex-1">
+                                                                            <p className="text-sm font-semibold text-slate-900">
+                                                                                {
+                                                                                    option.title
+                                                                                }{' '}
+                                                                                /{' '}
+                                                                                {
+                                                                                    option.subtitle
+                                                                                }
+                                                                            </p>
+                                                                            <p className="mt-1 whitespace-normal text-xs leading-5 text-slate-600">
+                                                                                {
+                                                                                    option.description
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </Button>
+                                                            );
+                                                        },
+                                                    )}
+                                                </div>
+                                                <InputError
+                                                    message={errors.accent_color}
+                                                />
+                                            </div>
+
                                             <div>
                                                 <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                                                     League icon
                                                 </Label>
-                                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                                <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
                                                     {leagueIconOptions.map(
                                                         (option) => (
                                                             <Button
@@ -905,99 +979,6 @@ export default function LeagueSettingsCard({
                                                 <div className="min-h-5">
                                                     <InputError
                                                         message={errors.icon}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                    Accent color
-                                                </Label>
-                                                <div className="mt-2 grid grid-cols-2 gap-2">
-                                                    {leagueAccentOptions.map(
-                                                        (option) => (
-                                                            <Button
-                                                                key={
-                                                                    option.value
-                                                                }
-                                                                type="button"
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    updateAccent(
-                                                                        option.value,
-                                                                    )
-                                                                }
-                                                                className={cn(
-                                                                    'h-10 justify-start rounded-xl border-slate-200 px-3 font-semibold hover:bg-slate-50 focus-visible:ring-cyan-300',
-                                                                    accent ===
-                                                                        option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
-                                                                )}
-                                                            >
-                                                                <span
-                                                                    className={cn(
-                                                                        'size-3 rounded-full',
-                                                                        option.dotClassName,
-                                                                    )}
-                                                                />
-                                                                {option.label}
-                                                            </Button>
-                                                        ),
-                                                    )}
-                                                </div>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={
-                                                            errors.accent_color
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Label className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                                                    Cover style
-                                                </Label>
-                                                <div className="mt-2 grid gap-2">
-                                                    {leagueCoverOptions.map(
-                                                        (option) => (
-                                                            <Button
-                                                                key={
-                                                                    option.value
-                                                                }
-                                                                type="button"
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    updateCover(
-                                                                        option.value,
-                                                                    )
-                                                                }
-                                                                className={cn(
-                                                                    'h-auto items-start justify-start rounded-xl border-slate-200 px-4 py-3 text-left hover:bg-slate-50 focus-visible:ring-cyan-300',
-                                                                    cover ===
-                                                                        option.value &&
-                                                                        'border-cyan-300 bg-cyan-50',
-                                                                )}
-                                                            >
-                                                                <div>
-                                                                    <p className="font-semibold text-slate-900">
-                                                                        {
-                                                                            option.label
-                                                                        }
-                                                                    </p>
-                                                                    <p className="mt-1 text-xs leading-5 text-slate-600">
-                                                                        {
-                                                                            option.description
-                                                                        }
-                                                                    </p>
-                                                                </div>
-                                                            </Button>
-                                                        ),
-                                                    )}
-                                                </div>
-                                                <div className="min-h-5">
-                                                    <InputError
-                                                        message={
-                                                            errors.cover_style
-                                                        }
                                                     />
                                                 </div>
                                             </div>

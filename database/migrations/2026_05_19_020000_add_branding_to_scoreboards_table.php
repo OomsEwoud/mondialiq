@@ -17,7 +17,7 @@ return new class extends Migration
                 ->default(LeagueBranding::DEFAULT_ACCENT_COLOR)
                 ->after('icon');
             $table->string('cover_style', 20)
-                ->default(LeagueBranding::DEFAULT_COVER_STYLE)
+                ->default('stadium')
                 ->after('accent_color');
         });
     }

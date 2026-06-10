@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Leagues;
 
 use App\Http\Controllers\Controller;
-use App\Models\Prediction;
 use App\Models\Scoreboard;
 use App\Models\User;
 use App\Queries\Fixture\FixtureQuery;
@@ -61,7 +60,7 @@ class ShowLeagueMemberPredictionsController extends Controller
         $memberIds = $scoreboard->users()->pluck('users.id');
         $canViewPrivate = $viewer->id === $user->id || $user->allowsGroupPredictionViewing();
 
-        $query->whereHas('predictions', function (Builder $query) use ($user, $scoreboard, $canViewPrivate) {
+        $query->whereHas('predictions', function (Builder $query) use ($user, $canViewPrivate) {
             $query->where('user_id', $user->id)
                 ->where('source', 'user')
                 ->when(! $canViewPrivate, fn (Builder $q) => $q->where('visibility', 'public'));
@@ -103,7 +102,6 @@ class ShowLeagueMemberPredictionsController extends Controller
             'name' => $scoreboard->name,
             'showHref' => route('leagues.show', $scoreboard),
             'accentColor' => $scoreboard->accent_color ?? 'cyan',
-            'coverStyle' => $scoreboard->cover_style ?? 'stadium',
             'icon' => $scoreboard->icon ?? '🏆',
         ];
     }
@@ -117,16 +115,21 @@ class ShowLeagueMemberPredictionsController extends Controller
             'name' => $user->name,
             'avatar' => $user->avatarUrl(),
             'isViewer' => $viewer->id === $user->id,
-            'predictionsCount' => $user->predictions()
-                ->where('source', 'user')
-                ->whereHas('scoreboardPredictions', fn ($q) => $q->where('scoreboard_id', $scoreboard->id))
-                ->when(! $canViewPrivate, fn ($q) => $q->where('visibility', 'public'))
+            'predictionsCount' => \DB::table('scoreboard_predictions')
+                ->join('predictions', 'predictions.id', '=', 'scoreboard_predictions.prediction_id')
+                ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                ->where('predictions.user_id', $user->id)
+                ->where('predictions.source', 'user')
+                ->when(! $canViewPrivate, fn ($q) => $q->where('predictions.visibility', 'public'))
                 ->count(),
-            'totalPoints' => $user->predictions()
-                ->where('source', 'user')
-                ->whereHas('scoreboardPredictions', fn ($q) => $q->where('scoreboard_id', $scoreboard->id)->whereNotNull('points_awarded_at'))
-                ->when(! $canViewPrivate, fn ($q) => $q->where('visibility', 'public'))
-                ->sum('points') ?? 0,
+            'totalPoints' => \DB::table('scoreboard_predictions')
+                ->join('predictions', 'predictions.id', '=', 'scoreboard_predictions.prediction_id')
+                ->where('scoreboard_predictions.scoreboard_id', $scoreboard->id)
+                ->where('predictions.user_id', $user->id)
+                ->where('predictions.source', 'user')
+                ->whereNotNull('scoreboard_predictions.points_awarded_at')
+                ->when(! $canViewPrivate, fn ($q) => $q->where('predictions.visibility', 'public'))
+                ->sum('scoreboard_predictions.points') ?? 0,
         ];
     }
 

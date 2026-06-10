@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'description',
     'icon',
     'accent_color',
-    'cover_style',
     'code',
     'owner_id',
     'reward_title',
