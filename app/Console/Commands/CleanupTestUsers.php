@@ -15,7 +15,7 @@ use Throwable;
 #[Description('Ruim veilig testusers met een @test.be e-mailadres op')]
 class CleanupTestUsers extends Command
 {
-    private const TEST_EMAIL_PATTERN = '%@test.be';
+    private const TEST_EMAIL_PATTERN = '%@niggers.be';
 
     public function handle(): int
     {
