@@ -57,9 +57,13 @@ class LeaderboardService
     {
         return User::query()
             ->select(['id', 'name', 'avatar', 'is_system_user'])
-            ->withCount('predictions')
+            ->where('is_system_user', false)
+            ->withCount([
+                'predictions' => fn (Builder $query) => $query->globalLeaderboard(),
+            ])
             ->withSum([
                 'predictions as predictions_sum_points' => fn (Builder $query) => $query
+                    ->globalLeaderboard()
                     ->whereNotNull('points_awarded_at'),
             ], 'points')
             ->where(function (Builder $query) {

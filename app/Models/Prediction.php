@@ -182,4 +182,14 @@ class Prediction extends Model
     {
         return $query->excludeFriendlies();
     }
+
+    public function scopeGlobalLeaderboard(Builder $query): Builder
+    {
+        return $query->whereNull('scoreboard_id')
+            ->where(function (Builder $q) {
+                $q->whereNull('visibility')
+                    ->orWhere('visibility', '!=', 'private');
+            })
+            ->where('source', '!=', PredictionTypes::Ai);
+    }
 }
