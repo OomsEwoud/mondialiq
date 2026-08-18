@@ -27,6 +27,8 @@ export interface Match {
     awayTeamShort: string;
     awayTeamLogo: string;
     round: string;
+    leagueName?: string | null;
+    leagueLogo?: string | null;
     date: string;
     dateValue: string;
     time: string;

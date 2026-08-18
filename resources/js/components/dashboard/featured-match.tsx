@@ -7,21 +7,23 @@ import type { Match } from '@/types/match';
 export default function FeaturedMatch({ match }: { match: Match }) {
     const prediction = match.aiPrediction;
     const chances = match.prediction;
+    const favorite = highestProbability(chances);
 
     return (
         <article className="overflow-hidden rounded-2xl border border-[#303732] bg-[#111513]">
             <div className="flex items-center justify-between border-b border-[#262c29] px-5 py-4 sm:px-7">
                 <div>
                     <span className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
-                        Voor jou
+                        Uitgelicht
                     </span>
                     <p className="mt-1 text-xs text-[#7f8882]">
-                        {match.date} · {match.time} · {match.round}
+                        {match.leagueName ?? match.round} · {match.date}{' '}
+                        {match.time}
                     </p>
                 </div>
                 {prediction?.confidence && (
                     <span className="rounded-full border border-[#2b4636] bg-[#153024] px-2.5 py-1 text-[0.65rem] font-semibold text-[#8bc5a1]">
-                        {prediction.confidence} confidence
+                        Zekerheid · {prediction.confidence}%
                     </span>
                 )}
             </div>
@@ -42,15 +44,27 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                 <div>
                     <div className="flex h-2 overflow-hidden rounded-full bg-[#202622]">
                         <span
-                            className="bg-[#57ad78]"
+                            className={
+                                favorite === 'home'
+                                    ? 'bg-[#57ad78]'
+                                    : 'bg-[#46504a]'
+                            }
                             style={{ width: `${chances?.homeWin ?? 0}%` }}
                         />
                         <span
-                            className="bg-[#68706b]"
+                            className={
+                                favorite === 'draw'
+                                    ? 'bg-[#57ad78]'
+                                    : 'bg-[#69716c]'
+                            }
                             style={{ width: `${chances?.draw ?? 0}%` }}
                         />
                         <span
-                            className="bg-[#39413c]"
+                            className={
+                                favorite === 'away'
+                                    ? 'bg-[#57ad78]'
+                                    : 'bg-[#303732]'
+                            }
                             style={{ width: `${chances?.awayWin ?? 0}%` }}
                         />
                     </div>
@@ -66,11 +80,12 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                             right
                         />
                     </div>
-                    {prediction?.advice && (
-                        <p className="mt-5 line-clamp-2 text-sm leading-6 text-[#949d97]">
-                            {prediction.advice}
-                        </p>
-                    )}
+                    <p className="mt-5 line-clamp-2 text-sm leading-6 text-[#949d97]">
+                        {chances
+                            ? insight(match, favorite)
+                            : (prediction?.advice ??
+                              'Bekijk de volledige analyse voor deze wedstrijd.')}
+                    </p>
                     <Link
                         href={showMatch(match.id)}
                         className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#daddd9] hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none"
@@ -118,4 +133,37 @@ function Chance({
 }
 function score(value?: number | null) {
     return value === null || value === undefined ? '—' : Math.round(value);
+}
+
+function highestProbability(chances: Match['prediction']) {
+    if (!chances) {
+        return null;
+    }
+
+    const highest = Math.max(chances.homeWin, chances.draw, chances.awayWin);
+
+    if (chances.homeWin === highest) {
+        return 'home';
+    }
+
+    if (chances.awayWin === highest) {
+        return 'away';
+    }
+
+    return 'draw';
+}
+
+function insight(
+    match: Match,
+    favorite: ReturnType<typeof highestProbability>,
+) {
+    if (favorite === 'home') {
+        return `MondialiQ geeft ${match.homeTeam} een licht voordeel.`;
+    }
+
+    if (favorite === 'away') {
+        return `MondialiQ verwacht dat ${match.awayTeam} de beste papieren heeft.`;
+    }
+
+    return 'MondialiQ verwacht een wedstrijd met weinig verschil tussen beide teams.';
 }

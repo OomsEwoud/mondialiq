@@ -36,18 +36,18 @@ export default function Dashboard({
                 title="Jouw voetbaloverzicht"
                 description="Bekijk relevante wedstrijden, live scores en recente AI-analyses op MondialiQ."
             />
-            <div className="space-y-16">
-                <header className="flex flex-col gap-4 border-b border-[#262c29] pb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div className="space-y-12 sm:space-y-14">
+                <header className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="text-sm font-semibold text-[#6fae88]">
                             {greeting()}, {firstName}
                         </p>
-                        <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-                            Dit staat er voor je klaar.
+                        <h1 className="mt-1.5 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+                            Dit speelt er vandaag.
                         </h1>
                         {upcomingFixtures.length > 0 ? (
                             <p className="mt-3 text-sm text-[#7f8882]">
-                                {upcomingFixtures.length} komende wedstrijden ·{' '}
+                                {upcomingFixtures.length} wedstrijden ·{' '}
                                 {
                                     upcomingFixtures.filter(
                                         (match) => match.hasAiPrediction,
@@ -91,8 +91,8 @@ export default function Dashboard({
                     </section>
                 )}
 
-                <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-                    <section>
+                <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+                    <section className="order-2 lg:order-1">
                         <div className="flex items-end justify-between gap-4">
                             <div>
                                 <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
@@ -127,7 +127,10 @@ export default function Dashboard({
                             </div>
                         )}
                     </section>
-                    <LivePanel matches={liveFixtures} />
+                    <LivePanel
+                        matches={liveFixtures}
+                        className="order-1 lg:order-2"
+                    />
                 </div>
 
                 <section>
@@ -158,17 +161,21 @@ export default function Dashboard({
                                     })}
                                     className="bg-[#111513] p-5 transition hover:bg-[#141916]"
                                 >
-                                    <span className="text-xs font-semibold text-[#daddd9]">
-                                        {match.homeTeam} — {match.awayTeam}
+                                    <span className="text-[0.65rem] font-semibold tracking-[0.08em] text-[#68706b] uppercase">
+                                        {match.leagueName ?? match.round}
                                     </span>
-                                    <strong className="mt-4 block text-2xl font-black text-white">
-                                        {match.aiPrediction?.homeScore ?? '—'}–
-                                        {match.aiPrediction?.awayScore ?? '—'}
+                                    <strong className="mt-3 block text-sm font-bold text-[#e3e5e1]">
+                                        {match.homeTeam} — {match.awayTeam}
                                     </strong>
-                                    <p className="mt-3 line-clamp-2 text-xs leading-5 text-[#7f8882]">
-                                        {match.aiPrediction?.advice ??
-                                            'Bekijk de volledige AI-analyse en kansverdeling.'}
+                                    <p className="mt-3 text-base font-bold text-white">
+                                        {analysisTitle(match)}
                                     </p>
+                                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#7f8882]">
+                                        {analysisFallback(match)}
+                                    </p>
+                                    <span className="mt-4 block text-xs font-semibold text-[#9ecbad]">
+                                        Bekijk analyse →
+                                    </span>
                                 </Link>
                             ))}
                         </div>
@@ -237,4 +244,38 @@ function greeting() {
     }
 
     return 'Goedenavond';
+}
+
+function analysisTitle(match: DashboardProps['upcomingFixtures'][number]) {
+    const prediction = match.aiPrediction;
+
+    if (prediction?.outcome === 'home') {
+        return `${match.homeTeam} krijgt het voordeel`;
+    }
+
+    if (prediction?.outcome === 'away') {
+        return `${match.awayTeam} heeft de beste papieren`;
+    }
+
+    return 'Weinig verschil tussen beide teams';
+}
+
+function analysisFallback(match: DashboardProps['upcomingFixtures'][number]) {
+    const chance = match.prediction;
+
+    if (!chance) {
+        return 'Bekijk de volledige AI-analyse voor deze wedstrijd.';
+    }
+
+    const highest = Math.max(chance.homeWin, chance.draw, chance.awayWin);
+
+    if (highest === chance.homeWin) {
+        return `${Math.round(chance.homeWin)}% kans op winst voor ${match.homeTeam}.`;
+    }
+
+    if (highest === chance.awayWin) {
+        return `${Math.round(chance.awayWin)}% kans op winst voor ${match.awayTeam}.`;
+    }
+
+    return `${Math.round(chance.draw)}% kans op een gelijkspel.`;
 }

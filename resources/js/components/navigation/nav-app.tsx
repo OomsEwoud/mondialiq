@@ -30,9 +30,9 @@ export default function NavApp({ className, onNavigate }: Props) {
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(
-                            'relative flex w-auto items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:px-3',
+                            'group relative flex w-auto items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:px-3',
                             isActive
-                                ? 'bg-[#171c19] text-white'
+                                ? 'bg-[#171c19] text-white md:bg-transparent'
                                 : 'text-[#949d97] hover:bg-[#141916] hover:text-white',
                         )}
                     >

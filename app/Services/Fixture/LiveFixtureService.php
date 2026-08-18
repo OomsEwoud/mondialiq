@@ -31,6 +31,7 @@ class LiveFixtureService
             ->inProgress()
             ->select([
                 'id',
+                'league_id',
                 'home_team_id',
                 'away_team_id',
                 'match_date',
@@ -44,6 +45,8 @@ class LiveFixtureService
             ->with([
                 'homeTeam:id,name,code,logo_url',
                 'awayTeam:id,name,code,logo_url',
+                'league:id,name,logo_url',
+                'aiPrediction:id,fixture_id,home_goals,away_goals',
             ])
             ->orderBy('match_date')
             ->get()
@@ -61,6 +64,14 @@ class LiveFixtureService
                     'code' => $fixture->awayTeam?->code,
                     'logo_url' => $fixture->awayTeam?->logo_url,
                 ],
+                'league' => [
+                    'name' => $fixture->league?->name,
+                    'logo_url' => $fixture->league?->logo_url,
+                ],
+                'ai_prediction' => $fixture->aiPrediction ? [
+                    'home_goals' => $fixture->aiPrediction->home_goals,
+                    'away_goals' => $fixture->aiPrediction->away_goals,
+                ] : null,
                 'home_goals' => $fixture->fulltime_home_goals,
                 'away_goals' => $fixture->fulltime_away_goals,
                 'status_short' => $fixture->status_short,

@@ -308,18 +308,7 @@ class MondialiQDemoSeeder extends Seeder
         }
 
         $confidenceLevels = [48, 53, 58, 64, 69, 72, 77, 81, 86];
-        $advice = [
-            'De thuisploeg creëert doorgaans meer kansen en heeft een licht vormvoordeel.',
-            'Beide teams scoren regelmatig; kleine details kunnen deze wedstrijd beslissen.',
-            'De uitploeg oogt efficiënt in omschakeling, maar geeft defensief ruimte weg.',
-            'Recente resultaten en thuisvorm wijzen op een gelijkopgaande wedstrijd.',
-            'De favoriet combineert meer balbezit met een hoger gemiddeld aantal doelpogingen.',
-            'De onderlinge ontmoetingen zijn vaak compact met weinig verschil in expected goals.',
-            'Sterke thuisprestaties geven de thuisploeg een meetbaar maar beperkt voordeel.',
-            'De bezoekers creëren veel kansen, terwijl de thuisploeg gevaarlijk blijft op stilstaande fases.',
-        ];
-
-        $fixtures->each(function (Fixture $fixture, int $index) use ($aiUser, $confidenceLevels, $advice): void {
+        $fixtures->each(function (Fixture $fixture, int $index) use ($aiUser, $confidenceLevels): void {
             [$homeGoals, $awayGoals] = $this->predictionScore($fixture, $index);
             [$homeChance, $drawChance, $awayChance] = $this->probabilities($homeGoals, $awayGoals, $index);
             $winnerId = match (true) {
@@ -347,7 +336,7 @@ class MondialiQDemoSeeder extends Seeder
                     'home_goals' => $homeGoals,
                     'away_goals' => $awayGoals,
                     'confidence' => (string) $confidenceLevels[$index % count($confidenceLevels)],
-                    'advice' => $advice[$index % count($advice)],
+                    'advice' => $this->aiAdvice($fixture, $homeChance, $drawChance, $awayChance),
                     'home_chance' => $homeChance,
                     'draw_chance' => $drawChance,
                     'away_chance' => $awayChance,
@@ -387,6 +376,25 @@ class MondialiQDemoSeeder extends Seeder
             $awayGoals > $homeGoals => [22 - intdiv($variation + 1, 2), 26 - intdiv($variation, 2), 52 + $variation],
             default => [31 + intdiv($variation, 2), 40 - $variation, 29 + intdiv($variation + 1, 2)],
         };
+    }
+
+    private function aiAdvice(
+        Fixture $fixture,
+        int $homeChance,
+        int $drawChance,
+        int $awayChance,
+    ): string {
+        $highest = max($homeChance, $drawChance, $awayChance);
+
+        if ($highest === $homeChance) {
+            return "{$fixture->homeTeam->name} krijgt het voordeel door de combinatie van recente vorm en thuisprestaties.";
+        }
+
+        if ($highest === $awayChance) {
+            return "{$fixture->awayTeam->name} heeft volgens het model de beste papieren, vooral door de efficiënte aanval.";
+        }
+
+        return 'De kansen liggen dicht bij elkaar; MondialiQ verwacht weinig verschil tussen beide teams.';
     }
 
     private function seedLiveEvents(?Fixture $fixture): void

@@ -12,9 +12,14 @@ export default function MatchList({ matches }: { matches: Match[] }) {
                     href={showMatch(match.id)}
                     className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-4 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset sm:grid-cols-[4.5rem_1fr_auto]"
                 >
-                    <span className="text-sm font-semibold text-[#949d97] tabular-nums">
-                        {match.time}
-                    </span>
+                    <div>
+                        <span className="text-sm font-semibold text-[#daddd9] tabular-nums">
+                            {match.time}
+                        </span>
+                        <span className="mt-1 block max-w-16 truncate text-[0.6rem] font-semibold tracking-[0.06em] text-[#68706b] uppercase">
+                            {match.leagueName ?? match.round}
+                        </span>
+                    </div>
                     <div className="min-w-0">
                         <div className="flex items-center gap-2">
                             <TeamLogo
@@ -37,7 +42,7 @@ export default function MatchList({ matches }: { matches: Match[] }) {
                     </div>
                     <div className="text-right">
                         <span className="text-[0.65rem] font-semibold tracking-[0.1em] text-[#68706b] uppercase">
-                            AI
+                            AI voorspelling
                         </span>
                         <strong className="mt-1 block text-xl font-black text-white tabular-nums">
                             {score(match.aiPrediction?.homeScore)}–

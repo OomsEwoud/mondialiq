@@ -2,7 +2,10 @@
 
 use App\Models\Fixture;
 use App\Models\League;
+use App\Models\Prediction;
 use App\Models\Team;
+use App\Models\User;
+use Database\Seeders\AiUserSeeder;
 use Illuminate\Support\Facades\Cache;
 
 beforeEach(fn () => Cache::flush());
@@ -43,6 +46,16 @@ test('the live fixtures endpoint returns slim cached live fixture data', functio
         'fulltime_away_goals' => 1,
     ]);
 
+    $this->seed(AiUserSeeder::class);
+
+    Prediction::create([
+        'fixture_id' => $liveFixture->id,
+        'user_id' => User::aiUser()?->id,
+        'source' => 'ai',
+        'home_goals' => 2,
+        'away_goals' => 1,
+    ]);
+
     Fixture::create([
         'external_id' => 102,
         'league_id' => $league->id,
@@ -65,6 +78,9 @@ test('the live fixtures endpoint returns slim cached live fixture data', functio
         ->assertJsonPath('data.0.away_team.name', 'Netherlands')
         ->assertJsonPath('data.0.away_team.code', 'NED')
         ->assertJsonPath('data.0.away_team.logo_url', 'https://example.com/netherlands.png')
+        ->assertJsonPath('data.0.league.name', 'World Cup')
+        ->assertJsonPath('data.0.ai_prediction.home_goals', 2)
+        ->assertJsonPath('data.0.ai_prediction.away_goals', 1)
         ->assertJsonPath('data.0.home_goals', 2)
         ->assertJsonPath('data.0.away_goals', 1)
         ->assertJsonPath('data.0.status_short', '2H')
@@ -76,6 +92,8 @@ test('the live fixtures endpoint returns slim cached live fixture data', functio
                     'id',
                     'home_team' => ['id', 'name', 'code', 'logo_url'],
                     'away_team' => ['id', 'name', 'code', 'logo_url'],
+                    'league' => ['name', 'logo_url'],
+                    'ai_prediction' => ['home_goals', 'away_goals'],
                     'home_goals',
                     'away_goals',
                     'status_short',

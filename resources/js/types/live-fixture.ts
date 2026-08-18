@@ -9,6 +9,14 @@ export interface LiveFixture {
     id: number;
     home_team: LiveFixtureTeam;
     away_team: LiveFixtureTeam;
+    league?: {
+        name: string | null;
+        logo_url: string | null;
+    };
+    ai_prediction?: {
+        home_goals: number | null;
+        away_goals: number | null;
+    } | null;
     home_goals: number | null;
     away_goals: number | null;
     status_short: string | null;
