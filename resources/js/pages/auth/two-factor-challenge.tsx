@@ -12,6 +12,11 @@ import {
 } from '@/components/ui/forms/input-otp';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
 import { store } from '@/routes/two-factor/login';
+import {
+    authInputClass,
+    authLinkClass,
+    authPrimaryButtonClass,
+} from '@/utils/auth-form';
 
 export default function TwoFactorChallenge() {
     const [showRecoveryInput, setShowRecoveryInput] = useState<boolean>(false);
@@ -60,6 +65,7 @@ export default function TwoFactorChallenge() {
                                         placeholder="ABCD-1234-EFGH"
                                         autoFocus={showRecoveryInput}
                                         required
+                                        className={authInputClass}
                                     />
                                     <InputError
                                         message={errors.recovery_code}
@@ -83,6 +89,7 @@ export default function TwoFactorChallenge() {
                                                         <InputOTPSlot
                                                             key={index}
                                                             index={index}
+                                                            className="size-11 border-[#343b37] bg-[#171c19] text-base text-white first:rounded-l-xl last:rounded-r-xl"
                                                         />
                                                     ),
                                                 )}
@@ -95,17 +102,17 @@ export default function TwoFactorChallenge() {
 
                             <Button
                                 type="submit"
-                                className="w-full"
+                                className={authPrimaryButtonClass}
                                 disabled={processing}
                             >
                                 Continue
                             </Button>
 
-                            <div className="text-center text-sm text-muted-foreground">
+                            <div className="text-center text-sm text-[#7f8882]">
                                 <span>or you can </span>
                                 <button
                                     type="button"
-                                    className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                    className={authLinkClass}
                                     onClick={() =>
                                         toggleRecoveryMode(clearErrors)
                                     }

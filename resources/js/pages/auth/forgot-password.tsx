@@ -23,8 +23,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <>
             <PageHead
-                title="Forgot password"
-                description="Request a secure MondialIQ password reset link for your account."
+                title="Wachtwoord vergeten"
+                description="Vraag veilig een link aan om je MondialiQ-wachtwoord opnieuw in te stellen."
                 noIndex
             />
 
@@ -41,7 +41,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     htmlFor="email"
                                     className={authFieldLabelClass}
                                 >
-                                    Email address
+                                    E-mailadres
                                 </Label>
                                 <Input
                                     id="email"
@@ -63,7 +63,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     data-test="email-password-reset-link-button"
                                 >
                                     {processing && <Spinner />}
-                                    Email password reset link
+                                    Verstuur herstelmail
                                 </Button>
                             </div>
                         </>
@@ -71,12 +71,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
                 </Form>
 
                 <div className={authMutedPanelClass}>
-                    <span>Or, return to</span>
+                    <span>Terug naar</span>
                     <TextLink
                         href={login()}
                         className={`ml-1 ${authLinkClass}`}
                     >
-                        log in
+                        inloggen
                     </TextLink>
                 </div>
             </div>
@@ -85,6 +85,6 @@ export default function ForgotPassword({ status }: { status?: string }) {
 }
 
 ForgotPassword.layout = {
-    title: 'Forgot password',
-    description: 'Enter your email and we will send a reset link.',
+    title: 'Wachtwoord vergeten?',
+    description: 'Vul je e-mailadres in. We sturen je een veilige herstellink.',
 };

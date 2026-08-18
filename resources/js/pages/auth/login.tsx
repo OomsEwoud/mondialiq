@@ -2,7 +2,6 @@ import { Form } from '@inertiajs/react';
 import type * as React from 'react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
-import BackButton from '@/components/navigation/back-button';
 import PageHead from '@/components/seo/page-head';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
@@ -10,7 +9,7 @@ import { Button } from '@/components/ui/forms/button';
 import { Checkbox } from '@/components/ui/forms/checkbox';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { home, register } from '@/routes';
+import { register } from '@/routes';
 import { redirect as authRedirect } from '@/routes/auth';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
@@ -64,8 +63,8 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-slate-200 bg-white text-slate-700 hover:border-cyan-300 hover:bg-cyan-50 hover:text-slate-900',
-        iconClassName: 'bg-white ring-slate-200',
+            'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
+        iconClassName: 'bg-white ring-[#343b37]',
     },
     {
         name: 'Facebook',
@@ -83,16 +82,16 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-blue-200 bg-blue-50 text-slate-900 hover:border-blue-300 hover:bg-blue-100',
-        iconClassName: 'bg-white ring-blue-100',
+            'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
+        iconClassName: 'bg-white ring-[#343b37]',
     },
 ] satisfies SocialProvider[];
 
 const socialDividerLabelClass =
-    'text-xs font-semibold tracking-widest text-slate-400 uppercase';
+    'text-[0.65rem] font-semibold tracking-[0.14em] text-[#68706b] uppercase';
 const rememberMeContainerClass =
-    'flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3';
-const socialButtonBaseClass = 'h-12 rounded-lg font-semibold shadow-none';
+    'flex items-center gap-3 rounded-xl border border-[#262c29] bg-[#141916] px-3 py-3';
+const socialButtonBaseClass = 'h-12 rounded-xl font-semibold shadow-none';
 
 export default function Login({
     status,
@@ -105,8 +104,8 @@ export default function Login({
     return (
         <>
             <PageHead
-                title="Log in"
-                description="Log in to MondialIQ to manage your World Cup predictions, account settings and prediction group rankings."
+                title="Inloggen"
+                description="Log veilig in op je MondialiQ-account."
                 noIndex
             />
 
@@ -118,7 +117,11 @@ export default function Login({
                 {({ processing, errors }) => (
                     <>
                         {intended && (
-                            <input type="hidden" name="intended" value={intended} />
+                            <input
+                                type="hidden"
+                                name="intended"
+                                value={intended}
+                            />
                         )}
 
                         {showStatus && (
@@ -135,7 +138,7 @@ export default function Login({
                                     htmlFor="email"
                                     className={authFieldLabelClass}
                                 >
-                                    Email address
+                                    E-mailadres
                                 </Label>
                                 <Input
                                     id="email"
@@ -156,7 +159,7 @@ export default function Login({
                                         htmlFor="password"
                                         className={authFieldLabelClass}
                                     >
-                                        Password
+                                        Wachtwoord
                                     </Label>
                                     {canResetPassword && (
                                         <TextLink
@@ -164,7 +167,7 @@ export default function Login({
                                             className={`ml-auto text-sm font-semibold ${authLinkClass}`}
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            Wachtwoord vergeten?
                                         </TextLink>
                                     )}
                                 </div>
@@ -184,13 +187,13 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className="border-slate-300 data-[state=checked]:border-cyan-500 data-[state=checked]:bg-cyan-500 data-[state=checked]:text-slate-900"
+                                    className="border-[#46504a] bg-[#171c19] data-[state=checked]:border-[#57ad78] data-[state=checked]:bg-[#57ad78] data-[state=checked]:text-[#0b0e0d]"
                                 />
                                 <Label
                                     htmlFor="remember"
-                                    className="text-sm font-semibold text-slate-600"
+                                    className="text-sm font-semibold text-[#949d97]"
                                 >
-                                    Remember me
+                                    Onthoud mij
                                 </Label>
                             </div>
 
@@ -202,17 +205,17 @@ export default function Login({
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Inloggen
                             </Button>
                         </div>
 
                         <div className="grid gap-4">
                             <div className="flex items-center gap-3">
-                                <div className="h-px flex-1 bg-slate-200" />
+                                <div className="h-px flex-1 bg-[#262c29]" />
                                 <span className={socialDividerLabelClass}>
-                                    Or continue with
+                                    Of ga verder met
                                 </span>
-                                <div className="h-px flex-1 bg-slate-200" />
+                                <div className="h-px flex-1 bg-[#262c29]" />
                             </div>
 
                             <div className="grid gap-3 sm:grid-cols-2">
@@ -230,7 +233,7 @@ export default function Login({
                                                     ? { query: { intended } }
                                                     : undefined,
                                             )}
-                                            aria-label={`Log in with ${provider.name}`}
+                                            aria-label={`Inloggen met ${provider.name}`}
                                         >
                                             <span
                                                 className={`flex size-7 items-center justify-center rounded-full shadow-sm ring-1 ${provider.iconClassName}`}
@@ -246,28 +249,25 @@ export default function Login({
 
                         {canRegister && (
                             <div className={authMutedPanelClass}>
-                                Don't have an account?{' '}
+                                Nog geen account?{' '}
                                 <TextLink
                                     href={register()}
                                     tabIndex={5}
                                     className={authLinkClass}
                                 >
-                                    Sign up
+                                    Account maken
                                 </TextLink>
                             </div>
                         )}
                     </>
                 )}
             </Form>
-
-            <div className="mt-6 flex justify-center border-t border-slate-100 pt-5">
-                <BackButton fallbackHref={home.url()} />
-            </div>
         </>
     );
 }
 
 Login.layout = {
-    title: 'Log in to MondialIQ',
-    description: 'Welcome back. Sign in to continue.',
+    title: 'Welkom terug',
+    description:
+        'Log in om je voetbalinzichten en gevolgde competities te bekijken.',
 };

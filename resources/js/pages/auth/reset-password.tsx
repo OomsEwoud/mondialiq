@@ -7,7 +7,11 @@ import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { update } from '@/routes/password';
-import { authInputClass, authPrimaryButtonClass } from '@/utils/auth-form';
+import {
+    authFieldLabelClass,
+    authInputClass,
+    authPrimaryButtonClass,
+} from '@/utils/auth-form';
 
 type Props = {
     token: string;
@@ -21,7 +25,7 @@ export default function ResetPassword({ token, email }: Props) {
     return (
         <>
             <PageHead
-                title="Reset password"
+                title="Nieuw wachtwoord"
                 description="Set a new password for your MondialIQ account."
                 noIndex
             />
@@ -34,7 +38,12 @@ export default function ResetPassword({ token, email }: Props) {
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
                         <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label
+                                htmlFor="email"
+                                className={authFieldLabelClass}
+                            >
+                                Email
+                            </Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -51,7 +60,12 @@ export default function ResetPassword({ token, email }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label
+                                htmlFor="password"
+                                className={authFieldLabelClass}
+                            >
+                                Wachtwoord
+                            </Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
@@ -64,8 +78,11 @@ export default function ResetPassword({ token, email }: Props) {
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="password_confirmation">
-                                Confirm password
+                            <Label
+                                htmlFor="password_confirmation"
+                                className={authFieldLabelClass}
+                            >
+                                Bevestig wachtwoord
                             </Label>
                             <PasswordInput
                                 id="password_confirmation"
@@ -87,7 +104,7 @@ export default function ResetPassword({ token, email }: Props) {
                             data-test="reset-password-button"
                         >
                             {processing && <Spinner />}
-                            Reset password
+                            Wachtwoord instellen
                         </Button>
                     </div>
                 )}
@@ -97,6 +114,6 @@ export default function ResetPassword({ token, email }: Props) {
 }
 
 ResetPassword.layout = {
-    title: 'Reset password',
-    description: 'Please enter your new password below',
+    title: 'Kies een nieuw wachtwoord',
+    description: 'Kies een sterk nieuw wachtwoord voor je account.',
 };

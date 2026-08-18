@@ -1,14 +1,13 @@
 import { Form } from '@inertiajs/react';
 import PasswordInput from '@/components/auth/password/password-input';
 import InputError from '@/components/forms/input-error';
-import BackButton from '@/components/navigation/back-button';
 import PageHead from '@/components/seo/page-head';
 import TextLink from '@/components/typography/text-link';
 import { Spinner } from '@/components/ui/feedback/spinner';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
-import { home, login } from '@/routes';
+import { login } from '@/routes';
 import { store } from '@/routes/register';
 import {
     authFieldLabelClass,
@@ -22,8 +21,8 @@ export default function Register() {
     return (
         <>
             <PageHead
-                title="Create account"
-                description="Create a MondialIQ account to save World Cup predictions, join private leagues and track your score."
+                title="Account maken"
+                description="Maak een MondialiQ-account voor persoonlijke voetbalinzichten en analyses."
                 noIndex
             />
 
@@ -40,7 +39,7 @@ export default function Register() {
                                     htmlFor="name"
                                     className={authFieldLabelClass}
                                 >
-                                    Name
+                                    Naam
                                 </Label>
                                 <Input
                                     id="name"
@@ -60,7 +59,7 @@ export default function Register() {
                                     htmlFor="email"
                                     className={authFieldLabelClass}
                                 >
-                                    Email address
+                                    E-mailadres
                                 </Label>
                                 <Input
                                     id="email"
@@ -79,7 +78,7 @@ export default function Register() {
                                     htmlFor="password"
                                     className={authFieldLabelClass}
                                 >
-                                    Password
+                                    Wachtwoord
                                 </Label>
                                 <PasswordInput
                                     id="password"
@@ -97,7 +96,7 @@ export default function Register() {
                                     htmlFor="password_confirmation"
                                     className={authFieldLabelClass}
                                 >
-                                    Confirm password
+                                    Bevestig wachtwoord
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -119,32 +118,29 @@ export default function Register() {
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
-                                Create account
+                                Account maken
                             </Button>
                         </div>
 
                         <div className={authMutedPanelClass}>
-                            Already have an account?{' '}
+                            Heb je al een account?{' '}
                             <TextLink
                                 href={login()}
                                 tabIndex={6}
                                 className={authLinkClass}
                             >
-                                Log in
+                                Inloggen
                             </TextLink>
                         </div>
                     </>
                 )}
             </Form>
-
-            <div className="mt-6 flex justify-center border-t border-slate-100 pt-5">
-                <BackButton fallbackHref={home.url()} />
-            </div>
         </>
     );
 }
 
 Register.layout = {
-    title: 'Create an account',
-    description: 'Create your MondialIQ account to get started.',
+    title: 'Maak je account',
+    description:
+        'Volg predictions, analyses en competities vanuit één persoonlijk overzicht.',
 };
