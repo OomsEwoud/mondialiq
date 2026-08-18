@@ -1,4 +1,5 @@
 export type * from './auth';
+export type * from './dashboard';
 export type * from './group';
 export type * from './league';
 export type * from './leaderboard';

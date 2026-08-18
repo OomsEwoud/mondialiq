@@ -21,6 +21,7 @@ use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Pages\AiPredictionsController;
 use App\Http\Controllers\Pages\ContactController;
+use App\Http\Controllers\Pages\DashboardController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
 use App\Http\Controllers\Pages\HowItWorksController;
@@ -60,6 +61,8 @@ Route::get('/auth/{provider}/callback', CallbackController::class)
     ->name('auth.callback');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
     Route::get('/leaderboards', LeaderboardsController::class)->name('leaderboards');
 
     Route::get('/leagues/create', CreateLeaguePageController::class)->name('leagues.create');

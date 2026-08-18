@@ -6,7 +6,7 @@ use App\Models\League;
 
 class WorldCupContext
 {
-    public function leagueId(): int
+    public function leagueId(): ?int
     {
         return League::query()
             ->where('external_id', config('services.api_football.league_id'))
@@ -24,11 +24,14 @@ class WorldCupContext
             ->pluck('id')
             ->all();
 
-        return array_merge([$worldCupLeagueId], $friendliesLeagueIds);
+        return array_values(array_filter(
+            array_merge([$worldCupLeagueId], $friendliesLeagueIds),
+            fn (?int $leagueId): bool => $leagueId !== null,
+        ));
     }
 
     public function season(): int
     {
-        return config('services.api_football.season');
+        return (int) config('services.api_football.season');
     }
 }

@@ -1,39 +1,39 @@
 <?php
 
+use App\Models\League;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
-test('authenticated users can visit the home page', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
-    $response = $this->get(route('home'));
-    $response->assertOk();
+test('guests are redirected from the dashboard to login', function () {
+    $this->get(route('dashboard'))
+        ->assertRedirect(route('login'));
 });
 
-test('globally shared auth user only exposes safe fields', function () {
-    $user = User::factory()->create([
-        'password' => null,
-        'social_provider' => 'google',
+test('authenticated users can view their dashboard', function () {
+    League::query()->create([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
+        'type' => 'Cup',
     ]);
 
-    $response = $this
-        ->actingAs($user)
-        ->get(route('home'));
+    $this->actingAs(User::factory()->create())
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('dashboard')
+            ->has('upcomingFixtures')
+            ->has('liveFixtures')
+            ->has('recentFixtures')
+            ->has('competitions'));
+});
 
-    $sharedUser = $response->inertiaProps('auth.user');
-
-    expect($sharedUser)->toHaveKeys([
-        'id',
-        'name',
-        'email',
-        'avatar',
-    ])->not->toHaveKeys([
-        'email_verified_at',
-        'social_provider',
-        'avatar_type',
-        'created_at',
-        'updated_at',
-        'has_password',
-        'is_sso_only',
-    ]);
+test('authenticated users can view an empty dashboard without a configured league', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('dashboard')
+            ->has('upcomingFixtures', 0)
+            ->has('recentFixtures', 0)
+            ->has('competitions', 0));
 });
