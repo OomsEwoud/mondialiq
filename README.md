@@ -15,7 +15,7 @@ MondialIQ is a World Cup 2026 prediction platform built with Laravel, Inertia, R
 
 ## Tech Stack
 
-- PHP 8.3+
+- PHP 8.5
 - Laravel 13
 - Inertia.js 3
 - React 19
@@ -29,7 +29,7 @@ MondialIQ is a World Cup 2026 prediction platform built with Laravel, Inertia, R
 
 Install these before starting:
 
-- PHP 8.3 or newer
+- PHP 8.5 or newer
 - Composer
 - Node.js and npm
 - MySQL or SQLite
