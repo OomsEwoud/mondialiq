@@ -18,7 +18,7 @@ test('the cleanup test users command is a dry run by default', function () {
         'email' => 'testuser698_1781191763899640000@test.be',
     ]);
 
-    User::factory()->create([
+    $realUser = User::factory()->create([
         'email' => 'real@example.com',
     ]);
 
@@ -27,8 +27,8 @@ test('the cleanup test users command is a dry run by default', function () {
         ->expectsOutput('DRY RUN - geen users verwijderd')
         ->assertSuccessful();
 
-    expect($testUser->refresh())->toBeInstanceOf(User::class)
-        ->and(User::query()->count())->toBe(2);
+    expect(User::query()->find($testUser->id))->toBeInstanceOf(User::class)
+        ->and(User::query()->find($realUser->id))->toBeInstanceOf(User::class);
 });
 
 test('the cleanup test users command removes test users and related user data with force', function () {

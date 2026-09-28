@@ -89,8 +89,7 @@ const socialProviders = [
 
 const socialDividerLabelClass =
     'text-[0.65rem] font-semibold tracking-[0.14em] text-[#68706b] uppercase';
-const rememberMeContainerClass =
-    'flex items-center gap-3 rounded-xl border border-[#262c29] bg-[#141916] px-3 py-3';
+const rememberMeContainerClass = 'flex items-center gap-3';
 const socialButtonBaseClass = 'h-12 rounded-xl font-semibold shadow-none';
 
 export default function Login({
@@ -105,7 +104,7 @@ export default function Login({
         <>
             <PageHead
                 title="Inloggen"
-                description="Log veilig in op je MondialiQ-account."
+                description="Log in en ga verder met je wedstrijden en voorspellingen."
                 noIndex
             />
 
@@ -147,7 +146,7 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="name@example.com"
+                                    placeholder="jij@voorbeeld.be"
                                     className={authInputClass}
                                 />
                                 <InputError message={errors.email} />
@@ -176,7 +175,7 @@ export default function Login({
                                     name="password"
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="********"
+                                    placeholder="Je wachtwoord"
                                     className={authPasswordInputClass}
                                 />
                                 <InputError message={errors.password} />
@@ -267,7 +266,6 @@ export default function Login({
 }
 
 Login.layout = {
-    title: 'Welkom terug',
-    description:
-        'Log in om je voetbalinzichten en gevolgde competities te bekijken.',
+    title: 'Klaar voor de aftrap?',
+    description: 'Log in en ga verder waar je gebleven was.',
 };

@@ -14,6 +14,7 @@ import {
     authInputClass,
     authLinkClass,
     authMutedPanelClass,
+    authPasswordInputClass,
     authPrimaryButtonClass,
 } from '@/utils/auth-form';
 
@@ -22,7 +23,7 @@ export default function Register() {
         <>
             <PageHead
                 title="Account maken"
-                description="Maak een MondialiQ-account voor persoonlijke voetbalinzichten en analyses."
+                description="Maak gratis een account en doe mee met MondialiQ."
                 noIndex
             />
 
@@ -48,7 +49,7 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Example User"
+                                    placeholder="Je naam"
                                     className={authInputClass}
                                 />
                                 <InputError message={errors.name} />
@@ -67,7 +68,7 @@ export default function Register() {
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="name@example.com"
+                                    placeholder="jij@voorbeeld.be"
                                     className={authInputClass}
                                 />
                                 <InputError message={errors.email} />
@@ -85,8 +86,8 @@ export default function Register() {
                                     tabIndex={3}
                                     autoComplete="new-password"
                                     name="password"
-                                    placeholder="Min. 8 characters"
-                                    className={authInputClass}
+                                    placeholder="Minstens 8 tekens"
+                                    className={authPasswordInputClass}
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -103,8 +104,8 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Repeat password"
-                                    className={authInputClass}
+                                    placeholder="Nog een keer"
+                                    className={authPasswordInputClass}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -123,7 +124,7 @@ export default function Register() {
                         </div>
 
                         <div className={authMutedPanelClass}>
-                            Heb je al een account?{' '}
+                            Al eerder meegedaan?{' '}
                             <TextLink
                                 href={login()}
                                 tabIndex={6}
@@ -140,7 +141,6 @@ export default function Register() {
 }
 
 Register.layout = {
-    title: 'Maak je account',
-    description:
-        'Volg predictions, analyses en competities vanuit één persoonlijk overzicht.',
+    title: 'Doe mee met MondialiQ',
+    description: 'Een gratis account. Daarna ben je meteen mee.',
 };
