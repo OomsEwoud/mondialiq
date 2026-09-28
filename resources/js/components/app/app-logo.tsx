@@ -9,9 +9,9 @@ type Props = {
     showText?: boolean;
 };
 
-const logoMarkClassName = 'h-10 w-10 rounded-xl shadow-sm';
+const logoMarkClassName = 'h-10 w-10 rounded-xl';
 
-const logoTextClassName = 'text-xl font-bold tracking-tight text-slate-900';
+const logoTextClassName = 'text-xl font-black tracking-normal text-[#111513]';
 
 export default function AppLogo({
     className,
@@ -28,7 +28,7 @@ export default function AppLogo({
             />
             {showText && (
                 <span className={cn(logoTextClassName, textClassName)}>
-                    Mondial<span className="text-cyan-400">IQ</span>
+                    Mondial<span className="text-[#70b98e]">IQ</span>
                 </span>
             )}
         </div>

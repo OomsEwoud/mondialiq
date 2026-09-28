@@ -6,6 +6,9 @@ type MondialIQLogoProps = SVGAttributes<SVGSVGElement> & {
     variant?: 'horizontal' | 'icon' | 'navbar';
 };
 
+const markPath =
+    'M110 342V170H166L256 250L346 170H402V342H334V263L256 333L178 263V342H110Z';
+
 export default function MondialIQLogo({
     className,
     variant = 'horizontal',
@@ -21,85 +24,26 @@ export default function MondialIQLogo({
                 viewBox="0 0 512 512"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <rect width="512" height="512" rx="112" fill="#FFFFFF" />
+                <rect width="512" height="512" rx="112" fill="#F3F4F1" />
                 <rect
                     x="20"
                     y="20"
                     width="472"
                     height="472"
                     rx="96"
-                    fill="#F8FAFC"
-                    stroke="#D8EEF5"
+                    fill="#111513"
+                    stroke="#303732"
                     strokeWidth="4"
                 />
-                <path
-                    d="M116 118C154 74 221 55 280 73"
-                    stroke="#07164D"
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M336 90C383 126 407 188 394 248"
-                    stroke="#10C8E8"
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M98 285C129 361 209 405 289 387"
-                    stroke="#07164D"
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M84 165C62 211 64 267 88 312"
-                    stroke="#07164D"
-                    strokeLinecap="round"
-                    strokeWidth="12"
-                    opacity="0.9"
-                />
-                <path
-                    d="M393 271C379 320 340 360 292 378"
-                    stroke="#10C8E8"
-                    strokeLinecap="round"
-                    strokeWidth="12"
-                    opacity="0.9"
-                />
-                <path
-                    d="M128 166L223 238L318 166V298H262V252L223 282L184 252V298H128V166Z"
-                    fill="#07164D"
-                />
-                <rect
-                    x="333"
-                    y="151"
-                    width="48"
-                    height="148"
-                    rx="24"
-                    fill="#10C8E8"
-                />
-                <circle cx="357" cy="117" r="31" fill="#10C8E8" />
-                <path
-                    d="M151 328C174 294 206 279 248 281C290 283 323 302 342 330C316 355 284 368 248 368C211 368 179 354 151 328Z"
-                    fill="#FFFFFF"
-                    stroke="#07164D"
-                    strokeLinejoin="round"
-                    strokeWidth="8"
-                />
-                <path
-                    d="M244 292L277 311L265 346H224L212 311L244 292Z"
-                    fill="#07164D"
-                />
-                <path
-                    d="M212 311L176 316M277 311L318 316M224 346L203 362M265 346L287 362"
-                    stroke="#07164D"
-                    strokeLinecap="round"
-                    strokeWidth="7"
-                />
+                <path d={markPath} fill="#F3F4F1" />
+                <circle cx="386" cy="126" r="34" fill="#57AD78" />
+                <circle cx="386" cy="126" r="9" fill="#111513" />
             </svg>
         );
     }
 
-    const primary = variant === 'navbar' ? '#FFFFFF' : '#07164D';
-    const ballFill = variant === 'navbar' ? '#07164D' : '#FFFFFF';
+    const primary = variant === 'navbar' ? '#F3F4F1' : '#111513';
+    const tile = variant === 'navbar' ? '#171C19' : '#111513';
 
     return (
         <svg
@@ -111,88 +55,30 @@ export default function MondialIQLogo({
             xmlns="http://www.w3.org/2000/svg"
         >
             <g transform="translate(36 28) scale(0.36)">
-                <path
-                    d="M116 118C154 74 221 55 280 73"
-                    stroke={primary}
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M336 90C383 126 407 188 394 248"
-                    stroke="#10C8E8"
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M98 285C129 361 209 405 289 387"
-                    stroke={primary}
-                    strokeLinecap="round"
-                    strokeWidth="18"
-                />
-                <path
-                    d="M84 165C62 211 64 267 88 312"
-                    stroke={primary}
-                    strokeLinecap="round"
-                    strokeWidth="12"
-                    opacity="0.9"
-                />
-                <path
-                    d="M393 271C379 320 340 360 292 378"
-                    stroke="#10C8E8"
-                    strokeLinecap="round"
-                    strokeWidth="12"
-                    opacity="0.9"
-                />
-                <path
-                    d="M128 166L223 238L318 166V298H262V252L223 282L184 252V298H128V166Z"
-                    fill={primary}
-                />
-                <rect
-                    x="333"
-                    y="151"
-                    width="48"
-                    height="148"
-                    rx="24"
-                    fill="#10C8E8"
-                />
-                <circle cx="357" cy="117" r="31" fill="#10C8E8" />
-                <path
-                    d="M151 328C174 294 206 279 248 281C290 283 323 302 342 330C316 355 284 368 248 368C211 368 179 354 151 328Z"
-                    fill={ballFill}
-                    stroke={primary}
-                    strokeLinejoin="round"
-                    strokeWidth="8"
-                />
-                <path
-                    d="M244 292L277 311L265 346H224L212 311L244 292Z"
-                    fill={primary}
-                />
-                <path
-                    d="M212 311L176 316M277 311L318 316M224 346L203 362M265 346L287 362"
-                    stroke={primary}
-                    strokeLinecap="round"
-                    strokeWidth="7"
-                />
+                <rect width="512" height="512" rx="112" fill={tile} />
+                <path d={markPath} fill="#F3F4F1" />
+                <circle cx="386" cy="126" r="34" fill="#57AD78" />
+                <circle cx="386" cy="126" r="9" fill={tile} />
             </g>
             <text
                 x="250"
                 y="145"
                 fill={primary}
-                fontFamily="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                fontFamily="Instrument Sans, ui-sans-serif, system-ui, sans-serif"
                 fontSize="82"
                 fontWeight="800"
-                letterSpacing="-3"
+                letterSpacing="0"
             >
                 Mondial
             </text>
             <text
-                x="642"
+                x="600"
                 y="145"
-                fill="#10C8E8"
-                fontFamily="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+                fill="#70B98E"
+                fontFamily="Instrument Sans, ui-sans-serif, system-ui, sans-serif"
                 fontSize="82"
                 fontWeight="900"
-                letterSpacing="-4"
+                letterSpacing="0"
             >
                 IQ
             </text>
