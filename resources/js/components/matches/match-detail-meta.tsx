@@ -7,22 +7,22 @@ interface Props {
 
 export default function MatchDetailMeta({ match }: Props) {
     return (
-        <div className="mt-5 grid grid-cols-1 gap-3 border-t border-slate-200 pt-5 text-sm sm:grid-cols-3 sm:gap-4">
-            <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
-                <Flag className="h-4 w-4 text-cyan-600" />
-                <span className="font-semibold text-slate-700">
+        <div className="mt-5 grid grid-cols-1 gap-2 border-t border-[#29312c] pt-5 text-sm sm:grid-cols-3">
+            <div className="flex items-center gap-2 rounded-md border border-[#29312c] bg-[#0d110f] px-3 py-2">
+                <Flag className="h-4 w-4 text-[#70b98e]" />
+                <span className="font-semibold text-[#b8bfba]">
                     {match.round}
                 </span>
             </div>
-            <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
-                <CalendarDays className="h-4 w-4 text-cyan-600" />
-                <span className="font-semibold text-slate-700">
+            <div className="flex items-center gap-2 rounded-md border border-[#29312c] bg-[#0d110f] px-3 py-2">
+                <CalendarDays className="h-4 w-4 text-[#70b98e]" />
+                <span className="font-semibold text-[#b8bfba]">
                     {match.date}
                 </span>
             </div>
-            <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
-                <Clock className="h-4 w-4 text-cyan-600" />
-                <span className="font-semibold text-slate-700">
+            <div className="flex items-center gap-2 rounded-md border border-[#29312c] bg-[#0d110f] px-3 py-2">
+                <Clock className="h-4 w-4 text-[#70b98e]" />
+                <span className="font-semibold text-[#b8bfba]">
                     {match.time}
                 </span>
             </div>

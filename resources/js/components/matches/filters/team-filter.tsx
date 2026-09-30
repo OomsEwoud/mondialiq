@@ -45,18 +45,18 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
     };
 
     return (
-        <div className="relative grid gap-2 text-xs font-bold tracking-wide text-slate-500 uppercase">
-            Team
+        <div className="relative grid gap-2 text-xs font-bold text-[#89928c]">
+            Ploeg
             <div className="relative">
                 <Search
                     aria-hidden
-                    className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2 text-cyan-600"
+                    className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#70b98e]"
                 />
                 <input
                     ref={inputRef}
                     type="search"
                     value={selected}
-                    placeholder="Search team"
+                    placeholder="Zoek een ploeg"
                     onFocus={() => setOpen(true)}
                     onBlur={() => window.setTimeout(() => setOpen(false), 120)}
                     onChange={(e) => {
@@ -65,21 +65,21 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                         setActiveIndex(0);
                     }}
                     onKeyDown={handleKeyDown}
-                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white/90 px-4 pr-11 pl-11 text-sm font-semibold text-slate-800 normal-case shadow-sm transition-all outline-none placeholder:text-slate-400 hover:border-cyan-200 hover:bg-white focus:border-cyan-300 focus:ring-4 focus:ring-slate-200"
+                    className="h-11 w-full rounded-md border border-[#343d37] bg-[#0d110f] pr-10 pl-10 text-sm font-semibold text-[#daddd9] normal-case transition-colors outline-none placeholder:text-[#59615c] hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
                 />
                 {selected && (
                     <button
                         type="button"
                         onClick={handleClear}
                         aria-label="Clear team"
-                        className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 rounded-sm p-1 text-[#717a74] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
                     >
                         <X size={15} />
                     </button>
                 )}
             </div>
             {open && matches.length > 0 && (
-                <div className="absolute top-full left-0 z-20 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white/98 py-1.5 shadow-sm">
+                <div className="absolute top-full left-0 z-20 mt-2 w-full overflow-hidden rounded-md border border-[#343d37] bg-[#141916] py-1.5 shadow-2xl shadow-black/40">
                     {matches.map((team, index) => (
                         <button
                             key={team}
@@ -93,8 +93,8 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                             className={[
                                 'block w-full px-4 py-2.5 text-left text-sm font-semibold normal-case transition-colors',
                                 index === safeIndex
-                                    ? 'bg-cyan-50 text-cyan-700'
-                                    : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
+                                    ? 'bg-[#223129] text-[#8fd0a8]'
+                                    : 'text-[#b8bfba] hover:bg-[#1b211e] hover:text-white',
                             ].join(' ')}
                         >
                             {team}

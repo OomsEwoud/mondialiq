@@ -7,15 +7,15 @@ interface Props {
 
 export default function MatchDetailsToggle({ expanded, onToggle }: Props) {
     return (
-        <div className="mt-4 flex justify-end">
+        <div className="mt-3 flex justify-end">
             <button
                 type="button"
                 onClick={onToggle}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none data-[expanded=true]:border-cyan-300 data-[expanded=true]:bg-cyan-50 data-[expanded=true]:text-cyan-700"
+                className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-[#343d37] bg-[#0d110f] px-3 py-1.5 text-sm font-semibold text-[#a8b0ab] transition-colors hover:border-[#536159] hover:bg-[#171c19] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none data-[expanded=true]:border-[#4b775d] data-[expanded=true]:bg-[#17251d] data-[expanded=true]:text-[#8fd0a8]"
                 aria-expanded={expanded}
                 data-expanded={expanded}
             >
-                Match details
+                Wedstrijddetails
                 <ChevronDown
                     className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`}
                 />

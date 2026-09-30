@@ -13,11 +13,11 @@ export default function UserPredictionButton({ match, onClick }: Props) {
     const predictionAllowed = canMakePrediction(match);
     const actionLabel = predictionAllowed
         ? hasUserPrediction
-            ? 'Edit prediction'
-            : 'Make prediction'
+            ? 'Bewerk voorspelling'
+            : 'Maak voorspelling'
         : hasUserPrediction
-          ? 'View prediction'
-          : 'Predictions closed';
+          ? 'Bekijk voorspelling'
+          : 'Voorspellen gesloten';
     const Icon = predictionAllowed
         ? PencilLine
         : hasUserPrediction
@@ -29,8 +29,8 @@ export default function UserPredictionButton({ match, onClick }: Props) {
             <Button
                 type="button"
                 disabled
-                aria-label="Predictions closed because match already started"
-                className="cursor-not-allowed justify-center rounded-xl border border-amber-200 bg-amber-50 text-amber-800 opacity-100 shadow-none"
+                aria-label="Voorspellen is gesloten omdat de wedstrijd al begonnen is"
+                className="cursor-not-allowed justify-center rounded-md border border-[#403c2c] bg-[#1d1b13] text-[#b9aa72] opacity-100 shadow-none"
             >
                 <Icon className="h-4 w-4" />
                 {actionLabel}
@@ -45,8 +45,8 @@ export default function UserPredictionButton({ match, onClick }: Props) {
             variant={predictionAllowed ? 'default' : 'outline'}
             className={
                 predictionAllowed
-                    ? 'justify-center rounded-xl bg-indigo-700 text-white shadow-sm hover:bg-indigo-800 focus-visible:ring-indigo-300'
-                    : 'justify-center rounded-xl border-amber-200 bg-amber-50 text-amber-800 shadow-none hover:bg-amber-100 hover:text-amber-900 focus-visible:ring-indigo-300'
+                    ? 'justify-center rounded-md bg-[#edf1ed] text-[#101412] shadow-none hover:bg-white focus-visible:ring-[#57ad78]'
+                    : 'justify-center rounded-md border-[#5a5132] bg-[#1d1b13] text-[#c9b977] shadow-none hover:bg-[#282419] hover:text-[#e0d295] focus-visible:ring-[#57ad78]'
             }
         >
             <Icon className="h-4 w-4" />

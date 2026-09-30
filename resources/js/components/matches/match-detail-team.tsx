@@ -22,8 +22,8 @@ export default function MatchDetailTeam({
     return (
         <Link
             href={showTeam.url(id)}
-            aria-label={`View ${name} team details`}
-            className={`group flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
+            aria-label={`Bekijk details van ${name}`}
+            className={`group flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
         >
             <img
                 src={logo}
@@ -31,12 +31,12 @@ export default function MatchDetailTeam({
                 className="h-10 w-10 shrink-0 object-contain"
             />
             <div>
-                <p className="text-xs font-medium text-slate-400">{label}</p>
-                <p className="font-bold text-slate-800 transition-colors group-hover:text-cyan-700">
+                <p className="text-xs font-medium text-[#68716b]">{label}</p>
+                <p className="font-bold text-[#daddd9] transition-colors group-hover:text-white">
                     {name}
                 </p>
-                <span className="mt-0.5 hidden items-center gap-1 text-xs font-bold text-slate-400 transition-colors group-hover:text-cyan-700 sm:inline-flex">
-                    View team
+                <span className="mt-0.5 hidden items-center gap-1 text-xs font-bold text-[#68716b] transition-colors group-hover:text-[#8fd0a8] sm:inline-flex">
+                    Bekijk ploeg
                     <ArrowUpRight className="h-3 w-3" />
                 </span>
             </div>

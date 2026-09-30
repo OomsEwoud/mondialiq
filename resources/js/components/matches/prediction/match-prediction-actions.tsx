@@ -14,15 +14,14 @@ export default function MatchPredictionActions({ match }: Props) {
     const openPredictionModal = () => setPredictionOpen(true);
 
     return (
-        <div className="mt-3 border-t border-slate-200 pt-3">
+        <div className="mt-4 border-t border-[#29312c] pt-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                        Match actions
+                    <p className="text-xs font-bold text-[#70b98e] uppercase">
+                        Wat wil je doen?
                     </p>
-                    <p className="mt-1 text-sm text-slate-600">
-                        Review the matchup, check AI availability and manage
-                        your pick before kickoff.
+                    <p className="mt-1 text-sm text-[#89928c]">
+                        Bekijk de analyse of leg je eigen voorspelling vast.
                     </p>
                 </div>
 

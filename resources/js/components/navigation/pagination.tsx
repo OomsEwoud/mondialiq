@@ -27,12 +27,12 @@ export default function Pagination({ links }: Props) {
             {links.map((link) => {
                 const key = `${link.label}-${link.url ?? 'disabled'}`;
                 const className = cn(
-                    'inline-flex min-h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                    'inline-flex min-h-10 min-w-10 items-center justify-center rounded-md border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
                     link.active
-                        ? 'border-cyan-200 bg-cyan-50 text-cyan-700 shadow-sm'
-                        : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-950',
+                        ? 'border-[#edf1ed] bg-[#edf1ed] text-[#101412]'
+                        : 'border-[#343d37] bg-[#111513] text-[#89928c] hover:border-[#536159] hover:bg-[#1a211d] hover:text-white',
                     !link.url &&
-                        'cursor-not-allowed bg-slate-50 text-slate-400 opacity-100 hover:bg-slate-50 hover:text-slate-400',
+                        'cursor-not-allowed border-[#222824] bg-[#0d110f] text-[#48504b] opacity-100 hover:border-[#222824] hover:bg-[#0d110f] hover:text-[#48504b]',
                 );
 
                 if (!link.url) {

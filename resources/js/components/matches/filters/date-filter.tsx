@@ -33,20 +33,20 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
     return (
         <div
             ref={ref}
-            className="relative grid gap-2 text-xs font-bold tracking-wide text-slate-500 uppercase"
+            className="relative grid gap-2 text-xs font-bold text-[#89928c]"
         >
-            Date
+            Datum
             <button
                 type="button"
                 onClick={() => (open ? setOpen(false) : openAt(selected))}
-                className="flex h-12 w-full items-center justify-between rounded-2xl border border-slate-200 bg-white/90 px-4 text-left text-sm font-semibold text-slate-800 normal-case shadow-sm transition-all outline-none hover:border-cyan-200 hover:bg-white focus:border-cyan-300 focus:ring-4 focus:ring-slate-200"
+                className="flex h-11 w-full items-center justify-between rounded-md border border-[#343d37] bg-[#0d110f] px-3 text-left text-sm font-semibold text-[#daddd9] normal-case transition-colors outline-none hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
             >
                 <span className="flex items-center gap-2">
-                    <CalendarDays className="size-4 text-cyan-600" />
+                    <CalendarDays className="size-4 text-[#70b98e]" />
                     {selected
                         ? (dateLookup.get(selected) ??
                           formatReadableDate(selected))
-                        : 'Pick a date'}
+                        : 'Kies een datum'}
                 </span>
                 {selected ? (
                     <span
@@ -56,13 +56,13 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
                             e.stopPropagation();
                             handleClear();
                         }}
-                        className="rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                        className="rounded-sm p-1 text-[#717a74] transition-colors hover:bg-[#1b211e] hover:text-white"
                     >
                         <X size={14} />
                     </span>
                 ) : (
-                    <span className="text-xs font-bold tracking-normal text-slate-400">
-                        Calendar
+                    <span className="text-xs font-semibold tracking-normal text-[#68716b]">
+                        Kalender
                     </span>
                 )}
             </button>

@@ -12,11 +12,11 @@ export default function MatchDetailsActionButton({ matchId }: Props) {
         <Button
             asChild
             variant="outline"
-            className="justify-center rounded-xl border-slate-200 bg-slate-50 text-slate-700 shadow-none hover:bg-slate-100 hover:text-slate-950 focus-visible:ring-cyan-300"
+            className="justify-center rounded-md border-[#343d37] bg-[#0d110f] text-[#b8bfba] shadow-none hover:border-[#536159] hover:bg-[#1a211d] hover:text-white focus-visible:ring-[#57ad78]"
         >
             <Link href={show.url(matchId)}>
                 <BarChart3 className="h-4 w-4" />
-                Match details
+                Wedstrijddetails
             </Link>
         </Button>
     );

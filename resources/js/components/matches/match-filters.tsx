@@ -50,32 +50,31 @@ export default function MatchFilters({
     };
 
     return (
-        <section className="mb-6 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm sm:p-6">
-            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <section className="mb-6 rounded-lg border border-[#29312c] bg-[#111513] p-4 sm:p-5">
+            <div className="mb-5 flex items-center justify-between gap-3">
                 <div>
-                    <h2 className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                        Filters
+                    <h2 className="text-sm font-bold text-[#f3f4f1]">
+                        Vind je wedstrijd
                     </h2>
-                    <p className="mt-1 text-sm text-slate-500">
-                        Fine-tune the schedule by status, round, date or team.
+                    <p className="mt-1 text-xs text-[#7f8882]">
+                        Filter op status, ronde, datum of team.
                     </p>
                 </div>
                 {hasActiveFilters && (
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex size-9 items-center justify-center gap-2 rounded-md border border-[#343d37] text-[#939c96] transition-colors hover:border-[#536159] hover:bg-[#1a211d] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:w-auto sm:px-3"
+                        aria-label="Wis alle filters"
+                        title="Wis alle filters"
                     >
                         <X size={15} />
-                        Clear
+                        <span className="hidden sm:inline">Wis filters</span>
                     </button>
                 )}
             </div>
 
-            <div className="mb-5 border-b border-slate-200 pb-5">
-                <p className="mb-2 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
-                    Match status
-                </p>
+            <div className="mb-5 border-b border-[#29312c] pb-5">
                 <MatchStatusTabs
                     selected={selectedMatchStatus}
                     onChange={handleMatchStatusChange}

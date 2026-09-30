@@ -19,55 +19,55 @@ export default function MatchCard({ match }: Props) {
     const [showDetails, setShowDetails] = useState(false);
 
     return (
-        <article className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm transition-shadow hover:shadow-md sm:p-6">
+        <article className="rounded-lg border border-[#29312c] bg-[#111513] p-3 transition-colors hover:border-[#3d4941] sm:p-5">
             <MatchSummary match={match} />
-            <div className="mt-4 flex flex-col gap-3 border-t border-slate-200 pt-4 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-slate-500">
+            <div className="mt-3 flex flex-col gap-3 border-t border-[#29312c] pt-3 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-[#89928c]">
                     <span className="flex min-w-0 items-center gap-1.5">
-                        <Trophy className="size-3.5 shrink-0 text-cyan-600" />
+                        <Trophy className="size-3.5 shrink-0 text-[#70b98e]" />
                         <span className="truncate">{match.round}</span>
                     </span>
-                    <span className="hidden text-slate-300 sm:inline">/</span>
+                    <span className="hidden text-[#3c4540] sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <CalendarDays className="size-3.5 text-cyan-600" />
+                        <CalendarDays className="size-3.5 text-[#70b98e]" />
                         {match.date}
                     </span>
-                    <span className="hidden text-slate-300 sm:inline">/</span>
+                    <span className="hidden text-[#3c4540] sm:inline">/</span>
                     <span className="flex items-center gap-1.5">
-                        <Clock className="size-3.5 text-cyan-600" />
+                        <Clock className="size-3.5 text-[#70b98e]" />
                         {match.time}
                     </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500">
+                <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#7f8882]">
                     <span
                         className="flex items-center gap-1.5"
                         title={
                             match.hasAiPrediction
-                                ? 'AI prediction available'
-                                : 'AI prediction pending'
+                                ? 'Voorspelling beschikbaar'
+                                : 'Voorspelling volgt'
                         }
                     >
                         <Sparkles
-                            className={`size-3.5 ${match.hasAiPrediction ? 'text-cyan-500' : 'text-slate-400'}`}
+                            className={`size-3.5 ${match.hasAiPrediction ? 'text-[#70b98e]' : 'text-[#59615c]'}`}
                         />
                         {match.hasAiPrediction
-                            ? 'AI prediction available'
-                            : 'AI pending'}
+                            ? 'Analyse klaar'
+                            : 'Analyse volgt'}
                     </span>
                     <span
                         className="flex items-center gap-1.5"
                         title={
                             match.userPrediction
-                                ? `Predicted: ${match.userPrediction.label}`
-                                : 'No prediction placed'
+                                ? `Voorspeld: ${match.userPrediction.label}`
+                                : 'Nog niet voorspeld'
                         }
                     >
                         <CheckCircle2
-                            className={`size-3.5 ${match.userPrediction ? 'text-emerald-500' : 'text-slate-400'}`}
+                            className={`size-3.5 ${match.userPrediction ? 'text-[#70b98e]' : 'text-[#59615c]'}`}
                         />
                         {match.userPrediction
-                            ? `Predicted: ${match.userPrediction.label}`
-                            : 'No prediction'}
+                            ? `Jouw keuze: ${match.userPrediction.label}`
+                            : 'Nog geen keuze'}
                     </span>
                 </div>
             </div>

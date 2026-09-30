@@ -23,40 +23,40 @@ export default function MatchTeam({
     return (
         <Link
             href={showTeam.url(id)}
-            aria-label={`View ${name} team details`}
+            aria-label={`Bekijk details van ${name}`}
             className={cn(
-                'group flex min-w-0 cursor-pointer items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-cyan-50/50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:px-4',
+                'group flex min-w-0 cursor-pointer items-center gap-2 rounded-md px-1 py-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:gap-4 sm:px-3',
                 align === 'right' && 'justify-end text-right',
-                isWinner && 'bg-emerald-50/50',
+                isWinner && 'bg-[#17251d]',
             )}
         >
             {align === 'left' ? (
                 <img
                     src={logo}
                     alt={name}
-                    className="size-11 shrink-0 object-contain sm:size-14"
+                    className="size-10 shrink-0 object-contain sm:size-14"
                 />
             ) : null}
 
             <div className="min-w-0">
                 <p
-                    className="truncate text-base font-bold text-slate-900 sm:text-lg"
+                    className="truncate text-sm font-bold text-[#f3f4f1] sm:text-lg"
                     title={name}
                 >
                     {name}
                 </p>
                 <span
                     className={cn(
-                        'mt-1.5 inline-flex rounded-full border px-2.5 py-1 text-xs font-bold uppercase',
+                        'mt-1 inline-flex rounded-sm border px-2 py-0.5 text-[10px] font-bold uppercase sm:text-xs',
                         isWinner
-                            ? 'border-emerald-200 bg-white text-emerald-700'
-                            : 'border-slate-200 bg-slate-50 text-slate-500',
+                            ? 'border-[#4b775d] bg-[#1b2b21] text-[#8fd0a8]'
+                            : 'border-[#343d37] bg-[#171c19] text-[#89928c]',
                     )}
                 >
                     {code}
                 </span>
-                <span className="mt-2 hidden items-center gap-1 text-xs text-slate-400 lg:inline-flex">
-                    View team
+                <span className="mt-2 hidden items-center gap-1 text-xs text-[#68716b] transition-colors group-hover:text-[#9fc9af] lg:inline-flex">
+                    Bekijk ploeg
                     <ArrowUpRight className="h-3 w-3" />
                 </span>
             </div>
@@ -65,7 +65,7 @@ export default function MatchTeam({
                 <img
                     src={logo}
                     alt={name}
-                    className="size-11 shrink-0 object-contain drop-shadow-sm sm:size-14"
+                    className="size-10 shrink-0 object-contain sm:size-14"
                 />
             ) : null}
         </Link>

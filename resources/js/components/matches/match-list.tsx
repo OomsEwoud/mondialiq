@@ -25,22 +25,22 @@ export default function MatchList({ matches }: Props) {
 
     if (visibleMatches.length === 0) {
         return (
-            <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 py-14 text-center shadow-sm">
-                <span className="flex size-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
+            <div className="flex flex-col items-center rounded-lg border border-dashed border-[#343d37] bg-[#101412] px-5 py-14 text-center">
+                <span className="flex size-11 items-center justify-center rounded-md bg-[#1a211d] text-[#70b98e]">
                     <SearchX className="size-5" />
                 </span>
-                <h3 className="mt-4 text-lg font-bold text-slate-900">
-                    No matches found
+                <h3 className="mt-4 text-lg font-bold text-[#f3f4f1]">
+                    Geen wedstrijden gevonden
                 </h3>
-                <p className="mt-2 text-sm text-slate-600">
-                    Try changing your filters or check back later.
+                <p className="mt-2 text-sm text-[#89928c]">
+                    Pas je filters aan of probeer het later opnieuw.
                 </p>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-3">
             {visibleMatches.map((match) => (
                 <MatchCard key={match.id} match={match} />
             ))}

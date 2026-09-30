@@ -1,4 +1,5 @@
 import { router } from '@inertiajs/react';
+import { CalendarDays } from 'lucide-react';
 import MatchesController from '@/actions/App/Http/Controllers/Pages/MatchesController';
 import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
@@ -42,21 +43,40 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
     return (
         <>
             <PageHead
-                title="Matches"
-                description="Browse the complete World Cup 2026 match schedule, filter fixtures by team, round, date and status, and open each match for details and predictions."
+                title="Wedstrijden"
+                description="Bekijk het volledige WK 2026-speelschema en filter wedstrijden op team, ronde, datum of status."
             />
 
-            <header className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 px-6 py-8 text-center shadow-lg sm:mb-8 sm:px-8 sm:py-10">
-                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
-                    World Cup 2026 schedule
-                </p>
-                <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                    All Matches
-                </h1>
-                <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-slate-300">
-                    Browse the complete match schedule, filter by team, round or
-                    date, and open each fixture for details and predictions.
-                </p>
+            <header className="mb-8 border-b border-[#29312c] pb-8 sm:mb-10 sm:pb-10">
+                <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+                    <div className="max-w-3xl">
+                        <p className="flex items-center gap-2 text-xs font-bold text-[#70b98e] uppercase">
+                            <span className="size-1.5 rounded-full bg-[#57ad78]" />
+                            WK 2026 · Speelschema
+                        </p>
+                        <h1 className="mt-4 max-w-2xl text-4xl leading-[1.05] font-black text-[#f3f4f1] sm:text-6xl">
+                            Alle wedstrijden.
+                            <span className="block text-[#a9bdb1]">
+                                Eén helder overzicht.
+                            </span>
+                        </h1>
+                        <p className="mt-5 max-w-2xl text-base leading-7 text-[#9aa29d]">
+                            Vind je volgende match, bekijk de aftraptijd en open
+                            de voorspelling zodra die klaarstaat.
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-3 border-l-2 border-[#57ad78] pl-4 lg:mb-1">
+                        <CalendarDays className="size-5 text-[#70b98e]" />
+                        <div>
+                            <p className="text-2xl font-black text-[#f3f4f1] tabular-nums">
+                                {fixtures.data.length}
+                            </p>
+                            <p className="text-xs font-semibold text-[#89928c]">
+                                wedstrijden op deze pagina
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </header>
 
             <MatchFilters

@@ -14,12 +14,12 @@ export default function AiPredictionButton({ available, matchId }: Props) {
             <Button
                 disabled
                 variant="outline"
-                title="AI prediction is not available yet"
-                aria-label="AI prediction pending"
-                className="w-full cursor-not-allowed justify-center rounded-xl border-slate-200 bg-slate-50 text-slate-400 opacity-100 shadow-none"
+                title="De analyse is nog niet beschikbaar"
+                aria-label="Analyse volgt"
+                className="w-full cursor-not-allowed justify-center rounded-md border-[#29312c] bg-[#0d110f] text-[#59615c] opacity-100 shadow-none"
             >
                 <Sparkles className="h-4 w-4" />
-                AI pending
+                Analyse volgt
             </Button>
         );
     }
@@ -28,11 +28,11 @@ export default function AiPredictionButton({ available, matchId }: Props) {
         <Button
             asChild
             variant="outline"
-            className="justify-center rounded-xl border-cyan-200 bg-cyan-50 text-cyan-700 shadow-none hover:bg-cyan-100 hover:text-cyan-900 focus-visible:ring-cyan-300"
+            className="justify-center rounded-md border-[#4b775d] bg-[#17251d] text-[#8fd0a8] shadow-none hover:bg-[#203328] hover:text-[#b8e0c7] focus-visible:ring-[#57ad78]"
         >
             <Link href={showAiPrediction.url(matchId)}>
                 <Sparkles className="h-4 w-4" />
-                View AI prediction
+                Bekijk analyse
             </Link>
         </Button>
     );
