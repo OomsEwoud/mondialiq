@@ -13,33 +13,33 @@ export default function PlayerDefensiveSection({ stats }: Props) {
             value: stats.tackles,
         },
         {
-            label: 'Blocks',
+            label: 'Geblokt',
             value: stats.blocks,
         },
         {
-            label: 'Interceptions',
+            label: 'Onderscheppingen',
             value: stats.interceptions,
         },
         {
-            label: 'Duels won',
+            label: 'Duels gewonnen',
             value: stats.duelsWon,
             suffix: stats.totalDuels ? `/ ${stats.totalDuels}` : undefined,
             highlight: true,
         },
         {
-            label: 'Fouls committed',
+            label: 'Overtredingen',
             value: stats.foulsCommitted,
         },
         {
-            label: 'Fouls drawn',
+            label: 'Fouten mee',
             value: stats.foulsDrawn,
         },
     ];
 
     return (
         <PlayerStatGrid
-            title="Defensive"
-            icon={<Shield className="size-5 text-slate-700" />}
+            title="Verdedigend"
+            icon={<Shield className="size-5" />}
             items={items}
         />
     );

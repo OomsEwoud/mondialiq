@@ -9,29 +9,29 @@ interface Props {
 export default function PlayerGoalkeeperSection({ stats }: Props) {
     const items = [
         {
-            label: 'Saves',
+            label: 'Reddingen',
             value: stats.saves,
             highlight: true,
         },
         {
-            label: 'Goals conceded',
+            label: 'Tegendoelpunten',
             value: stats.goalsConceded,
         },
         {
-            label: 'Penalties saved',
+            label: 'Penalty’s gestopt',
             value: stats.penaltiesSaved,
             highlight: true,
         },
         {
-            label: 'Penalties missed against',
+            label: 'Penalty’s naast',
             value: stats.penaltiesMissed,
         },
     ];
 
     return (
         <PlayerStatGrid
-            title="Goalkeeping"
-            icon={<ShieldCheck className="size-5 text-slate-700" />}
+            title="Doelverdediging"
+            icon={<ShieldCheck className="size-5" />}
             items={items}
         />
     );

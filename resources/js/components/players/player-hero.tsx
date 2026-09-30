@@ -1,18 +1,11 @@
-import {
-    Calendar,
-    Flag,
-    MapPin,
-    Shield,
-    Shirt,
-} from 'lucide-react';
+import { Calendar, Flag, MapPin, Shield, Shirt } from 'lucide-react';
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
 } from '@/components/ui/display/avatar';
-import { Badge } from '@/components/ui/feedback/badge';
 import type { PlayerDetails } from '@/types/player-details';
-import { getPersonInitials } from '@/utils/team-players';
+import { formatPositionLabel, getPersonInitials } from '@/utils/team-players';
 
 interface Props {
     player: PlayerDetails;
@@ -29,7 +22,9 @@ export default function PlayerHero({ player }: Props) {
         },
         {
             icon: <Shield className="size-3.5" />,
-            label: player.position,
+            label: player.position
+                ? formatPositionLabel(player.position)
+                : null,
         },
         {
             icon: <Flag className="size-3.5" />,
@@ -38,82 +33,77 @@ export default function PlayerHero({ player }: Props) {
         {
             icon: <Calendar className="size-3.5" />,
             label: player.birthDate
-                ? `${player.birthDate}${player.age ? ` · ${player.age} years` : ''}`
+                ? `${player.birthDate}${player.age ? ` · ${player.age} jaar` : ''}`
                 : null,
         },
         {
             icon: <MapPin className="size-3.5" />,
-            label: player.teams.length > 0 ? player.teams.map((t) => t.name).join(', ') : null,
+            label:
+                player.teams.length > 0
+                    ? player.teams.map((t) => t.name).join(', ')
+                    : null,
         },
     ];
 
     const visibleMetadata = metadata.filter((item) => item.label);
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-white/10 bg-slate-900 p-5 text-white sm:p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="flex min-w-0 items-center gap-4">
-                        <div className="relative shrink-0">
-                            <Avatar className="size-22 rounded-2xl border-2 border-white/20 shadow-lg sm:size-24">
-                                {player.photo ? (
-                                    <AvatarImage
-                                        src={player.photo}
-                                        alt={`${player.name} photo`}
-                                        className="object-cover"
-                                    />
-                                ) : null}
-                                <AvatarFallback className="rounded-2xl bg-blue-950 text-2xl font-bold text-white">
-                                    {fallbackLabel}
-                                </AvatarFallback>
-                            </Avatar>
-                        </div>
-                        <div className="min-w-0">
-                            <p className="text-xs font-bold tracking-wide text-cyan-300 uppercase">
-                                Player profile
-                            </p>
-                            <h1
-                                className="truncate text-3xl font-bold text-white sm:text-4xl"
-                                title={player.name}
-                            >
-                                {player.name}
-                            </h1>
-                            {player.country?.name ? (
-                                <p className="mt-1 truncate text-sm font-bold text-cyan-100">
-                                    {player.country.name}
-                                </p>
-                            ) : null}
-                        </div>
-                    </div>
+        <section className="border-b border-[#29312c] pb-8 sm:pb-10">
+            <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:gap-8">
+                <Avatar className="size-32 shrink-0 rounded-lg border border-[#343d37] bg-[#edf1ed] sm:size-40">
+                    {player.photo ? (
+                        <AvatarImage
+                            src={player.photo}
+                            alt={`Foto van ${player.name}`}
+                            className="object-cover"
+                        />
+                    ) : null}
+                    <AvatarFallback className="rounded-lg bg-[#1b2b21] text-3xl font-black text-[#8fd0a8]">
+                        {fallbackLabel}
+                    </AvatarFallback>
+                </Avatar>
 
-                    <div className="flex items-center gap-3 sm:justify-end">
-                        {player.country?.flag ? (
-                            <img
-                                src={player.country.flag}
-                                alt={player.country.name}
-                                className="h-11 w-16 shrink-0 rounded-xl border border-white/30 object-cover shadow-sm"
-                            />
-                        ) : null}
+                <div className="min-w-0 flex-1">
+                    <p className="flex items-center gap-2 text-xs font-bold text-[#70b98e] uppercase">
+                        <span className="size-1.5 rounded-full bg-[#57ad78]" />
+                        Spelersprofiel
+                    </p>
+                    <div className="mt-3 flex min-w-0 flex-wrap items-end gap-3">
+                        <h1
+                            className="min-w-0 text-5xl leading-none font-black text-[#f3f4f1] sm:text-7xl"
+                            title={player.name}
+                        >
+                            {player.name}
+                        </h1>
                         {player.number ? (
-                            <span className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white">
+                            <span className="mb-1 rounded-sm border border-[#4b775d] bg-[#17251d] px-2.5 py-1 text-xs font-bold text-[#8fd0a8] sm:mb-2">
                                 #{player.number}
                             </span>
                         ) : null}
                     </div>
+                    <p className="mt-4 text-sm leading-6 text-[#89928c] sm:text-base">
+                        {player.position
+                            ? formatPositionLabel(player.position)
+                            : 'Speler'}
+                        {player.country?.name
+                            ? ` · ${player.country.name}`
+                            : ''}
+                    </p>
                 </div>
             </div>
 
             {visibleMetadata.length > 0 ? (
-                <div className="flex flex-wrap gap-2 p-4 sm:p-5">
+                <div className="mt-8 grid grid-cols-2 border-y border-[#29312c] sm:grid-cols-3 lg:grid-cols-5">
                     {visibleMetadata.map((item) => (
-                        <Badge
+                        <div
                             key={item.label}
-                            variant="outline"
-                            className="gap-1.5 rounded-full border-slate-200 bg-gradient-to-b from-white to-slate-50/60 px-3 py-1.5 font-bold text-slate-600 shadow-sm [&_svg]:text-slate-600"
+                            className="flex min-w-0 items-center gap-2 border-r border-[#29312c] px-3 py-3 text-sm font-semibold text-[#b8bfba] last:border-r-0 [&_svg]:shrink-0 [&_svg]:text-[#70b98e]"
                         >
                             {item.icon}
-                            <span className="max-w-44 truncate">{item.label}</span>
-                        </Badge>
+                            <span className="max-w-44 truncate">
+                                {item.label}
+                            </span>
+                        </div>
                     ))}
                 </div>
             ) : null}

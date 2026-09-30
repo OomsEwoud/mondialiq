@@ -9,7 +9,7 @@ interface Props {
 export default function PlayerAttackingSection({ stats }: Props) {
     const items = [
         {
-            label: 'Goals',
+            label: 'Doelpunten',
             value: stats.goals,
             highlight: true,
         },
@@ -19,41 +19,43 @@ export default function PlayerAttackingSection({ stats }: Props) {
             highlight: true,
         },
         {
-            label: 'Total shots',
+            label: 'Schoten',
             value: stats.totalShots,
         },
         {
-            label: 'Shots on target',
+            label: 'Op doel',
             value: stats.shotsOnTarget,
             suffix: stats.totalShots ? `/ ${stats.totalShots}` : undefined,
         },
         {
-            label: 'Key passes',
+            label: 'Sleutelpasses',
             value: stats.keyPasses,
         },
         {
-            label: 'Dribbles',
+            label: 'Geslaagde dribbels',
             value: stats.dribblesSuccess,
-            suffix: stats.dribblesAttempts ? `/ ${stats.dribblesAttempts}` : undefined,
+            suffix: stats.dribblesAttempts
+                ? `/ ${stats.dribblesAttempts}`
+                : undefined,
         },
         {
-            label: 'Dribbled past',
+            label: 'Gepasseerd',
             value: stats.dribblesPast,
         },
         {
-            label: 'Penalties scored',
+            label: 'Penalty’s gescoord',
             value: stats.penaltiesScored,
         },
         {
-            label: 'Penalties missed',
+            label: 'Penalty’s gemist',
             value: stats.penaltiesMissed,
         },
     ];
 
     return (
         <PlayerStatGrid
-            title="Attacking"
-            icon={<TrendingUp className="size-5 text-slate-700" />}
+            title="Aanvallend"
+            icon={<TrendingUp className="size-5" />}
             items={items}
         />
     );

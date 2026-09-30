@@ -9,24 +9,24 @@ interface Props {
 export default function PlayerDisciplineSection({ stats }: Props) {
     const items = [
         {
-            label: 'Yellow cards',
+            label: 'Gele kaarten',
             value: stats.yellowCards,
         },
         {
-            label: 'Yellow-red cards',
+            label: 'Tweede geel',
             value: stats.yellowRedCards,
         },
         {
-            label: 'Red cards',
+            label: 'Rode kaarten',
             value: stats.redCards,
             highlight: true,
         },
         {
-            label: 'Penalties committed',
+            label: 'Penalty’s veroorzaakt',
             value: stats.penaltiesCommitted,
         },
         {
-            label: 'Penalties won',
+            label: 'Penalty’s verdiend',
             value: stats.penaltiesWon,
         },
     ];
@@ -34,7 +34,7 @@ export default function PlayerDisciplineSection({ stats }: Props) {
     return (
         <PlayerStatGrid
             title="Discipline"
-            icon={<Scale className="size-5 text-slate-700" />}
+            icon={<Scale className="size-5" />}
             items={items}
         />
     );

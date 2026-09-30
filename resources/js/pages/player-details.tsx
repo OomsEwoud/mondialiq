@@ -17,6 +17,7 @@ import {
     shouldShowGoalkeeping,
     shouldShowPassing,
 } from '@/utils/player-stats';
+import { formatPositionLabel } from '@/utils/team-players';
 
 interface Props {
     player: PlayerDetailsType;
@@ -29,55 +30,91 @@ export default function PlayerDetails({ player }: Props) {
         <>
             <PageHead
                 title={player.name}
-                description={`Explore ${player.name} player profile, season statistics and performance data on MondialIQ.`}
+                description={`Bekijk het spelersprofiel, de seizoensstatistieken en prestaties van ${player.name} op MondialIQ.`}
             />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:gap-6 lg:py-8">
-                <BackButton className="w-fit rounded-2xl border border-slate-200 bg-white/95 text-slate-700 shadow-lg shadow-sm hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
+            <div className="flex w-full flex-col gap-8">
+                <BackButton className="w-fit" />
                 <PlayerHero player={player} />
 
                 {hasSeasonStats ? (
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-10">
                         {player.seasonStats.map((stat) => {
-                            const isGk = isGoalkeeper(stat.position ?? player.position);
+                            const isGk = isGoalkeeper(
+                                stat.position ?? player.position,
+                            );
                             const showAttacking = shouldShowAttacking(stat);
                             const showPassing = shouldShowPassing(stat);
                             const showDefensive = shouldShowDefensive(stat);
                             const showDiscipline = shouldShowDiscipline(stat);
-                            const showGoalkeeping = shouldShowGoalkeeping(stat, stat.position ?? player.position);
+                            const showGoalkeeping = shouldShowGoalkeeping(
+                                stat,
+                                stat.position ?? player.position,
+                            );
 
                             return (
-                                <div key={stat.id} className="flex flex-col gap-5">
-                                    <div className="flex items-center gap-3">
+                                <section
+                                    key={stat.id}
+                                    className="flex flex-col gap-5 border-t border-[#29312c] pt-8"
+                                >
+                                    <div className="flex items-center gap-4">
                                         {stat.league?.logo ? (
-                                            <img
-                                                src={stat.league.logo}
-                                                alt={stat.league.name}
-                                                className="size-8 rounded-lg object-contain"
-                                            />
+                                            <span className="flex size-12 items-center justify-center rounded-md border border-[#343d37] bg-[#edf1ed] p-2">
+                                                <img
+                                                    src={stat.league.logo}
+                                                    alt={stat.league.name}
+                                                    className="size-full object-contain"
+                                                />
+                                            </span>
                                         ) : null}
                                         <div>
-                                            <h2 className="text-base font-bold text-slate-900">
-                                                {stat.league?.name ?? 'Season'}
+                                            <p className="text-xs font-bold text-[#70b98e] uppercase">
+                                                Seizoensstatistieken
+                                            </p>
+                                            <h2 className="mt-0.5 text-2xl font-black text-[#f3f4f1]">
+                                                {stat.league?.name ?? 'Seizoen'}
                                             </h2>
-                                            <p className="text-xs font-semibold text-slate-500">
-                                                {stat.season} season
-                                                {stat.position ? ` · ${stat.position}` : ''}
+                                            <p className="text-xs font-semibold text-[#89928c]">
+                                                Seizoen {stat.season}
+                                                {stat.position
+                                                    ? ` · ${formatPositionLabel(stat.position)}`
+                                                    : ''}
                                             </p>
                                         </div>
                                     </div>
 
-                                    <PlayerSeasonOverview stats={stat} isGoalkeeper={isGk} />
+                                    <PlayerSeasonOverview
+                                        stats={stat}
+                                        isGoalkeeper={isGk}
+                                    />
 
-                                    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-                                        {showAttacking ? <PlayerAttackingSection stats={stat} /> : null}
-                                        {showPassing ? <PlayerPassingSection stats={stat} /> : null}
-                                        {showDefensive ? <PlayerDefensiveSection stats={stat} /> : null}
-                                        {showDiscipline ? <PlayerDisciplineSection stats={stat} /> : null}
+                                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                                        {showAttacking ? (
+                                            <PlayerAttackingSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showPassing ? (
+                                            <PlayerPassingSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showDefensive ? (
+                                            <PlayerDefensiveSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
+                                        {showDiscipline ? (
+                                            <PlayerDisciplineSection
+                                                stats={stat}
+                                            />
+                                        ) : null}
                                     </div>
 
-                                    {showGoalkeeping ? <PlayerGoalkeeperSection stats={stat} /> : null}
-                                </div>
+                                    {showGoalkeeping ? (
+                                        <PlayerGoalkeeperSection stats={stat} />
+                                    ) : null}
+                                </section>
                             );
                         })}
                     </div>

@@ -2,17 +2,17 @@ import { Activity } from 'lucide-react';
 
 export default function PlayerSeasonEmptyState() {
     return (
-        <div className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed border-slate-300 bg-slate-50/60 p-10 text-center">
-            <span className="flex size-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
-                <Activity className="size-7" />
+        <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-dashed border-[#343d37] bg-[#0d110f] px-6 py-12 text-center">
+            <span className="flex size-12 items-center justify-center rounded-md bg-[#1b2b21] text-[#70b98e]">
+                <Activity className="size-6" />
             </span>
             <div>
-                <p className="text-base font-bold text-slate-700">
-                    No season statistics available yet
+                <p className="text-base font-bold text-[#f3f4f1]">
+                    Nog geen seizoensstatistieken
                 </p>
-                <p className="mt-1 text-sm text-slate-500">
-                    Statistics will appear once the player has recorded match data
-                    for this tournament.
+                <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-[#7f8882]">
+                    Zodra deze speler wedstrijdminuten maakt, verschijnen hier
+                    de prestaties en kerncijfers.
                 </p>
             </div>
         </div>

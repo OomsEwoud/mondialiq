@@ -9,16 +9,16 @@ interface Props {
 export default function PlayerPassingSection({ stats }: Props) {
     const items = [
         {
-            label: 'Total passes',
+            label: 'Passes',
             value: stats.totalPasses,
         },
         {
-            label: 'Key passes',
+            label: 'Sleutelpasses',
             value: stats.keyPasses,
             highlight: true,
         },
         {
-            label: 'Pass accuracy',
+            label: 'Passnauwkeurigheid',
             value: stats.passAccuracy,
             suffix: '%',
             highlight: true,
@@ -33,7 +33,7 @@ export default function PlayerPassingSection({ stats }: Props) {
     return (
         <PlayerStatGrid
             title="Passing"
-            icon={<Route className="size-5 text-slate-700" />}
+            icon={<Route className="size-5" />}
             items={items}
         />
     );

@@ -26,18 +26,18 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
     const fieldPlayerItems: StatItem[] = [
         {
             icon: <Activity className="size-5" />,
-            label: 'Appearances',
+            label: 'Wedstrijden',
             value: stats.appearances,
             highlight: true,
         },
         {
             icon: <Clock className="size-5" />,
-            label: 'Total minutes played',
+            label: 'Minuten',
             value: stats.minutes,
         },
         {
             icon: <Trophy className="size-5" />,
-            label: 'Goals',
+            label: 'Doelpunten',
             value: stats.goals,
             highlight: true,
         },
@@ -49,13 +49,13 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
         },
         {
             icon: <Crosshair className="size-5" />,
-            label: 'Shots on target',
+            label: 'Schoten op doel',
             value: stats.shotsOnTarget,
             suffix: stats.totalShots ? `/ ${stats.totalShots}` : undefined,
         },
         {
             icon: <Shield className="size-5" />,
-            label: 'Rating',
+            label: 'Beoordeling',
             value: stats.rating,
             suffix: stats.rating ? '/ 10' : undefined,
             highlight: true,
@@ -65,40 +65,46 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
     const goalkeeperItems: StatItem[] = [
         {
             icon: <Activity className="size-5" />,
-            label: 'Appearances',
+            label: 'Wedstrijden',
             value: stats.appearances,
             highlight: true,
         },
         {
             icon: <Clock className="size-5" />,
-            label: 'Total minutes played',
+            label: 'Minuten',
             value: stats.minutes,
         },
         {
             icon: <Goal className="size-5" />,
-            label: 'Goals conceded',
+            label: 'Tegendoelpunten',
             value: stats.goalsConceded,
             highlight: true,
         },
         {
             icon: <Shield className="size-5" />,
-            label: 'Saves',
+            label: 'Reddingen',
             value: stats.saves,
             highlight: true,
         },
         {
             icon: <Crosshair className="size-5" />,
             label: 'Clean sheets',
-            value: stats.goalsConceded === 0 && stats.appearances && stats.appearances > 0
-                ? stats.appearances
-                : null,
-            suffix: stats.goalsConceded === 0 && stats.appearances && stats.appearances > 0
-                ? 'est.'
-                : undefined,
+            value:
+                stats.goalsConceded === 0 &&
+                stats.appearances &&
+                stats.appearances > 0
+                    ? stats.appearances
+                    : null,
+            suffix:
+                stats.goalsConceded === 0 &&
+                stats.appearances &&
+                stats.appearances > 0
+                    ? 'schatting'
+                    : undefined,
         },
         {
             icon: <Shield className="size-5" />,
-            label: 'Rating',
+            label: 'Beoordeling',
             value: stats.rating,
             suffix: stats.rating ? '/ 10' : undefined,
             highlight: true,
@@ -109,19 +115,24 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
 
     const visibleItems = items.filter((item) => {
         if (item.value === null || item.value === undefined) {
-return false;
-}
+            return false;
+        }
 
-        if (item.value === 0 && item.label !== 'Goals' && item.label !== 'Assists' && item.label !== 'Red cards') {
-return false;
-}
+        if (
+            item.value === 0 &&
+            item.label !== 'Doelpunten' &&
+            item.label !== 'Assists' &&
+            item.label !== 'Rode kaarten'
+        ) {
+            return false;
+        }
 
         return true;
     });
 
     if (visibleItems.length === 0) {
-return null;
-}
+        return null;
+    }
 
     return (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -134,33 +145,35 @@ return null;
                 return (
                     <div
                         key={item.label}
-                        className={`flex h-full flex-col items-center rounded-2xl border p-4 text-center shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${
+                        className={`flex min-h-32 flex-col items-center justify-center rounded-lg border p-4 text-center ${
                             item.highlight
-                                ? 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white'
-                                : 'border-slate-200 bg-gradient-to-b from-white to-slate-50/60'
+                                ? 'border-[#4b775d] bg-[#17251d]'
+                                : 'border-[#29312c] bg-[#111513]'
                         }`}
                     >
                         <span
                             className={`mb-2 shrink-0 ${
-                                item.highlight ? 'text-cyan-600' : 'text-slate-500'
+                                item.highlight
+                                    ? 'text-[#8fd0a8]'
+                                    : 'text-[#70b98e]'
                             }`}
                         >
                             {item.icon}
                         </span>
                         <p
                             className={`mb-1 shrink-0 text-2xl font-bold tabular-nums ${
-                                item.highlight ? 'text-slate-900' : 'text-slate-700'
+                                item.highlight ? 'text-white' : 'text-[#daddd9]'
                             }`}
                         >
                             {displayValue}
                             {item.suffix ? (
-                                <span className="ml-1 text-sm font-semibold text-slate-400">
+                                <span className="ml-1 text-sm font-semibold text-[#68716b]">
                                     {item.suffix}
                                 </span>
                             ) : null}
                         </p>
                         <div className="flex h-9 w-full items-start justify-center">
-                            <p className="text-xs leading-tight font-semibold tracking-wide text-slate-500 uppercase">
+                            <p className="text-xs leading-tight font-semibold text-[#7f8882] uppercase">
                                 {item.label}
                             </p>
                         </div>
