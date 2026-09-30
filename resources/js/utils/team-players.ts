@@ -17,15 +17,15 @@ const positionGroups: Record<
     PlayerPositionGroupKey,
     { label: string; order: number }
 > = {
-    goalkeepers: { label: 'Goalkeepers', order: 10 },
-    defenders: { label: 'Defenders', order: 20 },
-    midfielders: { label: 'Midfielders', order: 30 },
-    attackers: { label: 'Attackers', order: 40 },
-    other: { label: 'Other', order: 50 },
+    goalkeepers: { label: 'Doelmannen', order: 10 },
+    defenders: { label: 'Verdedigers', order: 20 },
+    midfielders: { label: 'Middenvelders', order: 30 },
+    attackers: { label: 'Aanvallers', order: 40 },
+    other: { label: 'Overige spelers', order: 50 },
 };
 
 export function getPlayerDisplayName(player: TeamDetailsPlayer): string {
-    return player.name ?? 'Unknown player';
+    return player.name ?? 'Onbekende speler';
 }
 
 export function getPersonInitials(name: string | null): string {
@@ -47,15 +47,26 @@ export function getPersonInitials(name: string | null): string {
 }
 
 export function formatPositionLabel(position: string | null): string {
+    const normalizedPosition = position?.trim().toLowerCase() ?? '';
+    const translatedPositions: Record<string, string> = {
+        g: 'Doelman',
+        goalkeeper: 'Doelman',
+        keeper: 'Doelman',
+        d: 'Verdediger',
+        defender: 'Verdediger',
+        m: 'Middenvelder',
+        midfielder: 'Middenvelder',
+        f: 'Aanvaller',
+        attacker: 'Aanvaller',
+        forward: 'Aanvaller',
+        striker: 'Aanvaller',
+        winger: 'Aanvaller',
+    };
+
     return (
-        {
-            G: 'Goalkeeper',
-            D: 'Defender',
-            M: 'Midfielder',
-            F: 'Attacker',
-        }[position ?? ''] ??
+        translatedPositions[normalizedPosition] ??
         position ??
-        'Position TBC'
+        'Positie onbekend'
     );
 }
 

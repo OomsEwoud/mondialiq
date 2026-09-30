@@ -10,10 +10,10 @@ type Props = {
 };
 
 const backButtonClassName =
-    'group inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-bold text-slate-900 shadow-sm transition-colors hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus:ring-2 focus:ring-cyan-200 focus:outline-none';
+    'group inline-flex h-10 items-center gap-2 rounded-md border border-[#343d37] bg-[#111513] px-3 text-sm font-bold text-[#b8bfba] transition-colors hover:border-[#536159] hover:bg-[#1a211d] hover:text-white focus:ring-2 focus:ring-[#57ad78] focus:outline-none';
 
 const backButtonIconClassName =
-    'flex size-6 items-center justify-center rounded-full bg-white text-slate-900 shadow-sm ring-1 ring-slate-200 transition-colors group-hover:text-cyan-700 group-hover:ring-cyan-200';
+    'flex size-6 items-center justify-center rounded-sm bg-[#1b211e] text-[#70b98e] transition-colors group-hover:bg-[#223129] group-hover:text-[#9fc9af]';
 
 export default function BackButton({
     className,
@@ -38,7 +38,7 @@ export default function BackButton({
             <span className={backButtonIconClassName}>
                 <ArrowLeft className="size-4" />
             </span>
-            Back
+            Terug
         </button>
     );
 }

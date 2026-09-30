@@ -6,9 +6,9 @@ export interface SquadPositionFilter {
 }
 
 export const squadPositionFilters: SquadPositionFilter[] = [
-    { key: 'all', label: 'All' },
-    { key: 'goalkeepers', label: 'Goalkeepers' },
-    { key: 'defenders', label: 'Defenders' },
-    { key: 'midfielders', label: 'Midfielders' },
-    { key: 'attackers', label: 'Attackers' },
+    { key: 'all', label: 'Alles' },
+    { key: 'goalkeepers', label: 'Doelmannen' },
+    { key: 'defenders', label: 'Verdedigers' },
+    { key: 'midfielders', label: 'Middenvelders' },
+    { key: 'attackers', label: 'Aanvallers' },
 ];

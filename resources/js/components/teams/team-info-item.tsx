@@ -8,15 +8,15 @@ interface Props {
 
 export default function TeamInfoItem({ icon, label, value }: Props) {
     return (
-        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-3 shadow-sm">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-blue-100 [&_svg]:h-4 [&_svg]:w-4">
+        <div className="flex min-h-20 items-center gap-3 bg-[#0d110f] p-3">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-[#1b2b21] text-[#70b98e] [&_svg]:size-4">
                 {icon}
             </span>
             <div className="min-w-0">
-                <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
+                <p className="text-[10px] font-bold text-[#68716b] uppercase">
                     {label}
                 </p>
-                <p className="truncate text-sm font-bold text-slate-700">
+                <p className="mt-0.5 truncate text-sm font-bold text-[#daddd9]">
                     {value}
                 </p>
             </div>

@@ -7,33 +7,36 @@ interface Props {
 }
 
 export default function TeamInfoCard({ team }: Props) {
-    const foundedLabel = team.foundedAt ? String(team.foundedAt) : 'TBC';
+    const foundedLabel = team.foundedAt ? String(team.foundedAt) : 'Onbekend';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
-            <h2 className="mb-5 text-2xl font-bold text-slate-900">
-                Team info
+        <section className="rounded-lg border border-[#29312c] bg-[#111513] p-5 sm:p-6">
+            <p className="text-xs font-bold text-[#70b98e] uppercase">
+                Kerngegevens
+            </p>
+            <h2 className="mt-1 text-2xl font-black text-[#f3f4f1]">
+                Over het team
             </h2>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-px overflow-hidden rounded-md border border-[#29312c] bg-[#29312c] sm:grid-cols-2">
                 <TeamInfoItem
                     icon={<Hash />}
                     label="Code"
-                    value={team.code ?? 'TBC'}
+                    value={team.code ?? 'Onbekend'}
                 />
                 <TeamInfoItem
                     icon={<CalendarDays />}
-                    label="Founded"
+                    label="Opgericht"
                     value={foundedLabel}
                 />
                 <TeamInfoItem
                     icon={<MapPin />}
-                    label="Country"
-                    value={team.country?.name ?? 'TBC'}
+                    label="Land"
+                    value={team.country?.name ?? 'Onbekend'}
                 />
                 <TeamInfoItem
                     icon={<Flag />}
                     label="FIFA code"
-                    value={team.country?.fifaCode ?? 'TBC'}
+                    value={team.country?.fifaCode ?? 'Onbekend'}
                 />
             </div>
         </section>

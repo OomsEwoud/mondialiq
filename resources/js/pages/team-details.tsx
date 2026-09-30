@@ -15,13 +15,13 @@ export default function TeamDetails({ team }: Props) {
         <>
             <PageHead
                 title={team.name}
-                description={`Explore ${team.name} team details, coach information and active World Cup squad players on MondialIQ.`}
+                description={`Bekijk ${team.name}, de bondscoach en de actieve WK-selectie op MondialIQ.`}
             />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:gap-6 lg:py-8">
-                <BackButton className="w-fit rounded-2xl border border-slate-200 bg-white/95 text-slate-700 shadow-lg shadow-sm hover:border-cyan-200 hover:bg-cyan-50/60 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
+            <div className="flex w-full flex-col gap-8">
+                <BackButton className="w-fit" />
                 <TeamHero team={team} />
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.9fr_1.1fr]">
                     <TeamInfoCard team={team} />
                     <TeamCoachCard coach={team.coach} />
                 </div>

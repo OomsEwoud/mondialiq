@@ -13,29 +13,31 @@ interface Props {
 
 export default function TeamCoachCard({ coach }: Props) {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm">
+        <section className="rounded-lg border border-[#29312c] bg-[#111513] p-5 sm:p-6">
             <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                    <p className="text-xs font-bold tracking-wide text-slate-600 uppercase">
-                        Staff
+                    <p className="text-xs font-bold text-[#70b98e] uppercase">
+                        Technische staf
                     </p>
-                    <h2 className="text-2xl font-bold text-slate-900">Coach</h2>
+                    <h2 className="mt-1 text-2xl font-black text-[#f3f4f1]">
+                        Bondscoach
+                    </h2>
                 </div>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                    Head coach
+                <span className="rounded-sm border border-[#343d37] bg-[#171c19] px-2.5 py-1 text-xs font-bold text-[#89928c]">
+                    Hoofdcoach
                 </span>
             </div>
             {coach ? (
-                <div className="flex min-w-0 items-center gap-4 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm">
-                    <Avatar className="size-20 rounded-2xl border border-white shadow-sm ring-1 ring-slate-200">
+                <div className="flex min-w-0 items-center gap-4 rounded-md border border-[#29312c] bg-[#0d110f] p-4">
+                    <Avatar className="size-20 rounded-md border border-[#343d37]">
                         {coach.photo ? (
                             <AvatarImage
                                 src={coach.photo}
-                                alt={`${coach.name} photo`}
+                                alt={`Foto van ${coach.name}`}
                                 className="object-cover"
                             />
                         ) : null}
-                        <AvatarFallback className="rounded-2xl bg-blue-950 text-lg font-bold text-white">
+                        <AvatarFallback className="rounded-md bg-[#1b2b21] text-lg font-bold text-[#8fd0a8]">
                             {getPersonInitials(coach.name) || (
                                 <UserRound className="size-8" />
                             )}
@@ -43,35 +45,33 @@ export default function TeamCoachCard({ coach }: Props) {
                     </Avatar>
                     <div className="min-w-0 flex-1">
                         <p
-                            className="truncate text-xl font-bold text-slate-900"
+                            className="truncate text-xl font-bold text-[#f3f4f1]"
                             title={coach.name}
                         >
                             {coach.name}
                         </p>
-                        <p className="text-sm font-bold text-slate-600">
-                            Head coach
+                        <p className="text-sm font-bold text-[#89928c]">
+                            Bondscoach
                         </p>
-                        <div className="mt-3 grid gap-2 text-sm text-slate-500">
+                        <div className="mt-3 grid gap-2 text-xs text-[#7f8882] sm:text-sm">
                             <span className="flex min-w-0 items-center gap-2">
-                                <Flag className="size-4 shrink-0 text-slate-400" />
+                                <Flag className="size-4 shrink-0 text-[#70b98e]" />
                                 <span className="truncate">
-                                    {coach.country ?? 'Nationality TBC'}
+                                    {coach.country ?? 'Nationaliteit onbekend'}
                                 </span>
                             </span>
                             {coach.birthDate ? (
                                 <span className="flex min-w-0 items-center gap-2">
-                                    <CalendarDays className="size-4 shrink-0 text-slate-400" />
-                                    <span className="truncate">
-                                        Born {coach.birthDate}
-                                    </span>
+                                    <CalendarDays className="size-4 shrink-0 text-[#70b98e]" />
+                                    <span>Geboren op {coach.birthDate}</span>
                                 </span>
                             ) : null}
                         </div>
                     </div>
                 </div>
             ) : (
-                <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm font-medium text-slate-500">
-                    No coach information available yet.
+                <p className="rounded-md border border-dashed border-[#343d37] bg-[#0d110f] p-4 text-sm font-medium text-[#7f8882]">
+                    Nog geen informatie over de bondscoach beschikbaar.
                 </p>
             )}
         </section>

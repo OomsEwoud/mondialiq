@@ -46,34 +46,37 @@ export default function ActivePlayersGrid({ players }: Props) {
     const hasPlayers = players.length > 0;
     const hasVisiblePlayers = groupedPlayers.length > 0;
     const emptyMessage = hasPlayers
-        ? 'No players match your search.'
-        : 'No active players available yet.';
+        ? 'Geen spelers gevonden voor deze zoekopdracht.'
+        : 'Er zijn nog geen actieve spelers beschikbaar.';
     const showGroupHeaders = activeFilter === 'all';
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm shadow-xl sm:p-6">
-            <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <section className="border-t border-[#29312c] pt-8 sm:pt-10">
+            <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
-                        Squad
+                    <p className="text-xs font-bold text-[#70b98e] uppercase">
+                        WK-selectie
                     </p>
                     <div className="mt-1 flex items-center gap-3">
-                        <h2 className="text-2xl font-bold text-slate-900">
-                            Active players
+                        <h2 className="text-3xl font-black text-[#f3f4f1] sm:text-4xl">
+                            Actieve spelers
                         </h2>
-                        <span className="rounded-full border border-slate-200 bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-600 shadow-sm">
+                        <span className="rounded-sm border border-[#4b775d] bg-[#17251d] px-2.5 py-1 text-xs font-bold text-[#8fd0a8]">
                             {players.length}
                         </span>
                     </div>
+                    <p className="mt-2 text-sm text-[#89928c]">
+                        Zoek op naam of filter de selectie per positie.
+                    </p>
                 </div>
 
-                <div className="w-full lg:max-w-sm">
+                <div className="w-full lg:max-w-md">
                     <SquadSearch value={query} onChange={setQuery} />
                 </div>
             </div>
 
             {hasPlayers ? (
-                <div className="grid gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-6">
+                <div className="grid gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
                     <SquadPositionFilters
                         activeFilter={activeFilter}
                         onChange={setActiveFilter}
@@ -89,7 +92,7 @@ export default function ActivePlayersGrid({ players }: Props) {
                         </div>
 
                         {hasVisiblePlayers ? (
-                            <div className="flex flex-col gap-6">
+                            <div className="flex flex-col gap-8">
                                 {groupedPlayers.map((group) => (
                                     <PlayerPositionGroup
                                         key={group.key}

@@ -27,14 +27,14 @@ export default function SquadPositionFilters({
             <div
                 className={cn(
                     isDesktop
-                        ? 'rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-2.5 shadow-sm'
+                        ? 'rounded-lg border border-[#29312c] bg-[#111513] p-2'
                         : 'flex gap-2',
                 )}
             >
                 {isDesktop && (
                     <div className="px-2 pb-2">
-                        <p className="text-xs font-bold tracking-wide text-cyan-600 uppercase">
-                            Positions
+                        <p className="text-xs font-bold text-[#70b98e] uppercase">
+                            Posities
                         </p>
                     </div>
                 )}
@@ -50,13 +50,13 @@ export default function SquadPositionFilters({
                             aria-pressed={isActive}
                             onClick={() => onChange(filter.key)}
                             className={cn(
-                                'border px-3 text-sm font-bold shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2',
+                                'border px-3 text-sm font-bold shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78]',
                                 isDesktop
-                                    ? 'mb-1 h-11 w-full justify-start rounded-2xl'
-                                    : 'h-9 shrink-0 rounded-full',
+                                    ? 'mb-1 h-10 w-full justify-start rounded-md'
+                                    : 'h-9 shrink-0 rounded-md',
                                 isActive
-                                    ? 'border-cyan-200 bg-cyan-50 text-cyan-600 hover:bg-cyan-50 hover:text-cyan-600'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+                                    ? 'border-[#edf1ed] bg-[#edf1ed] text-[#101412] hover:bg-white hover:text-[#101412]'
+                                    : 'border-[#343d37] bg-[#111513] text-[#89928c] hover:border-[#536159] hover:bg-[#1a211d] hover:text-white',
                             )}
                         >
                             {filter.label}

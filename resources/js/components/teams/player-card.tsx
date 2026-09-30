@@ -24,41 +24,41 @@ export default function PlayerCard({ player }: Props) {
     return (
         <Link
             href={showPlayer.url(player.id)}
-            className="flex min-h-28 min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-3 shadow-lg shadow-sm transition-all hover:-translate-y-0.5 hover:border-cyan-200 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+            className="group flex min-h-24 min-w-0 items-center gap-3 rounded-lg border border-[#29312c] bg-[#111513] p-3 transition-colors hover:border-[#4b775d] hover:bg-[#141a16] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
         >
             <div className="relative shrink-0">
-                <Avatar className="size-16 rounded-2xl border border-white shadow-sm ring-1 ring-slate-200">
+                <Avatar className="size-16 rounded-md border border-[#343d37] bg-[#0d110f]">
                     {player.photo ? (
                         <AvatarImage
                             src={player.photo}
-                            alt={`${playerName} photo`}
+                            alt={`Foto van ${playerName}`}
                             className="object-cover"
                         />
                     ) : null}
-                    <AvatarFallback className="rounded-2xl bg-blue-950 text-sm font-bold text-white">
+                    <AvatarFallback className="rounded-md bg-[#1b2b21] text-sm font-bold text-[#8fd0a8]">
                         {fallbackLabel}
                     </AvatarFallback>
                 </Avatar>
-                <span className="absolute -right-2 -bottom-2 flex min-w-9 items-center justify-center rounded-full border-2 border-white bg-slate-900 px-2 py-1 text-xs font-bold text-white shadow-md shadow-sm">
+                <span className="absolute -right-2 -bottom-1 flex min-w-8 items-center justify-center rounded-sm border border-[#4b775d] bg-[#17251d] px-1.5 py-0.5 text-[10px] font-bold text-[#8fd0a8]">
                     #{player.number ?? '-'}
                 </span>
             </div>
 
             <div className="min-w-0 flex-1">
                 <p
-                    className="truncate text-base font-bold text-slate-900"
+                    className="truncate text-base font-bold text-[#f3f4f1] transition-colors group-hover:text-white"
                     title={playerName}
                 >
                     {playerName}
                 </p>
-                <p className="mt-1 truncate text-sm font-bold text-slate-600">
+                <p className="mt-1 truncate text-sm font-semibold text-[#8fa097]">
                     {formatPositionLabel(player.position)}
                 </p>
                 <p
-                    className="mt-1 truncate text-xs font-medium text-slate-400"
+                    className="mt-1 truncate text-xs font-medium text-[#68716b]"
                     title={player.country ?? undefined}
                 >
-                    {player.country ?? 'Country TBC'}
+                    {player.country ?? 'Land onbekend'}
                 </p>
             </div>
         </Link>
