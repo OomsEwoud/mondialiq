@@ -36,10 +36,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/overlays/dialog';
 import { cn } from '@/lib/utils';
-import type {
-    LeagueAccentColor,
-    ScoringRules,
-} from '@/types/league';
+import type { LeagueAccentColor, ScoringRules } from '@/types/league';
 import {
     getLeagueThemeBannerClass,
     getLeagueThemePalette,
@@ -65,10 +62,10 @@ type Props = {
 };
 
 const fieldClassName =
-    'h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
 
 const numberFieldClassName =
-    'h-11 w-full rounded-xl border-slate-200 bg-white px-3 text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
+    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
 
 export default function LeagueSettingsCard({
     leagueId,
@@ -151,17 +148,22 @@ export default function LeagueSettingsCard({
     };
 
     return (
-        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-2xl border-border bg-card shadow-sm">
             <CardHeader className="gap-3 px-5 py-5">
                 <div className="flex items-start justify-between gap-3">
                     <div>
-                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
+                        <div
+                            className={cn(
+                                'flex items-center gap-2',
+                                theme.darkAccent,
+                            )}
+                        >
                             <ShieldCheck className="size-4" />
                             <p className="text-xs font-semibold tracking-wide uppercase">
                                 Owner controls
                             </p>
                         </div>
-                        <CardTitle className="mt-2 text-xl font-semibold text-slate-900">
+                        <CardTitle className="mt-2 text-xl font-semibold text-foreground">
                             Prediction group settings
                         </CardTitle>
                     </div>
@@ -169,14 +171,18 @@ export default function LeagueSettingsCard({
                         className={cn(
                             'rounded-full border px-2.5 py-1 text-xs font-semibold',
                             hasChanges
-                                ? cn(theme.softBorder, theme.softBg, theme.softText)
-                                : 'border-slate-200 bg-slate-50 text-slate-600',
+                                ? cn(
+                                      theme.softBorder,
+                                      theme.softBg,
+                                      theme.softText,
+                                  )
+                                : 'border-border bg-muted text-muted-foreground',
                         )}
                     >
                         {hasChanges ? 'Unsaved changes' : 'Saved'}
                     </span>
                 </div>
-                <CardDescription className="text-sm leading-6 text-slate-600">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
                     Shape the group details, reward, scoring rules and invite
                     access from one owner dashboard.
                 </CardDescription>
@@ -266,7 +272,7 @@ export default function LeagueSettingsCard({
                                         <div className="mt-3 flex items-center gap-3">
                                             <div
                                                 className={cn(
-                                                    'flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-white/20 text-2xl shadow-sm',
+                                                    'flex size-12 items-center justify-center rounded-2xl border border-white/25 bg-card/20 text-2xl shadow-sm',
                                                     theme.badgeBorder,
                                                 )}
                                             >
@@ -294,7 +300,9 @@ export default function LeagueSettingsCard({
                                         setName={setName}
                                         description={description}
                                         setDescription={setDescription}
-                                        errors={errors as Record<string, string>}
+                                        errors={
+                                            errors as Record<string, string>
+                                        }
                                         theme={theme}
                                         fieldClassName={fieldClassName}
                                     />
@@ -304,30 +312,46 @@ export default function LeagueSettingsCard({
                                         rewardTitle={rewardTitle}
                                         setRewardTitle={setRewardTitle}
                                         rewardDescription={rewardDescription}
-                                        setRewardDescription={setRewardDescription}
-                                        errors={errors as Record<string, string>}
+                                        setRewardDescription={
+                                            setRewardDescription
+                                        }
+                                        errors={
+                                            errors as Record<string, string>
+                                        }
                                         theme={theme}
                                         fieldClassName={fieldClassName}
                                     />
 
                                     {/* Scoring settings */}
-                                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
+                                    <div className="rounded-2xl border border-border bg-card p-5">
+                                        <div
+                                            className={cn(
+                                                'flex items-center gap-2',
+                                                theme.darkAccent,
+                                            )}
+                                        >
                                             <Trophy className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Scoring settings
                                             </p>
                                         </div>
-                                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
                                             These rules determine how points are
                                             calculated inside this leaderboard.
                                         </p>
                                         <div className="mt-4 grid gap-4 sm:grid-cols-2">
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    htmlFor="scoring-exact-score"
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Exact score
                                                 </Label>
                                                 <Input
+                                                    id="scoring-exact-score"
                                                     type="number"
                                                     min={0}
                                                     max={100}
@@ -357,10 +381,17 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    htmlFor="scoring-correct-result"
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Correct result
                                                 </Label>
                                                 <Input
+                                                    id="scoring-correct-result"
                                                     type="number"
                                                     min={0}
                                                     max={100}
@@ -390,10 +421,17 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    htmlFor="scoring-correct-goal-difference"
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Correct goal difference
                                                 </Label>
                                                 <Input
+                                                    id="scoring-correct-goal-difference"
                                                     type="number"
                                                     min={0}
                                                     max={100}
@@ -423,10 +461,17 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    htmlFor="scoring-correct-home-goals"
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Correct home goals
                                                 </Label>
                                                 <Input
+                                                    id="scoring-correct-home-goals"
                                                     type="number"
                                                     min={0}
                                                     max={100}
@@ -456,10 +501,17 @@ export default function LeagueSettingsCard({
                                                 />
                                             </div>
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    htmlFor="scoring-correct-away-goals"
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Correct away goals
                                                 </Label>
                                                 <Input
+                                                    id="scoring-correct-away-goals"
                                                     type="number"
                                                     min={0}
                                                     max={100}
@@ -495,17 +547,26 @@ export default function LeagueSettingsCard({
                                     <BoostedPredictionSettings
                                         scoringRules={scoringRules}
                                         updateScoringRule={updateScoringRule}
-                                        errors={errors as Record<string, string>}
+                                        errors={
+                                            errors as Record<string, string>
+                                        }
                                         theme={theme}
-                                        numberFieldClassName={numberFieldClassName}
+                                        numberFieldClassName={
+                                            numberFieldClassName
+                                        }
                                     />
                                 </div>
 
                                 {/* Side column */}
                                 <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
                                     {/* Access */}
-                                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
+                                    <div className="rounded-2xl border border-border bg-card p-5">
+                                        <div
+                                            className={cn(
+                                                'flex items-center gap-2',
+                                                theme.darkAccent,
+                                            )}
+                                        >
                                             <ShieldCheck className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Privacy
@@ -515,7 +576,10 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="visibility"
-                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
                                                 >
                                                     Visibility
                                                 </Label>
@@ -540,7 +604,7 @@ export default function LeagueSettingsCard({
                                                         Public
                                                     </option>
                                                 </select>
-                                                <p className="mt-1 text-xs leading-5 text-slate-600">
+                                                <p className="mt-1 text-xs leading-5 text-muted-foreground">
                                                     Private groups remain
                                                     visible to members only.
                                                 </p>
@@ -551,7 +615,10 @@ export default function LeagueSettingsCard({
                                             <div>
                                                 <Label
                                                     htmlFor="is-active"
-                                                    className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
                                                 >
                                                     Join status
                                                 </Label>
@@ -574,7 +641,7 @@ export default function LeagueSettingsCard({
                                                         Inactive, invites closed
                                                     </option>
                                                 </select>
-                                                <p className="mt-1 text-xs leading-5 text-slate-600">
+                                                <p className="mt-1 text-xs leading-5 text-muted-foreground">
                                                     Inactive groups keep
                                                     existing members but block
                                                     new joins.
@@ -587,22 +654,33 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Appearance */}
-                                    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
+                                    <div className="rounded-2xl border border-border bg-card p-5">
+                                        <div
+                                            className={cn(
+                                                'flex items-center gap-2',
+                                                theme.darkAccent,
+                                            )}
+                                        >
                                             <PaintBucket className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Group appearance
                                             </p>
                                         </div>
-                                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                                            Choose a visual theme to give your leaderboard its own identity.
+                                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                                            Choose a visual theme to give your
+                                            leaderboard its own identity.
                                         </p>
                                         <div className="mt-4 space-y-4">
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     Group theme
                                                 </Label>
-                                                <div className="mt-2 grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                                                <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
                                                     {leagueThemeOptions.map(
                                                         (option) => {
                                                             const isSelected =
@@ -625,7 +703,7 @@ export default function LeagueSettingsCard({
                                                                         )
                                                                     }
                                                                     className={cn(
-                                                                        'h-auto flex-col items-stretch justify-start overflow-hidden rounded-xl border-slate-200 p-0 text-left hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                                                                        'h-auto flex-col items-stretch justify-start overflow-hidden rounded-xl border-border p-0 text-left hover:bg-muted focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
                                                                         isSelected &&
                                                                             cn(
                                                                                 'border-slate-900/20',
@@ -641,16 +719,14 @@ export default function LeagueSettingsCard({
                                                                         )}
                                                                     >
                                                                         {isSelected && (
-                                                                            <Badge
-                                                                                className="absolute right-2 top-2 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-slate-900 shadow-none uppercase"
-                                                                            >
+                                                                            <Badge className="absolute top-2 right-2 rounded-full bg-card/90 px-2 py-0.5 text-[10px] font-semibold tracking-wider text-foreground uppercase shadow-none">
                                                                                 Active
                                                                             </Badge>
                                                                         )}
                                                                     </div>
                                                                     <div className="flex w-full items-start justify-between gap-3 px-3 py-3">
                                                                         <div className="min-w-0 flex-1">
-                                                                            <p className="text-sm font-semibold text-slate-900">
+                                                                            <p className="text-sm font-semibold text-foreground">
                                                                                 {
                                                                                     option.title
                                                                                 }{' '}
@@ -659,7 +735,7 @@ export default function LeagueSettingsCard({
                                                                                     option.subtitle
                                                                                 }
                                                                             </p>
-                                                                            <p className="mt-1 whitespace-normal text-xs leading-5 text-slate-600">
+                                                                            <p className="mt-1 text-xs leading-5 whitespace-normal text-muted-foreground">
                                                                                 {
                                                                                     option.description
                                                                                 }
@@ -672,12 +748,19 @@ export default function LeagueSettingsCard({
                                                     )}
                                                 </div>
                                                 <InputError
-                                                    message={errors.accent_color}
+                                                    message={
+                                                        errors.accent_color
+                                                    }
                                                 />
                                             </div>
 
                                             <div>
-                                                <Label className={cn("text-xs font-semibold tracking-wide uppercase", theme.darkAccent)}>
+                                                <Label
+                                                    className={cn(
+                                                        'text-xs font-semibold tracking-wide uppercase',
+                                                        theme.darkAccent,
+                                                    )}
+                                                >
                                                     League icon
                                                 </Label>
                                                 <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -695,10 +778,13 @@ export default function LeagueSettingsCard({
                                                                     )
                                                                 }
                                                                 className={cn(
-                                                                    'h-12 rounded-xl border-slate-200 text-2xl hover:bg-slate-50 focus-visible:ring-cyan-300',
+                                                                    'h-12 rounded-xl border-border text-2xl hover:bg-muted focus-visible:ring-ring',
                                                                     icon ===
                                                                         option.value &&
-                                                                        cn(theme.softBorder, theme.softBg),
+                                                                        cn(
+                                                                            theme.softBorder,
+                                                                            theme.softBg,
+                                                                        ),
                                                                 )}
                                                             >
                                                                 <span aria-hidden="true">
@@ -720,17 +806,33 @@ export default function LeagueSettingsCard({
                                     </div>
 
                                     {/* Invite code */}
-                                    <div className={cn("rounded-2xl border p-5", theme.softBg, theme.softBorder)}>
-                                        <div className={cn("flex items-center gap-2", theme.darkAccent)}>
+                                    <div
+                                        className={cn(
+                                            'rounded-2xl border p-5',
+                                            theme.softBg,
+                                            theme.softBorder,
+                                        )}
+                                    >
+                                        <div
+                                            className={cn(
+                                                'flex items-center gap-2',
+                                                theme.darkAccent,
+                                            )}
+                                        >
                                             <KeyRound className="size-4" />
                                             <p className="text-xs font-semibold tracking-wide uppercase">
                                                 Invite code
                                             </p>
                                         </div>
-                                        <p className="mt-3 font-mono text-xl font-bold tracking-wide text-slate-900">
+                                        <p className="mt-3 font-mono text-xl font-bold tracking-wide text-foreground">
                                             {leagueCode}
                                         </p>
-                                        <p className={cn("mt-1 text-xs leading-5", theme.softText)}>
+                                        <p
+                                            className={cn(
+                                                'mt-1 text-xs leading-5',
+                                                theme.softText,
+                                            )}
+                                        >
                                             Refreshing invalidates the old code
                                             for new joins. Existing members keep
                                             access.
@@ -743,23 +845,23 @@ export default function LeagueSettingsCard({
                                                 <Button
                                                     type="button"
                                                     variant="outline"
-                                                    className="mt-3 h-10 w-full rounded-xl border-amber-300 bg-white px-5 font-semibold text-amber-900 hover:bg-amber-100 focus-visible:ring-amber-300"
+                                                    className="mt-3 h-10 w-full rounded-xl border-amber-300 bg-card px-5 font-semibold text-amber-200 hover:bg-amber-950/40 focus-visible:ring-amber-300"
                                                 >
                                                     <RefreshCcw className="size-4" />
                                                     Refresh invite code
                                                 </Button>
                                             </DialogTrigger>
-                                            <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                                <DialogTitle className="text-slate-900">
+                                            <DialogContent className="border-border bg-card sm:max-w-md">
+                                                <DialogTitle className="text-foreground">
                                                     Refresh invite code?
                                                 </DialogTitle>
-                                                <DialogDescription className="text-sm leading-6 text-slate-600">
+                                                <DialogDescription className="text-sm leading-6 text-muted-foreground">
                                                     The current code will stop
                                                     working for future members.
                                                     People already in the group
                                                     stay in.
                                                 </DialogDescription>
-                                                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                                                <div className="rounded-2xl border border-amber-200 bg-amber-950/40 px-4 py-3 text-sm leading-6 text-amber-200">
                                                     <div className="flex items-start gap-2">
                                                         <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                                                         Use this only when the
@@ -803,7 +905,7 @@ export default function LeagueSettingsCard({
                                                                 disabled={
                                                                     processing
                                                                 }
-                                                                className="rounded-xl bg-slate-900 font-semibold text-white hover:bg-blue-900"
+                                                                className="rounded-xl bg-secondary font-semibold text-white hover:bg-accent"
                                                             >
                                                                 {processing && (
                                                                     <Spinner />
@@ -830,17 +932,17 @@ export default function LeagueSettingsCard({
 
                             {/* Sticky save bar */}
                             {hasChanges && (
-                                <div className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-lg backdrop-blur-sm sm:px-6">
+                                <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 px-4 py-3 shadow-lg backdrop-blur-sm sm:px-6">
                                     <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
                                         <div className="flex items-center gap-2">
                                             <span className="size-2 rounded-full bg-cyan-500" />
-                                            <p className="text-sm font-semibold text-slate-700">
+                                            <p className="text-sm font-semibold text-foreground">
                                                 Unsaved changes
                                             </p>
                                         </div>
                                         <Button
                                             disabled={processing || !canSubmit}
-                                            className="h-10 rounded-xl bg-slate-900 px-6 font-semibold text-white hover:bg-blue-900 focus-visible:ring-cyan-300 disabled:border disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-600 disabled:opacity-100"
+                                            className="h-10 rounded-xl bg-secondary px-6 font-semibold text-white hover:bg-accent focus-visible:ring-ring disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
                                         >
                                             {processing && <Spinner />}
                                             <PencilLine className="size-4" />

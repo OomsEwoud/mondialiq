@@ -26,13 +26,13 @@ export default function MatchPredictionActionRow({
     const modalMatch = toPredictionMatch(match);
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 shadow-sm sm:p-6">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
+                    <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
                         Match actions
                     </p>
-                    <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
+                    <p className="mt-1 text-sm leading-6 font-medium text-muted-foreground">
                         Open the match report, check the AI signal and manage
                         your pick.
                     </p>

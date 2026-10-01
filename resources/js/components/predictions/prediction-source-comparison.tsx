@@ -21,18 +21,18 @@ export default function PredictionSourceComparison({ aiContext }: Props) {
     }
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-bold text-foreground">
                         Data signals
                     </h2>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-muted-foreground">
                         Market and API views are separate inputs for the model.
                     </p>
                 </div>
                 {signalsDiffer && (
-                    <span className="w-fit rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                    <span className="w-fit rounded-full border border-amber-200 bg-amber-950/40 px-3 py-1 text-xs font-semibold text-amber-200">
                         Mixed signals
                     </span>
                 )}

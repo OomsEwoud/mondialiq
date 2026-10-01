@@ -23,7 +23,7 @@ export default function FilterSelect<TValue extends string>({
             <select
                 value={value}
                 onChange={(event) => onChange(event.target.value as TValue)}
-                className="h-11 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-none transition-colors outline-none focus:border-cyan-300 focus:ring-2 focus:ring-cyan-200"
+                className="h-11 w-full rounded-xl border border-border bg-card px-4 text-sm font-semibold text-foreground shadow-none transition-colors outline-none focus:border-ring focus:ring-2 focus:ring-ring"
             >
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>

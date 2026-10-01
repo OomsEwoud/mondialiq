@@ -21,13 +21,13 @@ export default function Home() {
             <main>
                 <section className="relative overflow-hidden border-b border-[#262c29]">
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(54,169,107,0.08),transparent_30%)]" />
-                    <div className="relative mx-auto grid max-w-7xl gap-14 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-20 lg:py-32">
+                    <div className="relative mx-auto grid max-w-7xl gap-14 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-20 lg:py-24">
                         <div>
                             <div className="inline-flex items-center gap-2.5 text-[0.68rem] font-semibold tracking-[0.18em] text-[#aeb5b0] uppercase">
                                 <span className="size-1.5 rounded-full bg-[#36a96b]" />
                                 AI football intelligence · Seizoen 2026/27
                             </div>
-                            <h1 className="mt-7 max-w-3xl text-[clamp(3rem,8vw,6.5rem)] leading-[0.9] font-black tracking-[-0.065em] text-balance">
+                            <h1 className="mt-7 max-w-3xl text-[clamp(2.75rem,6vw,5.5rem)] leading-[1.02] font-black tracking-[-0.065em] text-balance">
                                 Zie wat de cijfers verwachten{' '}
                                 <span className="text-[#9ebaa9]">
                                     vóór de aftrap.
@@ -44,7 +44,7 @@ export default function Home() {
                                     href={predictions()}
                                     className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#f3f4f1] px-6 text-sm font-bold text-[#0b0e0d] transition hover:bg-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none active:translate-y-px"
                                 >
-                                    Ontdek alle predictions
+                                    Bekijk voorspellingen
                                 </Link>
                                 <Link
                                     href={matches()}
@@ -105,7 +105,7 @@ export default function Home() {
                         href={predictions()}
                         className="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#f3f4f1] px-7 text-sm font-bold text-[#0b0e0d] transition hover:bg-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none active:translate-y-px"
                     >
-                        Ontdek de predictions
+                        Bekijk de voorspellingen
                     </Link>
                 </section>
             </main>

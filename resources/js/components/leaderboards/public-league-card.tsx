@@ -42,12 +42,12 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
     };
 
     return (
-        <Card className="flex h-full flex-col overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
+        <Card className="flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card shadow-sm transition-all hover:shadow-md">
             <div className={getLeagueThemeBannerClass(league.accent_color)}>
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
                     <div
                         className={cn(
-                            'flex size-12 shrink-0 items-center justify-center rounded-2xl border bg-white/15 text-2xl shadow-sm ring-1',
+                            'flex size-12 shrink-0 items-center justify-center rounded-2xl border bg-card/15 text-2xl shadow-sm ring-1',
                             theme.badgeBorder,
                         )}
                     >
@@ -68,31 +68,31 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
                     </div>
                 </div>
             </div>
-            
+
             <CardHeader className="gap-2 px-4 py-4 sm:px-5">
-                <CardTitle className="line-clamp-1 text-lg font-bold text-slate-900">
+                <CardTitle className="line-clamp-1 text-lg font-bold text-foreground">
                     {league.name}
                 </CardTitle>
-                <CardDescription className="line-clamp-2 text-sm text-slate-500">
+                <CardDescription className="line-clamp-2 text-sm text-muted-foreground">
                     {league.description || 'No description provided.'}
                 </CardDescription>
             </CardHeader>
-            
+
             <CardContent className="mt-auto px-4 pb-5 sm:px-5">
                 <div className="mb-4 flex items-center justify-between">
                     <Badge
                         variant="secondary"
-                        className="rounded-full px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+                        className="rounded-full px-2.5 py-1 text-xs font-semibold text-foreground shadow-sm"
                     >
                         <Users className="mr-1.5 size-3.5" />
                         {league.users_count} {memberLabel}
                     </Badge>
                 </div>
-                
+
                 <Button
                     onClick={joinLeague}
                     disabled={isJoining || isAtLimit}
-                    className="w-full h-10 rounded-lg font-semibold"
+                    className="h-10 w-full rounded-lg font-semibold"
                 >
                     <LogIn className="mr-2 size-4" />
                     {isJoining ? 'Joining...' : 'Join group'}

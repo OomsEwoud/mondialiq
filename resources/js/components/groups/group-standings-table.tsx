@@ -19,13 +19,13 @@ export function GroupStandingsTable({ teams }: Props) {
                         className={cn(
                             'rounded-xl border p-3 shadow-sm',
                             team.rank <= 2
-                                ? 'border-cyan-200 bg-cyan-50/40'
-                                : 'border-slate-200 bg-white',
+                                ? 'border-border bg-accent/40'
+                                : 'border-border bg-card',
                         )}
                     >
                         <div className="mb-2.5 flex items-center justify-between gap-3">
                             <div className="flex min-w-0 items-center gap-2">
-                                <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
+                                <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-card text-xs font-bold text-foreground shadow-sm ring-1 ring-border">
                                     {team.rank}
                                 </span>
                                 <div className="min-w-0">
@@ -36,7 +36,7 @@ export function GroupStandingsTable({ teams }: Props) {
                                         name={team.name}
                                     />
                                     {team.rank <= 2 && (
-                                        <span className="ml-2 inline-flex rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-[10px] font-bold text-cyan-700 uppercase shadow-sm">
+                                        <span className="ml-2 inline-flex rounded-full border border-border bg-card px-2 py-0.5 text-[10px] font-bold text-primary uppercase shadow-sm">
                                             Advances
                                         </span>
                                     )}
@@ -45,7 +45,7 @@ export function GroupStandingsTable({ teams }: Props) {
                             <PointsBadge points={team.points} />
                         </div>
 
-                        <div className="grid grid-cols-5 overflow-hidden rounded-lg border border-slate-200 bg-white text-center shadow-sm">
+                        <div className="grid grid-cols-5 overflow-hidden rounded-lg border border-border bg-card text-center shadow-sm">
                             {[
                                 ...stats.map((stat) => [
                                     stat.label,
@@ -58,12 +58,12 @@ export function GroupStandingsTable({ teams }: Props) {
                             ].map(([label, value]) => (
                                 <div
                                     key={label}
-                                    className="border-r border-slate-100 py-1.5 last:border-r-0"
+                                    className="border-r border-border py-1.5 last:border-r-0"
                                 >
-                                    <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">
+                                    <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
                                         {label}
                                     </p>
-                                    <p className="text-sm font-bold text-slate-900">
+                                    <p className="text-sm font-bold text-foreground">
                                         {value}
                                     </p>
                                 </div>
@@ -73,9 +73,9 @@ export function GroupStandingsTable({ teams }: Props) {
                 ))}
             </div>
 
-            <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm md:block">
+            <div className="hidden overflow-hidden rounded-lg border border-border bg-card shadow-sm md:block">
                 <table className="w-full min-w-[720px] border-collapse text-sm">
-                    <thead className="bg-gradient-to-b from-slate-50 to-white text-xs text-slate-600 uppercase">
+                    <thead className="bg-gradient-to-b from-card to-card text-xs text-muted-foreground uppercase">
                         <tr>
                             <th className="w-16 px-5 py-4 text-left font-bold tracking-wide">
                                 #
@@ -104,13 +104,13 @@ export function GroupStandingsTable({ teams }: Props) {
                             <tr
                                 key={team.id}
                                 className={cn(
-                                    'border-t border-slate-100 text-slate-900 transition-colors hover:bg-slate-50/80',
+                                    'border-t border-border text-foreground transition-colors hover:bg-muted/80',
                                     team.rank <= 2 &&
-                                        'border-l-4 border-l-cyan-300 bg-cyan-50/30',
+                                        'border-l-4 border-l-cyan-300 bg-accent/30',
                                 )}
                             >
                                 <td className="px-5 py-4">
-                                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
+                                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-card font-bold text-foreground shadow-sm ring-1 ring-border">
                                         {team.rank}
                                     </span>
                                 </td>

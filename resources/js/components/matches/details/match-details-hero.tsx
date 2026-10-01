@@ -26,8 +26,8 @@ export default function MatchDetailsHero({
     const isLive = liveMatch !== undefined || isLiveStatus(match.status);
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-5 shadow-lg sm:p-6 lg:p-7">
-            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+        <section className="overflow-hidden rounded-2xl border border-border/50 bg-secondary p-5 shadow-lg sm:p-6 lg:p-7">
+            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-primary uppercase">
                 {match.round}
             </p>
 
@@ -41,7 +41,7 @@ export default function MatchDetailsHero({
                 <div className="text-center">
                     {isLive && (
                         <div className="mb-3 flex justify-center">
-                            <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-semibold tracking-wide text-red-700 uppercase">
+                            <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-950/40 px-3 py-1 text-xs font-semibold tracking-wide text-red-200 uppercase">
                                 <span className="relative flex h-2 w-2">
                                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
                                     <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
@@ -54,7 +54,7 @@ export default function MatchDetailsHero({
                         {scoreLabel}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
-                        <p className="mt-2 text-xs font-semibold tracking-wide text-slate-400">
+                        <p className="mt-2 text-xs font-semibold tracking-wide text-muted-foreground">
                             {lastUpdatedAt &&
                                 `Updated ${formatUpdatedTime(lastUpdatedAt)}`}
                             {hasPollingError &&

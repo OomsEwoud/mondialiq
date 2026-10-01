@@ -6,8 +6,8 @@ export function initialPredictionFormData(
 ): UserPredictionFormData {
     return {
         outcome: match.userPrediction?.outcome ?? '',
-        home_score: predictionScoreValue(match.userPrediction?.homeScore, '0'),
-        away_score: predictionScoreValue(match.userPrediction?.awayScore, '0'),
+        home_score: predictionScoreValue(match.userPrediction?.homeScore, ''),
+        away_score: predictionScoreValue(match.userPrediction?.awayScore, ''),
         confidence: match.userPrediction?.confidence ?? '',
         scoreboard_id: '',
         is_boosted: false,

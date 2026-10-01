@@ -72,9 +72,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/leagues/{scoreboard}/members', ShowLeagueMembersController::class)->name('leagues.members');
     Route::get('/leagues/{scoreboard}/members/{user}/predictions', ShowLeagueMemberPredictionsController::class)->name('leagues.member.predictions');
     Route::get('/leagues/{scoreboard}/predict', ShowLeaguePredictController::class)->name('leagues.predict');
-    Route::post('/leagues', StoreLeagueController::class)->name('leagues.store');
-    Route::post('/leagues/join', JoinLeagueController::class)->name('leagues.join.store');
-    Route::post('/leagues/{scoreboard}/join-public', JoinPublicLeagueController::class)->name('leagues.join-public');
+    Route::post('/leagues', StoreLeagueController::class)
+        ->middleware('throttle:league-manage')
+        ->name('leagues.store');
+    Route::post('/leagues/join', JoinLeagueController::class)
+        ->middleware('throttle:league-manage')
+        ->name('leagues.join.store');
+    Route::post('/leagues/{scoreboard}/join-public', JoinPublicLeagueController::class)
+        ->middleware('throttle:league-manage')
+        ->name('leagues.join-public');
 
     Route::get('/predictions/{fixture}/ai', PredictionDetailsController::class)
         ->defaults('predictionMode', 'ai')

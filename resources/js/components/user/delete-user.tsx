@@ -40,25 +40,25 @@ export default function DeleteUser({ user }: Props) {
     return (
         <section className={settingsDangerSectionClassName}>
             <div className="mb-5 flex gap-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-950/40 text-destructive">
                     <AlertTriangle className="size-5" />
                 </span>
                 <div>
                     <p className="mb-1 text-xs font-bold tracking-wide text-red-500 uppercase">
                         Danger zone
                     </p>
-                    <h2 className="text-xl font-bold tracking-tight text-slate-900">
+                    <h2 className="text-xl font-bold tracking-tight text-foreground">
                         Delete account
                     </h2>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                         This permanently deletes your account, predictions and
                         related data. This cannot be undone.
                     </p>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm font-semibold text-red-700">
+            <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm font-semibold text-red-200">
                     Only continue if you are completely sure.
                 </p>
                 <Dialog>
@@ -121,7 +121,7 @@ export default function DeleteUser({ user }: Props) {
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+                                            <div className="rounded-xl border border-red-200 bg-red-950/40 p-4 text-sm font-semibold text-red-200">
                                                 This only deletes your MondialIQ
                                                 account. It will not delete your
                                                 {` ${providerAccountLabel}`}

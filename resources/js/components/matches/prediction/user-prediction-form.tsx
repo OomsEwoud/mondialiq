@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import type * as React from 'react';
 import { toast } from 'sonner';
 import PredictionConfidenceField from '@/components/matches/prediction/prediction-confidence-field';
+import PredictionOutcomeField from '@/components/matches/prediction/prediction-outcome-field';
 import PredictionScoreFields from '@/components/matches/prediction/prediction-score-fields';
 import { Button } from '@/components/ui/forms/button';
 import { store as storePrediction } from '@/routes/matches/prediction';
@@ -103,7 +104,21 @@ export default function UserPredictionForm({
             numericConfidence(boostedConfidenceThreshold);
 
     return (
-        <form onSubmit={submit} className="grid gap-4">
+        <form onSubmit={submit} className="grid gap-5" aria-busy={processing}>
+            <PredictionOutcomeField
+                match={match}
+                value={data.outcome}
+                disabled={predictionLocked || processing}
+                error={errors.outcome}
+                onChange={(outcome) => {
+                    setData((current) => ({
+                        ...current,
+                        outcome,
+                        home_score: '',
+                        away_score: '',
+                    }));
+                }}
+            />
             <PredictionScoreFields
                 match={match}
                 homeScore={data.home_score}
@@ -123,11 +138,12 @@ export default function UserPredictionForm({
             />
 
             {showBoost && typeof boostsRemaining === 'number' && (
-                <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
+                <div className="rounded-2xl border border-border bg-accent/60 p-4">
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
                             role="switch"
+                            aria-label="Boost this prediction"
                             aria-checked={data.is_boosted}
                             disabled={
                                 predictionLocked ||
@@ -146,7 +162,7 @@ export default function UserPredictionForm({
                         >
                             <span
                                 className={
-                                    'inline-block size-5 rounded-full bg-white shadow-sm transition-transform ' +
+                                    'inline-block size-5 rounded-full bg-card shadow-sm transition-transform ' +
                                     (data.is_boosted
                                         ? 'translate-x-6'
                                         : 'translate-x-1')
@@ -154,10 +170,10 @@ export default function UserPredictionForm({
                             />
                         </button>
                         <div>
-                            <p className="text-sm font-semibold text-slate-900">
+                            <p className="text-sm font-semibold text-foreground">
                                 Boost this prediction
                             </p>
-                            <p className="text-xs text-slate-600">
+                            <p className="text-xs text-muted-foreground">
                                 {boostsRemaining === 0 && !data.is_boosted
                                     ? 'You have no boosts remaining in this leaderboard.'
                                     : `${boostsRemaining} of ${boostsLimit} boosts remaining`}
@@ -165,34 +181,46 @@ export default function UserPredictionForm({
                         </div>
                     </div>
                     {errors.is_boosted && (
-                        <p className="mt-2 text-xs font-medium text-rose-600">
+                        <p className="mt-2 text-xs font-medium text-destructive">
                             {errors.is_boosted}
                         </p>
                     )}
                     {!meetsBoostThreshold && (
                         <p className="mt-2 text-xs font-medium text-amber-600">
-                            A boosted prediction requires at least <span className="uppercase">{boostedConfidenceThreshold}</span> confidence.
+                            A boosted prediction requires at least{' '}
+                            <span className="uppercase">
+                                {boostedConfidenceThreshold}
+                            </span>{' '}
+                            confidence.
                         </p>
                     )}
                 </div>
             )}
 
-            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-slate-100 bg-white/95 px-4 pt-4 pb-4 sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
+            {errors.scoreboard_id && (
+                <p role="alert" className="text-sm text-destructive">
+                    {errors.scoreboard_id}
+                </p>
+            )}
+            <div className="sticky right-0 bottom-0 left-0 -mx-4 -mb-4 flex flex-col-reverse gap-2 border-t border-border bg-card px-4 pt-4 pb-4 sm:-mx-6 sm:-mb-4 sm:flex-row sm:justify-end sm:px-6">
                 <Button
                     type="button"
                     variant="outline"
                     disabled={processing}
                     onClick={onCancel}
-                    className="h-11 rounded-xl border-slate-200 bg-white font-bold text-slate-700 hover:bg-slate-50"
+                    className="h-11 rounded-xl border-border bg-card font-bold text-foreground hover:bg-muted"
                 >
                     Cancel
                 </Button>
                 <Button
                     type="submit"
                     disabled={
-                        processing || predictionLocked || data.outcome === '' || !meetsBoostThreshold
+                        processing ||
+                        predictionLocked ||
+                        data.outcome === '' ||
+                        !meetsBoostThreshold
                     }
-                    className="h-11 rounded-xl bg-blue-950 px-5 font-bold text-white hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-70"
+                    className="h-11 rounded-xl bg-primary px-5 font-bold text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                     {predictionLocked
                         ? 'Predictions closed'

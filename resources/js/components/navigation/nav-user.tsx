@@ -56,7 +56,7 @@ export function NavUser() {
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-sm"
+                        className="w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl border-border bg-card p-2 text-foreground shadow-sm"
                         align="end"
                         side={menuSide}
                     >

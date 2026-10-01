@@ -1,8 +1,9 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import AppFooter from '@/components/app/app-footer';
+
 import AppLoginButton from '@/components/app/app-login-button';
 import AppLogo from '@/components/app/app-logo';
+import MobileNavigation from '@/components/app/mobile-navigation';
 import NavApp from '@/components/navigation/nav-app';
 import {
     Avatar,
@@ -19,12 +20,17 @@ import { useInitials } from '@/hooks/use-initials';
 import { dashboard } from '@/routes';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-    const [menuOpen, setMenuOpen] = useState(false);
     const { auth } = usePage().props;
     const getInitials = useInitials();
 
     return (
-        <div className="min-h-screen w-full overflow-x-hidden bg-[#0b0e0d] font-sans text-[#f3f4f1]">
+        <div className="flex min-h-screen w-full flex-col bg-background font-sans text-foreground">
+            <a
+                href="#main-content"
+                className="sr-only fixed top-3 left-3 z-[100] rounded-lg bg-primary px-4 py-3 font-semibold text-primary-foreground focus:not-sr-only"
+            >
+                Naar inhoud
+            </a>
             <header className="sticky top-0 z-50 border-b border-[#262c29] bg-[#0b0e0d]/95 backdrop-blur-xl">
                 <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-5 sm:px-8">
                     <Link
@@ -32,11 +38,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         className="group flex shrink-0 items-center rounded-lg focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none"
                     >
                         <AppLogo
-                            textClassName="hidden text-[#f3f4f1] [&_span]:text-[#70b98e] sm:inline"
+                            textClassName="text-base text-[#f3f4f1] [&_span]:text-[#70b98e] sm:text-lg"
                             markClassName="size-8 rounded-lg shadow-none transition-transform group-hover:scale-105"
                         />
                     </Link>
-                    <NavApp className="hidden md:flex" />
+                    <NavApp className="hidden lg:flex" />
                     <div className="flex items-center gap-2 sm:gap-3">
                         {auth.user ? (
                             <DropdownMenu>
@@ -71,32 +77,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         ) : (
                             <AppLoginButton className="focus-visible:ring-offset-slate-900" />
                         )}
-                        <button
-                            type="button"
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            aria-expanded={menuOpen}
-                            aria-label={
-                                menuOpen
-                                    ? 'Close navigation menu'
-                                    : 'Open navigation menu'
-                            }
-                            className="rounded-lg p-2 text-[#949d97] transition-colors hover:bg-[#171c19] hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:hidden"
-                        >
-                            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-                        </button>
+                        <MobileNavigation />
                     </div>
                 </div>
-                {menuOpen && (
-                    <div className="border-t border-[#262c29] bg-[#0b0e0d] px-5 py-2.5 md:hidden">
-                        <div className="mx-auto w-full max-w-7xl">
-                            <NavApp onNavigate={() => setMenuOpen(false)} />
-                        </div>
-                    </div>
-                )}
             </header>
-            <main className="mx-auto w-full max-w-7xl min-w-0 px-5 py-10 sm:px-8 sm:py-12">
+            <main
+                id="main-content"
+                tabIndex={-1}
+                className="mx-auto w-full max-w-7xl min-w-0 px-4 py-7 sm:px-8 sm:py-9"
+            >
                 {children}
             </main>
+            <AppFooter />
         </div>
     );
 }

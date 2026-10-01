@@ -6,6 +6,7 @@ import EmptyFilteredPredictionsState from '@/components/predictions/empty-filter
 import PredictionList from '@/components/predictions/prediction-list';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { predictions as aiPredictionsRoute } from '@/routes/ai';
 import type { AiPredictionsPageProps as Props } from '@/types/prediction';
 import type {
@@ -122,23 +123,21 @@ export default function AiPredictions({
     };
 
     const pageTitle = 'MondialiQ AI Predictions';
-    const pageDescription = "Explore MondialiQ AI's World Cup predictions and match insights.";
+    const pageDescription =
+        "Explore MondialiQ AI's World Cup predictions and match insights.";
     const emptyMessage = 'No AI predictions available yet.';
 
     return (
         <>
-            <PageHead
-                title={pageTitle}
-                description={pageDescription}
-            />
+            <PageHead title={pageTitle} description={pageDescription} />
 
             <div className="mx-auto max-w-7xl">
-                <section className="mb-6 overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+                <section className="mb-6 overflow-hidden rounded-2xl border border-border/50 bg-secondary p-6 shadow-lg sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
-                        <div className="flex flex-col sm:flex-row sm:items-start gap-5">
-                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-600/50 bg-slate-800/50 text-xl font-bold text-slate-200 shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/50 bg-muted/50 text-xl font-bold text-foreground shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
                                 {aiUser.avatar ? (
-                                    <img
+                                    <ImageWithFallback
                                         src={aiUser.avatar}
                                         alt={aiUser.name}
                                         className="size-14 rounded-xl object-cover sm:size-16"
@@ -151,24 +150,24 @@ export default function AiPredictions({
                             </div>
 
                             <div>
-                                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                                     AI match insights
                                 </p>
                                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
                                     {pageTitle}
                                 </h1>
-                                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
                                     {pageDescription}
                                 </p>
 
                                 <div className="mt-5 flex flex-wrap gap-2.5">
-                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                    <span className="rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
                                         Data-driven insights
                                     </span>
-                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                    <span className="rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
                                         Machine learning
                                     </span>
-                                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                                    <span className="rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
                                         Match predictions
                                     </span>
                                 </div>
@@ -179,7 +178,7 @@ export default function AiPredictions({
                             <button
                                 type="button"
                                 onClick={() => window.history.back()}
-                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-5 py-3 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:w-auto"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:w-auto"
                             >
                                 <ArrowLeft className="size-4" />
                                 Back

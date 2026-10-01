@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
+import TeamCrest from '@/components/ui/display/team-crest';
 import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 
@@ -25,22 +26,23 @@ export default function MatchTeam({
             href={showTeam.url(id)}
             aria-label={`Bekijk details van ${name}`}
             className={cn(
-                'group flex min-w-0 cursor-pointer items-center gap-2 rounded-md px-1 py-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:gap-4 sm:px-3',
-                align === 'right' && 'justify-end text-right',
+                'group flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-md px-1 py-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:flex-row sm:gap-4 sm:px-3',
+                align === 'right' &&
+                    'flex-col-reverse sm:flex-row sm:justify-end sm:text-right',
                 isWinner && 'bg-[#17251d]',
             )}
         >
             {align === 'left' ? (
-                <img
+                <TeamCrest
                     src={logo}
-                    alt={name}
+                    name={name}
                     className="size-10 shrink-0 object-contain sm:size-14"
                 />
             ) : null}
 
             <div className="min-w-0">
                 <p
-                    className="truncate text-sm font-bold text-[#f3f4f1] sm:text-lg"
+                    className="text-sm font-bold break-words text-[#f3f4f1] sm:text-lg"
                     title={name}
                 >
                     {name}
@@ -62,9 +64,9 @@ export default function MatchTeam({
             </div>
 
             {align === 'right' ? (
-                <img
+                <TeamCrest
                     src={logo}
-                    alt={name}
+                    name={name}
                     className="size-10 shrink-0 object-contain sm:size-14"
                 />
             ) : null}

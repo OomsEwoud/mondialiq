@@ -14,7 +14,7 @@ export default function MatchStatComparisonBar({
     const awayPercentage = 100 - homePercentage;
 
     return (
-        <div className="flex h-1.5 overflow-hidden rounded-full bg-slate-100">
+        <div className="flex h-1.5 overflow-hidden rounded-full bg-muted">
             <div
                 className={cn(
                     'bg-blue-700',

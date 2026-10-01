@@ -6,6 +6,7 @@ import EmptyFilteredPredictionsState from '@/components/predictions/empty-filter
 import PredictionList from '@/components/predictions/prediction-list';
 import PredictionsFilterCard from '@/components/predictions/predictions-filter-card';
 import PageHead from '@/components/seo/page-head';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { Badge } from '@/components/ui/feedback/badge';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
@@ -191,7 +192,7 @@ export default function LeagueMemberPredictions({
                         <Link
                             href={league.showHref}
                             className={cn(
-                                'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                                'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
                                 theme.buttonRing,
                             )}
                         >
@@ -202,12 +203,12 @@ export default function LeagueMemberPredictions({
                         <div className="flex items-center gap-3">
                             <div
                                 className={cn(
-                                    'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border bg-slate-800/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
+                                    'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border bg-muted/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
                                     theme.badgeBorder,
                                 )}
                             >
                                 {member.avatar ? (
-                                    <img
+                                    <ImageWithFallback
                                         src={member.avatar}
                                         alt={member.name}
                                         className="size-12 rounded-xl object-cover sm:size-14"
@@ -215,7 +216,7 @@ export default function LeagueMemberPredictions({
                                 ) : (
                                     <span
                                         aria-hidden="true"
-                                        className="text-sm font-bold text-slate-200 sm:text-base"
+                                        className="text-sm font-bold text-foreground sm:text-base"
                                     >
                                         {getInitials(member.name)}
                                     </span>
@@ -237,7 +238,7 @@ export default function LeagueMemberPredictions({
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                                 {pageTitle}
                             </h1>
-                            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
                                 {pageDescription}
                             </p>
                         </div>
@@ -255,14 +256,14 @@ export default function LeagueMemberPredictions({
                                     theme.badgeText,
                                     stat.label === 'Role' &&
                                         member.isViewer &&
-                                        'border-white bg-white text-slate-900',
+                                        'border-white bg-card text-foreground',
                                 )}
                             >
                                 <stat.icon
                                     className={cn(
                                         'mr-1.5 size-3.5 shrink-0',
                                         stat.label === 'Role' && member.isViewer
-                                            ? 'text-slate-900'
+                                            ? 'text-foreground'
                                             : theme.iconColor,
                                     )}
                                 />

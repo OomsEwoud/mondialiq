@@ -1,8 +1,10 @@
 import { X } from 'lucide-react';
+import { useId, useState } from 'react';
 import { predictionFilterLabelClassName } from '@/components/predictions/filters/filter-field-label';
 import FilterSelect from '@/components/predictions/filters/filter-select';
 import MatchStatusSegmentedFilter from '@/components/predictions/filters/match-status-segmented-filter';
 import SearchInput from '@/components/predictions/filters/search-input';
+import { cn } from '@/lib/utils';
 
 import type {
     ConfidenceSort,
@@ -55,6 +57,8 @@ export default function PredictionsFilterCard({
     onMatchStatusChange,
     onClear,
 }: Props) {
+    const [showAdvanced, setShowAdvanced] = useState(false);
+    const advancedId = useId();
     const today = toDateKey(new Date());
     const matchStatusValue: MatchStatusSegmentValue =
         filters.date === today ? 'today' : filters.status;
@@ -75,11 +79,11 @@ export default function PredictionsFilterCard({
     };
 
     return (
-        <section className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm sm:p-6">
+        <section className="mb-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/80 p-4 shadow-sm sm:p-6">
             <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h2 className={predictionFilterLabelClassName}>Filters</h2>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-muted-foreground">
                         Find predictions by match status, date, round or team.
                     </p>
                 </div>
@@ -87,7 +91,7 @@ export default function PredictionsFilterCard({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-600 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                        className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                         <X className="size-4" />
                         Clear filters
@@ -106,27 +110,46 @@ export default function PredictionsFilterCard({
                     value={matchStatusValue}
                     onChange={updateMatchStatus}
                 />
-                <FilterSelect
-                    className="lg:col-span-4"
-                    label="Outcome"
-                    value={filters.outcome}
-                    options={outcomeOptions}
-                    onChange={(value) => onChange('outcome', value)}
-                />
-                <FilterSelect
-                    className="lg:col-span-4"
-                    label="Confidence"
-                    value={filters.confidenceSort}
-                    options={confidenceSortOptions}
-                    onChange={(value) => onChange('confidenceSort', value)}
-                />
-                <FilterSelect
-                    className="lg:col-span-4"
-                    label="Points state"
-                    value={filters.pointsState}
-                    options={pointsStateOptions}
-                    onChange={(value) => onChange('pointsState', value)}
-                />
+                <button
+                    type="button"
+                    aria-expanded={showAdvanced}
+                    aria-controls={advancedId}
+                    onClick={() => setShowAdvanced((open) => !open)}
+                    className="min-h-11 text-left text-sm font-semibold text-primary lg:hidden"
+                >
+                    {showAdvanced
+                        ? 'Hide advanced filters'
+                        : 'More filters: outcome, confidence and points'}
+                </button>
+                <div
+                    id={advancedId}
+                    className={cn(
+                        'grid gap-4 lg:col-span-12 lg:grid lg:grid-cols-12',
+                        !showAdvanced && 'hidden',
+                    )}
+                >
+                    <FilterSelect
+                        className="lg:col-span-4"
+                        label="Outcome"
+                        value={filters.outcome}
+                        options={outcomeOptions}
+                        onChange={(value) => onChange('outcome', value)}
+                    />
+                    <FilterSelect
+                        className="lg:col-span-4"
+                        label="Confidence"
+                        value={filters.confidenceSort}
+                        options={confidenceSortOptions}
+                        onChange={(value) => onChange('confidenceSort', value)}
+                    />
+                    <FilterSelect
+                        className="lg:col-span-4"
+                        label="Points state"
+                        value={filters.pointsState}
+                        options={pointsStateOptions}
+                        onChange={(value) => onChange('pointsState', value)}
+                    />
+                </div>
             </div>
         </section>
     );

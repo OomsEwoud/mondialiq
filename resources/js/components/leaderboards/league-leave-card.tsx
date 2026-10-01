@@ -32,7 +32,7 @@ export default function LeagueLeaveCard({
                     type="button"
                     variant="outline"
                     className={cn(
-                        'h-11 rounded-lg border-rose-200 bg-white px-5 font-bold text-rose-900 shadow-sm hover:bg-rose-50',
+                        'h-11 rounded-lg border-rose-200 bg-card px-5 font-bold text-rose-200 shadow-sm hover:bg-rose-950/40',
                         className,
                     )}
                 >
@@ -40,11 +40,11 @@ export default function LeagueLeaveCard({
                     Leave group
                 </Button>
             </DialogTrigger>
-            <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                <DialogTitle className="text-slate-900">
+            <DialogContent className="border-border bg-card sm:max-w-md">
+                <DialogTitle className="text-foreground">
                     Leave {leagueName}?
                 </DialogTitle>
-                <DialogDescription className="text-sm leading-6 text-slate-600">
+                <DialogDescription className="text-sm leading-6 text-muted-foreground">
                     You will lose access to this private group immediately. If
                     you want to come back later, you will need a fresh invite.
                 </DialogDescription>

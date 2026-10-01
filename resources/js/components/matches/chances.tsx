@@ -6,12 +6,12 @@ interface Props {
 
 export default function Chances({ homeWin, draw, awayWin }: Props) {
     return (
-        <div className="mt-3 border-t border-slate-100 pt-3">
-            <p className="mb-2 text-xs font-medium tracking-wide text-cyan-600 uppercase">
+        <div className="mt-3 border-t border-border pt-3">
+            <p className="mb-2 text-xs font-medium tracking-wide text-primary uppercase">
                 Chances
             </p>
             <div className="grid grid-cols-3 gap-2">
-                <div className="rounded-lg bg-red-50 p-3 text-center">
+                <div className="rounded-lg bg-red-950/40 p-3 text-center">
                     <p className="text-xs font-medium text-red-400 uppercase">
                         Home win
                     </p>
@@ -19,15 +19,15 @@ export default function Chances({ homeWin, draw, awayWin }: Props) {
                         {homeWin}%
                     </p>
                 </div>
-                <div className="rounded-lg bg-slate-100 p-3 text-center">
-                    <p className="text-xs font-medium text-slate-600 uppercase">
+                <div className="rounded-lg bg-muted p-3 text-center">
+                    <p className="text-xs font-medium text-muted-foreground uppercase">
                         Draw
                     </p>
-                    <p className="text-2xl font-semibold text-slate-600">
+                    <p className="text-2xl font-semibold text-muted-foreground">
                         {draw}%
                     </p>
                 </div>
-                <div className="rounded-lg bg-blue-50 p-3 text-center">
+                <div className="rounded-lg bg-blue-950/40 p-3 text-center">
                     <p className="text-xs font-medium text-blue-400 uppercase">
                         Away win
                     </p>

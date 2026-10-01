@@ -29,12 +29,12 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                     'rounded-lg border p-4 shadow-sm',
                                     qualified
                                         ? 'border-emerald-200 bg-emerald-50/30'
-                                        : 'border-slate-200 bg-white',
+                                        : 'border-border bg-card',
                                 )}
                             >
                                 <div className="mb-3 flex items-center justify-between gap-3">
                                     <div className="flex min-w-0 items-center gap-2">
-                                        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-600 shadow-sm ring-1 ring-slate-200">
+                                        <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-card text-sm font-semibold text-muted-foreground shadow-sm ring-1 ring-border">
                                             {team.rank}
                                         </span>
                                         <div className="min-w-0">
@@ -54,7 +54,7 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                     <PointsBadge points={team.points} />
                                 </div>
 
-                                <div className="grid grid-cols-6 overflow-hidden rounded-lg border border-slate-200 bg-white text-center text-sm">
+                                <div className="grid grid-cols-6 overflow-hidden rounded-lg border border-border bg-card text-center text-sm">
                                     {[
                                         ...stats.map((stat) => [
                                             stat.label,
@@ -70,12 +70,12 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                     ].map(([label, value]) => (
                                         <div
                                             key={label}
-                                            className="border-r border-slate-100 py-2.5 last:border-r-0"
+                                            className="border-r border-border py-2.5 last:border-r-0"
                                         >
-                                            <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                                 {label}
                                             </p>
-                                            <p className="font-bold text-slate-900">
+                                            <p className="font-bold text-foreground">
                                                 {value}
                                             </p>
                                         </div>
@@ -95,9 +95,9 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                 })}
             </div>
 
-            <div className="hidden overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm md:block">
+            <div className="hidden overflow-hidden rounded-lg border border-border bg-card shadow-sm md:block">
                 <table className="w-full min-w-[820px] border-collapse text-sm">
-                    <thead className="bg-gradient-to-b from-slate-50 to-white text-xs text-slate-600 uppercase">
+                    <thead className="bg-gradient-to-b from-card to-card text-xs text-muted-foreground uppercase">
                         <tr>
                             <th className="w-16 px-5 py-4 text-left font-bold tracking-wide">
                                 #
@@ -133,14 +133,14 @@ export default function ThirdPlaceStandingsTable({ teams }: Props) {
                                 <Fragment key={team.id}>
                                     <tr
                                         className={cn(
-                                            'border-t border-slate-100 text-slate-900 transition-colors hover:bg-slate-50/80',
+                                            'border-t border-border text-foreground transition-colors hover:bg-muted/80',
                                             qualified
                                                 ? 'border-l-4 border-l-emerald-300 bg-emerald-50/30'
-                                                : 'bg-slate-50/60',
+                                                : 'bg-muted/60',
                                         )}
                                     >
                                         <td className="px-5 py-4">
-                                            <span className="inline-flex size-8 items-center justify-center rounded-full bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
+                                            <span className="inline-flex size-8 items-center justify-center rounded-full bg-card font-bold text-foreground shadow-sm ring-1 ring-border">
                                                 {team.rank}
                                             </span>
                                         </td>

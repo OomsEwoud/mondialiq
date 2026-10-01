@@ -35,7 +35,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
     return (
         <Card className="rounded-2xl border-red-200 bg-red-50/30 shadow-sm">
             <CardHeader className="gap-2 px-4 py-5 sm:px-5">
-                <div className="flex items-center gap-2 text-red-700">
+                <div className="flex items-center gap-2 text-red-200">
                     <AlertTriangle className="size-4" />
                     <p className="text-xs font-semibold tracking-wide uppercase">
                         Danger zone
@@ -44,7 +44,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                 <CardTitle className="text-xl font-semibold text-red-950">
                     Delete group
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-red-900/80">
+                <CardDescription className="text-sm leading-6 text-red-200/80">
                     This permanently deletes the group, invite code and member
                     access. This cannot be undone.
                 </CardDescription>
@@ -61,16 +61,16 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                             Delete group
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                        <DialogTitle className="text-slate-900">
+                    <DialogContent className="border-border bg-card sm:max-w-md">
+                        <DialogTitle className="text-foreground">
                             Delete {leagueName}?
                         </DialogTitle>
-                        <DialogDescription className="text-sm leading-6 text-slate-600">
+                        <DialogDescription className="text-sm leading-6 text-muted-foreground">
                             This action cannot be undone. All members lose
                             access immediately and the group page disappears
                             from leaderboards.
                         </DialogDescription>
-                        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+                        <div className="rounded-2xl border border-red-200 bg-red-950/40 px-4 py-3 text-sm leading-6 text-red-200">
                             Type <span className="font-semibold">DELETE</span>{' '}
                             to confirm this permanent action.
                         </div>
@@ -87,7 +87,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                     <div className="space-y-2">
                                         <Label
                                             htmlFor="delete-league-confirm"
-                                            className="text-xs font-semibold tracking-wide text-cyan-600 uppercase"
+                                            className="text-xs font-semibold tracking-wide text-primary uppercase"
                                         >
                                             Confirmation
                                         </Label>
@@ -100,7 +100,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                                 )
                                             }
                                             placeholder="Type DELETE"
-                                            className="h-11 rounded-xl border-slate-200 focus-visible:border-red-300 focus-visible:ring-red-200"
+                                            className="h-11 rounded-xl border-border focus-visible:border-red-300 focus-visible:ring-red-200"
                                             autoComplete="off"
                                         />
                                     </div>

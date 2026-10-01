@@ -1,5 +1,6 @@
 import { ArrowRightLeft, Goal, Monitor, Search, Target } from 'lucide-react';
 import type * as React from 'react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 
 import { cn } from '@/lib/utils';
 import type { MatchDetailsEvent } from '@/types/match-details';
@@ -27,39 +28,39 @@ interface EventStyle {
 
 const eventStyles: Record<MatchEventKind, EventStyle> = {
     goal: {
-        marker: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+        marker: 'border-emerald-200 bg-emerald-950/40 text-emerald-200',
         card: 'border-emerald-100 bg-emerald-50/60 shadow-sm',
-        label: 'text-emerald-700',
+        label: 'text-emerald-200',
     },
     penalty: {
-        marker: 'border-emerald-200 bg-white text-emerald-700',
-        card: 'border-emerald-100 bg-white',
-        label: 'text-emerald-700',
+        marker: 'border-emerald-200 bg-card text-emerald-200',
+        card: 'border-emerald-100 bg-card',
+        label: 'text-emerald-200',
     },
     'yellow-card': {
         marker: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-        card: 'border-yellow-100 bg-white',
+        card: 'border-yellow-100 bg-card',
         label: 'text-yellow-700',
     },
     'red-card': {
-        marker: 'border-red-200 bg-red-50 text-red-700',
-        card: 'border-red-100 bg-white',
-        label: 'text-red-700',
+        marker: 'border-red-200 bg-red-950/40 text-red-200',
+        card: 'border-red-100 bg-card',
+        label: 'text-red-200',
     },
     substitution: {
-        marker: 'border-blue-200 bg-blue-50 text-blue-700',
-        card: 'border-slate-200 bg-white',
-        label: 'text-blue-700',
+        marker: 'border-blue-200 bg-blue-950/40 text-blue-200',
+        card: 'border-border bg-card',
+        label: 'text-blue-200',
     },
     var: {
-        marker: 'border-violet-200 bg-violet-50 text-violet-700',
-        card: 'border-slate-200 bg-white',
-        label: 'text-violet-700',
+        marker: 'border-violet-200 bg-violet-950/40 text-violet-200',
+        card: 'border-border bg-card',
+        label: 'text-violet-200',
     },
     default: {
-        marker: 'border-slate-200 bg-white text-slate-500',
-        card: 'border-slate-200 bg-white',
-        label: 'text-slate-600',
+        marker: 'border-border bg-card text-muted-foreground',
+        card: 'border-border bg-card',
+        label: 'text-muted-foreground',
     },
 };
 
@@ -74,14 +75,14 @@ export default function MatchEventTimelineItem({
 
     return (
         <div className="grid grid-cols-[2.75rem_1.75rem_minmax(0,1fr)] gap-2 sm:grid-cols-[3.25rem_2rem_minmax(0,1fr)] sm:gap-3">
-            <div className="pt-3 text-right text-xs font-bold text-blue-700 tabular-nums sm:text-sm">
+            <div className="pt-3 text-right text-xs font-bold text-blue-200 tabular-nums sm:text-sm">
                 {formatMinute(event)}
             </div>
 
             <div className="relative flex justify-center">
                 <span
                     className={cn(
-                        'absolute w-px bg-slate-200',
+                        'absolute w-px bg-accent',
                         isFirst ? 'top-4' : 'top-0',
                         isLast ? 'bottom-auto h-4' : 'bottom-0',
                     )}
@@ -104,7 +105,7 @@ export default function MatchEventTimelineItem({
                 )}
             >
                 <div className="flex min-w-0 items-start gap-3">
-                    <img
+                    <ImageWithFallback
                         src={event.teamLogo}
                         alt={event.team}
                         className="mt-0.5 size-6 shrink-0 object-contain sm:size-7"
@@ -119,20 +120,20 @@ export default function MatchEventTimelineItem({
                             >
                                 {formatMatchEventType(event)}
                             </p>
-                            <span className="min-w-0 truncate text-xs font-medium text-slate-400">
+                            <span className="min-w-0 truncate text-xs font-medium text-muted-foreground">
                                 {event.team}
                             </span>
                         </div>
                         <p
                             className={cn(
-                                'mt-1 truncate text-sm text-slate-800',
+                                'mt-1 truncate text-sm text-foreground',
                                 kind === 'goal' && 'font-bold',
                             )}
                         >
                             {primaryEventText(event, kind)}
                         </p>
                         {secondaryText ? (
-                            <p className="mt-0.5 truncate text-xs text-slate-500">
+                            <p className="mt-0.5 truncate text-xs text-muted-foreground">
                                 {secondaryText}
                             </p>
                         ) : null}

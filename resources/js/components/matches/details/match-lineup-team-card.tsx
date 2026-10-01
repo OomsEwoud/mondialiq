@@ -1,4 +1,5 @@
 import MatchLineupPlayerGroup from '@/components/matches/details/match-lineup-player-group';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import type {
     MatchDetailsLineupTeam,
     MatchDetailsTeam,
@@ -11,24 +12,24 @@ type Props = {
 
 export default function MatchLineupTeamCard({ team, lineup }: Props) {
     return (
-        <section className="min-w-0 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-3 shadow-sm sm:p-4">
-            <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-3">
+        <section className="min-w-0 rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-3 shadow-sm sm:p-4">
+            <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                 <div className="flex min-w-0 items-center gap-3">
-                    <img
+                    <ImageWithFallback
                         src={team.logo}
                         alt={team.name}
                         className="size-8 shrink-0 object-contain"
                     />
                     <div className="min-w-0">
-                        <h3 className="truncate text-sm font-bold text-slate-900">
+                        <h3 className="truncate text-sm font-bold text-foreground">
                             {team.name}
                         </h3>
-                        <p className="text-xs font-bold text-slate-400">
+                        <p className="text-xs font-bold text-muted-foreground">
                             Formation
                         </p>
                     </div>
                 </div>
-                <span className="rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-sm">
+                <span className="rounded-md border border-border bg-card px-2.5 py-1 text-xs font-bold text-foreground shadow-sm">
                     {lineup.formation ?? '-'}
                 </span>
             </div>

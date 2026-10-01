@@ -12,52 +12,51 @@
 export const predictionAccent = {
     ai: {
         /** Small pill badge: "AI report", "AI prediction", etc. */
-        badge: 'border-cyan-200 bg-cyan-50 text-cyan-700',
+        badge: 'border-border bg-accent text-primary',
         /** Square icon wrapper (size-10 / size-9) */
-        iconWrap: 'bg-cyan-50 text-cyan-600',
+        iconWrap: 'bg-accent text-primary',
         /** Round icon wrapper (size-9) */
-        iconWrapRound: 'bg-cyan-100 text-cyan-700',
+        iconWrapRound: 'bg-accent text-primary',
         /** Eyebrow / section label text */
-        text: 'text-cyan-600',
+        text: 'text-primary',
         /** Light text on dark hero backgrounds */
-        textLight: 'text-cyan-300',
+        textLight: 'text-primary',
         /** Small icon accent on dark hero backgrounds */
-        textIcon: 'text-cyan-400',
+        textIcon: 'text-primary',
         /** Hover text on team links */
-        textHover: 'group-hover:text-cyan-700',
+        textHover: 'group-hover:text-primary',
         /** Hover text on dark hero team links */
-        textHoverDark: 'group-hover:text-cyan-300',
+        textHoverDark: 'group-hover:text-primary',
         /** Card border accent */
-        border: 'border-cyan-200',
+        border: 'border-border',
         /** Card background tint */
-        bg: 'bg-cyan-50',
+        bg: 'bg-accent',
         /** Subtle hover bg on team cards */
-        bgHover: 'hover:bg-cyan-50/30',
+        bgHover: 'hover:bg-accent/30',
         /** Gradient card (score card center, etc.) */
-        gradientCard: 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white',
+        gradientCard: 'border-border bg-gradient-to-b from-accent/60 to-card',
         /** Progress / toggle bar active color */
         progressBar: 'bg-cyan-500',
         /** Focus ring */
-        ring: 'focus-visible:ring-cyan-300',
+        ring: 'focus-visible:ring-ring',
         /** Horizontal divider line */
         divider: 'bg-cyan-200',
     },
     user: {
-        badge: 'border-indigo-200 bg-indigo-50 text-indigo-700',
-        iconWrap: 'bg-indigo-50 text-indigo-600',
-        iconWrapRound: 'bg-indigo-100 text-indigo-700',
-        text: 'text-indigo-600',
+        badge: 'border-border bg-accent text-primary',
+        iconWrap: 'bg-accent text-primary',
+        iconWrapRound: 'bg-accent text-primary',
+        text: 'text-primary',
         textLight: 'text-indigo-300',
         textIcon: 'text-indigo-400',
-        textHover: 'group-hover:text-indigo-700',
+        textHover: 'group-hover:text-primary',
         textHoverDark: 'group-hover:text-indigo-300',
-        border: 'border-indigo-200',
-        bg: 'bg-indigo-50',
-        bgHover: 'hover:bg-indigo-50/30',
-        gradientCard:
-            'border-indigo-200 bg-gradient-to-b from-indigo-50/60 to-white',
+        border: 'border-border',
+        bg: 'bg-accent',
+        bgHover: 'hover:bg-accent/30',
+        gradientCard: 'border-border bg-gradient-to-b from-accent/60 to-card',
         progressBar: 'bg-indigo-500',
-        ring: 'focus-visible:ring-indigo-300',
+        ring: 'focus-visible:ring-ring',
         divider: 'bg-indigo-200',
     },
 } as const;

@@ -1,4 +1,4 @@
-import { CalendarDays, X } from 'lucide-react';
+import { CalendarDays } from 'lucide-react';
 import { useRef } from 'react';
 import { useCalendar } from '@/hooks/use-calendar';
 import { useOutsideClick } from '@/hooks/use-outside-click';
@@ -38,6 +38,8 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
             Datum
             <button
                 type="button"
+                aria-expanded={open}
+                aria-label={selected ? `Datum: ${selected}` : 'Kies een datum'}
                 onClick={() => (open ? setOpen(false) : openAt(selected))}
                 className="flex h-11 w-full items-center justify-between rounded-md border border-[#343d37] bg-[#0d110f] px-3 text-left text-sm font-semibold text-[#daddd9] normal-case transition-colors outline-none hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
             >
@@ -48,23 +50,9 @@ export default function DateFilter({ dates, selected, onChange }: Props) {
                           formatReadableDate(selected))
                         : 'Kies een datum'}
                 </span>
-                {selected ? (
-                    <span
-                        role="button"
-                        tabIndex={-1}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleClear();
-                        }}
-                        className="rounded-sm p-1 text-[#717a74] transition-colors hover:bg-[#1b211e] hover:text-white"
-                    >
-                        <X size={14} />
-                    </span>
-                ) : (
-                    <span className="text-xs font-semibold tracking-normal text-[#68716b]">
-                        Kalender
-                    </span>
-                )}
+                <span className="text-xs font-semibold text-muted-foreground">
+                    Kalender
+                </span>
             </button>
             {open && (
                 <CalendarGrid

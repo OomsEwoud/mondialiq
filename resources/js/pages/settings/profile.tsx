@@ -40,8 +40,6 @@ export default function Profile({
                 noIndex
             />
 
-            <h1 className="sr-only">Profile settings</h1>
-
             <div className="min-w-0 space-y-6">
                 <UpdateProfileInformationForm
                     user={user}

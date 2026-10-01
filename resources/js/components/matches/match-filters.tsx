@@ -1,4 +1,6 @@
 import { X } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
 import type { FilterKey, Filters, MatchStatusFilter } from '@/types/match-page';
 import { toDateKey } from '@/utils/date';
 import DateFilter from './filters/date-filter';
@@ -27,6 +29,7 @@ export default function MatchFilters({
     onQuickChange,
     onClear,
 }: Props) {
+    const [showFilters, setShowFilters] = useState(false);
     const today = toDateKey(new Date());
     const hasActiveFilters =
         selected.round ||
@@ -81,7 +84,26 @@ export default function MatchFilters({
                 />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <button
+                type="button"
+                className="flex min-h-11 w-full items-center justify-between text-sm font-semibold text-primary md:hidden"
+                aria-expanded={showFilters}
+                aria-controls="match-extra-filters"
+                onClick={() => setShowFilters(!showFilters)}
+            >
+                Ronde, datum en ploeg
+                {selected.round || selected.date || selected.team
+                    ? ' · actief'
+                    : ''}
+                <span aria-hidden="true">{showFilters ? '−' : '+'}</span>
+            </button>
+            <div
+                id="match-extra-filters"
+                className={cn(
+                    'grid-cols-1 gap-4 md:grid md:grid-cols-3',
+                    showFilters ? 'mt-3 grid md:mt-0' : 'hidden',
+                )}
+            >
                 <RoundFilter
                     rounds={rounds}
                     selected={selected.round}

@@ -21,14 +21,14 @@ export default function PredictionPointsBadge({
 
     const variantClasses = {
         default: {
-            pending: 'border-slate-200 bg-slate-50 text-slate-500',
-            earned: 'border-cyan-200 bg-cyan-50 text-cyan-700',
-            zero: 'border-slate-200 bg-slate-50 text-slate-500',
+            pending: 'border-border bg-muted text-muted-foreground',
+            earned: 'border-border bg-accent text-primary',
+            zero: 'border-border bg-muted text-muted-foreground',
         },
         indigo: {
-            pending: 'border-indigo-200 bg-white text-indigo-700',
-            earned: 'border-indigo-200 bg-white text-indigo-700',
-            zero: 'border-indigo-200 bg-white text-indigo-700',
+            pending: 'border-border bg-card text-primary',
+            earned: 'border-border bg-card text-primary',
+            zero: 'border-border bg-card text-primary',
         },
     };
 

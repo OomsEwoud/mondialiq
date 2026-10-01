@@ -24,7 +24,7 @@ export default function AiPredictionReportActions({
         <div className="flex justify-end">
             <Button
                 type="button"
-                className="bg-slate-900 text-white shadow-sm focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 sm:w-auto"
+                className="bg-secondary text-white shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:w-auto"
                 onClick={onPredictionClick}
             >
                 <PencilLine className="size-4" />

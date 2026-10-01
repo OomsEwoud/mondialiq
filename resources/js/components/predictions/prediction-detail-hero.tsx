@@ -38,20 +38,14 @@ export default function PredictionDetailHero({ match, mode }: Props) {
 
     return (
         <>
-            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <div
-                    className={`border-b border-slate-100 px-5 py-4 sm:px-6 ${
-                        isAiPrediction
-                            ? 'bg-linear-to-r from-cyan-50 via-white to-blue-50'
-                            : 'bg-linear-to-r from-indigo-50 via-white to-violet-50'
-                    }`}
-                >
+            <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                <div className="border-b border-border bg-card px-5 py-4 sm:px-6">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                 {headerLabel}
                             </p>
-                            <h1 className="mt-1 text-2xl font-bold text-slate-900 sm:text-3xl">
+                            <h1 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
                                 {match.homeTeam} vs {match.awayTeam}
                             </h1>
                         </div>
@@ -62,7 +56,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                             >
                                 {match.round}
                             </p>
-                            <p className="mt-1 text-sm font-medium text-slate-600">
+                            <p className="mt-1 text-sm font-medium text-muted-foreground">
                                 {match.date} &middot; {match.time}
                             </p>
                         </div>
@@ -71,7 +65,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
 
                 <div className="p-5 sm:p-6">
                     <div className="flex flex-col gap-4">
-                        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
                             <div className="grid grid-cols-[1fr] gap-4 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
                                 <UserPredictionTeam
                                     logo={match.homeTeamLogo}
@@ -80,10 +74,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                 />
 
                                 <div className="text-center">
-                                    <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
+                                    <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                         Predicted score
                                     </p>
-                                    <p className="mt-2 text-3xl font-semibold text-slate-900">
+                                    <p className="mt-2 text-3xl font-semibold text-foreground">
                                         {score ?? '-'}
                                     </p>
                                 </div>
@@ -97,7 +91,7 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <section className="rounded-2xl border border-border bg-card p-4 shadow-sm">
                             <div className="flex flex-col gap-4">
                                 <div className="flex items-start gap-3 text-left">
                                     <span
@@ -106,10 +100,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                         <Trophy className="size-4" />
                                     </span>
                                     <div>
-                                        <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
+                                        <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                             Predicted winner
                                         </p>
-                                        <p className="mt-1 text-base font-semibold text-slate-900">
+                                        <p className="mt-1 text-base font-semibold text-foreground">
                                             {activePredictionLabel}
                                         </p>
                                     </div>
@@ -123,10 +117,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                             <Gauge className="size-4" />
                                         </span>
                                         <div>
-                                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                                 Chance
                                             </p>
-                                            <p className="mt-1 text-base font-semibold text-slate-900 capitalize">
+                                            <p className="mt-1 text-base font-semibold text-foreground capitalize">
                                                 {activePredictionConfidence}{' '}
                                                 confidence
                                             </p>
@@ -142,10 +136,10 @@ export default function PredictionDetailHero({ match, mode }: Props) {
                                             <Sparkles className="size-4" />
                                         </span>
                                         <div>
-                                            <p className="text-xs font-semibold tracking-wide text-slate-600 uppercase">
+                                            <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                                 AI insight
                                             </p>
-                                            <p className="mt-1 text-sm leading-6 font-medium text-slate-600">
+                                            <p className="mt-1 text-sm leading-6 font-medium text-muted-foreground">
                                                 {aiPrediction?.advice}
                                             </p>
                                         </div>

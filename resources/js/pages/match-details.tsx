@@ -33,8 +33,9 @@ export default function MatchDetails({ match }: Props) {
                 description={`View ${match.homeTeam.name} vs ${match.awayTeam.name} match details, kickoff information, lineups, stats and prediction options on MondialIQ.`}
             />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 sm:px-6 lg:gap-6 lg:py-8">
-                <BackButton className="w-fit rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300" />
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:gap-6">
+                <h1 className="sr-only">{pageTitle}</h1>
+                <BackButton className="w-fit rounded-xl border border-border bg-card text-foreground shadow-sm hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring" />
 
                 <div className="flex flex-col gap-5 lg:gap-6">
                     <MatchDetailsHero

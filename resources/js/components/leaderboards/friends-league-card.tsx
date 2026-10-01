@@ -46,12 +46,12 @@ export default function FriendsLeagueCard({ league }: Props) {
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-white shadow-sm transition-all hover:shadow-md">
+        <Card className="overflow-hidden rounded-2xl border-border bg-card shadow-sm transition-all hover:shadow-md">
             <div className={getLeagueThemeBannerClass(league.accentColor)}>
                 <div className="flex items-center gap-3 px-4 py-4 sm:px-5">
                     <div
                         className={cn(
-                            'flex size-12 items-center justify-center rounded-2xl border bg-white/15 text-2xl shadow-sm ring-1',
+                            'flex size-12 items-center justify-center rounded-2xl border bg-card/15 text-2xl shadow-sm ring-1',
                             theme.badgeBorder,
                         )}
                     >
@@ -72,13 +72,13 @@ export default function FriendsLeagueCard({ league }: Props) {
                     </div>
                 </div>
             </div>
-            <CardHeader className="gap-3 border-b border-slate-200 px-4 py-4 sm:px-5">
+            <CardHeader className="gap-3 border-b border-border px-4 py-4 sm:px-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                        <CardTitle className="truncate text-lg font-bold text-slate-900">
+                        <CardTitle className="truncate text-lg font-bold text-foreground">
                             {league.name}
                         </CardTitle>
-                        <CardDescription className="mt-1 text-sm text-slate-500">
+                        <CardDescription className="mt-1 text-sm text-muted-foreground">
                             {league.visibility === 'private'
                                 ? 'Private prediction group standings.'
                                 : 'Public prediction group standings.'}
@@ -96,7 +96,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                                         alt={member.name}
                                         className="object-cover"
                                     />
-                                    <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
+                                    <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
                                         {getInitials(member.name)}
                                     </AvatarFallback>
                                 </Avatar>
@@ -148,7 +148,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         'rounded-2xl border px-3.5 py-3',
                         theme.softBg,
                         theme.softBorder,
-                        !performanceLabel && 'text-slate-400',
+                        !performanceLabel && 'text-muted-foreground',
                     )}
                 >
                     <p
@@ -159,7 +159,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                     >
                         Group pace
                     </p>
-                    <p className="mt-1.5 text-sm font-semibold text-slate-900">
+                    <p className="mt-1.5 text-sm font-semibold text-foreground">
                         {performanceLabel ?? 'No scoring data yet'}
                     </p>
                 </div>
@@ -181,7 +181,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         asChild
                         variant="outline"
                         className={cn(
-                            'h-10 w-full rounded-lg bg-white px-4 font-semibold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-lg border-border bg-card px-4 font-semibold text-foreground hover:bg-muted',
                             theme.buttonRing,
                         )}
                     >
@@ -194,14 +194,14 @@ export default function FriendsLeagueCard({ league }: Props) {
                     <LeagueLeaveCard
                         leagueId={league.id}
                         leagueName={league.name}
-                        className="h-10 w-full rounded-2xl border-rose-200 bg-white px-4 font-bold text-rose-900 hover:bg-rose-50"
+                        className="h-10 w-full rounded-2xl border-rose-200 bg-card px-4 font-bold text-rose-200 hover:bg-rose-950/40"
                     />
                 ) : (
                     <Button
                         type="button"
                         disabled
                         variant="outline"
-                        className="h-10 w-full rounded-lg px-4 font-semibold text-slate-400"
+                        className="h-10 w-full rounded-lg px-4 font-semibold text-muted-foreground"
                     >
                         Group action
                     </Button>

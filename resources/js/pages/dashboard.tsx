@@ -7,6 +7,7 @@ import LivePanel from '@/components/dashboard/live-panel';
 import MatchList from '@/components/dashboard/match-list';
 import RecentResults from '@/components/dashboard/recent-results';
 import PageHead from '@/components/seo/page-head';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { matches, predictions } from '@/routes';
 import type { DashboardProps } from '@/types/dashboard';
 
@@ -208,7 +209,7 @@ export default function Dashboard({
                                     className="inline-flex items-center gap-2 rounded-lg border border-[#303732] bg-[#111513] px-3 py-2 text-sm font-semibold text-[#aeb5b0]"
                                 >
                                     {competition.logoUrl && (
-                                        <img
+                                        <ImageWithFallback
                                             src={competition.logoUrl}
                                             alt=""
                                             className="size-5 object-contain"

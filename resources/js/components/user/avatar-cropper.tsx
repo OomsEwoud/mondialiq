@@ -74,9 +74,9 @@ export default function AvatarCropper({
 
     return (
         <Dialog open={open} onOpenChange={handleOpenChange}>
-            <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto border-slate-200 bg-white p-0 sm:max-w-2xl">
-                <DialogHeader className="border-b border-slate-200 px-5 py-4">
-                    <DialogTitle className="text-slate-900">
+            <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto border-border bg-card p-0 sm:max-w-2xl">
+                <DialogHeader className="border-b border-border px-5 py-4">
+                    <DialogTitle className="text-foreground">
                         Crop profile photo
                     </DialogTitle>
                     <DialogDescription>
@@ -93,7 +93,7 @@ export default function AvatarCropper({
                     zoom={zoom}
                 />
 
-                <DialogFooter className="border-t border-slate-200 px-5 py-4">
+                <DialogFooter className="border-t border-border px-5 py-4">
                     <Button
                         type="button"
                         variant="outline"
@@ -105,7 +105,7 @@ export default function AvatarCropper({
                     <Button
                         type="button"
                         disabled={!croppedAreaPixels}
-                        className="rounded-lg bg-slate-900 font-semibold text-white shadow-sm hover:bg-slate-800"
+                        className="rounded-lg bg-secondary font-semibold text-white shadow-sm hover:bg-muted"
                         onClick={handleApply}
                     >
                         Use cropped photo

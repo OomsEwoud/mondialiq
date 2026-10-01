@@ -30,18 +30,18 @@ export default function FriendsLeaguesSection({
     const hasReachedLeagueLimit = currentLeagueCount >= maxLeagueCount;
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
-            <CardHeader className="gap-4 border-b border-slate-200 px-5 py-5 sm:px-6">
+        <Card className="overflow-hidden rounded-2xl border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
+            <CardHeader className="gap-4 border-b border-border px-5 py-5 sm:px-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
-                        <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
+                        <CardTitle className="text-xl font-bold text-foreground sm:text-2xl">
                             Prediction Groups
                         </CardTitle>
-                        <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
+                        <CardDescription className="mt-1 text-sm leading-6 text-muted-foreground">
                             Create private groups to compare predictions with
                             friends, classmates or your crew.
                         </CardDescription>
-                        <p className="mt-3 text-sm font-semibold text-slate-600">
+                        <p className="mt-3 text-sm font-semibold text-muted-foreground">
                             {currentLeagueCount}/{maxLeagueCount} groups joined
                         </p>
                     </div>
@@ -50,7 +50,7 @@ export default function FriendsLeaguesSection({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-10 w-full rounded-2xl border-slate-200 bg-white px-4 font-bold text-slate-700 shadow-sm hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 sm:w-auto"
+                                className="h-10 w-full rounded-2xl border-border bg-card px-4 font-bold text-foreground shadow-sm hover:border-border hover:bg-accent hover:text-primary sm:w-auto"
                             >
                                 <Link href={joinLeagueHref}>
                                     <LogIn className="size-4" />
@@ -71,7 +71,7 @@ export default function FriendsLeaguesSection({
                         {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
-                                className="h-10 w-full rounded-2xl bg-slate-900 px-4 font-bold text-white shadow-sm focus-visible:ring-cyan-300 sm:w-auto"
+                                className="h-10 w-full rounded-2xl bg-secondary px-4 font-bold text-white shadow-sm focus-visible:ring-ring sm:w-auto"
                             >
                                 <Link href={createLeagueHref}>
                                     <Plus className="size-4" />
@@ -91,11 +91,11 @@ export default function FriendsLeaguesSection({
                     </div>
                 </div>
                 {hasReachedLeagueLimit && (
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 shadow-sm">
-                        <p className="text-sm font-bold text-amber-900">
+                    <div className="rounded-2xl border border-amber-200 bg-amber-950/40 px-4 py-4 shadow-sm">
+                        <p className="text-sm font-bold text-amber-200">
                             You reached the prediction group limit.
                         </p>
-                        <p className="mt-1 text-sm leading-6 text-amber-800">
+                        <p className="mt-1 text-sm leading-6 text-amber-200">
                             Leave one of your current groups before creating or
                             joining another.
                         </p>

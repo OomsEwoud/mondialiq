@@ -5,8 +5,14 @@ import {
     ChevronDown,
     ChevronUp,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useSyncExternalStore } from 'react';
 import { cn } from '@/lib/utils';
+import {
+    subscribeToInstructions,
+    instructionsExpanded,
+    instructionsServerSnapshot,
+    setInstructionsExpanded,
+} from '@/utils/prediction-instructions';
 
 const infoItems = [
     {
@@ -35,32 +41,21 @@ const infoItems = [
 ];
 
 export default function PredictionInfoGrid() {
-    const [isExpanded, setIsExpanded] = useState(false);
-
-    useEffect(() => {
-        const saved = localStorage.getItem('predictions-info-expanded');
-        if (saved !== null) {
-            setIsExpanded(saved === 'true');
-        }
-    }, []);
-
-    const toggleExpand = () => {
-        const nextState = !isExpanded;
-        setIsExpanded(nextState);
-        localStorage.setItem('predictions-info-expanded', String(nextState));
-    };
+    const isExpanded = useSyncExternalStore(
+        subscribeToInstructions,
+        instructionsExpanded,
+        instructionsServerSnapshot,
+    );
+    const toggleExpand = () => setInstructionsExpanded(!isExpanded);
 
     return (
-        <section className="mb-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-5 shadow-sm sm:p-6">
-            <div
-                onClick={toggleExpand}
-                className="group flex cursor-pointer items-start justify-between gap-4 select-none"
-            >
+        <section className="mt-5 mb-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/80 p-4">
+            <div className="group flex items-start justify-between gap-4 select-none">
                 <header className={cn(isExpanded && 'mb-5', 'flex-1')}>
-                    <p className="mb-1 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                    <p className="mb-1 text-xs font-semibold tracking-wide text-primary uppercase">
                         How it works
                     </p>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 transition-colors group-hover:text-cyan-700">
+                    <h2 className="text-base font-semibold tracking-tight text-foreground transition-colors group-hover:text-primary">
                         Three steps to smarter predictions
                     </h2>
                 </header>
@@ -70,7 +65,7 @@ export default function PredictionInfoGrid() {
                         e.stopPropagation();
                         toggleExpand();
                     }}
-                    className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition-colors group-hover:bg-slate-50 group-hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+                    className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground shadow-sm transition-colors group-hover:bg-muted group-hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     aria-expanded={isExpanded}
                     aria-label={
                         isExpanded
@@ -92,10 +87,10 @@ export default function PredictionInfoGrid() {
                         <article
                             key={item.title}
                             className={cn(
-                                'flex min-h-44 flex-col rounded-2xl border bg-white p-4 shadow-sm sm:p-5',
+                                'flex min-h-44 flex-col rounded-2xl border bg-card p-4 shadow-sm sm:p-5',
                                 item.featured
-                                    ? 'border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white'
-                                    : 'border-slate-200',
+                                    ? 'border-border bg-gradient-to-b from-accent/60 to-card'
+                                    : 'border-border',
                             )}
                         >
                             <div className="mb-4 flex items-start justify-between gap-3">
@@ -104,7 +99,7 @@ export default function PredictionInfoGrid() {
                                         'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm',
                                         item.featured
                                             ? 'bg-cyan-600'
-                                            : 'bg-slate-800',
+                                            : 'bg-muted',
                                     )}
                                 >
                                     <item.icon className="h-5 w-5" />
@@ -113,17 +108,17 @@ export default function PredictionInfoGrid() {
                                     className={cn(
                                         'rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide uppercase',
                                         item.featured
-                                            ? 'bg-cyan-100 text-cyan-700'
-                                            : 'bg-slate-100 text-slate-600',
+                                            ? 'bg-accent text-primary'
+                                            : 'bg-muted text-muted-foreground',
                                     )}
                                 >
                                     {item.badge}
                                 </span>
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900">
+                            <h3 className="text-lg font-bold text-foreground">
                                 {item.title}
                             </h3>
-                            <p className="mt-2 text-sm leading-6 text-slate-600">
+                            <p className="mt-2 text-sm leading-6 text-muted-foreground">
                                 {item.description}
                             </p>
                         </article>

@@ -64,7 +64,7 @@ const socialProviders = [
         ),
         className:
             'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
-        iconClassName: 'bg-white ring-[#343b37]',
+        iconClassName: 'bg-card ring-[#343b37]',
     },
     {
         name: 'Facebook',
@@ -83,7 +83,7 @@ const socialProviders = [
         ),
         className:
             'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
-        iconClassName: 'bg-white ring-[#343b37]',
+        iconClassName: 'bg-card ring-[#343b37]',
     },
 ] satisfies SocialProvider[];
 

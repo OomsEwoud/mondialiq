@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 
 import { show as showMatch } from '@/routes/matches';
 import type { Match } from '@/types/match';
@@ -103,7 +104,11 @@ function Team({ name, logo }: { name: string; logo: string }) {
     return (
         <div className="flex min-w-0 flex-col items-center gap-3 text-center">
             <div className="flex size-16 items-center justify-center rounded-xl bg-[#f3f4f1] p-2.5">
-                <img src={logo} alt="" className="size-full object-contain" />
+                <ImageWithFallback
+                    src={logo}
+                    alt=""
+                    className="size-full object-contain"
+                />
             </div>
             <span className="max-w-28 text-sm font-bold text-[#e3e5e1]">
                 {name}

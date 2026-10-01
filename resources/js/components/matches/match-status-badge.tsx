@@ -19,15 +19,14 @@ export default function MatchStatusBadge({ match }: Props) {
             className={cn(
                 'border px-2.5 py-1 font-bold shadow-none',
                 kind === 'finished' &&
-                    'border-emerald-200 bg-emerald-50 text-emerald-700',
-                kind === 'upcoming' &&
-                    'border-cyan-200 bg-cyan-50 text-cyan-700',
+                    'border-emerald-200 bg-emerald-950/40 text-emerald-200',
+                kind === 'upcoming' && 'border-border bg-accent text-primary',
                 kind === 'postponed' &&
-                    'border-amber-200 bg-amber-50 text-amber-700',
+                    'border-amber-200 bg-amber-950/40 text-amber-200',
                 kind === 'cancelled' &&
-                    'border-rose-200 bg-rose-50 text-rose-700',
+                    'border-rose-200 bg-rose-950/40 text-rose-200',
                 kind === 'unknown' &&
-                    'border-slate-200 bg-slate-50 text-slate-600',
+                    'border-border bg-muted text-muted-foreground',
             )}
         >
             {getMatchStatusLabel(match)}

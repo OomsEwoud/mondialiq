@@ -5,17 +5,23 @@ import { cn, toUrl } from '@/lib/utils';
 
 interface Props {
     className?: string;
+    mobile?: boolean;
     onNavigate?: () => void;
 }
 
-export default function NavApp({ className, onNavigate }: Props) {
+export default function NavApp({
+    className,
+    onNavigate,
+    mobile = false,
+}: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
         <nav
             aria-label="Main"
             className={cn(
-                'flex w-full flex-col items-start gap-0.5 md:w-auto md:flex-row md:items-center md:gap-0.5',
+                'flex gap-1',
+                mobile ? 'w-full flex-col' : 'items-center',
                 className,
             )}
         >
@@ -30,7 +36,7 @@ export default function NavApp({ className, onNavigate }: Props) {
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(
-                            'group relative flex w-auto items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:px-3',
+                            'group relative flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:px-3',
                             isActive
                                 ? 'bg-[#171c19] text-white md:bg-transparent'
                                 : 'text-[#949d97] hover:bg-[#141916] hover:text-white',

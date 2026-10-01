@@ -6,7 +6,11 @@ use App\Models\League;
 use App\Models\Prediction;
 use App\Models\Team;
 use App\Models\User;
+use Carbon\CarbonImmutable;
 
+beforeEach(function () {
+    $this->travelTo(CarbonImmutable::parse('2026-06-01 12:00:00'));
+});
 function createVisibilityFixture(string $matchDate = '2026-06-12 20:00:00'): Fixture
 {
     $league = League::create([

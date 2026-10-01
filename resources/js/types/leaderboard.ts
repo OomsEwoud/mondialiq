@@ -1,6 +1,4 @@
-import type {
-    LeagueAccentColor,
-} from './league';
+import type { LeagueAccentColor } from './league';
 
 export interface LeaderboardEntry {
     id: number;

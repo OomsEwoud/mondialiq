@@ -4,8 +4,18 @@ use App\Enums\PredictionTypes;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Prediction;
+use App\Models\Scoreboard;
 use App\Models\Team;
 use App\Models\User;
+use Carbon\CarbonImmutable;
+
+beforeEach(function () {
+    $this->travelTo(CarbonImmutable::parse('2026-06-01 12:00:00'));
+});
+
+beforeEach(function () {
+    $this->travelTo(CarbonImmutable::parse('2026-06-01 12:00:00'));
+});
 
 function createPredictionFixture(string $matchDate = '2026-06-12 20:00:00'): array
 {
@@ -153,3 +163,52 @@ test('the match prediction endpoint is rate limited', function () {
     expect($middleware)->toContain('auth')
         ->and($middleware)->toContain('throttle:prediction-store');
 });
+
+test('a non member cannot save a prediction for a group', function (string $visibility, bool $boosted) {
+    $user = User::factory()->create();
+    [$fixture] = createPredictionFixture(now()->addDay()->toDateTimeString());
+    $scoreboard = Scoreboard::create([
+        'name' => 'Another group',
+        'code' => 'SECURE01',
+        'visibility' => $visibility,
+    ]);
+
+    $this->actingAs($user)
+        ->post(route('matches.prediction.store', $fixture), [
+            'outcome' => 'home',
+            'scoreboard_id' => $scoreboard->id,
+            'is_boosted' => $boosted,
+        ])
+        ->assertSessionHasErrors('scoreboard_id');
+
+    $this->assertDatabaseCount('predictions', 0);
+    $this->assertDatabaseCount('scoreboard_predictions', 0);
+})->with(['private', 'public'])->with([false, true]);
+
+test('a group member or owner can save a prediction for their group', function (string $role) {
+    $user = User::factory()->create();
+    [$fixture] = createPredictionFixture(now()->addDay()->toDateTimeString());
+    $scoreboard = Scoreboard::create([
+        'name' => 'My group',
+        'code' => 'MEMBER01',
+        'owner_id' => $role === 'owner' ? $user->id : null,
+    ]);
+    $scoreboard->users()->attach($user->id, ['role' => $role]);
+
+    $this->actingAs($user)
+        ->post(route('matches.prediction.store', $fixture), [
+            'outcome' => 'home',
+            'scoreboard_id' => $scoreboard->id,
+            'is_boosted' => false,
+        ])
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+
+    $prediction = Prediction::whereBelongsTo($user)->whereBelongsTo($fixture)->sole();
+
+    $this->assertDatabaseHas('scoreboard_predictions', [
+        'scoreboard_id' => $scoreboard->id,
+        'prediction_id' => $prediction->id,
+        'is_boosted' => false,
+    ]);
+})->with(['member', 'owner']);

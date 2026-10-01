@@ -9,7 +9,11 @@ use App\Models\ScoreboardPrediction;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Prediction\PredictionScoreService;
+use Carbon\CarbonImmutable;
 
+beforeEach(function () {
+    $this->travelTo(CarbonImmutable::parse('2026-06-01 12:00:00'));
+});
 function createScoringFixture(array $overrides = []): Fixture
 {
     $league = League::query()->create([
@@ -624,6 +628,7 @@ test('user prediction service stores boost status for a scoreboard', function ()
         ->actingAs($user)
         ->post(route('matches.prediction.store', $fixture), [
             'outcome' => 'home',
+            'confidence' => 'medium',
             'home_score' => 2,
             'away_score' => 1,
             'scoreboard_id' => $scoreboard->id,

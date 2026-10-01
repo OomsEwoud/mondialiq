@@ -13,7 +13,7 @@ export default function AppLoginButton({ className }: Props) {
         <Link
             href={login()}
             className={cn(
-                'inline-flex h-9 items-center gap-2 rounded-lg bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                'inline-flex h-9 items-center gap-2 rounded-lg bg-card px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
                 className,
             )}
         >

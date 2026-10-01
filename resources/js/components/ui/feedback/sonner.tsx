@@ -7,13 +7,13 @@ function Toaster({ ...props }: ToasterProps) {
 
     return (
         <Sonner
-            theme="light"
+            theme="dark"
             className="toaster group"
             position="top-right"
             richColors
             icons={{
                 success: (
-                    <span className="flex size-6 items-center justify-center rounded-full bg-lime-100 text-green-800 ring-1 ring-white/70">
+                    <span className="flex size-6 items-center justify-center rounded-full bg-lime-100 text-green-200 ring-1 ring-white/70">
                         <CircleCheck className="size-4 stroke-[3]" />
                     </span>
                 ),

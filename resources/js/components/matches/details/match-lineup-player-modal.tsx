@@ -109,36 +109,36 @@ function isGoalkeeper(position: string | null): boolean {
 function getRatingStyles(rating: number) {
     if (rating >= 8.0) {
         return {
-            card: 'bg-emerald-50 border-emerald-200',
-            text: 'text-emerald-800',
+            card: 'bg-emerald-950/40 border-emerald-200',
+            text: 'text-emerald-200',
             subtext: 'text-emerald-600',
-            label: 'text-emerald-700',
+            label: 'text-emerald-200',
         };
     }
 
     if (rating >= 7.0) {
         return {
-            card: 'bg-blue-50 border-blue-200',
-            text: 'text-blue-800',
+            card: 'bg-blue-950/40 border-blue-200',
+            text: 'text-blue-200',
             subtext: 'text-blue-600',
-            label: 'text-blue-700',
+            label: 'text-blue-200',
         };
     }
 
     if (rating >= 6.0) {
         return {
-            card: 'bg-amber-50 border-amber-200',
-            text: 'text-amber-800',
+            card: 'bg-amber-950/40 border-amber-200',
+            text: 'text-amber-200',
             subtext: 'text-amber-600',
-            label: 'text-amber-700',
+            label: 'text-amber-200',
         };
     }
 
     return {
-        card: 'bg-red-50 border-red-200',
-        text: 'text-red-800',
-        subtext: 'text-red-600',
-        label: 'text-red-700',
+        card: 'bg-red-950/40 border-red-200',
+        text: 'text-red-200',
+        subtext: 'text-destructive',
+        label: 'text-red-200',
     };
 }
 
@@ -199,7 +199,7 @@ function extractSectionStats(
     if (section.key === 'passing') {
         const total = stats.passesTotal;
         const accurate = stats.passAccuracy;
-        
+
         if (
             hasMeaningfulStatValue(total) &&
             hasMeaningfulStatValue(accurate) &&
@@ -269,8 +269,6 @@ function buildVisibleSections(
     return sections;
 }
 
-
-
 export default function MatchLineupPlayerModal({
     player,
     teamName,
@@ -297,10 +295,10 @@ export default function MatchLineupPlayerModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-h-[90vh] max-w-md gap-0 overflow-y-auto p-0 sm:max-w-lg">
                 {/* Header */}
-                <div className="relative border-b border-slate-100 bg-white p-6">
+                <div className="relative border-b border-border bg-card p-6">
                     <DialogHeader className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
                         <div className="relative shrink-0">
-                            <div className="rounded-full bg-white p-1 shadow-lg ring-2 ring-slate-100">
+                            <div className="rounded-full bg-card p-1 shadow-lg ring-2 ring-slate-100">
                                 <Avatar
                                     className={cn(
                                         'border border-white shadow-sm',
@@ -314,30 +312,30 @@ export default function MatchLineupPlayerModal({
                                             className="object-cover"
                                         />
                                     ) : null}
-                                    <AvatarFallback className="bg-blue-950 text-xl font-bold text-white">
+                                    <AvatarFallback className="bg-secondary text-xl font-bold text-white">
                                         {getInitials(player.name)}
                                     </AvatarFallback>
                                 </Avatar>
                             </div>
-                            <span className="absolute -right-1 -bottom-1 flex min-w-7 items-center justify-center rounded-full border-2 border-white bg-slate-900 px-1.5 text-xs font-bold text-white shadow-md">
+                            <span className="absolute -right-1 -bottom-1 flex min-w-7 items-center justify-center rounded-full border-2 border-white bg-secondary px-1.5 text-xs font-bold text-white shadow-md">
                                 {player.number ?? '-'}
                             </span>
                         </div>
 
                         <div className="min-w-0">
-                            <DialogTitle className="text-xl font-bold text-slate-900">
+                            <DialogTitle className="text-xl font-bold text-foreground">
                                 {player.name}
                             </DialogTitle>
                             <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5 sm:justify-start">
-                                <span className="text-sm font-semibold text-slate-600">
+                                <span className="text-sm font-semibold text-muted-foreground">
                                     {teamName}
                                 </span>
-                                <span className="text-slate-300">·</span>
-                                <span className="inline-flex rounded-md bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-500">
+                                <span className="text-muted-foreground">·</span>
+                                <span className="inline-flex rounded-md bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground">
                                     {formatLineupPositionLabel(player.position)}
                                 </span>
                                 {player.isCaptain ? (
-                                    <span className="inline-flex items-center rounded-md bg-blue-950 px-2 py-0.5 text-xs font-bold text-white">
+                                    <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-bold text-white">
                                         Captain
                                     </span>
                                 ) : null}
@@ -352,13 +350,15 @@ export default function MatchLineupPlayerModal({
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
                                 <div className="h-4 w-1 rounded-full bg-slate-300" />
-                                <span className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+                                <span className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                     Match performance
                                 </span>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                                {rating !== null && ratingStyles && ratingLabel !== null ? (
+                                {rating !== null &&
+                                ratingStyles &&
+                                ratingLabel !== null ? (
                                     <RatingStatCard
                                         rating={rating}
                                         ratingLabel={ratingLabel}
@@ -398,7 +398,7 @@ export default function MatchLineupPlayerModal({
                                             key={config.key}
                                             className={cn(
                                                 index > 0 &&
-                                                    'border-t border-slate-100 pt-5',
+                                                    'border-t border-border pt-5',
                                             )}
                                         >
                                             <div className="mb-3 flex items-center gap-2">
@@ -408,7 +408,7 @@ export default function MatchLineupPlayerModal({
                                                         config.accentColor,
                                                     )}
                                                 />
-                                                <h4 className="text-sm font-bold text-slate-700">
+                                                <h4 className="text-sm font-bold text-foreground">
                                                     {config.title}
                                                 </h4>
                                             </div>
@@ -428,16 +428,16 @@ export default function MatchLineupPlayerModal({
                                 )}
                             </div>
                         ) : (
-                            <div className="rounded-lg border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-center">
-                                <p className="text-sm text-slate-400">
+                            <div className="rounded-lg border border-dashed border-border bg-muted px-4 py-3 text-center">
+                                <p className="text-sm text-muted-foreground">
                                     No detailed match statistics available yet.
                                 </p>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <div className="border-t border-slate-100 px-6 py-8 text-center">
-                        <p className="text-sm text-slate-400">
+                    <div className="border-t border-border px-6 py-8 text-center">
+                        <p className="text-sm text-muted-foreground">
                             No match statistics available.
                         </p>
                     </div>

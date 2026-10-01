@@ -9,9 +9,7 @@ import {
 } from '@/components/ui/layout/card';
 import { cn } from '@/lib/utils';
 import type { LeagueDetails } from '@/types/league';
-import {
-    getLeagueThemePalette,
-} from '@/utils/league-branding';
+import { getLeagueThemePalette } from '@/utils/league-branding';
 
 interface Props {
     league: LeagueDetails;
@@ -37,7 +35,7 @@ export default function LeagueSnapshotCard({ league }: Props) {
                 >
                     Group snapshot
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-slate-600">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
                     Quick overview of the current race.
                 </CardDescription>
             </CardHeader>

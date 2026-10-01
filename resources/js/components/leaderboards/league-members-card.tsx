@@ -26,6 +26,7 @@ type Props = {
 };
 
 export default function LeagueMembersCard({ members, accentColor }: Props) {
+    const isMember = members.some((member) => member.isCurrentUser);
     const getInitials = useInitials();
     const theme = getLeagueThemePalette(accentColor);
     const memberLabel = members.length === 1 ? 'member' : 'members';
@@ -38,7 +39,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
             className={cn(
                 'gap-0 overflow-hidden rounded-2xl border py-0 shadow-sm',
                 theme.softBorder,
-                'bg-white',
+                'bg-card',
             )}
         >
             <CardHeader
@@ -57,7 +58,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                         >
                             Group rankings
                         </CardTitle>
-                        <CardDescription className="mt-1 text-sm leading-6 text-slate-500">
+                        <CardDescription className="mt-1 text-sm leading-6 text-muted-foreground">
                             Member-only standings in this prediction group.
                         </CardDescription>
                     </div>
@@ -83,10 +84,10 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                 'grid grid-cols-[auto_minmax(0,1fr)_auto] gap-3 border-l-4 border-transparent px-4 py-3.5 sm:px-6',
                                 member.isCurrentUser &&
                                     cn(
-                                        'ring-1 ring-slate-200',
+                                        'ring-1 ring-border',
                                         theme.currentUserHighlight,
                                     ),
-                                member.isSystemUser && 'bg-slate-50/50',
+                                member.isSystemUser && 'bg-muted/50',
                             )}
                         >
                             <div
@@ -95,28 +96,28 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                     member.rank === 1
                                         ? theme.rankFirst
                                         : member.rank <= 3
-                                          ? 'border-slate-300 bg-slate-100 text-slate-700'
-                                          : 'border-slate-200 bg-slate-50 text-slate-900',
+                                          ? 'border-input bg-muted text-foreground'
+                                          : 'border-border bg-muted text-foreground',
                                 )}
                             >
                                 #{member.rank}
                             </div>
 
                             <div className="flex min-w-0 items-center gap-3">
-                                <Avatar className="size-10 rounded-2xl ring-1 ring-slate-200 sm:size-11">
+                                <Avatar className="size-10 rounded-2xl ring-1 ring-border sm:size-11">
                                     <AvatarImage
                                         src={member.avatar ?? undefined}
                                         alt={member.name}
                                         className="object-cover"
                                     />
-                                    <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
+                                    <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
                                         {getInitials(member.name)}
                                     </AvatarFallback>
                                 </Avatar>
 
                                 <div className="min-w-0">
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <p className="truncate text-sm font-bold text-slate-900 sm:text-base">
+                                        <p className="truncate text-sm font-bold text-foreground sm:text-base">
                                             {member.name}
                                         </p>
                                         {member.isOwner && (
@@ -133,7 +134,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                             </Badge>
                                         )}
                                         {member.isSystemUser && (
-                                            <Badge className="rounded-full bg-slate-800 px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                            <Badge className="rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-white shadow-none">
                                                 <Bot className="size-3" />
                                                 AI
                                             </Badge>
@@ -141,7 +142,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                         {member.isCurrentUser && (
                                             <Badge
                                                 className={cn(
-                                                    'rounded-full bg-white px-2 py-0.5 text-xs font-bold shadow-none',
+                                                    'rounded-full bg-card px-2 py-0.5 text-xs font-bold shadow-none',
                                                     theme.softBorder,
                                                     theme.softText,
                                                 )}
@@ -167,7 +168,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                                             'cold' ||
                                                         member.form.tone ===
                                                             'neutral') &&
-                                                        'bg-slate-100 text-slate-700',
+                                                        'bg-muted text-foreground',
                                                 )}
                                             >
                                                 {member.form.label}
@@ -205,7 +206,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                             )}
                                         />
                                     </div>
-                                    <div className="mt-2 flex items-center gap-2 text-xs font-medium text-slate-500 sm:text-sm">
+                                    <div className="mt-2 flex items-center gap-2 text-xs font-medium text-muted-foreground sm:text-sm">
                                         <p>
                                             {member.predictionsCount}{' '}
                                             {member.predictionsCount === 1
@@ -215,7 +216,10 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                         {member.lastPredictionLabel && (
                                             <>
                                                 <span>•</span>
-                                                <p>Last {member.lastPredictionLabel}</p>
+                                                <p>
+                                                    Last{' '}
+                                                    {member.lastPredictionLabel}
+                                                </p>
                                             </>
                                         )}
                                     </div>
@@ -225,19 +229,19 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                             <div className="flex flex-col items-end">
                                 <div
                                     className={cn(
-                                        'flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 sm:px-4',
+                                        'flex flex-col items-center justify-center rounded-xl border border-border bg-muted px-3 py-1.5 sm:px-4',
                                         theme.softBg,
                                         theme.softBorder,
                                     )}
                                 >
-                                    <p className="text-xl leading-none font-bold text-slate-900 sm:text-2xl">
+                                    <p className="text-xl leading-none font-bold text-foreground sm:text-2xl">
                                         {member.totalPoints}
                                     </p>
-                                    <p className="mt-0.5 text-[10px] font-bold tracking-wide text-slate-500 uppercase">
+                                    <p className="mt-0.5 text-[10px] font-bold tracking-wide text-muted-foreground uppercase">
                                         PTS
                                     </p>
                                 </div>
-                                {member.predictionsHref && (
+                                {isMember && member.predictionsHref && (
                                     <Button
                                         asChild
                                         variant="ghost"
@@ -283,7 +287,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                 >
                                     Your group is ready.
                                 </p>
-                                <p className="mt-1 text-sm leading-6 text-slate-600">
+                                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                     Invite friends to start the race.
                                 </p>
                             </div>

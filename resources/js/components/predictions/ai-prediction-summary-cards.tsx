@@ -42,15 +42,15 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
     return (
         <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <AiPredictionSummaryCard icon={Trophy} label="Predicted outcome">
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-2xl font-bold text-foreground">
                     {prediction?.label ?? 'N/A'}
                 </p>
-                <p className="mt-1 text-sm text-slate-500">Model pick</p>
+                <p className="mt-1 text-sm text-muted-foreground">Model pick</p>
             </AiPredictionSummaryCard>
 
             <AiPredictionSummaryCard icon={Gauge} label="Confidence">
                 <div className="flex items-end justify-between gap-2">
-                    <p className="text-2xl font-bold text-slate-900">
+                    <p className="text-2xl font-bold text-foreground">
                         {confidenceValue ?? '—'}%
                     </p>
                     {confidenceLabel && (
@@ -60,7 +60,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                                 confidenceValue! >= 70 && 'text-emerald-600',
                                 confidenceValue! >= 40 &&
                                     confidenceValue! < 70 &&
-                                    'text-cyan-600',
+                                    'text-primary',
                                 confidenceValue! < 40 && 'text-amber-600',
                             )}
                         >
@@ -68,7 +68,7 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                         </p>
                     )}
                 </div>
-                <div className="mt-3 h-3 rounded-full bg-slate-100">
+                <div className="mt-3 h-3 rounded-full bg-muted">
                     <div
                         className={cn(
                             'h-3 rounded-full transition-all',
@@ -80,10 +80,10 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
             </AiPredictionSummaryCard>
 
             <AiPredictionSummaryCard icon={Goal} label="Expected score">
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-2xl font-bold text-foreground">
                     {score ?? 'N/A'}
                 </p>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                     Projected final score
                 </p>
             </AiPredictionSummaryCard>
@@ -92,10 +92,12 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
                 icon={Medal}
                 label={pointsAwarded ? 'Points earned' : 'Points state'}
             >
-                <p className="text-2xl font-bold text-slate-900">
+                <p className="text-2xl font-bold text-foreground">
                     {pointsValue}
                 </p>
-                <p className="mt-1 text-sm text-slate-500">{pointsHelper}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                    {pointsHelper}
+                </p>
             </AiPredictionSummaryCard>
         </section>
     );

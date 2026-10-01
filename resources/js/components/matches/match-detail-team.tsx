@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
+import TeamCrest from '@/components/ui/display/team-crest';
 import { show as showTeam } from '@/routes/teams';
 
 interface Props {
@@ -25,9 +26,9 @@ export default function MatchDetailTeam({
             aria-label={`Bekijk details van ${name}`}
             className={`group flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none ${isRightAligned ? 'sm:flex-row-reverse sm:text-right' : ''}`}
         >
-            <img
+            <TeamCrest
                 src={logo}
-                alt={name}
+                name={name}
                 className="h-10 w-10 shrink-0 object-contain"
             />
             <div>

@@ -9,11 +9,15 @@ interface Props {
     href?: string;
 }
 
-export default function PredictionStatusAction({ matchId, label, href }: Props) {
+export default function PredictionStatusAction({
+    matchId,
+    label,
+    href,
+}: Props) {
     return (
         <Button
             asChild
-            className="w-full justify-center rounded-lg bg-slate-900 px-5 font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:ring-cyan-300 sm:w-fit"
+            className="w-full justify-center rounded-lg bg-secondary px-5 font-semibold text-white shadow-sm hover:bg-muted focus-visible:ring-ring sm:w-fit"
         >
             <Link href={href ?? showAiPrediction.url(matchId)}>
                 {label}

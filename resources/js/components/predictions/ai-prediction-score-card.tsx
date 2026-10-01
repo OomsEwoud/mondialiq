@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { Sparkles } from 'lucide-react';
 import PredictionPointsBadge from '@/components/predictions/prediction-points-badge';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
@@ -29,31 +30,31 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                 className={cn(
                     'group flex flex-col items-center gap-3 rounded-2xl p-5 shadow-sm ring-1 transition-colors',
                     homeIsWinner
-                        ? 'bg-gradient-to-b from-emerald-50/60 to-white ring-emerald-200 hover:bg-emerald-50/80'
-                        : 'bg-white ring-slate-200 hover:bg-cyan-50/30',
+                        ? 'bg-gradient-to-b from-accent to-card ring-primary/50 hover:bg-accent'
+                        : 'bg-card ring-border hover:bg-accent/30',
                 )}
             >
-                <img
+                <ImageWithFallback
                     src={match.homeTeamLogo}
                     alt={match.homeTeam}
                     className="size-16 shrink-0 object-contain sm:size-20"
                 />
-                <span className="text-sm font-bold text-slate-900 group-hover:text-cyan-700">
+                <span className="text-sm font-bold text-foreground group-hover:text-primary">
                     {match.homeTeamShort}
                 </span>
                 {homeIsWinner && (
-                    <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                    <span className="rounded-full bg-emerald-950/40 px-2.5 py-0.5 text-xs font-bold text-emerald-200">
                         Pick
                     </span>
                 )}
             </Link>
 
-            <div className="rounded-2xl border border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white px-6 py-6 text-center shadow-md sm:px-10 sm:py-8">
-                <p className="inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white px-3 py-1 text-xs font-semibold text-cyan-700">
+            <div className="rounded-2xl border border-border bg-gradient-to-b from-accent/60 to-card px-6 py-6 text-center shadow-md sm:px-10 sm:py-8">
+                <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-primary">
                     <Sparkles className="size-3" />
                     AI prediction
                 </p>
-                <p className="mt-4 text-5xl font-bold tracking-tight text-slate-900 tabular-nums sm:text-6xl">
+                <p className="mt-4 text-5xl font-bold tracking-tight text-foreground tabular-nums sm:text-6xl">
                     {score ?? 'N/A'}
                 </p>
                 <div className="mx-auto mt-4 h-px w-16 bg-cyan-200" />
@@ -64,12 +65,12 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                     />
                 </div>
                 {predictedWinner && prediction?.outcome !== 'draw' && (
-                    <p className="mt-1 text-sm font-bold text-emerald-700">
+                    <p className="mt-1 text-sm font-bold text-emerald-200">
                         {predictedWinner} to win
                     </p>
                 )}
                 {prediction?.outcome === 'draw' && (
-                    <p className="mt-1 text-sm font-bold text-slate-500">
+                    <p className="mt-1 text-sm font-bold text-muted-foreground">
                         Draw predicted
                     </p>
                 )}
@@ -80,20 +81,20 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                 className={cn(
                     'group flex flex-col items-center gap-3 rounded-2xl p-5 shadow-sm ring-1 transition-colors',
                     awayIsWinner
-                        ? 'bg-gradient-to-b from-emerald-50/60 to-white ring-emerald-200 hover:bg-emerald-50/80'
-                        : 'bg-white ring-slate-200 hover:bg-cyan-50/30',
+                        ? 'bg-gradient-to-b from-accent to-card ring-primary/50 hover:bg-accent'
+                        : 'bg-card ring-border hover:bg-accent/30',
                 )}
             >
-                <img
+                <ImageWithFallback
                     src={match.awayTeamLogo}
                     alt={match.awayTeam}
                     className="size-16 shrink-0 object-contain sm:size-20"
                 />
-                <span className="text-sm font-bold text-slate-900 group-hover:text-cyan-700">
+                <span className="text-sm font-bold text-foreground group-hover:text-primary">
                     {match.awayTeamShort}
                 </span>
                 {awayIsWinner && (
-                    <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                    <span className="rounded-full bg-emerald-950/40 px-2.5 py-0.5 text-xs font-bold text-emerald-200">
                         Pick
                     </span>
                 )}

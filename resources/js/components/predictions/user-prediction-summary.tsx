@@ -44,8 +44,8 @@ export default function UserPredictionSummary({
                 <Badge
                     className={
                         aiMode
-                            ? 'rounded-full border-cyan-200 bg-cyan-50 px-3 py-1 font-medium text-cyan-700'
-                            : 'rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-medium text-slate-800'
+                            ? 'rounded-full border-border bg-accent px-3 py-1 font-medium text-primary'
+                            : 'rounded-full border-border bg-muted px-3 py-1 font-medium text-foreground'
                     }
                 >
                     {aiMode ? 'Predicted outcome' : 'Prediction'}:{' '}
@@ -55,18 +55,18 @@ export default function UserPredictionSummary({
 
             {aiMode && finishedFixture && actualScore && (
                 <>
-                    <Badge className="rounded-full border-slate-200 bg-slate-50 px-3 py-1 font-medium text-slate-700">
+                    <Badge className="rounded-full border-border bg-muted px-3 py-1 font-medium text-foreground">
                         Actual: {actualScore}
                     </Badge>
                     {outcomeCorrect === true && (
-                        <Badge className="rounded-full border-emerald-200 bg-emerald-50 px-3 py-1 font-medium text-emerald-700">
+                        <Badge className="rounded-full border-emerald-200 bg-emerald-950/40 px-3 py-1 font-medium text-emerald-200">
                             Outcome correct
                         </Badge>
                     )}
                     {prediction.homeScore !== null &&
                         prediction.awayScore !== null &&
                         exactScoreCorrect === true && (
-                            <Badge className="rounded-full border-emerald-200 bg-emerald-50 px-3 py-1 font-medium text-emerald-700">
+                            <Badge className="rounded-full border-emerald-200 bg-emerald-950/40 px-3 py-1 font-medium text-emerald-200">
                                 Exact score correct
                             </Badge>
                         )}
@@ -74,7 +74,7 @@ export default function UserPredictionSummary({
             )}
 
             {prediction.isBoosted && (
-                <Badge className="rounded-full border-amber-200 bg-amber-50 px-3 py-1 font-medium text-amber-700">
+                <Badge className="rounded-full border-amber-200 bg-amber-950/40 px-3 py-1 font-medium text-amber-200">
                     <Zap className="mr-1 size-3.5" />
                     Boosted
                 </Badge>

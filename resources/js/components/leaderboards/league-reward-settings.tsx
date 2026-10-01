@@ -81,7 +81,7 @@ export default function LeagueRewardSettings({
                         onChange={(event) =>
                             setRewardDescription(event.target.value)
                         }
-                        className="min-h-20 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                        className="min-h-20 rounded-xl border-border bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
                         placeholder="Example: €20 gift card, paid outside MondialIQ."
                     />
                     <InputError message={errors.reward_description} />

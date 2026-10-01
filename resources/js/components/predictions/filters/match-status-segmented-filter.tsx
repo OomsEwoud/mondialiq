@@ -31,9 +31,9 @@ export default function MatchStatusSegmentedFilter({
         <div className={cn('grid gap-2', className)}>
             <p className={predictionFilterLabelClassName}>Match status</p>
             <div
-                role="radiogroup"
+                role="group"
                 aria-label="Match status"
-                className="grid grid-cols-2 gap-1 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-1.5 shadow-sm sm:grid-cols-4"
+                className="grid grid-cols-2 gap-1 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-1.5 shadow-sm sm:grid-cols-4"
             >
                 {matchStatusOptions.map((option) => {
                     const selected = value === option.value;
@@ -42,14 +42,13 @@ export default function MatchStatusSegmentedFilter({
                         <button
                             key={option.value}
                             type="button"
-                            role="radio"
-                            aria-checked={selected}
+                            aria-pressed={selected}
                             onClick={() => onChange(option.value)}
                             className={cn(
-                                'flex h-10 min-w-0 items-center justify-center rounded-xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'flex h-10 min-w-0 items-center justify-center rounded-xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
                                 selected
-                                    ? 'bg-slate-900 text-white shadow-md'
-                                    : 'text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
+                                    ? 'bg-secondary text-white shadow-md'
+                                    : 'text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm',
                             )}
                         >
                             {option.label}

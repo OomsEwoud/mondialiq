@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 
 export default function PlatformOverview() {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/80 p-5 shadow-sm sm:p-6 lg:p-7">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-accent/80 p-5 shadow-sm sm:p-6 lg:p-7">
             <header className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-2xl">
                     <p className="mb-2 text-xs font-semibold tracking-wide text-cyan-600 uppercase">
                         Platform modules
                     </p>
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                         Built for fans who want signal, not noise
                     </h2>
                 </div>
@@ -29,10 +29,10 @@ export default function PlatformOverview() {
                         key={product.title}
                         href={product.href}
                         className={cn(
-                            'group flex min-h-56 flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5',
+                            'group flex min-h-56 flex-col justify-between rounded-2xl border bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:p-5',
                             product.featured
-                                ? 'border-slate-200 bg-gradient-to-b from-cyan-50/60 to-white'
-                                : 'border-slate-200',
+                                ? 'border-border bg-gradient-to-b from-accent/60 to-card'
+                                : 'border-border',
                         )}
                     >
                         <div>
@@ -52,13 +52,13 @@ export default function PlatformOverview() {
                                         'rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide uppercase',
                                         product.featured
                                             ? 'bg-cyan-100 text-cyan-700'
-                                            : 'bg-slate-100 text-slate-600',
+                                            : 'bg-slate-100 text-muted-foreground',
                                     )}
                                 >
                                     {product.badge}
                                 </span>
                             </div>
-                            <h3 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+                            <h3 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
                                 {product.title}
                             </h3>
                             <p className="mt-3 text-sm leading-6 text-cyan-600">
@@ -70,8 +70,8 @@ export default function PlatformOverview() {
                             className={cn(
                                 'mt-5 inline-flex items-center gap-2 text-sm font-semibold transition-colors',
                                 product.featured
-                                    ? 'text-cyan-600 group-hover:text-slate-900'
-                                    : 'text-slate-700 group-hover:text-cyan-600',
+                                    ? 'text-cyan-600 group-hover:text-foreground'
+                                    : 'text-foreground group-hover:text-cyan-600',
                             )}
                         >
                             {product.cta}

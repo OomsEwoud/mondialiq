@@ -31,8 +31,23 @@ class StoreMatchPredictionRequest extends FormRequest
     {
         return [
             $this->validatePredictionRules(...),
+            $this->validateScoreboardMembership(...),
             $this->validateBoostRules(...),
         ];
+    }
+
+    private function validateScoreboardMembership(Validator $validator): void
+    {
+        if (! $this->filled('scoreboard_id') || $validator->errors()->has('scoreboard_id')) {
+            return;
+        }
+
+        if (! $this->user()->scoreboards()->whereKey($this->integer('scoreboard_id'))->exists()) {
+            $validator->errors()->add(
+                'scoreboard_id',
+                'Join this prediction group before saving predictions for it.',
+            );
+        }
     }
 
     private function validatePredictionRules(Validator $validator): void
@@ -65,7 +80,7 @@ class StoreMatchPredictionRequest extends FormRequest
 
     private function validateBoostRules(Validator $validator): void
     {
-        if (! $this->boolean('is_boosted')) {
+        if (! $this->boolean('is_boosted') || $validator->errors()->has('scoreboard_id')) {
             return;
         }
 

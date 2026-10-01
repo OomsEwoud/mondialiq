@@ -1,8 +1,15 @@
-import { dashboard, groups, matches, predictions } from '@/routes';
+import {
+    dashboard,
+    groups,
+    leaderboards,
+    matches,
+    predictions,
+} from '@/routes';
 
 export const navItems = [
-    { label: 'Home', href: dashboard() },
+    { label: 'Overzicht', href: dashboard() },
     { label: 'Wedstrijden', href: matches() },
-    { label: 'Predictions', href: predictions() },
-    { label: 'Competities', href: groups() },
+    { label: 'Voorspellingen', href: predictions() },
+    { label: 'Groepsstand', href: groups() },
+    { label: 'Ranglijsten', href: leaderboards() },
 ] as const;

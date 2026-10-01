@@ -32,7 +32,6 @@ const PasswordInput = forwardRef<
                 className={passwordToggleButtonClass}
                 aria-label={ariaLabel}
                 aria-pressed={showPassword}
-                tabIndex={-1}
             >
                 {showPassword ? (
                     <EyeOff className="size-4" />

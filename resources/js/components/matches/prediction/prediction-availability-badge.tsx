@@ -12,7 +12,7 @@ export default function PredictionAvailabilityBadge({ match }: Props) {
         return (
             <Badge
                 aria-label="Predictions closed because match already started"
-                className="gap-1 border-amber-200 bg-amber-50 text-amber-700 shadow-none"
+                className="gap-1 border-amber-200 bg-amber-950/40 text-amber-200 shadow-none"
             >
                 <LockKeyhole className="h-3 w-3" />
                 Predictions closed
@@ -21,7 +21,7 @@ export default function PredictionAvailabilityBadge({ match }: Props) {
     }
 
     return (
-        <Badge className="gap-1 border-cyan-200 bg-cyan-50 text-cyan-700 shadow-none">
+        <Badge className="gap-1 border-border bg-accent text-primary shadow-none">
             <PencilLine className="h-3 w-3" />
             Predictions open
         </Badge>

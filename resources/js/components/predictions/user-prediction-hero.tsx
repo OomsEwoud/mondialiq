@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { CalendarDays, Clock, PencilLine, Trophy } from 'lucide-react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { show as showTeam } from '@/routes/teams';
 import type { Match } from '@/types/match';
 import type { PredictionOwner } from '@/types/prediction';
@@ -20,7 +21,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
     const pickLabel = isOwn ? 'Your pick' : 'Their pick';
 
     return (
-        <section className="rounded-2xl border border-indigo-900/60 bg-gradient-to-br from-indigo-950 via-indigo-950/90 to-slate-900 p-6 shadow-lg sm:p-8">
+        <section className="rounded-2xl border border-border bg-card p-6 shadow-lg sm:p-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <p className="text-xs font-semibold tracking-wide text-indigo-300 uppercase">
                     {heroLabel}
@@ -32,8 +33,8 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         disabled={locked}
                         className={
                             locked
-                                ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-4 py-2 text-sm font-semibold text-slate-500'
-                                : 'inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
+                                ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-4 py-2 text-sm font-semibold text-muted-foreground'
+                                : 'inline-flex items-center gap-2 rounded-lg bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
                         }
                     >
                         <PencilLine className="size-4" />
@@ -45,9 +46,9 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
             <div className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-4 sm:gap-6">
                 <Link
                     href={showTeam.url(match.homeTeamId)}
-                    className="group flex flex-col items-center gap-3 rounded-xl p-3 transition-colors hover:bg-slate-800/50"
+                    className="group flex flex-col items-center gap-3 rounded-xl p-3 transition-colors hover:bg-muted/50"
                 >
-                    <img
+                    <ImageWithFallback
                         src={match.homeTeamLogo}
                         alt={match.homeTeam}
                         className="size-16 shrink-0 object-contain"
@@ -58,7 +59,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                 </Link>
 
                 <div className="text-center">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-indigo-300">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-indigo-300">
                         <Trophy className="size-3.5" />
                         {pickLabel}
                     </span>
@@ -69,9 +70,9 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
 
                 <Link
                     href={showTeam.url(match.awayTeamId)}
-                    className="group flex flex-col items-center gap-3 rounded-xl p-3 transition-colors hover:bg-slate-800/50"
+                    className="group flex flex-col items-center gap-3 rounded-xl p-3 transition-colors hover:bg-muted/50"
                 >
-                    <img
+                    <ImageWithFallback
                         src={match.awayTeamLogo}
                         alt={match.awayTeam}
                         className="size-16 shrink-0 object-contain"
@@ -86,17 +87,21 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                 {match.homeTeam} vs {match.awayTeam}
             </h1>
 
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-slate-400">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
                     <Trophy className="size-3.5 text-indigo-400" />
                     {match.round}
                 </span>
-                <span className="hidden text-slate-600 sm:inline">|</span>
+                <span className="hidden text-muted-foreground sm:inline">
+                    |
+                </span>
                 <span className="flex items-center gap-1.5">
                     <CalendarDays className="size-3.5 text-indigo-400" />
                     {match.date}
                 </span>
-                <span className="hidden text-slate-600 sm:inline">|</span>
+                <span className="hidden text-muted-foreground sm:inline">
+                    |
+                </span>
                 <span className="flex items-center gap-1.5">
                     <Clock className="size-3.5 text-indigo-400" />
                     {match.time}
@@ -105,4 +110,3 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
         </section>
     );
 }
-

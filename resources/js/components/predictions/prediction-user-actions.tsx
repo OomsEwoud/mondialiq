@@ -5,6 +5,7 @@ import UserPredictionModal from '@/components/matches/prediction/user-prediction
 import { Button } from '@/components/ui/forms/button';
 import { show as showMyPrediction } from '@/routes/predictions/mine';
 import type { Match } from '@/types/match';
+import { isPredictionLocked } from '@/utils/match-prediction';
 
 interface Props {
     match: Match;
@@ -24,6 +25,7 @@ export default function PredictionUserActions({
     boostedConfidenceThreshold,
 }: Props) {
     const [predictionOpen, setPredictionOpen] = useState(false);
+    const locked = isPredictionLocked(match);
     const openPredictionModal = () => setPredictionOpen(true);
 
     return (
@@ -32,15 +34,16 @@ export default function PredictionUserActions({
                 <Button
                     type="button"
                     variant="outline"
-                    className="justify-center rounded-lg border-slate-200 bg-white px-5 font-semibold text-slate-700 shadow-none hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 focus-visible:ring-cyan-300"
+                    disabled={locked}
+                    className="justify-center rounded-lg border-border bg-card px-5 font-semibold text-foreground shadow-none hover:border-border hover:bg-accent hover:text-primary focus-visible:ring-ring"
                     onClick={openPredictionModal}
                 >
-                    Edit prediction
+                    {locked ? 'Prediction locked' : 'Edit prediction'}
                 </Button>
 
                 <Button
                     asChild
-                    className="justify-center rounded-lg bg-slate-900 px-5 font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:ring-cyan-300"
+                    className="justify-center rounded-lg bg-secondary px-5 font-semibold text-white shadow-sm hover:bg-muted focus-visible:ring-ring"
                 >
                     <Link href={showMyPrediction.url(match.id)}>
                         {viewLabel}

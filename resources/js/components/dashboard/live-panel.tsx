@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 
 import { show as showMatch } from '@/routes/matches';
 import type { LiveFixture } from '@/types/live-fixture';
@@ -83,7 +84,7 @@ function LiveTeam({
         >
             {team.logo_url && (
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-[#f3f4f1] p-1">
-                    <img
+                    <ImageWithFallback
                         src={team.logo_url}
                         alt=""
                         className="size-full object-contain"

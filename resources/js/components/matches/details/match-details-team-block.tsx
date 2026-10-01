@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import TeamCrest from '@/components/ui/display/team-crest';
 import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 
@@ -16,19 +17,19 @@ export default function MatchDetailsTeamBlock({ id, logo, name, code }: Props) {
             href={showTeam.url(id)}
             aria-label={`View ${name} team details`}
             className={cn(
-                'group flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-xl px-3 py-3 text-center transition-all hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:gap-3 sm:px-4',
+                'group flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-xl px-3 py-3 text-center transition-all hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:gap-3 sm:px-4',
             )}
         >
-            <img
+            <TeamCrest
                 src={logo}
-                alt={name}
+                name={name}
                 className="h-11 w-11 shrink-0 object-contain drop-shadow-sm sm:h-14 sm:w-14"
             />
             <div className="min-w-0">
-                <p className="truncate text-base font-bold text-white sm:text-2xl">
+                <p className="text-base font-bold break-words text-white sm:text-2xl">
                     {name}
                 </p>
-                <p className="text-xs font-bold tracking-wide text-slate-400 uppercase">
+                <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
                     {code}
                 </p>
             </div>

@@ -1,4 +1,5 @@
 import { CalendarDays, Flag, Shirt, UserRound, UsersRound } from 'lucide-react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import type { TeamDetails } from '@/types/team-details';
 
 interface Props {
@@ -39,7 +40,7 @@ export default function TeamHero({ team }: Props) {
         <section className="border-b border-[#29312c] pb-8 sm:pb-10">
             <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:gap-8">
                 <span className="flex size-28 shrink-0 items-center justify-center rounded-lg border border-[#343d37] bg-[#edf1ed] p-4 sm:size-36 sm:p-5">
-                    <img
+                    <ImageWithFallback
                         src={team.logo}
                         alt={team.name}
                         className="size-full object-contain"

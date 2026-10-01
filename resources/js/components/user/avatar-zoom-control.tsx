@@ -10,10 +10,10 @@ export default function AvatarZoomControl({ onZoomChange, zoom }: Props) {
     return (
         <div className="space-y-3">
             <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                     Zoom
                 </p>
-                <span className="text-sm font-semibold text-slate-900">
+                <span className="text-sm font-semibold text-foreground">
                     {Math.round(zoom * 100)}%
                 </span>
             </div>

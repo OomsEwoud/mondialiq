@@ -26,6 +26,7 @@ import {
 
 export default function LeagueShow({ league }: LeagueDetailsPageProps) {
     const host = league.members.find((member) => member.isOwner);
+    const isMember = league.members.some((member) => member.isCurrentUser);
     const theme = getLeagueThemePalette(league.accentColor);
     const hostName = host?.name;
     const heroStats = [
@@ -72,7 +73,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                     <Link
                         href={leaderboards.url()}
                         className={cn(
-                            'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                            'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
                             theme.buttonRing,
                         )}
                     >
@@ -84,7 +85,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                         <div className="max-w-3xl">
                             <div
                                 className={cn(
-                                    'mb-3 flex size-12 items-center justify-center rounded-xl border bg-slate-800/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
+                                    'mb-3 flex size-12 items-center justify-center rounded-xl border bg-muted/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
                                     theme.badgeBorder,
                                 )}
                             >
@@ -102,7 +103,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 {league.name}
                             </h1>
                             {league.description && (
-                                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+                                <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
                                     {league.description}
                                 </p>
                             )}
@@ -157,7 +158,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 </Button>
                             )}
 
-                            {league.predictHref && (
+                            {!isMember && (
+                                <Button asChild>
+                                    <Link href={league.joinHref}>
+                                        Join group
+                                    </Link>
+                                </Button>
+                            )}
+                            {isMember && league.predictHref && (
                                 <Button
                                     asChild
                                     className={cn(
@@ -176,7 +184,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                     </div>
                 </section>
 
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.9fr)]">
+                <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.9fr)]">
                     <LeagueMembersCard
                         members={league.members}
                         accentColor={league.accentColor}
@@ -194,7 +202,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                 <div className="flex items-start gap-3">
                                     <span
                                         className={cn(
-                                            'flex size-10 shrink-0 items-center justify-center rounded-xl border bg-white shadow-sm ring-1',
+                                            'flex size-10 shrink-0 items-center justify-center rounded-xl border bg-card shadow-sm ring-1',
                                             theme.softBorder,
                                             theme.softText,
                                         )}
@@ -210,16 +218,16 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                                         >
                                             Optional reward
                                         </p>
-                                        <h2 className="mt-1 text-xl font-bold text-slate-900">
+                                        <h2 className="mt-1 text-xl font-bold text-foreground">
                                             {league.rewardTitle ??
                                                 'Reward available'}
                                         </h2>
                                         {league.rewardDescription && (
-                                            <p className="mt-2 text-sm leading-6 text-slate-800">
+                                            <p className="mt-2 text-sm leading-6 text-foreground">
                                                 {league.rewardDescription}
                                             </p>
                                         )}
-                                        <p className="mt-3 text-xs leading-5 font-medium text-slate-700">
+                                        <p className="mt-3 text-xs leading-5 font-medium text-foreground">
                                             MondialIQ does not process payments
                                             or payouts. This is a social note
                                             from the group owner.

@@ -52,15 +52,15 @@ export default function LeagueOnboardingCard({
             )}
         >
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
-                <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
+                <CardTitle className="text-xl font-bold text-foreground sm:text-2xl">
                     What next?
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-slate-600">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
                     {description}
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 px-4 pb-4 sm:px-6">
-                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-white/80 bg-card/85 px-4 py-3">
                     <div
                         className={cn(
                             'flex items-center gap-2',
@@ -72,10 +72,10 @@ export default function LeagueOnboardingCard({
                             Step 1
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-bold text-slate-900">
+                    <p className="mt-2 text-sm font-bold text-foreground">
                         Invite more friends into the group.
                     </p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
                         Bigger groups create more movement, more tension, and a
                         better leaderboard every matchday.
                     </p>
@@ -84,7 +84,7 @@ export default function LeagueOnboardingCard({
                         variant="outline"
                         onClick={openInviteTools}
                         className={cn(
-                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            'mt-3 h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:bg-muted sm:w-auto',
                             theme.buttonRing,
                         )}
                     >
@@ -93,7 +93,7 @@ export default function LeagueOnboardingCard({
                     </Button>
                 </div>
 
-                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-white/80 bg-card/85 px-4 py-3">
                     <div
                         className={cn(
                             'flex items-center gap-2',
@@ -105,10 +105,10 @@ export default function LeagueOnboardingCard({
                             Step 2
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-bold text-slate-900">
+                    <p className="mt-2 text-sm font-bold text-foreground">
                         Make your next prediction.
                     </p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
                         Fresh picks are the fastest way to climb once this group
                         starts filling up.
                     </p>
@@ -127,7 +127,7 @@ export default function LeagueOnboardingCard({
                     </Button>
                 </div>
 
-                <div className="rounded-2xl border border-white/80 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-white/80 bg-card/85 px-4 py-3">
                     <div
                         className={cn(
                             'flex items-center gap-2',
@@ -139,10 +139,10 @@ export default function LeagueOnboardingCard({
                             Step 3
                         </p>
                     </div>
-                    <p className="mt-2 text-sm font-bold text-slate-900">
+                    <p className="mt-2 text-sm font-bold text-foreground">
                         Track how your picks stack up.
                     </p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
                         Keep your prediction history close so you can spot
                         momentum early.
                     </p>
@@ -150,7 +150,7 @@ export default function LeagueOnboardingCard({
                         asChild
                         variant="outline"
                         className={cn(
-                            'mt-3 h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50 sm:w-auto',
+                            'mt-3 h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:bg-muted sm:w-auto',
                             theme.buttonRing,
                         )}
                     >

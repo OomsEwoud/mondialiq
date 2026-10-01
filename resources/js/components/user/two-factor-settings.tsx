@@ -50,8 +50,8 @@ export default function TwoFactorSettings({
         ? 'Your account asks for an authenticator code during login.'
         : 'Enable 2FA to require an authenticator code during login.';
     const twoFactorBadgeClassName = twoFactorEnabled
-        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-        : 'border-slate-200 bg-slate-50 text-slate-600';
+        ? 'border-emerald-200 bg-emerald-950/40 text-emerald-200'
+        : 'border-border bg-muted text-muted-foreground';
     const twoFactorBadgeLabel = twoFactorEnabled ? 'Enabled' : 'Not enabled';
 
     const openSetupModal = () => setShowSetupModal(true);
@@ -70,12 +70,12 @@ export default function TwoFactorSettings({
                 >
                     <div>
                         <div className="mb-2 flex items-center gap-2">
-                            <LockKeyhole className="size-4 text-cyan-500" />
-                            <p className="text-sm font-bold text-slate-900">
+                            <LockKeyhole className="size-4 text-primary" />
+                            <p className="text-sm font-bold text-foreground">
                                 2FA status
                             </p>
                         </div>
-                        <p className="text-sm leading-6 text-slate-600">
+                        <p className="text-sm leading-6 text-muted-foreground">
                             {twoFactorStatusText}
                         </p>
                     </div>
@@ -119,10 +119,7 @@ export default function TwoFactorSettings({
                                 Continue setup
                             </Button>
                         ) : (
-                            <Form
-                                {...enable.form()}
-                                onSuccess={openSetupModal}
-                            >
+                            <Form {...enable.form()} onSuccess={openSetupModal}>
                                 {({ processing }) => (
                                     <Button
                                         type="submit"

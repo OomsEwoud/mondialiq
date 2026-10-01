@@ -1,8 +1,9 @@
 import { Form, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, LifeBuoy, Lock, Send } from 'lucide-react';
+import { CheckCircle2, Lock, Send } from 'lucide-react';
 import StoreFeedbackController from '@/actions/App/Http/Controllers/Feedback/StoreFeedbackController';
 import InputError from '@/components/forms/input-error';
 import PageHead from '@/components/seo/page-head';
+import PageHeader from '@/components/typography/page-header';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
@@ -21,9 +22,9 @@ type ContactPageProps = {
 };
 
 const fieldClassName =
-    'h-11 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200';
+    'h-11 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
 const labelClassName =
-    'text-xs font-semibold tracking-wide text-slate-500 uppercase';
+    'text-xs font-semibold tracking-wide text-muted-foreground uppercase';
 
 export default function Contact({ categories }: ContactPageProps) {
     const { auth } = usePage().props;
@@ -37,37 +38,19 @@ export default function Contact({ categories }: ContactPageProps) {
             />
 
             <div className="space-y-6">
-                <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
-                    <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-                        <div className="max-w-3xl">
-                            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-slate-800 text-cyan-300">
-                                <LifeBuoy className="size-5" />
-                            </div>
-                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
-                                Support
-                            </p>
-                            <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                                Contact & feedback
-                            </h1>
-                            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                                Found incorrect data, a glitch or do you have a
-                                suggestion? Let us know so we can improve
-                                MondialiQ.
-                            </p>
-                        </div>
-                        <div className="rounded-xl border border-slate-600/50 bg-slate-800/60 px-4 py-3 text-sm font-semibold text-slate-300">
-                            Reports are linked to your MondialIQ account.
-                        </div>
-                    </div>
-                </section>
+                <PageHeader
+                    eyebrow="Support"
+                    title="Contact & feedback"
+                    description="Found incorrect data or need help? Send a report linked to your account so we can help you."
+                />
 
                 {user ? (
-                    <Card className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
+                    <Card className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
                         <CardHeader className="gap-2 px-5 py-5 sm:px-6">
-                            <CardTitle className="text-2xl font-bold text-slate-900">
+                            <CardTitle className="text-2xl font-bold text-foreground">
                                 Send a report
                             </CardTitle>
-                            <CardDescription className="max-w-2xl text-sm leading-6 text-slate-500">
+                            <CardDescription className="max-w-2xl text-sm leading-6 text-muted-foreground">
                                 Add enough detail so an admin can understand
                                 what happened and where to look.
                             </CardDescription>
@@ -87,7 +70,7 @@ export default function Contact({ categories }: ContactPageProps) {
                                     <>
                                         {recentlySuccessful && (
                                             <div
-                                                className="flex gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700"
+                                                className="flex gap-3 rounded-xl border border-emerald-200 bg-emerald-950/40 px-4 py-3 text-sm font-semibold text-emerald-200"
                                                 role="status"
                                             >
                                                 <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
@@ -163,7 +146,7 @@ export default function Contact({ categories }: ContactPageProps) {
                                             <Textarea
                                                 id="message"
                                                 name="message"
-                                                className="min-h-44 rounded-lg border-slate-300 bg-white text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                                                className="min-h-44 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
                                                 placeholder="What did you notice? Include teams, match, page, timing or anything that helps us reproduce it."
                                                 disabled={processing}
                                             />
@@ -206,17 +189,17 @@ export default function Contact({ categories }: ContactPageProps) {
                         </CardContent>
                     </Card>
                 ) : (
-                    <Card className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
+                    <Card className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
                         <CardContent className="px-5 py-6 sm:px-6">
                             <div className="grid gap-5 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-                                <div className="flex size-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 shadow-sm">
+                                <div className="flex size-12 items-center justify-center rounded-xl bg-accent text-primary shadow-sm">
                                     <Lock className="size-5" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900">
+                                    <h2 className="text-xl font-bold text-foreground">
                                         Log in to submit feedback
                                     </h2>
-                                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
                                         Feedback is linked to your account so an
                                         admin can review the report with enough
                                         context.
@@ -232,7 +215,7 @@ export default function Contact({ categories }: ContactPageProps) {
                                     <Button
                                         asChild
                                         variant="outline"
-                                        className="h-11 rounded-lg border-slate-200 px-5 font-semibold text-slate-700"
+                                        className="h-11 rounded-lg border-border px-5 font-semibold text-foreground"
                                     >
                                         <Link href={register.url()}>
                                             Register

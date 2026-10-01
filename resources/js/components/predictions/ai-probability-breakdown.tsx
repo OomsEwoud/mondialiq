@@ -33,16 +33,16 @@ export default function AiProbabilityBreakdown({ match }: Props) {
     }
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
             <div className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-white">
                     <BarChart3 className="size-5" />
                 </span>
                 <div>
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-bold text-foreground">
                         Probability breakdown
                     </h2>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-muted-foreground">
                         Estimated outcome chances
                     </p>
                 </div>

@@ -14,7 +14,7 @@ export function AppShell({ children, variant = 'sidebar' }: Props) {
 
     if (isHeaderVariant) {
         return (
-            <div className="min-h-screen w-full bg-slate-50 text-slate-950">
+            <div className="min-h-screen w-full bg-muted text-foreground">
                 <div className="flex min-h-screen w-full flex-col">
                     {children}
                 </div>

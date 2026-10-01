@@ -25,11 +25,12 @@ export default function PredictionScoreFields({
     return (
         <div className="grid gap-2.5">
             <div>
-                <h3 className="text-sm font-bold text-slate-900">
-                    Score prediction
+                <h3 className="text-sm font-bold text-foreground">
+                    Score prediction (optional)
                 </h3>
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                    Enter the score you expect after regular time.
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                    Add a score for extra points. Filling both scores updates
+                    your selected outcome.
                 </p>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

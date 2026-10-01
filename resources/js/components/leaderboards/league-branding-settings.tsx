@@ -26,7 +26,7 @@ export default function LeagueBrandingSettings({
     fieldClassName,
 }: Props) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="rounded-2xl border border-border bg-card p-5">
             <div className={cn('flex items-center gap-2', theme.darkAccent)}>
                 <Layers className="size-4" />
                 <p className="text-xs font-semibold tracking-wide uppercase">
@@ -52,7 +52,7 @@ export default function LeagueBrandingSettings({
                         className={fieldClassName}
                         placeholder="Your prediction group"
                     />
-                    <p className="mt-1 text-xs text-slate-600">
+                    <p className="mt-1 text-xs text-muted-foreground">
                         Give the group a name that members recognise instantly.
                     </p>
                     <div className="min-h-5">
@@ -74,10 +74,10 @@ export default function LeagueBrandingSettings({
                         name="description"
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
-                        className="min-h-20 rounded-xl border-slate-200 bg-white text-slate-900 shadow-none placeholder:text-slate-600 focus-visible:border-cyan-400 focus-visible:ring-cyan-200"
+                        className="min-h-20 rounded-xl border-border bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
                         placeholder="What is this prediction group about?"
                     />
-                    <p className="mt-1 text-xs leading-5 text-slate-600">
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
                         Short context for members. Keep it simple: classmates,
                         work crew, family group, or matchday challenge.
                     </p>

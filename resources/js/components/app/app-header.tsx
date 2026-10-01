@@ -68,7 +68,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     return (
         <>
-            <div className="-xl sticky top-0 z-40 border-b border-white/10 bg-blue-950/95 shadow-sm">
+            <div className="-xl sticky top-0 z-40 border-b border-white/10 bg-secondary/95 shadow-sm">
                 <div className="mx-auto flex h-16 items-center px-4 sm:px-6 md:max-w-7xl lg:px-8">
                     <AppHeaderMobileNav items={navigationItems} />
 
@@ -88,22 +88,22 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         variant="ghost"
-                                        className="size-10 rounded-full p-1 text-white hover:bg-white/10 focus-visible:ring-cyan-300"
+                                        className="size-10 rounded-full p-1 text-white hover:bg-card/10 focus-visible:ring-ring"
                                     >
-                                        <Avatar className="size-8 overflow-hidden rounded-full ring-2 ring-cyan-200/40">
+                                        <Avatar className="size-8 overflow-hidden rounded-full ring-2 ring-ring/40">
                                             <AvatarImage
                                                 src={user.avatar ?? undefined}
                                                 alt={user.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="rounded-lg bg-cyan-100 text-slate-900">
+                                            <AvatarFallback className="rounded-lg bg-accent text-foreground">
                                                 {getInitials(user.name)}
                                             </AvatarFallback>
                                         </Avatar>
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-64 rounded-xl border-slate-200 bg-white p-2 text-slate-700 shadow-sm"
+                                    className="w-64 rounded-xl border-border bg-card p-2 text-foreground shadow-sm"
                                     align="end"
                                 >
                                     <UserMenuContent user={user} />
@@ -116,8 +116,8 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                 </div>
             </div>
             {showBreadcrumbs && (
-                <div className="-xl flex w-full border-b border-slate-200/80 bg-white/80">
-                    <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-slate-500 sm:px-6 md:max-w-7xl lg:px-8">
+                <div className="-xl flex w-full border-b border-border/80 bg-card/80">
+                    <div className="mx-auto flex h-12 w-full items-center justify-start px-4 text-muted-foreground sm:px-6 md:max-w-7xl lg:px-8">
                         <Breadcrumbs breadcrumbs={breadcrumbs} />
                     </div>
                 </div>

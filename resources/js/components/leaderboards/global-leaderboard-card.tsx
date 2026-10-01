@@ -25,9 +25,9 @@ type Props = {
 };
 
 const topRankStyles: Record<number, string> = {
-    1: 'border-amber-200 bg-amber-50 text-amber-700',
-    2: 'border-slate-300 bg-slate-100 text-slate-700',
-    3: 'border-cyan-200 bg-cyan-50 text-cyan-600',
+    1: 'border-amber-200 bg-amber-950/40 text-amber-200',
+    2: 'border-input bg-muted text-foreground',
+    3: 'border-border bg-accent text-primary',
 };
 
 export default function GlobalLeaderboardCard({
@@ -37,12 +37,12 @@ export default function GlobalLeaderboardCard({
     const getInitials = useInitials();
 
     return (
-        <Card className="overflow-hidden rounded-2xl border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
-            <CardHeader className="gap-2 border-b border-slate-200 px-5 py-5 sm:px-6">
-                <CardTitle className="text-xl font-bold text-slate-900 sm:text-2xl">
+        <Card className="overflow-hidden rounded-2xl border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
+            <CardHeader className="gap-2 border-b border-border px-5 py-5 sm:px-6">
+                <CardTitle className="text-xl font-bold text-foreground sm:text-2xl">
                     Global leaderboard
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-slate-500">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
                     Compare total points, prediction volume and the strongest
                     runs across MondialIQ.
                 </CardDescription>
@@ -60,41 +60,41 @@ export default function GlobalLeaderboardCard({
                                     className={cn(
                                         'grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-l-4 border-transparent px-5 py-4 transition-colors sm:px-6',
                                         isCurrentUser &&
-                                            'border-cyan-200 bg-cyan-50/50',
+                                            'border-border bg-accent/50',
                                         isTopThree &&
                                             !isCurrentUser &&
-                                            'bg-slate-50',
+                                            'bg-muted',
                                     )}
                                 >
                                     <div
                                         className={cn(
                                             'flex min-w-11 items-center justify-center rounded-full border px-3 py-2 text-sm font-bold shadow-sm',
                                             topRankStyles[leader.rank] ??
-                                                'border-slate-200 bg-slate-50 text-slate-900',
+                                                'border-border bg-muted text-foreground',
                                         )}
                                     >
                                         #{leader.rank}
                                     </div>
 
                                     <div className="flex min-w-0 items-center gap-3">
-                                        <Avatar className="size-11 rounded-2xl shadow-sm ring-1 ring-slate-200">
+                                        <Avatar className="size-11 rounded-2xl shadow-sm ring-1 ring-border">
                                             <AvatarImage
                                                 src={leader.avatar ?? undefined}
                                                 alt={leader.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
+                                            <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
                                                 {getInitials(leader.name)}
                                             </AvatarFallback>
                                         </Avatar>
 
                                         <div className="min-w-0">
                                             <div className="flex flex-wrap items-center gap-2">
-                                                <p className="truncate text-sm font-bold text-slate-900 sm:text-base">
+                                                <p className="truncate text-sm font-bold text-foreground sm:text-base">
                                                     {leader.name}
                                                 </p>
                                                 {isCurrentUser && (
-                                                    <Badge className="rounded-full border border-cyan-200 bg-white px-2 py-0.5 text-xs font-semibold text-cyan-700 shadow-none">
+                                                    <Badge className="rounded-full border border-border bg-card px-2 py-0.5 text-xs font-semibold text-primary shadow-none">
                                                         You
                                                     </Badge>
                                                 )}
@@ -105,7 +105,7 @@ export default function GlobalLeaderboardCard({
                                                     </Badge>
                                                 )}
                                             </div>
-                                            <p className="mt-1 text-xs font-medium text-slate-500 sm:text-sm">
+                                            <p className="mt-1 text-xs font-medium text-muted-foreground sm:text-sm">
                                                 {leader.predictionsCount}{' '}
                                                 {leader.predictionsCount === 1
                                                     ? 'prediction'
@@ -114,7 +114,7 @@ export default function GlobalLeaderboardCard({
                                             {isCurrentUser &&
                                                 leader.predictionsCount ===
                                                     0 && (
-                                                    <p className="mt-1 text-xs font-semibold text-cyan-600">
+                                                    <p className="mt-1 text-xs font-semibold text-primary">
                                                         Make your first
                                                         prediction to start
                                                         scoring.
@@ -124,10 +124,10 @@ export default function GlobalLeaderboardCard({
                                     </div>
 
                                     <div className="text-right">
-                                        <p className="text-2xl leading-none font-bold text-slate-900 sm:text-3xl">
+                                        <p className="text-2xl leading-none font-bold text-foreground sm:text-3xl">
                                             {leader.totalPoints}
                                         </p>
-                                        <p className="text-xs font-bold tracking-wide text-slate-500 uppercase">
+                                        <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
                                             PTS
                                         </p>
                                         {leader.publicPredictionsHref && (
@@ -135,7 +135,7 @@ export default function GlobalLeaderboardCard({
                                                 asChild
                                                 variant="ghost"
                                                 size="sm"
-                                                className="mt-2 h-auto px-0 py-0 text-xs font-semibold text-cyan-600 hover:bg-transparent hover:text-cyan-700"
+                                                className="mt-2 h-auto px-0 py-0 text-xs font-semibold text-primary hover:bg-transparent hover:text-primary"
                                             >
                                                 <Link
                                                     href={

@@ -19,9 +19,9 @@ export default function PredictionOutcomeField({
     onChange,
 }: Props) {
     return (
-        <div className="grid gap-2.5">
-            <Label className="text-sm font-bold text-slate-900">
-                Match outcome
+        <div className="grid gap-2.5" role="group" aria-label="Match outcome">
+            <Label asChild className="text-sm font-bold text-foreground">
+                <span>Match outcome</span>
             </Label>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 <PredictionOptionCard
@@ -47,7 +47,12 @@ export default function PredictionOutcomeField({
                 />
             </div>
             {error && (
-                <p className="text-sm font-medium text-red-600">{error}</p>
+                <p
+                    role="alert"
+                    className="text-sm font-medium text-destructive"
+                >
+                    {error}
+                </p>
             )}
         </div>
     );

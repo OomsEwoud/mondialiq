@@ -32,14 +32,14 @@ export default function BoostedPredictionSettings({
     numberFieldClassName,
 }: Props) {
     return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+        <div className="rounded-2xl border border-border bg-card p-5">
             <div className={cn('flex items-center gap-2', theme.darkAccent)}>
                 <Zap className="size-4" />
                 <p className="text-xs font-semibold tracking-wide uppercase">
                     Boosted predictions
                 </p>
             </div>
-            <p className="mt-2 text-sm leading-6 text-slate-600">
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
                 Boosted predictions let members use one of their limited boosts
                 on a prediction they are confident about. If the prediction is
                 correct and the confidence is high enough, they receive bonus
@@ -49,6 +49,7 @@ export default function BoostedPredictionSettings({
                 <button
                     type="button"
                     role="switch"
+                    aria-label="Enable boosted predictions"
                     aria-checked={scoringRules.boosted_predictions_enabled}
                     onClick={() =>
                         updateScoringRule(
@@ -65,14 +66,14 @@ export default function BoostedPredictionSettings({
                 >
                     <span
                         className={cn(
-                            'inline-block size-5 rounded-full bg-white shadow-sm transition-transform',
+                            'inline-block size-5 rounded-full bg-card shadow-sm transition-transform',
                             scoringRules.boosted_predictions_enabled
                                 ? 'translate-x-6'
                                 : 'translate-x-1',
                         )}
                     />
                 </button>
-                <span className="text-sm font-semibold text-slate-900">
+                <span className="text-sm font-semibold text-foreground">
                     Enable boosted predictions
                 </span>
             </div>
@@ -92,6 +93,7 @@ export default function BoostedPredictionSettings({
                                 type="number"
                                 min={0}
                                 max={20}
+                                aria-label="Boosted predictions per user"
                                 value={scoringRules.boosted_predictions_limit}
                                 onChange={(event) =>
                                     updateScoringRule(
@@ -138,12 +140,17 @@ export default function BoostedPredictionSettings({
                                     !scoringRules.boosted_predictions_enabled
                                 }
                             >
-                                <SelectTrigger className={numberFieldClassName}>
+                                <SelectTrigger
+                                    aria-label="Required confidence threshold"
+                                    className={numberFieldClassName}
+                                >
                                     <SelectValue placeholder="Select confidence" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="low">Low</SelectItem>
-                                    <SelectItem value="medium">Medium</SelectItem>
+                                    <SelectItem value="medium">
+                                        Medium
+                                    </SelectItem>
                                     <SelectItem value="high">High</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -170,6 +177,7 @@ export default function BoostedPredictionSettings({
                                 type="number"
                                 min={0}
                                 max={100}
+                                aria-label="Bonus points"
                                 value={
                                     scoringRules.boosted_prediction_bonus_points
                                 }

@@ -22,9 +22,12 @@ export default function LeagueMetric({
         <div
             className={cn('rounded-xl border px-3.5 py-3 shadow-xs', className)}
         >
-            <div className="flex items-center gap-2 text-slate-500">
+            <div className="flex items-center gap-2 text-muted-foreground">
                 <Icon
-                    className={cn('size-4', iconClassName ?? 'text-slate-600')}
+                    className={cn(
+                        'size-4',
+                        iconClassName ?? 'text-muted-foreground',
+                    )}
                 />
                 <p
                     className={cn(
@@ -35,7 +38,7 @@ export default function LeagueMetric({
                     {label}
                 </p>
             </div>
-            <p className="mt-2 truncate text-sm font-bold text-slate-900">
+            <p className="mt-2 truncate text-sm font-bold text-foreground">
                 {value}
             </p>
         </div>

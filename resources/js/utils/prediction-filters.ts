@@ -141,26 +141,19 @@ function matchesPointsState(
         return true;
     }
 
-    const prediction = mode === 'ai'
-        ? match.aiPrediction
-        : match.userPrediction;
+    const prediction =
+        mode === 'ai' ? match.aiPrediction : match.userPrediction;
 
     if (!prediction) {
         return false;
     }
 
     if (filter === 'points-earned') {
-        return (
-            prediction.pointsAwarded &&
-            (prediction.points ?? 0) > 0
-        );
+        return prediction.pointsAwarded && (prediction.points ?? 0) > 0;
     }
 
     if (filter === 'no-points-earned') {
-        return (
-            prediction.pointsAwarded &&
-            (prediction.points ?? 0) <= 0
-        );
+        return prediction.pointsAwarded && (prediction.points ?? 0) <= 0;
     }
 
     return !prediction.pointsAwarded;

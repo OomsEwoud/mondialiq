@@ -46,21 +46,21 @@ export default function UserPredictionModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="flex max-h-[90vh] min-h-0 flex-col gap-0 overflow-hidden rounded-2xl border-slate-200 bg-white p-0 shadow-sm sm:max-w-3xl">
+            <DialogContent className="flex max-h-[90vh] min-h-0 flex-col gap-0 overflow-hidden rounded-2xl border-border bg-card p-0 shadow-sm sm:max-w-3xl">
                 <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-5 pb-4 sm:px-6 sm:pt-6">
                     <DialogHeader className="gap-3 pr-8 text-left">
-                        <span className="w-fit rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold tracking-wide text-indigo-600 uppercase">
+                        <span className="w-fit rounded-full border border-border bg-accent px-3 py-1 text-xs font-semibold tracking-wide text-primary uppercase">
                             Personal pick
                         </span>
                         <div className="grid gap-2">
-                            <DialogTitle className="text-2xl font-semibold tracking-tight text-slate-900">
+                            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
                                 {predictionLocked && isEditing
                                     ? 'View your prediction'
                                     : isEditing
                                       ? 'Edit your prediction'
                                       : 'Make your prediction'}
                             </DialogTitle>
-                            <DialogDescription className="text-sm leading-6 text-slate-600">
+                            <DialogDescription className="text-sm leading-6 text-muted-foreground">
                                 {predictionLocked
                                     ? 'Predictions are locked once the match has started.'
                                     : 'Choose a winner, predict the score and set your confidence before kickoff.'}
@@ -72,7 +72,7 @@ export default function UserPredictionModal({
                         <UserPredictionMatchSummary match={match} />
 
                         {predictionLocked && (
-                            <div className="flex gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm font-medium text-amber-900">
+                            <div className="flex gap-2 rounded-2xl border border-amber-200 bg-amber-950/40 p-3 text-sm font-medium text-amber-200">
                                 <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0" />
                                 <p>
                                     Predictions are closed because this match
@@ -81,9 +81,9 @@ export default function UserPredictionModal({
                             </div>
                         )}
 
-                        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-3 text-sm text-slate-600">
+                        <div className="rounded-2xl border border-border bg-accent/60 p-3 text-sm text-muted-foreground">
                             <div className="flex flex-wrap items-center gap-2">
-                                <span className="font-semibold text-slate-900">
+                                <span className="font-semibold text-foreground">
                                     Current pick:
                                 </span>
                                 <span>
@@ -91,12 +91,12 @@ export default function UserPredictionModal({
                                         'No pick selected yet'}
                                 </span>
                                 {currentScoreLabel && (
-                                    <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600">
+                                    <span className="rounded-full border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground">
                                         Score: {currentScoreLabel}
                                     </span>
                                 )}
                                 {currentConfidence && (
-                                    <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-600 capitalize">
+                                    <span className="rounded-full border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground capitalize">
                                         Confidence: {currentConfidence}
                                     </span>
                                 )}
@@ -114,7 +114,9 @@ export default function UserPredictionModal({
                                 scoreboardId={scoreboardId}
                                 boostsRemaining={boostsRemaining}
                                 boostsLimit={boostsLimit}
-                                boostedConfidenceThreshold={boostedConfidenceThreshold}
+                                boostedConfidenceThreshold={
+                                    boostedConfidenceThreshold
+                                }
                             />
                         )}
                     </div>

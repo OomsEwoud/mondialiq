@@ -32,15 +32,15 @@ export default function LeaderboardEmptyState({
     return (
         <div
             className={cn(
-                'rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-5 py-8 text-center sm:px-8 sm:py-10',
+                'rounded-2xl border border-dashed border-border bg-muted/80 px-5 py-8 text-center sm:px-8 sm:py-10',
                 className,
             )}
         >
-            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-cyan-50 text-cyan-700 shadow-sm ring-1 ring-slate-200">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-accent text-primary shadow-sm ring-1 ring-border">
                 <Trophy className="size-5" />
             </div>
-            <h3 className="mt-4 text-lg font-bold text-slate-900">{title}</h3>
-            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+            <h3 className="mt-4 text-lg font-bold text-foreground">{title}</h3>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
                 {description}
             </p>
             {(actionLabel || secondaryActionLabel) && (
@@ -70,7 +70,7 @@ export default function LeaderboardEmptyState({
                             <Button
                                 asChild
                                 variant="outline"
-                                className="h-10 w-full rounded-xl border-slate-200 bg-white px-4 font-bold text-slate-700 hover:border-cyan-200 hover:bg-cyan-50 hover:text-cyan-700 sm:w-auto"
+                                className="h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:border-border hover:bg-accent hover:text-primary sm:w-auto"
                             >
                                 <Link href={secondaryActionHref}>
                                     <LogIn className="size-4" />

@@ -5,8 +5,12 @@ use App\Models\League;
 use App\Models\Player;
 use App\Models\PlayerSeasonStat;
 use App\Models\Team;
+use Carbon\CarbonImmutable;
 use Inertia\Testing\AssertableInertia as Assert;
 
+beforeEach(function () {
+    $this->travelTo(CarbonImmutable::parse('2026-06-01 12:00:00'));
+});
 test('the player detail page renders with season statistics', function () {
     $country = Country::query()->create([
         'name' => 'Belgium',

@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 
 import { show as showMatch } from '@/routes/matches';
 import type { Match } from '@/types/match';
@@ -58,7 +59,11 @@ export default function MatchList({ matches }: { matches: Match[] }) {
 function TeamLogo({ src, name }: { src: string; name: string }) {
     return (
         <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#f3f4f1] p-1">
-            <img src={src} alt="" className="size-full object-contain" />
+            <ImageWithFallback
+                src={src}
+                alt=""
+                className="size-full object-contain"
+            />
             <span className="sr-only">{name}</span>
         </span>
     );

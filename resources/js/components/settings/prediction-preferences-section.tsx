@@ -28,7 +28,7 @@ function SegmentedControl({
     disabled?: boolean;
 }) {
     return (
-        <div className="flex rounded-lg border border-slate-200 bg-slate-50 p-1">
+        <div className="flex rounded-lg border border-border bg-muted p-1">
             {options.map((option) => {
                 const isActive = value === option.value;
 
@@ -41,8 +41,8 @@ function SegmentedControl({
                         className={cn(
                             'flex-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors',
                             isActive
-                                ? 'bg-white text-slate-900 shadow-sm'
-                                : 'text-slate-500 hover:text-slate-700',
+                                ? 'bg-card text-foreground shadow-sm'
+                                : 'text-muted-foreground hover:text-foreground',
                             disabled && 'cursor-not-allowed opacity-50',
                         )}
                     >
@@ -70,6 +70,7 @@ function ToggleSwitch({
             <button
                 type="button"
                 role="switch"
+                aria-label={label}
                 aria-checked={checked}
                 disabled={disabled}
                 onClick={() => onChange(!checked)}
@@ -81,12 +82,12 @@ function ToggleSwitch({
             >
                 <span
                     className={cn(
-                        'inline-block size-5 rounded-full bg-white shadow-sm transition-transform',
+                        'inline-block size-5 rounded-full bg-card shadow-sm transition-transform',
                         checked ? 'translate-x-6' : 'translate-x-1',
                     )}
                 />
             </button>
-            <span className="text-sm font-semibold text-slate-900">
+            <span className="text-sm font-semibold text-foreground">
                 {label}
             </span>
         </div>
@@ -122,7 +123,7 @@ export default function PredictionPreferencesSection({ preferences }: Props) {
             {({ processing, errors }) => (
                 <>
                     <div className={settingsSubtlePanelClassName}>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2 text-muted-foreground">
                             {data.predictions_visibility === 'public' ? (
                                 <Eye className="size-4" />
                             ) : (
@@ -132,7 +133,7 @@ export default function PredictionPreferencesSection({ preferences }: Props) {
                                 Prediction visibility
                             </p>
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
                             Public predictions can appear on match pages, groups
                             and shared prediction views. Private predictions are
                             only visible to you.
@@ -175,13 +176,13 @@ export default function PredictionPreferencesSection({ preferences }: Props) {
                     </div>
 
                     <div className={settingsSubtlePanelClassName}>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2 text-muted-foreground">
                             <Shield className="size-4" />
                             <p className="text-xs font-semibold tracking-wide uppercase">
                                 Default visibility for new predictions
                             </p>
                         </div>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">
                             This is applied automatically when you create a new
                             prediction.
                         </p>
@@ -221,10 +222,10 @@ export default function PredictionPreferencesSection({ preferences }: Props) {
                     <div className="grid items-start gap-5 sm:grid-cols-2">
                         <div className={settingsSubtlePanelClassName}>
                             <div className="mb-3">
-                                <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     Leaderboards
                                 </p>
-                                <p className="mt-1 text-sm leading-6 text-slate-600">
+                                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                     Disable this if you do not want your profile
                                     to appear in public ranking views.
                                 </p>
@@ -255,10 +256,10 @@ export default function PredictionPreferencesSection({ preferences }: Props) {
 
                         <div className={settingsSubtlePanelClassName}>
                             <div className="mb-3">
-                                <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                     Group visibility
                                 </p>
-                                <p className="mt-1 text-sm leading-6 text-slate-600">
+                                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                     Useful for private prediction groups with
                                     friends.
                                 </p>

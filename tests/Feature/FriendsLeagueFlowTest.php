@@ -10,6 +10,12 @@ use App\Models\Team;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
+test('league creation and joining require authentication and rate limiting', function (string $routeName) {
+    $middleware = app('router')->getRoutes()->getByName($routeName)->gatherMiddleware();
+
+    expect($middleware)->toContain('auth', 'throttle:league-manage');
+})->with(['leagues.store', 'leagues.join.store', 'leagues.join-public']);
+
 function createFriendsLeagueFixture(): Fixture
 {
     $league = League::create([

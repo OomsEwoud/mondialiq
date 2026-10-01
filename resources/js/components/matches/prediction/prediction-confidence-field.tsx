@@ -28,13 +28,13 @@ export default function PredictionConfidenceField({
 }: Props) {
     return (
         <div className="grid gap-2.5">
-            <Label className="text-sm font-bold text-slate-900">
+            <Label className="text-sm font-bold text-foreground">
                 Confidence
             </Label>
             <div
-                role="radiogroup"
+                role="group"
                 aria-label="Prediction confidence"
-                className="grid grid-cols-1 gap-2 rounded-2xl border border-slate-200 bg-slate-50/70 p-1.5 sm:grid-cols-3"
+                className="grid grid-cols-1 gap-2 rounded-2xl border border-border bg-muted/70 p-1.5 sm:grid-cols-3"
             >
                 {confidenceOptions.map((option) => {
                     const isSelected = value === option.value;
@@ -43,16 +43,15 @@ export default function PredictionConfidenceField({
                         <Button
                             key={option.value}
                             type="button"
-                            role="radio"
-                            aria-checked={isSelected}
+                            aria-pressed={isSelected}
                             variant="outline"
                             disabled={disabled}
                             onClick={() => onChange(option.value)}
                             className={cn(
-                                'h-auto rounded-xl border px-3 py-2.5 shadow-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2',
+                                'h-auto rounded-xl border px-3 py-2.5 shadow-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                                 isSelected
-                                    ? 'border-blue-950 bg-blue-950 text-white hover:bg-blue-900 hover:text-white'
-                                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900',
+                                    ? 'border-blue-950 bg-secondary text-white hover:bg-accent hover:text-white'
+                                    : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground',
                             )}
                         >
                             <span className="grid gap-0.5 text-left">
@@ -64,7 +63,7 @@ export default function PredictionConfidenceField({
                                         'text-xs font-medium',
                                         isSelected
                                             ? 'text-cyan-100'
-                                            : 'text-slate-500',
+                                            : 'text-muted-foreground',
                                     )}
                                 >
                                     {option.helper}
@@ -75,7 +74,7 @@ export default function PredictionConfidenceField({
                 })}
             </div>
             {error && (
-                <p className="text-sm font-medium text-red-600">{error}</p>
+                <p className="text-sm font-medium text-destructive">{error}</p>
             )}
         </div>
     );

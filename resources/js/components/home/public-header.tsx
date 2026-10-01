@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
 
 import AppLogo from '@/components/app/app-logo';
-import { home, login, register } from '@/routes';
+import { home, login, matches, register } from '@/routes';
 
 export default function PublicHeader() {
     return (
@@ -21,6 +21,12 @@ export default function PublicHeader() {
                     aria-label="Account"
                     className="flex items-center gap-1.5 sm:gap-3"
                 >
+                    <Link
+                        href={matches()}
+                        className="hidden min-h-11 items-center px-3 text-sm font-semibold text-muted-foreground hover:text-foreground sm:inline-flex"
+                    >
+                        Wedstrijden
+                    </Link>
                     <Link
                         href={login()}
                         className="rounded-lg px-3 py-2 text-sm font-semibold text-[#b4bbb6] transition hover:bg-[#171c19] hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none sm:px-4"

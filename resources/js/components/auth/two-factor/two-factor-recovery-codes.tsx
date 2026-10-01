@@ -55,14 +55,14 @@ export default function TwoFactorRecoveryCodes({
     return (
         <div className={settingsSubtlePanelClassName}>
             <div className="mb-4">
-                <h3 className="flex items-center gap-2 text-sm font-bold text-slate-900">
+                <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
                     <LockKeyhole
-                        className="size-4 text-cyan-500"
+                        className="size-4 text-primary"
                         aria-hidden="true"
                     />
                     Recovery codes
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
                     Recovery codes let you regain access if you lose your 2FA
                     device. Store them in a secure password manager.
                 </p>
@@ -135,7 +135,7 @@ export default function TwoFactorRecoveryCodes({
                         <>
                             <div
                                 ref={codesSectionRef}
-                                className="grid gap-1 rounded-lg border border-slate-200 bg-white p-4 font-mono text-sm text-slate-800"
+                                className="grid gap-1 rounded-lg border border-border bg-card p-4 font-mono text-sm text-foreground"
                                 role="list"
                                 aria-label="Recovery codes"
                             >
@@ -159,7 +159,7 @@ export default function TwoFactorRecoveryCodes({
                                             (_, index) => (
                                                 <div
                                                     key={index}
-                                                    className="h-4 animate-pulse rounded bg-slate-200"
+                                                    className="h-4 animate-pulse rounded bg-accent"
                                                     aria-hidden="true"
                                                 />
                                             ),
@@ -170,7 +170,7 @@ export default function TwoFactorRecoveryCodes({
 
                             <p
                                 id="regenerate-warning"
-                                className="text-xs leading-5 text-slate-500 select-none"
+                                className="text-xs leading-5 text-muted-foreground select-none"
                             >
                                 Each recovery code can be used once to access
                                 your account. Regenerating codes replaces the

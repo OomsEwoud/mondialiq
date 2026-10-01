@@ -98,13 +98,13 @@ export default function InviteCodeCard({
     return (
         <Card
             id="league-invite"
-            className="gap-0 rounded-2xl border-slate-200 bg-white py-0 shadow-sm"
+            className="gap-0 rounded-2xl border-border bg-card py-0 shadow-sm"
         >
             <CardHeader className="gap-2 px-4 py-4 sm:px-6">
-                <CardTitle className="text-xl font-bold text-slate-900">
+                <CardTitle className="text-xl font-bold text-foreground">
                     Invite teammates
                 </CardTitle>
-                <CardDescription className="text-sm leading-6 text-slate-500">
+                <CardDescription className="text-sm leading-6 text-muted-foreground">
                     Share this group with friends so they can join your private
                     ranking.
                 </CardDescription>
@@ -129,27 +129,27 @@ export default function InviteCodeCard({
                                 Invite your friends
                             </p>
                         </div>
-                        <p className="mt-2 text-sm font-bold text-slate-900">
+                        <p className="mt-2 text-sm font-bold text-foreground">
                             This group is just getting started.
                         </p>
-                        <p className="mt-1 text-sm leading-6 text-slate-600">
+                        <p className="mt-1 text-sm leading-6 text-muted-foreground">
                             Share the direct join link or send the invite code
                             so your group can start competing faster.
                         </p>
                     </div>
                 )}
 
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                    <div className="flex items-center gap-2 text-slate-500">
-                        <Ticket className="size-4 text-slate-600" />
+                <div className="rounded-2xl border border-border bg-muted px-4 py-3">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Ticket className="size-4 text-muted-foreground" />
                         <p className="text-xs font-bold tracking-wide uppercase">
                             Invite code
                         </p>
                     </div>
-                    <p className="mt-3 overflow-hidden font-mono text-2xl font-bold tracking-wide text-slate-900 sm:text-3xl">
+                    <p className="mt-3 overflow-hidden font-mono text-2xl font-bold tracking-wide text-foreground sm:text-3xl">
                         {code}
                     </p>
-                    <p className="mt-2 text-xs leading-5 text-slate-500">
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground">
                         Best result: send the join link for one-tap access and
                         keep this code as a backup.
                     </p>
@@ -174,7 +174,7 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite code"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:bg-muted',
                             theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}
@@ -193,7 +193,7 @@ export default function InviteCodeCard({
                         variant="outline"
                         aria-label="Copy invite link"
                         className={cn(
-                            'h-10 w-full rounded-xl bg-white px-4 font-bold text-slate-900 border-slate-200 hover:bg-slate-50',
+                            'h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:bg-muted',
                             theme.buttonRing,
                         )}
                         disabled={isCopyingCode || isCopyingJoinLink}

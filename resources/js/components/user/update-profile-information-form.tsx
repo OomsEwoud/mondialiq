@@ -25,10 +25,10 @@ type Props = {
     status?: string;
 };
 
-const fieldErrorWrapperClassName = 'min-h-10';
+const fieldErrorWrapperClassName = 'sm:min-h-6';
 const fieldErrorClassName = 'leading-5';
 const emailVerificationCardClassName =
-    'rounded-xl border border-amber-200 bg-amber-50 p-4';
+    'rounded-xl border border-amber-200 bg-amber-950/40 p-4';
 
 export default function UpdateProfileInformationForm({
     user,
@@ -66,7 +66,9 @@ export default function UpdateProfileInformationForm({
                                 error={errors.avatar}
                                 onAvatarChange={avatarUpload.handleAvatarChange}
                                 previewUrl={avatarUpload.avatarPreview}
-                                selectedFileName={avatarUpload.selectedAvatarName}
+                                selectedFileName={
+                                    avatarUpload.selectedAvatarName
+                                }
                                 user={user}
                             />
 
@@ -111,7 +113,11 @@ export default function UpdateProfileInformationForm({
                                             autoComplete="username"
                                             placeholder="name@example.com"
                                         />
-                                        <div className={fieldErrorWrapperClassName}>
+                                        <div
+                                            className={
+                                                fieldErrorWrapperClassName
+                                            }
+                                        >
                                             <InputError
                                                 message={errors.email}
                                                 className={fieldErrorClassName}
@@ -126,22 +132,24 @@ export default function UpdateProfileInformationForm({
                                     <div className="flex gap-3">
                                         <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
                                         <div className="space-y-2">
-                                            <p className="text-sm font-bold text-amber-900">
-                                                Your email address is unverified.
+                                            <p className="text-sm font-bold text-amber-200">
+                                                Your email address is
+                                                unverified.
                                             </p>
-                                            <p className="text-sm leading-6 text-amber-700">
+                                            <p className="text-sm leading-6 text-amber-200">
                                                 Verify your email to keep all
                                                 account features available.
                                             </p>
                                             <Link
                                                 href={send()}
                                                 as="button"
-                                                className="text-sm font-bold text-slate-900 underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-cyan-600"
+                                                className="text-sm font-bold text-foreground underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-primary"
                                             >
                                                 Resend verification email
                                             </Link>
-                                            {status === 'verification-link-sent' && (
-                                                <p className="text-sm font-semibold text-green-700">
+                                            {status ===
+                                                'verification-link-sent' && (
+                                                <p className="text-sm font-semibold text-green-200">
                                                     A new verification link has
                                                     been sent.
                                                 </p>

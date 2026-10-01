@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import TeamCrest from '@/components/ui/display/team-crest';
 import { cn } from '@/lib/utils';
 import { show as showTeam } from '@/routes/teams';
 
@@ -19,16 +20,14 @@ export default function UserPredictionTeam({
 }: Props) {
     const content = (
         <>
-            <img
+            <TeamCrest
                 src={logo}
-                alt={name}
+                name={name}
                 className="h-8 w-8 shrink-0 object-contain sm:h-9 sm:w-9"
             />
             <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-slate-900">
-                    {code}
-                </p>
-                <p className="truncate text-xs font-medium text-slate-500">
+                <p className="text-xs font-medium text-foreground">{code}</p>
+                <p className="text-sm font-semibold break-words text-muted-foreground">
                     {name}
                 </p>
             </div>
@@ -49,7 +48,7 @@ export default function UserPredictionTeam({
             aria-label={`View ${name} team details`}
             className={cn(
                 className,
-                'hover:bg-white hover:text-cyan-700 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                'hover:bg-card hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
             )}
         >
             {content}

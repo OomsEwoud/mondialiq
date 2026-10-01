@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight, Check, Gauge, Sparkles } from 'lucide-react';
+import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 
 import { predictions } from '@/routes';
 
@@ -37,12 +38,12 @@ export default function PredictionPreview() {
                             PL
                         </span>
                         <span className="text-xs font-medium text-[#7f8882]">
-                            Vandaag · 18:30
+                            Voorbeeld · 18:30
                         </span>
                     </div>
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2b4636] bg-[#153024] px-2.5 py-1 text-[0.65rem] font-semibold text-[#8bc5a1]">
                         <Sparkles className="size-3" aria-hidden="true" />
-                        AI-analyse gereed
+                        Voorbeeldanalyse
                     </span>
                 </header>
                 <div className="px-5 pt-6 sm:px-7 sm:pt-7">
@@ -142,7 +143,7 @@ function Team({ team }: { team: (typeof teams)[number] }) {
     return (
         <div className="flex min-w-0 flex-col items-center gap-2.5 text-center">
             <div className="flex size-14 items-center justify-center rounded-xl bg-[#f3f4f1] p-2 sm:size-18 sm:p-2.5">
-                <img
+                <ImageWithFallback
                     src={team.logo}
                     alt=""
                     className="size-full object-contain"

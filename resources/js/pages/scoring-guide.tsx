@@ -100,46 +100,46 @@ export default function ScoringGuide() {
                 <BackButton fallbackHref={predictions.url()} />
             </div>
 
-            <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 text-center shadow-lg sm:p-8">
-                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-slate-800 text-cyan-300 sm:size-14">
+            <section className="rounded-2xl border border-border/50 bg-secondary p-6 text-center shadow-lg sm:p-8">
+                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-muted text-primary sm:size-14">
                     <Calculator className="size-5" />
                 </div>
-                <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                     Prediction scoring
                 </p>
                 <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
                     How scoring works
                 </h1>
-                <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-300 sm:text-base">
+                <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
                     Every prediction is scored out of 20 after the final
                     whistle. Exact scores win the full score, partial points
                     reward close predictions.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-2.5">
-                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                    <span className="rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
                         Max 20 points
                     </span>
-                    <span className="rounded-full border border-slate-600/50 bg-slate-800/60 px-3 py-1 text-xs font-semibold text-slate-300">
+                    <span className="rounded-full border border-border/50 bg-muted/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
                         Confidence does not affect points
                     </span>
                 </div>
             </section>
 
-            <section className="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+            <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
                         <BadgeCheck className="size-5" />
                     </span>
                     <div>
-                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                             Validation
                         </p>
-                        <h2 className="mt-1 text-xl font-bold text-slate-900">
+                        <h2 className="mt-1 text-xl font-bold text-foreground">
                             When points are awarded
                         </h2>
                     </div>
                 </div>
-                <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+                <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
                     MondialIQ automatically checks on a fixed schedule, for
                     example every few hours, which matches have finished. Points
                     are then awarded using the existing scoring system.
@@ -148,7 +148,7 @@ export default function ScoringGuide() {
                     {validationPoints.map((point) => (
                         <div
                             key={point}
-                            className="rounded-xl border border-slate-200 bg-white p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm"
+                            className="rounded-xl border border-border bg-card p-4 text-sm leading-6 font-semibold text-foreground shadow-sm"
                         >
                             {point}
                         </div>
@@ -157,16 +157,16 @@ export default function ScoringGuide() {
             </section>
 
             <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
-                <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+                <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm">
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
                             <Trophy className="size-5" />
                         </span>
                         <div>
-                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                                 Rules
                             </p>
-                            <h2 className="mt-1 text-xl font-bold text-slate-900">
+                            <h2 className="mt-1 text-xl font-bold text-foreground">
                                 Points breakdown
                             </h2>
                         </div>
@@ -176,21 +176,21 @@ export default function ScoringGuide() {
                         {scoringRules.map((rule) => (
                             <div
                                 key={rule.label}
-                                className="flex items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                                className="flex items-start justify-between gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
                             >
                                 <div>
-                                    <h3 className="text-sm font-bold text-slate-900">
+                                    <h3 className="text-sm font-bold text-foreground">
                                         {rule.label}
                                     </h3>
-                                    <p className="mt-1 text-sm leading-5 text-slate-600">
+                                    <p className="mt-1 text-sm leading-5 text-muted-foreground">
                                         {rule.description}
                                     </p>
                                 </div>
                                 <span
                                     className={
                                         rule.isMaximum
-                                            ? 'shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-bold text-white'
-                                            : 'shrink-0 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-sm font-bold text-cyan-700'
+                                            ? 'shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-white'
+                                            : 'shrink-0 rounded-full border border-border bg-accent px-3 py-1 text-sm font-bold text-primary'
                                     }
                                 >
                                     +{rule.points}
@@ -200,16 +200,16 @@ export default function ScoringGuide() {
                     </div>
                 </section>
 
-                <aside className="rounded-2xl border border-cyan-200 bg-gradient-to-b from-cyan-50/60 to-white p-5 shadow-sm sm:p-6">
+                <aside className="rounded-2xl border border-border bg-gradient-to-b from-accent/60 to-card p-5 shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-cyan-600 shadow-sm ring-1 ring-cyan-200">
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-card text-primary shadow-sm ring-1 ring-ring">
                             <Scale className="size-5" />
                         </span>
                         <div>
-                            <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                                 Fairness
                             </p>
-                            <h2 className="mt-1 text-xl font-bold text-slate-900">
+                            <h2 className="mt-1 text-xl font-bold text-foreground">
                                 Simple by design
                             </h2>
                         </div>
@@ -218,9 +218,9 @@ export default function ScoringGuide() {
                         {fairnessPoints.map((point) => (
                             <div
                                 key={point}
-                                className="flex gap-3 rounded-xl border border-slate-200 bg-white p-4 text-sm leading-6 font-semibold text-slate-700 shadow-sm"
+                                className="flex gap-3 rounded-xl border border-border bg-card p-4 text-sm leading-6 font-semibold text-foreground shadow-sm"
                             >
-                                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cyan-600" />
+                                <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
                                 <span>{point}</span>
                             </div>
                         ))}
@@ -228,16 +228,16 @@ export default function ScoringGuide() {
                 </aside>
             </div>
 
-            <section className="mt-5 rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-5 shadow-sm sm:p-6">
+            <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-primary shadow-sm">
                         <Goal className="size-5" />
                     </span>
                     <div>
-                        <p className="text-xs font-semibold tracking-wide text-cyan-600 uppercase">
+                        <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                             Examples
                         </p>
-                        <h2 className="mt-1 text-xl font-bold text-slate-900">
+                        <h2 className="mt-1 text-xl font-bold text-foreground">
                             Real scoring examples
                         </h2>
                     </div>
@@ -247,23 +247,25 @@ export default function ScoringGuide() {
                     {examples.map((example) => (
                         <article
                             key={`${example.finalScore}-${example.prediction}`}
-                            className="flex items-start justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+                            className="flex items-start justify-between gap-3 rounded-xl border border-border bg-card p-4 shadow-sm"
                         >
                             <div>
                                 <div className="mb-3 flex items-center gap-2 text-sm">
-                                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-500">
+                                    <span className="rounded-full border border-border bg-muted px-2.5 py-1 text-xs font-bold text-muted-foreground">
                                         Final {example.finalScore}
                                     </span>
-                                    <span className="text-slate-300">vs</span>
-                                    <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-xs font-bold text-cyan-700">
+                                    <span className="text-muted-foreground">
+                                        vs
+                                    </span>
+                                    <span className="rounded-full border border-border bg-accent px-2.5 py-1 text-xs font-bold text-primary">
                                         Prediction {example.prediction}
                                     </span>
                                 </div>
-                                <p className="text-sm leading-5 text-slate-600">
+                                <p className="text-sm leading-5 text-muted-foreground">
                                     {example.explanation}
                                 </p>
                             </div>
-                            <span className="shrink-0 rounded-full bg-slate-900 px-3 py-1 text-sm font-bold text-white">
+                            <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-white">
                                 {example.points}/20
                             </span>
                         </article>
@@ -271,17 +273,17 @@ export default function ScoringGuide() {
                 </div>
             </section>
 
-            <section className="mt-5 rounded-2xl border border-cyan-200 bg-gradient-to-b from-cyan-50/40 to-white p-5 shadow-sm sm:p-6">
+            <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-accent/40 to-card p-5 shadow-sm sm:p-6">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex items-start gap-3">
-                        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-cyan-700">
+                        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
                             <BadgeCheck className="size-5" />
                         </span>
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900">
+                            <h2 className="text-xl font-bold text-foreground">
                                 Ready to make predictions?
                             </h2>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">
+                            <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                 Use this scoring guide when comparing your picks
                                 on Predictions and the Leaderboards.
                             </p>
@@ -290,14 +292,14 @@ export default function ScoringGuide() {
                     <div className="flex flex-col gap-2 sm:flex-row">
                         <Link
                             href={predictions.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <Calculator className="size-4" />
                             Go to predictions
                         </Link>
                         <Link
                             href={matches.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <CalendarDays className="size-4" />
                             View matches

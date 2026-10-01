@@ -26,9 +26,9 @@ export default function GroupTabs({
     ];
 
     return (
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-2.5 shadow-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="overflow-x-auto rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-2.5 shadow-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div
-                role="tablist"
+                role="group"
                 aria-label="World Cup groups"
                 className="grid min-w-max auto-cols-[5.25rem] grid-flow-col gap-2.5 md:min-w-0 md:grid-flow-row md:grid-cols-8 lg:grid-cols-[repeat(13,minmax(0,1fr))]"
             >
@@ -40,13 +40,12 @@ export default function GroupTabs({
                             key={tab.id}
                             type="button"
                             onClick={() => onChange(tab.id)}
-                            role="tab"
-                            aria-selected={isActive}
+                            aria-pressed={isActive}
                             className={[
-                                'h-11 rounded-2xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'h-11 rounded-2xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'border-slate-900 bg-slate-900 text-white shadow-md'
-                                    : 'border-transparent bg-white text-slate-600 hover:border-cyan-200 hover:bg-cyan-50',
+                                    ? 'border-slate-900 bg-secondary text-white shadow-md'
+                                    : 'border-transparent bg-card text-muted-foreground hover:border-border hover:bg-accent',
                             ].join(' ')}
                         >
                             {tab.label}

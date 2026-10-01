@@ -17,19 +17,19 @@ export default function Privacy() {
             />
 
             <div className="space-y-6">
-                <section className="rounded-2xl border border-slate-700/50 bg-slate-900 p-6 shadow-lg sm:p-8">
+                <section className="rounded-2xl border border-border/50 bg-secondary p-6 shadow-lg sm:p-8">
                     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                         <div className="max-w-3xl">
-                            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-slate-800 text-cyan-300">
+                            <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-muted text-primary">
                                 <Shield className="size-5" />
                             </div>
-                            <p className="text-xs font-semibold tracking-wide text-cyan-300 uppercase">
+                            <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                                 Legal
                             </p>
                             <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
                                 Privacy & Cookie Policy
                             </h1>
-                            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
                                 This policy describes how MondialIQ handles
                                 personal data, cookies, and your privacy rights.
                                 Last updated: June 7, 2026.
@@ -40,21 +40,21 @@ export default function Privacy() {
 
                 <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
                     <div className="space-y-6">
-                        <Card className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <Card className="rounded-2xl border border-border bg-card shadow-sm">
                             <CardHeader className="gap-2 px-5 py-5 sm:px-6">
-                                <div className="flex items-center gap-2 text-cyan-600">
+                                <div className="flex items-center gap-2 text-primary">
                                     <Lock className="size-4" />
                                     <p className="text-xs font-bold tracking-wide uppercase">
                                         Privacy Statement
                                     </p>
                                 </div>
-                                <CardTitle className="text-2xl font-bold text-slate-900">
+                                <CardTitle className="text-2xl font-bold text-foreground">
                                     How we handle your data
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-5 px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-6">
+                            <CardContent className="space-y-5 px-5 pb-6 text-sm leading-7 text-muted-foreground sm:px-6">
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Data Controller
                                     </h3>
                                     <p>
@@ -65,7 +65,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         What data do we collect?
                                     </h3>
                                     <p>
@@ -89,7 +89,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Legal Basis
                                     </h3>
                                     <p>
@@ -102,7 +102,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Your Rights
                                     </h3>
                                     <p>
@@ -115,7 +115,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Retention Period
                                     </h3>
                                     <p>
@@ -128,21 +128,21 @@ export default function Privacy() {
                             </CardContent>
                         </Card>
 
-                        <Card className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <Card className="rounded-2xl border border-border bg-card shadow-sm">
                             <CardHeader className="gap-2 px-5 py-5 sm:px-6">
-                                <div className="flex items-center gap-2 text-cyan-600">
+                                <div className="flex items-center gap-2 text-primary">
                                     <Cookie className="size-4" />
                                     <p className="text-xs font-bold tracking-wide uppercase">
                                         Cookie Policy
                                     </p>
                                 </div>
-                                <CardTitle className="text-2xl font-bold text-slate-900">
+                                <CardTitle className="text-2xl font-bold text-foreground">
                                     Cookies and tracking
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-5 px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-6">
+                            <CardContent className="space-y-5 px-5 pb-6 text-sm leading-7 text-muted-foreground sm:px-6">
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Functional cookies
                                     </h3>
                                     <p>
@@ -154,7 +154,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Analytical cookies
                                     </h3>
                                     <p>
@@ -166,7 +166,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Marketing cookies
                                     </h3>
                                     <p>
@@ -179,7 +179,7 @@ export default function Privacy() {
                                 </div>
 
                                 <div>
-                                    <h3 className="mb-1 text-base font-bold text-slate-900">
+                                    <h3 className="mb-1 text-base font-bold text-foreground">
                                         Adjusting cookie preferences
                                     </h3>
                                     <p>
@@ -194,22 +194,22 @@ export default function Privacy() {
                     </div>
 
                     <aside className="space-y-6">
-                        <Card className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+                        <Card className="rounded-2xl border border-border bg-card shadow-sm">
                             <CardHeader className="gap-3 px-5 py-5 sm:px-6">
-                                <div className="flex items-center gap-2 text-cyan-600">
+                                <div className="flex items-center gap-2 text-primary">
                                     <FileText className="size-4" />
                                     <p className="text-xs font-bold tracking-wide uppercase">
                                         Summary
                                     </p>
                                 </div>
-                                <CardTitle className="text-xl font-bold text-slate-900">
+                                <CardTitle className="text-xl font-bold text-foreground">
                                     In brief
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-4 px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-6">
+                            <CardContent className="space-y-4 px-5 pb-6 text-sm leading-7 text-muted-foreground sm:px-6">
                                 <ul className="space-y-3">
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/40 text-xs font-bold text-emerald-600">
                                             1
                                         </span>
                                         <span>
@@ -218,7 +218,7 @@ export default function Privacy() {
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/40 text-xs font-bold text-emerald-600">
                                             2
                                         </span>
                                         <span>
@@ -228,7 +228,7 @@ export default function Privacy() {
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/40 text-xs font-bold text-emerald-600">
                                             3
                                         </span>
                                         <span>
@@ -237,7 +237,7 @@ export default function Privacy() {
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/40 text-xs font-bold text-emerald-600">
                                             4
                                         </span>
                                         <span>
@@ -246,7 +246,7 @@ export default function Privacy() {
                                         </span>
                                     </li>
                                     <li className="flex gap-3">
-                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-600">
+                                        <span className="mt-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-emerald-950/40 text-xs font-bold text-emerald-600">
                                             5
                                         </span>
                                         <span>

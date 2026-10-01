@@ -19,12 +19,15 @@ export default function MatchInfoCard({ match }: Props) {
         ? [venue.name, venue.city].filter(Boolean).join(', ')
         : 'TBC';
     const seasonLabel = String(match.season);
-    
-    const timeLabel = !match.time || match.time === '00:00' || match.time === '00:00:00' ? 'TBD' : match.time;
+
+    const timeLabel =
+        !match.time || match.time === '00:00' || match.time === '00:00:00'
+            ? 'TBD'
+            : match.time;
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm sm:p-5">
-            <h2 className="mb-4 text-xl font-bold text-slate-900">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-4 shadow-sm sm:p-5">
+            <h2 className="mb-4 text-xl font-bold text-foreground">
                 Match info
             </h2>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">

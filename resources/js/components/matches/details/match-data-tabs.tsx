@@ -35,8 +35,8 @@ export default function MatchDataTabs({ match }: Props) {
     const [activeTab, setActiveTab] = useState<MatchDataTab>('events');
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 shadow-sm">
-            <div className="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white p-1.5">
+        <section className="overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
+            <div className="border-b border-border bg-gradient-to-b from-card to-card p-1.5">
                 <div
                     role="tablist"
                     aria-label="Match data"
@@ -54,10 +54,10 @@ export default function MatchDataTabs({ match }: Props) {
                                 aria-selected={isActive}
                                 onClick={() => setActiveTab(tab.value)}
                                 className={cn(
-                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
+                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
                                     isActive
-                                        ? 'bg-slate-900 text-white shadow-md'
-                                        : 'bg-white/90 text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm',
+                                        ? 'bg-secondary text-white shadow-md'
+                                        : 'bg-card/90 text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm',
                                 )}
                             >
                                 <Icon className="size-4 shrink-0" />

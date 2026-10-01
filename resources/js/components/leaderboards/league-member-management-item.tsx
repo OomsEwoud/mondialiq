@@ -1,5 +1,12 @@
 import { Form } from '@inertiajs/react';
-import { Bot, Crown, Shield, ShieldPlus, Trash2, UserMinus } from 'lucide-react';
+import {
+    Bot,
+    Crown,
+    Shield,
+    ShieldPlus,
+    Trash2,
+    UserMinus,
+} from 'lucide-react';
 import RemoveAiParticipantController from '@/actions/App/Http/Controllers/Leagues/RemoveAiParticipantController';
 import RemoveLeagueMemberController from '@/actions/App/Http/Controllers/Leagues/RemoveLeagueMemberController';
 import TransferLeagueOwnershipController from '@/actions/App/Http/Controllers/Leagues/TransferLeagueOwnershipController';
@@ -43,24 +50,24 @@ export default function LeagueMemberManagementItem({
                     ? 'border-amber-200 bg-amber-50/70'
                     : member.isSystemUser
                       ? 'border-emerald-200 bg-emerald-50/70'
-                      : 'border-slate-200 bg-slate-50',
+                      : 'border-border bg-muted',
             )}
         >
             <div className="flex min-w-0 items-center gap-3">
-                <Avatar className="size-11 rounded-2xl ring-1 ring-slate-200">
+                <Avatar className="size-11 rounded-2xl ring-1 ring-border">
                     <AvatarImage
                         src={member.avatar ?? undefined}
                         alt={member.name}
                         className="object-cover"
                     />
-                    <AvatarFallback className="bg-slate-800 text-xs font-semibold text-slate-200">
+                    <AvatarFallback className="bg-muted text-xs font-semibold text-foreground">
                         {getInitials(member.name)}
                     </AvatarFallback>
                 </Avatar>
 
                 <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                        <p className="truncate text-sm font-bold text-slate-900 sm:text-base">
+                        <p className="truncate text-sm font-bold text-foreground sm:text-base">
                             {member.name}
                         </p>
                         {member.isOwner && (
@@ -78,28 +85,28 @@ export default function LeagueMemberManagementItem({
                         {!member.isOwner &&
                             !member.isSystemUser &&
                             member.role === 'admin' && (
-                            <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
-                                <Shield className="size-3" />
-                                Admin
-                            </Badge>
-                        )}
+                                <Badge className="rounded-full bg-violet-400 px-2 py-0.5 text-xs font-bold text-violet-950">
+                                    <Shield className="size-3" />
+                                    Admin
+                                </Badge>
+                            )}
                         {!member.isOwner &&
                             !member.isSystemUser &&
                             member.role !== 'admin' && (
-                            <Badge
-                                variant="outline"
-                                className="rounded-full border-slate-200 bg-white px-2 py-0.5 text-xs font-bold text-slate-600"
-                            >
-                                Member
-                            </Badge>
-                        )}
+                                <Badge
+                                    variant="outline"
+                                    className="rounded-full border-border bg-card px-2 py-0.5 text-xs font-bold text-muted-foreground"
+                                >
+                                    Member
+                                </Badge>
+                            )}
                         {member.isCurrentUser && (
-                            <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-slate-900">
+                            <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-foreground">
                                 You
                             </Badge>
                         )}
                     </div>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
                         {member.isSystemUser
                             ? 'Automated predictions participant.'
                             : member.joinedAt
@@ -120,23 +127,23 @@ export default function LeagueMemberManagementItem({
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        className="h-10 w-full rounded-xl border-cyan-200 bg-white px-4 font-bold text-cyan-900 hover:border-cyan-300 hover:bg-cyan-50 focus-visible:ring-cyan-300"
+                                        className="h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-cyan-900 hover:border-ring hover:bg-accent focus-visible:ring-ring"
                                     >
                                         <ShieldPlus className="size-4" />
                                         Make owner
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                    <DialogTitle className="text-slate-900">
+                                <DialogContent className="border-border bg-card sm:max-w-md">
+                                    <DialogTitle className="text-foreground">
                                         Transfer ownership to {member.name}?
                                     </DialogTitle>
-                                    <DialogDescription className="text-sm leading-6 text-slate-600">
+                                    <DialogDescription className="text-sm leading-6 text-muted-foreground">
                                         {member.name} will become the new group
                                         owner immediately. You will stay in the
                                         group as a member, but owner controls
                                         move to them.
                                     </DialogDescription>
-                                    <div className="rounded-2xl border border-slate-200 bg-cyan-50 px-4 py-3 text-sm leading-6 text-cyan-900">
+                                    <div className="rounded-2xl border border-border bg-accent px-4 py-3 text-sm leading-6 text-cyan-900">
                                         After this transfer, use the regular
                                         group page as a normal member. Only the
                                         new owner will keep access to this
@@ -197,11 +204,11 @@ export default function LeagueMemberManagementItem({
                                         Remove AI
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                    <DialogTitle className="text-slate-900">
+                                <DialogContent className="border-border bg-card sm:max-w-md">
+                                    <DialogTitle className="text-foreground">
                                         Remove AI participant from this group?
                                     </DialogTitle>
-                                    <DialogDescription className="text-sm leading-6 text-slate-600">
+                                    <DialogDescription className="text-sm leading-6 text-muted-foreground">
                                         The AI participant will be removed from
                                         the group immediately. Existing AI
                                         predictions stay recorded in the
@@ -258,11 +265,11 @@ export default function LeagueMemberManagementItem({
                                         Remove member
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="border-slate-200 bg-white sm:max-w-md">
-                                    <DialogTitle className="text-slate-900">
+                                <DialogContent className="border-border bg-card sm:max-w-md">
+                                    <DialogTitle className="text-foreground">
                                         Remove {member.name} from this group?
                                     </DialogTitle>
-                                    <DialogDescription className="text-sm leading-6 text-slate-600">
+                                    <DialogDescription className="text-sm leading-6 text-muted-foreground">
                                         This removes their access to the group
                                         immediately. Existing predictions stay
                                         recorded, but they will no longer appear
@@ -311,7 +318,7 @@ export default function LeagueMemberManagementItem({
                         )}
                     </div>
                 ) : (
-                    <Badge className="rounded-full bg-amber-100 px-2.5 py-1 font-bold text-amber-900">
+                    <Badge className="rounded-full bg-amber-950/40 px-2.5 py-1 font-bold text-amber-200">
                         Protected role
                     </Badge>
                 )}

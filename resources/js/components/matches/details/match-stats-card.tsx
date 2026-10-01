@@ -7,14 +7,14 @@ interface Props {
 
 export default function MatchStatsCard({ match }: Props) {
     return (
-        <section className="rounded-xl border border-slate-200 bg-white p-5">
-            <h2 className="mb-4 text-lg font-bold text-slate-900">
+        <section className="rounded-xl border border-border bg-card p-5">
+            <h2 className="mb-4 text-lg font-bold text-foreground">
                 Team stats
             </h2>
             {match.stats.length > 0 ? (
                 <MatchStatsPanel match={match} />
             ) : (
-                <p className="rounded-lg bg-slate-50 p-4 text-sm text-slate-500">
+                <p className="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
                     No match statistics available yet.
                 </p>
             )}

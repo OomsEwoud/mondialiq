@@ -1,4 +1,3 @@
-
 import AiPredictionAdviceCard from '@/components/predictions/ai-prediction-advice-card';
 import AiPredictionHero from '@/components/predictions/ai-prediction-hero';
 import AiPredictionScoreCard from '@/components/predictions/ai-prediction-score-card';
@@ -28,11 +27,10 @@ export default function AiPredictionReport({ match, aiContext }: Props) {
                 <PredictionSourceComparison aiContext={aiContext} />
                 <AiPredictionAdviceCard advice={prediction?.advice} />
 
-                <p className="rounded-xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/60 p-4 text-center text-sm text-slate-500 shadow-sm">
+                <p className="rounded-xl border border-border bg-gradient-to-b from-card to-card/60 p-4 text-center text-sm text-muted-foreground shadow-sm">
                     Predictions are data-driven insights, not certainties.
                 </p>
             </div>
-
         </>
     );
 }

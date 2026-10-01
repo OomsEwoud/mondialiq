@@ -100,11 +100,7 @@ export default function Predictions({
             },
         }));
 
-        if (
-            key === 'date' ||
-            key === 'status' ||
-            key === 'pointsState'
-        ) {
+        if (key === 'date' || key === 'status' || key === 'pointsState') {
             const nextFilters = {
                 ...filters,
                 [key]: value,
@@ -181,7 +177,7 @@ export default function Predictions({
 
             <div className="mx-auto max-w-7xl">
                 <PredictionPageHeader scoringGuideHref={scoringGuideHref} />
-                <PredictionInfoGrid />
+
                 <PredictionTabs activeTab={mode} />
                 <PredictionsFilterCard
                     filters={filters}
@@ -210,6 +206,7 @@ export default function Predictions({
                     />
                 )}
                 <Pagination links={fixtures.links} />
+                <PredictionInfoGrid />
             </div>
         </>
     );

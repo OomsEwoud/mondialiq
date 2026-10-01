@@ -19,16 +19,15 @@ const statusTabs: Array<{ label: string; value: MatchStatusTabValue }> = [
 export default function MatchStatusTabs({ selected, onChange }: Props) {
     return (
         <div
-            role="radiogroup"
+            role="group"
             aria-label="Match status"
-            className="grid grid-cols-2 gap-1 rounded-md bg-[#0b0e0d] p-1 sm:grid-cols-5"
+            className="grid grid-cols-3 gap-1 rounded-md bg-[#0b0e0d] p-1 sm:grid-cols-5"
         >
             {statusTabs.map((tab) => (
                 <button
                     key={tab.value}
                     type="button"
-                    role="radio"
-                    aria-checked={selected === tab.value}
+                    aria-pressed={selected === tab.value}
                     onClick={() => onChange(tab.value)}
                     className={cn(
                         'flex h-9 min-w-0 items-center justify-center rounded-sm px-3 text-center text-sm leading-tight font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',

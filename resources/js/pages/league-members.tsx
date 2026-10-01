@@ -36,7 +36,7 @@ export default function LeagueMembers({
                         <Link
                             href={league.settingsHref || league.showHref || '#'}
                             className={cn(
-                                'inline-flex w-fit items-center gap-2 rounded-lg border border-slate-600/50 bg-slate-800/50 px-3.5 py-2 text-sm font-semibold text-slate-200 shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                                'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
                                 theme.buttonRing,
                             )}
                         >
@@ -60,7 +60,7 @@ export default function LeagueMembers({
                         <div className="max-w-3xl">
                             <div
                                 className={cn(
-                                    'mb-3 flex size-12 items-center justify-center rounded-xl border bg-slate-800/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
+                                    'mb-3 flex size-12 items-center justify-center rounded-xl border bg-muted/50 text-2xl shadow-sm ring-1 sm:size-14 sm:text-3xl',
                                     theme.badgeBorder,
                                 )}
                             >
@@ -77,7 +77,7 @@ export default function LeagueMembers({
                             <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
                                 {league.name} members
                             </h1>
-                            <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
+                            <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
                                 Review members, transfer ownership, or remove
                                 access when a group invite is no longer meant
                                 for someone.

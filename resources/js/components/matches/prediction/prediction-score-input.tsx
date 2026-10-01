@@ -19,8 +19,8 @@ export default function PredictionScoreInput({
     onChange,
 }: Props) {
     return (
-        <div className="grid gap-2 rounded-2xl border border-slate-200 bg-white p-3">
-            <Label htmlFor={id} className="text-xs font-bold text-slate-700">
+        <div className="grid gap-2 rounded-2xl border border-border bg-card p-3">
+            <Label htmlFor={id} className="text-xs font-bold text-foreground">
                 {label}
             </Label>
             <Input
@@ -31,13 +31,21 @@ export default function PredictionScoreInput({
                 inputMode="numeric"
                 value={value}
                 disabled={disabled}
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? `${id}-error` : undefined}
                 onChange={(event) =>
                     onChange(event.target.value.replace(/[^\d]/g, ''))
                 }
-                className="h-12 rounded-xl border-slate-200 bg-slate-50/60 text-center text-lg font-bold text-slate-900 shadow-none focus-visible:border-cyan-300 focus-visible:ring-cyan-200"
+                className="h-12 rounded-xl border-border bg-muted/60 text-center text-lg font-bold text-foreground shadow-none focus-visible:border-ring focus-visible:ring-ring"
             />
             {error && (
-                <p className="text-sm font-medium text-red-600">{error}</p>
+                <p
+                    id={`${id}-error`}
+                    role="alert"
+                    className="text-sm font-medium text-destructive"
+                >
+                    {error}
+                </p>
             )}
         </div>
     );

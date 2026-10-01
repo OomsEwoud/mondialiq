@@ -24,8 +24,8 @@ export default function MatchScoreCard({ match }: Props) {
     );
 
     return (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50/70 p-4 shadow-sm sm:p-6">
-            <h2 className="mb-5 text-xl font-bold text-slate-900">
+        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-4 shadow-sm sm:p-6">
+            <h2 className="mb-5 text-xl font-bold text-foreground">
                 Score details
             </h2>
             <div className="flex flex-col gap-2">
@@ -38,7 +38,7 @@ export default function MatchScoreCard({ match }: Props) {
                 ))}
             </div>
             {!hasAnyScore && (
-                <p className="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-4 py-4 text-sm leading-6 font-medium text-slate-500">
+                <p className="mt-4 rounded-2xl border border-dashed border-border bg-muted/80 px-4 py-4 text-sm leading-6 font-medium text-muted-foreground">
                     Score details will appear once the match is played.
                 </p>
             )}

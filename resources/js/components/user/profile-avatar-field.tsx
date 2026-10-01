@@ -6,7 +6,6 @@ import {
     AvatarFallback,
     AvatarImage,
 } from '@/components/ui/display/avatar';
-import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
 import { useInitials } from '@/hooks/use-initials';
 import type { User } from '@/types';
@@ -41,21 +40,21 @@ export default function ProfileAvatarField({
             className={`${settingsSubtlePanelClassName} flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between`}
         >
             <div className="flex items-center gap-4">
-                <Avatar className="size-16 border-2 border-white shadow-sm ring-1 ring-slate-200 sm:size-20">
+                <Avatar className="size-16 border-2 border-white shadow-sm ring-1 ring-border sm:size-20">
                     <AvatarImage
                         src={avatarSrc}
                         alt={user.name}
                         className="object-cover"
                     />
-                    <AvatarFallback className="bg-cyan-100 text-lg font-bold text-slate-900">
+                    <AvatarFallback className="bg-accent text-lg font-bold text-foreground">
                         {getInitials(user.name)}
                     </AvatarFallback>
                 </Avatar>
                 <div>
-                    <p className="text-sm font-bold text-slate-900">
+                    <p className="text-sm font-bold text-foreground">
                         Profile photo
                     </p>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
                         JPG, PNG or WebP. Square images work best.
                     </p>
                 </div>
@@ -65,26 +64,26 @@ export default function ProfileAvatarField({
                 <Label htmlFor="avatar" className="sr-only">
                     Profile photo
                 </Label>
-                <Input
+                <input
                     id="avatar"
                     type="file"
                     accept="image/*"
-                    className="sr-only"
+                    className="peer sr-only"
                     onChange={onAvatarChange}
                 />
                 <label
                     htmlFor="avatar"
-                    className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-colors focus-within:border-cyan-300 focus-within:ring-2 focus-within:ring-cyan-200 hover:bg-slate-50"
+                    className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 shadow-sm transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-ring hover:bg-muted"
                 >
                     <span className="flex min-w-0 items-center gap-3">
-                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-100 text-slate-900 ring-1 ring-cyan-200/70">
+                        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent text-foreground ring-1 ring-ring/70">
                             <ImagePlus className="size-5" />
                         </span>
                         <span className="min-w-0">
-                            <span className="block text-sm font-bold text-slate-900">
+                            <span className="block text-sm font-bold text-foreground">
                                 Choose image
                             </span>
-                            <span className="block truncate text-xs font-semibold text-slate-500">
+                            <span className="block truncate text-xs font-semibold text-muted-foreground">
                                 {selectedImageLabel}
                             </span>
                         </span>
