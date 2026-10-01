@@ -5,6 +5,7 @@ use App\Models\League;
 use App\Models\Player;
 use App\Models\PlayerSeasonStat;
 use App\Models\Team;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -66,7 +67,7 @@ test('the player detail page renders with season statistics', function () {
         'red_cards' => 0,
     ]);
 
-    $this->get(route('players.show', $player))
+    $this->actingAs(User::factory()->create())->get(route('players.show', $player))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('player-details')
@@ -100,7 +101,7 @@ test('the player detail page handles players without season stats', function () 
         'display_name' => 'Unknown Player',
     ]);
 
-    $this->get(route('players.show', $player))
+    $this->actingAs(User::factory()->create())->get(route('players.show', $player))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('player-details')
@@ -116,7 +117,7 @@ test('the player detail page handles players without a country', function () {
         'country_id' => null,
     ]);
 
-    $this->get(route('players.show', $player))
+    $this->actingAs(User::factory()->create())->get(route('players.show', $player))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('player-details')
@@ -152,7 +153,7 @@ test('the player detail page shows active teams only', function () {
     $activeTeam->players()->attach($player->id, ['is_active' => true]);
     $inactiveTeam->players()->attach($player->id, ['is_active' => false]);
 
-    $this->get(route('players.show', $player))
+    $this->actingAs(User::factory()->create())->get(route('players.show', $player))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('player-details')

@@ -42,25 +42,25 @@ use App\Http\Controllers\Socialite\RedirectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
-Route::get('/matches', MatchesController::class)->name('matches');
-Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.show');
-Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
-Route::get('/players/{player}', PlayerDetailsController::class)->name('players.show');
-Route::get('/groups', GroupsController::class)->name('groups');
-Route::get('/predictions', PredictionsController::class)->name('predictions');
-Route::get('/ai/predictions', AiPredictionsController::class)->name('ai.predictions');
 Route::get('/scoring', ScoringGuideController::class)->name('scoring');
 Route::get('/how-it-works', HowItWorksController::class)->name('how-it-works');
 Route::get('/contact', ContactController::class)->name('contact');
 Route::get('/privacy', PrivacyController::class)->name('privacy');
 Route::get('/auth/{provider}/redirect', RedirectController::class)
-    ->middleware('throttle:social-auth')
+    ->middleware(['guest', 'throttle:social-auth'])
     ->name('auth.redirect');
 Route::get('/auth/{provider}/callback', CallbackController::class)
-    ->middleware('throttle:social-auth')
+    ->middleware(['guest', 'throttle:social-auth'])
     ->name('auth.callback');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/matches', MatchesController::class)->name('matches');
+    Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.show');
+    Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');
+    Route::get('/players/{player}', PlayerDetailsController::class)->name('players.show');
+    Route::get('/groups', GroupsController::class)->name('groups');
+    Route::get('/predictions', PredictionsController::class)->name('predictions');
+    Route::get('/ai/predictions', AiPredictionsController::class)->name('ai.predictions');
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/leaderboards', LeaderboardsController::class)->name('leaderboards');

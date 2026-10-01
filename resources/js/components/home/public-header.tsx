@@ -1,32 +1,26 @@
 import { Link } from '@inertiajs/react';
 
 import AppLogo from '@/components/app/app-logo';
-import { home, login, matches, register } from '@/routes';
+import { home, login, register } from '@/routes';
 
 export default function PublicHeader() {
     return (
         <header className="sticky top-0 z-50 border-b border-[#262c29]/90 bg-[#0b0e0d]/90 backdrop-blur-xl">
-            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:h-18 sm:px-8">
+            <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
                 <Link
                     href={home()}
                     aria-label="MondialiQ home"
                     className="rounded-lg focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none"
                 >
                     <AppLogo
-                        markClassName="size-8 rounded-lg shadow-none sm:size-9"
-                        textClassName="text-lg text-[#f3f4f1] [&_span]:text-[#70b98e] sm:text-xl"
+                        markClassName="size-8 rounded-lg shadow-none"
+                        textClassName="text-base text-[#f3f4f1] [&_span]:text-[#70b98e] sm:text-lg"
                     />
                 </Link>
                 <nav
                     aria-label="Account"
                     className="flex items-center gap-1.5 sm:gap-3"
                 >
-                    <Link
-                        href={matches()}
-                        className="hidden min-h-11 items-center px-3 text-sm font-semibold text-muted-foreground hover:text-foreground sm:inline-flex"
-                    >
-                        Wedstrijden
-                    </Link>
                     <Link
                         href={login()}
                         className="rounded-lg px-3 py-2 text-sm font-semibold text-[#b4bbb6] transition hover:bg-[#171c19] hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none sm:px-4"

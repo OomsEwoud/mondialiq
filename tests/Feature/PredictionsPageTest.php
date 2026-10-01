@@ -48,7 +48,7 @@ test('an ai prediction can be shown on the predictions page', function () {
         'away_chance' => 20,
     ]);
 
-    $response = $this->get(route('predictions', ['mode' => 'ai']));
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', ['mode' => 'ai']));
 
     $response
         ->assertOk()
@@ -83,7 +83,7 @@ test('ai predictions can be filtered to upcoming matches', function () {
     createPredictionsPageAiPrediction($upcomingFixture);
     createPredictionsPageAiPrediction($finishedFixture);
 
-    $response = $this->get(route('predictions', [
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', [
         'mode' => 'ai',
         'status' => 'upcoming',
     ]));
@@ -117,7 +117,7 @@ test('ai predictions can be filtered to finished matches', function () {
     createPredictionsPageAiPrediction($upcomingFixture);
     createPredictionsPageAiPrediction($finishedFixture);
 
-    $response = $this->get(route('predictions', [
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', [
         'mode' => 'ai',
         'status' => 'past',
     ]));
@@ -151,7 +151,7 @@ test('ai predictions can be filtered by fixture date', function () {
     createPredictionsPageAiPrediction($todayFixture);
     createPredictionsPageAiPrediction($otherFixture);
 
-    $response = $this->get(route('predictions', [
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', [
         'mode' => 'ai',
         'date' => '2026-06-05',
     ]));
@@ -483,7 +483,7 @@ test('ai predictions can be filtered by points state', function (string $pointsS
         'no-points-earned' => $zeroPointsFixture->id,
     ];
 
-    $response = $this->get(route('predictions', [
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', [
         'mode' => 'ai',
         'pointsState' => $pointsState,
     ]));
@@ -513,7 +513,7 @@ test('ai predictions overview page shows ai predictions', function () {
 
     createPredictionsPageAiPrediction($fixture);
 
-    $response = $this->get(route('ai.predictions'));
+    $response = $this->actingAs(User::factory()->create())->get(route('ai.predictions'));
 
     $response
         ->assertOk()
@@ -526,7 +526,7 @@ test('ai predictions overview page shows ai predictions', function () {
         );
 });
 
-test('guest users do not see mine predictions results', function () {
+test('users without predictions see an empty mine overview', function () {
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
         'name' => 'World Cup',
@@ -556,7 +556,7 @@ test('guest users do not see mine predictions results', function () {
         'status_long' => 'Not Started',
     ]);
 
-    $response = $this->get(route('predictions', ['mode' => 'mine']));
+    $response = $this->actingAs(User::factory()->create())->get(route('predictions', ['mode' => 'mine']));
 
     $response
         ->assertOk()

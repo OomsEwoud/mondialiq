@@ -114,7 +114,7 @@ test('the matches page separates live fixtures from upcoming fixtures', function
         'status_long' => 'Not Started',
     ]);
 
-    $this->get(route('matches', ['status' => 'live']))
+    $this->actingAs(User::factory()->create())->get(route('matches', ['status' => 'live']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('matches')
@@ -122,7 +122,7 @@ test('the matches page separates live fixtures from upcoming fixtures', function
             ->where('fixtures.data.0.id', $liveFixture->id)
         );
 
-    $this->get(route('matches', ['status' => 'upcoming']))
+    $this->actingAs(User::factory()->create())->get(route('matches', ['status' => 'upcoming']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('matches')

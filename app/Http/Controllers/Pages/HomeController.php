@@ -20,8 +20,8 @@ class HomeController extends Controller
         LiveFixtureService $liveFixtureService,
     ): Response {
         return Inertia::render('home', [
-            'upcomingFixtures' => $this->upcomingFixtures($request->user()),
-            'liveFixtures' => $liveFixtureService->liveFixtures(),
+            'upcomingFixtures' => $request->user() ? $this->upcomingFixtures($request->user()) : [],
+            'liveFixtures' => $request->user() ? $liveFixtureService->liveFixtures() : [],
         ]);
     }
 

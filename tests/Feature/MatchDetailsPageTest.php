@@ -17,7 +17,7 @@ test('the match detail page exposes the fixture short status', function () {
         'status_long' => 'Halftime',
     ]);
 
-    $response = $this->get(route('matches.show', $fixture));
+    $response = $this->actingAs(User::factory()->create())->get(route('matches.show', $fixture));
 
     $response
         ->assertOk()
@@ -101,7 +101,7 @@ test('the match detail page exposes sorted fixture events with api minutes and f
         'detail' => 'Yellow Card',
     ]);
 
-    $response = $this->get(route('matches.show', $fixture));
+    $response = $this->actingAs(User::factory()->create())->get(route('matches.show', $fixture));
 
     $response
         ->assertOk()

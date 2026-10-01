@@ -3,6 +3,7 @@
 use App\Models\League;
 use App\Models\Standing;
 use App\Models\Team;
+use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('the groups page exposes group standings and the third placed ranking separately', function () {
@@ -38,7 +39,7 @@ test('the groups page exposes group standings and the third placed ranking separ
         );
     });
 
-    $response = $this->get(route('groups'));
+    $response = $this->actingAs(User::factory()->create())->get(route('groups'));
 
     $response
         ->assertOk()

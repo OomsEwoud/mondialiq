@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Events\TwoFactorAuthenticationChallenged;
 use Laravel\Socialite\Contracts\User as SocialiteUser;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -41,6 +42,17 @@ class CallbackController extends Controller
         }
 
         $user->forceFill($this->userAttributes($user, $newUser, $provider, $email))->save();
+
+        if ($user->hasEnabledTwoFactorAuthentication()) {
+            $request->session()->put([
+                'login.id' => $user->getKey(),
+                'login.remember' => false,
+            ]);
+
+            TwoFactorAuthenticationChallenged::dispatch($user);
+
+            return to_route('two-factor.login');
+        }
 
         Auth::login($user);
 

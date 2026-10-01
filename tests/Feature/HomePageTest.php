@@ -58,7 +58,7 @@ test('the home page only shows future not started upcoming fixtures', function (
         'status_long' => 'Match Cancelled',
     ]);
 
-    $this->get('/')
+    $this->actingAs(User::factory()->create())->get('/')
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('home')
@@ -67,7 +67,7 @@ test('the home page only shows future not started upcoming fixtures', function (
             ->where('upcomingFixtures.0.statusShort', 'NS')
             ->where('upcomingFixtures.0.statusLong', 'Not Started')
             ->where('upcomingFixtures.0.hasLineups', true)
-            ->where('upcomingFixtures.0.predictionState', null)
+            ->where('upcomingFixtures.0.predictionState', 'missing')
             ->where('upcomingFixtures.0.kickoffAt', $upcomingFixture->kickoffAt()));
 });
 

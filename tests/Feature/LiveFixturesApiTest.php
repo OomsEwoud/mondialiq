@@ -8,7 +8,10 @@ use App\Models\User;
 use Database\Seeders\AiUserSeeder;
 use Illuminate\Support\Facades\Cache;
 
-beforeEach(fn () => Cache::flush());
+beforeEach(function () {
+    Cache::flush();
+    $this->actingAs(User::factory()->create());
+});
 
 test('the live fixtures endpoint returns slim cached live fixture data', function () {
     $league = League::create([
