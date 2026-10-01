@@ -56,7 +56,7 @@ test('socialite callback without an authorization code redirects to login', func
     $this->assertGuest();
 });
 
-test('socialite callback signs in an existing account without two factor authentication', function () {
+test('socialite callback signs in an existing account without two factor authentication', function (string $providerName) {
     $user = User::factory()->create();
     $providerUser = (new SocialiteUser)->map([
         'id' => 'google-user-123',
@@ -65,15 +65,33 @@ test('socialite callback signs in an existing account without two factor authent
     ]);
     $provider = Mockery::mock(Provider::class);
     $provider->shouldReceive('user')->once()->andReturn($providerUser);
-    Socialite::shouldReceive('driver')->with('google')->once()->andReturn($provider);
+    Socialite::shouldReceive('driver')->with($providerName)->once()->andReturn($provider);
 
-    $this->withSession(['url.intended' => route('dashboard')])
-        ->get(route('auth.callback', ['provider' => 'google', 'code' => 'test-code']))
-        ->assertRedirect(route('dashboard'));
+    $this->withSession(['url.intended' => route('matches')])
+        ->get(route('auth.callback', ['provider' => $providerName, 'code' => 'test-code']))
+        ->assertRedirect(route('dashboard'))->assertSessionMissing('url.intended');
 
     $this->assertAuthenticatedAs($user);
     expect($user->fresh()->social_provider_id)->toBe('google-user-123');
-});
+})->with(['google', 'facebook']);
+
+test('new social accounts land on dashboard', function (string $providerName) {
+    $providerUser = (new SocialiteUser)->map([
+        'id' => 'new-social-user',
+        'name' => 'New User',
+        'email' => 'new-user@example.com',
+    ]);
+    $provider = Mockery::mock(Provider::class);
+    $provider->shouldReceive('user')->once()->andReturn($providerUser);
+    Socialite::shouldReceive('driver')->with($providerName)->once()->andReturn($provider);
+
+    $this->withSession(['url.intended' => route('matches')])
+        ->get(route('auth.callback', ['provider' => $providerName, 'code' => 'test-code']))
+        ->assertRedirect(route('dashboard'))
+        ->assertSessionMissing('url.intended');
+
+    $this->assertAuthenticatedAs(User::where('email', 'new-user@example.com')->firstOrFail());
+})->with(['google', 'facebook']);
 
 test('socialite login requires the configured second factor before authenticating', function () {
     Event::fake([TwoFactorAuthenticationChallenged::class]);
@@ -92,7 +110,7 @@ test('socialite login requires the configured second factor before authenticatin
     $provider->shouldReceive('user')->once()->andReturn($providerUser);
     Socialite::shouldReceive('driver')->with('google')->once()->andReturn($provider);
 
-    $this->withSession(['url.intended' => route('dashboard')])
+    $this->withSession(['url.intended' => route('matches')])
         ->get(route('auth.callback', ['provider' => 'google', 'code' => 'test-code']))
         ->assertRedirect(route('two-factor.login'))
         ->assertSessionHas('login.id', $user->id)
@@ -106,7 +124,7 @@ test('socialite login requires the configured second factor before authenticatin
     $this->assertGuest();
 
     $this->post(route('two-factor.login.store'), ['recovery_code' => 'recovery-code'])
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('dashboard'))->assertSessionMissing('url.intended');
     $this->assertAuthenticatedAs($user);
     expect($user->fresh()->recoveryCodes())->not->toContain('recovery-code');
 });

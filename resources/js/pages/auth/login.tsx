@@ -27,7 +27,6 @@ type Props = {
     status?: string;
     canResetPassword: boolean;
     canRegister: boolean;
-    intended?: string;
 };
 
 type SocialProvider = {
@@ -96,7 +95,6 @@ export default function Login({
     status,
     canResetPassword,
     canRegister,
-    intended,
 }: Props) {
     const showStatus = Boolean(status);
 
@@ -115,14 +113,6 @@ export default function Login({
             >
                 {({ processing, errors }) => (
                     <>
-                        {intended && (
-                            <input
-                                type="hidden"
-                                name="intended"
-                                value={intended}
-                            />
-                        )}
-
                         {showStatus && (
                             <div className={authStatusMessageClass}>
                                 {status}
@@ -228,9 +218,6 @@ export default function Login({
                                         <a
                                             href={authRedirect.url(
                                                 provider.provider,
-                                                intended
-                                                    ? { query: { intended } }
-                                                    : undefined,
                                             )}
                                             aria-label={`Inloggen met ${provider.name}`}
                                         >

@@ -16,9 +16,7 @@ class RedirectController extends Controller
     {
         $this->ensureSupportedProvider($provider);
 
-        if ($request->has('intended')) {
-            $request->session()->put('url.intended', $request->input('intended'));
-        }
+        $request->session()->forget('url.intended');
 
         return Socialite::driver($provider)->redirect();
     }

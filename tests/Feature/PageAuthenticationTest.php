@@ -37,14 +37,14 @@ test('live fixtures reject guests and support authenticated browser sessions', f
         ->assertJsonStructure(['data']);
 });
 
-test('login returns the user to the requested protected page', function () {
+test('login goes to dashboard instead of the requested protected page', function () {
     $user = User::factory()->create();
 
     $this->get('/predictions?mode=mine')->assertRedirect(route('login'));
     $this->post(route('login.store'), [
         'email' => $user->email,
         'password' => 'password',
-    ])->assertRedirect('/predictions?mode=mine');
+    ])->assertRedirect(route('dashboard'))->assertSessionMissing('url.intended');
 
     $this->assertAuthenticatedAs($user);
 });

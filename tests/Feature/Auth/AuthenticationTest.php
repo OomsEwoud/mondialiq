@@ -19,7 +19,7 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('home', absolute: false));
+    $response->assertRedirect(route('dashboard', absolute: false));
 });
 
 test('users with two factor enabled are redirected to two factor challenge', function () {
@@ -57,6 +57,21 @@ test('users can not authenticate with invalid password', function () {
     ]);
 
     $this->assertGuest();
+});
+
+test('successful login ignores posted and stored redirect destinations', function () {
+    $user = User::factory()->create();
+
+    $this->withSession(['url.intended' => route('matches')])
+        ->post(route('login.store'), [
+            'email' => $user->email,
+            'password' => 'password',
+            'intended' => 'https://example.com/untrusted',
+        ])
+        ->assertRedirect(route('dashboard'))
+        ->assertSessionMissing('url.intended');
+
+    $this->assertAuthenticatedAs($user);
 });
 
 test('users can logout', function () {

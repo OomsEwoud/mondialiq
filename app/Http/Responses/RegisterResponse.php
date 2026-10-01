@@ -10,6 +10,8 @@ class RegisterResponse implements RegisterResponseContract
 {
     public function toResponse($request): Response
     {
+        $request->session()->forget('url.intended');
+
         if ($request->wantsJson()) {
             return new JsonResponse(status: 201);
         }
