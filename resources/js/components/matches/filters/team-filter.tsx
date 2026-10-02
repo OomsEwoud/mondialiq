@@ -46,7 +46,6 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
 
     return (
         <div className="relative grid gap-2 text-xs font-bold text-[#89928c]">
-            Ploeg
             <div className="relative">
                 <Search
                     aria-hidden
@@ -57,7 +56,7 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                     ref={inputRef}
                     type="search"
                     value={selected}
-                    placeholder="Zoek een ploeg"
+                    placeholder="Zoek een ploeg…"
                     onFocus={() => setOpen(true)}
                     onBlur={() => window.setTimeout(() => setOpen(false), 120)}
                     onChange={(e) => {
@@ -66,13 +65,13 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                         setActiveIndex(0);
                     }}
                     onKeyDown={handleKeyDown}
-                    className="h-11 w-full rounded-md border border-[#343d37] bg-[#0d110f] pr-10 pl-10 text-sm font-semibold text-[#daddd9] normal-case transition-colors outline-none placeholder:text-[#59615c] hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
+                    className="h-11 w-full rounded-md border border-[#29312c] bg-transparent pr-10 pl-10 text-sm font-medium text-[#daddd9] normal-case transition-colors outline-none placeholder:text-[#949d97] hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
                 />
                 {selected && (
                     <button
                         type="button"
                         onClick={handleClear}
-                        aria-label="Clear team"
+                        aria-label="Ploeg wissen"
                         className="absolute top-1/2 right-3 -translate-y-1/2 rounded-sm p-1 text-[#717a74] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
                     >
                         <X size={15} />

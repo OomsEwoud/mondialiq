@@ -5,7 +5,6 @@ import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
 import PageHead from '@/components/seo/page-head';
-import PageHeader from '@/components/typography/page-header';
 import { emptyFilters } from '@/const/match';
 import type {
     FilterKey,
@@ -48,22 +47,28 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
         <>
             <PageHead
                 title="Wedstrijden"
-                description="Bekijk het volledige WK 2026-speelschema en filter wedstrijden op team, ronde, datum of status."
+                description="Bekijk het programma, analyses en voorspellingen. Filter wedstrijden op ploeg, ronde, datum of status."
             />
 
-            <PageHeader
-                eyebrow="WK 2026 · Speelschema"
-                title="Wedstrijden"
-                description="Vind je volgende match, bekijk de aftraptijd en maak je voorspelling."
-                actions={
-                    <p className="text-sm text-muted-foreground">
-                        <strong className="text-foreground tabular-nums">
-                            {fixtures.data.length}
-                        </strong>{' '}
-                        wedstrijden op deze pagina
+            <header className="mb-10 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                        Wedstrijden · Speelschema
                     </p>
-                }
-            />
+                    <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+                        Wedstrijden
+                    </h1>
+                    <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                        Bekijk het programma, analyses en voorspellingen.
+                    </p>
+                </div>
+                <p className="text-xs text-[#949d97]">
+                    <span className="font-semibold text-[#daddd9] tabular-nums">
+                        {fixtures.data.length}
+                    </span>{' '}
+                    wedstrijden op deze pagina
+                </p>
+            </header>
 
             <MatchFilters
                 rounds={filterOptions.rounds}
@@ -88,7 +93,10 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                         ? 'Wedstrijden laden…'
                         : `${fixtures.data.length} wedstrijden gevonden`}
                 </p>
-                <MatchList matches={fixtures.data} />
+                <MatchList
+                    matches={fixtures.data}
+                    onClear={() => visit(emptyFilters)}
+                />
             </div>
             <Pagination links={fixtures.links} />
         </>

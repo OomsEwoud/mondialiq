@@ -1,14 +1,13 @@
-import { X } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { FilterKey, Filters, MatchStatusFilter } from '@/types/match-page';
 import { toDateKey } from '@/utils/date';
 import DateFilter from './filters/date-filter';
 import MatchStatusTabs from './filters/match-status-tabs';
+import type { MatchStatusTabValue } from './filters/match-status-tabs';
 import RoundFilter from './filters/round-filter';
 import TeamFilter from './filters/team-filter';
-
-type MatchStatusTabValue = MatchStatusFilter | 'today';
 
 interface Props {
     rounds: Array<{ label: string; value: string }>;
@@ -31,20 +30,32 @@ export default function MatchFilters({
 }: Props) {
     const [showFilters, setShowFilters] = useState(false);
     const today = toDateKey(new Date());
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const tomorrow = toDateKey(tomorrowDate);
     const hasActiveFilters =
         selected.round ||
         selected.date ||
         selected.team ||
         selected.status !== 'all';
-    const selectedMatchStatus: MatchStatusTabValue =
+    const advancedFilterCount =
+        Number(Boolean(selected.round)) + Number(Boolean(selected.date));
+    const selectedMatchStatus: MatchStatusTabValue | null =
         selected.status !== 'all'
             ? selected.status
             : selected.date === today
               ? 'today'
-              : 'all';
+              : selected.date === tomorrow
+                ? 'tomorrow'
+                : selected.date
+                  ? null
+                  : 'all';
     const handleMatchStatusChange = (value: MatchStatusTabValue) => {
-        if (value === 'today') {
-            onQuickChange({ date: today, status: 'all' });
+        if (value === 'today' || value === 'tomorrow') {
+            onQuickChange({
+                date: value === 'today' ? today : tomorrow,
+                status: 'all',
+            });
 
             return;
         }
@@ -53,72 +64,69 @@ export default function MatchFilters({
     };
 
     return (
-        <section className="mb-6 rounded-lg border border-[#29312c] bg-[#111513] p-4 sm:p-5">
-            <div className="mb-5 flex items-center justify-between gap-3">
-                <div>
-                    <h2 className="text-sm font-bold text-[#f3f4f1]">
-                        Vind je wedstrijd
-                    </h2>
-                    <p className="mt-1 text-xs text-[#7f8882]">
-                        Filter op status, ronde, datum of team.
-                    </p>
-                </div>
-                {hasActiveFilters && (
-                    <button
-                        type="button"
-                        onClick={onClear}
-                        className="inline-flex size-9 items-center justify-center gap-2 rounded-md border border-[#343d37] text-[#939c96] transition-colors hover:border-[#536159] hover:bg-[#1a211d] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:w-auto sm:px-3"
-                        aria-label="Wis alle filters"
-                        title="Wis alle filters"
-                    >
-                        <X size={15} />
-                        <span className="hidden sm:inline">Wis filters</span>
-                    </button>
-                )}
-            </div>
-
-            <div className="mb-5 border-b border-[#29312c] pb-5">
+        <section aria-label="Wedstrijden filteren" className="mb-10">
+            <div className="border-b border-[#262c29]">
                 <MatchStatusTabs
                     selected={selectedMatchStatus}
                     onChange={handleMatchStatusChange}
                 />
             </div>
-
-            <button
-                type="button"
-                className="flex min-h-11 w-full items-center justify-between text-sm font-semibold text-primary md:hidden"
-                aria-expanded={showFilters}
-                aria-controls="match-extra-filters"
-                onClick={() => setShowFilters(!showFilters)}
-            >
-                Ronde, datum en ploeg
-                {selected.round || selected.date || selected.team
-                    ? ' · actief'
-                    : ''}
-                <span aria-hidden="true">{showFilters ? '−' : '+'}</span>
-            </button>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
+                <div className="min-w-0 flex-1 sm:max-w-sm">
+                    <TeamFilter
+                        teams={teams}
+                        selected={selected.team}
+                        onChange={(value) => onChange('team', value)}
+                    />
+                </div>
+                <button
+                    type="button"
+                    className={cn(
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-sm px-2 text-sm font-semibold transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        showFilters || advancedFilterCount
+                            ? 'text-[#9ecbad]'
+                            : 'text-[#949d97]',
+                    )}
+                    aria-expanded={showFilters}
+                    aria-controls="match-extra-filters"
+                    onClick={() => setShowFilters(!showFilters)}
+                >
+                    <SlidersHorizontal className="size-4" aria-hidden="true" />
+                    Filters
+                    {advancedFilterCount > 0 && (
+                        <span className="text-xs tabular-nums">
+                            ({advancedFilterCount})
+                        </span>
+                    )}
+                </button>
+                {hasActiveFilters && (
+                    <button
+                        type="button"
+                        onClick={onClear}
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-[#949d97] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                    >
+                        <X className="size-3.5" aria-hidden="true" />
+                        Filters wissen
+                    </button>
+                )}
+            </div>
             <div
                 id="match-extra-filters"
-                className={cn(
-                    'grid-cols-1 gap-4 md:grid md:grid-cols-3',
-                    showFilters ? 'mt-3 grid md:mt-0' : 'hidden',
-                )}
+                hidden={!showFilters}
+                className="pt-5"
             >
-                <RoundFilter
-                    rounds={rounds}
-                    selected={selected.round}
-                    onChange={(value) => onChange('round', value)}
-                />
-                <DateFilter
-                    dates={dates}
-                    selected={selected.date}
-                    onChange={(value) => onChange('date', value)}
-                />
-                <TeamFilter
-                    teams={teams}
-                    selected={selected.team}
-                    onChange={(value) => onChange('team', value)}
-                />
+                <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:max-w-2xl sm:grid-cols-2">
+                    <RoundFilter
+                        rounds={rounds}
+                        selected={selected.round}
+                        onChange={(value) => onChange('round', value)}
+                    />
+                    <DateFilter
+                        dates={dates}
+                        selected={selected.date}
+                        onChange={(value) => onChange('date', value)}
+                    />
+                </div>
             </div>
         </section>
     );

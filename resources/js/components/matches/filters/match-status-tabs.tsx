@@ -1,16 +1,17 @@
 import { cn } from '@/lib/utils';
 import type { MatchStatusFilter } from '@/types/match-page';
 
-type MatchStatusTabValue = MatchStatusFilter | 'today';
+export type MatchStatusTabValue = MatchStatusFilter | 'today' | 'tomorrow';
 
 interface Props {
-    selected: MatchStatusTabValue;
+    selected: MatchStatusTabValue | null;
     onChange: (value: MatchStatusTabValue) => void;
 }
 
 const statusTabs: Array<{ label: string; value: MatchStatusTabValue }> = [
     { label: 'Alles', value: 'all' },
     { label: 'Vandaag', value: 'today' },
+    { label: 'Morgen', value: 'tomorrow' },
     { label: 'Live', value: 'live' },
     { label: 'Binnenkort', value: 'upcoming' },
     { label: 'Gespeeld', value: 'played' },
@@ -20,8 +21,8 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
     return (
         <div
             role="group"
-            aria-label="Match status"
-            className="grid grid-cols-3 gap-1 rounded-md bg-[#0b0e0d] p-1 sm:grid-cols-5"
+            aria-label="Datum en wedstrijdstatus"
+            className="flex flex-wrap gap-x-5 gap-y-1 sm:gap-x-7"
         >
             {statusTabs.map((tab) => (
                 <button
@@ -30,10 +31,10 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
                     aria-pressed={selected === tab.value}
                     onClick={() => onChange(tab.value)}
                     className={cn(
-                        'flex h-9 min-w-0 items-center justify-center rounded-sm px-3 text-center text-sm leading-tight font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                        'flex min-h-11 items-center border-b-2 px-0.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
                         selected === tab.value
-                            ? 'bg-[#edf1ed] text-[#101412]'
-                            : 'text-[#7f8882] hover:bg-[#171c19] hover:text-[#daddd9]',
+                            ? 'border-[#6fae88] text-[#9ecbad]'
+                            : 'border-transparent text-[#949d97] hover:text-white',
                     )}
                 >
                     {tab.label}
