@@ -1,0 +1,215 @@
+import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { useId, useState } from 'react';
+import FilterSelect from '@/components/predictions/filters/filter-select';
+import { cn } from '@/lib/utils';
+import type {
+    PredictionFilters,
+    PredictionStatusFilter,
+} from '@/types/prediction-filter';
+import { toDateKey } from '@/utils/date';
+
+interface Props {
+    filters: PredictionFilters;
+    isPersonal: boolean;
+    hasActiveFilters: boolean;
+    onChange: <K extends keyof PredictionFilters>(
+        key: K,
+        value: PredictionFilters[K],
+    ) => void;
+    onQuickAll: () => void;
+    onMatchStatusChange: (status: PredictionStatusFilter, date: string) => void;
+    onClear: () => void;
+}
+
+export default function PredictionToolbar({
+    filters,
+    isPersonal,
+    hasActiveFilters,
+    onChange,
+    onQuickAll,
+    onMatchStatusChange,
+    onClear,
+}: Props) {
+    const [expanded, setExpanded] = useState(false);
+    const advancedId = useId();
+    const today = toDateKey(new Date());
+    const nextDay = new Date();
+    nextDay.setDate(nextDay.getDate() + 1);
+    const tomorrow = toDateKey(nextDay);
+    const dates = [
+        { label: 'Vandaag', value: today },
+        { label: 'Morgen', value: tomorrow },
+        { label: 'Alles', value: '' },
+    ];
+    const advancedCount =
+        Number(
+            Boolean(
+                filters.date &&
+                filters.date !== today &&
+                filters.date !== tomorrow,
+            ),
+        ) +
+        Number(filters.status !== 'all') +
+        Number(filters.outcome !== 'all') +
+        Number(filters.confidenceSort !== 'default') +
+        Number(filters.pointsState !== 'all');
+
+    return (
+        <section aria-label="Voorspellingen filteren" className="mb-10">
+            <div
+                role="group"
+                aria-label="Periode"
+                className="flex gap-7 border-b border-[#262c29]"
+            >
+                {dates.map(({ label, value }) => (
+                    <button
+                        key={label}
+                        type="button"
+                        aria-pressed={
+                            filters.date === value && filters.status === 'all'
+                        }
+                        onClick={() =>
+                            value
+                                ? onMatchStatusChange('all', value)
+                                : onQuickAll()
+                        }
+                        className={cn(
+                            'min-h-11 border-b-2 px-0.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                            filters.date === value && filters.status === 'all'
+                                ? 'border-[#6fae88] text-[#9ecbad]'
+                                : 'border-transparent text-[#949d97] hover:text-white',
+                        )}
+                    >
+                        {label}
+                    </button>
+                ))}
+            </div>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
+                <div className="relative min-w-0 flex-1 sm:max-w-sm">
+                    <Search
+                        aria-hidden="true"
+                        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#6fae88]"
+                    />
+                    <input
+                        type="search"
+                        aria-label="Zoek een ploeg"
+                        placeholder="Zoek een ploeg…"
+                        value={filters.search}
+                        onChange={(event) =>
+                            onChange('search', event.target.value)
+                        }
+                        className="h-11 w-full rounded-md border border-[#29312c] bg-transparent pr-3 pl-10 text-sm text-[#daddd9] outline-none placeholder:text-[#949d97] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
+                    />
+                </div>
+                <button
+                    type="button"
+                    aria-expanded={expanded}
+                    aria-controls={advancedId}
+                    onClick={() => setExpanded(!expanded)}
+                    className={cn(
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-sm px-2 text-sm font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        expanded || advancedCount
+                            ? 'text-[#9ecbad]'
+                            : 'text-[#949d97]',
+                    )}
+                >
+                    <SlidersHorizontal className="size-4" aria-hidden="true" />
+                    Filters
+                    {advancedCount > 0 && (
+                        <span className="text-xs tabular-nums">
+                            ({advancedCount})
+                        </span>
+                    )}
+                </button>
+                {hasActiveFilters && (
+                    <button
+                        type="button"
+                        onClick={onClear}
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-[#949d97] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                    >
+                        <X className="size-3.5" aria-hidden="true" />
+                        Filters wissen
+                    </button>
+                )}
+            </div>
+            <div id={advancedId} hidden={!expanded} className="pt-5">
+                <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <label className="grid min-w-0 gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
+                        Datum
+                        <input
+                            aria-label="Datum"
+                            type="date"
+                            value={filters.date}
+                            onChange={(event) =>
+                                onChange('date', event.target.value)
+                            }
+                            className="h-11 w-full min-w-0 rounded-xl border border-border bg-card px-3 text-sm font-semibold text-foreground [color-scheme:dark] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        />
+                    </label>
+                    <FilterSelect
+                        label="Wedstrijdstatus"
+                        value={filters.status}
+                        options={[
+                            { label: 'Alle wedstrijden', value: 'all' },
+                            { label: 'Binnenkort', value: 'upcoming' },
+                            { label: 'Gestart / afgelopen', value: 'past' },
+                        ]}
+                        onChange={(value) => onChange('status', value)}
+                    />
+                    <FilterSelect
+                        label="Voorspelde winnaar"
+                        value={filters.outcome}
+                        options={[
+                            { label: 'Alle uitkomsten', value: 'all' },
+                            { label: 'Thuisploeg', value: 'home' },
+                            { label: 'Gelijkspel', value: 'draw' },
+                            { label: 'Uitploeg', value: 'away' },
+                        ]}
+                        onChange={(value) => onChange('outcome', value)}
+                    />
+                    <FilterSelect
+                        label="Sorteer op confidence"
+                        value={filters.confidenceSort}
+                        options={[
+                            { label: 'Op datum', value: 'default' },
+                            {
+                                label: 'Hoog naar laag',
+                                value: 'confidence-desc',
+                            },
+                            {
+                                label: 'Laag naar hoog',
+                                value: 'confidence-asc',
+                            },
+                        ]}
+                        onChange={(value) => onChange('confidenceSort', value)}
+                    />
+                    {(isPersonal || filters.pointsState !== 'all') && (
+                        <FilterSelect
+                            label="Puntenstatus"
+                            value={filters.pointsState}
+                            options={[
+                                { label: 'Alle voorspellingen', value: 'all' },
+                                {
+                                    label: 'Punten toegekend',
+                                    value: 'points-earned',
+                                },
+                                {
+                                    label: 'Nog te beoordelen',
+                                    value: 'points-pending',
+                                },
+                                {
+                                    label: 'Geen punten behaald',
+                                    value: 'no-points-earned',
+                                },
+                            ]}
+                            onChange={(value) => onChange('pointsState', value)}
+                        />
+                    )}
+                </div>
+            </div>
+            <p className="mt-3 text-xs leading-5 text-[#949d97]">
+                Zoeken, winnaar en sortering gelden voor deze pagina.
+            </p>
+        </section>
+    );
+}
