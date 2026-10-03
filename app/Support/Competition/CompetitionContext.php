@@ -16,6 +16,8 @@ class CompetitionContext
 
     public function season(): int
     {
-        return (int) config('services.api_football.season');
+        $season = (int) config('services.api_football.season');
+
+        return $season > 0 ? $season : (int) now('Europe/Brussels')->format('Y');
     }
 }

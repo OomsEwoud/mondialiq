@@ -139,6 +139,22 @@ php artisan queue:listen --tries=1
 
 ## Database And Data Sync
 
+Create repeatable local demo data for competitions, teams, fixtures, standings,
+statistics and AI predictions:
+
+```bash
+php artisan mondialiq:demo-data
+```
+
+Optionally add predictions for an existing human user by ID or email:
+
+```bash
+php artisan mondialiq:demo-data --user=you@example.test
+```
+
+The command only runs in local or testing environments, does not call the
+football API, and does not delete existing records.
+
 Run migrations:
 
 ```bash

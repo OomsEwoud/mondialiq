@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use LogicException;
 
 class AiUserSeeder extends Seeder
 {
@@ -22,7 +23,7 @@ class AiUserSeeder extends Seeder
         );
 
         if (! $user->is_system_user) {
-            $user->forceFill(['is_system_user' => true])->save();
+            throw new LogicException('The reserved AI account email is already used by a human account.');
         }
     }
 }

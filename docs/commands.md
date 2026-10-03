@@ -4,6 +4,24 @@ Gebruik deze lijst als snelle test-cheatsheet voor lokale data-sync, prediction 
 
 Vervang `FIXTURE_ID` door een echte lokale `fixtures.id`, bijvoorbeeld `1169`.
 
+## Lokale demo-data
+
+Vul de lokale database met herhaalbare competitie-, team-, wedstrijd-, stand-,
+statistiek- en AI-demo-data:
+
+```bash
+php artisan mondialiq:demo-data
+```
+
+Voeg optioneel voorspellingen toe voor een bestaande menselijke gebruiker:
+
+```bash
+php artisan mondialiq:demo-data --user=EMAIL_OF_USER_ID
+```
+
+De opdracht werkt alleen in `local` en `testing`, gebruikt geen externe API en
+verwijdert geen bestaande gebruikers- of voetbaldata.
+
 ## Prediction Context En AI
 
 Bekijk alleen de opgeschoonde prediction context:

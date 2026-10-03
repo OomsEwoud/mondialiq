@@ -51,3 +51,10 @@ test('the competition context includes every league with fixtures in the configu
     expect(app(CompetitionContext::class)->leagueIds())
         ->toEqualCanonicalizing([$firstLeague->id, $secondLeague->id]);
 });
+
+test('the competition context falls back to the current season when its setting is invalid', function () {
+    config()->set('services.api_football.season', 'year');
+
+    expect(app(CompetitionContext::class)->season())
+        ->toBe((int) now('Europe/Brussels')->format('Y'));
+});

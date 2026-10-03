@@ -12,7 +12,7 @@
     font-style: normal;
     font-weight: 100 900;
     font-display: swap;
-    src: url('/fonts/filament/filament/inter/inter-latin-wght-normal-NRMW37G5.woff2')
+    src: url('../../vendor/filament/filament/dist/fonts/inter/inter-latin-wght-normal-NRMW37G5.woff2')
         format('woff2');
 }
 
