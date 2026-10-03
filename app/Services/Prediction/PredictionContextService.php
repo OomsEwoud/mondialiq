@@ -183,10 +183,6 @@ class PredictionContextService
             return 'Likely neutral venue; do not treat the listed home team as having home advantage.';
         }
 
-        if (str_contains($league, 'world cup')) {
-            return 'Home advantage should only apply to host nations, not automatically to the listed home team.';
-        }
-
         return null;
     }
 }

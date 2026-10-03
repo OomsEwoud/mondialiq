@@ -7,7 +7,7 @@ use App\Http\Resources\FixtureResource;
 use App\Models\League;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\LiveFixtureService;
-use App\Support\WorldCup\WorldCupContext;
+use App\Support\Competition\CompetitionContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,14 +21,14 @@ class DashboardController extends Controller
 
     public function __construct(
         private readonly LiveFixtureService $liveFixtureService,
-        private readonly WorldCupContext $worldCupContext,
+        private readonly CompetitionContext $competitionContext,
     ) {}
 
     public function __invoke(Request $request): Response
     {
         $leagueIds = League::query()
             ->whereHas('fixtures', fn (Builder $query) => $query
-                ->where('season', $this->worldCupContext->season()))
+                ->where('season', $this->competitionContext->season()))
             ->pluck('id')
             ->all();
 
@@ -64,7 +64,7 @@ class DashboardController extends Controller
     {
         return (new FixtureQuery(
             $leagueIds,
-            $this->worldCupContext->season(),
+            $this->competitionContext->season(),
         ))->build(['status' => $status]);
     }
 }

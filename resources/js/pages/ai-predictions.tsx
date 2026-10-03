@@ -124,7 +124,7 @@ export default function AiPredictions({
 
     const pageTitle = 'MondialiQ AI Predictions';
     const pageDescription =
-        "Explore MondialiQ AI's World Cup predictions and match insights.";
+        "Explore MondialiQ AI's football predictions and match insights.";
     const emptyMessage = 'No AI predictions available yet.';
 
     return (

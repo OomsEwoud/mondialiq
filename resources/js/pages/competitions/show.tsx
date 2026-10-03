@@ -25,7 +25,6 @@ export default function CompetitionPage(props: CompetitionPageProps) {
         teams,
         teamStatistics,
         topScorers,
-        isWorldCup,
     } = props;
     const [showStandingsExplanation, setShowStandingsExplanation] =
         useState(false);
@@ -129,24 +128,18 @@ export default function CompetitionPage(props: CompetitionPageProps) {
             {activeTab === 'standings' && (
                 <section aria-labelledby="standings-heading">
                     <SectionHeading id="standings-heading" title="Stand" />
-                    {isWorldCup && (
-                        <div className="mb-4 flex justify-end">
-                            <StandingsExplanationTrigger
-                                onClick={() =>
-                                    setShowStandingsExplanation(true)
-                                }
-                            />
-                        </div>
-                    )}
+                    <div className="mb-4 flex justify-end">
+                        <StandingsExplanationTrigger
+                            onClick={() => setShowStandingsExplanation(true)}
+                        />
+                    </div>
                     <CompetitionStandings groups={standings} />
                 </section>
             )}
-            {isWorldCup && (
-                <StandingsExplanationModal
-                    open={showStandingsExplanation}
-                    onOpenChange={setShowStandingsExplanation}
-                />
-            )}
+            <StandingsExplanationModal
+                open={showStandingsExplanation}
+                onOpenChange={setShowStandingsExplanation}
+            />
             {activeTab === 'statistics' && (
                 <Statistics
                     teamStatistics={teamStatistics}

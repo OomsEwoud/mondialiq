@@ -26,7 +26,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('wk2026-control-panel')
+            ->path('control-panel')
             ->login()
             ->colors([
                 'primary' => Color::Amber,

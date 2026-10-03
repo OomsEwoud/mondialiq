@@ -6,10 +6,10 @@ import GroupsEmptyState from '@/components/groups/groups-empty-state';
 import StandingsExplanationModal from '@/components/groups/standings-explanation-modal';
 import ThirdPlacePanel from '@/components/groups/third-place-panel';
 import PageHead from '@/components/seo/page-head';
-import type { ThirdPlaceRanking, WorldCupGroup } from '@/types/group';
+import type { ThirdPlaceRanking, CompetitionGroup } from '@/types/group';
 
 interface Props {
-    groups: WorldCupGroup[];
+    groups: CompetitionGroup[];
     thirdPlaceRanking: ThirdPlaceRanking;
 }
 
@@ -30,7 +30,7 @@ export default function Groups({ groups, thirdPlaceRanking }: Props) {
         <>
             <PageHead
                 title="Group Standings"
-                description="Track World Cup 2026 group standings, qualification positions and third-place rankings with a clear tournament overview."
+                description="Bekijk groepsstanden en resultaten per competitie in een helder overzicht."
             />
 
             <GroupPageHeader />

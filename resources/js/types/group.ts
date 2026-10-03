@@ -12,7 +12,7 @@ export interface GroupTeam {
     points: number;
 }
 
-export interface WorldCupGroup {
+export interface CompetitionGroup {
     id: string;
     name: string;
     teams: GroupTeam[];

@@ -1,9 +1,9 @@
 import { GroupStandingsTable } from '@/components/groups/group-standings-table';
 import StandingsExplanationTrigger from '@/components/groups/standings-explanation-trigger';
-import type { WorldCupGroup } from '@/types/group';
+import type { CompetitionGroup } from '@/types/group';
 
 interface Props {
-    group: WorldCupGroup;
+    group: CompetitionGroup;
     onExplain: () => void;
 }
 

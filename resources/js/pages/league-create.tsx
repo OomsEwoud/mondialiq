@@ -38,7 +38,7 @@ export default function LeagueCreate({
         <>
             <PageHead
                 title="Create Prediction Group"
-                description="Create a private MondialIQ prediction group, invite people with a code and compare World Cup prediction points together."
+                description="Create a private MondialIQ prediction group, invite people with a code and compare football prediction points together."
                 noIndex
             />
 

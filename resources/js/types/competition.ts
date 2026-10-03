@@ -35,7 +35,6 @@ export interface CompetitionStandingTeam extends CompetitionTeam {
 
 export interface CompetitionStandingGroup {
     name: string;
-    advanceCount: number | null;
     teams: CompetitionStandingTeam[];
 }
 
@@ -74,7 +73,6 @@ export interface CompetitionFixtures {
 export interface CompetitionPageProps {
     competition: CompetitionSummary;
     tab: 'overview' | 'matches' | 'standings' | 'statistics' | 'teams';
-    isWorldCup: boolean;
     standings: CompetitionStandingGroup[];
     fixtures: CompetitionFixtures;
     teams: CompetitionTeam[];

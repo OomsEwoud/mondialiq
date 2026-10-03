@@ -1,10 +1,10 @@
 # MondialIQ
 
-MondialIQ is a World Cup 2026 prediction platform built with Laravel, Inertia, React, and Tailwind CSS. The app shows tournament matches, groups, AI prediction insights, and lets authenticated users save their own match predictions.
+MondialIQ is a football prediction platform built with Laravel, Inertia, React, and Tailwind CSS. The app brings competitions, matches, standings, AI prediction insights, and user predictions together.
 
 ## Features
 
-- World Cup match overview with filters
+- Match overview across available competitions
 - Match detail pages with score, venue, events, and stats
 - Group standings and qualification information
 - AI prediction overview
@@ -99,8 +99,8 @@ Football API:
 ```env
 API_FOOTBALL_BASE_URL=
 API_FOOTBALL_KEY=
-WORLD_CUP_LEAGUE_ID=
-WORLD_CUP_SEASON_YEAR=2026
+FOOTBALL_LEAGUE_ID=
+FOOTBALL_SEASON_YEAR=2026
 ```
 
 Social login:
@@ -163,10 +163,10 @@ Sync all football data:
 php artisan app:sync-all-data
 ```
 
-Sync World Cup data and prediction context for a server/bootstrap run:
+Sync competition data and prediction context for a server/bootstrap run:
 
 ```bash
-php artisan app:sync-world-cup-data
+php artisan app:sync-competition-data
 ```
 
 Available import commands include:

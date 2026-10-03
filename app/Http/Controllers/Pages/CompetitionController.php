@@ -11,7 +11,6 @@ use App\Models\Standing;
 use App\Models\Team;
 use App\Models\TeamStatistic;
 use App\Services\Fixture\FixturePaginationService;
-use App\Support\WorldCup\WorldCupContext;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,18 +23,15 @@ class CompetitionController extends Controller
         Request $request,
         League $league,
         FixturePaginationService $paginationService,
-        WorldCupContext $worldCupContext,
     ): Response {
-        $isWorldCup = $league->id === $worldCupContext->leagueId();
-        $season = $isWorldCup ? $worldCupContext->season() : $this->season($league);
+        $season = $this->season($league);
         $tab = $request->string('tab')->toString();
         $tab = in_array($tab, self::TABS, true) ? $tab : 'overview';
 
         return Inertia::render('competitions/show', [
             'competition' => $this->competition($league, $season),
             'tab' => $tab,
-            'standings' => $this->standings($league, $season, $isWorldCup),
-            'isWorldCup' => $isWorldCup,
+            'standings' => $this->standings($league, $season),
             'fixtures' => $this->fixtures($league, $season, $tab, $paginationService),
             'teams' => $this->teams($league, $season),
             'teamStatistics' => $this->teamStatistics($league, $season),
@@ -89,7 +85,7 @@ class CompetitionController extends Controller
         ];
     }
 
-    private function standings(League $league, ?int $season, bool $isWorldCup): array
+    private function standings(League $league, ?int $season): array
     {
         if ($season === null) {
             return [];
@@ -119,9 +115,6 @@ class CompetitionController extends Controller
             ->groupBy('group_name')
             ->map(fn ($rows, string $group): array => [
                 'name' => $group,
-                'advanceCount' => $isWorldCup
-                    ? ($group === 'Ranking of third-placed teams' ? 8 : 2)
-                    : null,
                 'teams' => $rows->map(fn (Standing $standing): array => [
                     'id' => $standing->team->id,
                     'name' => $standing->team->name,

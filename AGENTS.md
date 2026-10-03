@@ -4,7 +4,7 @@ Instructions for AI coding agents working on MondialIQ.
 
 ## Project
 
-MondialIQ is a Laravel 13, Inertia.js 3, React 19, TypeScript, and Tailwind CSS 4 application for World Cup 2026 matches, AI predictions, and user predictions.
+MondialIQ is a Laravel 13, Inertia.js 3, React 19, TypeScript, and Tailwind CSS 4 application for football competitions, matches, AI predictions, and user predictions.
 
 ## Workflow
 

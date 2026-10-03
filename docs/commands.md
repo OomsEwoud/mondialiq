@@ -44,10 +44,10 @@ php artisan app:generate-ai-prediction FIXTURE_ID
 
 ## Basis Data Sync
 
-Synchroniseer World Cup data en prediction context voor server/bootstrap:
+Synchroniseer competitiegegevens en prediction context voor server/bootstrap:
 
 ```bash
-php artisan app:sync-world-cup-data
+php artisan app:sync-competition-data
 ```
 
 Synchroniseer alles in de bestaande volgorde:

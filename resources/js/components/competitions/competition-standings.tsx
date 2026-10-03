@@ -100,13 +100,6 @@ export default function CompetitionStandings({
                                                 <span className="truncate text-xs font-medium sm:text-sm">
                                                     {team.name}
                                                 </span>
-                                                {group.advanceCount !== null &&
-                                                    team.rank <=
-                                                        group.advanceCount && (
-                                                        <span className="shrink-0 text-[10px] font-semibold text-[#9ecbad]">
-                                                            Door
-                                                        </span>
-                                                    )}
                                             </Link>
                                         </td>
                                         {[

@@ -94,7 +94,7 @@ test('it includes prediction guidance', function () {
         ->and($prompt)->toContain('Treat API predictions as a secondary signal.')
         ->and($prompt)->toContain('Use team stats, standings and head-to-head as supporting context.')
         ->and($prompt)->toContain('Do not assume the listed home team has home advantage.')
-        ->and($prompt)->toContain('For World Cup matches, only host nations should receive a home-country advantage')
+        ->and($prompt)->not->toContain('host nations should receive a home-country advantage')
         ->and($prompt)->toContain('If market odds and API prediction disagree, mention the disagreement.')
         ->and($prompt)->toContain('The predicted score MUST match the predicted outcome.')
         ->and($prompt)->toContain('If predicted_outcome is home, predicted_home_score must be greater than predicted_away_score.')

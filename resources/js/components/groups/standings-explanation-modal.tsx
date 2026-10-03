@@ -1,11 +1,5 @@
-import {
-    CheckCircle2,
-    CircleHelp,
-    ListOrdered,
-    ShieldCheck,
-    Trophy,
-    XIcon,
-} from 'lucide-react';
+import { CircleHelp, Trophy, XIcon } from 'lucide-react';
+import type * as React from 'react';
 import {
     Dialog,
     DialogClose,
@@ -47,32 +41,6 @@ const tableColumns = [
     ['PTS', 'Points'],
 ] as const;
 
-const qualificationRules = [
-    {
-        label: 'Top 2',
-        status: 'Qualified',
-        description:
-            'The first two teams in every group go through automatically.',
-        tone: 'qualified',
-    },
-    {
-        label: 'Best 3rd top 8',
-        status: 'Qualified',
-        description:
-            'The best eight third-placed teams also reach the Round of 32.',
-        tone: 'qualified',
-    },
-    {
-        label: 'Others',
-        status: 'Not qualified',
-        description:
-            'The remaining third-placed teams and all fourth-placed teams are eliminated.',
-        tone: 'eliminated',
-    },
-] as const;
-
-const thirdPlaceRanks = Array.from({ length: 12 }, (_, index) => index + 1);
-
 export default function StandingsExplanationModal({
     open,
     onOpenChange,
@@ -102,19 +70,9 @@ export default function StandingsExplanationModal({
                                     How standings work
                                 </DialogTitle>
                                 <DialogDescription className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-                                    A clear guide to points, table columns,
-                                    qualification rules and third-place
-                                    rankings.
+                                    An overview of how to read the standings
+                                    table and its points system.
                                 </DialogDescription>
-                            </div>
-
-                            <div className="grid gap-2 sm:grid-cols-3 lg:max-w-sm lg:min-w-[18rem]">
-                                <HeroStat label="Groups" value="12" />
-                                <HeroStat label="Teams each" value="4" />
-                                <HeroStat
-                                    label="Advance"
-                                    value="Top 2 + 8 best 3rd"
-                                />
                             </div>
                         </div>
                     </DialogHeader>
@@ -122,24 +80,12 @@ export default function StandingsExplanationModal({
 
                 <div className="space-y-6 px-6 py-6 sm:px-8 sm:py-8">
                     <SectionCard
-                        icon={<ListOrdered className="size-5" />}
-                        eyebrow="Group format"
-                        title="How group standings work"
-                    >
-                        <p className="text-sm leading-6 text-muted-foreground sm:text-base">
-                            Each World Cup group contains four teams. Teams are
-                            ranked by their match results during the group
-                            stage.
-                        </p>
-                    </SectionCard>
-
-                    <SectionCard
                         icon={<Trophy className="size-5" />}
                         eyebrow="Points"
                         title="Points system"
                     >
                         <p className="text-sm leading-6 text-muted-foreground">
-                            Teams earn points from every group-stage match.
+                            Teams earn points from their competition matches.
                         </p>
                         <div className="mt-5 grid gap-3 sm:grid-cols-3">
                             {pointsRules.map((rule) => (
@@ -187,127 +133,6 @@ export default function StandingsExplanationModal({
                             ))}
                         </div>
                     </SectionCard>
-
-                    <SectionCard
-                        icon={<ShieldCheck className="size-5" />}
-                        eyebrow="Qualification"
-                        title="Qualification"
-                    >
-                        <p className="text-sm leading-6 text-muted-foreground">
-                            Group position decides whether a team keeps going or
-                            leaves the tournament.
-                        </p>
-                        <div className="mt-5 grid gap-3 lg:grid-cols-3">
-                            {qualificationRules.map((rule) => (
-                                <div
-                                    key={rule.label}
-                                    className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 shadow-sm"
-                                >
-                                    <div className="flex items-center justify-between gap-3">
-                                        <p className="text-lg font-bold text-foreground">
-                                            {rule.label}
-                                        </p>
-                                        <span
-                                            className={
-                                                rule.tone === 'qualified'
-                                                    ? 'rounded-full border border-emerald-200 bg-emerald-950/40 px-3 py-1 text-xs font-bold text-emerald-200'
-                                                    : 'rounded-full border border-rose-200 bg-rose-950/40 px-3 py-1 text-xs font-bold text-rose-200'
-                                            }
-                                        >
-                                            {rule.status}
-                                        </span>
-                                    </div>
-                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                                        {rule.description}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </SectionCard>
-
-                    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-                        <div className="border-b border-border bg-gradient-to-b from-card to-card/60 p-6">
-                            <div className="flex items-start gap-3">
-                                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-1 ring-border">
-                                    <CheckCircle2 className="size-5" />
-                                </span>
-                                <div>
-                                    <p className="text-xs font-bold tracking-wide text-primary uppercase">
-                                        Cross-group ranking
-                                    </p>
-                                    <h2 className="mt-1 text-2xl font-bold text-foreground sm:text-3xl">
-                                        Best 3rd ranking
-                                    </h2>
-                                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-                                        The Best 3rd ranking compares all teams
-                                        that finish third in their group. The
-                                        top eight in that ranking advance to the
-                                        Round of 32.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-                            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                                <p className="text-sm font-bold tracking-wide text-primary uppercase">
-                                    Quick view
-                                </p>
-                                <div className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                                    <MiniInfoCard
-                                        title="12 teams"
-                                        body="Every group sends one third-placed team into this comparison."
-                                    />
-                                    <MiniInfoCard
-                                        title="Top 8"
-                                        body="Only the strongest eight continue into the knockout stage."
-                                    />
-                                    <MiniInfoCard
-                                        title="Cutoff"
-                                        body="Rank #8 is the last safe place in the table."
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
-                                <div className="mb-3 flex items-center justify-between gap-3">
-                                    <p className="text-sm font-bold text-foreground">
-                                        12 third-placed teams
-                                    </p>
-                                    <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
-                                        Top 8 advance
-                                    </p>
-                                </div>
-                                <div className="grid gap-2">
-                                    {thirdPlaceRanks.map((rank) => (
-                                        <div key={rank}>
-                                            <div
-                                                className={
-                                                    rank <= 8
-                                                        ? 'flex items-center justify-between rounded-2xl border border-emerald-200 bg-emerald-950/40 px-3 py-2 text-sm font-bold text-emerald-200 shadow-sm'
-                                                        : 'flex items-center justify-between rounded-2xl border border-border bg-muted px-3 py-2 text-sm font-bold text-muted-foreground'
-                                                }
-                                            >
-                                                <span>Rank #{rank}</span>
-                                                <span>
-                                                    {rank <= 8
-                                                        ? 'Qualified'
-                                                        : 'Eliminated'}
-                                                </span>
-                                            </div>
-                                            {rank === 8 && (
-                                                <div className="my-2 flex items-center gap-3 text-xs font-bold tracking-wide text-amber-600 uppercase">
-                                                    <span className="h-px flex-1 bg-amber-200" />
-                                                    <span>Cutoff line</span>
-                                                    <span className="h-px flex-1 bg-amber-200" />
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                 </div>
             </DialogContent>
         </Dialog>
@@ -342,29 +167,5 @@ function SectionCard({
                 </div>
             </div>
         </section>
-    );
-}
-
-function HeroStat({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="rounded-2xl border border-border bg-card px-4 py-3 text-left shadow-sm">
-            <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
-                {label}
-            </p>
-            <p className="mt-1 text-sm leading-5 font-bold text-foreground">
-                {value}
-            </p>
-        </div>
-    );
-}
-
-function MiniInfoCard({ title, body }: { title: string; body: string }) {
-    return (
-        <div className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 shadow-sm">
-            <p className="text-sm font-bold text-foreground">{title}</p>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                {body}
-            </p>
-        </div>
     );
 }

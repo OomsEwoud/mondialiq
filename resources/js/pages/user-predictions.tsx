@@ -128,11 +128,11 @@ export default function UserPredictions({
         ? 'My public predictions'
         : `${user.name}'s Predictions`;
     const pageDescription = user.isViewer
-        ? 'Explore your public World Cup predictions and match insights.'
-        : `Explore ${user.name}'s World Cup predictions and match insights.`;
+        ? 'Explore your public football predictions and match insights.'
+        : `Explore ${user.name}'s football predictions and match insights.`;
     const emptyMessage = user.isViewer
         ? 'You have not predicted any matches yet.'
-        : 'This user has not shared any predictions for the World Cup yet.';
+        : 'This user has not shared any predictions yet.';
 
     return (
         <>

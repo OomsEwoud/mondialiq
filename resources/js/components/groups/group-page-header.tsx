@@ -3,9 +3,9 @@ import PageHeader from '@/components/typography/page-header';
 export default function GroupPageHeader() {
     return (
         <PageHeader
-            eyebrow="WK 2026 · Toernooi"
+            eyebrow="Competitie"
             title="Groepsstand"
-            description="Punten, doelsaldo en kwalificatie. Kies een groep om de stand te bekijken."
+            description="Punten en doelsaldo. Kies een groep om de stand te bekijken."
         />
     );
 }

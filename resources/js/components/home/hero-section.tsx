@@ -21,7 +21,7 @@ export default function HeroSection() {
                         AI football intelligence
                     </p>
                     <h1 className="max-w-3xl text-4xl leading-none font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
-                        <span className="block">World Cup 2026</span>
+                        <span className="block">Football, understood</span>
                         <span className="bg-gradient-to-r from-cyan-300 to-sky-300 bg-clip-text text-transparent">
                             prediction cockpit
                         </span>

@@ -61,7 +61,7 @@ const predictionSteps = [
     {
         step: 1,
         title: 'Choose a match',
-        description: 'Browse upcoming World Cup fixtures.',
+        description: 'Browse upcoming fixtures across competitions.',
     },
     {
         step: 2,
@@ -135,7 +135,7 @@ export default function HowItWorks() {
         <>
             <PageHead
                 title="How MondialIQ Works"
-                description="Learn how MondialIQ predictions, AI insights, scoring and leaderboards work for the World Cup 2026."
+                description="Learn how MondialIQ predictions, AI insights, scoring and leaderboards work across football competitions."
             />
 
             <div className="mb-5">
@@ -154,7 +154,7 @@ export default function HowItWorks() {
                     How MondialIQ Works
                 </h1>
                 <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
-                    Predict World Cup matches, compare your choices with AI
+                    Predict football matches, compare your choices with AI
                     insights, and climb the leaderboard.
                 </p>
 
@@ -192,9 +192,9 @@ export default function HowItWorks() {
                     </div>
                 </div>
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
-                    MondialIQ is a World Cup 2026 prediction platform where
-                    users can follow matches, make predictions, compare them
-                    with AI-generated insights and compete in leaderboards or
+                    MondialIQ is a football prediction platform where users can
+                    follow matches, make predictions, compare them with
+                    AI-generated insights and compete in leaderboards or
                     prediction groups.
                 </p>
             </section>

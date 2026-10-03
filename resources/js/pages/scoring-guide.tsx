@@ -93,7 +93,7 @@ export default function ScoringGuide() {
         <>
             <PageHead
                 title="How Scoring Works"
-                description="Learn how MondialIQ scores World Cup predictions out of 20 points, including exact scores, outcomes, goal difference and partial points."
+                description="Learn how MondialIQ scores football predictions out of 20 points, including exact scores, outcomes, goal difference and partial points."
             />
 
             <div className="mb-5">

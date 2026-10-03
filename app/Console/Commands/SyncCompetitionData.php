@@ -6,9 +6,9 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('app:sync-world-cup-data')]
-#[Description('Synchroniseer World Cup data en prediction context uit de Football API')]
-class SyncWorldCupData extends Command
+#[Signature('app:sync-competition-data')]
+#[Description('Synchroniseer competitiegegevens en prediction context uit de Football API')]
+class SyncCompetitionData extends Command
 {
     private array $commands = [
         ['command' => 'app:add-countries'],
@@ -34,19 +34,19 @@ class SyncWorldCupData extends Command
 
     public function handle(): int
     {
-        $this->info('World Cup data sync gestart');
+        $this->info('Competitiedata synchronisatie gestart');
 
         foreach ($this->commands as $command) {
             $exitCode = $this->call($command['command'], $command['arguments'] ?? []);
 
             if ($exitCode !== self::SUCCESS) {
-                $this->error("World Cup data sync gestopt bij {$command['command']}.");
+                $this->error("Synchronisatie gestopt bij {$command['command']}.");
 
                 return $exitCode;
             }
         }
 
-        $this->info('World Cup data en prediction context zijn geupdate');
+        $this->info('Competitiedata en prediction context zijn bijgewerkt');
 
         return self::SUCCESS;
     }

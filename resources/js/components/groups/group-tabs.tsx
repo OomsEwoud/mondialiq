@@ -1,7 +1,7 @@
-import type { WorldCupGroup } from '@/types/group';
+import type { CompetitionGroup } from '@/types/group';
 
 interface Props {
-    groups: WorldCupGroup[];
+    groups: CompetitionGroup[];
     activeGroupId: string;
     showThirdPlaceRanking: boolean;
     onChange: (groupId: string) => void;
@@ -29,7 +29,7 @@ export default function GroupTabs({
         <div className="overflow-x-auto rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-2.5 shadow-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div
                 role="group"
-                aria-label="World Cup groups"
+                aria-label="Competitiegroepen"
                 className="grid min-w-max auto-cols-[5.25rem] grid-flow-col gap-2.5 md:min-w-0 md:grid-flow-row md:grid-cols-8 lg:grid-cols-[repeat(13,minmax(0,1fr))]"
             >
                 {tabs.map((tab) => {

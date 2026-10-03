@@ -1,12 +1,12 @@
 <?php
 
-use App\Console\Commands\SyncWorldCupData;
+use App\Console\Commands\SyncCompetitionData;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-test('the world cup data sync command runs the configured imports in order', function () {
-    $command = Mockery::mock(SyncWorldCupData::class)->makePartial();
+test('the competition data sync command runs the configured imports in order', function () {
+    $command = Mockery::mock(SyncCompetitionData::class)->makePartial();
 
     foreach ([
         ['app:add-countries', []],
@@ -32,7 +32,7 @@ test('the world cup data sync command runs the configured imports in order', fun
             ->once()
             ->ordered()
             ->with($subCommand, $arguments)
-            ->andReturn(SyncWorldCupData::SUCCESS);
+            ->andReturn(SyncCompetitionData::SUCCESS);
     }
 
     $command->setLaravel(app());
@@ -41,5 +41,5 @@ test('the world cup data sync command runs the configured imports in order', fun
 
     $exitCode = $command->handle();
 
-    expect($exitCode)->toBe(SyncWorldCupData::SUCCESS);
+    expect($exitCode)->toBe(SyncCompetitionData::SUCCESS);
 });

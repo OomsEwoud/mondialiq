@@ -95,7 +95,7 @@ function absoluteUrl(appUrl: unknown, path: unknown): string {
 
 function formatSocialTitle(title?: string): string {
     if (!title) {
-        return 'MondialIQ - AI World Cup 2026 Predictions';
+        return 'MondialIQ - Football Predictions and Insights';
     }
 
     return title.includes(siteName) ? title : `${title} | ${siteName}`;

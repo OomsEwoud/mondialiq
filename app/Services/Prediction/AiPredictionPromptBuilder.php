@@ -54,7 +54,6 @@ class AiPredictionPromptBuilder
             '- Treat API predictions as a secondary signal.',
             '- Use team stats, standings and head-to-head as supporting context.',
             '- Do not assume the listed home team has home advantage. In finals and neutral-venue matches, home/away is usually administrative.',
-            '- For World Cup matches, only host nations should receive a home-country advantage; other listed home teams should not.',
             '- If market odds and API prediction disagree, mention the disagreement.',
             '- The predicted score MUST match the predicted outcome.',
             '- If predicted_outcome is home, predicted_home_score must be greater than predicted_away_score.',

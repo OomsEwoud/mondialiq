@@ -4,19 +4,18 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\League;
-use App\Support\WorldCup\WorldCupContext;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CompetitionsController extends Controller
 {
-    public function __invoke(WorldCupContext $worldCupContext): Response
+    public function __invoke(): Response
     {
         $competitions = League::query()
             ->with('country:id,name')
             ->orderBy('name')
             ->get()
-            ->map(fn (League $league): array => $this->competitionSummary($league, $worldCupContext))
+            ->map(fn (League $league): array => $this->competitionSummary($league))
             ->values();
 
         return Inertia::render('competitions/index', [
@@ -24,14 +23,12 @@ class CompetitionsController extends Controller
         ]);
     }
 
-    private function competitionSummary(League $league, WorldCupContext $worldCupContext): array
+    private function competitionSummary(League $league): array
     {
-        $season = $league->id === $worldCupContext->leagueId()
-            ? $worldCupContext->season()
-            : ($league->fixtures()->max('season')
-                ?? $league->standings()->max('season')
-                ?? $league->teamStatistics()->max('season')
-                ?? $league->playerSeasonStats()->max('season'));
+        $season = $league->fixtures()->max('season')
+            ?? $league->standings()->max('season')
+            ?? $league->teamStatistics()->max('season')
+            ?? $league->playerSeasonStats()->max('season');
         $teamsCount = $season === null
             ? 0
             : $league->standings()->where('season', $season)->distinct('team_id')->count('team_id');
@@ -60,7 +57,7 @@ class CompetitionsController extends Controller
             ->value('round_name');
 
         $countryName = $league->country?->name;
-        $internationalCountries = ['europe', 'international', 'world', 'world cup'];
+        $internationalCountries = ['europe', 'international', 'world'];
 
         return [
             'id' => $league->id,

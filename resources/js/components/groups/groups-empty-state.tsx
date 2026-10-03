@@ -12,8 +12,8 @@ export default function GroupsEmptyState() {
                 No standings available
             </h2>
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-                Group standings will appear here after the standings sync has
-                stored World Cup data.
+                Group standings will appear here after standings data has been
+                synchronized.
             </p>
             <Link
                 href={matches()}

@@ -7,7 +7,7 @@ use App\Models\Scoreboard;
 use App\Models\User;
 use App\Queries\Fixture\FixtureQuery;
 use App\Services\Fixture\FixturePaginationService;
-use App\Support\WorldCup\WorldCupContext;
+use App\Support\Competition\CompetitionContext;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,7 +17,7 @@ class ShowLeagueMemberPredictionsController extends Controller
 {
     public function __construct(
         private readonly FixturePaginationService $paginationService,
-        private readonly WorldCupContext $worldCupContext,
+        private readonly CompetitionContext $competitionContext,
     ) {}
 
     public function __invoke(Request $request, Scoreboard $scoreboard, User $user): Response
@@ -163,8 +163,8 @@ class ShowLeagueMemberPredictionsController extends Controller
     private function fixtureQuery(string $status, string $date): Builder
     {
         return (new FixtureQuery(
-            $this->worldCupContext->leagueIds(),
-            $this->worldCupContext->season(),
+            $this->competitionContext->leagueIds(),
+            $this->competitionContext->season(),
         ))->build([
             'date' => $date,
             'status' => $status,

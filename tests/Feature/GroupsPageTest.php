@@ -80,19 +80,10 @@ test('competition pages expose available leagues and standings', function () {
             ->where('standings.1.teams.0.name', 'Canada'));
 });
 
-test('legacy groups route opens the world cup competition standings', function () {
-    $league = League::create([
-        'external_id' => config('services.api_football.league_id'),
-        'name' => 'World Cup',
-        'type' => 'Cup',
-    ]);
-
+test('legacy groups route redirects to the competition directory', function () {
     $this->actingAs(User::factory()->create())
         ->get(route('groups'))
-        ->assertRedirect(route('competitions.show', [
-            'league' => $league->id,
-            'tab' => 'standings',
-        ]));
+        ->assertRedirect(route('competitions.index'));
 });
 
 test('competition pages require authentication and ignore unknown tabs', function () {

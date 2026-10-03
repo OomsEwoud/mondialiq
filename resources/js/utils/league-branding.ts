@@ -166,7 +166,7 @@ export const leagueThemeOptions = [
     {
         value: 'amber',
         title: 'Gold',
-        subtitle: 'World Cup',
+        subtitle: 'Competition',
         description: 'Premium trophy feel.',
         previewClassName: leagueThemePalettes.amber.banner,
     },
