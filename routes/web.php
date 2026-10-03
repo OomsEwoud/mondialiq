@@ -21,6 +21,8 @@ use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Pages\AiPredictionsController;
 use App\Http\Controllers\Pages\ContactController;
+use App\Http\Controllers\Pages\CompetitionsController;
+use App\Http\Controllers\Pages\CompetitionController;
 use App\Http\Controllers\Pages\DashboardController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
@@ -54,6 +56,8 @@ Route::get('/auth/{provider}/callback', CallbackController::class)
     ->name('auth.callback');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/competities', CompetitionsController::class)->name('competitions.index');
+    Route::get('/competities/{league}', CompetitionController::class)->name('competitions.show');
     Route::get('/matches', MatchesController::class)->name('matches');
     Route::get('/matches/{fixture}', MatchDetailsController::class)->name('matches.show');
     Route::get('/teams/{team}', TeamDetailsController::class)->name('teams.show');

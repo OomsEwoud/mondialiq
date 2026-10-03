@@ -6,87 +6,121 @@ use App\Models\Team;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('the groups page exposes group standings and the third placed ranking separately', function () {
+test('competition pages expose available leagues and standings', function () {
+    $league = League::create([
+        'external_id' => 99901,
+        'name' => 'World Cup',
+        'type' => 'Cup',
+    ]);
+    $team = Team::create([
+        'external_id' => 99901,
+        'name' => 'Belgium',
+        'code' => 'BEL',
+    ]);
+
+    Standing::create([
+        'team_id' => $team->id,
+        'league_id' => $league->id,
+        'season' => 2026,
+        'group_name' => 'Group A',
+        'rank' => 1,
+        'points' => 3,
+        'matches_played' => 1,
+        'wins' => 1,
+        'draws' => 0,
+        'losses' => 0,
+        'goals_for' => 2,
+        'goals_against' => 0,
+        'goal_difference' => 2,
+    ]);
+    $thirdPlacedTeam = Team::create([
+        'external_id' => 99903,
+        'name' => 'Canada',
+        'code' => 'CAN',
+    ]);
+    Standing::create([
+        'team_id' => $thirdPlacedTeam->id,
+        'league_id' => $league->id,
+        'season' => 2026,
+        'group_name' => 'Ranking of third-placed teams',
+        'rank' => 1,
+        'points' => 2,
+        'matches_played' => 3,
+        'wins' => 0,
+        'draws' => 2,
+        'losses' => 1,
+        'goals_for' => 2,
+        'goals_against' => 3,
+        'goal_difference' => -1,
+    ]);
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('competitions.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('competitions/index')
+            ->has('competitions', 1)
+            ->where('competitions.0.name', 'World Cup')
+            ->where('competitions.0.season', 2026));
+
+    $this->actingAs($user)
+        ->get(route('competitions.show', ['league' => $league, 'tab' => 'standings']))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('competitions/show')
+            ->where('tab', 'standings')
+            ->where('competition.name', 'World Cup')
+            ->has('standings', 2)
+            ->where('standings.0.name', 'Group A')
+            ->where('standings.0.teams.0.name', 'Belgium')
+            ->where('standings.0.teams.0.points', 3)
+            ->where('standings.1.name', 'Ranking of third-placed teams')
+            ->where('standings.1.teams.0.name', 'Canada'));
+});
+
+test('legacy groups route opens the world cup competition standings', function () {
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
         'name' => 'World Cup',
         'type' => 'Cup',
     ]);
 
-    $southKorea = createGroupsPageTeam(701, 'South Korea', 'KOR');
-
-    collect([
-        [$southKorea, 3],
-        [createGroupsPageTeam(702, 'Belgium', 'BEL'), 1],
-        [createGroupsPageTeam(703, 'Canada', 'CAN'), 2],
-        [createGroupsPageTeam(704, 'Egypt', 'EGY'), 4],
-    ])->each(function (array $teamStanding) use ($league) {
-        [$team, $rank] = $teamStanding;
-
-        createGroupsPageStanding($team, $league, 'Group A', $rank);
-    });
-
-    collect(range(1, 12))->each(function (int $rank) use ($league, $southKorea) {
-        $team = $rank === 1
-            ? $southKorea
-            : createGroupsPageTeam(800 + $rank, "Third Team {$rank}", "T{$rank}");
-
-        createGroupsPageStanding(
-            $team,
-            $league,
-            'Ranking of third-placed teams',
-            $rank,
-        );
-    });
-
-    $response = $this->actingAs(User::factory()->create())->get(route('groups'));
-
-    $response
-        ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('groups')
-            ->has('groups', 1)
-            ->where('groups.0.id', 'A')
-            ->has('groups.0.teams', 4)
-            ->where('groups.0.teams.2.name', 'South Korea')
-            ->where('groups.0.teams.2.rank', 3)
-            ->where('thirdPlaceRanking.id', 'BEST_3RD')
-            ->where('thirdPlaceRanking.name', 'Best third-placed teams')
-            ->has('thirdPlaceRanking.teams', 12)
-            ->where('thirdPlaceRanking.teams.0.name', 'South Korea')
-            ->where('thirdPlaceRanking.teams.0.rank', 1)
-        );
+    $this->actingAs(User::factory()->create())
+        ->get(route('groups'))
+        ->assertRedirect(route('competitions.show', [
+            'league' => $league->id,
+            'tab' => 'standings',
+        ]));
 });
 
-function createGroupsPageTeam(int $externalId, string $name, string $code): Team
-{
-    return Team::create([
-        'external_id' => $externalId,
-        'name' => $name,
-        'code' => $code,
-        'logo_url' => "https://example.com/{$code}.png",
+test('competition pages require authentication and ignore unknown tabs', function () {
+    $league = League::create([
+        'external_id' => 99902,
+        'name' => 'Premier League',
+        'type' => 'League',
     ]);
-}
 
-function createGroupsPageStanding(
-    Team $team,
-    League $league,
-    string $groupName,
-    int $rank,
-): Standing {
-    return Standing::create([
-        'team_id' => $team->id,
-        'league_id' => $league->id,
-        'season' => config('services.api_football.season'),
-        'group_name' => $groupName,
-        'rank' => $rank,
-        'points' => 12 - $rank,
-        'matches_played' => 3,
-        'wins' => max(0, 4 - $rank),
-        'draws' => $rank === 3 ? 1 : 0,
-        'losses' => max(0, $rank - 2),
-        'goals_for' => 6,
-        'goals_against' => 3,
-        'goal_difference' => 3,
-    ]);
-}
+    $this->get(route('competitions.index'))
+        ->assertRedirect(route('login'));
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('competitions.index'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('competitions/index')
+            ->has('competitions', 1)
+            ->where('competitions.0.name', 'Premier League')
+            ->where('competitions.0.season', null));
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('competitions.show', ['league' => $league, 'tab' => 'unavailable']))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('competitions/show')
+            ->where('tab', 'overview')
+            ->has('standings', 0)
+            ->has('teams', 0)
+            ->has('fixtures.all.data', 0));
+});

@@ -35,4 +35,9 @@ class League extends Model
     {
         return $this->hasMany(TeamStatistic::class);
     }
+
+    public function playerSeasonStats(): HasMany
+    {
+        return $this->hasMany(PlayerSeasonStat::class);
+    }
 }
