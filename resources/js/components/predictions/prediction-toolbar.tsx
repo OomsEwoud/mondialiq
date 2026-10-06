@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 import { useId, useState } from 'react';
 import FilterSelect from '@/components/predictions/filters/filter-select';
 import { cn } from '@/lib/utils';
@@ -105,21 +105,34 @@ export default function PredictionToolbar({
                     type="button"
                     aria-expanded={expanded}
                     aria-controls={advancedId}
-                    onClick={() => setExpanded(!expanded)}
+                    onClick={() => setExpanded((isOpen) => !isOpen)}
                     className={cn(
-                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-sm px-2 text-sm font-semibold hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
                         expanded || advancedCount
-                            ? 'text-[#9ecbad]'
-                            : 'text-[#949d97]',
+                            ? 'border-[#4b775d] bg-[#17251d] text-[#9ecbad]'
+                            : 'border-[#343d37] bg-[#0d110f] text-[#a8b0ab] hover:border-[#536159] hover:text-white',
                     )}
                 >
                     <SlidersHorizontal className="size-4" aria-hidden="true" />
-                    Filters
                     {advancedCount > 0 && (
-                        <span className="text-xs tabular-nums">
-                            ({advancedCount})
-                        </span>
+                        <>
+                            <span>Filters</span>
+                            <span
+                                aria-label={`${advancedCount} actief`}
+                                className="text-xs text-[#9ecbad] tabular-nums"
+                            >
+                                · {advancedCount}
+                            </span>
+                        </>
                     )}
+                    {advancedCount === 0 && <span>Filters</span>}
+                    <ChevronDown
+                        className={cn(
+                            'size-4 transition-transform duration-200',
+                            expanded && 'rotate-180',
+                        )}
+                        aria-hidden="true"
+                    />
                 </button>
                 {hasActiveFilters && (
                     <button
@@ -132,79 +145,98 @@ export default function PredictionToolbar({
                     </button>
                 )}
             </div>
-            <div id={advancedId} hidden={!expanded} className="pt-5">
-                <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:grid-cols-2 lg:grid-cols-4">
-                    <label className="grid min-w-0 gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
-                        Datum
-                        <input
-                            aria-label="Datum"
-                            type="date"
-                            value={filters.date}
-                            onChange={(event) =>
-                                onChange('date', event.target.value)
-                            }
-                            className="h-11 w-full min-w-0 rounded-xl border border-border bg-card px-3 text-sm font-semibold text-foreground [color-scheme:dark] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
-                        />
-                    </label>
-                    <FilterSelect
-                        label="Wedstrijdstatus"
-                        value={filters.status}
-                        options={[
-                            { label: 'Alle wedstrijden', value: 'all' },
-                            { label: 'Binnenkort', value: 'upcoming' },
-                            { label: 'Gestart / afgelopen', value: 'past' },
-                        ]}
-                        onChange={(value) => onChange('status', value)}
-                    />
-                    <FilterSelect
-                        label="Voorspelde winnaar"
-                        value={filters.outcome}
-                        options={[
-                            { label: 'Alle uitkomsten', value: 'all' },
-                            { label: 'Thuisploeg', value: 'home' },
-                            { label: 'Gelijkspel', value: 'draw' },
-                            { label: 'Uitploeg', value: 'away' },
-                        ]}
-                        onChange={(value) => onChange('outcome', value)}
-                    />
-                    <FilterSelect
-                        label="Sorteer op confidence"
-                        value={filters.confidenceSort}
-                        options={[
-                            { label: 'Op datum', value: 'default' },
-                            {
-                                label: 'Hoog naar laag',
-                                value: 'confidence-desc',
-                            },
-                            {
-                                label: 'Laag naar hoog',
-                                value: 'confidence-asc',
-                            },
-                        ]}
-                        onChange={(value) => onChange('confidenceSort', value)}
-                    />
-                    {(isPersonal || filters.pointsState !== 'all') && (
+            <div
+                id={advancedId}
+                aria-hidden={!expanded}
+                inert={!expanded}
+                className={cn(
+                    'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                    expanded
+                        ? 'grid-rows-[1fr] opacity-100'
+                        : 'pointer-events-none grid-rows-[0fr] opacity-0',
+                )}
+            >
+                <div className="min-h-0 overflow-hidden">
+                    <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:grid-cols-2 lg:grid-cols-4">
+                        <label className="grid min-w-0 gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
+                            Datum
+                            <input
+                                aria-label="Datum"
+                                type="date"
+                                value={filters.date}
+                                onChange={(event) =>
+                                    onChange('date', event.target.value)
+                                }
+                                className="h-11 w-full min-w-0 rounded-xl border border-border bg-card px-3 text-sm font-semibold text-foreground [color-scheme:dark] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            />
+                        </label>
                         <FilterSelect
-                            label="Puntenstatus"
-                            value={filters.pointsState}
+                            label="Wedstrijdstatus"
+                            value={filters.status}
                             options={[
-                                { label: 'Alle voorspellingen', value: 'all' },
+                                { label: 'Alle wedstrijden', value: 'all' },
+                                { label: 'Binnenkort', value: 'upcoming' },
+                                { label: 'Gestart / afgelopen', value: 'past' },
+                            ]}
+                            onChange={(value) => onChange('status', value)}
+                        />
+                        <FilterSelect
+                            label="Voorspelde winnaar"
+                            value={filters.outcome}
+                            options={[
+                                { label: 'Alle uitkomsten', value: 'all' },
+                                { label: 'Thuisploeg', value: 'home' },
+                                { label: 'Gelijkspel', value: 'draw' },
+                                { label: 'Uitploeg', value: 'away' },
+                            ]}
+                            onChange={(value) => onChange('outcome', value)}
+                        />
+                        <FilterSelect
+                            label="Sorteer op confidence"
+                            value={filters.confidenceSort}
+                            options={[
+                                { label: 'Op datum', value: 'default' },
                                 {
-                                    label: 'Punten toegekend',
-                                    value: 'points-earned',
+                                    label: 'Hoog naar laag',
+                                    value: 'confidence-desc',
                                 },
                                 {
-                                    label: 'Nog te beoordelen',
-                                    value: 'points-pending',
-                                },
-                                {
-                                    label: 'Geen punten behaald',
-                                    value: 'no-points-earned',
+                                    label: 'Laag naar hoog',
+                                    value: 'confidence-asc',
                                 },
                             ]}
-                            onChange={(value) => onChange('pointsState', value)}
+                            onChange={(value) =>
+                                onChange('confidenceSort', value)
+                            }
                         />
-                    )}
+                        {(isPersonal || filters.pointsState !== 'all') && (
+                            <FilterSelect
+                                label="Puntenstatus"
+                                value={filters.pointsState}
+                                options={[
+                                    {
+                                        label: 'Alle voorspellingen',
+                                        value: 'all',
+                                    },
+                                    {
+                                        label: 'Punten toegekend',
+                                        value: 'points-earned',
+                                    },
+                                    {
+                                        label: 'Nog te beoordelen',
+                                        value: 'points-pending',
+                                    },
+                                    {
+                                        label: 'Geen punten behaald',
+                                        value: 'no-points-earned',
+                                    },
+                                ]}
+                                onChange={(value) =>
+                                    onChange('pointsState', value)
+                                }
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
             <p className="mt-3 text-xs leading-5 text-[#949d97]">
