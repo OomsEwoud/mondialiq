@@ -51,60 +51,52 @@ export default function ActivePlayersGrid({ players }: Props) {
     const showGroupHeaders = activeFilter === 'all';
 
     return (
-        <section className="border-t border-[#29312c] pt-8 sm:pt-10">
-            <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                    <p className="text-xs font-bold text-[#70b98e] uppercase">
-                        WK-selectie
+        <section>
+            <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div className="min-w-0">
+                    <p className="text-[11px] font-bold tracking-[0.14em] text-[#929a95] uppercase">
+                        De selectie
                     </p>
                     <div className="mt-1 flex items-center gap-3">
-                        <h2 className="text-3xl font-black text-[#f3f4f1] sm:text-4xl">
-                            Actieve spelers
+                        <h2 className="text-2xl font-bold tracking-tight text-[#f3f4f1] sm:text-3xl">
+                            Spelers
                         </h2>
-                        <span className="rounded-sm border border-[#4b775d] bg-[#17251d] px-2.5 py-1 text-xs font-bold text-[#8fd0a8]">
+                        <span className="rounded-full border border-[#373c39] bg-[#191c1a] px-2.5 py-1 text-xs font-semibold text-[#c0c6c2]">
                             {players.length}
                         </span>
                     </div>
-                    <p className="mt-2 text-sm text-[#89928c]">
-                        Zoek op naam of filter de selectie per positie.
+                    <p className="mt-1.5 text-sm text-[#89928c]">
+                        Bekijk de selectie per positie of zoek een speler.
                     </p>
                 </div>
 
-                <div className="w-full lg:max-w-md">
+                <div className="w-full xl:max-w-xs">
                     <SquadSearch value={query} onChange={setQuery} />
                 </div>
             </div>
 
             {hasPlayers ? (
-                <div className="grid gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-6">
-                    <SquadPositionFilters
-                        activeFilter={activeFilter}
-                        onChange={setActiveFilter}
-                        variant="desktop"
-                    />
-                    <div className="min-w-0">
-                        <div className="mb-4">
-                            <SquadPositionFilters
-                                activeFilter={activeFilter}
-                                onChange={setActiveFilter}
-                                variant="mobile"
-                            />
-                        </div>
-
-                        {hasVisiblePlayers ? (
-                            <div className="flex flex-col gap-8">
-                                {groupedPlayers.map((group) => (
-                                    <PlayerPositionGroup
-                                        key={group.key}
-                                        group={group}
-                                        compactHeader={!showGroupHeaders}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <SquadEmptyState message={emptyMessage} />
-                        )}
+                <div className="min-w-0">
+                    <div className="mb-5">
+                        <SquadPositionFilters
+                            activeFilter={activeFilter}
+                            onChange={setActiveFilter}
+                        />
                     </div>
+
+                    {hasVisiblePlayers ? (
+                        <div className="flex flex-col gap-7">
+                            {groupedPlayers.map((group) => (
+                                <PlayerPositionGroup
+                                    key={group.key}
+                                    group={group}
+                                    compactHeader={!showGroupHeaders}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <SquadEmptyState message={emptyMessage} />
+                    )}
                 </div>
             ) : (
                 <SquadEmptyState message={emptyMessage} />

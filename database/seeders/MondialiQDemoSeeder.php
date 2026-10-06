@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\PredictionTypes;
+use App\Models\Coach;
 use App\Models\Country;
 use App\Models\Fixture;
 use App\Models\FixtureEvent;
@@ -63,6 +64,7 @@ class MondialiQDemoSeeder extends Seeder
             $countries = $this->seedCountries();
             $this->seedLeagues($countries);
             $this->seedTeams($countries);
+            $this->seedCoaches($countries);
 
             $fixtures = $this->seedFixtures();
             $this->seedAiPredictions($fixtures);
@@ -152,6 +154,34 @@ class MondialiQDemoSeeder extends Seeder
                     'country_id' => $countries[$countryKey]->id,
                     'founded_at' => $foundedAt,
                     'logo_url' => '',
+                ],
+            );
+        }
+    }
+
+    /** @param array<string, Country> $countries */
+    private function seedCoaches(array $countries): void
+    {
+        $definitions = [
+            'club-brugge' => ['Thomas', 'Vermeer', 'belgium'],
+            'arsenal' => ['Daniel', 'Mercer', 'england'],
+            'barcelona' => ['Javier', 'Ortega', 'spain'],
+            'real-madrid' => ['Mateo', 'Serrano', 'spain'],
+        ];
+
+        foreach ($definitions as $teamKey => [$firstName, $lastName, $countryKey]) {
+            $team = $this->teams[$teamKey];
+
+            Coach::query()->updateOrCreate(
+                ['team_id' => $team->id],
+                [
+                    'external_id' => null,
+                    'country_id' => $countries[$countryKey]->id,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'display_name' => "{$firstName} {$lastName}",
+                    'birth_date' => null,
+                    'photo_url' => null,
                 ],
             );
         }

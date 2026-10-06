@@ -18,12 +18,12 @@ export default function TeamDetails({ team }: Props) {
                 description={`Bekijk ${team.name}, de bondscoach en de actieve WK-selectie op MondialIQ.`}
             />
 
-            <div className="flex w-full flex-col gap-8">
+            <div className="flex w-full flex-col gap-7 sm:gap-9">
                 <BackButton className="w-fit" />
                 <TeamHero team={team} />
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.15fr_0.85fr]">
                     <TeamInfoCard team={team} />
-                    <TeamCoachCard coach={team.coach} />
+                    {team.coach ? <TeamCoachCard coach={team.coach} /> : null}
                 </div>
                 <ActivePlayersGrid players={team.activePlayers} />
             </div>
