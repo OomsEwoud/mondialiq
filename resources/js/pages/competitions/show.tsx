@@ -16,6 +16,24 @@ import PageHead from '@/components/seo/page-head';
 import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import type { CompetitionPageProps } from '@/types/competition';
 
+const recentFormResults: Record<
+    'W' | 'D' | 'L',
+    { label: string; className: string }
+> = {
+    W: {
+        label: 'Gewonnen',
+        className: 'border-[#355642] bg-[#20352a] text-[#a6d7b7]',
+    },
+    D: {
+        label: 'Gelijkgespeeld',
+        className: 'border-[#3b423e] bg-[#252b28] text-[#c2c9c4]',
+    },
+    L: {
+        label: 'Verloren',
+        className: 'border-[#573a37] bg-[#352725] text-[#d7aaa4]',
+    },
+};
+
 export default function CompetitionPage(props: CompetitionPageProps) {
     const {
         competition,
@@ -372,14 +390,45 @@ function Statistics({
                                         {statistic.teamName ?? 'Team'}
                                     </span>
                                 </span>
-                                <span className="shrink-0 text-right text-xs text-[#949d97] tabular-nums">
-                                    <span className="block">
+                                <span className="flex shrink-0 flex-col items-end text-right tabular-nums">
+                                    <span className="text-xs leading-4 font-medium text-[#aeb6b0]">
                                         {statistic.wins} zeges ·{' '}
                                         {statistic.cleanSheets} clean sheets
                                     </span>
                                     {statistic.form && (
-                                        <span className="mt-1 block tracking-[0.16em] text-[#9ecbad]">
-                                            {statistic.form}
+                                        <span
+                                            role="group"
+                                            aria-label="Recente resultaten"
+                                            className="mt-1.5 flex min-h-6 items-center gap-1"
+                                        >
+                                            {[
+                                                ...statistic.form.toUpperCase(),
+                                            ].map((result, resultIndex) => {
+                                                const resultDetails =
+                                                    recentFormResults[
+                                                        result as keyof typeof recentFormResults
+                                                    ];
+
+                                                if (!resultDetails) {
+                                                    return null;
+                                                }
+
+                                                return (
+                                                    <span
+                                                        key={`${result}-${resultIndex}`}
+                                                        role="img"
+                                                        aria-label={
+                                                            resultDetails.label
+                                                        }
+                                                        title={
+                                                            resultDetails.label
+                                                        }
+                                                        className={`flex size-[22px] shrink-0 items-center justify-center rounded-[6px] border text-[10px] leading-none font-bold ${resultDetails.className}`}
+                                                    >
+                                                        {result}
+                                                    </span>
+                                                );
+                                            })}
                                         </span>
                                     )}
                                 </span>
