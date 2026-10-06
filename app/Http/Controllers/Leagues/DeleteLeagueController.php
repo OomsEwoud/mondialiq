@@ -21,6 +21,6 @@ class DeleteLeagueController extends Controller
             'message' => __('Prediction group deleted: :group.', ['group' => $leagueName]),
         ]);
 
-        return to_route('leaderboards');
+        return to_route('social');
     }
 }

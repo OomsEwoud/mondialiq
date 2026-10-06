@@ -745,7 +745,7 @@ test('a league member can leave a league', function () {
 
     $this->actingAs($member)
         ->delete(route('leagues.leave', $league))
-        ->assertRedirect(route('leaderboards'))
+        ->assertRedirect(route('social'))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'You left Leavable League.',
@@ -792,7 +792,7 @@ test('a league owner can delete their league', function () {
 
     $this->actingAs($owner)
         ->delete(route('leagues.destroy', $league))
-        ->assertRedirect(route('leaderboards'))
+        ->assertRedirect(route('social'))
         ->assertSessionHas('inertia.flash_data.toast', [
             'type' => 'success',
             'message' => 'Prediction group deleted: Disposable League.',

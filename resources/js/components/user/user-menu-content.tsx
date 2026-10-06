@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { BarChart3, LogOut, Medal, UserRound } from 'lucide-react';
+import { BarChart3, LogOut, UsersRound, UserRound } from 'lucide-react';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/forms/dropdown-menu';
 import { UserInfo } from '@/components/user/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { editAccount, leaderboards, logout, predictions } from '@/routes';
+import { editAccount, social, logout, predictions } from '@/routes';
 import type { User } from '@/types';
 
 type Props = {
@@ -61,12 +61,12 @@ export function UserMenuContent({ user }: Props) {
                 <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
                         className={menuLinkClassName}
-                        href={leaderboards.url()}
+                        href={social.url()}
                         prefetch
                         onClick={cleanup}
                     >
-                        <Medal className="size-4 text-primary" />
-                        Leaderboards
+                        <UsersRound className="size-4 text-primary" />
+                        Social
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>

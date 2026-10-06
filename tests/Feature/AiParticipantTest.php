@@ -328,7 +328,7 @@ test('ai user is included in global leaderboard', function () {
 
     $response = $this
         ->actingAs($user)
-        ->get(route('leaderboards'));
+        ->get(route('social'));
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page

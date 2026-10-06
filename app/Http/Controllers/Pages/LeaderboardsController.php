@@ -3,33 +3,25 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Services\League\LeaderboardService;
-use App\Support\Leagues\LeagueMembershipLimit;
-use Illuminate\Http\Request;
+use App\Http\Requests\Rankings\AiRankingsRequest;
+use App\Services\Prediction\AiRankingService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LeaderboardsController extends Controller
 {
     public function __construct(
-        private readonly LeaderboardService $leaderboardService,
+        private readonly AiRankingService $rankingService,
     ) {}
 
-    public function __invoke(Request $request): Response
+    public function __invoke(AiRankingsRequest $request): Response
     {
-        $leaders = $this->leaderboardService->globalLeaders();
-        $user = $request->user();
-
-        return Inertia::render('leaderboards', [
-            'globalLeaderboard' => $leaders->take(10)->values(),
-            'currentUserPosition' => $this->leaderboardService->currentUserPosition($leaders, $user),
-            'totalPlayers' => $leaders->count(),
-            'joinedLeagues' => $this->leaderboardService->joinedLeagues($user),
-            'createLeagueHref' => route('leagues.create'),
-            'joinLeagueHref' => route('leagues.join'),
-            'scoringGuideHref' => route('scoring'),
-            'currentLeagueCount' => $this->leaderboardService->currentLeagueCount($user),
-            'maxLeagueCount' => LeagueMembershipLimit::MAX_LEAGUES_PER_USER,
-        ]);
+        return Inertia::render('leaderboards', $this->rankingService->overview([
+            'competition' => $request->filled('competition') ? $request->integer('competition') : null,
+            'team' => $request->filled('team') ? $request->integer('team') : null,
+            'period' => $request->validated('period') ?? '30d',
+            'predictionType' => $request->validated('predictionType') ?? 'all',
+            'confidence' => $request->validated('confidence') ?? 'all',
+        ]));
     }
 }

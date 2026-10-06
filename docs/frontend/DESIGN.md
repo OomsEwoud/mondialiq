@@ -2,9 +2,11 @@
 
 ## Product and journey
 
-Existing, functioning football product for fans comparing match data, making predictions and competing in leagues. Objects: fixtures, teams, players, predictions, standings and leagues. Main journey: discover a match → inspect evidence → choose an outcome → optionally add score/confidence → save → track results. Recovery must preserve input and explain validation, unavailable data and kickoff locks. On mobile, match selection and saving a prediction take priority.
+AI-first football product for comparing match data, AI predictions and measured performance. Main product journey: matches → AI predictions → competitions → AI performance. Personal leaderboards and prediction groups live in Social under the profile menu; their existing backend remains available. Objects: fixtures, teams, players, predictions, standings and leagues. Prediction entry still supports choosing an outcome, optional score/confidence, saving and tracking results. Recovery must preserve input and explain validation, unavailable data and kickoff locks.
 
 ## Direction
+
+AI Performance measures one combined MondialiQ prediction engine. Compare the engine's results across competitions, teams, periods, prediction types and confidence bands. Never introduce competing model personas or subscription tiers. Show actual sample sizes, empty states and prediction-versus-result records; preserve the separate Social experience.
 
 An editorial matchday desk: charcoal surfaces, pitch-green accents, warm white text, tabular scores and restrained borders. Preserve the existing football identity and shadcn/Radix behavior. Avoid oversized overview heroes, decorative badges, gradients on every card and competing cyan/indigo visual systems. Marketing can be expressive; operational screens stay compact. League branding and semantic warning/error colors remain meaningful.
 

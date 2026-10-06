@@ -17,7 +17,7 @@ import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { Button } from '@/components/ui/forms/button';
 import { cn } from '@/lib/utils';
-import { leaderboards } from '@/routes';
+import { social } from '@/routes';
 import type { LeagueDetailsPageProps } from '@/types/league';
 import {
     getLeagueThemeBannerClass,
@@ -71,14 +71,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                     )}
                 >
                     <Link
-                        href={leaderboards.url()}
+                        href={social.url()}
                         className={cn(
                             'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
                             theme.buttonRing,
                         )}
                     >
                         <ArrowLeft className="size-4" />
-                        Back to leaderboards
+                        Back to Social
                     </Link>
 
                     <div className="mt-5 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">

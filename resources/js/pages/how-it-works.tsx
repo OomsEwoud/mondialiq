@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import BackButton from '@/components/navigation/back-button';
 import PageHead from '@/components/seo/page-head';
-import { home, leaderboards, matches, predictions, scoring } from '@/routes';
+import { home, matches, predictions, scoring, social } from '@/routes';
 
 const scoringRules = [
     {
@@ -538,7 +538,7 @@ export default function HowItWorks() {
                             Explore predictions
                         </Link>
                         <Link
-                            href={leaderboards.url()}
+                            href={social.url()}
                             className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <Users className="size-4" />

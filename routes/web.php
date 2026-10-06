@@ -20,9 +20,9 @@ use App\Http\Controllers\Leagues\StoreLeagueController;
 use App\Http\Controllers\Leagues\TransferLeagueOwnershipController;
 use App\Http\Controllers\Leagues\UpdateLeagueController;
 use App\Http\Controllers\Pages\AiPredictionsController;
-use App\Http\Controllers\Pages\ContactController;
-use App\Http\Controllers\Pages\CompetitionsController;
 use App\Http\Controllers\Pages\CompetitionController;
+use App\Http\Controllers\Pages\CompetitionsController;
+use App\Http\Controllers\Pages\ContactController;
 use App\Http\Controllers\Pages\DashboardController;
 use App\Http\Controllers\Pages\GroupsController;
 use App\Http\Controllers\Pages\HomeController;
@@ -36,6 +36,7 @@ use App\Http\Controllers\Pages\PredictionsController;
 use App\Http\Controllers\Pages\PrivacyController;
 use App\Http\Controllers\Pages\ScoringGuideController;
 use App\Http\Controllers\Pages\ShowUserPredictionController;
+use App\Http\Controllers\Pages\SocialController;
 use App\Http\Controllers\Pages\TeamDetailsController;
 use App\Http\Controllers\Pages\UserPredictionsController;
 use App\Http\Controllers\Predictions\StoreMatchPredictionController;
@@ -68,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/leaderboards', LeaderboardsController::class)->name('leaderboards');
+    Route::redirect('/ranglijsten', '/leaderboards')->name('rankings.redirect');
+    Route::get('/social', SocialController::class)->name('social');
 
     Route::get('/leagues/create', CreateLeaguePageController::class)->name('leagues.create');
     Route::get('/leagues/join', JoinLeaguePageController::class)->name('leagues.join');

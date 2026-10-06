@@ -17,6 +17,7 @@ interface Option<TValue extends string> {
 
 interface Props<TValue extends string> {
     className?: string;
+    disabled?: boolean;
     label: string;
     value: TValue;
     options: Option<TValue>[];
@@ -25,6 +26,7 @@ interface Props<TValue extends string> {
 
 export default function FilterDropdown<TValue extends string>({
     className,
+    disabled = false,
     label,
     value,
     options,
@@ -38,6 +40,7 @@ export default function FilterDropdown<TValue extends string>({
                 {label}
             </span>
             <Select
+                disabled={disabled}
                 value={value === '' ? emptyValue : value}
                 onValueChange={(nextValue) =>
                     onChange(

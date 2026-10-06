@@ -19,6 +19,6 @@ class LeaveLeagueController extends Controller
             'message' => __('You left :group.', ['group' => $scoreboard->name]),
         ]);
 
-        return to_route('leaderboards');
+        return to_route('social');
     }
 }

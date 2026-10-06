@@ -15,7 +15,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/layout/card';
-import { leaderboards } from '@/routes';
+import { social } from '@/routes';
 import type { LeagueCreatePageProps } from '@/types';
 
 const fieldClassName =
@@ -50,11 +50,11 @@ export default function LeagueCreate({
                     actions={
                         <div className="flex flex-col items-start gap-2">
                             <Link
-                                href={leaderboards()}
+                                href={social()}
                                 className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary"
                             >
                                 <ArrowLeft className="size-4" />
-                                Back to leaderboards
+                                Back to Social
                             </Link>
                             <span className="text-xs text-muted-foreground">
                                 {leagueCountLabel}
@@ -243,7 +243,7 @@ export default function LeagueCreate({
                                             variant="ghost"
                                             className={secondaryActionClassName}
                                         >
-                                            <Link href={leaderboards.url()}>
+                                            <Link href={social.url()}>
                                                 Cancel
                                             </Link>
                                         </Button>

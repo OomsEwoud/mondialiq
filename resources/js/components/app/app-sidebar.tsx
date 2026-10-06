@@ -4,8 +4,9 @@ import {
     LayoutGrid,
     Sparkles,
     TableProperties,
-    Trophy,
+    BarChart3,
 } from 'lucide-react';
+import CompetitionsController from '@/actions/App/Http/Controllers/Pages/CompetitionsController';
 import AppLogo from '@/components/app/app-logo';
 import { NavMain } from '@/components/navigation/nav-main';
 import { NavUser } from '@/components/navigation/nav-user';
@@ -18,7 +19,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/navigation/sidebar';
-import { groups, home, leaderboards, matches, predictions } from '@/routes';
+import { home, leaderboards, matches, predictions } from '@/routes';
 import type { NavItem } from '@/types';
 
 const sidebarNavItems: NavItem[] = [
@@ -33,19 +34,19 @@ const sidebarNavItems: NavItem[] = [
         icon: CalendarDays,
     },
     {
-        title: 'Groups',
-        href: groups(),
-        icon: TableProperties,
-    },
-    {
-        title: 'Predictions',
+        title: 'AI Predictions',
         href: predictions(),
         icon: Sparkles,
     },
     {
-        title: 'Leaderboards',
+        title: 'Competitions',
+        href: CompetitionsController.url(),
+        icon: TableProperties,
+    },
+    {
+        title: 'AI Performance',
         href: leaderboards(),
-        icon: Trophy,
+        icon: BarChart3,
     },
 ];
 

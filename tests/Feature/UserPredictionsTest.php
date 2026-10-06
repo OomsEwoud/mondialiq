@@ -234,10 +234,10 @@ test('leaderboard excludes users with show_on_leaderboards false', function () {
 
     $this
         ->actingAs($visibleUser)
-        ->get(route('leaderboards'))
+        ->get(route('social'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('leaderboards')
+            ->component('social')
             ->has('globalLeaderboard', 2)
             ->where('globalLeaderboard.0.id', $visibleUser->id)
             ->where('globalLeaderboard.0.predictionsArePublic', true)
@@ -262,10 +262,10 @@ test('leaderboard includes public predictions href for public users', function (
 
     $this
         ->actingAs($user)
-        ->get(route('leaderboards'))
+        ->get(route('social'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('leaderboards')
+            ->component('social')
             ->has('globalLeaderboard', 2)
             ->where('globalLeaderboard.0.predictionsArePublic', true)
             ->where('globalLeaderboard.0.publicPredictionsHref', route('users.predictions', $user))
@@ -292,10 +292,10 @@ test('leaderboard excludes public predictions href for private users', function 
 
     $this
         ->actingAs($user)
-        ->get(route('leaderboards'))
+        ->get(route('social'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->component('leaderboards')
+            ->component('social')
             ->has('globalLeaderboard', 2)
             ->where('globalLeaderboard.0.predictionsArePublic', false)
             ->where('globalLeaderboard.0.publicPredictionsHref', null)

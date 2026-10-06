@@ -4,7 +4,7 @@ import LeagueSettingsCard from '@/components/leaderboards/league-settings-card';
 import PageHead from '@/components/seo/page-head';
 import { Badge } from '@/components/ui/feedback/badge';
 import { cn } from '@/lib/utils';
-import { leaderboards } from '@/routes';
+import { social } from '@/routes';
 import type { LeagueSettingsPageProps } from '@/types/league';
 import {
     getLeagueThemeBannerClass,
@@ -13,7 +13,7 @@ import {
 
 export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
     const theme = getLeagueThemePalette(league.accentColor);
-    const backHref = league.showHref ?? leaderboards.url();
+    const backHref = league.showHref ?? social.url();
     const memberLabel = league.membersCount === 1 ? 'member' : 'members';
 
     return (
