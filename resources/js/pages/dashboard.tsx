@@ -37,7 +37,7 @@ export default function Dashboard({
                 title="Jouw voetbaloverzicht"
                 description="Bekijk relevante wedstrijden, live scores en recente AI-analyses op MondialiQ."
             />
-            <div className="space-y-12 sm:space-y-14">
+            <div className="space-y-14 sm:space-y-16">
                 <header className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="text-sm font-semibold text-[#6fae88]">
@@ -92,7 +92,7 @@ export default function Dashboard({
                     </section>
                 )}
 
-                <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+                <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
                     <section className="order-2 lg:order-1">
                         <div className="flex items-end justify-between gap-4">
                             <div>
@@ -112,11 +112,11 @@ export default function Dashboard({
                             </Link>
                         </div>
                         {remaining.length > 0 ? (
-                            <div className="mt-6">
+                            <div className="mt-7">
                                 <MatchList matches={remaining} />
                             </div>
                         ) : (
-                            <div className="mt-6">
+                            <div className="mt-7">
                                 <EmptyState
                                     title="Geen extra wedstrijden gepland"
                                     description="Naast de wedstrijd in de kijker zijn er momenteel geen andere komende wedstrijden beschikbaar."

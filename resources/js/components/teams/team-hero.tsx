@@ -24,10 +24,7 @@ export default function TeamHero({ team }: Props) {
                     />
                 </span>
                 <div className="min-w-0">
-                    <p className="flex items-center gap-2 text-[11px] font-bold tracking-[0.16em] text-[#929a95] uppercase">
-                        Nationaal team
-                    </p>
-                    <div className="mt-3 flex min-w-0 flex-wrap items-end gap-3">
+                    <div className="flex min-w-0 flex-wrap items-end gap-3">
                         <h1
                             className="min-w-0 text-4xl leading-none font-black tracking-tight text-[#f3f4f1] sm:text-6xl"
                             title={team.name}

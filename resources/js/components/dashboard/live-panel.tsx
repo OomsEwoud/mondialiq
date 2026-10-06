@@ -19,17 +19,17 @@ export default function LivePanel({
                 <h2 className="text-xl font-bold text-white">Live</h2>
             </div>
             {matches.length === 0 ? (
-                <p className="mt-5 text-sm text-[#7f8882]">
+                <p className="mt-6 text-sm text-[#7f8882]">
                     Geen wedstrijden live op dit moment. Zodra een match begint,
                     verschijnt de score hier automatisch.
                 </p>
             ) : (
-                <div className="mt-5 divide-y divide-[#262c29] border-y border-[#262c29]">
+                <div className="mt-6 divide-y divide-[#262c29] border-y border-[#262c29]">
                     {matches.map((match) => (
                         <Link
                             key={match.id}
                             href={showMatch(match.id)}
-                            className="block py-4 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset"
+                            className="block py-5 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset"
                         >
                             <div className="flex items-center justify-between gap-3">
                                 <span className="truncate text-xs font-medium text-[#7f8882]">

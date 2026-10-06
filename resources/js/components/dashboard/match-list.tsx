@@ -11,7 +11,7 @@ export default function MatchList({ matches }: { matches: Match[] }) {
                 <Link
                     key={match.id}
                     href={showMatch(match.id)}
-                    className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-4 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset sm:grid-cols-[4.5rem_1fr_auto]"
+                    className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-5 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset sm:grid-cols-[4.5rem_1fr_auto]"
                 >
                     <div>
                         <span className="text-sm font-semibold text-[#daddd9] tabular-nums">
