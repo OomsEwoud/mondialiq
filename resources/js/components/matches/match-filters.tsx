@@ -1,4 +1,4 @@
-import { SlidersHorizontal, X } from 'lucide-react';
+import { ChevronDown, SlidersHorizontal, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { FilterKey, Filters, MatchStatusFilter } from '@/types/match-page';
@@ -82,22 +82,35 @@ export default function MatchFilters({
                 <button
                     type="button"
                     className={cn(
-                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-sm px-2 text-sm font-semibold transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
                         showFilters || advancedFilterCount
-                            ? 'text-[#9ecbad]'
-                            : 'text-[#949d97]',
+                            ? 'border-[#4b775d] bg-[#17251d] text-[#9ecbad]'
+                            : 'border-[#343d37] bg-[#0d110f] text-[#a8b0ab] hover:border-[#536159] hover:text-white',
                     )}
                     aria-expanded={showFilters}
                     aria-controls="match-extra-filters"
-                    onClick={() => setShowFilters(!showFilters)}
+                    onClick={() => setShowFilters((isOpen) => !isOpen)}
                 >
                     <SlidersHorizontal className="size-4" aria-hidden="true" />
-                    Filters
                     {advancedFilterCount > 0 && (
-                        <span className="text-xs tabular-nums">
-                            ({advancedFilterCount})
-                        </span>
+                        <>
+                            <span>Filters</span>
+                            <span
+                                aria-label={`${advancedFilterCount} actief`}
+                                className="text-xs text-[#9ecbad] tabular-nums"
+                            >
+                                · {advancedFilterCount}
+                            </span>
+                        </>
                     )}
+                    {advancedFilterCount === 0 && <span>Filters</span>}
+                    <ChevronDown
+                        className={cn(
+                            'size-4 transition-transform duration-200',
+                            showFilters && 'rotate-180',
+                        )}
+                        aria-hidden="true"
+                    />
                 </button>
                 {hasActiveFilters && (
                     <button
@@ -112,20 +125,28 @@ export default function MatchFilters({
             </div>
             <div
                 id="match-extra-filters"
-                hidden={!showFilters}
-                className="pt-5"
+                aria-hidden={!showFilters}
+                inert={!showFilters}
+                className={cn(
+                    'grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none',
+                    showFilters
+                        ? 'grid-rows-[1fr] opacity-100'
+                        : 'pointer-events-none grid-rows-[0fr] opacity-0',
+                )}
             >
-                <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:max-w-2xl sm:grid-cols-2">
-                    <RoundFilter
-                        rounds={rounds}
-                        selected={selected.round}
-                        onChange={(value) => onChange('round', value)}
-                    />
-                    <DateFilter
-                        dates={dates}
-                        selected={selected.date}
-                        onChange={(value) => onChange('date', value)}
-                    />
+                <div className="min-h-0 overflow-hidden">
+                    <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:max-w-2xl sm:grid-cols-2">
+                        <RoundFilter
+                            rounds={rounds}
+                            selected={selected.round}
+                            onChange={(value) => onChange('round', value)}
+                        />
+                        <DateFilter
+                            dates={dates}
+                            selected={selected.date}
+                            onChange={(value) => onChange('date', value)}
+                        />
+                    </div>
                 </div>
             </div>
         </section>
