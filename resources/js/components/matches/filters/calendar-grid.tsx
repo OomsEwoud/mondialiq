@@ -1,12 +1,11 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { weekDays } from '@/const/filters';
 import { toDateKey } from '@/utils/date';
 
 interface Props {
+    id: string;
     visibleMonth: Date;
     days: Array<Date | null>;
     selectedDate: string;
-    availableDates: Set<string>;
     onSelect: (date: Date) => void;
     onPrev: () => void;
     onNext: () => void;
@@ -15,10 +14,10 @@ interface Props {
 }
 
 export default function CalendarGrid({
+    id,
     visibleMonth,
     days,
     selectedDate,
-    availableDates,
     onSelect,
     onPrev,
     onNext,
@@ -26,13 +25,18 @@ export default function CalendarGrid({
     onClose,
 }: Props) {
     return (
-        <div className="absolute top-full left-0 z-20 mt-2 w-[min(19rem,calc(100vw-2.5rem))] rounded-md border border-[#343d37] bg-[#141916] p-3 text-[#daddd9] shadow-2xl shadow-black/50">
+        <div
+            id={id}
+            role="dialog"
+            aria-label="Datum kiezen"
+            className="absolute top-full left-0 z-20 mt-2 w-[min(19rem,calc(100vw-2.5rem))] rounded-lg border border-[#343d37] bg-[#141916] p-3 text-[#daddd9] shadow-2xl shadow-black/50"
+        >
             <div className="mb-3 flex items-center justify-between">
                 <button
                     type="button"
                     onClick={onPrev}
                     className="inline-flex size-9 items-center justify-center rounded-md border border-[#343d37] text-[#89928c] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
-                    aria-label="Previous month"
+                    aria-label="Vorige maand"
                 >
                     <ChevronLeft size={16} />
                 </button>
@@ -46,14 +50,14 @@ export default function CalendarGrid({
                     type="button"
                     onClick={onNext}
                     className="inline-flex size-9 items-center justify-center rounded-md border border-[#343d37] text-[#89928c] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
-                    aria-label="Next month"
+                    aria-label="Volgende maand"
                 >
                     <ChevronRight size={16} />
                 </button>
             </div>
 
             <div className="mb-2 grid grid-cols-7 text-center text-xs font-semibold text-[#70b98e] uppercase">
-                {weekDays.map((day) => (
+                {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map((day) => (
                     <span key={day}>{day}</span>
                 ))}
             </div>
@@ -71,21 +75,17 @@ export default function CalendarGrid({
 
                     const dateKey = toDateKey(date);
                     const isActive = dateKey === selectedDate;
-                    const isAvailable = availableDates.has(dateKey);
 
                     return (
                         <button
                             key={dateKey}
                             type="button"
-                            disabled={!isAvailable}
                             onClick={() => onSelect(date)}
                             className={[
                                 'aspect-square rounded-sm text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
                                 isActive
                                     ? 'bg-[#edf1ed] text-[#101412]'
-                                    : isAvailable
-                                      ? 'text-[#b8bfba] hover:bg-[#1b211e] hover:text-white'
-                                      : 'cursor-not-allowed text-[#48504b]',
+                                    : 'text-[#b8bfba] hover:bg-[#1b211e] hover:text-white',
                             ].join(' ')}
                         >
                             {date.getDate()}

@@ -72,7 +72,6 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
 
             <MatchFilters
                 rounds={filterOptions.rounds}
-                dates={filterOptions.dates}
                 teams={filterOptions.teams}
                 selected={filters}
                 onChange={handleFilterChange}

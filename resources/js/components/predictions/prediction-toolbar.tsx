@@ -1,5 +1,6 @@
 import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 import { useId, useState } from 'react';
+import DatePicker from '@/components/filters/date-picker';
 import FilterSelect from '@/components/predictions/filters/filter-select';
 import { cn } from '@/lib/utils';
 import type {
@@ -156,20 +157,18 @@ export default function PredictionToolbar({
                         : 'pointer-events-none grid-rows-[0fr] opacity-0',
                 )}
             >
-                <div className="min-h-0 overflow-hidden">
+                <div
+                    className={cn(
+                        'min-h-0',
+                        expanded ? 'overflow-visible' : 'overflow-hidden',
+                    )}
+                >
                     <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:grid-cols-2 lg:grid-cols-4">
-                        <label className="grid min-w-0 gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
-                            Datum
-                            <input
-                                aria-label="Datum"
-                                type="date"
-                                value={filters.date}
-                                onChange={(event) =>
-                                    onChange('date', event.target.value)
-                                }
-                                className="h-11 w-full min-w-0 rounded-xl border border-border bg-card px-3 text-sm font-semibold text-foreground [color-scheme:dark] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
-                            />
-                        </label>
+                        <DatePicker
+                            label="Datum"
+                            selected={filters.date}
+                            onChange={(value) => onChange('date', value)}
+                        />
                         <FilterSelect
                             label="Wedstrijdstatus"
                             value={filters.status}

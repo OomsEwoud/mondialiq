@@ -11,7 +11,6 @@ import TeamFilter from './filters/team-filter';
 
 interface Props {
     rounds: Array<{ label: string; value: string }>;
-    dates: Array<{ label: string; value: string }>;
     teams: string[];
     selected: Filters;
     onChange: (key: FilterKey, value: string | MatchStatusFilter) => void;
@@ -21,7 +20,6 @@ interface Props {
 
 export default function MatchFilters({
     rounds,
-    dates,
     teams,
     selected,
     onChange,
@@ -134,7 +132,12 @@ export default function MatchFilters({
                         : 'pointer-events-none grid-rows-[0fr] opacity-0',
                 )}
             >
-                <div className="min-h-0 overflow-hidden">
+                <div
+                    className={cn(
+                        'min-h-0',
+                        showFilters ? 'overflow-visible' : 'overflow-hidden',
+                    )}
+                >
                     <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:max-w-2xl sm:grid-cols-2">
                         <RoundFilter
                             rounds={rounds}
@@ -142,7 +145,6 @@ export default function MatchFilters({
                             onChange={(value) => onChange('round', value)}
                         />
                         <DateFilter
-                            dates={dates}
                             selected={selected.date}
                             onChange={(value) => onChange('date', value)}
                         />

@@ -10,7 +10,7 @@ export function useCalendar(selectedDate: string) {
     );
 
     const days = useMemo(() => {
-        const firstWeekday = startOfMonth(visibleMonth).getDay();
+        const firstWeekday = (startOfMonth(visibleMonth).getDay() + 6) % 7;
         const daysInMonth = new Date(
             visibleMonth.getFullYear(),
             visibleMonth.getMonth() + 1,
