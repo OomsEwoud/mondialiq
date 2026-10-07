@@ -3,24 +3,69 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Pages\CompetitionsIndexRequest;
+use App\Models\Country;
 use App\Models\League;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CompetitionsController extends Controller
 {
-    public function __invoke(): Response
+    public function __invoke(CompetitionsIndexRequest $request): Response
     {
-        $competitions = League::query()
+        $search = trim((string) $request->validated('search', ''));
+        $internationalCountryIds = Country::query()
+            ->whereIn(DB::raw('LOWER(name)'), ['europe', 'international', 'world'])
+            ->pluck('id');
+
+        $domesticQuery = League::query()
+            ->whereNotNull('country_id')
+            ->whereNotIn('country_id', $internationalCountryIds);
+
+        $this->applySearch($domesticQuery, $search);
+
+        $domesticCompetitions = $domesticQuery
             ->with('country:id,name')
             ->orderBy('name')
-            ->get()
-            ->map(fn (League $league): array => $this->competitionSummary($league))
-            ->values();
+            ->paginate(10, ['*'], 'domestic_page')
+            ->withQueryString()
+            ->through(fn (League $league): array => $this->competitionSummary($league));
+
+        $internationalQuery = League::query()
+            ->where(function (Builder $query) use ($internationalCountryIds): void {
+                $query->whereNull('country_id')
+                    ->orWhereIn('country_id', $internationalCountryIds);
+            });
+
+        $this->applySearch($internationalQuery, $search);
+
+        $internationalCompetitions = $internationalQuery
+            ->with('country:id,name')
+            ->orderBy('name')
+            ->paginate(10, ['*'], 'international_page')
+            ->withQueryString()
+            ->through(fn (League $league): array => $this->competitionSummary($league));
 
         return Inertia::render('competitions/index', [
-            'competitions' => $competitions,
+            'domesticCompetitions' => $domesticCompetitions,
+            'internationalCompetitions' => $internationalCompetitions,
+            'search' => $search,
         ]);
+    }
+
+    private function applySearch(Builder $query, string $search): void
+    {
+        if ($search === '') {
+            return;
+        }
+
+        $query->where(function (Builder $query) use ($search): void {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhereHas('country', fn (Builder $countryQuery) => $countryQuery
+                    ->where('name', 'like', "%{$search}%"));
+        });
     }
 
     private function competitionSummary(League $league): array
