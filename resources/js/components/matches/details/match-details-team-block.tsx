@@ -17,19 +17,19 @@ export default function MatchDetailsTeamBlock({ id, logo, name, code }: Props) {
             href={showTeam.url(id)}
             aria-label={`Bekijk ${name}`}
             className={cn(
-                'group flex min-w-0 flex-col items-center gap-3 rounded-md px-1 py-2 text-center transition-colors hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:gap-4 sm:px-4',
+                'group flex min-w-0 flex-col items-center gap-3 rounded-lg px-1 py-2 text-center transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:gap-4 sm:px-4',
             )}
         >
             <TeamCrest
                 src={logo}
                 name={name}
-                className="size-12 shrink-0 object-contain sm:size-16"
+                className="size-16 shrink-0 object-contain transition-transform duration-200 group-hover:scale-105 sm:size-24"
             />
             <div className="min-w-0">
-                <p className="text-sm font-semibold break-words text-foreground sm:text-xl">
+                <p className="text-sm font-bold break-words text-foreground sm:text-2xl">
                     {name}
                 </p>
-                <p className="mt-1 text-xs tracking-widest text-muted-foreground uppercase">
+                <p className="mt-1 text-xs font-medium tracking-wider text-muted-foreground">
                     {code}
                 </p>
             </div>

@@ -24,8 +24,8 @@ export default function MatchScoreCard({ match }: Props) {
     );
 
     return (
-        <section className="rounded-lg border border-border bg-card p-4 sm:p-5">
-            <h2 className="mb-3 text-sm font-semibold text-foreground">
+        <section className="border-t border-border/70 pt-6">
+            <h2 className="mb-3 text-lg font-semibold text-foreground">
                 Scoreverloop
             </h2>
             <div className="flex flex-col divide-y divide-border/60">

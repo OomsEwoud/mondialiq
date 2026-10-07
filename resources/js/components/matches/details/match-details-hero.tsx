@@ -29,25 +29,28 @@ export default function MatchDetailsHero({
     return (
         <section
             aria-label="Scorebord"
-            className="overflow-hidden rounded-lg border border-border bg-card"
+            className="relative overflow-hidden rounded-xl bg-gradient-to-b from-card/75 to-transparent px-2 py-5 sm:px-6 sm:py-7"
         >
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/70 px-4 py-3 sm:px-6">
-                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
-                    {match.round}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                    {match.date} · {match.time}
-                </p>
+            <div className="mb-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm sm:mb-7">
+                <p className="font-semibold text-foreground">{match.round}</p>
+                <span aria-hidden="true" className="text-muted-foreground/50">
+                    ·
+                </span>
+                <p className="text-muted-foreground">{match.date}</p>
+                <span aria-hidden="true" className="text-muted-foreground/50">
+                    ·
+                </span>
+                <p className="text-muted-foreground">{match.time}</p>
             </div>
 
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-6 sm:gap-6 sm:px-8 sm:py-9">
+            <div className="mx-auto grid max-w-4xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-8">
                 <MatchDetailsTeamBlock
                     id={match.homeTeam.id}
                     logo={match.homeTeam.logo}
                     name={match.homeTeam.name}
                     code={match.homeTeam.code}
                 />
-                <div className="flex max-w-28 flex-col items-center gap-2 text-center sm:max-w-44">
+                <div className="flex min-w-24 flex-col items-center gap-2.5 text-center sm:min-w-40">
                     {isLive && (
                         <div className="flex justify-center">
                             <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
@@ -59,10 +62,10 @@ export default function MatchDetailsHero({
                             </span>
                         </div>
                     )}
-                    <p className="text-4xl font-semibold tracking-tight whitespace-nowrap text-foreground tabular-nums sm:text-6xl">
+                    <p className="text-4xl font-bold tracking-tight whitespace-nowrap text-foreground tabular-nums sm:text-6xl lg:text-7xl">
                         {scoreLabel}
                     </p>
-                    <p className="text-xs font-medium text-muted-foreground">
+                    <p className="text-sm font-medium text-muted-foreground">
                         {translateMatchStatus(
                             liveMatch?.status_long ?? match.status,
                         )}

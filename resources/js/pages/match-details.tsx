@@ -33,7 +33,7 @@ export default function MatchDetails({ match }: Props) {
                 description={`View ${match.homeTeam.name} vs ${match.awayTeam.name} match details, kickoff information, lineups, stats and prediction options on MondialIQ.`}
             />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:gap-6">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 lg:gap-5">
                 <h1 className="sr-only">{pageTitle}</h1>
                 <div className="flex items-center justify-between gap-4">
                     <BackButton />
@@ -42,7 +42,7 @@ export default function MatchDetails({ match }: Props) {
                     </p>
                 </div>
 
-                <div className="flex flex-col gap-5 lg:gap-6">
+                <div className="flex flex-col gap-4 lg:gap-5">
                     <MatchDetailsHero
                         match={match}
                         liveMatch={liveMatch}
@@ -50,10 +50,10 @@ export default function MatchDetails({ match }: Props) {
                         hasPollingError={hasPollingError}
                     />
                     <MatchPredictionActionRow match={match} />
-                    <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-6">
+                    <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-10">
                         <MatchDataTabs match={match} />
                         <aside
-                            className="flex min-w-0 flex-col gap-5"
+                            className="flex min-w-0 flex-col gap-7 border-t border-border/70 pt-7 lg:border-t-0 lg:pt-2"
                             aria-label="Wedstrijdinformatie"
                         >
                             <MatchInfoCard match={match} />

@@ -27,9 +27,9 @@ export default function MatchInfoCard({ match }: Props) {
             : match.time;
 
     return (
-        <section className="rounded-lg border border-border bg-card p-4 sm:p-5">
-            <h2 className="mb-2 text-sm font-semibold text-foreground">
-                Wedstrijdinformatie
+        <section>
+            <h2 className="mb-2 text-xs font-semibold tracking-wider text-muted-foreground">
+                Wedstrijdgegevens
             </h2>
             <div className="grid grid-cols-1 divide-y divide-border/60">
                 <MatchInfoItem

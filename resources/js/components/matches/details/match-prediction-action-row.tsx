@@ -16,15 +16,24 @@ export default function MatchPredictionActionRow({ match }: Props) {
     return (
         <section
             aria-label="AI-voorspelling"
-            className="flex flex-col gap-3 rounded-lg border border-primary/25 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between"
+            className="flex flex-col gap-4 border-y border-border/70 py-5 sm:flex-row sm:items-center sm:justify-between sm:py-6"
         >
-            <p className="text-sm font-medium text-primary">
-                AI-voorspelling beschikbaar
-            </p>
+            <div className="flex items-start gap-3">
+                <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Sparkles aria-hidden="true" className="size-4" />
+                </span>
+                <div>
+                    <p className="text-xs font-semibold tracking-wide text-primary">
+                        AI-MATCHINZICHT
+                    </p>
+                    <p className="mt-1 text-sm text-foreground">
+                        Bekijk de voorspelling en analyse voor deze wedstrijd.
+                    </p>
+                </div>
+            </div>
             <Button asChild className="min-h-11 w-full sm:w-auto">
                 <Link href={showAiPrediction.url(match.id)}>
-                    <Sparkles aria-hidden="true" />
-                    Bekijk AI-voorspelling
+                    Bekijk AI-analyse
                     <ArrowUpRight aria-hidden="true" />
                 </Link>
             </Button>

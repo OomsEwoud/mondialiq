@@ -12,8 +12,8 @@ export default function MatchScoreRow({ label, score }: Props) {
             : `${score.home} - ${score.away}`;
 
     return (
-        <div className="flex items-center justify-between gap-3 py-3">
-            <span className="text-sm text-muted-foreground">{label}</span>
+        <div className="relative flex items-center justify-between gap-3 py-3 before:absolute before:top-0 before:left-0 before:h-full before:w-px before:bg-border">
+            <span className="pl-4 text-sm text-muted-foreground">{label}</span>
             <span className="font-semibold text-foreground tabular-nums">
                 {value}
             </span>

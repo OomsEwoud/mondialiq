@@ -15,15 +15,17 @@ export default function MatchInfoItem({
     className,
 }: Props) {
     return (
-        <div className={cn('flex min-w-0 items-start gap-3 py-3', className)}>
+        <div className={cn('flex min-w-0 items-start gap-3 py-3.5', className)}>
             <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-muted-foreground [&_svg]:size-4">
                 {icon}
             </span>
             <div className="min-w-0 flex-1">
-                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="text-xs font-medium text-muted-foreground">
+                    {label}
+                </p>
                 {typeof value === 'string' ? (
                     <p
-                        className="mt-1 text-sm font-medium break-words text-foreground"
+                        className="mt-1 text-sm font-semibold break-words text-foreground"
                         title={value}
                     >
                         {value}
