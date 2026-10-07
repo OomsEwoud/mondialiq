@@ -17,33 +17,33 @@ export default function MatchInfoCard({ match }: Props) {
     const venue = match.venue;
     const venueLabel = venue
         ? [venue.name, venue.city].filter(Boolean).join(', ')
-        : 'TBC';
+        : 'Nog niet bekend';
     const seasonLabel = String(match.season);
 
     const timeLabel =
         !match.time || match.time === '00:00' || match.time === '00:00:00'
-            ? 'TBD'
+            ? 'Nog niet bekend'
             : match.time;
 
     return (
-        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-4 shadow-sm sm:p-5">
-            <h2 className="mb-4 text-xl font-bold text-foreground">
-                Match info
+        <section className="rounded-lg border border-border bg-card p-4 sm:p-5">
+            <h2 className="mb-2 text-sm font-semibold text-foreground">
+                Wedstrijdinformatie
             </h2>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div className="grid grid-cols-1 divide-y divide-border/60">
                 <MatchInfoItem
                     icon={<CalendarDays />}
-                    label="Date"
+                    label="Datum"
                     value={match.date}
                 />
                 <MatchInfoItem
                     icon={<Clock />}
-                    label="Kickoff"
+                    label="Aftrap"
                     value={timeLabel}
                 />
                 <MatchInfoItem
                     icon={<Trophy />}
-                    label="Season"
+                    label="Seizoen"
                     value={seasonLabel}
                 />
                 <MatchInfoItem
@@ -53,15 +53,13 @@ export default function MatchInfoCard({ match }: Props) {
                 />
                 <MatchInfoItem
                     icon={<MapPin />}
-                    label="Venue"
+                    label="Stadion"
                     value={venueLabel}
-                    className="md:col-span-2"
                 />
                 <MatchInfoItem
                     icon={<UserRound />}
-                    label="Referee"
-                    value={match.referee ?? 'TBC'}
-                    className="md:col-span-2"
+                    label="Scheidsrechter"
+                    value={match.referee ?? 'Nog niet bekend'}
                 />
             </div>
         </section>

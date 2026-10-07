@@ -1,4 +1,4 @@
-import { UsersRound } from 'lucide-react';
+import MatchDataEmptyState from '@/components/matches/details/match-data-empty-state';
 import MatchLineupTeamCard from '@/components/matches/details/match-lineup-team-card';
 import type { MatchDetails } from '@/types/match-details';
 import { hasLineupData } from '@/utils/match-lineup';
@@ -13,12 +13,7 @@ export default function MatchLineupsPanel({ match }: Props) {
 
     if (!hasLineups) {
         return (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card px-4 py-8 text-center text-sm font-medium text-muted-foreground">
-                <span className="flex size-10 items-center justify-center rounded-full bg-card text-muted-foreground shadow-sm ring-1 ring-border">
-                    <UsersRound className="size-4" />
-                </span>
-                <p>No lineups available yet for this match.</p>
-            </div>
+            <MatchDataEmptyState message="De opstellingen zijn nog niet beschikbaar voor deze wedstrijd." />
         );
     }
 

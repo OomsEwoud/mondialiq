@@ -9,10 +9,10 @@ interface Props {
 }
 
 const scoreRows: Array<[string, keyof MatchDetails['score']]> = [
-    ['Halftime', 'halftime'],
-    ['Fulltime', 'fulltime'],
-    ['Extra time', 'extratime'],
-    ['Penalties', 'penalties'],
+    ['Rust', 'halftime'],
+    ['Eindstand', 'fulltime'],
+    ['Verlenging', 'extratime'],
+    ['Strafschoppen', 'penalties'],
 ];
 
 export default function MatchScoreCard({ match }: Props) {
@@ -24,11 +24,11 @@ export default function MatchScoreCard({ match }: Props) {
     );
 
     return (
-        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-4 shadow-sm sm:p-6">
-            <h2 className="mb-5 text-xl font-bold text-foreground">
-                Score details
+        <section className="rounded-lg border border-border bg-card p-4 sm:p-5">
+            <h2 className="mb-3 text-sm font-semibold text-foreground">
+                Scoreverloop
             </h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col divide-y divide-border/60">
                 {visibleScoreRows.map(([label, key]) => (
                     <MatchScoreRow
                         key={key}
@@ -38,8 +38,8 @@ export default function MatchScoreCard({ match }: Props) {
                 ))}
             </div>
             {!hasAnyScore && (
-                <p className="mt-4 rounded-2xl border border-dashed border-border bg-muted/80 px-4 py-4 text-sm leading-6 font-medium text-muted-foreground">
-                    Score details will appear once the match is played.
+                <p className="text-sm leading-6 text-muted-foreground">
+                    De scores verschijnen zodra de wedstrijd is gespeeld.
                 </p>
             )}
         </section>

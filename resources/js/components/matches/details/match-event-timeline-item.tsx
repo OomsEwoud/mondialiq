@@ -28,38 +28,38 @@ interface EventStyle {
 
 const eventStyles: Record<MatchEventKind, EventStyle> = {
     goal: {
-        marker: 'border-emerald-200 bg-emerald-950/40 text-emerald-200',
-        card: 'border-emerald-100 bg-emerald-50/60 shadow-sm',
-        label: 'text-emerald-200',
+        marker: 'border-primary/30 bg-secondary text-primary',
+        card: 'border-primary/25 bg-primary/5',
+        label: 'text-primary',
     },
     penalty: {
-        marker: 'border-emerald-200 bg-card text-emerald-200',
-        card: 'border-emerald-100 bg-card',
-        label: 'text-emerald-200',
+        marker: 'border-primary/30 bg-secondary text-primary',
+        card: 'border-primary/25 bg-primary/5',
+        label: 'text-primary',
     },
     'yellow-card': {
-        marker: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-        card: 'border-yellow-100 bg-card',
-        label: 'text-yellow-700',
+        marker: 'border-amber-400/30 bg-amber-400/10 text-amber-300',
+        card: 'border-border/60 bg-background/30',
+        label: 'text-amber-300',
     },
     'red-card': {
-        marker: 'border-red-200 bg-red-950/40 text-red-200',
-        card: 'border-red-100 bg-card',
-        label: 'text-red-200',
+        marker: 'border-destructive/30 bg-destructive/10 text-destructive',
+        card: 'border-destructive/25 bg-destructive/5',
+        label: 'text-destructive',
     },
     substitution: {
-        marker: 'border-blue-200 bg-blue-950/40 text-blue-200',
-        card: 'border-border bg-card',
-        label: 'text-blue-200',
+        marker: 'border-border bg-muted text-muted-foreground',
+        card: 'border-border/60 bg-background/30',
+        label: 'text-muted-foreground',
     },
     var: {
-        marker: 'border-violet-200 bg-violet-950/40 text-violet-200',
-        card: 'border-border bg-card',
-        label: 'text-violet-200',
+        marker: 'border-border bg-muted text-muted-foreground',
+        card: 'border-border/60 bg-background/30',
+        label: 'text-muted-foreground',
     },
     default: {
-        marker: 'border-border bg-card text-muted-foreground',
-        card: 'border-border bg-card',
+        marker: 'border-border/60 bg-background/30 text-muted-foreground',
+        card: 'border-border/60 bg-background/30',
         label: 'text-muted-foreground',
     },
 };
@@ -75,7 +75,7 @@ export default function MatchEventTimelineItem({
 
     return (
         <div className="grid grid-cols-[2.75rem_1.75rem_minmax(0,1fr)] gap-2 sm:grid-cols-[3.25rem_2rem_minmax(0,1fr)] sm:gap-3">
-            <div className="pt-3 text-right text-xs font-bold text-blue-200 tabular-nums sm:text-sm">
+            <div className="pt-3 text-right text-xs font-semibold text-muted-foreground tabular-nums sm:text-sm">
                 {formatMinute(event)}
             </div>
 
@@ -99,7 +99,7 @@ export default function MatchEventTimelineItem({
 
             <article
                 className={cn(
-                    'group mb-2 min-w-0 rounded-lg border px-3 py-2.5 shadow-xs transition-colors hover:border-blue-200 hover:bg-blue-50/40 sm:px-4',
+                    'mb-2 min-w-0 rounded-md border px-3 py-2.5 sm:px-4',
                     style.card,
                     kind === 'goal' && 'py-3',
                 )}
@@ -213,19 +213,19 @@ function formatMatchEventType(event: MatchDetailsEvent): string {
     }
 
     if (kind === 'yellow-card') {
-        return 'Yellow card';
+        return 'Gele kaart';
     }
 
     if (kind === 'red-card') {
-        return 'Red card';
+        return 'Rode kaart';
     }
 
     if (kind === 'substitution') {
-        return 'Substitution';
+        return 'Wissel';
     }
 
     if (kind === 'var') {
-        return 'VAR review';
+        return 'VAR-controle';
     }
 
     if (kind === 'penalty') {
@@ -259,7 +259,7 @@ function secondaryEventText(
     }
 
     if (kind === 'substitution' && event.player && event.assist) {
-        return 'Player out -> player in';
+        return 'Speler uit → speler in';
     }
 
     if (kind !== 'goal' && kind !== 'substitution' && event.assist) {

@@ -35,7 +35,12 @@ export default function MatchDetails({ match }: Props) {
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 lg:gap-6">
                 <h1 className="sr-only">{pageTitle}</h1>
-                <BackButton className="w-fit rounded-xl border border-border bg-card text-foreground shadow-sm hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring" />
+                <div className="flex items-center justify-between gap-4">
+                    <BackButton />
+                    <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+                        Wedstrijdcentrum
+                    </p>
+                </div>
 
                 <div className="flex flex-col gap-5 lg:gap-6">
                     <MatchDetailsHero
@@ -45,11 +50,16 @@ export default function MatchDetails({ match }: Props) {
                         hasPollingError={hasPollingError}
                     />
                     <MatchPredictionActionRow match={match} />
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.35fr_0.65fr]">
-                        <MatchInfoCard match={match} />
-                        <MatchScoreCard match={match} />
+                    <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-6">
+                        <MatchDataTabs match={match} />
+                        <aside
+                            className="flex min-w-0 flex-col gap-5"
+                            aria-label="Wedstrijdinformatie"
+                        >
+                            <MatchInfoCard match={match} />
+                            <MatchScoreCard match={match} />
+                        </aside>
                     </div>
-                    <MatchDataTabs match={match} />
                 </div>
             </div>
         </>

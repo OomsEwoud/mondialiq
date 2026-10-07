@@ -16,7 +16,7 @@ export default function MatchDataTabPanel({ activeTab, match }: Props) {
         return match.events.length > 0 ? (
             <MatchEventsTimeline events={match.events} />
         ) : (
-            <MatchDataEmptyState message="No match events available yet. Events will appear once the match starts." />
+            <MatchDataEmptyState message="Nog geen wedstrijdverloop beschikbaar. Gebeurtenissen verschijnen zodra ze worden aangeleverd." />
         );
     }
 
@@ -24,7 +24,7 @@ export default function MatchDataTabPanel({ activeTab, match }: Props) {
         return match.stats.length > 0 ? (
             <MatchStatsPanel match={match} />
         ) : (
-            <MatchDataEmptyState message="No match statistics available yet. Team stats will appear once data is available." />
+            <MatchDataEmptyState message="Nog geen statistieken beschikbaar voor deze wedstrijd." />
         );
     }
 

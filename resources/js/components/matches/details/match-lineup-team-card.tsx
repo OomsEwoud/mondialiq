@@ -12,7 +12,7 @@ type Props = {
 
 export default function MatchLineupTeamCard({ team, lineup }: Props) {
     return (
-        <section className="min-w-0 rounded-2xl border border-border bg-gradient-to-b from-card to-card/70 p-3 shadow-sm sm:p-4">
+        <section className="min-w-0 rounded-md border border-border/70 bg-background/30 p-3 sm:p-4">
             <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                 <div className="flex min-w-0 items-center gap-3">
                     <ImageWithFallback
@@ -25,7 +25,7 @@ export default function MatchLineupTeamCard({ team, lineup }: Props) {
                             {team.name}
                         </h3>
                         <p className="text-xs font-bold text-muted-foreground">
-                            Formation
+                            Formatie
                         </p>
                     </div>
                 </div>
@@ -36,13 +36,13 @@ export default function MatchLineupTeamCard({ team, lineup }: Props) {
 
             <div className="mt-4 flex flex-col gap-4">
                 <MatchLineupPlayerGroup
-                    title="Starting XI"
+                    title="Basiself"
                     players={lineup.starters}
                     teamName={team.name}
                     isStarting
                 />
                 <MatchLineupPlayerGroup
-                    title="Substitutes"
+                    title="Wisselspelers"
                     players={lineup.substitutes}
                     teamName={team.name}
                 />

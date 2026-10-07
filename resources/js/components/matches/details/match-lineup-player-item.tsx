@@ -50,10 +50,10 @@ export default function MatchLineupPlayerItem({
                 className={cn(
                     'flex min-w-0 items-center gap-2.5 rounded-md border bg-card px-2.5 shadow-xs transition-colors',
                     isStarting
-                        ? 'border-blue-100 py-2.5'
+                        ? 'border-border/70 py-2.5'
                         : 'border-border bg-card/80 py-1.5 shadow-none',
                     hasStats &&
-                        'cursor-pointer hover:bg-muted hover:ring-1 hover:ring-border focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:outline-none',
+                        'cursor-pointer hover:bg-muted hover:ring-1 hover:ring-border focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                 )}
                 onClick={() => {
                     if (hasStats) {
@@ -81,7 +81,7 @@ export default function MatchLineupPlayerItem({
                 <div className="relative shrink-0">
                     <Avatar
                         className={cn(
-                            'border border-white shadow-sm ring-1 ring-border',
+                            'border border-border',
                             isStarting ? 'size-10' : 'size-9',
                         )}
                     >
@@ -96,7 +96,7 @@ export default function MatchLineupPlayerItem({
                             {getInitials(player.name)}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-white bg-secondary px-1 text-xs font-bold text-white shadow-sm">
+                    <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-border bg-secondary px-1 text-xs font-bold text-white">
                         {player.number ?? '-'}
                     </span>
                 </div>

@@ -26,39 +26,50 @@ export default function MatchDetailsHero({
     const isLive = liveMatch !== undefined || isLiveStatus(match.status);
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-border/50 bg-secondary p-5 shadow-lg sm:p-6 lg:p-7">
-            <p className="mb-5 text-center text-xs font-semibold tracking-wide text-primary uppercase">
-                {match.round}
-            </p>
+        <section
+            aria-label="Scorebord"
+            className="overflow-hidden rounded-lg border border-border bg-card"
+        >
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/70 px-4 py-3 sm:px-6">
+                <p className="text-xs font-semibold tracking-wide text-primary uppercase">
+                    {match.round}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                    {match.date} · {match.time}
+                </p>
+            </div>
 
-            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-4">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-3 py-6 sm:gap-6 sm:px-8 sm:py-9">
                 <MatchDetailsTeamBlock
                     id={match.homeTeam.id}
                     logo={match.homeTeam.logo}
                     name={match.homeTeam.name}
                     code={match.homeTeam.code}
                 />
-                <div className="text-center">
+                <div className="flex max-w-28 flex-col items-center gap-2 text-center sm:max-w-44">
                     {isLive && (
-                        <div className="mb-3 flex justify-center">
-                            <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-950/40 px-3 py-1 text-xs font-semibold tracking-wide text-red-200 uppercase">
+                        <div className="flex justify-center">
+                            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-wide text-primary uppercase">
                                 <span className="relative flex h-2 w-2">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+                                    <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 motion-safe:animate-ping" />
+                                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
                                 </span>
-                                Live provisional score
+                                Live
                             </span>
                         </div>
                     )}
-                    <p className="text-3xl font-semibold text-white tabular-nums sm:text-4xl">
+                    <p className="text-4xl font-semibold tracking-tight whitespace-nowrap text-foreground tabular-nums sm:text-6xl">
                         {scoreLabel}
+                    </p>
+                    <p className="text-xs font-medium text-muted-foreground">
+                        {liveMatch?.status_long ?? match.status}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
                         <p className="mt-2 text-xs font-semibold tracking-wide text-muted-foreground">
                             {lastUpdatedAt &&
-                                `Updated ${formatUpdatedTime(lastUpdatedAt)}`}
+                                `Bijgewerkt ${formatUpdatedTime(lastUpdatedAt)}`}
                             {hasPollingError &&
-                                `${lastUpdatedAt ? ' · ' : ''}using latest data`}
+                                `${lastUpdatedAt ? ' · ' : ''}laatst bekende stand`}
                         </p>
                     )}
                 </div>

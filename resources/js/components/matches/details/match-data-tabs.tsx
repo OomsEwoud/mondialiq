@@ -12,17 +12,17 @@ interface Props {
 const tabs = [
     {
         value: 'events',
-        label: 'Match events',
+        label: 'Verloop',
         icon: ListTree,
     },
     {
         value: 'stats',
-        label: 'Match stats',
+        label: 'Statistieken',
         icon: BarChart3,
     },
     {
         value: 'lineups',
-        label: 'Lineups',
+        label: 'Opstellingen',
         icon: UsersRound,
     },
 ] satisfies {
@@ -35,12 +35,12 @@ export default function MatchDataTabs({ match }: Props) {
     const [activeTab, setActiveTab] = useState<MatchDataTab>('events');
 
     return (
-        <section className="overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 shadow-sm">
-            <div className="border-b border-border bg-gradient-to-b from-card to-card p-1.5">
+        <section className="min-w-0 overflow-hidden rounded-lg border border-border bg-card">
+            <div className="border-b border-border px-2 sm:px-4">
                 <div
                     role="tablist"
-                    aria-label="Match data"
-                    className="grid grid-cols-3 gap-1.5"
+                    aria-label="Wedstrijdgegevens"
+                    className="grid grid-cols-3 gap-1"
                 >
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
@@ -51,16 +51,50 @@ export default function MatchDataTabs({ match }: Props) {
                                 key={tab.value}
                                 type="button"
                                 role="tab"
+                                id={`match-tab-${tab.value}`}
+                                aria-controls="match-data-panel"
                                 aria-selected={isActive}
+                                tabIndex={isActive ? 0 : -1}
                                 onClick={() => setActiveTab(tab.value)}
+                                onKeyDown={(event) => {
+                                    const index = tabs.findIndex(
+                                        ({ value }) => value === activeTab,
+                                    );
+                                    const nextIndex =
+                                        event.key === 'ArrowRight'
+                                            ? (index + 1) % tabs.length
+                                            : event.key === 'ArrowLeft'
+                                              ? (index + tabs.length - 1) %
+                                                tabs.length
+                                              : event.key === 'Home'
+                                                ? 0
+                                                : event.key === 'End'
+                                                  ? tabs.length - 1
+                                                  : null;
+
+                                    if (nextIndex === null) {
+                                        return;
+                                    }
+
+                                    event.preventDefault();
+                                    setActiveTab(tabs[nextIndex].value);
+                                    document
+                                        .getElementById(
+                                            `match-tab-${tabs[nextIndex].value}`,
+                                        )
+                                        ?.focus();
+                                }}
                                 className={cn(
-                                    'flex min-h-11 min-w-0 items-center justify-center gap-1.5 rounded-xl px-2 text-xs font-bold transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:gap-2 sm:px-3 sm:text-sm',
+                                    'flex min-h-12 min-w-0 items-center justify-center gap-1.5 border-b-2 px-1 text-xs font-semibold transition-colors focus-visible:outline-offset-[-4px] sm:gap-2 sm:px-3 sm:text-sm',
                                     isActive
-                                        ? 'bg-secondary text-white shadow-md'
-                                        : 'bg-card/90 text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm',
+                                        ? 'border-primary text-primary'
+                                        : 'border-transparent text-muted-foreground hover:text-foreground',
                                 )}
                             >
-                                <Icon className="size-4 shrink-0" />
+                                <Icon
+                                    className="hidden size-4 shrink-0 min-[380px]:block"
+                                    aria-hidden="true"
+                                />
                                 <span className="truncate">{tab.label}</span>
                             </button>
                         );
@@ -68,7 +102,13 @@ export default function MatchDataTabs({ match }: Props) {
                 </div>
             </div>
 
-            <div role="tabpanel" className="p-4 sm:p-5">
+            <div
+                id="match-data-panel"
+                role="tabpanel"
+                aria-labelledby={`match-tab-${activeTab}`}
+                tabIndex={0}
+                className="p-3 sm:p-5"
+            >
                 <MatchDataTabPanel activeTab={activeTab} match={match} />
             </div>
         </section>

@@ -1,93 +1,33 @@
-import { useState } from 'react';
-import AiPredictionButton from '@/components/matches/prediction/ai-prediction-button';
-import MatchDetailsActionButton from '@/components/matches/prediction/match-details-action-button';
-import UserPredictionButton from '@/components/matches/prediction/user-prediction-button';
-import UserPredictionModal from '@/components/matches/prediction/user-prediction-modal';
-import type { Match } from '@/types/match';
+import { Link } from '@inertiajs/react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/forms/button';
+import { show as showAiPrediction } from '@/routes/predictions/ai';
 import type { MatchDetails } from '@/types/match-details';
 
 interface Props {
     match: MatchDetails;
-    scoreboardId?: number;
-    boostsRemaining?: number | null;
-    boostsLimit?: number | null;
-    boostedConfidenceThreshold?: string | null;
 }
 
-export default function MatchPredictionActionRow({
-    match,
-    scoreboardId,
-    boostsRemaining,
-    boostsLimit,
-    boostedConfidenceThreshold,
-}: Props) {
-    const [predictionOpen, setPredictionOpen] = useState(false);
-    const hasAiPrediction = Boolean(match.hasAiPrediction);
-    const modalMatch = toPredictionMatch(match);
+export default function MatchPredictionActionRow({ match }: Props) {
+    if (!match.hasAiPrediction) {
+        return null;
+    }
 
     return (
-        <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-4 shadow-sm sm:p-6">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                    <p className="text-xs font-bold tracking-wide text-muted-foreground uppercase">
-                        Match actions
-                    </p>
-                    <p className="mt-1 text-sm leading-6 font-medium text-muted-foreground">
-                        Open the match report, check the AI signal and manage
-                        your pick.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
-                    <MatchDetailsActionButton matchId={match.id} />
-                    <AiPredictionButton
-                        available={hasAiPrediction}
-                        matchId={match.id}
-                    />
-                    <UserPredictionButton
-                        match={modalMatch}
-                        onClick={() => setPredictionOpen(true)}
-                    />
-                </div>
-            </div>
-
-            <UserPredictionModal
-                match={modalMatch}
-                open={predictionOpen}
-                onOpenChange={setPredictionOpen}
-                scoreboardId={scoreboardId}
-                boostsRemaining={boostsRemaining}
-                boostsLimit={boostsLimit}
-                boostedConfidenceThreshold={boostedConfidenceThreshold}
-            />
+        <section
+            aria-label="AI-voorspelling"
+            className="flex flex-col gap-3 rounded-lg border border-primary/25 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+            <p className="text-sm font-medium text-primary">
+                AI-voorspelling beschikbaar
+            </p>
+            <Button asChild className="min-h-11 w-full sm:w-auto">
+                <Link href={showAiPrediction.url(match.id)}>
+                    <Sparkles aria-hidden="true" />
+                    Bekijk AI-voorspelling
+                    <ArrowUpRight aria-hidden="true" />
+                </Link>
+            </Button>
         </section>
     );
-}
-
-function toPredictionMatch(match: MatchDetails): Match {
-    return {
-        id: match.id,
-        homeTeamId: match.homeTeam.id,
-        homeTeam: match.homeTeam.name,
-        homeTeamShort: match.homeTeam.code,
-        homeTeamLogo: match.homeTeam.logo,
-        awayTeamId: match.awayTeam.id,
-        awayTeam: match.awayTeam.name,
-        awayTeamShort: match.awayTeam.code,
-        awayTeamLogo: match.awayTeam.logo,
-        round: match.round,
-        date: match.date,
-        dateValue: match.dateValue,
-        time: match.time,
-        kickoffAt: match.kickoffAt,
-        status: match.status,
-        elapsedTime: match.elapsedTime,
-        score: {
-            fulltime: match.score.fulltime,
-            extratime: match.score.extratime,
-            penalties: match.score.penalties,
-        },
-        hasAiPrediction: match.hasAiPrediction,
-        userPrediction: match.userPrediction,
-    };
 }

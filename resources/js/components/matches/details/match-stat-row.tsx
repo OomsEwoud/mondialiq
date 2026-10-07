@@ -28,17 +28,17 @@ export default function MatchStatRow({ stat }: Props) {
     return (
         <div
             className={cn(
-                'rounded-xl border px-3 py-3 text-sm shadow-xs',
+                'border-b px-1 py-3 text-sm',
                 isComparable
-                    ? 'border-border bg-card'
-                    : 'border-border bg-muted/70',
+                    ? 'border-border/60'
+                    : 'border-border/60 bg-muted/30',
             )}
         >
-            <div className="grid grid-cols-[4.25rem_minmax(0,1fr)_4.25rem] items-center gap-2 sm:grid-cols-[5.5rem_minmax(0,1fr)_5.5rem] sm:gap-3">
+            <div className="grid grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center gap-2 sm:grid-cols-[5.5rem_minmax(0,1fr)_5.5rem] sm:gap-3">
                 <span className="min-w-0 truncate text-left font-bold text-foreground">
                     {homeValue}
                 </span>
-                <p className="min-w-0 truncate text-center font-bold text-foreground">
+                <p className="min-w-0 text-center text-muted-foreground">
                     {formatStatLabel(stat.name)}
                 </p>
                 <span className="min-w-0 truncate text-right font-bold text-foreground">

@@ -17,14 +17,14 @@ export default function MatchStatComparisonBar({
         <div className="flex h-1.5 overflow-hidden rounded-full bg-muted">
             <div
                 className={cn(
-                    'bg-blue-700',
+                    'bg-primary',
                     homeValue >= awayValue ? 'opacity-100' : 'opacity-45',
                 )}
                 style={{ width: `${homePercentage}%` }}
             />
             <div
                 className={cn(
-                    'bg-cyan-500',
+                    'bg-foreground',
                     awayValue >= homeValue ? 'opacity-100' : 'opacity-45',
                 )}
                 style={{ width: `${awayPercentage}%` }}
