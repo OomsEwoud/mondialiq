@@ -1,6 +1,7 @@
 import MatchDetailsTeamBlock from '@/components/matches/details/match-details-team-block';
 import type { LiveFixture } from '@/types/live-fixture';
 import type { MatchDetails } from '@/types/match-details';
+import { translateMatchStatus } from '@/utils/match-status';
 
 interface Props {
     match: MatchDetails;
@@ -62,7 +63,9 @@ export default function MatchDetailsHero({
                         {scoreLabel}
                     </p>
                     <p className="text-xs font-medium text-muted-foreground">
-                        {liveMatch?.status_long ?? match.status}
+                        {translateMatchStatus(
+                            liveMatch?.status_long ?? match.status,
+                        )}
                     </p>
                     {isLive && (lastUpdatedAt || hasPollingError) && (
                         <p className="mt-2 text-xs font-semibold tracking-wide text-muted-foreground">

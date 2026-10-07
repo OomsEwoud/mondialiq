@@ -94,6 +94,46 @@ export function getMatchStatusLabel(match: Match): string {
     )[kind];
 }
 
+export function translateMatchStatus(
+    status: string | null | undefined,
+): string {
+    const normalizedStatus = normalizeStatus(status);
+    const labels: Record<string, string> = {
+        ns: 'Nog niet gestart',
+        'not started': 'Nog niet gestart',
+        tbd: 'Tijd nog niet bekend',
+        'time to be defined': 'Tijd nog niet bekend',
+        '1h': 'Eerste helft',
+        'first half': 'Eerste helft',
+        ht: 'Rust',
+        halftime: 'Rust',
+        'half time': 'Rust',
+        '2h': 'Tweede helft',
+        '2nd half started': 'Tweede helft',
+        'second half': 'Tweede helft',
+        et: 'Verlenging',
+        'extra time': 'Verlenging',
+        bt: 'Onderbreking',
+        'break time': 'Onderbreking',
+        p: 'Penaltyserie',
+        'penalty in progress': 'Penaltyserie',
+        live: 'Live',
+        ft: 'Afgelopen',
+        'match finished': 'Afgelopen',
+        aet: 'Afgelopen na verlenging',
+        pen: 'Afgelopen na penaltyserie',
+        pst: 'Uitgesteld',
+        postponed: 'Uitgesteld',
+        canc: 'Afgelast',
+        cancelled: 'Afgelast',
+        suspended: 'Onderbroken',
+        interrupted: 'Onderbroken',
+        abandoned: 'Gestaakt',
+    };
+
+    return labels[normalizedStatus] ?? status ?? 'Onbekend';
+}
+
 export function getReadableLiveStatus(
     statusLong: string | null | undefined,
     statusShort?: string | null | undefined,

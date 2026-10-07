@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import MatchInfoItem from '@/components/matches/details/match-info-item';
 import type { MatchDetails } from '@/types/match-details';
+import { translateMatchStatus } from '@/utils/match-status';
 
 interface Props {
     match: MatchDetails;
@@ -49,7 +50,7 @@ export default function MatchInfoCard({ match }: Props) {
                 <MatchInfoItem
                     icon={<Shield />}
                     label="Status"
-                    value={match.status}
+                    value={translateMatchStatus(match.status)}
                 />
                 <MatchInfoItem
                     icon={<MapPin />}

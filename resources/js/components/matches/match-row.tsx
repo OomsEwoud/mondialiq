@@ -17,7 +17,7 @@ export default function MatchRow({ match }: { match: Match }) {
     const score = getDisplayMatchScore(match);
     const showScore = shouldShowMatchScore(match);
     const status = {
-        upcoming: 'Binnenkort',
+        upcoming: 'Nog niet gestart',
         live: `Live${match.elapsedTime !== null ? ` ${match.elapsedTime}′` : ''}`,
         finished: 'FT',
         postponed: 'Uitgesteld',
@@ -68,16 +68,11 @@ export default function MatchRow({ match }: { match: Match }) {
                             <span className="min-w-0 flex-1 text-sm font-semibold text-foreground sm:text-base">
                                 {team.name}
                             </span>
-                            <span
-                                className={cn(
-                                    'w-6 shrink-0 text-right text-base font-semibold tabular-nums',
-                                    showScore
-                                        ? 'text-foreground'
-                                        : 'text-muted-foreground',
-                                )}
-                            >
-                                {showScore ? (team.score ?? '–') : '–'}
-                            </span>
+                            {showScore && (
+                                <span className="w-6 shrink-0 text-right text-base font-semibold text-foreground tabular-nums">
+                                    {team.score ?? '–'}
+                                </span>
+                            )}
                         </div>
                     ))}
                 </div>
