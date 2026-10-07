@@ -29,7 +29,7 @@ export default function MatchDetailsHero({
     return (
         <section
             aria-label="Scorebord"
-            className="relative overflow-hidden rounded-xl bg-gradient-to-b from-card/75 to-transparent px-2 py-5 sm:px-6 sm:py-7"
+            className="relative overflow-hidden rounded-xl bg-[radial-gradient(ellipse_at_50%_38%,rgba(39,49,42,0.72)_0%,rgba(24,30,26,0.28)_46%,transparent_76%)] px-2 py-5 sm:px-6 sm:py-7"
         >
             <div className="mb-5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm sm:mb-7">
                 <p className="font-semibold text-foreground">{match.round}</p>
@@ -65,7 +65,7 @@ export default function MatchDetailsHero({
                     <p className="text-4xl font-bold tracking-tight whitespace-nowrap text-foreground tabular-nums sm:text-6xl lg:text-7xl">
                         {scoreLabel}
                     </p>
-                    <p className="text-sm font-medium text-muted-foreground">
+                    <p className="rounded-full bg-muted/70 px-3 py-1 text-xs font-medium text-muted-foreground sm:text-sm">
                         {translateMatchStatus(
                             liveMatch?.status_long ?? match.status,
                         )}

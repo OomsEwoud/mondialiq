@@ -16,7 +16,7 @@ export default function MatchPredictionActionRow({ match }: Props) {
     return (
         <section
             aria-label="AI-voorspelling"
-            className="flex flex-col gap-4 border-y border-border/70 py-5 sm:flex-row sm:items-center sm:justify-between sm:py-6"
+            className="flex flex-col gap-4 rounded-lg border-y border-border/50 bg-gradient-to-r from-primary/[0.07] via-card/40 to-transparent px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-6"
         >
             <div className="flex items-start gap-3">
                 <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">

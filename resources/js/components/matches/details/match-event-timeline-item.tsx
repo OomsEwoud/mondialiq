@@ -22,44 +22,36 @@ interface Props {
 
 interface EventStyle {
     marker: string;
-    card: string;
     label: string;
 }
 
 const eventStyles: Record<MatchEventKind, EventStyle> = {
     goal: {
         marker: 'border-primary/30 bg-secondary text-primary',
-        card: 'border-primary/25 bg-primary/5',
         label: 'text-primary',
     },
     penalty: {
         marker: 'border-primary/30 bg-secondary text-primary',
-        card: 'border-primary/25 bg-primary/5',
         label: 'text-primary',
     },
     'yellow-card': {
         marker: 'border-amber-400/30 bg-amber-400/10 text-amber-300',
-        card: 'border-border/60 bg-background/30',
         label: 'text-amber-300',
     },
     'red-card': {
         marker: 'border-destructive/30 bg-destructive/10 text-destructive',
-        card: 'border-destructive/25 bg-destructive/5',
         label: 'text-destructive',
     },
     substitution: {
         marker: 'border-border bg-muted text-muted-foreground',
-        card: 'border-border/60 bg-background/30',
         label: 'text-muted-foreground',
     },
     var: {
         marker: 'border-border bg-muted text-muted-foreground',
-        card: 'border-border/60 bg-background/30',
         label: 'text-muted-foreground',
     },
     default: {
         marker: 'border-border/60 bg-background/30 text-muted-foreground',
-        card: 'border-border/60 bg-background/30',
         label: 'text-muted-foreground',
     },
 };
@@ -89,7 +81,7 @@ export default function MatchEventTimelineItem({
                 />
                 <span
                     className={cn(
-                        'relative z-10 mt-2 flex size-7 items-center justify-center rounded-full border shadow-xs',
+                        'relative z-10 mt-2 flex size-7 items-center justify-center rounded-full border border-background/80 shadow-sm',
                         style.marker,
                     )}
                 >
@@ -99,9 +91,8 @@ export default function MatchEventTimelineItem({
 
             <article
                 className={cn(
-                    'mb-2 min-w-0 rounded-md border px-3 py-2.5 sm:px-4',
-                    style.card,
-                    kind === 'goal' && 'py-3',
+                    'mb-2 min-w-0 border-b border-border/50 px-1 py-3 last:border-b-0 sm:px-3',
+                    kind === 'goal' && 'bg-primary/[0.035]',
                 )}
             >
                 <div className="flex min-w-0 items-start gap-3">

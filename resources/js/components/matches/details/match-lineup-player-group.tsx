@@ -19,7 +19,7 @@ export default function MatchLineupPlayerGroup({
 
     return (
         <div>
-            <h4 className="mb-2 text-xs font-bold tracking-wide text-muted-foreground uppercase">
+            <h4 className="mb-3 text-sm font-semibold text-foreground">
                 {title}
             </h4>
             {sortedPlayers.length > 0 ? (
@@ -34,7 +34,7 @@ export default function MatchLineupPlayerGroup({
                     ))}
                 </div>
             ) : (
-                <p className="rounded-lg border border-dashed border-border bg-card px-3 py-2 text-sm text-muted-foreground">
+                <p className="px-1 py-2 text-sm text-muted-foreground">
                     No players listed.
                 </p>
             )}
