@@ -32,7 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 Naar inhoud
             </a>
             <header className="sticky top-0 z-50 border-b border-border-subtle bg-background/95 backdrop-blur-xl">
-                <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-5 sm:px-8">
+                <div className="mq-container flex h-16 items-center justify-between gap-3">
                     <Link
                         href={dashboard()}
                         className="group flex shrink-0 items-center rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
@@ -81,7 +81,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </div>
                 </div>
             </header>
-            <main id="main-content" tabIndex={-1} className="mq-page-content">
+            <main
+                id="main-content"
+                tabIndex={-1}
+                className="mq-container mq-page-content min-w-0"
+            >
                 {children}
             </main>
             <AppFooter />

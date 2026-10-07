@@ -7,6 +7,7 @@ import CompetitionPerformance from '@/components/rankings/competition-performanc
 import PerformanceBreakdowns from '@/components/rankings/performance-breakdowns';
 import PerformanceTrend from '@/components/rankings/performance-trend';
 import PageHead from '@/components/seo/page-head';
+import PageHeader from '@/components/typography/page-header';
 import { leaderboards } from '@/routes';
 import type {
     AiPerformancePageProps,
@@ -65,17 +66,12 @@ export default function AiPerformance({
                 title="AI Prestaties"
                 description="Bekijk de nauwkeurigheid, trends en resultaten van de MondialiQ AI prediction-engine."
             />
-            <header className="mb-8 max-w-3xl">
-                <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
-                    MondialiQ AI · Performance
-                </p>
-                <h1 className="mq-page-title mt-2">AI Prestaties</h1>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    Eén prediction-engine, gevoed door voetbaldata, machine
-                    learning en voorspellingslogica. Volg de nauwkeurigheid en
-                    ontdek hoe de prestaties zich ontwikkelen.
-                </p>
-            </header>
+            <PageHeader
+                variant="top-level"
+                eyebrow="MondialiQ AI · Performance"
+                title="AI Prestaties"
+                description="Eén prediction-engine, gevoed door voetbaldata, machine learning en voorspellingslogica. Volg de nauwkeurigheid en ontdek hoe de prestaties zich ontwikkelen."
+            />
             <AiPerformanceFilters
                 filters={filters}
                 competitionOptions={competitionOptions}

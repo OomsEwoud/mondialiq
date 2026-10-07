@@ -8,6 +8,7 @@ import CompetitionsController from '@/actions/App/Http/Controllers/Pages/Competi
 import CompetitionPagination from '@/components/competitions/competition-pagination';
 import type { CompetitionPaginationLink } from '@/components/competitions/competition-pagination';
 import PageHead from '@/components/seo/page-head';
+import PageHeader from '@/components/typography/page-header';
 import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { Button } from '@/components/ui/forms/button';
 import type { CompetitionSummary } from '@/types/competition';
@@ -74,15 +75,12 @@ export default function CompetitionsIndex({
                 title="Competities"
                 description="Ontdek voetbalcompetities, programma’s, standen en beschikbare statistieken."
             />
-            <header className="mb-12 max-w-2xl">
-                <p className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">
-                    Voetbaldata
-                </p>
-                <h1 className="mq-page-title mt-2">Competities</h1>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                    Volg wedstrijden, standen en statistieken per competitie.
-                </p>
-            </header>
+            <PageHeader
+                variant="top-level"
+                eyebrow="Voetbaldata"
+                title="Competities"
+                description="Volg wedstrijden, standen en statistieken per competitie."
+            />
 
             <form
                 role="search"

@@ -5,6 +5,7 @@ import MatchFilters from '@/components/matches/match-filters';
 import MatchList from '@/components/matches/match-list';
 import Pagination from '@/components/navigation/pagination';
 import PageHead from '@/components/seo/page-head';
+import PageHeader from '@/components/typography/page-header';
 import { emptyFilters } from '@/const/match';
 import type {
     FilterKey,
@@ -50,52 +51,49 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
                 description="Bekijk aankomende wedstrijden, resultaten en AI-analyses. Filter wedstrijden op ploeg, ronde, datum of status."
             />
 
-            <div className="mx-auto w-full max-w-5xl">
-                <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                        <h1 className="mq-page-title">Wedstrijden</h1>
-                        <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                            Bekijk aankomende wedstrijden, resultaten en
-                            AI-analyses.
-                        </p>
-                    </div>
+            <PageHeader
+                variant="top-level"
+                eyebrow="Wedstrijdprogramma"
+                title="Wedstrijden"
+                description="Bekijk aankomende wedstrijden, resultaten en AI-analyses."
+                actions={
                     <p className="text-xs text-muted-foreground">
                         <span className="font-semibold text-foreground tabular-nums">
                             {fixtures.total}
                         </span>{' '}
                         wedstrijden
                     </p>
-                </header>
+                }
+            />
 
-                <MatchFilters
-                    rounds={filterOptions.rounds}
-                    teams={filterOptions.teams}
-                    selected={filters}
-                    onChange={handleFilterChange}
-                    onQuickChange={handleQuickFiltersChange}
+            <MatchFilters
+                rounds={filterOptions.rounds}
+                teams={filterOptions.teams}
+                selected={filters}
+                onChange={handleFilterChange}
+                onQuickChange={handleQuickFiltersChange}
+                onClear={() => visit(emptyFilters)}
+            />
+
+            <div
+                aria-busy={loading}
+                className={
+                    loading
+                        ? 'opacity-60 transition-opacity'
+                        : 'transition-opacity'
+                }
+            >
+                <p role="status" className="sr-only">
+                    {loading
+                        ? 'Wedstrijden laden…'
+                        : `${fixtures.data.length} wedstrijden gevonden`}
+                </p>
+                <MatchList
+                    matches={fixtures.data}
                     onClear={() => visit(emptyFilters)}
                 />
-
-                <div
-                    aria-busy={loading}
-                    className={
-                        loading
-                            ? 'opacity-60 transition-opacity'
-                            : 'transition-opacity'
-                    }
-                >
-                    <p role="status" className="sr-only">
-                        {loading
-                            ? 'Wedstrijden laden…'
-                            : `${fixtures.data.length} wedstrijden gevonden`}
-                    </p>
-                    <MatchList
-                        matches={fixtures.data}
-                        onClear={() => visit(emptyFilters)}
-                    />
-                </div>
-                <Pagination links={fixtures.links} />
             </div>
+            <Pagination links={fixtures.links} />
         </>
     );
 }

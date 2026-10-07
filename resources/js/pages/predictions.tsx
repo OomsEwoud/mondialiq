@@ -164,7 +164,7 @@ export default function Predictions({
                 }
             />
 
-            <div className="mx-auto max-w-7xl">
+            <div>
                 <PredictionPageHeader
                     isPersonal={isPersonal}
                     scoringGuideHref={scoringGuideHref}

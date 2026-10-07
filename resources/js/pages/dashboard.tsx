@@ -7,6 +7,7 @@ import LivePanel from '@/components/dashboard/live-panel';
 import MatchList from '@/components/dashboard/match-list';
 import RecentResults from '@/components/dashboard/recent-results';
 import PageHead from '@/components/seo/page-head';
+import PageHeader from '@/components/typography/page-header';
 import ImageWithFallback from '@/components/ui/display/image-with-fallback';
 import { matches, predictions } from '@/routes';
 import type { DashboardProps } from '@/types/dashboard';
@@ -37,32 +38,16 @@ export default function Dashboard({
                 title="Jouw voetbaloverzicht"
                 description="Bekijk relevante wedstrijden, live scores en recente AI-analyses op MondialiQ."
             />
-            <div className="space-y-14 sm:space-y-16">
-                <header className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                        <p className="text-sm font-semibold text-primary">
-                            {greeting()}, {firstName}
-                        </p>
-                        <h1 className="mq-page-title mt-1.5">
-                            Dit speelt er vandaag.
-                        </h1>
-                        {upcomingFixtures.length > 0 ? (
-                            <p className="mt-3 text-sm text-text-muted">
-                                {upcomingFixtures.length} wedstrijden ·{' '}
-                                {
-                                    upcomingFixtures.filter(
-                                        (match) => match.hasAiPrediction,
-                                    ).length
-                                }{' '}
-                                AI-analyses beschikbaar
-                            </p>
-                        ) : (
-                            <p className="mt-3 text-sm text-text-muted">
-                                Zodra er nieuwe wedstrijden beschikbaar zijn,
-                                verschijnen ze hier automatisch.
-                            </p>
-                        )}
-                    </div>
+            <PageHeader
+                variant="top-level"
+                eyebrow={`${greeting()}, ${firstName}`}
+                title="Dit speelt er vandaag."
+                description={
+                    upcomingFixtures.length > 0
+                        ? `${upcomingFixtures.length} wedstrijden · ${upcomingFixtures.filter((match) => match.hasAiPrediction).length} AI-analyses beschikbaar`
+                        : 'Zodra er nieuwe wedstrijden beschikbaar zijn, verschijnen ze hier automatisch.'
+                }
+                actions={
                     <span className="text-sm font-medium text-text-muted">
                         {new Intl.DateTimeFormat('nl-BE', {
                             weekday: 'long',
@@ -70,8 +55,9 @@ export default function Dashboard({
                             month: 'long',
                         }).format(new Date())}
                     </span>
-                </header>
-
+                }
+            />
+            <div className="space-y-14 sm:space-y-16">
                 {featured ? (
                     <FeaturedMatch match={featured} />
                 ) : (
