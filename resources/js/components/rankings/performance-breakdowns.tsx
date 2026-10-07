@@ -32,14 +32,14 @@ export default function PerformanceBreakdowns({
         <section aria-labelledby={headingId} className="min-w-0">
             <h2
                 id={headingId}
-                className="text-xl font-bold tracking-tight text-white"
+                className="text-xl font-bold tracking-tight text-foreground"
             >
                 Prestaties uitgesplitst
             </h2>
             <div
                 role="group"
                 aria-label="Uitsplitsing kiezen"
-                className="mt-4 flex gap-1 border-b border-[#262c29]"
+                className="mt-4 flex gap-1 border-b border-border-subtle"
             >
                 {views.map((option) => (
                     <button
@@ -52,10 +52,10 @@ export default function PerformanceBreakdowns({
                             setShowAll(false);
                         }}
                         className={cn(
-                            'min-h-11 border-b-2 px-3 text-sm font-semibold focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                            'min-h-11 border-b-2 px-3 text-sm font-semibold focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                             view === option.value
-                                ? 'border-[#6fae88] text-[#a6d7b7]'
-                                : 'border-transparent text-[#89928c] hover:text-white',
+                                ? 'border-primary text-positive'
+                                : 'border-transparent text-muted-foreground hover:text-foreground',
                         )}
                     >
                         {option.label}
@@ -63,7 +63,7 @@ export default function PerformanceBreakdowns({
                 ))}
             </div>
             <div id={panelId}>
-                <p className="my-4 text-xs leading-5 text-[#89928c]">
+                <p className="my-4 text-xs leading-5 text-muted-foreground">
                     {view === 'team'
                         ? 'Wedstrijdvoorspellingen waarin het team speelt. Eén wedstrijd kan bij beide teams meetellen.'
                         : view === 'type'
@@ -71,7 +71,7 @@ export default function PerformanceBreakdowns({
                           : 'Alle confidence-niveaus binnen de overige filters. Confidence is de inschatting vooraf, geen gemeten nauwkeurigheid.'}
                 </p>
                 {rows.length === 0 ? (
-                    <p className="border-t border-[#262c29] py-8 text-sm text-[#949d97]">
+                    <p className="border-t border-border-subtle py-8 text-sm text-muted-foreground">
                         Geen resultaten voor deze selectie.
                     </p>
                 ) : (
@@ -83,7 +83,7 @@ export default function PerformanceBreakdowns({
                                     ?.label
                             }
                         </caption>
-                        <thead className="text-xs text-[#89928c]">
+                        <thead className="text-xs text-muted-foreground">
                             <tr>
                                 <th
                                     scope="col"
@@ -113,17 +113,17 @@ export default function PerformanceBreakdowns({
                             {visibleRows.map((row) => (
                                 <tr
                                     key={row.id}
-                                    className="border-t border-[#262c29]"
+                                    className="border-t border-border-subtle"
                                 >
                                     <th
                                         scope="row"
-                                        className="py-4 pr-3 font-semibold break-words text-[#daddd9]"
+                                        className="py-4 pr-3 font-semibold break-words text-foreground"
                                     >
                                         {view === 'team' &&
                                         typeof row.id === 'number' ? (
                                             <Link
                                                 href={showTeam.url(row.id)}
-                                                className="inline-flex min-h-11 items-center hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                                                className="inline-flex min-h-11 items-center hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                                             >
                                                 {row.name}
                                             </Link>
@@ -131,10 +131,10 @@ export default function PerformanceBreakdowns({
                                             row.name
                                         )}
                                     </th>
-                                    <td className="py-4 text-right font-semibold text-[#a6d7b7] tabular-nums">
+                                    <td className="py-4 text-right font-semibold text-positive tabular-nums">
                                         {rankingPercentage(row.accuracy)}
                                     </td>
-                                    <td className="py-4 pl-2 text-right text-[#949d97] tabular-nums">
+                                    <td className="py-4 pl-2 text-right text-muted-foreground tabular-nums">
                                         {row.correctCount}/{row.evaluatedCount}
                                     </td>
                                 </tr>
@@ -146,7 +146,7 @@ export default function PerformanceBreakdowns({
                     <button
                         type="button"
                         onClick={() => setShowAll(!showAll)}
-                        className="mt-2 min-h-11 rounded-md px-2 text-sm font-semibold text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="mt-2 min-h-11 rounded-md px-2 text-sm font-semibold text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         {showAll
                             ? 'Minder tonen'

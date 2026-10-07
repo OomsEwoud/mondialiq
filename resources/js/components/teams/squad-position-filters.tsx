@@ -31,10 +31,10 @@ export default function SquadPositionFilters({
                             aria-pressed={isActive}
                             onClick={() => onChange(filter.key)}
                             className={cn(
-                                'h-9 shrink-0 rounded-full border px-4 text-sm font-semibold shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78]',
+                                'h-9 shrink-0 rounded-full border px-4 text-sm font-semibold shadow-none transition-colors focus-visible:ring-2 focus-visible:ring-ring',
                                 isActive
-                                    ? 'border-[#52745c] bg-[#1c2a20] text-[#b5ddc1] hover:bg-[#223329] hover:text-white'
-                                    : 'border-[#343d37] bg-[#111513] text-[#929b95] hover:border-[#536159] hover:bg-[#1a211d] hover:text-white',
+                                    ? 'border-[#52745c] bg-[#1c2a20] text-[#b5ddc1] hover:bg-[#223329] hover:text-foreground'
+                                    : 'border-border-strong bg-surface text-[#929b95] hover:border-border-strong hover:bg-surface-interactive hover:text-foreground',
                             )}
                         >
                             {filter.label}

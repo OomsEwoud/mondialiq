@@ -224,10 +224,10 @@ export default function Predictions({
                 ) : (
                     <aside
                         aria-label="Over de modeluitkomsten"
-                        className="mt-10 max-w-3xl text-xs leading-6 text-[#949d97]"
+                        className="mt-10 max-w-3xl text-xs leading-6 text-muted-foreground"
                     >
                         <p>
-                            <strong className="font-semibold text-[#b5bbb7]">
+                            <strong className="font-semibold text-text-secondary">
                                 Zo lees je de analyse.
                             </strong>{' '}
                             De percentages beschrijven de kansen op winst,

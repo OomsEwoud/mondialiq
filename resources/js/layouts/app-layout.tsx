@@ -31,14 +31,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             >
                 Naar inhoud
             </a>
-            <header className="sticky top-0 z-50 border-b border-[#262c29] bg-[#0b0e0d]/95 backdrop-blur-xl">
+            <header className="sticky top-0 z-50 border-b border-border-subtle bg-background/95 backdrop-blur-xl">
                 <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 px-5 sm:px-8">
                     <Link
                         href={dashboard()}
-                        className="group flex shrink-0 items-center rounded-lg focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none"
+                        className="group flex shrink-0 items-center rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
                     >
                         <AppLogo
-                            textClassName="text-base text-[#f3f4f1] [&_span]:text-[#70b98e] sm:text-lg"
+                            textClassName="text-base text-foreground [&_span]:text-primary sm:text-lg"
                             markClassName="size-8 rounded-lg shadow-none transition-transform group-hover:scale-105"
                         />
                     </Link>
@@ -49,10 +49,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                 <DropdownMenuTrigger asChild>
                                     <button
                                         type="button"
-                                        className="rounded-full focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none"
+                                        className="rounded-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
                                         aria-label="Open user menu"
                                     >
-                                        <Avatar className="h-9 w-9 border border-[#343b37]">
+                                        <Avatar className="h-9 w-9 border border-border-strong">
                                             <AvatarImage
                                                 src={
                                                     auth.user.avatar ??
@@ -61,31 +61,27 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                                 alt={auth.user.name}
                                                 className="object-cover"
                                             />
-                                            <AvatarFallback className="bg-[#171c19] text-[#daddd9]">
+                                            <AvatarFallback className="bg-surface-interactive text-foreground">
                                                 {getInitials(auth.user.name)}
                                             </AvatarFallback>
                                         </Avatar>
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-64 rounded-xl border border-[#303732] bg-[#111513] p-2 text-[#daddd9] shadow-2xl shadow-black/30"
+                                    className="w-64 rounded-xl border border-border-strong bg-surface p-2 text-foreground shadow-2xl shadow-black/30"
                                     align="end"
                                 >
                                     <UserMenuContent user={auth.user} />
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <AppLoginButton className="focus-visible:ring-offset-slate-900" />
+                            <AppLoginButton className="focus-visible:ring-offset-background" />
                         )}
                         <MobileNavigation />
                     </div>
                 </div>
             </header>
-            <main
-                id="main-content"
-                tabIndex={-1}
-                className="mx-auto w-full max-w-7xl min-w-0 px-4 py-7 sm:px-8 sm:py-9"
-            >
+            <main id="main-content" tabIndex={-1} className="mq-page-content">
                 {children}
             </main>
             <AppFooter />

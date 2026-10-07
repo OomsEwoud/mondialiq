@@ -34,7 +34,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         className={
                             locked
                                 ? 'inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-4 py-2 text-sm font-semibold text-muted-foreground'
-                                : 'inline-flex items-center gap-2 rounded-lg bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none'
+                                : 'inline-flex items-center gap-2 rounded-lg bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none'
                         }
                     >
                         <PencilLine className="size-4" />
@@ -53,7 +53,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         alt={match.homeTeam}
                         className="size-16 shrink-0 object-contain"
                     />
-                    <span className="text-sm font-bold text-white group-hover:text-indigo-300">
+                    <span className="text-sm font-bold text-foreground group-hover:text-indigo-300">
                         {match.homeTeamShort}
                     </span>
                 </Link>
@@ -63,7 +63,7 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         <Trophy className="size-3.5" />
                         {pickLabel}
                     </span>
-                    <p className="mt-3 text-3xl font-bold text-white sm:text-4xl">
+                    <p className="mt-3 text-3xl font-bold text-foreground sm:text-4xl">
                         vs
                     </p>
                 </div>
@@ -77,13 +77,13 @@ export default function UserPredictionHero({ match, owner, onEdit }: Props) {
                         alt={match.awayTeam}
                         className="size-16 shrink-0 object-contain"
                     />
-                    <span className="text-sm font-bold text-white group-hover:text-indigo-300">
+                    <span className="text-sm font-bold text-foreground group-hover:text-indigo-300">
                         {match.awayTeamShort}
                     </span>
                 </Link>
             </div>
 
-            <h1 className="mt-5 text-center text-2xl font-bold text-white sm:text-3xl">
+            <h1 className="mt-5 text-center text-2xl font-bold text-foreground sm:text-3xl">
                 {match.homeTeam} vs {match.awayTeam}
             </h1>
 

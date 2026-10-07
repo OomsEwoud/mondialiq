@@ -19,13 +19,13 @@ export default function AnalysisFeed({
 }: Props) {
     if (matches.length === 0) {
         return (
-            <section className="flex min-h-44 flex-col items-center justify-center border-y border-[#262c29] py-6 text-center">
-                <h2 className="text-base font-semibold text-[#f3f4f1]">
+            <section className="flex min-h-44 flex-col items-center justify-center border-y border-border-subtle py-6 text-center">
+                <h2 className="text-base font-semibold text-foreground">
                     {hasActiveFilters
                         ? 'Geen analyses gevonden'
                         : 'Nog geen AI-analyses beschikbaar'}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-[#949d97]">
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
                     {hasActiveFilters
                         ? 'Pas je filters aan of zoek een andere ploeg.'
                         : 'Nieuwe voorspellingen verschijnen hier zodra het model ze heeft opgesteld.'}
@@ -34,14 +34,14 @@ export default function AnalysisFeed({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="mt-2 min-h-11 rounded-sm text-sm font-semibold text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="mt-2 min-h-11 rounded-sm text-sm font-semibold text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Filters wissen
                     </button>
                 ) : (
                     <Link
                         href={matchesRoute()}
-                        className="mt-2 inline-flex min-h-11 items-center rounded-sm text-sm font-semibold text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="mt-2 inline-flex min-h-11 items-center rounded-sm text-sm font-semibold text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Bekijk het programma →
                     </Link>
@@ -61,7 +61,7 @@ export default function AnalysisFeed({
                 <section key={date} aria-labelledby={`analysis-date-${date}`}>
                     <h2
                         id={`analysis-date-${date}`}
-                        className="mb-2 text-xs font-semibold tracking-[0.12em] text-[#949d97] uppercase"
+                        className="mb-2 text-xs font-semibold tracking-[0.12em] text-muted-foreground uppercase"
                     >
                         {date === 'confidence' ? (
                             'Gesorteerd op confidence'
@@ -76,7 +76,7 @@ export default function AnalysisFeed({
                             </time>
                         )}
                     </h2>
-                    <div className="divide-y divide-[#262c29] border-y border-[#262c29]">
+                    <div className="divide-y divide-border-subtle border-y border-border-subtle">
                         {fixtures.map((match) => (
                             <AnalysisEntry
                                 key={match.id}

@@ -157,7 +157,7 @@ export default function UserPredictionForm({
                                 'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 ' +
                                 (data.is_boosted
                                     ? 'bg-indigo-500'
-                                    : 'bg-slate-300')
+                                    : 'bg-border-strong')
                             }
                         >
                             <span

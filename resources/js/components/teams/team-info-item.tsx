@@ -8,7 +8,7 @@ interface Props {
 
 export default function TeamInfoItem({ icon, label, value }: Props) {
     return (
-        <div className="flex min-h-[4.5rem] min-w-0 items-center gap-2.5 rounded-lg border border-[#292e2b] bg-[#0d0f0e] p-3">
+        <div className="flex min-h-[4.5rem] min-w-0 items-center gap-2.5 rounded-lg border border-border-subtle bg-background p-3">
             <span className="flex size-8 shrink-0 items-center justify-center text-[#8b938e] [&_svg]:size-4">
                 {icon}
             </span>

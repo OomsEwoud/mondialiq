@@ -21,10 +21,10 @@ export default function PlayerStatGrid({ title, icon, items }: Props) {
     }
 
     return (
-        <section className="flex h-full flex-col rounded-lg border border-[#29312c] bg-[#111513] p-5">
-            <div className="mb-5 flex shrink-0 items-center gap-2 border-b border-[#29312c] pb-3 text-[#70b98e]">
+        <section className="flex h-full flex-col rounded-lg border border-border-subtle bg-surface p-5">
+            <div className="mb-5 flex shrink-0 items-center gap-2 border-b border-border-subtle pb-3 text-primary">
                 {icon}
-                <h3 className="text-xs font-bold text-[#daddd9] uppercase">
+                <h3 className="text-xs font-bold text-foreground uppercase">
                     {title}
                 </h3>
             </div>
@@ -41,19 +41,19 @@ export default function PlayerStatGrid({ title, icon, items }: Props) {
                             key={item.label}
                             className="flex h-full flex-col justify-between gap-1"
                         >
-                            <p className="text-[11px] leading-tight font-semibold text-[#68716b] uppercase">
+                            <p className="text-[11px] leading-tight font-semibold text-text-muted uppercase">
                                 {item.label}
                             </p>
                             <p
                                 className={`text-xl font-bold tracking-tight tabular-nums ${
                                     item.highlight
-                                        ? 'text-[#8fd0a8]'
-                                        : 'text-[#daddd9]'
+                                        ? 'text-positive'
+                                        : 'text-foreground'
                                 }`}
                             >
                                 {displayValue}
                                 {item.suffix ? (
-                                    <span className="ml-1 text-sm font-medium text-[#68716b]">
+                                    <span className="ml-1 text-sm font-medium text-text-muted">
                                         {item.suffix}
                                     </span>
                                 ) : null}

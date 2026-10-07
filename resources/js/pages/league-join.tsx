@@ -19,7 +19,7 @@ import { social } from '@/routes';
 import type { LeagueJoinPageProps } from '@/types/league';
 
 const fieldClassName =
-    'h-11 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
+    'h-11 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring';
 const secondaryActionClassName =
     'h-11 rounded-lg px-5 font-semibold text-muted-foreground';
 const inviteCodePlaceholder = 'ABCDEFGH';

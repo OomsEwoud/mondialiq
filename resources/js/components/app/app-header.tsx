@@ -78,7 +78,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         prefetch
                         className="flex items-center space-x-2"
                     >
-                        <AppLogo textClassName="text-white" />
+                        <AppLogo textClassName="text-foreground" />
                     </Link>
 
                     <AppHeaderDesktopNav items={navigationItems} />
@@ -89,7 +89,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 <DropdownMenuTrigger asChild>
                                     <Button
                                         variant="ghost"
-                                        className="size-10 rounded-full p-1 text-white hover:bg-card/10 focus-visible:ring-ring"
+                                        className="size-10 rounded-full p-1 text-foreground hover:bg-card/10 focus-visible:ring-ring"
                                     >
                                         <Avatar className="size-8 overflow-hidden rounded-full ring-2 ring-ring/40">
                                             <AvatarImage

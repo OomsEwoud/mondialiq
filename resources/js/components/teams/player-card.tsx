@@ -25,10 +25,10 @@ export default function PlayerCard({ player }: Props) {
     return (
         <Link
             href={showPlayer.url(player.id)}
-            className="group flex min-h-[6.25rem] min-w-0 items-center gap-3 rounded-xl border border-[#292e2b] bg-[#101211] p-3.5 transition-colors hover:border-[#4b775d] hover:bg-[#141715] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+            className="group flex min-h-[6.25rem] min-w-0 items-center gap-3 rounded-xl border border-border-subtle bg-surface p-3.5 transition-colors hover:border-border-strong hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
             <div className="relative shrink-0">
-                <Avatar className="size-[3.75rem] rounded-lg border border-[#343d37] bg-[#0d110f]">
+                <Avatar className="size-[3.75rem] rounded-lg border border-border-strong bg-surface">
                     {player.photo ? (
                         <AvatarImage
                             src={player.photo}
@@ -36,7 +36,7 @@ export default function PlayerCard({ player }: Props) {
                             className="object-cover"
                         />
                     ) : null}
-                    <AvatarFallback className="rounded-lg bg-[#1a1d1b] text-sm font-bold text-[#c0c7c2]">
+                    <AvatarFallback className="rounded-lg bg-surface-interactive text-sm font-bold text-text-secondary">
                         {fallbackLabel}
                     </AvatarFallback>
                 </Avatar>
@@ -47,13 +47,13 @@ export default function PlayerCard({ player }: Props) {
 
             <div className="min-w-0 flex-1">
                 <p
-                    className="truncate text-[15px] font-bold text-[#f3f4f1] transition-colors group-hover:text-white"
+                    className="truncate text-[15px] font-bold text-foreground transition-colors group-hover:text-foreground"
                     title={playerName}
                 >
                     {playerName}
                 </p>
                 <div className="mt-2 flex min-w-0 flex-wrap items-center gap-1.5">
-                    <span className="rounded-full border border-[#303432] bg-[#171918] px-2 py-0.5 text-[10px] font-semibold text-[#aeb5b0]">
+                    <span className="rounded-full border border-border-strong bg-surface-interactive px-2 py-0.5 text-[10px] font-semibold text-text-secondary">
                         {formatPositionLabel(player.position)}
                     </span>
                     {player.country ? (
@@ -67,7 +67,7 @@ export default function PlayerCard({ player }: Props) {
                 </div>
             </div>
             <ArrowUpRight
-                className="size-4 shrink-0 self-start text-[#68706b] transition-colors group-hover:text-[#a6d7b7]"
+                className="size-4 shrink-0 self-start text-text-muted transition-colors group-hover:text-positive"
                 aria-hidden="true"
             />
         </Link>

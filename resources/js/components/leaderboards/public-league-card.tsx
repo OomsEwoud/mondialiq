@@ -62,7 +62,7 @@ export default function PublicLeagueCard({ league, isAtLimit }: Props) {
                         >
                             Open group
                         </p>
-                        <p className="truncate text-lg font-bold text-white">
+                        <p className="truncate text-lg font-bold text-foreground">
                             {league.name}
                         </p>
                     </div>

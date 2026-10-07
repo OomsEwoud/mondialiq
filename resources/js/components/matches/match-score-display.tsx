@@ -15,7 +15,7 @@ interface Props {
 export default function MatchScoreDisplay({ match }: Props) {
     if (!shouldShowMatchScore(match) || !hasDisplayMatchScore(match)) {
         return (
-            <span className="flex size-10 items-center justify-center rounded-full border border-[#343d37] bg-[#0b0e0d] text-xs font-bold text-[#7f8882] sm:size-12">
+            <span className="flex size-10 items-center justify-center rounded-full border border-border-strong bg-background text-xs font-bold text-text-muted sm:size-12">
                 vs
             </span>
         );
@@ -25,12 +25,12 @@ export default function MatchScoreDisplay({ match }: Props) {
     const winner = getWinner(match);
 
     return (
-        <div className="flex min-w-20 flex-col items-center justify-center rounded-md border border-[#343d37] bg-[#0b0e0d] px-2 py-2 sm:min-w-28 sm:px-3">
-            <div className="flex items-baseline justify-center gap-2 text-2xl leading-none font-black text-[#f3f4f1] tabular-nums sm:text-3xl">
+        <div className="flex min-w-20 flex-col items-center justify-center rounded-md border border-border-strong bg-background px-2 py-2 sm:min-w-28 sm:px-3">
+            <div className="flex items-baseline justify-center gap-2 text-2xl leading-none font-black text-foreground tabular-nums sm:text-3xl">
                 <span
                     className={cn(
-                        winner === 'home' && 'text-white',
-                        winner === 'away' && 'text-[#717a74]',
+                        winner === 'home' && 'text-foreground',
+                        winner === 'away' && 'text-text-muted',
                     )}
                 >
                     {score.home}
@@ -40,14 +40,14 @@ export default function MatchScoreDisplay({ match }: Props) {
                 </span>
                 <span
                     className={cn(
-                        winner === 'away' && 'text-white',
-                        winner === 'home' && 'text-[#717a74]',
+                        winner === 'away' && 'text-foreground',
+                        winner === 'home' && 'text-text-muted',
                     )}
                 >
                     {score.away}
                 </span>
             </div>
-            <span className="mt-1 text-[10px] font-bold text-[#70b98e] uppercase">
+            <span className="mt-1 text-[10px] font-bold text-primary uppercase">
                 {getMatchStatusLabel(match)}
             </span>
         </div>

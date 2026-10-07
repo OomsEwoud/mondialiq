@@ -159,7 +159,7 @@ export default function InviteCodeCard({
                     <Button
                         type="button"
                         className={cn(
-                            'h-10 w-full rounded-xl px-4 font-bold text-white focus-visible:ring-2',
+                            'h-10 w-full rounded-xl px-4 font-bold text-foreground focus-visible:ring-2',
                             theme.primaryButton,
                             theme.buttonRing,
                         )}

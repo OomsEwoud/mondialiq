@@ -41,10 +41,10 @@ export default function AiPerformanceFilters({
         <section
             aria-label="AI-prestaties filteren"
             aria-busy={loading}
-            className="mb-8 border-y border-[#262c29] py-5"
+            className="mb-8 border-y border-border-subtle py-5"
         >
             <div className="flex items-center justify-between gap-3 lg:hidden">
-                <span className="text-sm text-[#949d97]">
+                <span className="text-sm text-muted-foreground">
                     {filters.period === 'all'
                         ? 'Alle periodes'
                         : `Laatste ${parseInt(filters.period, 10)} dagen`}
@@ -55,10 +55,10 @@ export default function AiPerformanceFilters({
                     aria-controls={panelId}
                     onClick={() => setExpanded(!expanded)}
                     className={cn(
-                        'inline-flex min-h-11 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                        'inline-flex min-h-11 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                         expanded || activeCount > 0
-                            ? 'border-[#4b745b] bg-[#18251d] text-[#a6d7b7]'
-                            : 'border-[#343d37] bg-[#111713] text-[#daddd9] hover:bg-[#18201b]',
+                            ? 'border-[#4b745b] bg-[#18251d] text-positive'
+                            : 'border-border-strong bg-[#111713] text-foreground hover:bg-[#18201b]',
                     )}
                 >
                     <SlidersHorizontal aria-hidden="true" className="size-4" />
@@ -158,7 +158,7 @@ export default function AiPerformanceFilters({
                     }
                 />
             </div>
-            <div className="mt-3 flex min-h-9 items-center justify-between gap-3 text-xs text-[#89928c]">
+            <div className="mt-3 flex min-h-9 items-center justify-between gap-3 text-xs text-muted-foreground">
                 <p role="status">
                     {loading
                         ? 'Prestaties laden…'
@@ -176,7 +176,7 @@ export default function AiPerformanceFilters({
                                 confidence: 'all',
                             })
                         }
-                        className="min-h-11 shrink-0 rounded-md px-2 font-semibold text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="min-h-11 shrink-0 rounded-md px-2 font-semibold text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Filters wissen
                     </button>

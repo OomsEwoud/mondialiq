@@ -91,7 +91,7 @@ const STAT_SECTIONS: StatSectionConfig[] = [
     {
         key: 'goalkeeping',
         title: 'Goalkeeping',
-        accentColor: 'bg-cyan-500',
+        accentColor: 'bg-brand-subtle',
         stats: [{ key: 'saves', label: 'Saves' }],
     },
 ];
@@ -298,7 +298,7 @@ export default function MatchLineupPlayerModal({
                 <div className="relative border-b border-border bg-card p-6">
                     <DialogHeader className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
                         <div className="relative shrink-0">
-                            <div className="rounded-full bg-card p-1 shadow-lg ring-2 ring-slate-100">
+                            <div className="rounded-full bg-card p-1 shadow-lg ring-2 ring-border-subtle">
                                 <Avatar
                                     className={cn(
                                         'border border-white shadow-sm',
@@ -312,12 +312,12 @@ export default function MatchLineupPlayerModal({
                                             className="object-cover"
                                         />
                                     ) : null}
-                                    <AvatarFallback className="bg-secondary text-xl font-bold text-white">
+                                    <AvatarFallback className="bg-secondary text-xl font-bold text-foreground">
                                         {getInitials(player.name)}
                                     </AvatarFallback>
                                 </Avatar>
                             </div>
-                            <span className="absolute -right-1 -bottom-1 flex min-w-7 items-center justify-center rounded-full border-2 border-white bg-secondary px-1.5 text-xs font-bold text-white shadow-md">
+                            <span className="absolute -right-1 -bottom-1 flex min-w-7 items-center justify-center rounded-full border-2 border-white bg-secondary px-1.5 text-xs font-bold text-foreground shadow-md">
                                 {player.number ?? '-'}
                             </span>
                         </div>
@@ -335,7 +335,7 @@ export default function MatchLineupPlayerModal({
                                     {formatLineupPositionLabel(player.position)}
                                 </span>
                                 {player.isCaptain ? (
-                                    <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-bold text-white">
+                                    <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-bold text-foreground">
                                         Captain
                                     </span>
                                 ) : null}
@@ -349,7 +349,7 @@ export default function MatchLineupPlayerModal({
                         {/* Primary summary */}
                         <div className="space-y-3">
                             <div className="flex items-center gap-2">
-                                <div className="h-4 w-1 rounded-full bg-slate-300" />
+                                <div className="h-4 w-1 rounded-full bg-border-strong" />
                                 <span className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                     Match performance
                                 </span>

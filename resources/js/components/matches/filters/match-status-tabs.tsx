@@ -31,10 +31,10 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
                     aria-pressed={selected === tab.value}
                     onClick={() => onChange(tab.value)}
                     className={cn(
-                        'flex min-h-10 items-center justify-center rounded-md border-b-2 px-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                        'flex min-h-10 items-center justify-center rounded-md border-b-2 px-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                         selected === tab.value
-                            ? 'border-[#6fae88] bg-[#202822] text-[#f3f4f1]'
-                            : 'border-transparent text-[#949d97] hover:text-white',
+                            ? 'border-primary bg-brand-subtle text-foreground'
+                            : 'border-transparent text-muted-foreground hover:text-foreground',
                     )}
                 >
                     {tab.label}

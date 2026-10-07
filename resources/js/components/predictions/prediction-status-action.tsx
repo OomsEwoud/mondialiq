@@ -17,7 +17,7 @@ export default function PredictionStatusAction({
     return (
         <Button
             asChild
-            className="w-full justify-center rounded-lg bg-secondary px-5 font-semibold text-white shadow-sm hover:bg-muted focus-visible:ring-ring sm:w-fit"
+            className="w-full justify-center rounded-lg bg-secondary px-5 font-semibold text-foreground shadow-sm hover:bg-muted focus-visible:ring-ring sm:w-fit"
         >
             <Link href={href ?? showAiPrediction.url(matchId)}>
                 {label}

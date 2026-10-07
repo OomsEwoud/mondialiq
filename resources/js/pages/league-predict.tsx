@@ -36,7 +36,7 @@ export default function LeaguePredict({
                         <Link
                             href={league.showHref || '#'}
                             className={cn(
-                                'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                                'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-surface-interactive/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
                                 theme.buttonRing,
                             )}
                         >
@@ -64,7 +64,7 @@ export default function LeaguePredict({
                             >
                                 Predictions
                             </p>
-                            <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                            <h1 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">
                                 Predict for {league.name}
                             </h1>
                             <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">

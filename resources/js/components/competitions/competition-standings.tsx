@@ -16,7 +16,7 @@ export default function CompetitionStandings({
 
     if (groups.length === 0) {
         return (
-            <p className="py-5 text-sm text-[#7f8882]">
+            <p className="py-5 text-sm text-text-muted">
                 De stand is nog niet beschikbaar.
             </p>
         );
@@ -38,7 +38,7 @@ export default function CompetitionStandings({
                             type="button"
                             aria-pressed={selectedGroup === index}
                             onClick={() => setSelectedGroup(index)}
-                            className={`min-h-10 shrink-0 border-b-2 px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none ${selectedGroup === index ? 'border-[#6fae88] text-white' : 'border-transparent text-[#949d97] hover:text-white'}`}
+                            className={`min-h-10 shrink-0 border-b-2 px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${selectedGroup === index ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
                         >
                             {item.name}
                         </button>
@@ -48,14 +48,14 @@ export default function CompetitionStandings({
             {group && (
                 <>
                     {groups.length > 1 && preview && (
-                        <p className="mb-2 text-xs font-medium tracking-wide text-[#949d97] uppercase">
+                        <p className="mb-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
                             {group.name}
                         </p>
                     )}
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[540px] border-collapse text-sm">
                             <thead>
-                                <tr className="border-b border-[#343b37] text-[10px] font-semibold tracking-wide text-[#7f8882] uppercase">
+                                <tr className="border-b border-border-strong text-[10px] font-semibold tracking-wide text-text-muted uppercase">
                                     <th className="w-9 py-3 text-left">#</th>
                                     <th className="py-3 text-left">Team</th>
                                     <th className="w-10 py-3 text-center">
@@ -79,15 +79,15 @@ export default function CompetitionStandings({
                                 {rows.map((team) => (
                                     <tr
                                         key={team.id}
-                                        className="border-b border-[#262c29] last:border-b-0"
+                                        className="border-b border-border-subtle last:border-b-0"
                                     >
-                                        <td className="py-3 text-xs text-[#949d97] tabular-nums">
+                                        <td className="py-3 text-xs text-muted-foreground tabular-nums">
                                             {team.rank}
                                         </td>
                                         <td className="py-2">
                                             <Link
                                                 href={teamShow.url(team.id)}
-                                                className="flex min-w-0 items-center gap-2 text-[#daddd9] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                                                className="flex min-w-0 items-center gap-2 text-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                                             >
                                                 <ImageWithFallback
                                                     src={
@@ -110,20 +110,20 @@ export default function CompetitionStandings({
                                         ].map((value, index) => (
                                             <td
                                                 key={index}
-                                                className="py-3 text-center text-xs text-[#949d97] tabular-nums"
+                                                className="py-3 text-center text-xs text-muted-foreground tabular-nums"
                                             >
                                                 {value}
                                             </td>
                                         ))}
-                                        <td className="py-3 text-center text-xs text-[#949d97] tabular-nums">
+                                        <td className="py-3 text-center text-xs text-muted-foreground tabular-nums">
                                             {team.goalsFor}–{team.goalsAgainst}
                                         </td>
-                                        <td className="py-3 text-center text-xs text-[#949d97] tabular-nums">
+                                        <td className="py-3 text-center text-xs text-muted-foreground tabular-nums">
                                             {team.goalDifference > 0
                                                 ? `+${team.goalDifference}`
                                                 : team.goalDifference}
                                         </td>
-                                        <td className="py-3 text-right text-xs font-bold text-white tabular-nums">
+                                        <td className="py-3 text-right text-xs font-bold text-foreground tabular-nums">
                                             {team.points}
                                         </td>
                                     </tr>

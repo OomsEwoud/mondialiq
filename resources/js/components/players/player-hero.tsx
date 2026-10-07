@@ -48,9 +48,9 @@ export default function PlayerHero({ player }: Props) {
     const visibleMetadata = metadata.filter((item) => item.label);
 
     return (
-        <section className="border-b border-[#29312c] pb-8 sm:pb-10">
+        <section className="border-b border-border-subtle pb-8 sm:pb-10">
             <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:gap-8">
-                <Avatar className="size-32 shrink-0 rounded-lg border border-[#343d37] bg-[#edf1ed] sm:size-40">
+                <Avatar className="size-32 shrink-0 rounded-lg border border-border-strong bg-crest-surface sm:size-40">
                     {player.photo ? (
                         <AvatarImage
                             src={player.photo}
@@ -58,30 +58,30 @@ export default function PlayerHero({ player }: Props) {
                             className="object-cover"
                         />
                     ) : null}
-                    <AvatarFallback className="rounded-lg bg-[#1b2b21] text-3xl font-black text-[#8fd0a8]">
+                    <AvatarFallback className="rounded-lg bg-brand-subtle text-3xl font-black text-positive">
                         {fallbackLabel}
                     </AvatarFallback>
                 </Avatar>
 
                 <div className="min-w-0 flex-1">
-                    <p className="flex items-center gap-2 text-xs font-bold text-[#70b98e] uppercase">
-                        <span className="size-1.5 rounded-full bg-[#57ad78]" />
+                    <p className="flex items-center gap-2 text-xs font-bold text-primary uppercase">
+                        <span className="size-1.5 rounded-full bg-primary" />
                         Spelersprofiel
                     </p>
                     <div className="mt-3 flex min-w-0 flex-wrap items-end gap-3">
                         <h1
-                            className="min-w-0 text-5xl leading-none font-black text-[#f3f4f1] sm:text-7xl"
+                            className="min-w-0 text-5xl leading-none font-black text-foreground sm:text-7xl"
                             title={player.name}
                         >
                             {player.name}
                         </h1>
                         {player.number ? (
-                            <span className="mb-1 rounded-sm border border-[#4b775d] bg-[#17251d] px-2.5 py-1 text-xs font-bold text-[#8fd0a8] sm:mb-2">
+                            <span className="mb-1 rounded-sm border border-border-strong bg-brand-subtle px-2.5 py-1 text-xs font-bold text-positive sm:mb-2">
                                 #{player.number}
                             </span>
                         ) : null}
                     </div>
-                    <p className="mt-4 text-sm leading-6 text-[#89928c] sm:text-base">
+                    <p className="mt-4 text-sm leading-6 text-muted-foreground sm:text-base">
                         {player.position
                             ? formatPositionLabel(player.position)
                             : 'Speler'}
@@ -93,11 +93,11 @@ export default function PlayerHero({ player }: Props) {
             </div>
 
             {visibleMetadata.length > 0 ? (
-                <div className="mt-8 grid grid-cols-2 border-y border-[#29312c] sm:grid-cols-3 lg:grid-cols-5">
+                <div className="mt-8 grid grid-cols-2 border-y border-border-subtle sm:grid-cols-3 lg:grid-cols-5">
                     {visibleMetadata.map((item) => (
                         <div
                             key={item.label}
-                            className="flex min-w-0 items-center gap-2 border-r border-[#29312c] px-3 py-3 text-sm font-semibold text-[#b8bfba] last:border-r-0 [&_svg]:shrink-0 [&_svg]:text-[#70b98e]"
+                            className="flex min-w-0 items-center gap-2 border-r border-border-subtle px-3 py-3 text-sm font-semibold text-text-secondary last:border-r-0 [&_svg]:shrink-0 [&_svg]:text-primary"
                         >
                             {item.icon}
                             <span className="max-w-44 truncate">

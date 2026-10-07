@@ -106,7 +106,7 @@ export function GroupStandingsTable({ teams }: Props) {
                                 className={cn(
                                     'border-t border-border text-foreground transition-colors hover:bg-muted/80',
                                     team.rank <= 2 &&
-                                        'border-l-4 border-l-cyan-300 bg-accent/30',
+                                        'border-l-4 border-l-primary bg-accent/30',
                                 )}
                             >
                                 <td className="px-5 py-4">

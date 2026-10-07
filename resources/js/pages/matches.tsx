@@ -53,16 +53,14 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
             <div className="mx-auto w-full max-w-5xl">
                 <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-                            Wedstrijden
-                        </h1>
-                        <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                        <h1 className="mq-page-title">Wedstrijden</h1>
+                        <p className="mt-3 text-sm leading-6 text-muted-foreground">
                             Bekijk aankomende wedstrijden, resultaten en
                             AI-analyses.
                         </p>
                     </div>
-                    <p className="text-xs text-[#949d97]">
-                        <span className="font-semibold text-[#daddd9] tabular-nums">
+                    <p className="text-xs text-muted-foreground">
+                        <span className="font-semibold text-foreground tabular-nums">
                             {fixtures.total}
                         </span>{' '}
                         wedstrijden

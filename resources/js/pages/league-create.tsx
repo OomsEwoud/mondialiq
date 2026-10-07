@@ -19,7 +19,7 @@ import { social } from '@/routes';
 import type { LeagueCreatePageProps } from '@/types';
 
 const fieldClassName =
-    'h-11 w-full rounded-lg border-input bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
+    'h-11 w-full rounded-lg border-input bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring';
 const secondaryActionClassName =
     'h-11 rounded-lg px-5 font-semibold text-muted-foreground';
 const leagueNamePlaceholder = 'Example: Class 6A Predictions';
@@ -123,7 +123,7 @@ export default function LeagueCreate({
                                             <Textarea
                                                 id="description"
                                                 name="description"
-                                                className="min-h-28 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
+                                                className="min-h-28 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring"
                                                 placeholder="Tell members what this group is for."
                                             />
                                             <InputError
@@ -171,7 +171,7 @@ export default function LeagueCreate({
                                                     <Textarea
                                                         id="reward_description"
                                                         name="reward_description"
-                                                        className="min-h-24 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
+                                                        className="min-h-24 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring"
                                                         placeholder="No payment is handled by MondialIQ."
                                                     />
                                                     <InputError

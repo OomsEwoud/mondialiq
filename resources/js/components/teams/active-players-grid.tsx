@@ -54,18 +54,18 @@ export default function ActivePlayersGrid({ players }: Props) {
         <section>
             <div className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
                 <div className="min-w-0">
-                    <p className="text-[11px] font-bold tracking-[0.14em] text-[#929a95] uppercase">
+                    <p className="text-[11px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
                         De selectie
                     </p>
                     <div className="mt-1 flex items-center gap-3">
-                        <h2 className="text-2xl font-bold tracking-tight text-[#f3f4f1] sm:text-3xl">
+                        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                             Spelers
                         </h2>
                         <span className="rounded-full border border-[#373c39] bg-[#191c1a] px-2.5 py-1 text-xs font-semibold text-[#c0c6c2]">
                             {players.length}
                         </span>
                     </div>
-                    <p className="mt-1.5 text-sm text-[#89928c]">
+                    <p className="mt-1.5 text-sm text-muted-foreground">
                         Bekijk de selectie per positie of zoek een speler.
                     </p>
                 </div>

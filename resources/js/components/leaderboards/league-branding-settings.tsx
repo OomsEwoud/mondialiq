@@ -74,7 +74,7 @@ export default function LeagueBrandingSettings({
                         name="description"
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
-                        className="min-h-20 rounded-xl border-border bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
+                        className="min-h-20 rounded-xl border-border bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring"
                         placeholder="What is this prediction group about?"
                     />
                     <p className="mt-1 text-xs leading-5 text-muted-foreground">

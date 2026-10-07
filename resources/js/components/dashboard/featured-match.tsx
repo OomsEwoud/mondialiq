@@ -11,19 +11,19 @@ export default function FeaturedMatch({ match }: { match: Match }) {
     const favorite = highestProbability(chances);
 
     return (
-        <article className="overflow-hidden rounded-2xl border border-[#303732] bg-[#111513]">
-            <div className="flex items-center justify-between border-b border-[#262c29] px-5 py-4 sm:px-7">
+        <article className="overflow-hidden rounded-2xl border border-border-strong bg-surface">
+            <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4 sm:px-7">
                 <div>
-                    <span className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                    <span className="text-[0.65rem] font-semibold tracking-[0.14em] text-primary uppercase">
                         Uitgelicht
                     </span>
-                    <p className="mt-1 text-xs text-[#7f8882]">
+                    <p className="mt-1 text-xs text-text-muted">
                         {match.leagueName ?? match.round} · {match.date}{' '}
                         {match.time}
                     </p>
                 </div>
                 {prediction?.confidence && (
-                    <span className="rounded-full border border-[#2b4636] bg-[#153024] px-2.5 py-1 text-[0.65rem] font-semibold text-[#8bc5a1]">
+                    <span className="rounded-full border border-primary/25 bg-brand-subtle px-2.5 py-1 text-[0.65rem] font-semibold text-positive">
                         Zekerheid · {prediction.confidence}%
                     </span>
                 )}
@@ -32,10 +32,10 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                 <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
                     <Team name={match.homeTeam} logo={match.homeTeamLogo} />
                     <div className="text-center">
-                        <span className="text-[0.65rem] font-semibold tracking-[0.12em] text-[#68706b] uppercase">
+                        <span className="text-[0.65rem] font-semibold tracking-[0.12em] text-text-muted uppercase">
                             AI voorspelling
                         </span>
-                        <strong className="mt-2 block text-5xl font-black tracking-[-0.06em] text-white tabular-nums">
+                        <strong className="mt-2 block text-5xl font-black tracking-[-0.06em] text-foreground tabular-nums">
                             {score(prediction?.homeScore)}–
                             {score(prediction?.awayScore)}
                         </strong>
@@ -43,28 +43,28 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                     <Team name={match.awayTeam} logo={match.awayTeamLogo} />
                 </div>
                 <div>
-                    <div className="flex h-2 overflow-hidden rounded-full bg-[#202622]">
+                    <div className="flex h-2 overflow-hidden rounded-full bg-surface-interactive">
                         <span
                             className={
                                 favorite === 'home'
-                                    ? 'bg-[#57ad78]'
-                                    : 'bg-[#46504a]'
+                                    ? 'bg-primary'
+                                    : 'bg-border-strong'
                             }
                             style={{ width: `${chances?.homeWin ?? 0}%` }}
                         />
                         <span
                             className={
                                 favorite === 'draw'
-                                    ? 'bg-[#57ad78]'
-                                    : 'bg-[#69716c]'
+                                    ? 'bg-primary'
+                                    : 'bg-text-muted'
                             }
                             style={{ width: `${chances?.draw ?? 0}%` }}
                         />
                         <span
                             className={
                                 favorite === 'away'
-                                    ? 'bg-[#57ad78]'
-                                    : 'bg-[#303732]'
+                                    ? 'bg-primary'
+                                    : 'bg-border-strong'
                             }
                             style={{ width: `${chances?.awayWin ?? 0}%` }}
                         />
@@ -81,7 +81,7 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                             right
                         />
                     </div>
-                    <p className="mt-5 line-clamp-2 text-sm leading-6 text-[#949d97]">
+                    <p className="mt-5 line-clamp-2 text-sm leading-6 text-muted-foreground">
                         {chances
                             ? insight(match, favorite)
                             : (prediction?.advice ??
@@ -89,7 +89,7 @@ export default function FeaturedMatch({ match }: { match: Match }) {
                     </p>
                     <Link
                         href={showMatch(match.id)}
-                        className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#daddd9] hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none"
+                        className="group mt-5 inline-flex items-center gap-2 text-sm font-semibold text-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Bekijk analyse
                         <ArrowUpRight className="size-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -103,14 +103,14 @@ export default function FeaturedMatch({ match }: { match: Match }) {
 function Team({ name, logo }: { name: string; logo: string }) {
     return (
         <div className="flex min-w-0 flex-col items-center gap-3 text-center">
-            <div className="flex size-16 items-center justify-center rounded-xl bg-[#f3f4f1] p-2.5">
+            <div className="flex size-16 items-center justify-center rounded-xl bg-crest-surface p-2.5">
                 <ImageWithFallback
                     src={logo}
                     alt=""
                     className="size-full object-contain"
                 />
             </div>
-            <span className="max-w-28 text-sm font-bold text-[#e3e5e1]">
+            <span className="max-w-28 text-sm font-bold text-foreground">
                 {name}
             </span>
         </div>
@@ -129,10 +129,10 @@ function Chance({
 }) {
     return (
         <div className={center ? 'text-center' : right ? 'text-right' : ''}>
-            <strong className="block text-[#daddd9]">
+            <strong className="block text-foreground">
                 {value !== undefined ? `${Math.round(value)}%` : '—'}
             </strong>
-            <span className="text-[#68706b]">{label}</span>
+            <span className="text-text-muted">{label}</span>
         </div>
     );
 }

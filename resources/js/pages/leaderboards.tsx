@@ -66,13 +66,11 @@ export default function AiPerformance({
                 description="Bekijk de nauwkeurigheid, trends en resultaten van de MondialiQ AI prediction-engine."
             />
             <header className="mb-8 max-w-3xl">
-                <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
                     MondialiQ AI · Performance
                 </p>
-                <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-                    AI Prestaties
-                </h1>
-                <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                <h1 className="mq-page-title mt-2">AI Prestaties</h1>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                     Eén prediction-engine, gevoed door voetbaldata, machine
                     learning en voorspellingslogica. Volg de nauwkeurigheid en
                     ontdek hoe de prestaties zich ontwikkelen.
@@ -121,8 +119,8 @@ export default function AiPerformance({
                     predictionType={filters.predictionType}
                 />
             </div>
-            <details className="mt-8 border-t border-[#262c29] pt-5 text-xs leading-6 text-[#89928c]">
-                <summary className="w-fit cursor-pointer rounded-sm font-semibold text-[#c5ccc7] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none">
+            <details className="mt-8 border-t border-border-subtle pt-5 text-xs leading-6 text-muted-foreground">
+                <summary className="w-fit cursor-pointer rounded-sm font-semibold text-text-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
                     Hoe meten we de prestaties?
                 </summary>
                 <div className="mt-3 max-w-3xl space-y-2">

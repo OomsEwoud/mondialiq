@@ -27,9 +27,9 @@ export default function AiPredictionSummaryCards({ match, score }: Props) {
             ? confidenceValue >= 70
                 ? 'bg-emerald-500'
                 : confidenceValue >= 40
-                  ? 'bg-cyan-500'
+                  ? 'bg-brand-subtle'
                   : 'bg-amber-400'
-            : 'bg-slate-300';
+            : 'bg-border-strong';
 
     const pointsAwarded = prediction?.pointsAwarded ?? false;
     const pointsValue = pointsAwarded

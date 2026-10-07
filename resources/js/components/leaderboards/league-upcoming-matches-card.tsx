@@ -101,7 +101,7 @@ export default function LeagueUpcomingMatchesCard({
                                         type="button"
                                         disabled={!canPredict}
                                         onClick={() => setOpenModalId(match.id)}
-                                        className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-secondary px-4 text-xs font-bold text-white shadow-sm transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                        className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-secondary px-4 text-xs font-bold text-foreground shadow-sm transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                                     >
                                         {match.userPrediction ? (
                                             <>

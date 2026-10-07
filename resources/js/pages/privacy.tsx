@@ -26,7 +26,7 @@ export default function Privacy() {
                             <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                                 Legal
                             </p>
-                            <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                            <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                                 Privacy & Cookie Policy
                             </h1>
                             <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">

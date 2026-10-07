@@ -99,7 +99,7 @@ export default function PredictionScoreBreakdown({
                                         className={cn(
                                             'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
                                             item.earned
-                                                ? 'bg-cyan-500 text-white'
+                                                ? 'bg-brand-subtle text-foreground'
                                                 : 'bg-muted text-muted-foreground',
                                         )}
                                     >
@@ -118,7 +118,7 @@ export default function PredictionScoreBreakdown({
                                         </p>
                                     </div>
                                 </div>
-                                <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs font-bold text-white">
+                                <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs font-bold text-foreground">
                                     +{item.points}
                                 </span>
                             </div>
@@ -149,7 +149,7 @@ export default function PredictionScoreBreakdown({
     return (
         <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
             <div className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-white">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground">
                     <Calculator className="size-5" />
                 </span>
                 <div>
@@ -209,7 +209,7 @@ export default function PredictionScoreBreakdown({
                                     className={cn(
                                         'mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full',
                                         item.earned
-                                            ? 'bg-cyan-500 text-white'
+                                            ? 'bg-brand-subtle text-foreground'
                                             : 'bg-muted text-muted-foreground',
                                     )}
                                 >
@@ -228,7 +228,7 @@ export default function PredictionScoreBreakdown({
                                     </p>
                                 </div>
                             </div>
-                            <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs font-bold text-white">
+                            <span className="shrink-0 rounded-full bg-secondary px-2.5 py-1 text-xs font-bold text-foreground">
                                 +{item.points}
                             </span>
                         </div>

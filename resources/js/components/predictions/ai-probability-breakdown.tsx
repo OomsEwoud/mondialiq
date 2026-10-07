@@ -35,7 +35,7 @@ export default function AiProbabilityBreakdown({ match }: Props) {
     return (
         <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
             <div className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-white">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground">
                     <BarChart3 className="size-5" />
                 </span>
                 <div>

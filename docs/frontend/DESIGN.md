@@ -10,6 +10,18 @@ AI Performance measures one combined MondialiQ prediction engine. Compare the en
 
 An editorial matchday desk: charcoal surfaces, pitch-green accents, warm white text, tabular scores and restrained borders. Preserve the existing football identity and shadcn/Radix behavior. Avoid oversized overview heroes, decorative badges, gradients on every card and competing cyan/indigo visual systems. Marketing can be expressive; operational screens stay compact. League branding and semantic warning/error colors remain meaningful.
 
+## MondialiQ visual system
+
+- **Surfaces:** `background` is the page canvas; `surface` is the quiet base; `surface-elevated` is for focused content; `surface-interactive` is for hover/selection; `surface-highlighted` is reserved for AI and meaningful emphasis. Use `card` only when the content benefits from a distinct panel.
+- **Borders:** use `border-subtle` for separators and `border-strong` for controls or clear edges. Green is not a default border color.
+- **Text:** use `foreground` for primary information, `text-secondary` for supporting content, `muted-foreground` for metadata and `text-muted` only for tertiary detail. Preserve readable contrast.
+- **Status:** use `positive`, `warning`, and `negative` for semantic outcomes; do not reuse brand green to represent every state.
+- **Brand:** `primary` is the MondialiQ accent; pair it with `brand-subtle` or `surface-highlighted` for restrained AI/selected treatments.
+- **Typography:** use `mq-page-title`, `mq-section-title`, `mq-eyebrow`, and `mq-body-copy` for common hierarchy. Match scores and performance numbers use tabular numerals and lead the football content.
+- **Surfaces and spacing:** prefer whitespace and thin separators to nested cards. The shared app shell owns page width and horizontal padding. Keep a consistent medium radius (`rounded-md` controls, `rounded-lg` sections); reserve full rounding for pills and avatars.
+- **Controls:** use the shared `Button` variants and `SportsTabs` for navigation/segmented tabs. Keep visible focus, disabled, and responsive behavior.
+- **Icons:** inherit neutral text by default; use the brand accent only for AI identity, active navigation, or meaningful positive information.
+
 ## Implementation sequence
 
 1. Shared tokens, readable controls, focus, motion and consistent navigation.

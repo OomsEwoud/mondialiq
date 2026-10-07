@@ -33,7 +33,7 @@ export default function MatchRow({ match }: { match: Match }) {
         <article>
             <Link
                 href={showMatch(match.id)}
-                className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 rounded-xl border border-[#262e28] bg-[#111513] p-4 transition-colors hover:border-[#425047] hover:bg-[#171d19] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:grid-cols-[4.5rem_minmax(0,1fr)_auto] sm:gap-x-5 lg:grid-cols-[4.5rem_minmax(0,1fr)_minmax(13rem,0.8fr)_auto] lg:px-5"
+                className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 rounded-xl border border-[#262e28] bg-surface p-4 transition-colors hover:border-[#425047] hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:grid-cols-[4.5rem_minmax(0,1fr)_auto] sm:gap-x-5 lg:grid-cols-[4.5rem_minmax(0,1fr)_minmax(13rem,0.8fr)_auto] lg:px-5"
             >
                 <div className="col-span-2 flex items-center gap-2 sm:col-span-1 sm:row-span-2 sm:block">
                     <time

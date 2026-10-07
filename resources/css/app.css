@@ -21,12 +21,30 @@
         'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
         'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    --radius-lg: var(--radius);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-sm: calc(var(--radius) - 4px);
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 0.75rem;
+    --radius-3xl: 0.75rem;
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+
+    --color-surface: var(--surface);
+    --color-surface-elevated: var(--surface-elevated);
+    --color-surface-interactive: var(--surface-interactive);
+    --color-surface-highlighted: var(--surface-highlighted);
+    --color-border-subtle: var(--border-subtle);
+    --color-border-strong: var(--border-strong);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-muted: var(--text-muted);
+    --color-crest-surface: var(--crest-surface);
+    --color-positive: var(--positive);
+    --color-warning: var(--warning);
+    --color-negative: var(--negative);
+    --color-brand-subtle: var(--brand-subtle);
 
     --color-card: var(--card);
     --color-card-foreground: var(--card-foreground);
@@ -74,7 +92,20 @@
     color-scheme: dark;
     --background: #0b0e0d;
     --foreground: #f3f4f1;
-    --card: #141a17;
+    --surface: #111613;
+    --surface-elevated: #141a17;
+    --surface-interactive: #1c2520;
+    --surface-highlighted: #19241d;
+    --border-subtle: #262c29;
+    --border-strong: #343d37;
+    --text-secondary: #b8bfba;
+    --text-muted: #7f8882;
+    --crest-surface: #f3f4f1;
+    --brand-subtle: #20352a;
+    --positive: #9ecbad;
+    --warning: #e6c27a;
+    --negative: #d98f88;
+    --card: var(--surface-elevated);
     --card-foreground: #f3f4f1;
     --popover: #19211c;
     --popover-foreground: #f3f4f1;
@@ -83,13 +114,13 @@
     --secondary: #22392b;
     --secondary-foreground: #eef5ef;
     --muted: #1c2520;
-    --muted-foreground: #a9b6ad;
+    --muted-foreground: #949d97;
     --accent: #243b2d;
     --accent-foreground: #c5ead0;
     --destructive: #ef7777;
     --destructive-foreground: #210909;
-    --border: #334238;
-    --input: #475b4d;
+    --border: var(--border-subtle);
+    --input: var(--border-strong);
     --ring: #9ad5ad;
     --chart-1: #9ad5ad;
     --chart-2: #a4bde0;
@@ -103,8 +134,46 @@
     --sidebar-primary-foreground: #102218;
     --sidebar-accent: #243b2d;
     --sidebar-accent-foreground: #c5ead0;
-    --sidebar-border: #334238;
+    --sidebar-border: var(--border-subtle);
     --sidebar-ring: #9ad5ad;
+}
+
+@layer components {
+    .mq-page-title {
+        @apply text-3xl font-bold tracking-tight text-foreground sm:text-4xl;
+    }
+
+    .mq-section-title {
+        @apply text-xl font-semibold tracking-tight text-foreground sm:text-2xl;
+    }
+
+    .mq-eyebrow {
+        @apply text-xs font-semibold tracking-wide text-muted-foreground;
+    }
+
+    .mq-body-copy {
+        @apply text-sm leading-6 text-muted-foreground;
+    }
+
+    .mq-surface {
+        @apply rounded-lg bg-surface;
+    }
+
+    .mq-surface-elevated {
+        @apply rounded-lg border border-border-subtle bg-surface-elevated;
+    }
+
+    .mq-surface-interactive {
+        @apply rounded-md transition-colors hover:bg-surface-interactive;
+    }
+
+    .mq-surface-highlighted {
+        @apply rounded-lg bg-surface-highlighted;
+    }
+
+    .mq-page-content {
+        @apply mx-auto w-full max-w-7xl min-w-0 px-4 py-7 sm:px-8 sm:py-9;
+    }
 }
 @layer base {
     html,

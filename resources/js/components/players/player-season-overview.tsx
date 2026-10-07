@@ -147,33 +147,35 @@ export default function PlayerSeasonOverview({ stats, isGoalkeeper }: Props) {
                         key={item.label}
                         className={`flex min-h-32 flex-col items-center justify-center rounded-lg border p-4 text-center ${
                             item.highlight
-                                ? 'border-[#4b775d] bg-[#17251d]'
-                                : 'border-[#29312c] bg-[#111513]'
+                                ? 'border-border-strong bg-brand-subtle'
+                                : 'border-border-subtle bg-surface'
                         }`}
                     >
                         <span
                             className={`mb-2 shrink-0 ${
                                 item.highlight
-                                    ? 'text-[#8fd0a8]'
-                                    : 'text-[#70b98e]'
+                                    ? 'text-positive'
+                                    : 'text-primary'
                             }`}
                         >
                             {item.icon}
                         </span>
                         <p
                             className={`mb-1 shrink-0 text-2xl font-bold tabular-nums ${
-                                item.highlight ? 'text-white' : 'text-[#daddd9]'
+                                item.highlight
+                                    ? 'text-foreground'
+                                    : 'text-foreground'
                             }`}
                         >
                             {displayValue}
                             {item.suffix ? (
-                                <span className="ml-1 text-sm font-semibold text-[#68716b]">
+                                <span className="ml-1 text-sm font-semibold text-text-muted">
                                     {item.suffix}
                                 </span>
                             ) : null}
                         </p>
                         <div className="flex h-9 w-full items-start justify-center">
-                            <p className="text-xs leading-tight font-semibold text-[#7f8882] uppercase">
+                            <p className="text-xs leading-tight font-semibold text-text-muted uppercase">
                                 {item.label}
                             </p>
                         </div>

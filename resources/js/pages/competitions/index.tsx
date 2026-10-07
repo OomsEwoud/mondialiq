@@ -75,13 +75,11 @@ export default function CompetitionsIndex({
                 description="Ontdek voetbalcompetities, programma’s, standen en beschikbare statistieken."
             />
             <header className="mb-12 max-w-2xl">
-                <p className="text-xs font-semibold tracking-[0.16em] text-[#6fae88] uppercase">
+                <p className="text-xs font-semibold tracking-[0.16em] text-primary uppercase">
                     Voetbaldata
                 </p>
-                <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-                    Competities
-                </h1>
-                <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                <h1 className="mq-page-title mt-2">Competities</h1>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                     Volg wedstrijden, standen en statistieken per competitie.
                 </p>
             </header>
@@ -94,10 +92,10 @@ export default function CompetitionsIndex({
                 <label htmlFor="competition-search" className="sr-only">
                     Zoek op competitie of land
                 </label>
-                <div className="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-[#343b37] bg-[#111613] px-3.5 transition-colors focus-within:border-[#57ad78]">
+                <div className="flex min-w-0 flex-1 items-center gap-3 rounded-lg border border-border-strong bg-surface px-3.5 transition-colors focus-within:border-ring">
                     <Search
                         aria-hidden="true"
-                        className="size-4 shrink-0 text-[#737c76]"
+                        className="size-4 shrink-0 text-text-muted"
                     />
                     <input
                         id="competition-search"
@@ -108,14 +106,14 @@ export default function CompetitionsIndex({
                         maxLength={100}
                         placeholder="Competitie of land"
                         autoComplete="off"
-                        className="h-11 min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-[#737c76] [&::-webkit-search-cancel-button]:hidden"
+                        className="h-11 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-text-muted [&::-webkit-search-cancel-button]:hidden"
                     />
                     {query && (
                         <button
                             type="button"
                             onClick={clearSearch}
                             aria-label="Zoekopdracht wissen"
-                            className="rounded p-1 text-[#949d97] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="rounded p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         >
                             <X aria-hidden="true" className="size-4" />
                         </button>
@@ -124,7 +122,7 @@ export default function CompetitionsIndex({
                 <Button
                     type="submit"
                     disabled={searching}
-                    className="h-11 shrink-0 bg-[#193526] px-4 text-[#c5e2ce] hover:bg-[#234532]"
+                    className="h-11 shrink-0 bg-brand-subtle px-4 text-[#c5e2ce] hover:bg-[#234532]"
                 >
                     <Search aria-hidden="true" className="size-4 sm:hidden" />
                     <span>{searching ? 'Zoeken…' : 'Zoeken'}</span>
@@ -158,28 +156,31 @@ export default function CompetitionsIndex({
                     )}
                 </div>
             ) : search ? (
-                <div role="status" className="border-y border-[#262c29] py-12">
-                    <h2 className="text-lg font-bold text-white">
+                <div
+                    role="status"
+                    className="border-y border-border-subtle py-12"
+                >
+                    <h2 className="text-lg font-bold text-foreground">
                         Geen competities gevonden
                     </h2>
-                    <p className="mt-2 text-sm leading-6 text-[#949d97]">
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
                         Geen resultaten voor “{search}”. Probeer een andere naam
                         of een ander land.
                     </p>
                     <button
                         type="button"
                         onClick={clearSearch}
-                        className="mt-4 text-sm font-semibold text-[#9ecbad] underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="mt-4 text-sm font-semibold text-positive underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Wis zoekopdracht
                     </button>
                 </div>
             ) : (
-                <div className="border-y border-[#262c29] py-12">
-                    <h2 className="text-lg font-bold text-white">
+                <div className="border-y border-border-subtle py-12">
+                    <h2 className="text-lg font-bold text-foreground">
                         Nog geen competities beschikbaar
                     </h2>
-                    <p className="mt-2 text-sm leading-6 text-[#949d97]">
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
                         Zodra wedstrijd- of standgegevens zijn ingeladen,
                         verschijnen ze hier.
                     </p>
@@ -202,7 +203,7 @@ function CompetitionSection({
         <section aria-labelledby={`section-${title}`}>
             <h2
                 id={`section-${title}`}
-                className="border-b border-[#343b37] pb-3 text-xs font-semibold tracking-[0.13em] text-[#949d97] uppercase"
+                className="border-b border-border-strong pb-3 text-xs font-semibold tracking-[0.13em] text-muted-foreground uppercase"
             >
                 {title}
             </h2>
@@ -211,9 +212,9 @@ function CompetitionSection({
                     <li key={competition.id}>
                         <Link
                             href={CompetitionController.url(competition.id)}
-                            className="group flex min-h-20 items-center gap-4 border-b border-[#262c29] py-4 focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="group flex min-h-20 items-center gap-4 border-b border-border-subtle py-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         >
-                            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#f3f4f1] p-2">
+                            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-crest-surface p-2">
                                 <ImageWithFallback
                                     src={competition.logoUrl ?? undefined}
                                     alt=""
@@ -221,10 +222,10 @@ function CompetitionSection({
                                 />
                             </span>
                             <span className="min-w-0 flex-1">
-                                <span className="block truncate text-sm font-semibold text-[#f3f4f1] transition-colors group-hover:text-[#9ecbad]">
+                                <span className="block truncate text-sm font-semibold text-foreground transition-colors group-hover:text-positive">
                                     {competition.name}
                                 </span>
-                                <span className="mt-1 block text-xs text-[#949d97]">
+                                <span className="mt-1 block text-xs text-muted-foreground">
                                     {[
                                         competition.country,
                                         competition.season
@@ -238,7 +239,7 @@ function CompetitionSection({
                                         .join(' · ')}
                                 </span>
                             </span>
-                            <span className="hidden text-right text-xs leading-5 text-[#949d97] sm:block">
+                            <span className="hidden text-right text-xs leading-5 text-muted-foreground sm:block">
                                 {competition.currentRound && (
                                     <span className="block">
                                         {competition.currentRound}
@@ -254,7 +255,7 @@ function CompetitionSection({
                             </span>
                             <ArrowUpRight
                                 aria-hidden="true"
-                                className="size-4 shrink-0 text-[#737c76] transition-colors group-hover:text-[#9ecbad]"
+                                className="size-4 shrink-0 text-text-muted transition-colors group-hover:text-positive"
                             />
                         </Link>
                     </li>

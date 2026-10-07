@@ -143,7 +143,7 @@ export default function UpdateProfileInformationForm({
                                             <Link
                                                 href={send()}
                                                 as="button"
-                                                className="text-sm font-bold text-foreground underline decoration-cyan-300 underline-offset-4 transition-colors hover:text-primary"
+                                                className="text-sm font-bold text-foreground underline decoration-primary underline-offset-4 transition-colors hover:text-primary"
                                             >
                                                 Resend verification email
                                             </Link>

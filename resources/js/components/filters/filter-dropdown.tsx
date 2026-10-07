@@ -36,7 +36,10 @@ export default function FilterDropdown<TValue extends string>({
 
     return (
         <div className={cn('grid min-w-0 gap-2', className)}>
-            <span id={labelId} className="text-xs font-bold text-[#89928c]">
+            <span
+                id={labelId}
+                className="text-xs font-bold text-muted-foreground"
+            >
                 {label}
             </span>
             <Select
@@ -50,16 +53,16 @@ export default function FilterDropdown<TValue extends string>({
             >
                 <SelectTrigger
                     aria-labelledby={labelId}
-                    className="h-11 w-full rounded-md border-[#343d37] bg-[#0d110f] px-3 text-sm font-semibold text-[#daddd9] hover:border-[#536159] hover:bg-[#0d110f] focus-visible:border-[#57ad78] focus-visible:ring-2 focus-visible:ring-[#57ad78]/20"
+                    className="h-11 w-full rounded-md border-border-strong bg-surface px-3 text-sm font-semibold text-foreground hover:border-border-strong hover:bg-surface focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20"
                 >
                     <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="border-[#343d37] bg-[#141916] text-[#daddd9]">
+                <SelectContent className="border-border-strong bg-surface-interactive text-foreground">
                     {options.map((option) => (
                         <SelectItem
                             key={option.value || emptyValue}
                             value={option.value || emptyValue}
-                            className="cursor-pointer text-sm text-[#daddd9] focus:bg-[#1b211e] focus:text-white data-[state=checked]:text-[#9ecbad]"
+                            className="cursor-pointer text-sm text-foreground focus:bg-muted focus:text-foreground data-[state=checked]:text-positive"
                         >
                             {option.label}
                         </SelectItem>

@@ -77,7 +77,7 @@ export default function LeagueMemberManagementItem({
                             </Badge>
                         )}
                         {member.isSystemUser && (
-                            <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white">
+                            <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-foreground">
                                 <Bot className="size-3" />
                                 AI
                             </Badge>
@@ -101,7 +101,7 @@ export default function LeagueMemberManagementItem({
                                 </Badge>
                             )}
                         {member.isCurrentUser && (
-                            <Badge className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs font-bold text-foreground">
+                            <Badge className="rounded-full bg-brand-subtle px-2 py-0.5 text-xs font-bold text-foreground">
                                 You
                             </Badge>
                         )}
@@ -127,7 +127,7 @@ export default function LeagueMemberManagementItem({
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        className="h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-cyan-900 hover:border-ring hover:bg-accent focus-visible:ring-ring"
+                                        className="h-10 w-full rounded-xl border-border bg-card px-4 font-bold text-foreground hover:border-ring hover:bg-accent focus-visible:ring-ring"
                                     >
                                         <ShieldPlus className="size-4" />
                                         Make owner
@@ -143,7 +143,7 @@ export default function LeagueMemberManagementItem({
                                         group as a member, but owner controls
                                         move to them.
                                     </DialogDescription>
-                                    <div className="rounded-2xl border border-border bg-accent px-4 py-3 text-sm leading-6 text-cyan-900">
+                                    <div className="rounded-2xl border border-border bg-accent px-4 py-3 text-sm leading-6 text-foreground">
                                         After this transfer, use the regular
                                         group page as a normal member. Only the
                                         new owner will keep access to this

@@ -48,6 +48,8 @@ export function getMatchStatusKind(match: Match): MatchStatusKind {
     }
 
     if (
+        status === 'ns' ||
+        status === 'tbd' ||
         status.includes('not started') ||
         status.includes('time to be defined')
     ) {
@@ -85,7 +87,7 @@ export function getMatchStatusLabel(match: Match): string {
 
     return (
         {
-            upcoming: 'Upcoming',
+            upcoming: 'Nog niet gestart',
             finished: 'Full-time',
             postponed: 'Postponed',
             cancelled: 'Cancelled',

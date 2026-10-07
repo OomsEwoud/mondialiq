@@ -29,13 +29,13 @@ export default function Social({
             />
 
             <header className="mb-10 max-w-2xl">
-                <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
                     Jouw profiel · Social
                 </p>
-                <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+                <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-foreground sm:text-4xl">
                     Social
                 </h1>
-                <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                     Volg je persoonlijke ranglijst en beheer je prediction
                     groups met vrienden.
                 </p>

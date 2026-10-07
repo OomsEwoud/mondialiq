@@ -50,7 +50,7 @@ export default function PredictionConfidenceField({
                             className={cn(
                                 'h-auto rounded-xl border px-3 py-2.5 shadow-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                                 isSelected
-                                    ? 'border-blue-950 bg-secondary text-white hover:bg-accent hover:text-white'
+                                    ? 'border-blue-950 bg-secondary text-foreground hover:bg-accent hover:text-foreground'
                                     : 'border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground',
                             )}
                         >
@@ -62,7 +62,7 @@ export default function PredictionConfidenceField({
                                     className={cn(
                                         'text-xs font-medium',
                                         isSelected
-                                            ? 'text-cyan-100'
+                                            ? 'text-positive'
                                             : 'text-muted-foreground',
                                     )}
                                 >

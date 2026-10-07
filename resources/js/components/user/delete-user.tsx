@@ -66,7 +66,7 @@ export default function DeleteUser({ user }: Props) {
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
-                            className="w-full rounded-lg bg-red-600 font-semibold text-white shadow-sm hover:bg-red-700 sm:w-auto"
+                            className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 sm:w-auto"
                             onClick={() => setConfirmationText('')}
                         >
                             Delete account
@@ -174,7 +174,7 @@ export default function DeleteUser({ user }: Props) {
                                                 processing ||
                                                 confirmationText !== 'DELETE'
                                             }
-                                            className="w-full rounded-lg bg-red-600 font-semibold text-white shadow-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                                            className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                                             data-test="confirm-delete-user-button"
                                         >
                                             Delete account

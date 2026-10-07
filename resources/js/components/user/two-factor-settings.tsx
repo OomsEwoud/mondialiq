@@ -95,7 +95,7 @@ export default function TwoFactorSettings({
                                     variant="destructive"
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full rounded-lg bg-red-600 font-semibold text-white shadow-sm hover:bg-red-700 sm:w-auto"
+                                    className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 sm:w-auto"
                                 >
                                     Disable 2FA
                                 </Button>

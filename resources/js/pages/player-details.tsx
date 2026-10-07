@@ -55,11 +55,11 @@ export default function PlayerDetails({ player }: Props) {
                             return (
                                 <section
                                     key={stat.id}
-                                    className="flex flex-col gap-5 border-t border-[#29312c] pt-8"
+                                    className="flex flex-col gap-5 border-t border-border-subtle pt-8"
                                 >
                                     <div className="flex items-center gap-4">
                                         {stat.league?.logo ? (
-                                            <span className="flex size-12 items-center justify-center rounded-md border border-[#343d37] bg-[#edf1ed] p-2">
+                                            <span className="flex size-12 items-center justify-center rounded-md border border-border-strong bg-crest-surface p-2">
                                                 <img
                                                     src={stat.league.logo}
                                                     alt={stat.league.name}
@@ -68,13 +68,13 @@ export default function PlayerDetails({ player }: Props) {
                                             </span>
                                         ) : null}
                                         <div>
-                                            <p className="text-xs font-bold text-[#70b98e] uppercase">
+                                            <p className="text-xs font-bold text-primary uppercase">
                                                 Seizoensstatistieken
                                             </p>
-                                            <h2 className="mt-0.5 text-2xl font-black text-[#f3f4f1]">
+                                            <h2 className="mt-0.5 text-2xl font-black text-foreground">
                                                 {stat.league?.name ?? 'Seizoen'}
                                             </h2>
-                                            <p className="text-xs font-semibold text-[#89928c]">
+                                            <p className="text-xs font-semibold text-muted-foreground">
                                                 Seizoen {stat.season}
                                                 {stat.position
                                                     ? ` · ${formatPositionLabel(stat.position)}`

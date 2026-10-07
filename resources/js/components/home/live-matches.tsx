@@ -47,7 +47,7 @@ export default function LiveMatches({ initialMatches }: Props) {
                     visibleMatches.map((match) => (
                         <div
                             key={match.id}
-                            className="rounded-lg border border-border bg-slate-50 p-3"
+                            className="rounded-lg border border-border bg-surface-elevated p-3"
                         >
                             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
                                 <TeamLabel team={match.home_team} />
@@ -68,7 +68,7 @@ export default function LiveMatches({ initialMatches }: Props) {
                             <div className="mt-3 flex justify-end border-t border-border pt-2">
                                 <Link
                                     href={showMatch.url(match.id)}
-                                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-sm transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-sm transition-colors hover:bg-surface-elevated focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                                 >
                                     Match details
                                     <ArrowRight className="h-3.5 w-3.5" />
@@ -78,7 +78,7 @@ export default function LiveMatches({ initialMatches }: Props) {
                     ))
                 ) : (
                     <div className="flex flex-col items-center rounded-lg border border-border bg-card p-6 text-center shadow-sm">
-                        <span className="flex size-10 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                        <span className="flex size-10 items-center justify-center rounded-full bg-surface-interactive text-text-muted">
                             <svg
                                 className="size-5"
                                 viewBox="0 0 24 24"
@@ -132,7 +132,7 @@ function TeamLogo({ team }: { team: LiveFixture['home_team'] }) {
         <ImageWithFallback
             src={team.logo_url}
             alt={team.name ?? team.code ?? 'Team'}
-            className="h-7 w-7 shrink-0 rounded-full bg-card object-contain ring-1 ring-slate-200"
+            className="h-7 w-7 shrink-0 rounded-full bg-card object-contain ring-1 ring-border-subtle"
         />
     );
 }

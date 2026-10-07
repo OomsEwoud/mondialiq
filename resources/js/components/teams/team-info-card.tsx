@@ -10,11 +10,11 @@ export default function TeamInfoCard({ team }: Props) {
     const foundedLabel = team.foundedAt ? String(team.foundedAt) : 'Onbekend';
 
     return (
-        <section className="rounded-xl border border-[#292e2b] bg-[#101211] p-5 sm:p-6">
-            <p className="text-[11px] font-bold tracking-[0.14em] text-[#929a95] uppercase">
+        <section className="rounded-xl border border-border-subtle bg-surface p-5 sm:p-6">
+            <p className="text-[11px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
                 Teamprofiel
             </p>
-            <h2 className="mt-1 text-xl font-bold text-[#f3f4f1]">
+            <h2 className="mt-1 text-xl font-bold text-foreground">
                 In één oogopslag
             </h2>
             <div className="mt-4 grid grid-cols-2 gap-2">

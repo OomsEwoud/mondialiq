@@ -11,7 +11,7 @@ export default function MatchDetailsToggle({ expanded, onToggle }: Props) {
             <button
                 type="button"
                 onClick={onToggle}
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-[#343d37] bg-[#0d110f] px-3 py-1.5 text-sm font-semibold text-[#a8b0ab] transition-colors hover:border-[#536159] hover:bg-[#171c19] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none data-[expanded=true]:border-[#4b775d] data-[expanded=true]:bg-[#17251d] data-[expanded=true]:text-[#8fd0a8]"
+                className="inline-flex min-h-9 items-center gap-1.5 rounded-md border border-border-strong bg-surface px-3 py-1.5 text-sm font-semibold text-text-secondary transition-colors hover:border-border-strong hover:bg-surface-interactive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none data-[expanded=true]:border-border-strong data-[expanded=true]:bg-brand-subtle data-[expanded=true]:text-positive"
                 aria-expanded={expanded}
                 data-expanded={expanded}
             >

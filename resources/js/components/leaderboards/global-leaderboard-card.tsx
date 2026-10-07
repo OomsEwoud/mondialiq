@@ -49,7 +49,7 @@ export default function GlobalLeaderboardCard({
             </CardHeader>
             <CardContent className="p-0">
                 {leaders.length > 0 ? (
-                    <div className="divide-y divide-slate-200">
+                    <div className="divide-y divide-border-subtle">
                         {leaders.map((leader) => {
                             const isCurrentUser = leader.id === currentUserId;
                             const isTopThree = leader.rank <= 3;
@@ -99,7 +99,7 @@ export default function GlobalLeaderboardCard({
                                                     </Badge>
                                                 )}
                                                 {leader.isSystemUser && (
-                                                    <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                                    <Badge className="rounded-full bg-emerald-500 px-2 py-0.5 text-xs font-bold text-foreground shadow-none">
                                                         <Bot className="size-3" />
                                                         AI
                                                     </Badge>

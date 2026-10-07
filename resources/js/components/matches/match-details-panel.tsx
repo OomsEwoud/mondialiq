@@ -9,9 +9,9 @@ interface Props {
 
 export default function MatchDetailsPanel({ match }: Props) {
     return (
-        <div className="mt-5 border-t border-[#29312c] pt-5">
+        <div className="mt-5 border-t border-border-subtle pt-5">
             <div className="mb-4 flex items-center justify-between gap-3">
-                <p className="text-xs font-bold text-[#70b98e] uppercase">
+                <p className="text-xs font-bold text-primary uppercase">
                     Over deze wedstrijd
                 </p>
             </div>
@@ -24,7 +24,7 @@ export default function MatchDetailsPanel({ match }: Props) {
                     name={match.homeTeam}
                 />
 
-                <span className="rounded-sm border border-[#343d37] bg-[#0b0e0d] px-4 py-1.5 text-center text-xs font-semibold text-[#68716b]">
+                <span className="rounded-sm border border-border-strong bg-background px-4 py-1.5 text-center text-xs font-semibold text-text-muted">
                     VS
                 </span>
 

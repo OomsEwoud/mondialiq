@@ -26,10 +26,10 @@ export default function MatchTeam({
             href={showTeam.url(id)}
             aria-label={`Bekijk details van ${name}`}
             className={cn(
-                'group flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-md px-1 py-2 transition-colors hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:flex-row sm:gap-4 sm:px-3',
+                'group flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-md px-1 py-2 transition-colors hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:flex-row sm:gap-4 sm:px-3',
                 align === 'right' &&
                     'flex-col-reverse sm:flex-row sm:justify-end sm:text-right',
-                isWinner && 'bg-[#17251d]',
+                isWinner && 'bg-brand-subtle',
             )}
         >
             {align === 'left' ? (
@@ -42,7 +42,7 @@ export default function MatchTeam({
 
             <div className="min-w-0">
                 <p
-                    className="text-sm font-bold break-words text-[#f3f4f1] sm:text-lg"
+                    className="text-sm font-bold break-words text-foreground sm:text-lg"
                     title={name}
                 >
                     {name}
@@ -51,13 +51,13 @@ export default function MatchTeam({
                     className={cn(
                         'mt-1 inline-flex rounded-sm border px-2 py-0.5 text-[10px] font-bold uppercase sm:text-xs',
                         isWinner
-                            ? 'border-[#4b775d] bg-[#1b2b21] text-[#8fd0a8]'
-                            : 'border-[#343d37] bg-[#171c19] text-[#89928c]',
+                            ? 'border-border-strong bg-brand-subtle text-positive'
+                            : 'border-border-strong bg-surface-interactive text-muted-foreground',
                     )}
                 >
                     {code}
                 </span>
-                <span className="mt-2 hidden items-center gap-1 text-xs text-[#68716b] transition-colors group-hover:text-[#9fc9af] lg:inline-flex">
+                <span className="mt-2 hidden items-center gap-1 text-xs text-text-muted transition-colors group-hover:text-positive lg:inline-flex">
                     Bekijk ploeg
                     <ArrowUpRight className="h-3 w-3" />
                 </span>

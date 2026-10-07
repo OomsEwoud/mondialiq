@@ -71,7 +71,7 @@ export default function FriendsLeaguesSection({
                         {!hasReachedLeagueLimit ? (
                             <Button
                                 asChild
-                                className="h-10 w-full rounded-2xl bg-secondary px-4 font-bold text-white shadow-sm focus-visible:ring-ring sm:w-auto"
+                                className="h-10 w-full rounded-2xl bg-secondary px-4 font-bold text-foreground shadow-sm focus-visible:ring-ring sm:w-auto"
                             >
                                 <Link href={createLeagueHref}>
                                     <Plus className="size-4" />

@@ -14,7 +14,7 @@ type Props = {
     items: NavItem[];
 };
 
-const activeItemStyles = 'border-ring/40 bg-card/12 text-white shadow-sm';
+const activeItemStyles = 'border-ring/40 bg-card/12 text-foreground shadow-sm';
 
 export default function AppHeaderDesktopNav({ items }: Props) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
@@ -32,7 +32,7 @@ export default function AppHeaderDesktopNav({ items }: Props) {
                                 href={item.href}
                                 className={cn(
                                     navigationMenuTriggerStyle(),
-                                    'h-9 cursor-pointer rounded-full border border-transparent bg-transparent px-3 text-sm font-bold text-blue-100 transition-colors hover:border-white/15 hover:bg-card/8 hover:text-white focus-visible:ring-ring',
+                                    'h-9 cursor-pointer rounded-full border border-transparent bg-transparent px-3 text-sm font-bold text-blue-100 transition-colors hover:border-white/15 hover:bg-card/8 hover:text-foreground focus-visible:ring-ring',
                                     isCurrentOrParentUrl(item.href) &&
                                         activeItemStyles,
                                 )}
@@ -43,7 +43,7 @@ export default function AppHeaderDesktopNav({ items }: Props) {
                                 {item.title}
                             </Link>
                             {isCurrentOrParentUrl(item.href) && (
-                                <div className="absolute bottom-1 left-1/2 h-1 w-5 -translate-x-1/2 rounded-full bg-cyan-300" />
+                                <div className="absolute bottom-1 left-1/2 h-1 w-5 -translate-x-1/2 rounded-full bg-primary" />
                             )}
                         </NavigationMenuItem>
                     ))}

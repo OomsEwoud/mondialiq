@@ -12,15 +12,15 @@ export default function PredictionPageHeader({
     scoringGuideHref,
 }: Props) {
     return (
-        <header className="mb-10 flex flex-col gap-5 border-b border-[#262c29] pb-8 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+        <header className="mb-10 flex flex-col gap-5 border-b border-border-subtle pb-8 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
                     {isPersonal ? 'Jouw keuzes' : 'AI-analyses'}
                 </p>
-                <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+                <h1 className="mq-page-title mt-2">
                     {isPersonal ? 'Mijn voorspellingen' : 'Voorspellingen'}
                 </h1>
-                <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                     {isPersonal
                         ? 'Volg je eigen keuzes en bekijk de resultaten.'
                         : 'Bekijk wat het model verwacht vóór de aftrap.'}
@@ -34,7 +34,7 @@ export default function PredictionPageHeader({
                     href={predictions({
                         query: { mode: isPersonal ? 'ai' : 'mine' },
                     })}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-medium text-[#b5bbb7] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-medium text-text-secondary transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 >
                     {isPersonal ? 'Bekijk AI-analyses' : 'Mijn voorspellingen'}
                     <ArrowRight className="size-4" aria-hidden="true" />
@@ -42,7 +42,7 @@ export default function PredictionPageHeader({
                 {isPersonal && (
                     <Link
                         href={scoringGuideHref}
-                        className="inline-flex min-h-11 items-center rounded-sm text-xs text-[#949d97] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="inline-flex min-h-11 items-center rounded-sm text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Puntentelling
                     </Link>

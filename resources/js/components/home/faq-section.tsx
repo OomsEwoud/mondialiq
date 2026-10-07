@@ -29,32 +29,32 @@ const faqs = [
 
 export default function FaqSection() {
     return (
-        <section className="border-t border-[#262c29] bg-[#0e1210] px-5 py-20 sm:px-8 sm:py-28">
+        <section className="border-t border-border-subtle bg-surface px-5 py-20 sm:px-8 sm:py-28">
             <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
                 <header>
-                    <p className="text-xs font-semibold tracking-[0.18em] text-[#6fae88] uppercase">
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
                         FAQ
                     </p>
                     <h2 className="mt-4 text-3xl font-black tracking-[-0.035em] sm:text-5xl">
                         Veelgestelde vragen
                     </h2>
                 </header>
-                <div className="border-t border-[#303732]">
+                <div className="border-t border-border-strong">
                     {faqs.map(([question, answer]) => (
                         <details
                             key={question}
-                            className="group border-b border-[#303732]"
+                            className="group border-b border-border-strong"
                         >
-                            <summary className="flex min-h-20 list-none items-center justify-between gap-5 py-5 text-left font-semibold text-[#e1e3df] transition outline-none hover:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-inset [&::-webkit-details-marker]:hidden">
+                            <summary className="flex min-h-20 list-none items-center justify-between gap-5 py-5 text-left font-semibold text-[#e1e3df] transition outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset [&::-webkit-details-marker]:hidden">
                                 {question}
                                 <ChevronDown
                                     aria-hidden="true"
-                                    className="size-5 shrink-0 text-[#68706b] transition-transform duration-200 group-open:rotate-180"
+                                    className="size-5 shrink-0 text-text-muted transition-transform duration-200 group-open:rotate-180"
                                 />
                             </summary>
                             <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 group-open:grid-rows-[1fr]">
                                 <div className="overflow-hidden">
-                                    <p className="max-w-2xl pb-6 text-sm leading-7 text-[#949d97]">
+                                    <p className="max-w-2xl pb-6 text-sm leading-7 text-muted-foreground">
                                         {answer}
                                     </p>
                                 </div>

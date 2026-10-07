@@ -9,20 +9,20 @@ export default function RecentResults({ matches }: { matches: Match[] }) {
     return (
         <section>
             <div>
-                <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-primary uppercase">
                     Modeltransparantie
                 </p>
-                <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
+                <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-foreground">
                     Zo deed MondialiQ het
                 </h2>
             </div>
             {matches.length > 0 ? (
-                <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-[#262c29] bg-[#262c29] sm:grid-cols-2">
+                <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-border-subtle bg-border-subtle sm:grid-cols-2">
                     {matches.map((match) => (
                         <Link
                             key={match.id}
                             href={showMatch(match.id)}
-                            className="bg-[#111513] p-5 transition hover:bg-[#141916] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset"
+                            className="bg-surface p-5 transition hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset"
                         >
                             <div className="flex items-center justify-between gap-3">
                                 <div className="flex min-w-0 items-center gap-2">
@@ -30,7 +30,7 @@ export default function RecentResults({ matches }: { matches: Match[] }) {
                                         src={match.homeTeamLogo}
                                         name={match.homeTeam}
                                     />
-                                    <span className="truncate text-sm font-semibold text-[#daddd9]">
+                                    <span className="truncate text-sm font-semibold text-foreground">
                                         {match.homeTeam} — {match.awayTeam}
                                     </span>
                                     <TeamLogo
@@ -38,14 +38,14 @@ export default function RecentResults({ matches }: { matches: Match[] }) {
                                         name={match.awayTeam}
                                     />
                                 </div>
-                                <strong className="shrink-0 text-lg text-white tabular-nums">
+                                <strong className="shrink-0 text-lg text-foreground tabular-nums">
                                     {match.score.fulltime.home ?? '—'}–
                                     {match.score.fulltime.away ?? '—'}
                                 </strong>
                             </div>
-                            <p className="mt-3 text-xs text-[#7f8882]">
+                            <p className="mt-3 text-xs text-text-muted">
                                 AI voorspelde{' '}
-                                <strong className="text-[#aeb5b0]">
+                                <strong className="text-text-secondary">
                                     {score(match.aiPrediction?.homeScore)}–
                                     {score(match.aiPrediction?.awayScore)}
                                 </strong>
@@ -86,14 +86,14 @@ function performance(match: Match) {
     ) {
         return {
             label: 'Nog niet beoordeeld',
-            className: 'border-[#303732] text-[#7f8882]',
+            className: 'border-border-strong text-text-muted',
         };
     }
 
     if (predictedHome === actualHome && predictedAway === actualAway) {
         return {
             label: 'Exact correct',
-            className: 'border-[#2b4636] text-[#8bc5a1]',
+            className: 'border-primary/25 text-positive',
         };
     }
 
@@ -104,7 +104,7 @@ function performance(match: Match) {
         return {
             label:
                 actualOutcome === 0 ? 'Gelijkspel correct' : 'Winnaar correct',
-            className: 'border-[#39413c] text-[#aeb5b0]',
+            className: 'border-border-strong text-text-secondary',
         };
     }
 
@@ -116,7 +116,7 @@ function performance(match: Match) {
 
 function TeamLogo({ src, name }: { src: string; name: string }) {
     return (
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#f3f4f1] p-1">
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-crest-surface p-1">
             <ImageWithFallback
                 src={src}
                 alt=""

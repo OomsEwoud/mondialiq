@@ -47,7 +47,7 @@ export default function AnalysisEntry({
             <h3 id={`analysis-${match.id}`} className="sr-only">
                 {match.homeTeam} – {match.awayTeam}
             </h3>
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-[#949d97]">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 text-xs text-muted-foreground">
                 <p>
                     {match.leagueName ?? match.round}
                     <span aria-hidden="true"> · </span>
@@ -57,10 +57,10 @@ export default function AnalysisEntry({
                     </time>
                 </p>
                 {kind === 'live' ? (
-                    <span className="inline-flex items-center gap-1.5 text-[#9ecbad]">
+                    <span className="inline-flex items-center gap-1.5 text-positive">
                         <span
                             aria-hidden="true"
-                            className="size-1.5 rounded-full bg-[#6fae88]"
+                            className="size-1.5 rounded-full bg-primary"
                         />
                         Live
                         {match.elapsedTime !== null
@@ -85,11 +85,11 @@ export default function AnalysisEntry({
                                 key={team.id}
                                 href={showTeam(team.id)}
                                 className={cn(
-                                    'flex min-w-0 flex-col items-center gap-3 rounded-sm text-center focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                                    'flex min-w-0 flex-col items-center gap-3 rounded-sm text-center focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                                     index === 1 && 'col-start-3 row-start-1',
                                 )}
                             >
-                                <span className="flex size-11 items-center justify-center rounded-lg bg-[#f3f4f1] p-2 sm:size-12">
+                                <span className="flex size-11 items-center justify-center rounded-lg bg-crest-surface p-2 sm:size-12">
                                     <ImageWithFallback
                                         src={team.logo}
                                         alt=""
@@ -97,18 +97,18 @@ export default function AnalysisEntry({
                                         className="size-full object-contain"
                                     />
                                 </span>
-                                <span className="text-sm leading-5 font-semibold break-words text-[#daddd9] hover:text-white sm:text-base">
+                                <span className="text-sm leading-5 font-semibold break-words text-foreground hover:text-foreground sm:text-base">
                                     {team.name}
                                 </span>
                             </Link>
                         ))}
                         <div className="col-start-2 row-start-1 text-center">
-                            <p className="text-3xl font-black tracking-[-0.05em] whitespace-nowrap text-white tabular-nums sm:text-4xl">
+                            <p className="text-3xl font-black tracking-[-0.05em] whitespace-nowrap text-foreground tabular-nums sm:text-4xl">
                                 {hasScore
                                     ? `${Math.round(prediction.homeScore!)} – ${Math.round(prediction.awayScore!)}`
                                     : '—'}
                             </p>
-                            <p className="mt-2 max-w-24 text-xs leading-4 text-[#949d97]">
+                            <p className="mt-2 max-w-24 text-xs leading-4 text-muted-foreground">
                                 {hasScore
                                     ? 'Verwachte uitslag'
                                     : 'Uitslag nog onbekend'}
@@ -119,14 +119,14 @@ export default function AnalysisEntry({
                         <AnalysisProbabilities match={match} />
                     </div>
                 </div>
-                <div className="flex min-w-0 flex-col items-start border-t border-[#262c29] pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
+                <div className="flex min-w-0 flex-col items-start border-t border-border-subtle pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
                     <div className="flex w-full flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
-                        <p className="text-xs font-semibold tracking-[0.1em] text-[#9ecbad] uppercase">
+                        <p className="text-xs font-semibold tracking-[0.1em] text-positive uppercase">
                             Waarom deze voorspelling?
                         </p>
-                        <p className="text-xs text-[#949d97]">
+                        <p className="text-xs text-muted-foreground">
                             Confidence{' '}
-                            <span className="font-semibold text-[#daddd9] tabular-nums">
+                            <span className="font-semibold text-foreground tabular-nums">
                                 {prediction?.confidence
                                     ? formatAiConfidence(prediction.confidence)
                                           .value
@@ -134,13 +134,13 @@ export default function AnalysisEntry({
                             </span>
                         </p>
                     </div>
-                    <p className="mt-4 line-clamp-4 text-sm leading-7 break-words text-[#b5bbb7]">
+                    <p className="mt-4 line-clamp-4 text-sm leading-7 break-words text-text-secondary">
                         {advice ??
                             'Er is nog geen toelichting beschikbaar voor deze voorspelling.'}
                     </p>
                     <Link
                         href={showAnalysis(match.id)}
-                        className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-semibold text-[#9ecbad] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-sm text-sm font-semibold text-positive transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Bekijk volledige analyse{' '}
                         <ArrowRight className="size-4" aria-hidden="true" />

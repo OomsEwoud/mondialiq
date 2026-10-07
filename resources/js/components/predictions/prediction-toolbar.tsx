@@ -60,7 +60,7 @@ export default function PredictionToolbar({
             <div
                 role="group"
                 aria-label="Periode"
-                className="flex gap-7 border-b border-[#262c29]"
+                className="flex gap-7 border-b border-border-subtle"
             >
                 {dates.map(({ label, value }) => (
                     <button
@@ -75,10 +75,10 @@ export default function PredictionToolbar({
                                 : onQuickAll()
                         }
                         className={cn(
-                            'min-h-11 border-b-2 px-0.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                            'min-h-11 border-b-2 px-0.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                             filters.date === value && filters.status === 'all'
-                                ? 'border-[#6fae88] text-[#9ecbad]'
-                                : 'border-transparent text-[#949d97] hover:text-white',
+                                ? 'border-primary text-positive'
+                                : 'border-transparent text-muted-foreground hover:text-foreground',
                         )}
                     >
                         {label}
@@ -89,7 +89,7 @@ export default function PredictionToolbar({
                 <div className="relative min-w-0 flex-1 sm:max-w-sm">
                     <Search
                         aria-hidden="true"
-                        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#6fae88]"
+                        className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-primary"
                     />
                     <input
                         type="search"
@@ -99,7 +99,7 @@ export default function PredictionToolbar({
                         onChange={(event) =>
                             onChange('search', event.target.value)
                         }
-                        className="h-11 w-full rounded-md border border-[#29312c] bg-transparent pr-3 pl-10 text-sm text-[#daddd9] outline-none placeholder:text-[#949d97] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20"
+                        className="h-11 w-full rounded-md border border-border-subtle bg-transparent pr-3 pl-10 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-2 focus:ring-ring/20"
                     />
                 </div>
                 <button
@@ -108,10 +108,10 @@ export default function PredictionToolbar({
                     aria-controls={advancedId}
                     onClick={() => setExpanded((isOpen) => !isOpen)}
                     className={cn(
-                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:ml-auto',
                         expanded || advancedCount
-                            ? 'border-[#4b775d] bg-[#17251d] text-[#9ecbad]'
-                            : 'border-[#343d37] bg-[#0d110f] text-[#a8b0ab] hover:border-[#536159] hover:text-white',
+                            ? 'border-border-strong bg-brand-subtle text-positive'
+                            : 'border-border-strong bg-surface text-text-secondary hover:border-border-strong hover:text-foreground',
                     )}
                 >
                     <SlidersHorizontal className="size-4" aria-hidden="true" />
@@ -120,7 +120,7 @@ export default function PredictionToolbar({
                             <span>Filters</span>
                             <span
                                 aria-label={`${advancedCount} actief`}
-                                className="text-xs text-[#9ecbad] tabular-nums"
+                                className="text-xs text-positive tabular-nums"
                             >
                                 · {advancedCount}
                             </span>
@@ -139,7 +139,7 @@ export default function PredictionToolbar({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-[#949d97] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         <X className="size-3.5" aria-hidden="true" />
                         Filters wissen
@@ -163,7 +163,7 @@ export default function PredictionToolbar({
                         expanded ? 'overflow-visible' : 'overflow-hidden',
                     )}
                 >
-                    <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid gap-4 border-t border-border-subtle pt-5 sm:grid-cols-2 lg:grid-cols-4">
                         <DatePicker
                             label="Datum"
                             selected={filters.date}
@@ -238,7 +238,7 @@ export default function PredictionToolbar({
                     </div>
                 </div>
             </div>
-            <p className="mt-3 text-xs leading-5 text-[#949d97]">
+            <p className="mt-3 text-xs leading-5 text-muted-foreground">
                 Zoeken, winnaar en sortering gelden voor deze pagina.
             </p>
         </section>

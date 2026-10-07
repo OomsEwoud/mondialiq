@@ -28,18 +28,18 @@ export default function AppHeaderMobileNav({ items }: Props) {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="mr-2 h-[38px] w-[38px] rounded-full text-blue-100 hover:bg-card/10 hover:text-white focus-visible:ring-ring"
+                        className="mr-2 h-[38px] w-[38px] rounded-full text-blue-100 hover:bg-card/10 hover:text-foreground focus-visible:ring-ring"
                     >
                         <Menu className="h-5 w-5" />
                     </Button>
                 </SheetTrigger>
                 <SheetContent
                     side="left"
-                    className="flex h-full w-72 flex-col border-white/10 bg-secondary text-white"
+                    className="flex h-full w-72 flex-col border-white/10 bg-secondary text-foreground"
                 >
                     <SheetTitle className="sr-only">Navigation menu</SheetTitle>
                     <SheetHeader className="flex justify-start text-left">
-                        <AppLogo textClassName="text-white" />
+                        <AppLogo textClassName="text-foreground" />
                     </SheetHeader>
                     <nav className="flex flex-1 flex-col gap-2 p-4 text-sm">
                         {items.map((item) => {
@@ -53,8 +53,8 @@ export default function AppHeaderMobileNav({ items }: Props) {
                                     className={cn(
                                         'flex items-center space-x-2 rounded-md px-3 py-2 font-medium transition-colors',
                                         isActive
-                                            ? 'bg-cyan-300 text-foreground'
-                                            : 'text-blue-100 hover:bg-card/10 hover:text-white',
+                                            ? 'bg-primary text-primary-foreground'
+                                            : 'text-blue-100 hover:bg-card/10 hover:text-foreground',
                                     )}
                                 >
                                     {item.icon && (

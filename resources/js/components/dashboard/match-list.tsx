@@ -6,18 +6,18 @@ import type { Match } from '@/types/match';
 
 export default function MatchList({ matches }: { matches: Match[] }) {
     return (
-        <div className="divide-y divide-[#262c29] border-y border-[#262c29]">
+        <div className="divide-y divide-border-subtle border-y border-border-subtle">
             {matches.map((match) => (
                 <Link
                     key={match.id}
                     href={showMatch(match.id)}
-                    className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-5 transition hover:bg-[#111513] focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:outline-none focus-visible:ring-inset sm:grid-cols-[4.5rem_1fr_auto]"
+                    className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-3 py-5 transition hover:bg-surface focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset sm:grid-cols-[4.5rem_1fr_auto]"
                 >
                     <div>
-                        <span className="text-sm font-semibold text-[#daddd9] tabular-nums">
+                        <span className="text-sm font-semibold text-foreground tabular-nums">
                             {match.time}
                         </span>
-                        <span className="mt-1 block max-w-16 truncate text-[0.6rem] font-semibold tracking-[0.06em] text-[#68706b] uppercase">
+                        <span className="mt-1 block max-w-16 truncate text-[0.6rem] font-semibold tracking-[0.06em] text-text-muted uppercase">
                             {match.leagueName ?? match.round}
                         </span>
                     </div>
@@ -27,7 +27,7 @@ export default function MatchList({ matches }: { matches: Match[] }) {
                                 src={match.homeTeamLogo}
                                 name={match.homeTeam}
                             />
-                            <span className="truncate text-sm font-semibold text-[#daddd9]">
+                            <span className="truncate text-sm font-semibold text-foreground">
                                 {match.homeTeam}
                             </span>
                         </div>
@@ -36,16 +36,16 @@ export default function MatchList({ matches }: { matches: Match[] }) {
                                 src={match.awayTeamLogo}
                                 name={match.awayTeam}
                             />
-                            <span className="truncate text-sm font-semibold text-[#daddd9]">
+                            <span className="truncate text-sm font-semibold text-foreground">
                                 {match.awayTeam}
                             </span>
                         </div>
                     </div>
                     <div className="text-right">
-                        <span className="text-[0.65rem] font-semibold tracking-[0.1em] text-[#68706b] uppercase">
+                        <span className="text-[0.65rem] font-semibold tracking-[0.1em] text-text-muted uppercase">
                             AI voorspelling
                         </span>
-                        <strong className="mt-1 block text-xl font-black text-white tabular-nums">
+                        <strong className="mt-1 block text-xl font-black text-foreground tabular-nums">
                             {score(match.aiPrediction?.homeScore)}–
                             {score(match.aiPrediction?.awayScore)}
                         </strong>
@@ -58,7 +58,7 @@ export default function MatchList({ matches }: { matches: Match[] }) {
 
 function TeamLogo({ src, name }: { src: string; name: string }) {
     return (
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#f3f4f1] p-1">
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-crest-surface p-1">
             <ImageWithFallback
                 src={src}
                 alt=""

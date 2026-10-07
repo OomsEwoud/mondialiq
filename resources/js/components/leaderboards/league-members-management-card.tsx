@@ -87,10 +87,10 @@ export default function LeagueMembersManagementCard({
                                 <Users className="size-4" />
                             </span>
                             <div>
-                                <p className="text-sm font-bold text-cyan-950">
+                                <p className="text-sm font-bold text-foreground">
                                     Invite friends to fill this group.
                                 </p>
-                                <p className="mt-1 text-sm leading-6 text-cyan-900">
+                                <p className="mt-1 text-sm leading-6 text-foreground">
                                     Once more members join, ownership transfer
                                     and removal controls will appear here.
                                 </p>

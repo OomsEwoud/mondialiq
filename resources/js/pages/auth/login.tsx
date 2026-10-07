@@ -62,7 +62,7 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
+            'border-border-strong bg-surface-interactive text-foreground hover:border-border-strong hover:bg-[#1d231f] hover:text-foreground',
         iconClassName: 'bg-card ring-[#343b37]',
     },
     {
@@ -81,13 +81,13 @@ const socialProviders = [
             </svg>
         ),
         className:
-            'border-[#343b37] bg-[#171c19] text-[#daddd9] hover:border-[#4a534e] hover:bg-[#1d231f] hover:text-white',
+            'border-border-strong bg-surface-interactive text-foreground hover:border-border-strong hover:bg-[#1d231f] hover:text-foreground',
         iconClassName: 'bg-card ring-[#343b37]',
     },
 ] satisfies SocialProvider[];
 
 const socialDividerLabelClass =
-    'text-[0.65rem] font-semibold tracking-[0.14em] text-[#68706b] uppercase';
+    'text-[0.65rem] font-semibold tracking-[0.14em] text-text-muted uppercase';
 const rememberMeContainerClass = 'flex items-center gap-3';
 const socialButtonBaseClass = 'h-12 rounded-xl font-semibold shadow-none';
 
@@ -176,11 +176,11 @@ export default function Login({
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
-                                    className="border-[#46504a] bg-[#171c19] data-[state=checked]:border-[#57ad78] data-[state=checked]:bg-[#57ad78] data-[state=checked]:text-[#0b0e0d]"
+                                    className="border-[#46504a] bg-surface-interactive data-[state=checked]:border-[#57ad78] data-[state=checked]:bg-primary data-[state=checked]:text-background"
                                 />
                                 <Label
                                     htmlFor="remember"
-                                    className="text-sm font-semibold text-[#949d97]"
+                                    className="text-sm font-semibold text-muted-foreground"
                                 >
                                     Onthoud mij
                                 </Label>
@@ -200,11 +200,11 @@ export default function Login({
 
                         <div className="grid gap-4">
                             <div className="flex items-center gap-3">
-                                <div className="h-px flex-1 bg-[#262c29]" />
+                                <div className="h-px flex-1 bg-border-subtle" />
                                 <span className={socialDividerLabelClass}>
                                     Of ga verder met
                                 </span>
-                                <div className="h-px flex-1 bg-[#262c29]" />
+                                <div className="h-px flex-1 bg-border-subtle" />
                             </div>
 
                             <div className="grid gap-3 sm:grid-cols-2">

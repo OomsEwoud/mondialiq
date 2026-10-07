@@ -142,7 +142,7 @@ export default function UserPredictions({
                 <section className="mb-6 overflow-hidden rounded-2xl border border-border/50 bg-secondary p-6 shadow-lg sm:p-8">
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
                         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/50 bg-muted/50 text-xl font-bold text-foreground shadow-sm ring-1 ring-slate-600/50 sm:size-16 sm:text-2xl">
+                            <div className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/50 bg-muted/50 text-xl font-bold text-foreground shadow-sm ring-1 ring-border-strong/50 sm:size-16 sm:text-2xl">
                                 {user.avatar ? (
                                     <ImageWithFallback
                                         src={user.avatar}
@@ -160,7 +160,7 @@ export default function UserPredictions({
                                         ? 'My public predictions'
                                         : 'User predictions'}
                                 </p>
-                                <h1 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                                <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                                     {pageTitle}
                                 </h1>
                                 <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
@@ -188,7 +188,7 @@ export default function UserPredictions({
                             <button
                                 type="button"
                                 onClick={() => window.history.back()}
-                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none sm:w-auto"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-surface-interactive/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none sm:w-auto"
                             >
                                 <ArrowLeft className="size-4" />
                                 Back

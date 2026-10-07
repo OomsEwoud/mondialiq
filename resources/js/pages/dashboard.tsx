@@ -40,14 +40,14 @@ export default function Dashboard({
             <div className="space-y-14 sm:space-y-16">
                 <header className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p className="text-sm font-semibold text-[#6fae88]">
+                        <p className="text-sm font-semibold text-primary">
                             {greeting()}, {firstName}
                         </p>
-                        <h1 className="mt-1.5 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
+                        <h1 className="mq-page-title mt-1.5">
                             Dit speelt er vandaag.
                         </h1>
                         {upcomingFixtures.length > 0 ? (
-                            <p className="mt-3 text-sm text-[#7f8882]">
+                            <p className="mt-3 text-sm text-text-muted">
                                 {upcomingFixtures.length} wedstrijden ·{' '}
                                 {
                                     upcomingFixtures.filter(
@@ -57,13 +57,13 @@ export default function Dashboard({
                                 AI-analyses beschikbaar
                             </p>
                         ) : (
-                            <p className="mt-3 text-sm text-[#7f8882]">
+                            <p className="mt-3 text-sm text-text-muted">
                                 Zodra er nieuwe wedstrijden beschikbaar zijn,
                                 verschijnen ze hier automatisch.
                             </p>
                         )}
                     </div>
-                    <span className="text-sm font-medium text-[#68706b]">
+                    <span className="text-sm font-medium text-text-muted">
                         {new Intl.DateTimeFormat('nl-BE', {
                             weekday: 'long',
                             day: 'numeric',
@@ -76,9 +76,7 @@ export default function Dashboard({
                     <FeaturedMatch match={featured} />
                 ) : (
                     <section>
-                        <h2 className="text-xl font-bold text-white">
-                            Voor jou
-                        </h2>
+                        <h2 className="mq-section-title">Voor jou</h2>
                         <div className="mt-5">
                             <EmptyState
                                 title="Nog geen wedstrijd in de kijker"
@@ -96,16 +94,16 @@ export default function Dashboard({
                     <section className="order-2 lg:order-1">
                         <div className="flex items-end justify-between gap-4">
                             <div>
-                                <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                                <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-primary uppercase">
                                     Binnenkort
                                 </p>
-                                <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
+                                <h2 className="mq-section-title mt-2">
                                     Komende wedstrijden
                                 </h2>
                             </div>
                             <Link
                                 href={matches()}
-                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#949d97] hover:text-white"
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
                             >
                                 Alles bekijken
                                 <ArrowRight className="size-3.5" />
@@ -137,44 +135,44 @@ export default function Dashboard({
                 <section>
                     <div className="flex items-end justify-between gap-4">
                         <div>
-                            <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                            <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-primary uppercase">
                                 Net bijgewerkt
                             </p>
-                            <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
+                            <h2 className="mq-section-title mt-2">
                                 Nieuwe analyses
                             </h2>
                         </div>
                         <Link
                             href={predictions()}
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#949d97] hover:text-white"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground"
                         >
                             Alle predictions
                             <ArrowRight className="size-3.5" />
                         </Link>
                     </div>
                     {analyses.length > 0 ? (
-                        <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-[#262c29] bg-[#262c29] md:grid-cols-3">
+                        <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-border-subtle bg-border-subtle md:grid-cols-3">
                             {analyses.map((match) => (
                                 <Link
                                     key={match.id}
                                     href={predictions({
                                         query: { date: match.dateValue },
                                     })}
-                                    className="bg-[#111513] p-5 transition hover:bg-[#141916]"
+                                    className="bg-surface p-5 transition hover:bg-surface-interactive"
                                 >
-                                    <span className="text-[0.65rem] font-semibold tracking-[0.08em] text-[#68706b] uppercase">
+                                    <span className="text-[0.65rem] font-semibold tracking-[0.08em] text-text-muted uppercase">
                                         {match.leagueName ?? match.round}
                                     </span>
-                                    <strong className="mt-3 block text-sm font-bold text-[#e3e5e1]">
+                                    <strong className="mt-3 block text-sm font-bold text-foreground">
                                         {match.homeTeam} — {match.awayTeam}
                                     </strong>
-                                    <p className="mt-3 text-base font-bold text-white">
+                                    <p className="mt-3 text-base font-bold text-foreground">
                                         {analysisTitle(match)}
                                     </p>
-                                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#7f8882]">
+                                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-text-muted">
                                         {analysisFallback(match)}
                                     </p>
-                                    <span className="mt-4 block text-xs font-semibold text-[#9ecbad]">
+                                    <span className="mt-4 block text-xs font-semibold text-positive">
                                         Bekijk analyse →
                                     </span>
                                 </Link>
@@ -195,10 +193,10 @@ export default function Dashboard({
                 </section>
                 <RecentResults matches={recentFixtures} />
                 <section>
-                    <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                    <p className="text-[0.65rem] font-semibold tracking-[0.14em] text-primary uppercase">
                         In je overzicht
                     </p>
-                    <h2 className="mt-2 text-2xl font-black tracking-[-0.03em] text-white">
+                    <h2 className="mq-section-title mt-2">
                         Competities in beeld
                     </h2>
                     {competitions.length > 0 ? (
@@ -206,7 +204,7 @@ export default function Dashboard({
                             {competitions.map((competition) => (
                                 <span
                                     key={competition.id}
-                                    className="inline-flex items-center gap-2 rounded-lg border border-[#303732] bg-[#111513] px-3 py-2 text-sm font-semibold text-[#aeb5b0]"
+                                    className="inline-flex items-center gap-2 rounded-lg border border-border-strong bg-surface px-3 py-2 text-sm font-semibold text-text-secondary"
                                 >
                                     {competition.logoUrl && (
                                         <ImageWithFallback

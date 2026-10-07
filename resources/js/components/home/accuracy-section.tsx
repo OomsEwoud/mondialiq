@@ -10,17 +10,17 @@ export default function AccuracySection() {
     return (
         <section
             id="resultaten"
-            className="border-t border-[#262c29] bg-[#0e1210] px-5 py-20 sm:px-8 sm:py-28"
+            className="border-t border-border-subtle bg-surface px-5 py-20 sm:px-8 sm:py-28"
         >
             <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-20">
                 <div>
-                    <p className="text-xs font-semibold tracking-[0.18em] text-[#6fae88] uppercase">
+                    <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
                         Modeltransparantie
                     </p>
                     <h2 className="mt-4 text-3xl leading-tight font-black tracking-[-0.035em] sm:text-5xl">
                         Voorspellen én terugkijken.
                     </h2>
-                    <p className="mt-5 max-w-xl text-base leading-7 text-[#949d97]">
+                    <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground">
                         Na de wedstrijd wordt de verwachting naast de echte
                         uitslag gelegd. Zo zie je niet alleen wat het model
                         verwachtte, maar ook hoe het doorheen het seizoen
@@ -44,17 +44,17 @@ export default function AccuracySection() {
                         />
                     </div>
                 </div>
-                <div className="rounded-2xl border border-[#303732] bg-[#111513] p-5 sm:p-8">
-                    <div className="flex items-start justify-between gap-5 border-b border-[#262c29] pb-6">
+                <div className="rounded-2xl border border-border-strong bg-surface p-5 sm:p-8">
+                    <div className="flex items-start justify-between gap-5 border-b border-border-subtle pb-6">
                         <div>
-                            <span className="text-[0.65rem] font-semibold tracking-[0.14em] text-[#68706b] uppercase">
+                            <span className="text-[0.65rem] font-semibold tracking-[0.14em] text-text-muted uppercase">
                                 Voorbeeldweergave · demonstratiedata
                             </span>
-                            <h3 className="mt-2 text-xl font-bold text-white">
+                            <h3 className="mt-2 text-xl font-bold text-foreground">
                                 Modelrapport · laatste 200 matches
                             </h3>
                         </div>
-                        <span className="rounded-lg border border-[#303732] bg-[#171c19] px-2.5 py-1.5 text-xs font-semibold text-[#949d97]">
+                        <span className="rounded-lg border border-border-strong bg-surface-interactive px-2.5 py-1.5 text-xs font-semibold text-muted-foreground">
                             Alle leagues
                         </span>
                     </div>
@@ -62,23 +62,23 @@ export default function AccuracySection() {
                         {reports.map((report) => (
                             <div key={report.label}>
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-[#aeb5b0]">
+                                    <span className="text-text-secondary">
                                         {report.label}
                                     </span>
-                                    <strong className="text-[#e3e5e1]">
+                                    <strong className="text-foreground">
                                         {report.value}
                                     </strong>
                                 </div>
                                 <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#242a27]">
                                     <div
-                                        className="h-full rounded-full bg-[#57ad78]"
+                                        className="h-full rounded-full bg-primary"
                                         style={{ width: report.width }}
                                     />
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <p className="mt-7 border-t border-[#262c29] pt-5 text-xs leading-5 text-[#68706b]">
+                    <p className="mt-7 border-t border-border-subtle pt-5 text-xs leading-5 text-text-muted">
                         Deze cijfers tonen uitsluitend hoe de rapportage wordt
                         gepresenteerd en zijn geen actuele performanceclaim.
                     </p>
@@ -100,12 +100,12 @@ function Principle({
     return (
         <div className="flex gap-3">
             <Icon
-                className="mt-0.5 size-4 shrink-0 text-[#6fae88]"
+                className="mt-0.5 size-4 shrink-0 text-primary"
                 aria-hidden="true"
             />
             <div>
-                <strong className="text-sm text-[#daddd9]">{title}</strong>
-                <p className="mt-1 text-sm leading-6 text-[#7f8882]">{text}</p>
+                <strong className="text-sm text-foreground">{title}</strong>
+                <p className="mt-1 text-sm leading-6 text-text-muted">{text}</p>
             </div>
         </div>
     );

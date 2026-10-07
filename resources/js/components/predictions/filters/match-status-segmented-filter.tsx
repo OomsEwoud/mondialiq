@@ -47,7 +47,7 @@ export default function MatchStatusSegmentedFilter({
                             className={cn(
                                 'flex h-10 min-w-0 items-center justify-center rounded-xl px-3 text-center text-sm leading-tight font-bold transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
                                 selected
-                                    ? 'bg-secondary text-white shadow-md'
+                                    ? 'bg-secondary text-foreground shadow-md'
                                     : 'text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm',
                             )}
                         >

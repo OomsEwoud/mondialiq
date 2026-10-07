@@ -46,8 +46,8 @@ export default function AiProbabilityCard({
                     className={cn(
                         'h-2 rounded-full transition-all',
                         tone === 'home' && 'bg-muted',
-                        tone === 'draw' && 'bg-slate-500',
-                        tone === 'away' && 'bg-slate-400',
+                        tone === 'draw' && 'bg-text-muted',
+                        tone === 'away' && 'bg-text-muted',
                     )}
                     style={{ width: `${width}%` }}
                 />

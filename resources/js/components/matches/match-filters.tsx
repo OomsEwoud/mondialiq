@@ -66,7 +66,7 @@ export default function MatchFilters({
 
     return (
         <section aria-label="Wedstrijden filteren" className="mb-6">
-            <div className="rounded-lg border border-[#262c29] bg-[#111513] p-1">
+            <div className="rounded-lg border border-border-subtle bg-surface p-1">
                 <MatchStatusTabs
                     selected={selectedMatchStatus}
                     onChange={handleMatchStatusChange}
@@ -83,10 +83,10 @@ export default function MatchFilters({
                 <button
                     type="button"
                     className={cn(
-                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-[#171c19] focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none sm:ml-auto',
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 rounded-md border px-3 text-sm font-semibold transition-colors duration-200 hover:bg-surface-interactive focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:ml-auto',
                         showFilters || advancedFilterCount
-                            ? 'border-[#4b775d] bg-[#17251d] text-[#9ecbad]'
-                            : 'border-[#343d37] bg-[#0d110f] text-[#a8b0ab] hover:border-[#536159] hover:text-white',
+                            ? 'border-border-strong bg-brand-subtle text-positive'
+                            : 'border-border-strong bg-surface text-text-secondary hover:border-border-strong hover:text-foreground',
                     )}
                     aria-expanded={showFilters}
                     aria-controls="match-extra-filters"
@@ -98,7 +98,7 @@ export default function MatchFilters({
                             <span>Filters</span>
                             <span
                                 aria-label={`${advancedFilterCount} actief`}
-                                className="text-xs text-[#9ecbad] tabular-nums"
+                                className="text-xs text-positive tabular-nums"
                             >
                                 · {advancedFilterCount}
                             </span>
@@ -117,7 +117,7 @@ export default function MatchFilters({
                     <button
                         type="button"
                         onClick={onClear}
-                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-[#949d97] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         <X className="size-3.5" aria-hidden="true" />
                         Filters wissen
@@ -141,7 +141,7 @@ export default function MatchFilters({
                         showFilters ? 'overflow-visible' : 'overflow-hidden',
                     )}
                 >
-                    <div className="grid gap-4 border-t border-[#262c29] pt-5 sm:max-w-2xl sm:grid-cols-2">
+                    <div className="grid gap-4 border-t border-border-subtle pt-5 sm:max-w-2xl sm:grid-cols-2">
                         <RoundFilter
                             rounds={rounds}
                             selected={selected.round}

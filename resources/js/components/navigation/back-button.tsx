@@ -10,10 +10,10 @@ type Props = {
 };
 
 const backButtonClassName =
-    'group inline-flex h-10 items-center gap-2 rounded-md border border-[#343d37] bg-[#111513] px-3 text-sm font-bold text-[#b8bfba] transition-colors hover:border-[#536159] hover:bg-[#1a211d] hover:text-white focus:ring-2 focus:ring-[#57ad78] focus:outline-none';
+    'group inline-flex h-10 items-center gap-2 rounded-md border border-border-strong bg-surface px-3 text-sm font-bold text-text-secondary transition-colors hover:border-border-strong hover:bg-surface-interactive hover:text-foreground focus:ring-2 focus:ring-ring focus:outline-none';
 
 const backButtonIconClassName =
-    'flex size-6 items-center justify-center rounded-sm bg-[#1b211e] text-[#70b98e] transition-colors group-hover:bg-[#223129] group-hover:text-[#9fc9af]';
+    'flex size-6 items-center justify-center rounded-sm bg-muted text-primary transition-colors group-hover:bg-[#223129] group-hover:text-positive';
 
 export default function BackButton({
     className,

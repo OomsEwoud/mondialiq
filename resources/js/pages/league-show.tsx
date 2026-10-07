@@ -66,14 +66,14 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
             <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
                 <section
                     className={cn(
-                        'relative overflow-hidden rounded-2xl p-4 text-white shadow-sm ring-1 sm:p-6 lg:p-8',
+                        'relative overflow-hidden rounded-2xl p-4 text-foreground shadow-sm ring-1 sm:p-6 lg:p-8',
                         getLeagueThemeBannerClass(league.accentColor),
                     )}
                 >
                     <Link
                         href={social.url()}
                         className={cn(
-                            'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-slate-700/50 hover:text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none',
+                            'inline-flex w-fit items-center gap-2 rounded-lg border border-border/50 bg-muted/50 px-3.5 py-2 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-surface-interactive/50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
                             theme.buttonRing,
                         )}
                     >
@@ -99,7 +99,7 @@ export default function LeagueShow({ league }: LeagueDetailsPageProps) {
                             >
                                 Prediction Group
                             </p>
-                            <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                            <h1 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">
                                 {league.name}
                             </h1>
                             {league.description && (

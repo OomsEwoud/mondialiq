@@ -96,9 +96,9 @@ export default function PredictionInfoGrid() {
                             <div className="mb-4 flex items-start justify-between gap-3">
                                 <span
                                     className={cn(
-                                        'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-sm',
+                                        'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-foreground shadow-sm',
                                         item.featured
-                                            ? 'bg-cyan-600'
+                                            ? 'bg-primary'
                                             : 'bg-muted',
                                     )}
                                 >

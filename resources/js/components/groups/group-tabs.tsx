@@ -26,7 +26,7 @@ export default function GroupTabs({
     ];
 
     return (
-        <div className="overflow-x-auto rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-2.5 shadow-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="overflow-x-auto rounded-lg border border-border-subtle bg-surface p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <div
                 role="group"
                 aria-label="Competitiegroepen"
@@ -42,10 +42,10 @@ export default function GroupTabs({
                             onClick={() => onChange(tab.id)}
                             aria-pressed={isActive}
                             className={[
-                                'h-11 rounded-2xl border px-3 text-sm font-bold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
+                                'h-11 rounded-md border px-3 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none',
                                 isActive
-                                    ? 'border-slate-900 bg-secondary text-white shadow-md'
-                                    : 'border-transparent bg-card text-muted-foreground hover:border-border hover:bg-accent',
+                                    ? 'border-primary/30 bg-brand-subtle text-foreground'
+                                    : 'border-transparent bg-surface-elevated text-muted-foreground hover:bg-surface-interactive hover:text-foreground',
                             ].join(' ')}
                         >
                             {tab.label}

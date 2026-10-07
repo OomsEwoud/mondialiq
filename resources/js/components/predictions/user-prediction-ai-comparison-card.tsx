@@ -26,7 +26,7 @@ export default function UserPredictionAiComparisonCard({ matchId }: Props) {
                 </div>
                 <Button
                     asChild
-                    className="justify-center bg-secondary text-white shadow-sm"
+                    className="justify-center bg-secondary text-foreground shadow-sm"
                 >
                     <Link href={showAiPrediction.url(matchId)}>
                         View AI report

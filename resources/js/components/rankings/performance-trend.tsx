@@ -15,11 +15,11 @@ export default function PerformanceTrend({
             <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
                 <h2
                     id="performance-trend-heading"
-                    className="text-xl font-bold tracking-tight text-white"
+                    className="text-xl font-bold tracking-tight text-foreground"
                 >
                     Prestaties door de tijd
                 </h2>
-                <p className="text-xs text-[#89928c]">
+                <p className="text-xs text-muted-foreground">
                     7 en 30 dagen · tegenover de voorgaande periode
                 </p>
             </div>
@@ -28,25 +28,25 @@ export default function PerformanceTrend({
                     {periods.map((period) => (
                         <div
                             key={period.days}
-                            className="border-t border-[#262c29] pt-5"
+                            className="border-t border-border-subtle pt-5"
                         >
-                            <dt className="text-sm font-semibold text-[#949d97]">
+                            <dt className="text-sm font-semibold text-muted-foreground">
                                 Laatste {period.days} dagen
                             </dt>
-                            <dd className="mt-2 text-3xl font-bold text-white tabular-nums">
+                            <dd className="mt-2 text-3xl font-bold text-foreground tabular-nums">
                                 {rankingPercentage(period.current.accuracy)}
                             </dd>
-                            <dd className="mt-2 text-xs leading-5 text-[#89928c]">
+                            <dd className="mt-2 text-xs leading-5 text-muted-foreground">
                                 {period.current.correctCount} /{' '}
                                 {period.current.evaluatedCount} juist
                             </dd>
-                            <dd className="mt-3 text-sm font-semibold text-[#c5ccc7] tabular-nums">
+                            <dd className="mt-3 text-sm font-semibold text-text-secondary tabular-nums">
                                 {rankingChange(period.change)}{' '}
-                                <span className="font-normal text-[#89928c]">
+                                <span className="font-normal text-muted-foreground">
                                     vs. {period.days} dagen daarvoor
                                 </span>
                             </dd>
-                            <dd className="mt-1 text-xs text-[#89928c]">
+                            <dd className="mt-1 text-xs text-muted-foreground">
                                 Vorige periode:{' '}
                                 {rankingPercentage(period.previous.accuracy)} ·{' '}
                                 {period.previous.evaluatedCount} beoordeeld
@@ -54,8 +54,8 @@ export default function PerformanceTrend({
                         </div>
                     ))}
                 </dl>
-                <div className="min-w-0 border-t border-[#262c29] pt-5">
-                    <h3 className="text-sm font-semibold text-[#949d97]">
+                <div className="min-w-0 border-t border-border-subtle pt-5">
+                    <h3 className="text-sm font-semibold text-muted-foreground">
                         Dagelijkse nauwkeurigheid
                     </h3>
                     {hasResults ? (
@@ -75,8 +75,8 @@ export default function PerformanceTrend({
                                             aria-hidden="true"
                                             className={
                                                 day.accuracy === null
-                                                    ? 'w-full border-b border-dashed border-[#343d37]'
-                                                    : 'w-full rounded-t-sm bg-[#6fae88]'
+                                                    ? 'w-full border-b border-dashed border-border-strong'
+                                                    : 'w-full rounded-t-sm bg-primary'
                                             }
                                             style={
                                                 day.accuracy === null
@@ -89,7 +89,7 @@ export default function PerformanceTrend({
                                     </li>
                                 ))}
                             </ol>
-                            <div className="mt-3 flex justify-between text-xs text-[#89928c]">
+                            <div className="mt-3 flex justify-between text-xs text-muted-foreground">
                                 <time dateTime={daily[0]?.date}>
                                     {daily[0]?.date}
                                 </time>
@@ -97,14 +97,14 @@ export default function PerformanceTrend({
                             </div>
                         </>
                     ) : (
-                        <p className="mt-5 text-sm leading-6 text-[#949d97]">
+                        <p className="mt-5 text-sm leading-6 text-muted-foreground">
                             Geen beoordeelde voorspellingen in de laatste 30
                             kalenderdagen.
                         </p>
                     )}
                 </div>
             </div>
-            <p className="mt-4 text-xs leading-5 text-[#89928c]">
+            <p className="mt-4 text-xs leading-5 text-muted-foreground">
                 Deze vaste vensters gebruiken je competitie-, team-, type- en
                 confidencefilters. De periodefilter bepaalt de overige secties.
                 Dagen zonder resultaten tellen niet als 0%.

@@ -76,7 +76,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                 </div>
             </CardHeader>
             <CardContent className="p-0">
-                <div className="divide-y divide-slate-200">
+                <div className="divide-y divide-border-subtle">
                     {members.map((member) => (
                         <div
                             key={member.id}
@@ -134,7 +134,7 @@ export default function LeagueMembersCard({ members, accentColor }: Props) {
                                             </Badge>
                                         )}
                                         {member.isSystemUser && (
-                                            <Badge className="rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-white shadow-none">
+                                            <Badge className="rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-foreground shadow-none">
                                                 <Bot className="size-3" />
                                                 AI
                                             </Badge>

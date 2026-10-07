@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/forms/input';
 import { cn } from '@/lib/utils';
 
 const passwordToggleButtonClass =
-    'absolute inset-y-1 right-1 flex w-10 items-center justify-center rounded-lg text-[#68706b] transition-colors hover:bg-[#202622] hover:text-white focus-visible:bg-[#202622] focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#36a96b]/30 focus-visible:outline-none active:bg-[#252c28]';
+    'absolute inset-y-1 right-1 flex w-10 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-interactive hover:text-foreground focus-visible:bg-surface-interactive focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-none active:bg-surface-interactive';
 
 const PasswordInput = forwardRef<
     HTMLInputElement,

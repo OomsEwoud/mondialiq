@@ -22,11 +22,11 @@ const recentFormResults: Record<
 > = {
     W: {
         label: 'Gewonnen',
-        className: 'border-[#355642] bg-[#20352a] text-[#a6d7b7]',
+        className: 'border-[#355642] bg-brand-subtle text-positive',
     },
     D: {
         label: 'Gelijkgespeeld',
-        className: 'border-[#3b423e] bg-[#252b28] text-[#c2c9c4]',
+        className: 'border-[#3b423e] bg-[#252b28] text-text-secondary',
     },
     L: {
         label: 'Verloren',
@@ -66,13 +66,13 @@ export default function CompetitionPage(props: CompetitionPageProps) {
             />
             <Link
                 href={CompetitionsController.url()}
-                className="mb-7 inline-flex min-h-10 items-center gap-2 text-sm font-medium text-[#949d97] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                className="mb-7 inline-flex min-h-10 items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >
                 <ArrowLeft aria-hidden="true" className="size-4" />
                 Alle competities
             </Link>
-            <header className="mb-8 flex flex-wrap items-center gap-4 border-b border-[#343b37] pb-7 sm:gap-5">
-                <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-[#f3f4f1] p-2.5 sm:size-16">
+            <header className="mb-8 flex flex-wrap items-center gap-4 border-b border-border-strong pb-7 sm:gap-5">
+                <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-crest-surface p-2.5 sm:size-16">
                     <ImageWithFallback
                         src={competition.logoUrl ?? undefined}
                         alt=""
@@ -80,13 +80,13 @@ export default function CompetitionPage(props: CompetitionPageProps) {
                     />
                 </span>
                 <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
+                    <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
                         Competitie
                     </p>
-                    <h1 className="mt-1 text-2xl font-black tracking-[-0.04em] text-white sm:text-3xl">
+                    <h1 className="mt-1 text-2xl font-black tracking-[-0.04em] text-foreground sm:text-3xl">
                         {competition.name}
                     </h1>
-                    <p className="mt-2 text-sm text-[#949d97]">
+                    <p className="mt-2 text-sm text-muted-foreground">
                         {[
                             competition.country,
                             competition.season
@@ -97,10 +97,10 @@ export default function CompetitionPage(props: CompetitionPageProps) {
                             .join(' · ') || 'Competitie'}
                     </p>
                 </div>
-                <div className="flex w-full flex-wrap gap-x-6 gap-y-2 text-xs text-[#949d97] sm:w-auto sm:justify-end">
+                <div className="flex w-full flex-wrap gap-x-6 gap-y-2 text-xs text-muted-foreground sm:w-auto sm:justify-end">
                     {competition.teamsCount && (
                         <span>
-                            <strong className="font-semibold text-[#daddd9] tabular-nums">
+                            <strong className="font-semibold text-foreground tabular-nums">
                                 {competition.teamsCount}
                             </strong>{' '}
                             teams
@@ -108,7 +108,7 @@ export default function CompetitionPage(props: CompetitionPageProps) {
                     )}
                     {competition.currentRound && (
                         <span>
-                            <strong className="font-semibold text-[#daddd9]">
+                            <strong className="font-semibold text-foreground">
                                 {competition.currentRound}
                             </strong>
                         </span>
@@ -196,7 +196,7 @@ function Overview({
         teams.length === 0
     ) {
         return (
-            <p className="border-y border-[#262c29] py-8 text-sm text-[#949d97]">
+            <p className="border-y border-border-subtle py-8 text-sm text-muted-foreground">
                 Wedstrijdgegevens voor deze competitie zijn nog niet
                 beschikbaar.
             </p>
@@ -251,20 +251,20 @@ function Overview({
                 {aiFixtures.length > 0 && (
                     <section aria-labelledby="ai-heading">
                         <SectionHeading id="ai-heading" title="AI-analyses" />
-                        <ul className="divide-y divide-[#262c29]">
+                        <ul className="divide-y divide-border-subtle">
                             {aiFixtures.slice(0, 3).map((fixture) => (
                                 <li key={fixture.id}>
                                     <Link
                                         href={PredictionDetailsController[
                                             '/predictions/{fixture}/ai'
                                         ].url(fixture.id)}
-                                        className="flex min-h-14 items-center justify-between gap-4 py-3 text-sm text-[#daddd9] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                                        className="flex min-h-14 items-center justify-between gap-4 py-3 text-sm text-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                                     >
                                         <span className="min-w-0 truncate">
                                             {fixture.homeTeam} –{' '}
                                             {fixture.awayTeam}
                                         </span>
-                                        <span className="flex shrink-0 items-center gap-2 text-xs text-[#9ecbad]">
+                                        <span className="flex shrink-0 items-center gap-2 text-xs text-positive">
                                             Bekijk analyse
                                             <ArrowUpRight
                                                 aria-hidden="true"
@@ -308,7 +308,7 @@ function Overview({
                                 />
                             }
                         />
-                        <p className="border-b border-[#262c29] py-4 text-sm text-[#949d97]">
+                        <p className="border-b border-border-subtle py-4 text-sm text-muted-foreground">
                             {teams.length} teams in deze competitie
                         </p>
                     </section>
@@ -330,7 +330,7 @@ function Statistics({
                     <div className="overflow-x-auto">
                         <table className="w-full min-w-[340px] text-sm">
                             <thead>
-                                <tr className="border-b border-[#343b37] text-[10px] font-semibold tracking-wide text-[#7f8882] uppercase">
+                                <tr className="border-b border-border-strong text-[10px] font-semibold tracking-wide text-text-muted uppercase">
                                     <th className="py-3 text-left">Speler</th>
                                     <th className="w-14 py-3 text-right">G</th>
                                     <th className="w-14 py-3 text-right">A</th>
@@ -341,25 +341,25 @@ function Statistics({
                                 {topScorers.map((scorer) => (
                                     <tr
                                         key={scorer.id}
-                                        className="border-b border-[#262c29] last:border-0"
+                                        className="border-b border-border-subtle last:border-0"
                                     >
-                                        <td className="py-3 font-medium text-[#daddd9]">
+                                        <td className="py-3 font-medium text-foreground">
                                             {scorer.name}
                                         </td>
-                                        <td className="py-3 text-right font-bold text-white tabular-nums">
+                                        <td className="py-3 text-right font-bold text-foreground tabular-nums">
                                             {scorer.goals}
                                         </td>
-                                        <td className="py-3 text-right text-[#949d97] tabular-nums">
+                                        <td className="py-3 text-right text-muted-foreground tabular-nums">
                                             {scorer.assists}
                                         </td>
-                                        <td className="py-3 text-right text-[#949d97] tabular-nums">
+                                        <td className="py-3 text-right text-muted-foreground tabular-nums">
                                             {scorer.appearances}
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <p className="mt-3 text-[11px] text-[#737c76]">
+                        <p className="mt-3 text-[11px] text-text-muted">
                             Goals · assists · wedstrijden
                         </p>
                     </div>
@@ -371,14 +371,14 @@ function Statistics({
                         id="team-statistics-heading"
                         title="Teamstatistieken"
                     />
-                    <ul className="divide-y divide-[#262c29]">
+                    <ul className="divide-y divide-border-subtle">
                         {teamStatistics.map((statistic, index) => (
                             <li
                                 key={statistic.teamId ?? index}
                                 className="flex min-h-14 items-center justify-between gap-4 py-3"
                             >
                                 <span className="flex min-w-0 items-center gap-3">
-                                    <span className="w-6 text-xs text-[#737c76] tabular-nums">
+                                    <span className="w-6 text-xs text-text-muted tabular-nums">
                                         {index + 1}
                                     </span>
                                     <ImageWithFallback
@@ -386,12 +386,12 @@ function Statistics({
                                         alt=""
                                         className="size-6 shrink-0 object-contain"
                                     />
-                                    <span className="truncate text-sm font-medium text-[#daddd9]">
+                                    <span className="truncate text-sm font-medium text-foreground">
                                         {statistic.teamName ?? 'Team'}
                                     </span>
                                 </span>
                                 <span className="flex shrink-0 flex-col items-end text-right tabular-nums">
-                                    <span className="text-xs leading-4 font-medium text-[#aeb6b0]">
+                                    <span className="text-xs leading-4 font-medium text-text-secondary">
                                         {statistic.wins} zeges ·{' '}
                                         {statistic.cleanSheets} clean sheets
                                     </span>
@@ -451,10 +451,10 @@ function SectionHeading({
     action?: React.ReactNode;
 }) {
     return (
-        <header className="flex min-h-10 items-center justify-between gap-4 border-b border-[#343b37] pb-3">
+        <header className="flex min-h-10 items-center justify-between gap-4 border-b border-border-strong pb-3">
             <h2
                 id={id}
-                className="text-xs font-semibold tracking-[0.13em] text-[#949d97] uppercase"
+                className="text-xs font-semibold tracking-[0.13em] text-muted-foreground uppercase"
             >
                 {title}
             </h2>
@@ -475,7 +475,7 @@ function TabLink({
     return (
         <Link
             href={CompetitionController.url(competitionId, { query: { tab } })}
-            className="text-xs font-medium text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+            className="text-xs font-medium text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
             {label}
         </Link>

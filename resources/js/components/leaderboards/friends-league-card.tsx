@@ -66,7 +66,7 @@ export default function FriendsLeagueCard({ league }: Props) {
                         >
                             Prediction group
                         </p>
-                        <p className="truncate text-lg font-bold text-white">
+                        <p className="truncate text-lg font-bold text-foreground">
                             {league.name}
                         </p>
                     </div>

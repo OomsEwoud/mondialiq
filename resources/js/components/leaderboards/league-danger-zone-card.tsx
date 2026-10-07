@@ -55,7 +55,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                         <Button
                             type="button"
                             variant="destructive"
-                            className="h-11 w-full rounded-xl bg-red-600 px-5 font-semibold text-white hover:bg-red-700 focus-visible:ring-red-200"
+                            className="h-11 w-full rounded-xl bg-red-600 px-5 font-semibold text-foreground hover:bg-red-700 focus-visible:ring-red-200"
                         >
                             <Trash2 className="size-4" />
                             Delete group
@@ -120,7 +120,7 @@ export default function LeagueDangerZoneCard({ leagueId, leagueName }: Props) {
                                             type="submit"
                                             variant="destructive"
                                             disabled={processing || !canDelete}
-                                            className="rounded-xl bg-red-600 font-semibold text-white hover:bg-red-700 focus-visible:ring-red-200"
+                                            className="rounded-xl bg-red-600 font-semibold text-foreground hover:bg-red-700 focus-visible:ring-red-200"
                                         >
                                             {processing && <Spinner />}
                                             <Trash2 className="size-4" />

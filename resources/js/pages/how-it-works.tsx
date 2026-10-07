@@ -150,7 +150,7 @@ export default function HowItWorks() {
                 <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                     Getting started
                 </p>
-                <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                     How MondialIQ Works
                 </h1>
                 <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
@@ -165,7 +165,7 @@ export default function HowItWorks() {
                             className="rounded-xl border border-border/50 bg-muted/60 p-4 text-left shadow-sm"
                         >
                             <card.icon className="size-5 text-primary" />
-                            <h3 className="mt-2 text-sm font-bold text-white">
+                            <h3 className="mt-2 text-sm font-bold text-foreground">
                                 {card.label}
                             </h3>
                             <p className="mt-1 text-xs leading-5 text-muted-foreground">
@@ -179,7 +179,7 @@ export default function HowItWorks() {
             {/* 2. What is MondialiQ? */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Globe className="size-5" />
                     </span>
                     <div>
@@ -202,7 +202,7 @@ export default function HowItWorks() {
             {/* 3. Match predictions */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Flag className="size-5" />
                     </span>
                     <div>
@@ -245,7 +245,7 @@ export default function HowItWorks() {
             {/* 4. AI predictions */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Brain className="size-5" />
                     </span>
                     <div>
@@ -285,7 +285,7 @@ export default function HowItWorks() {
             <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
                 <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                             <Calculator className="size-5" />
                         </span>
                         <div>
@@ -322,7 +322,7 @@ export default function HowItWorks() {
                                 <span
                                     className={
                                         rule.isMaximum
-                                            ? 'shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-white'
+                                            ? 'shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-foreground'
                                             : 'shrink-0 rounded-full border border-border bg-accent px-3 py-1 text-sm font-bold text-primary'
                                     }
                                 >
@@ -386,7 +386,7 @@ export default function HowItWorks() {
             {/* 6. Prediction states */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Eye className="size-5" />
                     </span>
                     <div>
@@ -421,7 +421,7 @@ export default function HowItWorks() {
             {/* 7. Leaderboards & prediction groups */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Users className="size-5" />
                     </span>
                     <div>
@@ -446,7 +446,7 @@ export default function HowItWorks() {
             {/* 8. Privacy & sharing */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <Shield className="size-5" />
                     </span>
                     <div>
@@ -469,7 +469,7 @@ export default function HowItWorks() {
             {/* 9. Data availability */}
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <CalendarDays className="size-5" />
                     </span>
                     <div>
@@ -525,7 +525,7 @@ export default function HowItWorks() {
                     <div className="flex flex-col gap-2 sm:flex-row">
                         <Link
                             href={matches.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <Flag className="size-4" />
                             View matches

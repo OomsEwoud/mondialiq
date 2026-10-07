@@ -22,7 +22,7 @@ type ContactPageProps = {
 };
 
 const fieldClassName =
-    'h-11 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
+    'h-11 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring';
 const labelClassName =
     'text-xs font-semibold tracking-wide text-muted-foreground uppercase';
 
@@ -146,7 +146,7 @@ export default function Contact({ categories }: ContactPageProps) {
                                             <Textarea
                                                 id="message"
                                                 name="message"
-                                                className="min-h-44 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring"
+                                                className="min-h-44 rounded-lg border-input bg-card text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring"
                                                 placeholder="What did you notice? Include teams, match, page, timing or anything that helps us reproduce it."
                                                 disabled={processing}
                                             />

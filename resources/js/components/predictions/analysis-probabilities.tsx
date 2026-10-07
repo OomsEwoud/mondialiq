@@ -7,7 +7,7 @@ export default function AnalysisProbabilities({ match }: { match: Match }) {
         {
             label: match.homeTeam,
             value: chances?.homeWin,
-            color: 'bg-[#6fae88]',
+            color: 'bg-primary',
         },
         { label: 'Gelijkspel', value: chances?.draw, color: 'bg-[#87958c]' },
         {
@@ -26,7 +26,7 @@ export default function AnalysisProbabilities({ match }: { match: Match }) {
 
     if (!hasProbabilities) {
         return (
-            <p className="text-sm text-[#949d97]">
+            <p className="text-sm text-muted-foreground">
                 Winstkansen nog niet beschikbaar.
             </p>
         );
@@ -36,7 +36,7 @@ export default function AnalysisProbabilities({ match }: { match: Match }) {
         <div>
             <div
                 aria-hidden="true"
-                className="flex h-1.5 gap-0.5 overflow-hidden rounded-full bg-[#262c29]"
+                className="flex h-1.5 gap-0.5 overflow-hidden rounded-full bg-border-subtle"
             >
                 {outcomes.map(({ label, value, color }) => (
                     <span
@@ -59,12 +59,12 @@ export default function AnalysisProbabilities({ match }: { match: Match }) {
                             index === 2 && 'text-right',
                         )}
                     >
-                        <dt className="order-2 text-xs leading-5 break-words text-[#949d97]">
+                        <dt className="order-2 text-xs leading-5 break-words text-muted-foreground">
                             {label}
                         </dt>
-                        <dd className="text-xl font-bold tracking-tight text-[#daddd9] tabular-nums">
+                        <dd className="text-xl font-bold tracking-tight text-foreground tabular-nums">
                             {Math.round(value!)}
-                            <span className="ml-0.5 text-xs font-medium text-[#949d97]">
+                            <span className="ml-0.5 text-xs font-medium text-muted-foreground">
                                 %
                             </span>
                         </dd>

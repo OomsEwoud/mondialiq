@@ -25,17 +25,17 @@ export default function MatchList({ matches, onClear }: Props) {
 
     if (visibleMatches.length === 0) {
         return (
-            <div className="flex min-h-44 flex-col items-center justify-center border-y border-[#262c29] py-6 text-center">
-                <h2 className="text-base font-semibold text-[#f3f4f1]">
+            <div className="flex min-h-44 flex-col items-center justify-center border-y border-border-subtle py-6 text-center">
+                <h2 className="text-base font-semibold text-foreground">
                     Geen wedstrijden gevonden
                 </h2>
-                <p className="mt-2 text-sm text-[#949d97]">
+                <p className="mt-2 text-sm text-muted-foreground">
                     Er zijn geen wedstrijden die overeenkomen met je filters.
                 </p>
                 <button
                     type="button"
                     onClick={onClear}
-                    className="mt-2 min-h-11 rounded-sm text-sm font-semibold text-[#9ecbad] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                    className="mt-2 min-h-11 rounded-sm text-sm font-semibold text-positive hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                 >
                     Filters wissen
                 </button>

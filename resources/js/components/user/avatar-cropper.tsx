@@ -105,7 +105,7 @@ export default function AvatarCropper({
                     <Button
                         type="button"
                         disabled={!croppedAreaPixels}
-                        className="rounded-lg bg-secondary font-semibold text-white shadow-sm hover:bg-muted"
+                        className="rounded-lg bg-secondary font-semibold text-foreground shadow-sm hover:bg-muted"
                         onClick={handleApply}
                     >
                         Use cropped photo

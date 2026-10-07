@@ -57,7 +57,7 @@ export default function AiPredictionScoreCard({ match, score }: Props) {
                 <p className="mt-4 text-5xl font-bold tracking-tight text-foreground tabular-nums sm:text-6xl">
                     {score ?? 'N/A'}
                 </p>
-                <div className="mx-auto mt-4 h-px w-16 bg-cyan-200" />
+                <div className="mx-auto mt-4 h-px w-16 bg-border-strong" />
                 <div className="mt-4 flex justify-center">
                     <PredictionPointsBadge
                         points={prediction?.points ?? null}

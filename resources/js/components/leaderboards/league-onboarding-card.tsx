@@ -115,7 +115,7 @@ export default function LeagueOnboardingCard({
                     <Button
                         asChild
                         className={cn(
-                            'mt-3 h-10 w-full rounded-xl px-4 font-bold text-white sm:w-auto',
+                            'mt-3 h-10 w-full rounded-xl px-4 font-bold text-foreground sm:w-auto',
                             theme.primaryButton,
                             theme.buttonRing,
                         )}

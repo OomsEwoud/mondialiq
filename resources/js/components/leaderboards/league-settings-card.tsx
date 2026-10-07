@@ -62,10 +62,10 @@ type Props = {
 };
 
 const fieldClassName =
-    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring';
+    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring';
 
 const numberFieldClassName =
-    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-cyan-400 focus-visible:ring-ring [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
+    'h-11 w-full rounded-xl border-border bg-card px-3 text-foreground shadow-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none';
 
 export default function LeagueSettingsCard({
     leagueId,
@@ -262,11 +262,11 @@ export default function LeagueSettingsCard({
                                     {/* Live preview */}
                                     <div
                                         className={cn(
-                                            'rounded-2xl border border-white/20 p-5 text-white shadow-sm',
+                                            'rounded-2xl border border-white/20 p-5 text-foreground shadow-sm',
                                             getLeagueThemeBannerClass(accent),
                                         )}
                                     >
-                                        <p className="text-xs font-semibold tracking-wide text-white uppercase">
+                                        <p className="text-xs font-semibold tracking-wide text-foreground uppercase">
                                             Live preview
                                         </p>
                                         <div className="mt-3 flex items-center gap-3">
@@ -281,11 +281,11 @@ export default function LeagueSettingsCard({
                                                 </span>
                                             </div>
                                             <div className="min-w-0">
-                                                <p className="truncate text-lg font-semibold text-white">
+                                                <p className="truncate text-lg font-semibold text-foreground">
                                                     {normalizedName ||
                                                         'Your group'}
                                                 </p>
-                                                <p className="text-sm text-white/80">
+                                                <p className="text-sm text-foreground/80">
                                                     {visibility === 'private'
                                                         ? 'Private prediction group'
                                                         : 'Public prediction group'}
@@ -706,7 +706,7 @@ export default function LeagueSettingsCard({
                                                                         'h-auto flex-col items-stretch justify-start overflow-hidden rounded-xl border-border p-0 text-left hover:bg-muted focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
                                                                         isSelected &&
                                                                             cn(
-                                                                                'border-slate-900/20',
+                                                                                'border-border-strong/20',
                                                                                 'ring-2 ring-offset-2 ring-offset-white',
                                                                                 theme.buttonRing,
                                                                             ),
@@ -905,7 +905,7 @@ export default function LeagueSettingsCard({
                                                                 disabled={
                                                                     processing
                                                                 }
-                                                                className="rounded-xl bg-secondary font-semibold text-white hover:bg-accent"
+                                                                className="rounded-xl bg-secondary font-semibold text-foreground hover:bg-accent"
                                                             >
                                                                 {processing && (
                                                                     <Spinner />
@@ -935,14 +935,14 @@ export default function LeagueSettingsCard({
                                 <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 px-4 py-3 shadow-lg backdrop-blur-sm sm:px-6">
                                     <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
                                         <div className="flex items-center gap-2">
-                                            <span className="size-2 rounded-full bg-cyan-500" />
+                                            <span className="size-2 rounded-full bg-brand-subtle" />
                                             <p className="text-sm font-semibold text-foreground">
                                                 Unsaved changes
                                             </p>
                                         </div>
                                         <Button
                                             disabled={processing || !canSubmit}
-                                            className="h-10 rounded-xl bg-secondary px-6 font-semibold text-white hover:bg-accent focus-visible:ring-ring disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+                                            className="h-10 rounded-xl bg-secondary px-6 font-semibold text-foreground hover:bg-accent focus-visible:ring-ring disabled:border disabled:border-border disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
                                         >
                                             {processing && <Spinner />}
                                             <PencilLine className="size-4" />

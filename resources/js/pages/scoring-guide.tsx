@@ -107,7 +107,7 @@ export default function ScoringGuide() {
                 <p className="text-xs font-semibold tracking-wide text-primary uppercase">
                     Prediction scoring
                 </p>
-                <h1 className="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                <h1 className="mt-2 text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
                     How scoring works
                 </h1>
                 <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-muted-foreground sm:text-base">
@@ -127,7 +127,7 @@ export default function ScoringGuide() {
 
             <section className="mt-5 rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                         <BadgeCheck className="size-5" />
                     </span>
                     <div>
@@ -159,7 +159,7 @@ export default function ScoringGuide() {
             <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,0.75fr)]">
                 <section className="rounded-2xl border border-border bg-gradient-to-b from-card to-card/60 p-5 shadow-sm sm:p-6">
                     <div className="flex items-start gap-3">
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-white shadow-sm">
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-foreground shadow-sm">
                             <Trophy className="size-5" />
                         </span>
                         <div>
@@ -189,7 +189,7 @@ export default function ScoringGuide() {
                                 <span
                                     className={
                                         rule.isMaximum
-                                            ? 'shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-white'
+                                            ? 'shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-foreground'
                                             : 'shrink-0 rounded-full border border-border bg-accent px-3 py-1 text-sm font-bold text-primary'
                                     }
                                 >
@@ -265,7 +265,7 @@ export default function ScoringGuide() {
                                     {example.explanation}
                                 </p>
                             </div>
-                            <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-white">
+                            <span className="shrink-0 rounded-full bg-secondary px-3 py-1 text-sm font-bold text-foreground">
                                 {example.points}/20
                             </span>
                         </article>
@@ -292,7 +292,7 @@ export default function ScoringGuide() {
                     <div className="flex flex-col gap-2 sm:flex-row">
                         <Link
                             href={predictions.url()}
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none sm:w-auto"
                         >
                             <Calculator className="size-4" />
                             Go to predictions

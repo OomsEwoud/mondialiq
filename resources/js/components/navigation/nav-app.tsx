@@ -36,22 +36,22 @@ export default function NavApp({
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
                         className={cn(
-                            'group relative flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#36a96b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d] focus-visible:outline-none md:px-3',
+                            'group relative flex min-h-11 items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none md:px-3',
                             isActive
-                                ? 'bg-[#171c19] text-white md:bg-transparent'
-                                : 'text-[#949d97] hover:bg-[#141916] hover:text-white',
+                                ? 'bg-surface-interactive text-foreground md:bg-transparent'
+                                : 'text-muted-foreground hover:bg-surface-interactive hover:text-foreground',
                         )}
                     >
                         <span
                             className={cn(
-                                'mr-2 h-4 w-0.5 rounded-full bg-[#57ad78] transition-opacity duration-200 md:hidden',
+                                'mr-2 h-4 w-0.5 rounded-full bg-primary transition-opacity duration-200 md:hidden',
                                 isActive ? 'opacity-100' : 'opacity-0',
                             )}
                         />
                         {label}
                         <span
                             className={cn(
-                                'absolute right-3 bottom-0 left-3 hidden h-px rounded-full bg-[#57ad78] transition-opacity duration-200 md:block',
+                                'absolute right-3 bottom-0 left-3 hidden h-px rounded-full bg-primary transition-opacity duration-200 md:block',
                                 isActive
                                     ? 'opacity-90'
                                     : 'opacity-0 group-hover:opacity-50',

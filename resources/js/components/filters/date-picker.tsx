@@ -36,7 +36,7 @@ export default function DatePicker({
     return (
         <div
             ref={ref}
-            className="relative grid min-w-0 gap-2 text-xs font-bold text-[#89928c]"
+            className="relative grid min-w-0 gap-2 text-xs font-bold text-muted-foreground"
         >
             {label}
             <button
@@ -61,7 +61,7 @@ export default function DatePicker({
                         setOpen(false);
                     }
                 }}
-                className="flex h-11 w-full min-w-0 items-center justify-between rounded-md border border-[#343d37] bg-[#0d110f] px-3 text-left text-sm font-semibold text-[#daddd9] transition-colors hover:border-[#536159] focus:border-[#57ad78] focus:ring-2 focus:ring-[#57ad78]/20 focus-visible:outline-none"
+                className="flex h-11 w-full min-w-0 items-center justify-between rounded-md border border-border-strong bg-surface px-3 text-left text-sm font-semibold text-foreground transition-colors hover:border-border-strong focus:border-ring focus:ring-2 focus:ring-ring/20 focus-visible:outline-none"
             >
                 <span>
                     {selected
@@ -72,7 +72,7 @@ export default function DatePicker({
                           })
                         : 'Kies een datum'}
                 </span>
-                <span className="text-xs font-semibold text-[#89928c]">
+                <span className="text-xs font-semibold text-muted-foreground">
                     Kalender
                 </span>
             </button>
@@ -82,7 +82,7 @@ export default function DatePicker({
                     role="dialog"
                     aria-label={`${label} kiezen`}
                     className={cn(
-                        'absolute top-full z-30 mt-2 w-[min(19rem,calc(100vw-2.5rem))] rounded-lg border border-[#343d37] bg-[#141916] p-3 text-[#daddd9] shadow-2xl shadow-black/50',
+                        'absolute top-full z-30 mt-2 w-[min(19rem,calc(100vw-2.5rem))] rounded-lg border border-border-strong bg-surface-interactive p-3 text-foreground shadow-2xl shadow-black/50',
                         align === 'right' ? 'right-0' : 'left-0',
                     )}
                 >
@@ -90,12 +90,12 @@ export default function DatePicker({
                         <button
                             type="button"
                             onClick={prevMonth}
-                            className="inline-flex size-9 items-center justify-center rounded-md border border-[#343d37] text-[#89928c] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="inline-flex size-9 items-center justify-center rounded-md border border-border-strong text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             aria-label="Vorige maand"
                         >
                             <ChevronLeft size={16} aria-hidden="true" />
                         </button>
-                        <span className="text-sm font-semibold text-[#f3f4f1]">
+                        <span className="text-sm font-semibold text-foreground">
                             {formatDate(visibleMonth, {
                                 month: 'long',
                                 year: 'numeric',
@@ -104,14 +104,14 @@ export default function DatePicker({
                         <button
                             type="button"
                             onClick={nextMonth}
-                            className="inline-flex size-9 items-center justify-center rounded-md border border-[#343d37] text-[#89928c] transition-colors hover:bg-[#1b211e] hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="inline-flex size-9 items-center justify-center rounded-md border border-border-strong text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             aria-label="Volgende maand"
                         >
                             <ChevronRight size={16} aria-hidden="true" />
                         </button>
                     </div>
 
-                    <div className="mb-2 grid grid-cols-7 text-center text-xs font-semibold text-[#70b98e] uppercase">
+                    <div className="mb-2 grid grid-cols-7 text-center text-xs font-semibold text-primary uppercase">
                         {['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'].map(
                             (day) => (
                                 <span key={day}>{day}</span>
@@ -147,10 +147,10 @@ export default function DatePicker({
                                     })}
                                     onClick={() => handleSelect(date)}
                                     className={cn(
-                                        'aspect-square rounded-sm text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                                        'aspect-square rounded-sm text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                                         isActive
-                                            ? 'bg-[#edf1ed] text-[#101412]'
-                                            : 'text-[#b8bfba] hover:bg-[#1b211e] hover:text-white',
+                                            ? 'bg-crest-surface text-background'
+                                            : 'text-text-secondary hover:bg-muted hover:text-foreground',
                                         isToday &&
                                             !isActive &&
                                             'ring-1 ring-[#70b98e]',
@@ -162,21 +162,21 @@ export default function DatePicker({
                         })}
                     </div>
 
-                    <div className="mt-3 flex items-center justify-between border-t border-[#29312c] pt-3">
+                    <div className="mt-3 flex items-center justify-between border-t border-border-subtle pt-3">
                         <button
                             type="button"
                             onClick={() => {
                                 onChange('');
                                 setOpen(false);
                             }}
-                            className="text-sm font-medium text-[#89928c] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         >
                             Wis datum
                         </button>
                         <button
                             type="button"
                             onClick={() => setOpen(false)}
-                            className="text-sm font-medium text-[#89928c] transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none"
+                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         >
                             Sluiten
                         </button>

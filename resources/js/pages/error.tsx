@@ -156,7 +156,7 @@ export default function ErrorPage({ status }: ErrorPageProps) {
                     <div className="mx-auto flex h-16 w-full max-w-6xl items-center px-5 sm:px-6">
                         <Link
                             href={home.url()}
-                            className="rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 focus-visible:outline-none"
+                            className="rounded-lg focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none"
                         >
                             <AppLogo textClassName="text-primary" />
                         </Link>

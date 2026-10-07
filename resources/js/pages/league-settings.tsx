@@ -34,7 +34,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <Link
                             href={backHref}
-                            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-secondary/25 px-3.5 py-2 text-sm font-black text-white shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-secondary/35 hover:text-white focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
+                            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/30 bg-secondary/25 px-3.5 py-2 text-sm font-black text-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-white/50 hover:bg-secondary/35 hover:text-foreground focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-950 focus-visible:outline-none"
                         >
                             <ArrowLeft className="size-4" />
                             Back to group
@@ -58,10 +58,10 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             <div className="mb-3 flex size-14 items-center justify-center rounded-2xl border border-white/25 bg-card/20 text-3xl shadow-sm backdrop-blur-sm">
                                 <span aria-hidden="true">{league.icon}</span>
                             </div>
-                            <p className="text-xs font-black tracking-wide text-white uppercase">
+                            <p className="text-xs font-black tracking-wide text-foreground uppercase">
                                 Prediction group settings
                             </p>
-                            <h1 className="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                            <h1 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">
                                 Manage {league.name}
                             </h1>
                             <p
@@ -78,14 +78,14 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                         <div className="flex flex-wrap gap-2 lg:justify-end">
                             <Badge
                                 variant="outline"
-                                className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-foreground shadow-sm"
                             >
                                 <Users className="size-3.5" />
                                 {league.membersCount} {memberLabel}
                             </Badge>
                             <Badge
                                 variant="outline"
-                                className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-foreground shadow-sm"
                             >
                                 {league.visibility === 'private'
                                     ? 'Private group'
@@ -94,7 +94,7 @@ export default function LeagueSettings({ league }: LeagueSettingsPageProps) {
                             {!league.isActive ? (
                                 <Badge
                                     variant="outline"
-                                    className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-white shadow-sm"
+                                    className="rounded-lg border-white/30 bg-card/20 px-3 py-1.5 font-black text-foreground shadow-sm"
                                 >
                                     Invites closed
                                 </Badge>

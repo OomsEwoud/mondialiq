@@ -89,7 +89,7 @@ export default function TwoFactorChallenge() {
                                                         <InputOTPSlot
                                                             key={index}
                                                             index={index}
-                                                            className="size-11 border-[#343b37] bg-[#171c19] text-base text-white first:rounded-l-xl last:rounded-r-xl"
+                                                            className="size-11 border-border-strong bg-surface-interactive text-base text-foreground first:rounded-l-xl last:rounded-r-xl"
                                                         />
                                                     ),
                                                 )}
@@ -108,7 +108,7 @@ export default function TwoFactorChallenge() {
                                 Continue
                             </Button>
 
-                            <div className="text-center text-sm text-[#7f8882]">
+                            <div className="text-center text-sm text-text-muted">
                                 <span>or you can </span>
                                 <button
                                     type="button"

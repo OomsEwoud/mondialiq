@@ -49,9 +49,9 @@ export default function StandingsExplanationModal({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent
                 hideCloseButton
-                className="max-h-[85vh] overflow-y-auto rounded-3xl border border-border bg-card p-0 shadow-xl shadow-slate-200/60 sm:max-w-4xl"
+                className="shadow-black/20/60 max-h-[85vh] overflow-y-auto rounded-3xl border border-border bg-card p-0 shadow-xl sm:max-w-4xl"
             >
-                <DialogClose className="absolute top-5 right-5 z-10 flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:outline-none">
+                <DialogClose className="absolute top-5 right-5 z-10 flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none">
                     <XIcon className="size-5" />
                     <span className="sr-only">Close</span>
                 </DialogClose>

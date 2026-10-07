@@ -13,10 +13,10 @@ export default function TeamHero({ team }: Props) {
     ].filter((item) => item.label);
 
     return (
-        <section className="relative overflow-hidden rounded-xl border border-[#292e2b] bg-[#101211] px-5 py-6 sm:px-8 sm:py-8">
+        <section className="relative overflow-hidden rounded-xl border border-border-subtle bg-surface px-5 py-6 sm:px-8 sm:py-8">
             <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 bg-[radial-gradient(ellipse_at_top_right,rgba(180,190,182,0.045),transparent_68%)]" />
             <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-7">
-                <span className="flex size-24 shrink-0 items-center justify-center rounded-xl border border-[#343d37] bg-[#e9eeea] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.22)] sm:size-32 sm:p-5">
+                <span className="flex size-24 shrink-0 items-center justify-center rounded-xl border border-border-strong bg-[#e9eeea] p-4 shadow-[0_12px_32px_rgba(0,0,0,0.22)] sm:size-32 sm:p-5">
                     <ImageWithFallback
                         src={team.logo}
                         alt={team.name}
@@ -26,7 +26,7 @@ export default function TeamHero({ team }: Props) {
                 <div className="min-w-0">
                     <div className="flex min-w-0 flex-wrap items-end gap-3">
                         <h1
-                            className="min-w-0 text-4xl leading-none font-black tracking-tight text-[#f3f4f1] sm:text-6xl"
+                            className="min-w-0 text-4xl leading-none font-black tracking-tight text-foreground sm:text-6xl"
                             title={team.name}
                         >
                             {team.name}
@@ -41,7 +41,7 @@ export default function TeamHero({ team }: Props) {
                             {metadata.map((item) => (
                                 <span
                                     key={item.label}
-                                    className="inline-flex min-h-8 items-center gap-2 rounded-full border border-[#303432] bg-[#171918]/90 px-3 text-xs font-medium text-[#bdc5bf] [&_svg]:size-3.5 [&_svg]:text-[#858e88]"
+                                    className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border-strong bg-surface-interactive/90 px-3 text-xs font-medium text-text-secondary [&_svg]:size-3.5 [&_svg]:text-muted-foreground"
                                 >
                                     {item.icon}
                                     {item.label}

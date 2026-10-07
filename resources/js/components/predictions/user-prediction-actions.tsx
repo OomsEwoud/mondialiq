@@ -26,7 +26,7 @@ export default function UserPredictionActions({ locked, onEdit }: Props) {
                     'justify-center',
                     locked
                         ? 'bg-accent text-muted-foreground'
-                        : 'bg-secondary text-white shadow-sm',
+                        : 'bg-secondary text-foreground shadow-sm',
                 )}
                 onClick={onEdit}
             >

@@ -43,7 +43,7 @@ export default function PredictionUserActions({
 
                 <Button
                     asChild
-                    className="justify-center rounded-lg bg-secondary px-5 font-semibold text-white shadow-sm hover:bg-muted focus-visible:ring-ring"
+                    className="justify-center rounded-lg bg-secondary px-5 font-semibold text-foreground shadow-sm hover:bg-muted focus-visible:ring-ring"
                 >
                     <Link href={showMyPrediction.url(match.id)}>
                         {viewLabel}

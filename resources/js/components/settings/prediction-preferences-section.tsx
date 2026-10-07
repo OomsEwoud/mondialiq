@@ -76,7 +76,7 @@ function ToggleSwitch({
                 onClick={() => onChange(!checked)}
                 className={cn(
                     'relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors',
-                    checked ? 'bg-cyan-500' : 'bg-slate-300',
+                    checked ? 'bg-brand-subtle' : 'bg-border-strong',
                     disabled && 'cursor-not-allowed opacity-50',
                 )}
             >

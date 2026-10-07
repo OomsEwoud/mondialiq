@@ -92,11 +92,11 @@ export default function MatchLineupPlayerItem({
                                 className="object-cover"
                             />
                         ) : null}
-                        <AvatarFallback className="bg-secondary text-xs font-bold text-white">
+                        <AvatarFallback className="bg-secondary text-xs font-bold text-foreground">
                             {getInitials(player.name)}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-border bg-secondary px-1 text-xs font-bold text-white">
+                    <span className="absolute -right-1 -bottom-1 flex min-w-5 items-center justify-center rounded-full border border-border bg-secondary px-1 text-xs font-bold text-foreground">
                         {player.number ?? '-'}
                     </span>
                 </div>
@@ -111,7 +111,7 @@ export default function MatchLineupPlayerItem({
                         </span>
                         {player.isCaptain ? (
                             <span
-                                className="flex size-5 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-white"
+                                className="flex size-5 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-foreground"
                                 title="Captain"
                                 aria-label="Captain"
                             >

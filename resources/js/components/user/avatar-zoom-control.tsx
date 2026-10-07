@@ -33,7 +33,7 @@ export default function AvatarZoomControl({ onZoomChange, zoom }: Props) {
                     max="3"
                     step="0.01"
                     value={zoom}
-                    className="h-2 w-full cursor-pointer accent-cyan-500"
+                    className="h-2 w-full cursor-pointer accent-primary"
                     onChange={(event) =>
                         onZoomChange(Number(event.target.value))
                     }
