@@ -37,7 +37,10 @@ export default function MatchFilters({
         selected.team ||
         selected.status !== 'all';
     const advancedFilterCount =
-        Number(Boolean(selected.round)) + Number(Boolean(selected.date));
+        Number(Boolean(selected.round)) +
+        Number(Boolean(selected.date)) +
+        Number(Boolean(selected.team)) +
+        Number(selected.status !== 'all');
     const selectedMatchStatus: MatchStatusTabValue | null =
         selected.status !== 'all'
             ? selected.status
@@ -62,15 +65,15 @@ export default function MatchFilters({
     };
 
     return (
-        <section aria-label="Wedstrijden filteren" className="mb-10">
-            <div className="border-b border-[#262c29]">
+        <section aria-label="Wedstrijden filteren" className="mb-6">
+            <div className="rounded-lg border border-[#262c29] bg-[#111513] p-1">
                 <MatchStatusTabs
                     selected={selectedMatchStatus}
                     onChange={handleMatchStatusChange}
                 />
             </div>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
-                <div className="min-w-0 flex-1 sm:max-w-sm">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-3">
+                <div className="min-w-0 flex-1">
                     <TeamFilter
                         teams={teams}
                         selected={selected.team}

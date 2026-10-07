@@ -1,11 +1,6 @@
-import {
-    CalendarDays,
-    CheckCircle2,
-    Clock,
-    Sparkles,
-    Trophy,
-} from 'lucide-react';
+import { CalendarDays, Clock, Trophy } from 'lucide-react';
 import { useState } from 'react';
+import MatchAiAnalysis from '@/components/matches/match-ai-analysis';
 import MatchDetailsPanel from '@/components/matches/match-details-panel';
 import MatchDetailsToggle from '@/components/matches/match-details-toggle';
 import MatchSummary from '@/components/matches/match-summary';
@@ -38,38 +33,7 @@ export default function MatchCard({ match }: Props) {
                         {match.time}
                     </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#7f8882]">
-                    <span
-                        className="flex items-center gap-1.5"
-                        title={
-                            match.hasAiPrediction
-                                ? 'Voorspelling beschikbaar'
-                                : 'Voorspelling volgt'
-                        }
-                    >
-                        <Sparkles
-                            className={`size-3.5 ${match.hasAiPrediction ? 'text-[#70b98e]' : 'text-[#59615c]'}`}
-                        />
-                        {match.hasAiPrediction
-                            ? 'Analyse klaar'
-                            : 'Analyse volgt'}
-                    </span>
-                    <span
-                        className="flex items-center gap-1.5"
-                        title={
-                            match.userPrediction
-                                ? `Voorspeld: ${match.userPrediction.label}`
-                                : 'Nog niet voorspeld'
-                        }
-                    >
-                        <CheckCircle2
-                            className={`size-3.5 ${match.userPrediction ? 'text-[#70b98e]' : 'text-[#59615c]'}`}
-                        />
-                        {match.userPrediction
-                            ? `Jouw keuze: ${match.userPrediction.label}`
-                            : 'Nog geen keuze'}
-                    </span>
-                </div>
+                <MatchAiAnalysis match={match} />
             </div>
             <MatchDetailsToggle
                 expanded={showDetails}

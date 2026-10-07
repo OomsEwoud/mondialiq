@@ -13,6 +13,7 @@ export type MatchStatusFilter = 'all' | 'live' | 'upcoming' | 'played';
 
 export interface MatchPageProps {
     fixtures: {
+        total: number;
         data: Match[];
         links: Array<{ url: string | null; label: string; active: boolean }>;
     };

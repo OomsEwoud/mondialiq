@@ -58,7 +58,7 @@ class MatchesController extends Controller
 
     private function loadPredictionRelations(Builder $fixturesQuery, ?User $user): void
     {
-        $fixturesQuery->with('aiPrediction');
+        $fixturesQuery->with(['aiPrediction', 'league']);
 
         if ($user) {
             $fixturesQuery->with([

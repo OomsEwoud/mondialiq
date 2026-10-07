@@ -52,11 +52,11 @@ export default function TeamFilter({ teams, selected, onChange }: Props) {
                     className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#70b98e]"
                 />
                 <input
-                    aria-label="Zoek een ploeg"
+                    aria-label="Zoek club of land"
                     ref={inputRef}
                     type="search"
                     value={selected}
-                    placeholder="Zoek een ploeg…"
+                    placeholder="Zoek club of land…"
                     onFocus={() => setOpen(true)}
                     onBlur={() => window.setTimeout(() => setOpen(false), 120)}
                     onChange={(e) => {

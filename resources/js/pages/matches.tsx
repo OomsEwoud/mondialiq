@@ -47,57 +47,57 @@ export default function Matches({ fixtures, filterOptions, filters }: Props) {
         <>
             <PageHead
                 title="Wedstrijden"
-                description="Bekijk het programma, analyses en voorspellingen. Filter wedstrijden op ploeg, ronde, datum of status."
+                description="Bekijk aankomende wedstrijden, resultaten en AI-analyses. Filter wedstrijden op ploeg, ronde, datum of status."
             />
 
-            <header className="mb-10 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <p className="text-xs font-semibold tracking-[0.14em] text-[#6fae88] uppercase">
-                        Wedstrijden · Speelschema
+            <div className="mx-auto w-full max-w-5xl">
+                <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                            Wedstrijden
+                        </h1>
+                        <p className="mt-3 text-sm leading-6 text-[#949d97]">
+                            Bekijk aankomende wedstrijden, resultaten en
+                            AI-analyses.
+                        </p>
+                    </div>
+                    <p className="text-xs text-[#949d97]">
+                        <span className="font-semibold text-[#daddd9] tabular-nums">
+                            {fixtures.total}
+                        </span>{' '}
+                        wedstrijden
                     </p>
-                    <h1 className="mt-2 text-3xl font-black tracking-[-0.04em] text-white sm:text-4xl">
-                        Wedstrijden
-                    </h1>
-                    <p className="mt-3 text-sm leading-6 text-[#949d97]">
-                        Bekijk het programma, analyses en voorspellingen.
-                    </p>
-                </div>
-                <p className="text-xs text-[#949d97]">
-                    <span className="font-semibold text-[#daddd9] tabular-nums">
-                        {fixtures.data.length}
-                    </span>{' '}
-                    wedstrijden op deze pagina
-                </p>
-            </header>
+                </header>
 
-            <MatchFilters
-                rounds={filterOptions.rounds}
-                teams={filterOptions.teams}
-                selected={filters}
-                onChange={handleFilterChange}
-                onQuickChange={handleQuickFiltersChange}
-                onClear={() => visit(emptyFilters)}
-            />
-
-            <div
-                aria-busy={loading}
-                className={
-                    loading
-                        ? 'opacity-60 transition-opacity'
-                        : 'transition-opacity'
-                }
-            >
-                <p role="status" className="sr-only">
-                    {loading
-                        ? 'Wedstrijden laden…'
-                        : `${fixtures.data.length} wedstrijden gevonden`}
-                </p>
-                <MatchList
-                    matches={fixtures.data}
+                <MatchFilters
+                    rounds={filterOptions.rounds}
+                    teams={filterOptions.teams}
+                    selected={filters}
+                    onChange={handleFilterChange}
+                    onQuickChange={handleQuickFiltersChange}
                     onClear={() => visit(emptyFilters)}
                 />
+
+                <div
+                    aria-busy={loading}
+                    className={
+                        loading
+                            ? 'opacity-60 transition-opacity'
+                            : 'transition-opacity'
+                    }
+                >
+                    <p role="status" className="sr-only">
+                        {loading
+                            ? 'Wedstrijden laden…'
+                            : `${fixtures.data.length} wedstrijden gevonden`}
+                    </p>
+                    <MatchList
+                        matches={fixtures.data}
+                        onClear={() => visit(emptyFilters)}
+                    />
+                </div>
+                <Pagination links={fixtures.links} />
             </div>
-            <Pagination links={fixtures.links} />
         </>
     );
 }

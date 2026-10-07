@@ -22,7 +22,7 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
         <div
             role="group"
             aria-label="Datum en wedstrijdstatus"
-            className="flex flex-wrap gap-x-5 gap-y-1 sm:gap-x-7"
+            className="grid grid-cols-3 gap-1 sm:grid-cols-6"
         >
             {statusTabs.map((tab) => (
                 <button
@@ -31,9 +31,9 @@ export default function MatchStatusTabs({ selected, onChange }: Props) {
                     aria-pressed={selected === tab.value}
                     onClick={() => onChange(tab.value)}
                     className={cn(
-                        'flex min-h-11 items-center border-b-2 px-0.5 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
+                        'flex min-h-10 items-center justify-center rounded-md border-b-2 px-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-[#57ad78] focus-visible:outline-none',
                         selected === tab.value
-                            ? 'border-[#6fae88] text-[#9ecbad]'
+                            ? 'border-[#6fae88] bg-[#202822] text-[#f3f4f1]'
                             : 'border-transparent text-[#949d97] hover:text-white',
                     )}
                 >

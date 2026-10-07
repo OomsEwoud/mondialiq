@@ -1,6 +1,6 @@
 import MatchDetailMeta from '@/components/matches/match-detail-meta';
 import MatchDetailTeam from '@/components/matches/match-detail-team';
-import MatchPredictionActions from '@/components/matches/prediction/match-prediction-actions';
+import MatchDetailsActionButton from '@/components/matches/prediction/match-details-action-button';
 import type { Match } from '@/types/match';
 
 interface Props {
@@ -38,7 +38,9 @@ export default function MatchDetailsPanel({ match }: Props) {
             </div>
 
             <MatchDetailMeta match={match} />
-            <MatchPredictionActions match={match} />
+            <div className="mt-4 flex justify-end border-t border-border pt-4">
+                <MatchDetailsActionButton matchId={match.id} />
+            </div>
         </div>
     );
 }

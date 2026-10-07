@@ -46,23 +46,28 @@ export default function MatchList({ matches, onClear }: Props) {
     const groups = Map.groupBy(visibleMatches, (match) => match.dateValue);
 
     return (
-        <div className="space-y-10 sm:space-y-12">
+        <div className="space-y-6">
             {Array.from(groups, ([date, dayMatches]) => (
                 <section key={date} aria-labelledby={`match-date-${date}`}>
                     <h2
                         id={`match-date-${date}`}
-                        className="mb-4 text-xs font-semibold tracking-[0.12em] text-[#949d97] uppercase"
+                        className="mb-2 flex items-center justify-between gap-3 px-1 text-sm font-semibold text-foreground"
                     >
                         <time dateTime={date}>
                             {new Intl.DateTimeFormat('nl-BE', {
                                 weekday: 'long',
                                 day: 'numeric',
                                 month: 'long',
-                                year: 'numeric',
                             }).format(new Date(`${date}T00:00:00`))}
                         </time>
+                        <span className="text-xs font-normal text-muted-foreground">
+                            {dayMatches.length}{' '}
+                            {dayMatches.length === 1
+                                ? 'wedstrijd'
+                                : 'wedstrijden'}
+                        </span>
                     </h2>
-                    <div className="divide-y divide-[#262c29] border-y border-[#262c29]">
+                    <div className="grid gap-2">
                         {dayMatches.map((match) => (
                             <MatchRow key={match.id} match={match} />
                         ))}
