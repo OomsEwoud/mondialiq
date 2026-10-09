@@ -628,6 +628,33 @@ class MondialiQDemoSeeder extends Seeder
                         ? 1 + ($playerIndex % 4)
                         : 2 + ($playerIndex % 5);
 
+                    foreach ([1, 2] as $seasonsAgo) {
+                        $appearances = 28 + ($playerIndex % 5) - $seasonsAgo;
+                        $seasonGoals = $goals * (4 - $seasonsAgo);
+                        $seasonAssists = $assists * (4 - $seasonsAgo);
+
+                        PlayerSeasonStat::query()->updateOrCreate(
+                            [
+                                'player_id' => $player->id,
+                                'league_id' => $league->id,
+                                'season' => $this->season() - $seasonsAgo,
+                            ],
+                            [
+                                'appearances' => $appearances,
+                                'total_minutes' => $appearances * (80 - $seasonsAgo * 5),
+                                'position' => $role,
+                                'rating' => 6.6 + (($playerIndex % 10) / 10) - $seasonsAgo / 10,
+                                'total_shots' => $seasonGoals * 4,
+                                'shots_on_target' => $seasonGoals * 2,
+                                'total_goals' => $seasonGoals,
+                                'total_assists' => $seasonAssists,
+                                'total_passes' => $appearances * ($positionIndex === 0 ? 19 : 52),
+                                'key_passes' => $seasonAssists * 3,
+                                'pass_accuracy' => ($positionIndex === 0 ? 76.5 : 88.2) - $seasonsAgo,
+                            ],
+                        );
+                    }
+
                     PlayerSeasonStat::query()->updateOrCreate(
                         [
                             'player_id' => $player->id,

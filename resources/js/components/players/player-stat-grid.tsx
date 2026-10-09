@@ -1,67 +1,53 @@
+import { cn } from '@/lib/utils';
+
 interface StatItem {
     label: string;
     value: number | null;
     suffix?: string;
     highlight?: boolean;
 }
-
 interface Props {
     title: string;
     icon: React.ReactNode;
     items: StatItem[];
 }
-
-export default function PlayerStatGrid({ title, icon, items }: Props) {
-    const visibleItems = items.filter(
-        (item) => item.value !== null && item.value !== undefined,
-    );
+export default function PlayerStatGrid({ title, items }: Props) {
+    const visibleItems = items.filter((item) => item.value !== null);
 
     if (visibleItems.length === 0) {
         return null;
     }
 
     return (
-        <section className="flex h-full flex-col rounded-lg border border-border-subtle bg-surface p-5">
-            <div className="mb-5 flex shrink-0 items-center gap-2 border-b border-border-subtle pb-3 text-primary">
-                {icon}
-                <h3 className="text-xs font-bold text-foreground uppercase">
-                    {title}
-                </h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3 lg:grid-cols-4">
-                {visibleItems.map((item) => {
-                    const displayValue =
-                        typeof item.value === 'number' && item.value % 1 !== 0
-                            ? item.value.toFixed(1)
-                            : String(item.value);
-
-                    return (
-                        <div
-                            key={item.label}
-                            className="flex h-full flex-col justify-between gap-1"
+        <section>
+            <h3 className="mb-3 text-base font-semibold">{title}</h3>
+            <dl className="divide-y divide-border-subtle">
+                {visibleItems.map((item) => (
+                    <div
+                        key={item.label}
+                        className="flex items-baseline justify-between gap-5 py-2.5 text-sm"
+                    >
+                        <dt className="text-muted-foreground">{item.label}</dt>
+                        <dd
+                            className={cn(
+                                'shrink-0 font-medium tabular-nums',
+                                item.value === 0
+                                    ? 'text-muted-foreground'
+                                    : 'text-foreground',
+                            )}
                         >
-                            <p className="text-[11px] leading-tight font-semibold text-text-muted uppercase">
-                                {item.label}
-                            </p>
-                            <p
-                                className={`text-xl font-bold tracking-tight tabular-nums ${
-                                    item.highlight
-                                        ? 'text-positive'
-                                        : 'text-foreground'
-                                }`}
-                            >
-                                {displayValue}
-                                {item.suffix ? (
-                                    <span className="ml-1 text-sm font-medium text-text-muted">
-                                        {item.suffix}
-                                    </span>
-                                ) : null}
-                            </p>
-                        </div>
-                    );
-                })}
-            </div>
+                            {item.value?.toLocaleString('nl-NL', {
+                                maximumFractionDigits: 2,
+                            })}
+                            {item.suffix && (
+                                <span className="ml-1 font-normal text-muted-foreground">
+                                    {item.suffix}
+                                </span>
+                            )}
+                        </dd>
+                    </div>
+                ))}
+            </dl>
         </section>
     );
 }

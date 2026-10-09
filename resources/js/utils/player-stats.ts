@@ -1,5 +1,23 @@
 import type { PlayerDetailsSeasonStat } from '@/types/player-details';
 
+export function perNinety(
+    value: number | null,
+    minutes: number | null,
+): number | null {
+    if (
+        value === null ||
+        minutes === null ||
+        !Number.isFinite(value) ||
+        !Number.isFinite(minutes) ||
+        value < 0 ||
+        minutes <= 0
+    ) {
+        return null;
+    }
+
+    return (value / minutes) * 90;
+}
+
 export function isGoalkeeper(position: string | null): boolean {
     if (!position) {
         return false;
