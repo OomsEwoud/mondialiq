@@ -15,7 +15,10 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/forms/dropdown-menu';
-import { UserMenuContent } from '@/components/user/user-menu-content';
+import {
+    accountMenuClassName,
+    UserMenuContent,
+} from '@/components/user/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { dashboard } from '@/routes';
 
@@ -68,7 +71,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
-                                    className="w-64 rounded-xl border border-border-strong bg-surface p-2 text-foreground shadow-2xl shadow-black/30"
+                                    className={accountMenuClassName}
                                     align="end"
                                 >
                                     <UserMenuContent user={auth.user} />

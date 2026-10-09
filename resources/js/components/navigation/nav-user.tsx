@@ -12,7 +12,10 @@ import {
     useSidebar,
 } from '@/components/ui/navigation/sidebar';
 import { UserInfo } from '@/components/user/user-info';
-import { UserMenuContent } from '@/components/user/user-menu-content';
+import {
+    accountMenuClassName,
+    UserMenuContent,
+} from '@/components/user/user-menu-content';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { login } from '@/routes';
 
@@ -56,7 +59,7 @@ export function NavUser() {
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-64 rounded-xl border-border bg-card p-2 text-foreground shadow-sm"
+                        className={accountMenuClassName}
                         align="end"
                         side={menuSide}
                     >

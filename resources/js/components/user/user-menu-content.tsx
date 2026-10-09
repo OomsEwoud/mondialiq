@@ -16,8 +16,11 @@ type Props = {
 };
 
 const menuItemClassName =
-    'cursor-pointer rounded-lg px-3 py-2 font-semibold text-foreground transition-colors hover:bg-accent hover:text-foreground focus:bg-accent focus:text-foreground';
+    'min-h-10 cursor-pointer rounded-md px-3 py-2 font-medium text-text-secondary transition-colors focus:bg-surface-interactive focus:text-foreground data-[highlighted]:bg-surface-interactive data-[highlighted]:text-foreground';
 const menuLinkClassName = 'flex w-full cursor-pointer items-center gap-2.5';
+
+export const accountMenuClassName =
+    'w-56 max-w-[calc(100vw-2rem)] rounded-xl border-border-subtle bg-surface-elevated p-1.5 text-foreground shadow-xl shadow-black/20';
 
 export function UserMenuContent({ user }: Props) {
     const cleanup = useMobileNavigation();
@@ -29,12 +32,9 @@ export function UserMenuContent({ user }: Props) {
 
     return (
         <>
-            <DropdownMenuLabel className="p-0 font-normal">
-                <div className="rounded-lg bg-muted px-3 py-3">
-                    <UserInfo user={user} showEmail={true} />
-                </div>
+            <DropdownMenuLabel className="flex min-w-0 items-center gap-2.5 px-3 py-3 font-normal [&_[data-slot=avatar]]:size-7 [&_[data-slot=avatar]]:shrink-0 [&_[data-slot=avatar]]:border-0 [&>div]:min-w-0">
+                <UserInfo user={user} />
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="my-2 bg-muted" />
             <DropdownMenuGroup>
                 <DropdownMenuItem asChild className={menuItemClassName}>
                     <Link
@@ -43,8 +43,8 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <UserRound className="size-4 text-primary" />
-                        Profile settings
+                        <UserRound className="size-3.5 text-muted-foreground" />
+                        Profielinstellingen
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className={menuItemClassName}>
@@ -54,8 +54,8 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <BarChart3 className="size-4 text-primary" />
-                        My predictions
+                        <BarChart3 className="size-3.5 text-muted-foreground" />
+                        Mijn voorspellingen
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className={menuItemClassName}>
@@ -65,15 +65,15 @@ export function UserMenuContent({ user }: Props) {
                         prefetch
                         onClick={cleanup}
                     >
-                        <UsersRound className="size-4 text-primary" />
+                        <UsersRound className="size-3.5 text-muted-foreground" />
                         Social
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator className="my-2 bg-muted" />
+            <DropdownMenuSeparator className="mx-3 my-1.5 bg-border-subtle" />
             <DropdownMenuItem
                 asChild
-                className="cursor-pointer rounded-lg px-3 py-2 font-semibold text-muted-foreground transition-colors hover:bg-red-950/40 hover:text-destructive focus:bg-red-950/40 focus:text-destructive"
+                className="min-h-10 cursor-pointer rounded-md px-3 py-2 font-normal text-muted-foreground transition-colors focus:bg-destructive/10 focus:text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive"
             >
                 <Link
                     className={menuLinkClassName}
@@ -82,8 +82,8 @@ export function UserMenuContent({ user }: Props) {
                     onClick={handleLogout}
                     data-test="logout-button"
                 >
-                    <LogOut className="size-4" />
-                    Log out
+                    <LogOut className="size-3.5 text-current" />
+                    Uitloggen
                 </Link>
             </DropdownMenuItem>
         </>
