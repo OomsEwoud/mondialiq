@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Predictions\EditPredictionPreferencesController;
 use App\Http\Controllers\Settings\DeleteAccountController;
 use App\Http\Controllers\Settings\EditAccountController;
 use App\Http\Controllers\Settings\UpdateAccountController;
@@ -8,6 +9,9 @@ use App\Http\Controllers\Settings\UpdatePredictionPreferencesController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('predictions/preferences', EditPredictionPreferencesController::class)
+        ->name('predictions.preferences');
+
     Route::redirect('settings', '/settings/profile');
 
     Route::get('settings/profile', EditAccountController::class)->name('edit-account');

@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 import PageHeader from '@/components/typography/page-header';
 import { predictions } from '@/routes';
+import { preferences } from '@/routes/predictions';
 
 interface Props {
     isPersonal: boolean;
@@ -27,6 +28,14 @@ export default function PredictionPageHeader({
                     aria-label="Meer over voorspellingen"
                     className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2"
                 >
+                    {isPersonal && (
+                        <Link
+                            href={preferences()}
+                            className="inline-flex min-h-11 items-center rounded-sm text-sm font-medium text-text-secondary hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                        >
+                            Voorkeuren
+                        </Link>
+                    )}
                     <Link
                         href={predictions({
                             query: { mode: isPersonal ? 'ai' : 'mine' },

@@ -1,17 +1,13 @@
-import { Eye } from 'lucide-react';
 import EditAccountController from '@/actions/App/Http/Controllers/Settings/EditAccountController';
 import PageHead from '@/components/seo/page-head';
-import PredictionPreferencesSection from '@/components/settings/prediction-preferences-section';
-import SettingsSection from '@/components/settings/settings-section';
 import DeleteUser from '@/components/user/delete-user';
 import TwoFactorSettings from '@/components/user/two-factor-settings';
 import UpdatePasswordForm from '@/components/user/update-password-form';
 import UpdateProfileInformationForm from '@/components/user/update-profile-information-form';
-import type { AccountUser, PredictionPreferences } from '@/types';
+import type { AccountUser } from '@/types';
 
 type Props = {
     accountUser: AccountUser;
-    predictionPreferences: PredictionPreferences;
     mustVerifyEmail: boolean;
     status?: string;
     canManageTwoFactor?: boolean;
@@ -21,7 +17,6 @@ type Props = {
 
 export default function Profile({
     accountUser,
-    predictionPreferences,
     mustVerifyEmail,
     status,
     canManageTwoFactor = false,
@@ -35,8 +30,8 @@ export default function Profile({
     return (
         <>
             <PageHead
-                title="Profile settings"
-                description="Manage your MondialIQ profile, email address, password, two-factor authentication and account safety settings."
+                title="Instellingen"
+                description="Beheer je MondialIQ-profiel en account."
                 noIndex
             />
 
@@ -50,7 +45,16 @@ export default function Profile({
                     status={status}
                 />
 
-                {!isSsoOnly && <UpdatePasswordForm />}
+                {!isSsoOnly && (
+                    <details className="group border-t border-border-subtle py-5">
+                        <summary className="cursor-pointer text-sm font-medium">
+                            Wachtwoord wijzigen
+                        </summary>
+                        <div className="pt-5">
+                            <UpdatePasswordForm />
+                        </div>
+                    </details>
+                )}
 
                 {showTwoFactorSection && (
                     <TwoFactorSettings
@@ -58,27 +62,6 @@ export default function Profile({
                         twoFactorEnabled={twoFactorEnabled}
                     />
                 )}
-
-                <SettingsSection
-                    icon={Eye}
-                    eyebrow="Predictions"
-                    title="Prediction Preferences"
-                    description="Control how your predictions are shared across MondialIQ."
-                >
-                    <PredictionPreferencesSection
-                        key={
-                            predictionPreferences.predictions_visibility +
-                            predictionPreferences.default_prediction_visibility +
-                            (predictionPreferences.show_on_leaderboards
-                                ? '1'
-                                : '0') +
-                            (predictionPreferences.allow_group_visibility
-                                ? '1'
-                                : '0')
-                        }
-                        preferences={predictionPreferences}
-                    />
-                </SettingsSection>
 
                 <DeleteUser user={user} />
             </div>

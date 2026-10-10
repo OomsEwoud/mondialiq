@@ -1,5 +1,4 @@
 import { Form } from '@inertiajs/react';
-import { AlertTriangle } from 'lucide-react';
 import { useRef, useState } from 'react';
 import DeleteAccountController from '@/actions/App/Http/Controllers/Settings/DeleteAccountController';
 import PasswordInput from '@/components/auth/password/password-input';
@@ -39,49 +38,36 @@ export default function DeleteUser({ user }: Props) {
 
     return (
         <section className={settingsDangerSectionClassName}>
-            <div className="mb-5 flex gap-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-red-950/40 text-destructive">
-                    <AlertTriangle className="size-5" />
-                </span>
-                <div>
-                    <p className="mb-1 text-xs font-bold tracking-wide text-red-500 uppercase">
-                        Danger zone
-                    </p>
-                    <h2 className="text-xl font-bold tracking-tight text-foreground">
-                        Delete account
-                    </h2>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-                        This permanently deletes your account, predictions and
-                        related data. This cannot be undone.
-                    </p>
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-4 rounded-xl border border-red-200 bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm font-semibold text-red-200">
-                    Only continue if you are completely sure.
+            <div className="mb-4">
+                <h2 className="text-lg font-semibold">Account verwijderen</h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    Verwijder je MondialIQ-account, voorspellingen en
+                    bijbehorende gegevens permanent. Dit kun je niet ongedaan
+                    maken.
                 </p>
+            </div>
+            <div>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button
                             variant="destructive"
                             data-test="delete-user-button"
-                            className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 sm:w-auto"
+                            className="w-full border border-destructive/30 bg-transparent text-destructive shadow-none hover:bg-destructive/10 sm:w-auto"
                             onClick={() => setConfirmationText('')}
                         >
-                            Delete account
+                            Account verwijderen
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="rounded-2xl border-red-100">
+                    <DialogContent className="rounded-xl border-border-subtle">
                         <DialogTitle>
-                            Are you sure you want to delete your account?
+                            Weet je zeker dat je je account wilt verwijderen?
                         </DialogTitle>
                         <DialogDescription>
-                            This permanently deletes your account, predictions
-                            and related data.
+                            Dit verwijdert je account, voorspellingen en
+                            bijbehorende gegevens permanent.
                             {requiresPassword
-                                ? ' Enter your password and type DELETE to confirm.'
-                                : ' Type DELETE to confirm.'}
+                                ? ' Vul je wachtwoord in en typ DELETE om te bevestigen.'
+                                : ' Typ DELETE om te bevestigen.'}
                         </DialogDescription>
 
                         <Form
@@ -102,7 +88,7 @@ export default function DeleteUser({ user }: Props) {
                                                     htmlFor="password"
                                                     className={`sr-only ${settingsLabelClassName}`}
                                                 >
-                                                    Password
+                                                    Wachtwoord
                                                 </Label>
 
                                                 <PasswordInput
@@ -112,7 +98,7 @@ export default function DeleteUser({ user }: Props) {
                                                     className={
                                                         settingsFieldClassName
                                                     }
-                                                    placeholder="Password"
+                                                    placeholder="Wachtwoord"
                                                     autoComplete="current-password"
                                                 />
 
@@ -121,9 +107,10 @@ export default function DeleteUser({ user }: Props) {
                                                 />
                                             </div>
                                         ) : (
-                                            <div className="rounded-xl border border-red-200 bg-red-950/40 p-4 text-sm font-semibold text-red-200">
-                                                This only deletes your MondialIQ
-                                                account. It will not delete your
+                                            <div className="text-sm leading-6 text-muted-foreground">
+                                                Dit verwijdert alleen je
+                                                MondialIQ- account, niet je
+                                                gekoppelde
                                                 {` ${providerAccountLabel}`}
                                             </div>
                                         )}
@@ -135,7 +122,7 @@ export default function DeleteUser({ user }: Props) {
                                                     settingsLabelClassName
                                                 }
                                             >
-                                                Type DELETE to confirm
+                                                Typ DELETE om te bevestigen
                                             </Label>
                                             <Input
                                                 id="delete-confirmation"
@@ -164,7 +151,7 @@ export default function DeleteUser({ user }: Props) {
                                                 }}
                                                 className="w-full rounded-lg font-semibold sm:w-auto"
                                             >
-                                                Cancel
+                                                Annuleren
                                             </Button>
                                         </DialogClose>
 
@@ -177,7 +164,7 @@ export default function DeleteUser({ user }: Props) {
                                             className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                                             data-test="confirm-delete-user-button"
                                         >
-                                            Delete account
+                                            Account verwijderen
                                         </Button>
                                     </DialogFooter>
                                 </>

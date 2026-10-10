@@ -47,12 +47,14 @@ export default function TwoFactorSettings({
     }, [twoFactorEnabled, clearTwoFactorAuthData]);
 
     const twoFactorStatusText = twoFactorEnabled
-        ? 'Your account asks for an authenticator code during login.'
-        : 'Enable 2FA to require an authenticator code during login.';
+        ? 'Bij het inloggen wordt om een code uit je authenticator-app gevraagd.'
+        : 'Voeg bij het inloggen een extra controle met je authenticator-app toe.';
     const twoFactorBadgeClassName = twoFactorEnabled
         ? 'border-emerald-200 bg-emerald-950/40 text-emerald-200'
         : 'border-border bg-muted text-muted-foreground';
-    const twoFactorBadgeLabel = twoFactorEnabled ? 'Enabled' : 'Not enabled';
+    const twoFactorBadgeLabel = twoFactorEnabled
+        ? 'Ingeschakeld'
+        : 'Uitgeschakeld';
 
     const openSetupModal = () => setShowSetupModal(true);
     const closeSetupModal = () => setShowSetupModal(false);
@@ -61,8 +63,8 @@ export default function TwoFactorSettings({
         <SettingsSection
             icon={ShieldCheck}
             eyebrow="Sign-in"
-            title="Two-factor authentication"
-            description="Add an authenticator app check to protect your account."
+            title="Tweestapsverificatie"
+            description="Beveilig je account met een extra inlogcontrole."
         >
             <div className="space-y-5">
                 <div
@@ -97,7 +99,7 @@ export default function TwoFactorSettings({
                                     disabled={processing}
                                     className="w-full rounded-lg bg-red-600 font-semibold text-foreground shadow-sm hover:bg-red-700 sm:w-auto"
                                 >
-                                    Disable 2FA
+                                    2FA uitschakelen
                                 </Button>
                             )}
                         </Form>
@@ -116,7 +118,7 @@ export default function TwoFactorSettings({
                                 className={settingsPrimaryButtonClassName}
                             >
                                 <ShieldCheck />
-                                Continue setup
+                                Instellen voortzetten
                             </Button>
                         ) : (
                             <Form {...enable.form()} onSuccess={openSetupModal}>
@@ -128,7 +130,7 @@ export default function TwoFactorSettings({
                                             settingsPrimaryButtonClassName
                                         }
                                     >
-                                        Enable 2FA
+                                        2FA inschakelen
                                     </Button>
                                 )}
                             </Form>

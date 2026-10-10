@@ -5,6 +5,7 @@ import YourPositionCard from '@/components/leaderboards/your-position-card';
 import PageHead from '@/components/seo/page-head';
 import { Button } from '@/components/ui/forms/button';
 import { matches } from '@/routes';
+import { preferences } from '@/routes/predictions';
 import type { Auth } from '@/types';
 import type { LeaderboardsPageProps } from '@/types/leaderboard';
 
@@ -40,6 +41,9 @@ export default function Social({
                     groups met vrienden.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-3">
+                    <Button asChild variant="ghost">
+                        <Link href={preferences()}>Privacyvoorkeuren</Link>
+                    </Button>
                     <Button asChild variant="outline">
                         <Link href={matches()}>Voorspel een wedstrijd</Link>
                     </Button>

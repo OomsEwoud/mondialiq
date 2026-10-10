@@ -1,9 +1,6 @@
 import { Form, Link } from '@inertiajs/react';
-import { MailWarning, UserRound } from 'lucide-react';
-
 import UpdateAccountController from '@/actions/App/Http/Controllers/Settings/UpdateAccountController';
 import InputError from '@/components/forms/input-error';
-import SettingsSection from '@/components/settings/settings-section';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Label } from '@/components/ui/forms/label';
@@ -12,11 +9,8 @@ import ProfileAvatarField from '@/components/user/profile-avatar-field';
 import { useAvatarUpload } from '@/hooks/use-avatar-upload';
 import { send } from '@/routes/verification';
 import type { AccountUser } from '@/types';
-import {
-    settingsFieldClassName,
-    settingsLabelClassName,
-    settingsPrimaryButtonClassName,
-} from '@/utils/settings-ui';
+import { settingsFieldClassName } from '@/utils/settings-ui';
+import { formatProviderName } from '@/utils/social-provider';
 
 type Props = {
     user: AccountUser;
@@ -25,11 +19,6 @@ type Props = {
     status?: string;
 };
 
-const fieldErrorWrapperClassName = 'sm:min-h-6';
-const fieldErrorClassName = 'leading-5';
-const emailVerificationCardClassName =
-    'rounded-xl border border-amber-200 bg-amber-950/40 p-4';
-
 export default function UpdateProfileInformationForm({
     user,
     isSsoOnly,
@@ -37,30 +26,19 @@ export default function UpdateProfileInformationForm({
     status,
 }: Props) {
     const avatarUpload = useAvatarUpload();
-    const profileGridClassName = isSsoOnly
-        ? 'grid items-start gap-5'
-        : 'grid items-start gap-5 md:grid-cols-2';
 
     return (
         <>
-            <SettingsSection
-                icon={UserRound}
-                eyebrow="Profile"
-                title="Profile information"
-                description={
-                    isSsoOnly
-                        ? 'Keep your display name up to date.'
-                        : 'Keep your name and email address up to date.'
-                }
+            <Form
+                {...UpdateAccountController.form()}
+                options={{ preserveScroll: true }}
+                encType="multipart/form-data"
+                className="space-y-7"
             >
-                <Form
-                    {...UpdateAccountController.form()}
-                    options={{ preserveScroll: true }}
-                    encType="multipart/form-data"
-                    className="space-y-5"
-                >
-                    {({ processing, errors }) => (
-                        <>
+                {({ processing, errors }) => (
+                    <>
+                        <section className="space-y-5 border-t border-border-subtle pt-6">
+                            <h2 className="text-lg font-semibold">Profiel</h2>
                             <ProfileAvatarField
                                 avatarInputRef={avatarUpload.croppedAvatarInput}
                                 error={errors.avatar}
@@ -71,108 +49,93 @@ export default function UpdateProfileInformationForm({
                                 }
                                 user={user}
                             />
-
-                            <div className={profileGridClassName}>
-                                <div className="flex min-w-0 flex-col gap-2">
-                                    <Label
-                                        htmlFor="name"
-                                        className={settingsLabelClassName}
-                                    >
-                                        Name
-                                    </Label>
-                                    <Input
-                                        id="name"
-                                        className={settingsFieldClassName}
-                                        defaultValue={user.name}
-                                        name="name"
-                                        autoComplete="name"
-                                        placeholder="Example User"
-                                    />
-                                    <div className={fieldErrorWrapperClassName}>
-                                        <InputError
-                                            message={errors.name}
-                                            className={fieldErrorClassName}
-                                        />
-                                    </div>
-                                </div>
-
-                                {!isSsoOnly && (
-                                    <div className="flex min-w-0 flex-col gap-2">
-                                        <Label
-                                            htmlFor="email"
-                                            className={settingsLabelClassName}
-                                        >
-                                            Email address
-                                        </Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            className={settingsFieldClassName}
-                                            defaultValue={user.email}
-                                            name="email"
-                                            autoComplete="username"
-                                            placeholder="name@example.com"
-                                        />
-                                        <div
-                                            className={
-                                                fieldErrorWrapperClassName
-                                            }
-                                        >
-                                            <InputError
-                                                message={errors.email}
-                                                className={fieldErrorClassName}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
+                            <div className="space-y-2">
+                                <Label htmlFor="name">Naam</Label>
+                                <Input
+                                    id="name"
+                                    className={settingsFieldClassName}
+                                    defaultValue={user.name}
+                                    name="name"
+                                    autoComplete="name"
+                                />
+                                <InputError message={errors.name} />
                             </div>
-
-                            {needsEmailVerification && (
-                                <div className={emailVerificationCardClassName}>
-                                    <div className="flex gap-3">
-                                        <MailWarning className="mt-0.5 size-5 shrink-0 text-amber-600" />
-                                        <div className="space-y-2">
-                                            <p className="text-sm font-bold text-amber-200">
-                                                Your email address is
-                                                unverified.
-                                            </p>
-                                            <p className="text-sm leading-6 text-amber-200">
-                                                Verify your email to keep all
-                                                account features available.
-                                            </p>
-                                            <Link
-                                                href={send()}
-                                                as="button"
-                                                className="text-sm font-bold text-foreground underline decoration-primary underline-offset-4 transition-colors hover:text-primary"
-                                            >
-                                                Resend verification email
-                                            </Link>
-                                            {status ===
-                                                'verification-link-sent' && (
-                                                <p className="text-sm font-semibold text-green-200">
-                                                    A new verification link has
-                                                    been sent.
-                                                </p>
-                                            )}
-                                        </div>
+                        </section>
+                        <section className="space-y-4 border-t border-border-subtle pt-6">
+                            <h2 className="text-lg font-semibold">Account</h2>
+                            {isSsoOnly ? (
+                                <dl className="space-y-4 text-sm">
+                                    <div>
+                                        <dt className="text-muted-foreground">
+                                            E-mailadres
+                                        </dt>
+                                        <dd className="mt-1 break-all">
+                                            {user.email}
+                                        </dd>
                                     </div>
+                                    <div>
+                                        <dt className="text-muted-foreground">
+                                            Inloggen
+                                        </dt>
+                                        <dd className="mt-1">
+                                            Je logt in via{' '}
+                                            {formatProviderName(
+                                                user.social_provider,
+                                            ) ?? 'je gekoppelde account'}
+                                            . Beheer je inloggegevens bij deze
+                                            aanbieder.
+                                        </dd>
+                                    </div>
+                                </dl>
+                            ) : (
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">E-mailadres</Label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        className={settingsFieldClassName}
+                                        defaultValue={user.email}
+                                        name="email"
+                                        autoComplete="email"
+                                    />
+                                    <InputError message={errors.email} />
                                 </div>
                             )}
-
-                            <div className="flex justify-end">
-                                <Button
-                                    disabled={processing}
-                                    data-test="update-profile-button"
-                                    className={settingsPrimaryButtonClassName}
-                                >
-                                    Save profile
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                </Form>
-            </SettingsSection>
-
+                            {needsEmailVerification && (
+                                <div className="space-y-2 text-sm">
+                                    <p className="text-muted-foreground">
+                                        Je e-mailadres is nog niet bevestigd.
+                                    </p>
+                                    <Link
+                                        href={send()}
+                                        as="button"
+                                        className="text-primary underline underline-offset-4"
+                                    >
+                                        Verificatiemail opnieuw versturen
+                                    </Link>
+                                    {status === 'verification-link-sent' && (
+                                        <p
+                                            role="status"
+                                            className="text-primary"
+                                        >
+                                            Een nieuwe verificatielink is
+                                            verstuurd.
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+                        </section>
+                        <div className="flex justify-end">
+                            <Button
+                                disabled={processing}
+                                data-test="update-profile-button"
+                            >
+                                Wijzigingen opslaan
+                            </Button>
+                        </div>
+                    </>
+                )}
+            </Form>
             <AvatarCropper
                 fileName={avatarUpload.selectedAvatarName}
                 imageSrc={avatarUpload.cropperImage}

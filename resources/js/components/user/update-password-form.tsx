@@ -25,8 +25,8 @@ export default function UpdatePasswordForm() {
         <SettingsSection
             icon={KeyRound}
             eyebrow="Password"
-            title="Update password"
-            description="Use at least 8 characters and avoid reused passwords."
+            title="Wachtwoord"
+            description="Gebruik minimaal 8 tekens en een uniek wachtwoord."
         >
             <Form
                 {...UpdatePasswordController.form()}
@@ -56,7 +56,7 @@ export default function UpdatePasswordForm() {
                                     htmlFor="current_password"
                                     className={settingsLabelClassName}
                                 >
-                                    Current password
+                                    Huidig wachtwoord
                                 </Label>
                                 <PasswordInput
                                     id="current_password"
@@ -79,7 +79,7 @@ export default function UpdatePasswordForm() {
                                     htmlFor="password"
                                     className={settingsLabelClassName}
                                 >
-                                    New password
+                                    Nieuw wachtwoord
                                 </Label>
                                 <PasswordInput
                                     id="password"
@@ -102,7 +102,7 @@ export default function UpdatePasswordForm() {
                                     htmlFor="password_confirmation"
                                     className={settingsLabelClassName}
                                 >
-                                    Confirm password
+                                    Bevestig wachtwoord
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -126,7 +126,7 @@ export default function UpdatePasswordForm() {
                                 data-test="update-password-button"
                                 className={settingsPrimaryButtonClassName}
                             >
-                                Save password
+                                Wachtwoord opslaan
                             </Button>
                         </div>
                     </>

@@ -1,13 +1,61 @@
 <?php
 
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
+
+test('account settings no longer receives prediction preferences', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('edit-account'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('settings/profile')
+            ->missing('predictionPreferences'));
+});
+
+test('prediction preferences page requires authentication', function () {
+    $this->get(route('predictions.preferences'))->assertRedirect(route('login'));
+});
+
+test('saved preferences are returned on their new page without changing another user', function () {
+    $user = User::factory()->create();
+    $other = User::factory()->create();
+    $other->userPreference();
+    $values = [
+        'predictions_visibility' => 'private',
+        'default_prediction_visibility' => 'private',
+        'show_on_leaderboards' => false,
+        'allow_group_visibility' => false,
+    ];
+
+    $this->actingAs($user)
+        ->patch(route('update-prediction-preferences'), $values)
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('predictions.preferences'));
+
+    $this->actingAs($user->fresh())->get(route('predictions.preferences'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('predictions/preferences')
+            ->where('predictionPreferences', $values));
+
+    expect($other->fresh()->userPreference()->predictions_visibility)->toBe('public');
+
+    $publicValues = [
+        'predictions_visibility' => 'public',
+        'default_prediction_visibility' => 'public',
+        'show_on_leaderboards' => true,
+        'allow_group_visibility' => true,
+    ];
+
+    $this->patch(route('update-prediction-preferences'), $publicValues)->assertSessionHasNoErrors();
+    $this->get(route('predictions.preferences'))
+        ->assertInertia(fn (Assert $page) => $page->where('predictionPreferences', $publicValues));
+});
 
 test('prediction preferences page receives default preferences', function () {
     $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
-        ->get(route('edit-account'));
+        ->get(route('predictions.preferences'));
 
     $response->assertOk();
 
@@ -35,7 +83,7 @@ test('prediction preferences can be updated', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('edit-account'));
+        ->assertRedirect(route('predictions.preferences'));
 
     $user->refresh();
     $preference = $user->userPreference();

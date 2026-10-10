@@ -22,6 +22,6 @@ class UpdatePredictionPreferencesController extends Controller
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Prediction preferences saved.')]);
 
-        return to_route('edit-account');
+        return to_route('predictions.preferences');
     }
 }
