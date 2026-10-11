@@ -55,6 +55,10 @@ class TeamStatisticsService
             return true;
         }
 
+        if ($existing->statistics_date?->isBefore(today('UTC')) && ! empty($existing->raw_data)) {
+            return false;
+        }
+
         return $existing->fetched_at->lt($this->refreshThreshold($hasFixtureToday));
     }
 

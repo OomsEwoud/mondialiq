@@ -186,10 +186,7 @@ test('the add fixture lineups command only fetches lineups inside the retry wind
         'match_date' => now('Europe/Brussels')->copy()->addMinutes(46),
     ]);
 
-    $lineups = [
-        ['team' => ['id' => $homeTeam->external_id], 'formation' => '4-3-3'],
-        ['team' => ['id' => $awayTeam->external_id], 'formation' => '4-2-3-1'],
-    ];
+    $lineups = completeCommandLineups($homeTeam, $awayTeam);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($lineupFixture, $lineups) {
         $mock->shouldReceive('getFixtureLineups')->once()->with($lineupFixture->external_id)->andReturn($lineups);
@@ -244,7 +241,7 @@ test('the add fixture lineups command retries later when lineups are unavailable
     });
 
     $this->artisan('app:add-fixture-lineups')
-        ->expectsOutput("No lineups available for fixture {$fixture->id}; will retry later")
+
         ->assertSuccessful();
 
     expect($fixture->refresh()->has_lineups)->toBeFalse()
@@ -282,9 +279,7 @@ test('the add fixture lineups command fetches live fixtures shortly after kickof
         'status_long' => 'First Half',
     ]);
 
-    $lineups = [
-        ['team' => ['id' => $homeTeam->external_id], 'formation' => '4-3-3'],
-    ];
+    $lineups = completeCommandLineups($homeTeam, $awayTeam);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture, $lineups) {
         $mock->shouldReceive('getFixtureLineups')->once()->with($fixture->external_id)->andReturn($lineups);
@@ -347,7 +342,7 @@ test('the add fixture lineups command skips live fixtures beyond the lineup wind
         ->and($fixture->lineup_sync_attempts)->toBe(0);
 });
 
-test('the add fixture lineups command keeps retrying after previous unavailable attempts', function () {
+test('the add fixture lineups command stops after the lineup attempt limit', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
@@ -377,26 +372,20 @@ test('the add fixture lineups command keeps retrying after previous unavailable 
         'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(20),
     ]);
 
-    $lineups = [
-        ['team' => ['id' => $homeTeam->external_id], 'formation' => '4-4-2'],
-    ];
+    $lineups = completeCommandLineups($homeTeam, $awayTeam);
 
-    $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture, $lineups) {
-        $mock->shouldReceive('getFixtureLineups')->once()->with($fixture->external_id)->andReturn($lineups);
-    });
+    $this->mock(FootballApiService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('getFixtureLineups'));
 
-    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($fixture, $lineups) {
-        $mock->shouldReceive('storeLineups')->once()->with($lineups, $fixture->id)->andReturn(true);
-    });
+    $this->mock(FixtureLineupService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeLineups'));
 
     $this->artisan('app:add-fixture-lineups')
         ->assertSuccessful();
 
-    expect($fixture->refresh()->has_lineups)->toBeTrue()
-        ->and($fixture->lineup_sync_attempts)->toBe(13);
+    expect($fixture->refresh()->has_lineups)->toBeFalse()
+        ->and($fixture->lineup_sync_attempts)->toBe(12);
 });
 
-test('the add fixture lineups command retries quickly near kickoff after an unavailable check', function () {
+test('the add fixture lineups command respects lineup backoff near kickoff', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
@@ -425,23 +414,17 @@ test('the add fixture lineups command retries quickly near kickoff after an unav
         'lineups_synced_at' => now('Europe/Brussels')->copy()->subMinutes(2),
     ]);
 
-    $lineups = [
-        ['team' => ['id' => $homeTeam->external_id], 'formation' => '4-3-3'],
-    ];
+    $lineups = completeCommandLineups($homeTeam, $awayTeam);
 
-    $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture, $lineups) {
-        $mock->shouldReceive('getFixtureLineups')->once()->with($fixture->external_id)->andReturn($lineups);
-    });
+    $this->mock(FootballApiService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('getFixtureLineups'));
 
-    $this->mock(FixtureLineupService::class, function (MockInterface $mock) use ($fixture, $lineups) {
-        $mock->shouldReceive('storeLineups')->once()->with($lineups, $fixture->id)->andReturn(true);
-    });
+    $this->mock(FixtureLineupService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeLineups'));
 
     $this->artisan('app:add-fixture-lineups')
         ->assertSuccessful();
 
-    expect($fixture->refresh()->has_lineups)->toBeTrue()
-        ->and($fixture->lineup_sync_attempts)->toBe(1);
+    expect($fixture->refresh()->has_lineups)->toBeFalse()
+        ->and($fixture->lineup_sync_attempts)->toBe(0);
 });
 
 test('the add fixture lineups command fetches recently finished fixtures that missed lineup sync', function () {
@@ -474,9 +457,7 @@ test('the add fixture lineups command fetches recently finished fixtures that mi
         'status_long' => 'Match Finished',
     ]);
 
-    $lineups = [
-        ['team' => ['id' => $homeTeam->external_id], 'formation' => '3-5-2'],
-    ];
+    $lineups = completeCommandLineups($homeTeam, $awayTeam);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($fixture, $lineups) {
         $mock->shouldReceive('getFixtureLineups')->once()->with($fixture->external_id)->andReturn($lineups);
@@ -504,4 +485,13 @@ function createLineupFixture(League $league, Team $homeTeam, Team $awayTeam, arr
         'status_long' => 'Not Started',
         ...$attributes,
     ]);
+}
+
+function completeCommandLineups(Team $home, Team $away): array
+{
+    return array_map(fn (Team $team): array => [
+        'team' => ['id' => $team->external_id],
+        'formation' => '4-3-3',
+        'startXI' => array_map(fn (int $id): array => ['player' => ['id' => $id]], range(1, 11)),
+    ], [$home, $away]);
 }

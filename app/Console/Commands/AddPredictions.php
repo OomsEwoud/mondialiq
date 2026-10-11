@@ -37,7 +37,7 @@ class AddPredictions extends Command
         $this->info("{$fixtures->count()} relevante fixtures gevonden.");
 
         $failed = 0;
-        $this->withProgressBar($fixtures, function (Fixture $fixture) use ($failed): void {
+        $this->withProgressBar($fixtures, function (Fixture $fixture) use (&$failed): void {
             try {
                 $this->syncFixturePrediction($fixture);
             } catch (Throwable $exception) {
@@ -63,6 +63,10 @@ class AddPredictions extends Command
     {
         return Fixture::query()
             ->whereNotNull('external_id')
+            ->forConfiguredCompetition()
+            ->notStarted()
+            ->where('match_date', '>', now('Europe/Brussels'))
+            ->where('match_date', '<=', now('Europe/Brussels')->addDays(14))
             ->orderBy('match_date')
             ->get(['id', 'external_id', 'match_date']);
     }
@@ -71,6 +75,9 @@ class AddPredictions extends Command
     {
         $predictionData = $this->api->getFixturePrediction((int) $fixture->external_id);
 
-        $this->service->storeApiPrediction($predictionData, $fixture->id);
+        $fixture->refresh();
+        if ($predictionData !== [] && ! $fixture->hasStarted() && $fixture->isNotStarted()) {
+            $this->service->storeApiPrediction($predictionData, $fixture->id);
+        }
     }
 }

@@ -59,12 +59,12 @@ test('football api service fetches every page for paginated endpoints', function
     );
 });
 
-test('football api service returns an empty array for invalid json responses', function () {
+test('football api service rejects invalid json responses', function () {
     Http::fake([
         '*' => Http::response('invalid-json'),
     ]);
 
-    expect(app(FootballApiService::class)->getCountries())->toBe([]);
+    expect(fn () => app(FootballApiService::class)->getCountries())->toThrow(RuntimeException::class);
 });
 
 test('football api service throws a clear exception for failed responses', function () {

@@ -21,8 +21,8 @@ test('the competition data sync command runs the configured imports in order', f
         ['app:add-odds', ['--days' => 90]],
         ['app:add-predictions', []],
 
-        ['app:import-head-to-head', ['--force' => true]],
-        ['app:import-team-statistics', ['--force' => true]],
+        ['app:import-head-to-head', []],
+        ['app:import-team-statistics', []],
         ['app:add-fixture-lineups', []],
         ['app:add-fixture-data', []],
         ['app:add-fixture-player-stats', []],

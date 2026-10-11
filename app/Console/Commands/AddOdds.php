@@ -85,6 +85,8 @@ class AddOdds extends Command
     {
         return Fixture::query()
             ->whereNotNull('external_id')
+            ->forConfiguredCompetition()
+            ->when(! $this->option('include-recent'), fn ($query) => $query->notStarted())
             ->whereBetween('match_date', [$this->oddsWindowStart(), $this->oddsWindowEnd()])
             ->orderBy('match_date')
             ->get(['id', 'external_id', 'match_date']);

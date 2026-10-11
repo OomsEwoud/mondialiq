@@ -3,6 +3,7 @@
 namespace App\Services\Venue;
 
 use App\Models\Country;
+use App\Models\Fixture;
 use App\Models\Venue;
 use App\Services\Apis\FootballApiService;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -37,6 +38,7 @@ class VenueService
         $countries = Country::query()->pluck('id', 'name');
 
         Venue::query()
+            ->whereIn('id', Fixture::query()->forConfiguredCompetition()->whereNotNull('venue_id')->select('venue_id'))
             ->whereNotNull('external_id')
             ->chunk(100, function (EloquentCollection $venues) use ($countries) {
                 foreach ($venues as $venue) {

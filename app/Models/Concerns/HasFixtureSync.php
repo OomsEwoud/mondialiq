@@ -38,11 +38,17 @@ trait HasFixtureSync
         'INT',
     ];
 
+    public function scopeForConfiguredCompetition(Builder $query): Builder
+    {
+        return $query->where('season', config('services.api_football.season'))
+            ->whereHas('league', fn (Builder $query) => $query->where('external_id', config('services.api_football.league_id')));
+    }
+
     public function scopeRelevantForDataSync(Builder $query): Builder
     {
         $now = now(self::MATCH_TIMEZONE);
         $windowEnd = $now->copy()->addMinutes(self::UPCOMING_DATA_SYNC_WINDOW_MINUTES);
-        $basicDataRetryCutoff = now(self::MATCH_TIMEZONE)->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
+        $basicDataRetryCutoff = now('UTC')->subMinutes(self::BASIC_DATA_RETRY_MINUTES);
         $recentlyStartedStart = $now->copy()->subHours(self::RECENTLY_STARTED_SYNC_WINDOW_HOURS);
 
         return $query->where(function (Builder $query) use ($basicDataRetryCutoff, $now, $windowEnd, $recentlyStartedStart) {
@@ -68,12 +74,7 @@ trait HasFixtureSync
                         ->whereBetween('match_date', [
                             $recentlyStartedStart->format('Y-m-d H:i:s'),
                             $now->format('Y-m-d H:i:s'),
-                        ])
-                        ->where(
-                            fn (Builder $query) => $query
-                                ->whereNull('fixture_basics_synced_at')
-                                ->orWhere('fixture_basics_synced_at', '<=', $basicDataRetryCutoff),
-                        ),
+                        ]),
                 )
                 ->orWhere(fn (Builder $query) => $query->readyForFinalDataSync());
         });
@@ -88,7 +89,10 @@ trait HasFixtureSync
     {
         return $query
             ->lineupSyncWindow()
-            ->where('has_lineups', false);
+            ->where('has_lineups', false)
+            ->where('lineup_sync_attempts', '<', config('football_sync.lineup_max_attempts', 4))
+            ->where(fn (Builder $query) => $query->whereNull('lineups_synced_at')
+                ->orWhere('lineups_synced_at', '<=', now('UTC')->subMinutes(15)));
     }
 
     public function scopeRelevantForLineupSync(Builder $query): Builder
@@ -130,9 +134,11 @@ trait HasFixtureSync
             ->where(
                 fn (Builder $query) => $query
                     ->whereNull('final_data_sync_attempts')
-                    ->orWhere('final_data_sync_attempts', '<', self::MAX_FINAL_DATA_SYNC_ATTEMPTS),
+                    ->orWhere('final_data_sync_attempts', '<', config('football_sync.final_max_attempts', self::MAX_FINAL_DATA_SYNC_ATTEMPTS)),
             )
-            ->whereNull('final_data_synced_at');
+            ->whereNull('final_data_synced_at')
+            ->where(fn (Builder $query) => $query->whereNull('final_data_attempted_at')
+                ->orWhere('final_data_attempted_at', '<=', now('UTC')->subMinutes(15)));
     }
 
     public function scopeReadyForPlayerStatsSync(Builder $query): Builder
@@ -142,17 +148,19 @@ trait HasFixtureSync
             ->where(
                 'match_date',
                 '>=',
-                now('UTC')
+                now(self::MATCH_TIMEZONE)
                     ->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)
                     ->format('Y-m-d H:i:s'),
             )
-            ->where('player_stats_sync_attempts', '<', self::MAX_PLAYER_STATS_SYNC_ATTEMPTS)
-            ->whereNull('player_stats_synced_at');
+            ->where('player_stats_sync_attempts', '<', config('football_sync.final_max_attempts', self::MAX_PLAYER_STATS_SYNC_ATTEMPTS))
+            ->where(fn (Builder $query) => $query->whereNull('player_stats_synced_at')->orWhere('has_lineups', false))
+            ->where(fn (Builder $query) => $query->whereNull('player_stats_attempted_at')
+                ->orWhere('player_stats_attempted_at', '<=', now('UTC')->subMinutes(15)));
     }
 
     public function shouldSyncLineups(bool $force = false): bool
     {
-        if ($this->has_lineups) {
+        if ($this->has_lineups || (! $force && $this->lineup_sync_attempts >= config('football_sync.lineup_max_attempts', 4))) {
             return false;
         }
 
@@ -275,22 +283,6 @@ trait HasFixtureSync
 
     private function lineupRetryMinutes(): int
     {
-        $matchDate = $this->lineupMatchDate();
-
-        if (! $matchDate) {
-            return self::LINEUP_RETRY_MINUTES;
-        }
-
-        $kickoffInMinutes = now(self::MATCH_TIMEZONE)->diffInMinutes($matchDate, false);
-
-        if ($kickoffInMinutes <= 30 && $kickoffInMinutes >= 0) {
-            return 1;
-        }
-
-        if ($kickoffInMinutes <= 60 && $kickoffInMinutes > 30) {
-            return 5;
-        }
-
         return self::LINEUP_RETRY_MINUTES;
     }
 

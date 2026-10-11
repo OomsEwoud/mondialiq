@@ -4,6 +4,18 @@ namespace App\Concerns\FootballApi;
 
 trait FixtureEndpoints
 {
+    public function getFixturesByIds(array $fixtureIds): array
+    {
+        if ($fixtureIds === [] || count($fixtureIds) > 20) {
+            throw new \InvalidArgumentException('Fixture batches require between 1 and 20 IDs.');
+        }
+
+        return $this->call('/fixtures', [
+            'ids' => implode('-', array_unique(array_map('intval', $fixtureIds))),
+            'timezone' => 'Europe/Brussels',
+        ]);
+    }
+
     public function getFixtures(int $leagueId, int $season): array
     {
         return $this->call('/fixtures', [

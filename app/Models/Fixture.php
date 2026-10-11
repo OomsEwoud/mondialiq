@@ -70,6 +70,10 @@ class Fixture extends Model
             'final_data_sync_attempts' => 'integer',
             'player_stats_synced_at' => 'datetime',
             'player_stats_sync_attempts' => 'integer',
+            'final_data_attempted_at' => 'datetime',
+            'player_stats_attempted_at' => 'datetime',
+            'events_synced_at' => 'datetime',
+            'statistics_synced_at' => 'datetime',
         ];
     }
 

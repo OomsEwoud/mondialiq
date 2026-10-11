@@ -4,6 +4,7 @@ namespace App\Services\Coach;
 
 use App\Models\Coach;
 use App\Models\Country;
+use App\Models\Fixture;
 use App\Models\Team;
 use App\Services\Apis\FootballApiService;
 use App\Services\Country\CountryService;
@@ -27,7 +28,9 @@ class CoachService
 
     public function syncCoaches(): void
     {
-        Team::query()->whereNotNull('external_id')->chunk(100, function (Collection $teams) {
+        $teamIds = Fixture::query()->forConfiguredCompetition()
+            ->get(['home_team_id', 'away_team_id'])->flatMap(fn ($fixture): array => [$fixture->home_team_id, $fixture->away_team_id])->unique();
+        Team::query()->whereIn('id', $teamIds)->whereNotNull('external_id')->chunkById(100, function (Collection $teams) {
             foreach ($teams as $team) {
                 $this->syncTeamCoach($team);
             }

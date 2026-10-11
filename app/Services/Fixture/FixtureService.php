@@ -11,6 +11,7 @@ use App\Models\Venue;
 use App\Services\Prediction\UserPredictionScoringService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class FixtureService
 {
@@ -24,21 +25,29 @@ class FixtureService
         $stats = ['imported' => 0, 'skipped' => 0, 'lazy_teams_created' => 0];
 
         foreach ($fixtures as $fixture) {
-            $identity = $this->fixtureIdentity($fixture, $leagueIds, $stats);
+            DB::transaction(function () use ($fixture, $leagueIds, &$stats): void {
+                $existing = Fixture::query()->where('external_id', data_get($fixture, 'fixture.id'))->lockForUpdate()->first();
+                if ($existing?->isFinished() && $existing->final_data_synced_at !== null) {
+                    $stats['skipped']++;
 
-            if ($identity === null) {
-                $stats['skipped']++;
+                    return;
+                }
+                $identity = $this->fixtureIdentity($fixture, $leagueIds, $stats);
 
-                continue;
-            }
+                if ($identity === null) {
+                    $stats['skipped']++;
 
-            $storedFixture = Fixture::query()->updateOrCreate(
-                $this->fixtureUpdateIdentity($identity),
-                $this->fixtureAttributes($fixture, $identity),
-            );
+                    return;
+                }
 
-            $this->scoreUserPredictions($storedFixture);
-            $stats['imported']++;
+                $storedFixture = Fixture::query()->updateOrCreate(
+                    $this->fixtureUpdateIdentity($identity),
+                    $this->fixtureAttributes($fixture, $identity),
+                );
+
+                $this->scoreUserPredictions($storedFixture);
+                $stats['imported']++;
+            });
         }
 
         return $stats;

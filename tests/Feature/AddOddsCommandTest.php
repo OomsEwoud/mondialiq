@@ -111,9 +111,9 @@ test('the add odds command returns early when no fixtures are in the odds window
 
 function createCommandOddsFixture(array $overrides = []): Fixture
 {
-    $league = League::query()->create([
-        'external_id' => fake()->unique()->numberBetween(40000, 49999),
-        'name' => fake()->unique()->word(),
+    $league = League::query()->firstOrCreate([
+        'external_id' => config('services.api_football.league_id'),
+        'name' => 'World Cup',
         'type' => 'Cup',
     ]);
 

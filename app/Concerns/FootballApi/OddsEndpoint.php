@@ -6,7 +6,7 @@ trait OddsEndpoint
 {
     public function getFixtureOdds(int $fixtureId): array
     {
-        return $this->call('/odds', ['fixture' => $fixtureId]);
+        return $this->callAllPages('/odds', ['fixture' => $fixtureId]);
     }
 
     public function getBookmakers(): array

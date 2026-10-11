@@ -173,17 +173,62 @@ Seed the database:
 php artisan db:seed
 ```
 
-Sync all football data:
-
-```bash
-php artisan app:sync-all-data
-```
-
 Sync competition data and prediction context for a server/bootstrap run:
 
 ```bash
 php artisan app:sync-competition-data
 ```
+
+Use the following phases for routine synchronization of the configured league and season:
+
+```bash
+php artisan football:sync reference-data
+php artisan football:sync fixtures
+php artisan football:sync pre-match
+php artisan football:sync live
+php artisan football:sync post-match
+php artisan football:sync standings
+```
+
+The scheduler registers these phases with overlap protection and a shared-server
+lock. Use a persistent shared cache (`database` or `redis`), including the cache
+lock table for the database driver. Keep the single `schedule:run` cron documented
+below; remove any separate server cron entries for the legacy football imports.
+The old command names remain available for compatibility.
+
+`config/football_sync.php` defines request budgets and reference cache durations.
+Set `FOOTBALL_SYNC_REQUESTS_PER_MINUTE` to fit the actual API plan (default 60).
+If the plan does not support `/fixtures?ids`, set
+`FOOTBALL_SYNC_BATCH_FIXTURES=false` through deployment configuration and rebuild
+the Laravel config cache. API requests emit structured `football_api.request`
+logs with endpoint, caller, status and available quota headers; cached responses
+do not count as API calls. No API key or response body is logged.
+
+For optional queued fixture processing:
+
+```bash
+php artisan football:sync post-match --queue
+php artisan queue:work football --queue=football --tries=1 --timeout=300
+```
+
+The dedicated database queue connection reserves jobs for 360 seconds. Dataset
+retries are controlled by persistent fixture state, rather than repeated queue
+attempts. The default scheduler uses synchronous batches in background commands;
+queue mode sends one fixture per unique job and trades batch efficiency for worker
+isolation. Only change scheduler entries to `--queue` after deploying a worker.
+
+After deploying the sync changes:
+
+```bash
+php artisan migrate --force
+php artisan config:cache
+php artisan queue:restart
+php artisan schedule:list
+```
+
+Run migrations before restarting synchronization. No frontend changes or new
+dependencies are required. See [the sync report](docs/football-sync-report.md)
+for the complete command inventory, retry policy, limitations and recovery steps.
 
 Available import commands include:
 

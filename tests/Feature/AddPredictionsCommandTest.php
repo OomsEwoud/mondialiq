@@ -40,7 +40,7 @@ test('the add predictions command syncs fixtures with external ids', function ()
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addMinutes(30),
+        'match_date' => now('Europe/Brussels')->addMinutes(30),
         'status_long' => 'Not Started',
     ]);
 
@@ -51,7 +51,7 @@ test('the add predictions command syncs fixtures with external ids', function ()
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 2',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->addDay(),
+        'match_date' => now('Europe/Brussels')->addDay(),
         'status_long' => 'Not Started',
     ]);
 
@@ -62,25 +62,23 @@ test('the add predictions command syncs fixtures with external ids', function ()
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 3',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subDay(),
+        'match_date' => now('Europe/Brussels')->subDay(),
         'status_long' => 'Finished',
     ]);
 
     $this->mock(FootballApiService::class, function (MockInterface $mock) use ($pastFixture, $soonFixture, $laterFixture) {
-        $mock->shouldReceive('getFixturePrediction')->once()->with($pastFixture->external_id)->andReturn([]);
+        $mock->shouldNotReceive('getFixturePrediction')->with($pastFixture->external_id);
         $mock->shouldReceive('getFixturePrediction')->once()->with($soonFixture->external_id)->andReturn([]);
         $mock->shouldReceive('getFixturePrediction')->once()->with($laterFixture->external_id)->andReturn([]);
     });
 
-    $this->mock(PredictionService::class, function (MockInterface $mock) use ($pastFixture, $soonFixture, $laterFixture) {
-        $mock->shouldReceive('storeApiPrediction')->once()->with([], $pastFixture->id);
-        $mock->shouldReceive('storeApiPrediction')->once()->with([], $soonFixture->id);
-        $mock->shouldReceive('storeApiPrediction')->once()->with([], $laterFixture->id);
+    $this->mock(PredictionService::class, function (MockInterface $mock) {
+        $mock->shouldNotReceive('storeApiPrediction');
     });
 
     $this->artisan('app:add-predictions')
         ->expectsOutput('Starten met ophalen van voorspellingen')
-        ->expectsOutput('3 relevante fixtures gevonden.')
+        ->expectsOutput('2 relevante fixtures gevonden.')
         ->expectsOutput('Alle voorspellingen zijn geupdate')
         ->assertSuccessful();
 });
@@ -115,7 +113,7 @@ test('the add predictions command returns early when no relevant fixtures are fo
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 1',
         'season' => config('services.api_football.season'),
-        'match_date' => now('UTC')->subDay(),
+        'match_date' => now('Europe/Brussels')->subDay(),
         'status_long' => 'Finished',
     ]);
 

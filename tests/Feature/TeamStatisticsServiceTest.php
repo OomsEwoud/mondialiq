@@ -117,6 +117,14 @@ test('refresh policy uses 7 days for teams without a fixture today', function ()
         ->and($service->shouldRefresh(new TeamStatistic(['fetched_at' => now()->subDays(6)]), false))->toBeFalse();
 });
 
+test('dated historical statistics are immutable unless explicitly forced', function () {
+    $existing = new TeamStatistic(['statistics_date' => today('UTC')->subMonth(), 'fetched_at' => now()->subDays(8), 'raw_data' => ['form' => 'WWD']]);
+    $service = app(TeamStatisticsService::class);
+
+    expect($service->shouldRefresh($existing, false))->toBeFalse()
+        ->and($service->shouldRefresh($existing, false, true))->toBeTrue();
+});
+
 test('null safe parsing and import do not crash on empty api response', function () {
     $this->mock(FootballApiService::class, function (MockInterface $mock) {
         $mock->shouldReceive('getTeamStatistics')

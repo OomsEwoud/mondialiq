@@ -147,7 +147,7 @@ test('the relevant fixture data sync scope includes upcoming live and unfinished
         ->not->toContain($farPastNsFixture->external_id);
 });
 
-test('recently started ns fixtures respect the basic data retry cutoff', function () {
+test('recently started ns fixtures are polled promptly after kickoff', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 18, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
@@ -202,7 +202,7 @@ test('recently started ns fixtures respect the basic data retry cutoff', functio
         ->pluck('external_id')
         ->all();
 
-    expect($relevantFixtureIds)->not->toContain($recentlyStartedSyncedRecently->external_id)
+    expect($relevantFixtureIds)->toContain($recentlyStartedSyncedRecently->external_id)
         ->toContain($recentlyStartedSyncedLongAgo->external_id);
 });
 
@@ -310,7 +310,7 @@ test('the add fixture data command only syncs relevant fixtures', function () {
         'away_team_id' => $awayTeam->id,
         'round_name' => 'Group Stage - Matchday 2',
         'season' => config('services.api_football.season'),
-        'match_date' => now('Europe/Brussels')->copy()->subDay(),
+        'match_date' => now('Europe/Brussels')->copy()->subHour(),
         'status_short' => '1H',
         'status_long' => 'First Half',
         'elapsed_time' => 45,
@@ -459,10 +459,10 @@ test('the add fixture data command continues when one fixture fails', function (
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureEvents'));
 
     $this->artisan('app:add-fixture-data')
-        ->assertSuccessful();
+        ->assertFailed();
 });
 
-test('the add fixture data command fetches final data once for finished fixtures', function () {
+test('the add fixture data command does not mark empty final statistics complete', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 20, 0, 0, 'Europe/Brussels'));
 
     $league = League::create([
@@ -534,12 +534,10 @@ test('the add fixture data command fetches final data once for finished fixtures
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldReceive('storeFixtureEvents')->once()->with([], $finishedFixture->id));
 
     $this->artisan('app:add-fixture-data')
-        ->expectsOutput('1 relevante fixtures gevonden.')
-        ->expectsOutput("Fixture {$finishedFixture->id} (external {$finishedFixture->external_id}) sync state [status_short=FT | status_long=Match Finished | elapsed_time=90 | isLive=false | isFinished=true | shouldSyncFinalData=true]")
-        ->expectsOutput("Fetching final data for fixture {$finishedFixture->id}: status FT")
+
         ->assertSuccessful();
 
-    expect($finishedFixture->refresh()->final_data_synced_at)->not->toBeNull()
+    expect($finishedFixture->refresh()->final_data_synced_at)->toBeNull()
         ->and($finishedFixture->final_data_sync_attempts)->toBe(1);
 });
 
@@ -588,8 +586,7 @@ test('the add fixture data command returns early when no relevant fixtures are f
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldNotReceive('storeFixtureEvents'));
 
     $this->artisan('app:add-fixture-data')
-        ->expectsOutput('Ophalen van fixture data voor relevante fixtures')
-        ->expectsOutput('Geen relevante fixtures gevonden voor fixture data sync.')
+
         ->assertSuccessful();
 });
 

@@ -4,16 +4,15 @@ namespace App\Console\Commands;
 
 use App\Models\Fixture;
 use App\Services\Apis\FootballApiService;
-use App\Services\Fixture\FixtureEventsService;
-use App\Services\Fixture\FixtureLineupService;
 use App\Services\Fixture\FixtureService;
-use App\Services\Fixture\FixtureStatsService;
+use App\Services\Football\FixtureSyncService;
 use App\Services\Standing\StandingService;
 use App\Services\Team\TeamService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
@@ -26,6 +25,7 @@ use Throwable;
     .' {--skip-fixture-data : Sla events/statistics/lineups over en importeer enkel teams, fixtures en standings}'
     .' {--skip-standings : Sla standings over}'
     .' {--skip-teams : Sla teams import over en gebruik enkel bestaande teams}'
+    .' {--retry-incomplete : Reset uitgeputte pogingen voor onvolledige historische datasets}'
 )]
 #[Description('Importeer historische voetbalseizoenen vanuit API-Football voor demo data')]
 class SeedHistoricalSeasonCommand extends Command
@@ -34,10 +34,8 @@ class SeedHistoricalSeasonCommand extends Command
         private readonly FootballApiService $api,
         private readonly TeamService $teamService,
         private readonly FixtureService $fixtureService,
-        private readonly FixtureStatsService $fixtureStatsService,
-        private readonly FixtureEventsService $fixtureEventsService,
-        private readonly FixtureLineupService $fixtureLineupService,
         private readonly StandingService $standingService,
+        private readonly FixtureSyncService $syncService,
     ) {
         parent::__construct();
     }
@@ -103,7 +101,7 @@ class SeedHistoricalSeasonCommand extends Command
         $this->line('Per-fixture fouten: '.$fixtureSummary['errors']);
         $this->line('Standings geïmporteerd: '.($standingsImported ? 'ja' : 'nee'));
 
-        return self::SUCCESS;
+        return $fixtureSummary['errors'] === 0 ? self::SUCCESS : self::FAILURE;
     }
 
     private function importTeams(int $leagueId, int $season): void
@@ -186,11 +184,23 @@ class SeedHistoricalSeasonCommand extends Command
             }
 
             try {
-                $externalId = (int) $fixture->external_id;
+                if (! $fixture->isFinished()) {
+                    $skipped++;
+                    $bar->advance();
 
-                $this->importEventsForFixture($externalId, $fixture->id);
-                $this->importStatsForFixture($externalId, $fixture->id);
-                $this->importLineupsForFixture($externalId, $fixture->id);
+                    continue;
+                }
+                if ($this->option('retry-incomplete')) {
+                    Cache::lock('football:fixture:'.$fixture->id, 3600)->get(function () use ($fixture): void {
+                        $fixture->refresh();
+                        foreach (['final_data', 'player_stats'] as $dataset) {
+                            if ($fixture->{$dataset.'_synced_at'} === null || ($dataset === 'player_stats' && ! $fixture->has_lineups)) {
+                                $fixture->forceFill([$dataset.'_sync_attempts' => 0, $dataset.'_attempted_at' => null])->save();
+                            }
+                        }
+                    });
+                }
+                $errors += $this->syncService->run('post-match', (bool) config('football_sync.batch_fixtures'), $fixture->id, true);
 
                 $processed++;
             } catch (Throwable $e) {
@@ -220,33 +230,6 @@ class SeedHistoricalSeasonCommand extends Command
             'skipped' => $skipped,
             'errors' => $errors,
         ];
-    }
-
-    private function importEventsForFixture(int $externalFixtureId, int $localFixtureId): void
-    {
-        $events = $this->api->getFixtureEvents($externalFixtureId);
-
-        if (! empty($events)) {
-            $this->fixtureEventsService->storeFixtureEvents($events, $localFixtureId);
-        }
-    }
-
-    private function importStatsForFixture(int $externalFixtureId, int $localFixtureId): void
-    {
-        $stats = $this->api->getFixtureStats($externalFixtureId);
-
-        if (! empty($stats)) {
-            $this->fixtureStatsService->storeFixtureStats($stats, $localFixtureId);
-        }
-    }
-
-    private function importLineupsForFixture(int $externalFixtureId, int $localFixtureId): void
-    {
-        $lineups = $this->api->getFixtureLineups($externalFixtureId);
-
-        if (! empty($lineups)) {
-            $this->fixtureLineupService->storeLineups($lineups, $localFixtureId);
-        }
     }
 
     private function importStandings(int $leagueId, int $season): bool
