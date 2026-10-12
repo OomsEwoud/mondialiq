@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobs\SyncFootballFixture;
+use App\Jobs\SyncFootballBatch;
 use App\Models\Fixture;
 use App\Models\League;
 use App\Models\Team;
@@ -202,7 +202,7 @@ test('queue mode dispatches bounded unique fixture jobs with no inline API calls
     $fixture = syncTestFixture(100);
     Http::fake();
     $this->artisan('football:sync live --queue')->assertSuccessful();
-    Bus::assertDispatched(SyncFootballFixture::class, fn ($job) => $job->fixtureId === $fixture->id && $job->connection === 'football' && $job->timeout < config('queue.connections.football.retry_after'));
+    Bus::assertDispatched(SyncFootballBatch::class, fn ($job) => $job->fixtureIds === [$fixture->id] && $job->connection === 'football' && $job->timeout < config('queue.connections.football.retry_after'));
     Http::assertNothingSent();
 });
 

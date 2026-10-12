@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('football:sync fixtures')->dailyAt('00:05')->withoutOverlapping()->onOneServer()->runInBackground();
-Schedule::command('football:sync reference-data')->dailyAt('01:00')->withoutOverlapping()->onOneServer()->runInBackground();
+Schedule::command('football:sync reference-data')->hourlyAt(10)->withoutOverlapping()->onOneServer()->runInBackground();
 Schedule::command('football:sync live')->everyMinute()->withoutOverlapping()->onOneServer()->runInBackground();
 Schedule::command('football:sync pre-match')->everyFiveMinutes()->withoutOverlapping()->onOneServer()->runInBackground();
 Schedule::command('football:sync post-match')->everyFiveMinutes()->withoutOverlapping()->onOneServer()->runInBackground();

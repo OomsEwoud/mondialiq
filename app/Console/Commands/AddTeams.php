@@ -26,20 +26,16 @@ class AddTeams extends Command
 
     public function handle(): int
     {
-        $config = $this->footballApiConfig();
-
-        if ($config === null) {
-            return self::FAILURE;
-        }
-
-        return $this->runFootballApiImport(
-            'Ophalen van teams',
-            'Data van teams opslaan in database',
-            fn (): array => $this->api->getTeams($config['leagueId'], $config['season']),
-            function (array $teams): void {
-                $this->teamService->storeTeams($teams);
-            },
-            'Teams klaar',
-        );
+        return $this->forEachFootballCompetition(function (array $config): int {
+            return $this->runFootballApiImport(
+                'Ophalen van teams',
+                'Data van teams opslaan in database',
+                fn (): array => $this->api->getTeams($config['leagueId'], $config['season']),
+                function (array $teams): void {
+                    $this->teamService->storeTeams($teams);
+                },
+                'Teams klaar',
+            );
+        });
     }
 }

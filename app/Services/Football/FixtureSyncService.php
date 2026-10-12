@@ -3,8 +3,10 @@
 namespace App\Services\Football;
 
 use App\Models\Fixture;
+use App\Services\Apis\ApiPriority;
 use App\Services\Apis\FootballApiBudget;
 use App\Services\Apis\FootballApiBudgetExceeded;
+use App\Services\Apis\FootballApiContext;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureEventsService;
 use App\Services\Fixture\FixtureLineupService;
@@ -34,7 +36,7 @@ class FixtureSyncService
         private readonly FootballApiBudget $budget,
     ) {}
 
-    public function candidates(string $phase): Builder
+    public static function candidates(string $phase): Builder
     {
         $query = Fixture::query()->whereNotNull('external_id')->forConfiguredCompetition();
 
@@ -49,19 +51,33 @@ class FixtureSyncService
         };
     }
 
-    public function run(string $phase, bool $batch = true, ?int $fixtureId = null, bool $historical = false): int
+    public function run(string $phase, bool $batch = true, ?int $fixtureId = null, bool $historical = false, ?array $fixtureIds = null): int
+    {
+        if ($phase === 'live' && ! config('api-football.live_sync_enabled', true)) {
+            return 0;
+        }
+        $priority = $historical ? ApiPriority::Background : ApiPriority::forPhase($phase);
+
+        return app(FootballApiContext::class)->withPriority($priority,
+            fn (): int => $this->runSelected($phase, $batch, $fixtureId, $historical, $fixtureIds, $priority));
+    }
+
+    private function runSelected(string $phase, bool $batch, ?int $fixtureId, bool $historical, ?array $fixtureIds, ApiPriority $priority): int
     {
         $failed = 0;
         $query = $this->selection($phase, $historical)->orderBy('match_date')->orderBy('id');
         if ($fixtureId !== null) {
             $query->whereKey($fixtureId);
         }
+        if ($fixtureIds !== null) {
+            $query->whereKey($fixtureIds);
+        }
         if ($historical && $fixtureId === null) {
             throw new \InvalidArgumentException('Historical sync requires an explicit fixture ID.');
         }
 
-        foreach ($query->limit((int) config('football_sync.max_fixtures_per_run', 100))->get()->chunk($batch ? 20 : 1) as $chunk) {
-            if (! $this->budget->available()) {
+        foreach ($query->with(['homeTeam', 'awayTeam'])->limit((int) config('football_sync.max_fixtures_per_run', 100))->get()->chunk($batch ? 20 : 1) as $chunk) {
+            if (! $this->budget->available($priority)) {
                 Log::info('football_sync.deferred', ['phase' => $phase, 'reason' => 'api_budget']);
 
                 break;

@@ -26,20 +26,16 @@ class AddFixtures extends Command
 
     public function handle(): int
     {
-        $config = $this->footballApiConfig();
-
-        if ($config === null) {
-            return self::FAILURE;
-        }
-
-        return $this->runFootballApiImport(
-            'Ophalen van fixtures',
-            'Data van fixtures opslaan in database',
-            fn (): array => $this->api->getFixtures($config['leagueId'], $config['season']),
-            function (array $fixtures): void {
-                $this->service->storeFixtures($fixtures);
-            },
-            'Fixtures klaar',
-        );
+        return $this->forEachFootballCompetition(function (array $config): int {
+            return $this->runFootballApiImport(
+                'Ophalen van fixtures',
+                'Data van fixtures opslaan in database',
+                fn (): array => $this->api->getFixtures($config['leagueId'], $config['season']),
+                function (array $fixtures): void {
+                    $this->service->storeFixtures($fixtures);
+                },
+                'Fixtures klaar',
+            );
+        });
     }
 }

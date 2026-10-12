@@ -31,6 +31,7 @@ test('football phases replace overlapping legacy schedules', function () {
     }
 
     expect($football->first(fn ($event) => str_contains($event->command, 'sync fixtures'))->expression)->toBe('5 0 * * *')
+        ->and($football->first(fn ($event) => str_contains($event->command, 'sync reference-data'))->expression)->toBe('10 * * * *')
         ->and($football->first(fn ($event) => str_contains($event->command, 'sync pre-match'))->expression)->toBe('*/5 * * * *')
         ->and($football->first(fn ($event) => str_contains($event->command, 'sync post-match'))->expression)->toBe('*/5 * * * *')
         ->and($events->filter(fn ($event) => str_contains($event->command ?? '', 'app:add-fixture')))->toHaveCount(0);

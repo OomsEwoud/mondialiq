@@ -12,7 +12,6 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Sleep;
 use RuntimeException;
 
@@ -26,11 +25,11 @@ class FootballApiService
 
     private const int REQUEST_TIMEOUT_SECONDS = 20;
 
-    private readonly string $baseUrl;
+    private string $baseUrl;
 
-    private readonly string $apiKey;
+    private string $apiKey;
 
-    public function __construct()
+    private function configure(): void
     {
         $this->baseUrl = $this->configString('services.api_football.base_url');
         $this->apiKey = $this->configString('services.api_football.api_key');
@@ -38,6 +37,8 @@ class FootballApiService
 
     private function rawCall(string $endpoint, array $params = []): array
     {
+        // Artisan also resolves import commands for quota-free status and dry runs.
+        $this->configure();
         $cacheParams = $params;
         ksort($cacheParams);
         $key = 'football:response:'.hash('sha256', $this->baseUrl.$this->apiKey.$endpoint.json_encode($cacheParams));
@@ -50,17 +51,17 @@ class FootballApiService
 
     private function request(string $endpoint, array $params): array
     {
-        $budgetKey = 'football:budget:'.hash('sha256', $this->apiKey);
+        $budget = app(FootballApiBudget::class);
+        $priority = app(FootballApiContext::class)->priority($endpoint, $params);
 
         for ($attempt = 1; $attempt <= 2; $attempt++) {
-            if (Cache::has($budgetKey.':paused') || ! RateLimiter::attempt($budgetKey, (int) config('football_sync.max_requests_per_minute', 60), fn () => true, 60)) {
-                throw new FootballApiBudgetExceeded($attempt > 1);
-            }
+            $budget->reserve($priority, $attempt > 1);
+            $started = hrtime(true);
 
             try {
                 $response = $this->httpClient()->get($this->url($endpoint), $params);
             } catch (ConnectionException) {
-                $this->recordRequest($endpoint, $attempt, null);
+                $this->recordRequest($endpoint, $attempt, null, $started);
                 if ($attempt === 2) {
                     throw new RuntimeException("API call to {$endpoint} failed: connection error.");
                 }
@@ -69,14 +70,8 @@ class FootballApiService
                 continue;
             }
 
-            $this->recordRequest($endpoint, $attempt, $response);
-            $dailyRemaining = $response->header('x-ratelimit-requests-remaining');
-            $minuteRemaining = $response->header('X-RateLimit-Remaining');
-            if ($dailyRemaining === '0') {
-                Cache::put($budgetKey.':paused', true, now('UTC')->endOfDay()->addSecond());
-            } elseif ($response->status() === 429 || $minuteRemaining === '0') {
-                Cache::put($budgetKey.':paused', true, max(60, min(3600, (int) $response->header('Retry-After'))));
-            }
+            $budget->observe($response);
+            $this->recordRequest($endpoint, $attempt, $response, $started);
 
             if ($response->serverError() && $attempt < 2) {
                 Sleep::for(500)->milliseconds();
@@ -99,12 +94,15 @@ class FootballApiService
         throw new RuntimeException('API Football retry limit reached.');
     }
 
-    private function recordRequest(string $endpoint, int $attempt, ?Response $response): void
+    private function recordRequest(string $endpoint, int $attempt, ?Response $response, int $started): void
     {
+        $caller = app(FootballApiContext::class)->caller();
+        app(FootballApiBudget::class)->recordUsage($endpoint, $caller);
         Log::info('football_api.request', [
             'endpoint' => $endpoint,
             'calls' => 1,
-            'caller' => app(FootballApiContext::class)->caller(),
+            'caller' => $caller,
+            'duration_ms' => round((hrtime(true) - $started) / 1_000_000, 2),
             'timestamp' => now('UTC')->toIso8601String(),
             'status' => $response?->status(),
             'attempt' => $attempt,

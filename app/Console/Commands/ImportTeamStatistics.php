@@ -39,13 +39,7 @@ class ImportTeamStatistics extends Command
             return $this->handleTargetedImport($options);
         }
 
-        $config = $this->footballApiConfig();
-
-        if ($config === null) {
-            return self::FAILURE;
-        }
-
-        return $this->importRelevantTeams($config['leagueId'], $config['season'], $options['date'], $options['force']);
+        return $this->forEachFootballCompetition(fn (array $config): int => $this->importRelevantTeams($config['leagueId'], $config['season'], $options['date'], $options['force']));
     }
 
     private function handleTargetedImport(array $options): int

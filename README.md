@@ -179,7 +179,7 @@ Sync competition data and prediction context for a server/bootstrap run:
 php artisan app:sync-competition-data
 ```
 
-Use the following phases for routine synchronization of the configured league and season:
+Use the following phases for routine synchronization of all configured league-season pairs:
 
 ```bash
 php artisan football:sync reference-data
@@ -188,6 +188,8 @@ php artisan football:sync pre-match
 php artisan football:sync live
 php artisan football:sync post-match
 php artisan football:sync standings
+php artisan football:sync live --dry-run
+php artisan football:api-status
 ```
 
 The scheduler registers these phases with overlap protection and a shared-server
@@ -195,6 +197,34 @@ lock. Use a persistent shared cache (`database` or `redis`), including the cache
 lock table for the database driver. Keep the single `schedule:run` cron documented
 below; remove any separate server cron entries for the legacy football imports.
 The old command names remain available for compatibility.
+
+`config/api-football.php` reads explicit competition pairs and quota thresholds:
+
+```dotenv
+API_FOOTBALL_COMPETITIONS=39:2026,140:2026,78:2026,135:2026,61:2026,144:2026,2:2026,3:2026,848:2026
+API_FOOTBALL_QUOTA_WARNING_PERCENT=25
+API_FOOTBALL_QUOTA_CRITICAL_PERCENT=10
+API_FOOTBALL_QUOTA_RESERVE=500
+API_FOOTBALL_MINUTE_RESERVE=2
+API_FOOTBALL_LIVE_SYNC_ENABLED=true
+```
+
+Seasons use their starting year: `39:2026` means Premier League 2026/27.
+Use different years per league when needed. Empty competition configuration
+falls back to `FOOTBALL_LEAGUE_ID` / `FOOTBALL_SEASON_YEAR`; separate league and
+season lists are deliberately unsupported to prevent accidental cross products.
+Malformed pairs fail explicitly. The example does not confirm subscription coverage.
+
+At 25% remaining, low/background work pauses; at 10%, only high/critical
+requests continue. At the absolute reserve, only critical live/final requests
+continue. Set a smaller reserve for plans below 500 daily calls. Unknown quota
+permits requests under the local minute cap until headers become available.
+No Redis installation is needed: use the existing persistent Laravel cache.
+The reference phase checks hourly, but successful datasets retain their own
+daily/weekly/monthly refresh policy. Interrupted player pagination resumes using
+cached pages. `football:api-status` reports cached observations and their age,
+plus today's actual calls by endpoint/caller, without making an API request.
+Cache flushes erase these temporary metrics; structured logs remain available.
 
 `config/football_sync.php` defines request budgets and reference cache durations.
 Set `FOOTBALL_SYNC_REQUESTS_PER_MINUTE` to fit the actual API plan (default 60).
@@ -208,14 +238,16 @@ For optional queued fixture processing:
 
 ```bash
 php artisan football:sync post-match --queue
-php artisan queue:work football --queue=football --tries=1 --timeout=300
+php artisan queue:work football --queue=football --tries=1 --timeout=3300
 ```
 
-The dedicated database queue connection reserves jobs for 360 seconds. Dataset
+The dedicated database queue connection reserves jobs for 3360 seconds. Batch
+jobs have a 3300-second upper timeout to accommodate slow fallback requests;
+configure the supervisor shutdown grace period above this timeout. Dataset
 retries are controlled by persistent fixture state, rather than repeated queue
 attempts. The default scheduler uses synchronous batches in background commands;
-queue mode sends one fixture per unique job and trades batch efficiency for worker
-isolation. Only change scheduler entries to `--queue` after deploying a worker.
+queue mode groups up to 20 fixtures per unique job and retains HTTP batching.
+Only change scheduler entries to `--queue` after deploying a worker.
 
 After deploying the sync changes:
 
@@ -227,8 +259,10 @@ php artisan schedule:list
 ```
 
 Run migrations before restarting synchronization. No frontend changes or new
-dependencies are required. See [the sync report](docs/football-sync-report.md)
-for the complete command inventory, retry policy, limitations and recovery steps.
+dependencies are required. This extension adds no migration; the earlier sync
+state migration must already be applied. See [the multi-competition report](docs/football-multicompetition-report.md)
+and [the original sync report](docs/football-sync-report.md) for the command
+inventory, retry policy, limitations and recovery steps.
 
 Available import commands include:
 

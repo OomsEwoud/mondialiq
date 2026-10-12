@@ -36,7 +36,7 @@ return [
             'connection' => env('DB_QUEUE_CONNECTION'),
             'table' => env('DB_QUEUE_TABLE', 'jobs'),
             'queue' => 'football',
-            'retry_after' => 360,
+            'retry_after' => 3360,
             'after_commit' => true,
         ],
 

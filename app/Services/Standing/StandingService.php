@@ -18,10 +18,12 @@ class StandingService
             return;
         }
 
-        $teams = $this->teamIdsByExternalId();
+        $standingRows = $this->standingRows($leagueData);
+        $teams = Team::query()->whereIn('external_id', $standingRows->pluck('team.id'))->pluck('id', 'external_id');
         $season = (int) data_get($leagueData, 'season');
+        $rows = [];
 
-        foreach ($this->standingRows($leagueData) as $standing) {
+        foreach ($standingRows as $standing) {
             $teamId = $this->teamId($standing, $teams);
 
             if ($teamId === null) {
@@ -30,10 +32,11 @@ class StandingService
 
             $groupName = (string) data_get($standing, 'group', '');
 
-            Standing::query()->updateOrCreate(
-                $this->standingIdentity($teamId, $league->id, $season, $groupName),
-                $this->standingAttributes($standing, $groupName),
-            );
+            $rows[] = [...$this->standingIdentity($teamId, $league->id, $season, $groupName), ...$this->standingAttributes($standing, $groupName)];
+        }
+        foreach (array_chunk($rows, 500) as $chunk) {
+            Standing::query()->upsert($chunk, ['team_id', 'league_id', 'season', 'group_name'],
+                ['rank', 'points', 'matches_played', 'wins', 'draws', 'losses', 'goals_for', 'goals_against', 'goal_difference', 'form']);
         }
     }
 
@@ -46,6 +49,10 @@ class StandingService
 
     private function league(array $leagueData): ?League
     {
+        if (is_numeric($leagueData['id'] ?? null)) {
+            return League::query()->where('external_id', (int) $leagueData['id'])->first();
+        }
+
         $leagueName = data_get($leagueData, 'name');
 
         if (! is_string($leagueName) || $leagueName === '') {
@@ -55,11 +62,6 @@ class StandingService
         return League::query()
             ->where('name', $leagueName)
             ->first();
-    }
-
-    private function teamIdsByExternalId(): Collection
-    {
-        return Team::query()->pluck('id', 'external_id');
     }
 
     private function standingRows(array $leagueData): Collection

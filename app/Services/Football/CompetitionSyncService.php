@@ -19,21 +19,44 @@ class CompetitionSyncService
 
     public function fixtures(): void
     {
-        $this->fixtures->storeFixtures($this->api->getFixtures(
-            (int) config('services.api_football.league_id'), (int) config('services.api_football.season'),
-        ));
+        foreach (CompetitionConfig::configured() as $competition) {
+            $lock = Cache::lock('football:calendar:'.$competition->key(), 120);
+            if (! $lock->get()) {
+                continue;
+            }
+            try {
+                $key = 'football:calendar-imported:'.$competition->key();
+                $initial = ! Cache::has($key);
+                $data = $initial
+                    ? $this->api->getFixtures($competition->leagueId, $competition->season)
+                    : $this->api->getFixturesInWindow($competition->leagueId, $competition->season, now('Europe/Brussels')->subDays(3)->toDateString(), now('Europe/Brussels')->addDays(14)->toDateString());
+                $stored = $this->fixtures->storeFixtures($data);
+                if ($initial && $data !== [] && ($stored['imported'] > 0 || $competition->constrain(Fixture::query())->exists())) {
+                    Cache::put($key, true, now()->addDays(30));
+                }
+            } finally {
+                $lock->release();
+            }
+        }
     }
 
     public function standings(): void
     {
-        $query = $this->fixturesQuery();
+        foreach (CompetitionConfig::configured() as $competition) {
+            $this->syncStandings($competition);
+        }
+    }
+
+    private function syncStandings(CompetitionConfig $competition): void
+    {
+        $query = $competition->constrain(Fixture::query());
         $active = (clone $query)->whereBetween('match_date', [now('Europe/Brussels')->subDay(), now('Europe/Brussels')->addDay()])->exists();
-        $key = 'football:standings:'.config('services.api_football.league_id').':'.config('services.api_football.season').':'.($active ? 'active' : 'idle');
+        $key = 'football:standings:'.$competition->key().':'.($active ? 'active' : 'idle');
         if (Cache::has($key)) {
             return;
         }
 
-        $data = $this->api->getStandings((int) config('services.api_football.league_id'), (int) config('services.api_football.season'));
+        $data = $this->api->getStandings($competition->leagueId, $competition->season);
         if ($data !== []) {
             $this->standings->storeStandings($data);
         }

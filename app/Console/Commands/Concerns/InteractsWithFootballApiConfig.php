@@ -2,22 +2,43 @@
 
 namespace App\Console\Commands\Concerns;
 
+use App\Services\Football\CompetitionConfig;
+use InvalidArgumentException;
+
 trait InteractsWithFootballApiConfig
 {
     protected function footballApiConfig(): ?array
     {
-        $leagueId = (int) config('services.api_football.league_id');
-        $season = (int) config('services.api_football.season');
-
-        if ($leagueId <= 0 || $season <= 0) {
-            $this->error('API Football league_id of season is niet correct geconfigureerd.');
+        try {
+            $competition = CompetitionConfig::configured()[0];
+        } catch (InvalidArgumentException $exception) {
+            $this->error($exception->getMessage());
 
             return null;
         }
 
         return [
-            'leagueId' => $leagueId,
-            'season' => $season,
+            'leagueId' => $competition->leagueId,
+            'season' => $competition->season,
         ];
+    }
+
+    protected function forEachFootballCompetition(callable $callback): int
+    {
+        try {
+            $competitions = CompetitionConfig::configured();
+        } catch (InvalidArgumentException $exception) {
+            $this->error($exception->getMessage());
+
+            return self::FAILURE;
+        }
+        foreach ($competitions as $competition) {
+            $exit = $callback(['leagueId' => $competition->leagueId, 'season' => $competition->season]);
+            if ($exit !== self::SUCCESS) {
+                return $exit;
+            }
+        }
+
+        return self::SUCCESS;
     }
 }

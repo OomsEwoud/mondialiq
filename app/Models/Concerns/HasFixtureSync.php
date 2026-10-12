@@ -2,6 +2,7 @@
 
 namespace App\Models\Concerns;
 
+use App\Services\Football\CompetitionConfig;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,8 +41,13 @@ trait HasFixtureSync
 
     public function scopeForConfiguredCompetition(Builder $query): Builder
     {
-        return $query->where('season', config('services.api_football.season'))
-            ->whereHas('league', fn (Builder $query) => $query->where('external_id', config('services.api_football.league_id')));
+        $competitions = CompetitionConfig::configured();
+
+        return $query->where(function (Builder $query) use ($competitions): void {
+            foreach ($competitions as $competition) {
+                $query->orWhere(fn (Builder $pair) => $competition->constrain($pair));
+            }
+        });
     }
 
     public function scopeRelevantForDataSync(Builder $query): Builder

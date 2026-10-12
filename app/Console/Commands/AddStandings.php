@@ -26,20 +26,16 @@ class AddStandings extends Command
 
     public function handle(): int
     {
-        $config = $this->footballApiConfig();
-
-        if ($config === null) {
-            return self::FAILURE;
-        }
-
-        return $this->runFootballApiImport(
-            'Ophalen van standings',
-            'Data van standings opslaan in database',
-            fn (): array => $this->api->getStandings($config['leagueId'], $config['season']),
-            function (array $standings): void {
-                $this->service->storeStandings($standings);
-            },
-            'Standings klaar',
-        );
+        return $this->forEachFootballCompetition(function (array $config): int {
+            return $this->runFootballApiImport(
+                'Ophalen van standings',
+                'Data van standings opslaan in database',
+                fn (): array => $this->api->getStandings($config['leagueId'], $config['season']),
+                function (array $standings): void {
+                    $this->service->storeStandings($standings);
+                },
+                'Standings klaar',
+            );
+        });
     }
 }

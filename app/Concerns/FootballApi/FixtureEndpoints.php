@@ -4,6 +4,13 @@ namespace App\Concerns\FootballApi;
 
 trait FixtureEndpoints
 {
+    public function getFixturesInWindow(int $leagueId, int $season, string $from, string $to): array
+    {
+        return $this->call('/fixtures', [
+            'league' => $leagueId, 'season' => $season, 'from' => $from, 'to' => $to, 'timezone' => 'Europe/Brussels',
+        ]);
+    }
+
     public function getFixturesByIds(array $fixtureIds): array
     {
         if ($fixtureIds === [] || count($fixtureIds) > 20) {

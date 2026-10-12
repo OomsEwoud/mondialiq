@@ -11,6 +11,7 @@ class TeamService
     public function storeTeams(array $teamsData): void
     {
         $countries = Country::query()->pluck('id', 'name');
+        $rows = [];
 
         foreach ($teamsData as $teamData) {
             $teamPayload = $this->teamPayload($teamData);
@@ -19,10 +20,10 @@ class TeamService
                 continue;
             }
 
-            Team::query()->updateOrCreate(
-                $this->teamIdentity($teamPayload),
-                $this->teamAttributes($teamPayload, $countries),
-            );
+            $rows[$teamPayload['external_id']] = [...$this->teamIdentity($teamPayload), ...$this->teamAttributes($teamPayload, $countries)];
+        }
+        foreach (array_chunk(array_values($rows), 500) as $chunk) {
+            Team::query()->upsert($chunk, ['external_id'], ['name', 'code', 'logo_url', 'founded_at', 'country_id']);
         }
     }
 
