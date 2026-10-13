@@ -36,39 +36,49 @@ class AddPlayers extends Command
             $active = $pair->constrain(Fixture::query())->whereBetween('match_date', [now('Europe/Brussels')->subDay(), now('Europe/Brussels')->addDays(14)])->exists();
             $key = 'football:players:'.$pair->key().':'.($active ? 'active' : 'idle');
             if ($this->option('due') && Cache::has($key)) {
+                $this->syncSquads($pair, $active);
+
                 return self::SUCCESS;
             }
             $result = $this->runFootballApiImport(
                 'Ophalen van players',
                 'Data van players opslaan in database',
                 fn (): array => $this->api->getPlayersByLeagueSeason($config['leagueId'], $config['season']),
-                function (array $players) use ($config): void {
-                    $this->storePlayers($players, $config['leagueId'], $config['season']);
+                function (array $players): void {
+                    $this->storePlayers($players);
                 },
                 'Players klaar',
                 storeWhenEmpty: true,
             );
             if ($result === self::SUCCESS) {
-                Cache::put($key, true, $active ? 86400 : 604800);
+                Cache::put($key, true, now()->addDays((int) config($active ? 'football_sync.players_active_refresh_days' : 'football_sync.players_idle_refresh_days')));
+                $this->syncSquads($pair, $active, ! $this->option('due'));
             }
 
             return $result;
         });
     }
 
-    private function storePlayers(array $players, int $leagueId, int $season): void
+    private function syncSquads(CompetitionConfig $pair, bool $active, bool $force = false): void
+    {
+        $key = 'football:squads:'.$pair->key().':'.($active ? 'active' : 'idle');
+        if ($force || ! Cache::has($key)) {
+            $this->service->syncTeamPlayers($pair->leagueId, $pair->season);
+            Cache::put($key, true, $active ? 86400 : 604800);
+
+            $stats = $this->service->stats();
+
+            $this->info('Spelers verwerkt: '.$stats['processed']);
+            $this->info('Country ingevuld via team: '.$stats['country_filled']);
+            $this->info('Spelers zonder country: '.$stats['missing_country']);
+        }
+    }
+
+    private function storePlayers(array $players): void
     {
         if (! empty($players)) {
             $this->service->storePlayers($players);
             $this->statsService->storePlayerStats($players);
         }
-
-        $this->service->syncTeamPlayers($leagueId, $season);
-
-        $stats = $this->service->stats();
-
-        $this->info('Spelers verwerkt: '.$stats['processed']);
-        $this->info('Country ingevuld via team: '.$stats['country_filled']);
-        $this->info('Spelers zonder country: '.$stats['missing_country']);
     }
 }

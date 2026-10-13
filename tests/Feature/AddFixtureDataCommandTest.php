@@ -462,8 +462,9 @@ test('the add fixture data command continues when one fixture fails', function (
         ->assertFailed();
 });
 
-test('the add fixture data command does not mark empty final statistics complete', function () {
+test('known final scores leave live sync while empty final statistics remain incomplete', function () {
     Carbon::setTestNow(Carbon::create(2026, 6, 12, 20, 0, 0, 'Europe/Brussels'));
+    config(['football_sync.batch_fixtures' => false]);
 
     $league = League::create([
         'external_id' => config('services.api_football.league_id'),
@@ -496,6 +497,8 @@ test('the add fixture data command does not mark empty final statistics complete
         'status_short' => 'FT',
         'status_long' => 'Match Finished',
         'elapsed_time' => 90,
+        'has_lineups' => true,
+        'player_stats_synced_at' => now('UTC'),
     ]);
 
     Fixture::create([
@@ -509,6 +512,8 @@ test('the add fixture data command does not mark empty final statistics complete
         'status_short' => 'FT',
         'status_long' => 'Match Finished',
         'elapsed_time' => 90,
+        'has_lineups' => true,
+        'player_stats_synced_at' => now('UTC'),
         'final_data_synced_at' => now('Europe/Brussels')->copy()->subMinutes(5),
         'final_data_sync_attempts' => 1,
     ]);
@@ -533,9 +538,9 @@ test('the add fixture data command does not mark empty final statistics complete
     $this->mock(FixtureStatsService::class, fn (MockInterface $mock) => $mock->shouldReceive('storeFixtureStats')->once()->with([], $finishedFixture->id));
     $this->mock(FixtureEventsService::class, fn (MockInterface $mock) => $mock->shouldReceive('storeFixtureEvents')->once()->with([], $finishedFixture->id));
 
-    $this->artisan('app:add-fixture-data')
-
-        ->assertSuccessful();
+    $this->artisan('app:add-fixture-data')->assertSuccessful();
+    expect($finishedFixture->refresh()->final_data_sync_attempts)->toBe(0);
+    $this->artisan('football:sync post-match')->assertSuccessful();
 
     expect($finishedFixture->refresh()->final_data_synced_at)->toBeNull()
         ->and($finishedFixture->final_data_sync_attempts)->toBe(1);

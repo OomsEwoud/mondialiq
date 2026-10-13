@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
 use App\Jobs\SyncFootballBatch;
+use App\Models\Fixture;
 use App\Services\Apis\ApiPriority;
 use App\Services\Apis\FootballApiBudget;
 use App\Services\Apis\FootballApiBudgetExceeded;
@@ -43,8 +44,24 @@ class SyncFootball extends Command
                 $this->line('Competitie '.$pair->key());
             }
             $fixturePhase = in_array($phase, ['live', 'pre-match', 'post-match'], true);
-            $count = $fixturePhase ? min(FixtureSyncService::candidates($phase)->count(), (int) config('football_sync.max_fixtures_per_run')) : count(CompetitionConfig::configured());
+            $candidates = $fixturePhase ? FixtureSyncService::candidates($phase)->count() : count(CompetitionConfig::configured());
+            $count = $fixturePhase ? min($candidates, (int) config('football_sync.max_fixtures_per_run')) : $candidates;
             $calls = $fixturePhase && $phase !== 'pre-match' && config('football_sync.batch_fixtures') ? (int) ceil($count / 20) : $count;
+            $budget = app(FootballApiBudget::class);
+            $priority = ApiPriority::forPhase($phase);
+            $allowed = $budget->available($priority) && ($phase !== 'live' || config('api-football.live_sync_enabled', true));
+            $this->line("Kandidaten (exact nu): {$candidates}; geselecteerd binnen runlimiet: {$count}".($fixturePhase ? ' fixtures' : ' competitie-seizoenen'));
+            $this->line('Prioriteit: '.$priority->name.'; quotabeleid: '.($allowed ? 'toegestaan' : 'uitgesteld'));
+            $this->line('Volgens huidig beleid uitvoerbaar: '.($allowed ? $count : 0).'; uitgesteld: '.($allowed ? $candidates - $count : $candidates).'; locks en quota kunnen tijdens uitvoering veranderen.');
+            if ($fixturePhase) {
+                $fallbacks = $count * match ($phase) {
+                    'live' => 2, 'post-match' => 4, default => 0
+                };
+                $this->line("Primaire request-batches (exact zonder locks/cache): {$calls}; aanvullende fallbackcalls (schatting): 0–{$fallbacks}; retries niet inbegrepen.");
+            } else {
+                $this->line('Lokale fixtures binnen geselecteerde paren (exact nu): '.Fixture::query()->forConfiguredCompetition()->count().'; deze fase selecteert competitiegegevens, geen fixturewerk per kandidaat.');
+                $this->line('Batches en aanvullende calls: onbekend; afhankelijk van cache, kalenderafwijkingen, teams en paginering.');
+            }
             $endpoint = match ($phase) {
                 'pre-match' => '/fixtures/lineups',
                 'standings' => '/standings',

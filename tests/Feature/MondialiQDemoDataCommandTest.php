@@ -56,7 +56,8 @@ test('the demo data command refuses to run in production', function () {
 });
 
 test('the demo data command does not promote a human account to the reserved AI account', function () {
-    $human = User::factory()->create(['email' => 'ai@mondialiq.local']);
+    $human = User::query()->where('email', 'ai@mondialiq.local')->firstOrFail();
+    $human->forceFill(['is_system_user' => false])->save();
 
     $this->artisan('mondialiq:demo-data')
         ->assertExitCode(1);

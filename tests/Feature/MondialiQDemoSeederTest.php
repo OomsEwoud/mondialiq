@@ -35,7 +35,8 @@ test('the demo seeder creates a varied football week', function () {
         ->and(FixtureStat::query()->count())->toBe(168)
         ->and(Standing::query()->count())->toBe(16)
         ->and(TeamStatistic::query()->count())->toBe(16)
-        ->and(PlayerSeasonStat::query()->count())->toBe(32)
+        ->and(PlayerSeasonStat::query()->count())->toBe(96)
+        ->and(PlayerSeasonStat::query()->selectRaw('season, COUNT(*) as total')->groupBy('season')->pluck('total')->all())->toBe([32, 32, 32])
         ->and(User::query()->where('is_system_user', false)->count())->toBe(1);
 
     $this->actingAs($user)
@@ -62,7 +63,8 @@ test('the demo seeder can be run repeatedly without creating duplicates', functi
         ->and(FixtureStat::query()->count())->toBe(168)
         ->and(Standing::query()->count())->toBe(16)
         ->and(TeamStatistic::query()->count())->toBe(16)
-        ->and(PlayerSeasonStat::query()->count())->toBe(32);
+        ->and(PlayerSeasonStat::query()->count())->toBe(96)
+        ->and(PlayerSeasonStat::query()->selectRaw('season, COUNT(*) as total')->groupBy('season')->pluck('total')->all())->toBe([32, 32, 32]);
 });
 
 test('the demo seeder keeps API-synced records separate', function () {

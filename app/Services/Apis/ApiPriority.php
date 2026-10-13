@@ -13,9 +13,9 @@ enum ApiPriority: int
     public static function forPhase(string $phase): self
     {
         return match ($phase) {
-            'live', 'post-match' => self::Critical,
-            'pre-match' => self::High,
-            'reference-data', 'player-stats' => self::Low,
+            'live' => self::Critical,
+            'pre-match', 'post-match', 'player-stats' => self::High,
+            'reference-data' => self::Low,
             default => self::Normal,
         };
     }
@@ -24,9 +24,10 @@ enum ApiPriority: int
     {
         return match ($endpoint) {
             '/fixtures' => isset($params['id']) || isset($params['ids']) || isset($params['live']) ? self::Critical : self::Normal,
-            '/fixtures/events', '/fixtures/lineups', '/fixtures/statistics' => self::High,
+            '/fixtures/events' => self::Critical,
+            '/fixtures/lineups', '/fixtures/statistics', '/fixtures/players' => self::High,
             '/standings', '/predictions', '/odds' => self::Normal,
-            '/players', '/players/squads', '/coachs', '/venues', '/fixtures/players' => self::Low,
+            '/countries', '/leagues', '/teams', '/odds/bookmakers', '/players', '/players/squads', '/coachs', '/venues' => self::Low,
             default => self::Background,
         };
     }

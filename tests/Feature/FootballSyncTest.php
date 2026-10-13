@@ -3,13 +3,18 @@
 use App\Jobs\SyncFootballBatch;
 use App\Models\Fixture;
 use App\Models\League;
+use App\Models\Player;
+use App\Models\PlayerSeasonStat;
 use App\Models\Team;
+use App\Services\Apis\FootballApiBudget;
 use App\Services\Apis\FootballApiService;
 use App\Services\Fixture\FixtureService;
 use App\Services\Football\FixtureSyncService;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Sleep;
@@ -294,7 +299,7 @@ test('a budget exhausted between the batch and fallback does not spend dataset a
     unset($payload['statistics']);
     Http::fake(['*' => Http::response(['response' => [$payload]])]);
 
-    $this->artisan('football:sync post-match')->assertFailed();
+    $this->artisan('football:sync post-match')->assertSuccessful();
     expect($fixture->refresh()->final_data_sync_attempts)->toBe(0)
         ->and($fixture->events_synced_at)->not->toBeNull();
     Http::assertSentCount(1);
@@ -373,3 +378,200 @@ function syncTestLineups(Fixture $fixture): array
         'startXI' => array_map(fn (int $number) => ['player' => ['id' => $id * 100 + $number, 'name' => 'Player '.$number, 'number' => $number, 'pos' => 'M']], range(1, 11)),
     ], [10, 20]);
 }
+
+test('reserve protects the final score and enrichment resumes after the quota resets', function () {
+    $fixture = syncTestFixture(100);
+    $payload = syncTestPayload($fixture);
+    $payload['fixture']['status'] = ['short' => 'FT', 'long' => 'Match Finished'];
+    $payload['lineups'] = syncTestLineups($fixture);
+    $payload['players'] = array_map(fn (array $lineup) => [
+        'team' => $lineup['team'],
+        'players' => array_map(fn (array $entry) => ['player' => $entry['player'], 'statistics' => [['games' => ['minutes' => 90]]]], $lineup['startXI']),
+    ], $payload['lineups']);
+    $budget = app(FootballApiBudget::class);
+    $budget->observe(new Illuminate\Http\Client\Response(new Response(200, [
+        'x-ratelimit-requests-limit' => '7500', 'x-ratelimit-requests-remaining' => '400',
+    ])));
+    Http::fake(['*' => Http::response(['response' => [$payload]])]);
+
+    $this->artisan('football:sync live')->assertSuccessful();
+    $this->artisan('football:sync post-match')->assertSuccessful();
+    expect($fixture->refresh()->status_short)->toBe('FT')
+        ->and($fixture->fulltime_home_goals)->toBe(1)
+        ->and($fixture->final_data_sync_attempts)->toBe(0)
+        ->and($fixture->player_stats_sync_attempts)->toBe(0)
+        ->and($fixture->statistics_synced_at)->toBeNull();
+    Http::assertSentCount(1);
+
+    $this->travel(1)->days();
+    $this->artisan('football:sync post-match')->assertSuccessful();
+    expect($fixture->refresh()->final_data_synced_at)->not->toBeNull()
+        ->and($fixture->player_stats_synced_at)->not->toBeNull()
+        ->and($fixture->has_lineups)->toBeTrue();
+    Http::assertSentCount(2);
+});
+
+test('live events remain critical while statistics fallback waits for high priority budget', function () {
+    $fixture = syncTestFixture(100);
+    $payload = syncTestPayload($fixture);
+    unset($payload['events'], $payload['statistics']);
+    Http::fake([
+        '*/fixtures?*' => Http::response(['response' => [$payload]], 200, ['x-ratelimit-requests-limit' => '7500', 'x-ratelimit-requests-remaining' => '400']),
+        '*/fixtures/events*' => Http::response(['response' => syncTestPayload($fixture)['events']]),
+    ]);
+    $this->artisan('football:sync live')->assertSuccessful();
+    expect($fixture->refresh()->fulltime_home_goals)->toBe(1)
+        ->and($fixture->fixtureEvents()->count())->toBe(1);
+    Http::assertSentCount(2);
+});
+
+test('mixed competition batches map by id and retry only an incomplete fixture', function () {
+    config(['api-football.competitions' => '1:2026,39:2025']);
+    $other = League::create(['external_id' => 39, 'name' => 'Other', 'type' => 'League']);
+    $fixtures = collect(range(100, 120))->map(fn (int $id) => syncTestFixture($id, [
+        'status_short' => 'FT', 'status_long' => 'Match Finished',
+        'has_lineups' => true, 'player_stats_synced_at' => now('UTC'),
+        ...($id % 2 ? ['league_id' => $other->id, 'season' => 2025] : []),
+    ]));
+    Http::fake(function ($request) use ($fixtures) {
+        $selected = $fixtures->whereIn('external_id', explode('-', $request['ids']))->reject(fn ($fixture) => $fixture->external_id === 110);
+
+        return Http::response(['response' => $selected->reverse()->map(function ($fixture) {
+            $payload = syncTestPayload($fixture);
+            $payload['league']['id'] = $fixture->league->external_id;
+            $payload['league']['season'] = $fixture->season;
+            $payload['goals']['home'] = $fixture->external_id;
+
+            return $payload;
+        })->values()->all()]);
+    });
+    $this->artisan('football:sync post-match')->assertFailed();
+    Http::assertSentCount(2);
+    expect(Http::recorded()->map(fn ($record) => $record[0]['ids'])->all())
+        ->toBe([implode('-', range(100, 119)), '120']);
+    foreach ($fixtures->reject(fn ($fixture) => $fixture->external_id === 110) as $fixture) {
+        expect($fixture->refresh()->fulltime_home_goals)->toBe($fixture->external_id)
+            ->and($fixture->final_data_synced_at)->not->toBeNull();
+    }
+    $this->travel(16)->minutes();
+    $this->artisan('football:sync post-match')->assertFailed();
+    Http::assertSentCount(3);
+    Http::assertSent(fn ($request) => $request['ids'] === '110');
+});
+
+test('calendar rechecks missing and postponed fixtures outside the rolling window', function (string $status, int $offset, string $updatedStatus, int $newOffset) {
+    $fixture = syncTestFixture(100, ['status_short' => $status, 'match_date' => now('Europe/Brussels')->addDays($offset)]);
+    Cache::put('football:calendar-imported:v2:1:2026', true, 604800);
+    $payload = syncTestPayload($fixture);
+    $payload['fixture']['date'] = now('Europe/Brussels')->addDays($newOffset)->toIso8601String();
+    $payload['fixture']['status'] = ['short' => $updatedStatus, 'long' => $updatedStatus];
+    Http::fake(fn ($request) => Http::response(['response' => isset($request['ids']) ? [$payload] : []]));
+    $this->artisan('football:sync fixtures')->assertSuccessful();
+    expect($fixture->refresh()->status_short)->toBe($updatedStatus)
+        ->and($fixture->match_date->toDateString())->toBe(now('Europe/Brussels')->addDays($newOffset)->toDateString());
+    Http::assertSentCount(2);
+    Http::assertSent(fn ($request) => ($request['ids'] ?? null) === '100');
+})->with([
+    'moved beyond two weeks' => ['NS', 1, 'NS', 21],
+    'moved months ahead' => ['NS', 1, 'NS', 90],
+    'old postponed fixture gets a date' => ['PST', -30, 'NS', 30],
+    'cancelled fixture disappears from window' => ['NS', 1, 'CANC', 1],
+]);
+
+test('weekly full calendar refresh discovers a new fixture outside the daily window', function () {
+    $fixture = syncTestFixture(100, ['status_short' => 'NS', 'match_date' => now('Europe/Brussels')->addDays(60)]);
+    Cache::put('football:calendar-imported:v2:1:2026', true, now()->addDays(7));
+    $payload = syncTestPayload($fixture);
+    $payload['fixture']['id'] = 101;
+    $rescheduled = syncTestPayload($fixture);
+    $rescheduled['fixture']['date'] = now('Europe/Brussels')->addDays(90)->toIso8601String();
+    Http::fake(fn ($request) => Http::response(['response' => isset($request['from']) ? [] : [$payload, $rescheduled]]));
+    $this->artisan('football:sync fixtures')->assertSuccessful();
+    expect(Fixture::where('external_id', 101)->exists())->toBeFalse();
+    $this->travel(8)->days();
+    $this->artisan('football:sync fixtures')->assertSuccessful();
+    expect(Fixture::where('external_id', 101)->exists())->toBeTrue()
+        ->and($fixture->refresh()->match_date->toDateString())->toBe(Carbon::parse($rescheduled['fixture']['date'])->toDateString());
+    Http::assertSentCount(2);
+});
+
+test('due players import weekly while active squads still refresh daily', function () {
+    syncTestFixture(100, ['status_short' => 'NS', 'match_date' => now('Europe/Brussels')->addDays(10)]);
+    Http::fake(['*' => Http::response(['response' => [], 'paging' => ['total' => 1]])]);
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    Http::assertSentCount(3);
+    $this->travel(2)->days();
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    Http::assertSentCount(5);
+    $this->travel(6)->days();
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    Http::assertSentCount(8);
+    expect(Http::recorded(fn ($request) => str_contains($request->url(), '/players?'))->count())->toBe(2);
+});
+
+test('idle full player imports wait twenty eight days and manual import remains available', function () {
+    Http::fake(['*' => Http::response(['response' => [], 'paging' => ['total' => 1]])]);
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    $this->travel(8)->days();
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    Http::assertSentCount(1);
+    $this->artisan('app:add-players')->assertSuccessful();
+    Http::assertSentCount(2);
+    $this->travel(29)->days();
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    Http::assertSentCount(3);
+});
+
+test('daily squad refresh discovers players without repeating season pages', function () {
+    $fixture = syncTestFixture(100);
+    Cache::put('football:players:1:2026:active', true, 604800);
+    Http::fake(['*/players/squads*' => Http::response(['response' => [[
+        'players' => [['id' => 99001, 'name' => 'New squad player', 'position' => 'Midfielder']],
+    ]]])]);
+    $this->artisan('app:add-players --due')->assertSuccessful();
+    $player = Player::where('external_id', 99001)->firstOrFail();
+    expect($fixture->homeTeam->players()->whereKey($player->id)->exists())->toBeTrue()
+        ->and(PlayerSeasonStat::count())->toBe(0);
+    Http::assertSentCount(2);
+});
+
+test('a completed statistics dataset is not refetched when events need another attempt', function () {
+    $fixture = syncTestFixture(100, [
+        'status_short' => 'FT', 'status_long' => 'Match Finished',
+        'has_lineups' => true, 'player_stats_synced_at' => now('UTC'),
+    ]);
+    $payload = syncTestPayload($fixture);
+    $completedPayload = $payload;
+    unset($completedPayload['statistics'], $completedPayload['players'], $completedPayload['lineups']);
+    $payload['events'] = [];
+    Http::fake(['*/fixtures?*' => Http::sequence()->push(['response' => [$payload]])->push(['response' => [$completedPayload]])]);
+    $this->artisan('football:sync post-match')->assertSuccessful();
+    $completedAt = $fixture->refresh()->statistics_synced_at;
+    expect($completedAt)->not->toBeNull()->and($fixture->events_synced_at)->toBeNull();
+    $this->travel(16)->minutes();
+    $this->artisan('football:sync post-match')->assertSuccessful();
+    expect($fixture->refresh()->statistics_synced_at->equalTo($completedAt))->toBeTrue()
+        ->and($fixture->final_data_synced_at)->not->toBeNull();
+    Http::assertSentCount(2);
+});
+
+test('dry run exposes selection and quota deferral without database writes or HTTP', function () {
+    syncTestFixture(100, ['status_short' => 'FT', 'status_long' => 'Match Finished']);
+    $budget = app(FootballApiBudget::class);
+    $budget->observe(new Illuminate\Http\Client\Response(new Response(200, [
+        'x-ratelimit-requests-limit' => '7500', 'x-ratelimit-requests-remaining' => '400',
+    ])));
+    Http::fake();
+    $writes = [];
+    DB::listen(function ($event) use (&$writes) {
+        if (preg_match('/^\s*(insert|update|delete|replace|create|alter|drop)\b/i', $event->sql)) {
+            $writes[] = $event->sql;
+        }
+    });
+    $this->artisan('football:sync post-match --dry-run')
+        ->expectsOutputToContain('Kandidaten (exact nu): 1')
+        ->expectsOutputToContain('High; quotabeleid: uitgesteld')
+        ->expectsOutputToContain('fallbackcalls (schatting): 0–4')->assertSuccessful();
+    expect($writes)->toBe([]);
+    Http::assertNothingSent();
+});

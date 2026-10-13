@@ -89,7 +89,11 @@ test('quota status and usage are read without HTTP', function () {
     $budget->observe(quotaResponse(6000));
     $budget->recordUsage('/fixtures', 'football:sync');
     Http::fake();
-    $this->artisan('football:api-status')->expectsOutputToContain('HEALTHY')
+    $this->artisan('football:api-status')->expectsOutputToContain('NORMAL (HEALTHY)')
+        ->expectsOutputToContain('Resterend percentage')
+        ->expectsOutputToContain('Calls tot reserve')
+        ->expectsOutputToContain('Endpoint totaal')
+        ->expectsOutputToContain('Command/job totaal')
         ->expectsOutputToContain('Ouderdom')->expectsOutputToContain('/fixtures')->assertSuccessful();
     Http::assertNothingSent();
 });

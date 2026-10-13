@@ -132,7 +132,7 @@ test('domestic and international competitions paginate independently', function 
         'fifa_code' => 'BEL',
     ]);
 
-    foreach (range(1, 6) as $number) {
+    foreach (range(1, 11) as $number) {
         League::create([
             'external_id' => 99000 + $number,
             'name' => sprintf('Domestic %02d', $number),
@@ -151,11 +151,11 @@ test('domestic and international competitions paginate independently', function 
         ->get(route('competitions.index', ['domestic_page' => 2]))
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('domesticCompetitions.total', 6)
+            ->where('domesticCompetitions.total', 11)
             ->where('domesticCompetitions.current_page', 2)
             ->has('domesticCompetitions.data', 1)
-            ->where('domesticCompetitions.data.0.name', 'Domestic 06')
-            ->has('internationalCompetitions.data', 5)
+            ->where('domesticCompetitions.data.0.name', 'Domestic 11')
+            ->has('internationalCompetitions.data', 10)
             ->where('internationalCompetitions.data.0.name', 'International 01')
             ->where('internationalCompetitions.current_page', 1));
 
@@ -163,11 +163,11 @@ test('domestic and international competitions paginate independently', function 
         ->get(route('competitions.index', ['international_page' => 2]))
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
-            ->has('domesticCompetitions.data', 5)
+            ->has('domesticCompetitions.data', 10)
             ->where('domesticCompetitions.data.0.name', 'Domestic 01')
             ->where('domesticCompetitions.current_page', 1)
             ->has('internationalCompetitions.data', 1)
-            ->where('internationalCompetitions.data.0.name', 'International 06')
+            ->where('internationalCompetitions.data.0.name', 'International 11')
             ->where('internationalCompetitions.current_page', 2));
 
     $this->actingAs(User::factory()->create())
@@ -177,9 +177,9 @@ test('domestic and international competitions paginate independently', function 
         ]))
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('domesticCompetitions.data.0.name', 'Domestic 06')
+            ->where('domesticCompetitions.data.0.name', 'Domestic 11')
             ->where('domesticCompetitions.current_page', 2)
-            ->where('internationalCompetitions.data.0.name', 'International 06')
+            ->where('internationalCompetitions.data.0.name', 'International 11')
             ->where('internationalCompetitions.current_page', 2));
 
     $this->actingAs(User::factory()->create())
@@ -187,7 +187,7 @@ test('domestic and international competitions paginate independently', function 
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->where('search', 'Belgium')
-            ->where('domesticCompetitions.total', 6)
+            ->where('domesticCompetitions.total', 11)
             ->where('internationalCompetitions.total', 0));
 
     $this->actingAs(User::factory()->create())

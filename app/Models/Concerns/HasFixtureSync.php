@@ -21,8 +21,6 @@ trait HasFixtureSync
 
     private const RECENTLY_STARTED_SYNC_WINDOW_HOURS = 3;
 
-    private const RECENT_FINAL_SYNC_WINDOW_HOURS = 6;
-
     private const MAX_FINAL_DATA_SYNC_ATTEMPTS = 3;
 
     private const MAX_PLAYER_STATS_SYNC_ATTEMPTS = 3;
@@ -134,7 +132,7 @@ trait HasFixtureSync
                 'match_date',
                 '>=',
                 now(self::MATCH_TIMEZONE)
-                    ->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)
+                    ->subHours((int) config('football_sync.enrichment_window_hours', 72))
                     ->format('Y-m-d H:i:s'),
             )
             ->where(
@@ -155,7 +153,7 @@ trait HasFixtureSync
                 'match_date',
                 '>=',
                 now(self::MATCH_TIMEZONE)
-                    ->subHours(self::RECENT_FINAL_SYNC_WINDOW_HOURS)
+                    ->subHours((int) config('football_sync.enrichment_window_hours', 72))
                     ->format('Y-m-d H:i:s'),
             )
             ->where('player_stats_sync_attempts', '<', config('football_sync.final_max_attempts', self::MAX_PLAYER_STATS_SYNC_ATTEMPTS))

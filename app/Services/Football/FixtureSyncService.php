@@ -45,6 +45,8 @@ class FixtureSyncService
             'post-match' => $query->where(fn (Builder $query) => $query->readyForFinalDataSync()->orWhere(fn (Builder $query) => $query->readyForPlayerStatsSync())),
             'player-stats' => $query->readyForPlayerStatsSync()->whereNull('player_stats_synced_at'),
             default => $query->relevantForFixtureDataSync()
+                ->where(fn (Builder $query) => $query->whereNotIn('status_short', Fixture::FINISHED_STATUS_SHORTS)
+                    ->orWhereNull('status_short')->orWhereNull('fulltime_home_goals')->orWhereNull('fulltime_away_goals'))
                 ->where('match_date', '>=', now('Europe/Brussels')->subHours(6))
                 ->where(fn (Builder $query) => $query->whereNull('fixture_basics_synced_at')
                     ->orWhere('fixture_basics_synced_at', '<=', now('UTC')->subSeconds(55))),
@@ -116,16 +118,20 @@ class FixtureSyncService
                         $this->sync($fixture, $phase, $payloads[$externalId] ?? null, $attempts[$fixture->id]);
                     } catch (Throwable $exception) {
                         $this->releaseDeferredAttempts($fixture, $attempts[$fixture->id], $exception);
-                        $failed++;
-                        $this->recordFailure($fixture, $exception);
+                        if (! $exception instanceof FootballApiBudgetExceeded) {
+                            $failed++;
+                            $this->recordFailure($fixture, $exception);
+                        }
                     }
                 }
             } catch (Throwable $exception) {
                 foreach ($locked as $fixture) {
                     $this->releaseDeferredAttempts($fixture, $attempts[$fixture->id], $exception);
                 }
-                $failed += count($locked) ?: 1;
-                Log::warning('football_sync.batch_failed', ['phase' => $phase, 'exception' => $exception::class]);
+                if (! $exception instanceof FootballApiBudgetExceeded) {
+                    $failed += count($locked) ?: 1;
+                    Log::warning('football_sync.batch_failed', ['phase' => $phase, 'exception' => $exception::class]);
+                }
             } finally {
                 foreach ($locks as $lock) {
                     $lock->release();
@@ -160,6 +166,9 @@ class FixtureSyncService
             return $attempts;
         }
         if ($fixture->isFinished()) {
+            if (! $this->budget->available(ApiPriority::High)) {
+                return $attempts;
+            }
             $attributes = [];
             if ($phase !== 'player-stats' && $fixture->final_data_synced_at === null && $this->due($fixture, 'final_data')) {
                 $attributes['final_data_sync_attempts'] = $fixture->final_data_sync_attempts + 1;
@@ -208,8 +217,10 @@ class FixtureSyncService
         }
 
         if ($fixture->isLive()) {
-            $this->statistics->storeFixtureStats($this->dataset($payload, 'statistics', $fixture), $fixture->id);
-            $this->events->storeFixtureEvents($this->dataset($payload, 'events', $fixture), $fixture->id);
+            $this->runDatasets([
+                'events' => fn () => $this->events->storeFixtureEvents($this->dataset($payload, 'events', $fixture), $fixture->id),
+                'statistics' => fn () => $this->statistics->storeFixtureStats($this->dataset($payload, 'statistics', $fixture), $fixture->id),
+            ]);
         } elseif ($fixture->isFinished()) {
             $tasks = [];
             if ($fixture->final_data_synced_at === null && $attempts['final_data']) {
@@ -233,12 +244,17 @@ class FixtureSyncService
             return $payload[$key];
         }
 
-        return match ($key) {
+        $priority = $key === 'events' && $fixture->isLive() ? ApiPriority::Critical : ApiPriority::High;
+        if (app(FootballApiContext::class)->priority('/fixtures', []) === ApiPriority::Background) {
+            $priority = ApiPriority::Background;
+        }
+
+        return app(FootballApiContext::class)->withPriority($priority, fn (): array => match ($key) {
             'statistics' => $this->api->getFixtureStats((int) $fixture->external_id),
             'events' => $this->api->getFixtureEvents((int) $fixture->external_id),
             'lineups' => $this->api->getFixtureLineups((int) $fixture->external_id),
             'players' => $this->api->getFixturePlayersStats((int) $fixture->external_id),
-        };
+        });
     }
 
     private function storeFinalData(Fixture $fixture, array $payload): void

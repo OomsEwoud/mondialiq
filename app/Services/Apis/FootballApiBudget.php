@@ -53,6 +53,16 @@ class FootballApiBudget
         };
     }
 
+    public function effectiveRemaining(): ?int
+    {
+        $quota = $this->quota();
+        if ($quota === null || ! $quota->lastUpdatedAt->isSameDay(now('UTC'))) {
+            return null;
+        }
+
+        return Cache::get($this->key().':daily', $quota->dailyRemaining);
+    }
+
     public function canExecute(ApiPriority $priority): bool
     {
         $allowed = match ($this->status()) {
@@ -65,7 +75,7 @@ class FootballApiBudget
         $minute = Cache::get($this->key().':minute');
 
         return $allowed && ! Cache::has($this->key().':paused')
-            && ! RateLimiter::tooManyAttempts($this->key(), $this->minuteLimit())
+            && (RateLimiter::attempts($this->key()) < $this->minuteLimit() || RateLimiter::availableIn($this->key()) === 0)
             && ($minute === null || $minute > ($priority === ApiPriority::Critical ? 0 : (int) config('api-football.quota.minute_reserve', 2)));
     }
 

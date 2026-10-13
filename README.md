@@ -216,8 +216,10 @@ season lists are deliberately unsupported to prevent accidental cross products.
 Malformed pairs fail explicitly. The example does not confirm subscription coverage.
 
 At 25% remaining, low/background work pauses; at 10%, only high/critical
-requests continue. At the absolute reserve, only critical live/final requests
-continue. Set a smaller reserve for plans below 500 daily calls. Unknown quota
+requests continue. At the absolute reserve, only live scores, status, events and
+final score detection continue. Final statistics, lineups and player enrichment
+use High priority and can resume for 72 hours after kickoff, with the existing
+three-attempt limit. Set a smaller reserve for plans below 500 daily calls. Unknown quota
 permits requests under the local minute cap until headers become available.
 No Redis installation is needed: use the existing persistent Laravel cache.
 The reference phase checks hourly, but successful datasets retain their own
@@ -225,6 +227,18 @@ daily/weekly/monthly refresh policy. Interrupted player pagination resumes using
 cached pages. `football:api-status` reports cached observations and their age,
 plus today's actual calls by endpoint/caller, without making an API request.
 Cache flushes erase these temporary metrics; structured logs remain available.
+
+Full player pagination refreshes every seven days for active competitions and
+every 28 days otherwise. Squads refresh independently every day / seven days;
+`app:add-players` without `--due` requests a manual full import while retaining
+the response cache. Current squads do not represent historical season rosters.
+Calendar sync uses a rolling -3/+14-day window, checks missing/postponed fixture
+IDs, and repeats a complete season refresh every seven days. The versioned
+calendar marker triggers one full refresh after deploying this refinement.
+`--dry-run` reports candidate counts, batches, priorities and estimated fallbacks
+without requesting provider data or dispatching work. See
+[`docs/football-sync-refinement-report.md`](docs/football-sync-refinement-report.md)
+for quota assumptions, request estimates and verification.
 
 `config/football_sync.php` defines request budgets and reference cache durations.
 Set `FOOTBALL_SYNC_REQUESTS_PER_MINUTE` to fit the actual API plan (default 60).

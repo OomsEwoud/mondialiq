@@ -6,6 +6,10 @@ return [
     'max_requests_per_minute' => env('FOOTBALL_SYNC_REQUESTS_PER_MINUTE', 60),
     'lineup_max_attempts' => 4,
     'final_max_attempts' => 3,
+    'enrichment_window_hours' => 72,
+    'calendar_full_refresh_days' => 7,
+    'players_active_refresh_days' => 7,
+    'players_idle_refresh_days' => 28,
     'reference_ttl' => [
         '/countries' => 2592000,
         '/leagues' => 2592000,
