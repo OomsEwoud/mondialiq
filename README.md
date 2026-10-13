@@ -248,6 +248,29 @@ the Laravel config cache. API requests emit structured `football_api.request`
 logs with endpoint, caller, status and available quota headers; cached responses
 do not count as API calls. No API key or response body is logged.
 
+Odds and provider predictions now perform local freshness checks before requests.
+Odds refresh every 24 hours beyond seven days, every 12 hours at two to seven
+days, and every six hours within 48 hours. Predictions use 72/48/24 hours for
+the same windows. Cancelled/postponed and started fixtures are excluded from
+automatic prematch refresh; a confirmed new kickoff can become due again.
+Complete due odds matchdays share a paginated league/season/UTC-date query.
+Standings refresh around actual matches/results, with daily active and weekly
+inactive safety checks. The scheduler frequencies themselves remain unchanged.
+
+Preview these datasets without requests or marker changes:
+
+```bash
+php artisan football:sync odds --dry-run
+php artisan football:sync predictions --dry-run
+php artisan football:sync standings --dry-run
+```
+
+See [the third-round report](docs/football-market-sync-report.md) for negative
+cache/retry limits, request estimates and deployment checks. The existing
+`app:add-odds --include-recent` and `--days` options remain explicit manual
+extensions of the automatic 14-day window. Legacy `app:add-standings` now shares
+the same due markers as `football:sync standings`.
+
 For optional queued fixture processing:
 
 ```bash

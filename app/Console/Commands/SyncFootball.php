@@ -11,12 +11,13 @@ use App\Services\Apis\FootballApiBudgetExceeded;
 use App\Services\Football\CompetitionConfig;
 use App\Services\Football\CompetitionSyncService;
 use App\Services\Football\FixtureSyncService;
+use App\Services\Football\PrematchSyncService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
-#[Signature('football:sync {phase=live : reference-data, fixtures, live, pre-match, post-match or standings} {--queue : Queue fixture batches on the football connection} {--dry-run : Show selection and estimated calls without API requests}')]
+#[Signature('football:sync {phase=live : reference-data, fixtures, live, pre-match, post-match, standings, odds or predictions} {--queue : Queue fixture batches on the football connection} {--dry-run : Show selection and estimated calls without API requests}')]
 #[Description('Synchroniseer API-Football volgens de fase van de competitie of wedstrijd')]
 class SyncFootball extends Command
 {
@@ -28,8 +29,8 @@ class SyncFootball extends Command
             return self::FAILURE;
         }
         $phase = (string) $this->argument('phase');
-        if (! in_array($phase, ['reference-data', 'fixtures', 'live', 'pre-match', 'post-match', 'standings'], true)) {
-            $this->error('Onbekende syncfase. Gebruik reference-data, fixtures, live, pre-match, post-match of standings.');
+        if (! in_array($phase, ['reference-data', 'fixtures', 'live', 'pre-match', 'post-match', 'standings', 'odds', 'predictions'], true)) {
+            $this->error('Onbekende syncfase. Gebruik reference-data, fixtures, live, pre-match, post-match, standings, odds of predictions.');
 
             return self::INVALID;
         }
@@ -40,6 +41,9 @@ class SyncFootball extends Command
         }
 
         if ($this->option('dry-run')) {
+            if (in_array($phase, ['odds', 'predictions', 'standings'], true)) {
+                return $this->marketDryRun($phase);
+            }
             foreach (CompetitionConfig::configured() as $pair) {
                 $this->line('Competitie '.$pair->key());
             }
@@ -89,10 +93,16 @@ class SyncFootball extends Command
         }
 
         try {
+            if (in_array($phase, ['odds', 'predictions'], true)) {
+                return $this->call('app:add-'.$phase);
+            }
+            if ($phase === 'standings') {
+                return app(CompetitionSyncService::class)->standings() === 0 ? self::SUCCESS : self::FAILURE;
+            }
             if ($phase === 'reference-data') {
                 return $this->referenceData();
             }
-            if ($phase === 'fixtures' || $phase === 'standings') {
+            if ($phase === 'fixtures') {
                 app(CompetitionSyncService::class)->{$phase}();
 
                 return self::SUCCESS;
@@ -116,6 +126,37 @@ class SyncFootball extends Command
         } finally {
             $lock->release();
         }
+    }
+
+    private function marketDryRun(string $phase): int
+    {
+        $pairs = CompetitionConfig::configured();
+        foreach ($pairs as $pair) {
+            $this->line('Competitie '.$pair->key());
+        }
+        $budget = app(FootballApiBudget::class);
+        $allowed = $budget->available(ApiPriority::Normal);
+        if ($phase === 'standings') {
+            $plans = array_map(fn (CompetitionConfig $pair): array => app(CompetitionSyncService::class)->standingsPlan($pair), $pairs);
+            $due = count(array_filter($plans, fn (array $plan): bool => $plan['due']));
+            $this->line('Lokale relevante fixtures: '.array_sum(array_column($plans, 'fixtures')));
+            $this->line('Competitieparen: '.count($pairs).'; due: '.$due.'; freshness/backoff overgeslagen: '.(count($pairs) - $due));
+            $this->line('Status overgeslagen: niet van toepassing op competitiebrede standings.');
+            $this->line('Primaire requests: '.$due.'; bespaard versus een onvoorwaardelijke run: '.(count($pairs) - $due));
+            $this->line('Oude dagstrategie (schatting): '.array_sum(array_column($plans, 'old_daily_calls')).'; nieuwe intervallen (uur): '.implode(', ', array_column($plans, 'hours')));
+        } else {
+            $plan = app(PrematchSyncService::class)->plan($phase);
+            $due = $plan['due'];
+            $this->line("Lokale kandidaten: {$plan['candidates']}; due: {$due}; freshness/backoff overgeslagen: {$plan['freshness_skipped']}; status overgeslagen: {$plan['status_skipped']}");
+            $saved = $plan['old_requests'] - $plan['requests'];
+            $this->line("Primaire requests (eerste pagina's): {$plan['requests']}; oude strategie per run: {$plan['old_requests']}; bespaarde eerste requests: {$saved}");
+            $this->line($phase === 'odds' ? 'Extra paginacalls: onbekend; league/season/date bundels bevatten alle pagina’s. Totale besparing is een schatting, geen garantie.' : 'Paginacalls: 0; geen gedocumenteerde predictionbatch beschikbaar.');
+        }
+        $this->line('Prioriteit: Normal; quota: '.$budget->status().'; beleid: '.($allowed ? 'toegestaan' : 'uitgesteld'));
+        $this->line('Door quotabeleid uitgestelde taken: '.($allowed ? 0 : $due).'; actuele locks, cachehits en veranderend quota kunnen uitvoering beperken.');
+        $this->line('Read-only: geen HTTP, reservaties, datasetmarkers of jobs.');
+
+        return self::SUCCESS;
     }
 
     private function referenceData(): int

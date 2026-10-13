@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Concerns\InteractsWithFootballApiConfig;
-use App\Console\Commands\Concerns\RunsFootballApiImportTasks;
-use App\Services\Apis\FootballApiService;
-use App\Services\Standing\StandingService;
+use App\Services\Football\CompetitionSyncService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -15,27 +13,13 @@ use Illuminate\Console\Command;
 class AddStandings extends Command
 {
     use InteractsWithFootballApiConfig;
-    use RunsFootballApiImportTasks;
 
-    public function __construct(
-        private readonly FootballApiService $api,
-        private readonly StandingService $service,
-    ) {
-        parent::__construct();
-    }
-
-    public function handle(): int
+    public function handle(CompetitionSyncService $sync): int
     {
-        return $this->forEachFootballCompetition(function (array $config): int {
-            return $this->runFootballApiImport(
-                'Ophalen van standings',
-                'Data van standings opslaan in database',
-                fn (): array => $this->api->getStandings($config['leagueId'], $config['season']),
-                function (array $standings): void {
-                    $this->service->storeStandings($standings);
-                },
-                'Standings klaar',
-            );
-        });
+        if ($this->footballApiConfig() === null) {
+            return self::FAILURE;
+        }
+
+        return $sync->standings() === 0 ? self::SUCCESS : self::FAILURE;
     }
 }

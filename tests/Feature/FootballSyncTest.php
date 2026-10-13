@@ -309,7 +309,8 @@ test('historical api predictions remain unchanged and empty responses preserve e
     $past = syncTestFixture(100, ['status_short' => 'FT', 'status_long' => 'Match Finished']);
     $future = syncTestFixture(101, ['status_short' => 'NS', 'status_long' => 'Not Started', 'match_date' => now('Europe/Brussels')->addDay()]);
     foreach ([$past, $future] as $fixture) {
-        $fixture->predictions()->create(['source' => 'api', 'home_chance' => 60, 'advice' => 'Saved before kickoff']);
+        $fixture->predictions()->create(['source' => 'api', 'home_chance' => 60, 'advice' => 'Saved before kickoff'])
+            ->forceFill(['updated_at' => now('UTC')->subDays(2)])->save();
     }
     Http::fake(['*' => Http::response(['response' => []])]);
 
