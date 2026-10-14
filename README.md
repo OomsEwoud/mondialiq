@@ -13,6 +13,14 @@ MondialIQ is a football prediction platform built with Laravel, Inertia, React, 
 - Fortify authentication with two-factor support
 - Pest test suite
 
+## Local machine learning
+
+The offline 1X2 baseline lives in `ml/`. See [ML setup and commands](ml/README.md)
+and the [data audit and baseline report](docs/ml/ml-baseline-report.md).
+It uses private Laravel exports of local data and never calls API-Football during
+training. Python is optional for the existing application. No database migrations
+or production inference service are required for this phase.
+
 ## Tech Stack
 
 - PHP 8.5
