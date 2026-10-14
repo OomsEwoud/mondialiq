@@ -7,17 +7,25 @@ import numpy as np
 
 from ml.data import CLASSES, Fixture
 from ml.features import FeatureBuilder
+from ml.policy import available_at
 
 
 def dataset(
-    fixtures: list[Fixture], exported_at: datetime, allow_demo: bool = False
+    fixtures: list[Fixture],
+    exported_at: datetime,
+    allow_demo: bool = False,
+    historical: bool = False,
+    target_seasons: set[int] | None = None,
 ) -> tuple[list[Fixture], list[str], np.ndarray]:
-    builder = FeatureBuilder(fixtures, allow_demo=allow_demo)
+    builder = FeatureBuilder(fixtures, allow_demo=allow_demo, historical=historical)
+    if target_seasons and not historical:
+        raise ValueError("Target seasons require historical mode")
     rows = [
         fixture
         for fixture in fixtures
-        if fixture.available_for(allow_demo) is not None
-        and fixture.available_for(allow_demo) < exported_at
+        if available_at(fixture, allow_demo, historical) is not None
+        and available_at(fixture, allow_demo, historical) < exported_at
+        and (not target_seasons or fixture.season in target_seasons)
     ]
     names = sorted(builder.build(rows[0], rows[0].kickoff)) if rows else []
     snapshots = [builder.build(row, row.kickoff) for row in rows]
@@ -73,6 +81,7 @@ def split(
     validation_start: datetime,
     test_start: datetime,
     allow_demo: bool = False,
+    historical: bool = False,
 ) -> dict[str, list[int]]:
     if validation_start >= test_start:
         raise ValueError("Validation must start before test")
@@ -81,13 +90,13 @@ def split(
             i
             for i, row in enumerate(rows)
             if row.kickoff < validation_start
-            and row.available_for(allow_demo) < validation_start
+            and available_at(row, allow_demo, historical) < validation_start
         ],
         "validation": [
             i
             for i, row in enumerate(rows)
             if validation_start <= row.kickoff < test_start
-            and row.available_for(allow_demo) < test_start
+            and available_at(row, allow_demo, historical) < test_start
         ],
         "test": [i for i, row in enumerate(rows) if row.kickoff >= test_start],
     }
@@ -99,11 +108,14 @@ def training_blockers(
     names: list[str],
     matrix: np.ndarray,
     allow_demo: bool = False,
+    historical: bool = False,
 ) -> list[str]:
     blockers = []
     minimums = (
         (("train", 1), ("validation", 1), ("test", 1))
         if allow_demo
+        else (("train", 12), ("validation", 3), ("test", 3))
+        if historical
         else (("train", 300), ("validation", 100), ("test", 100))
     )
     for name, minimum in minimums:
@@ -111,12 +123,14 @@ def training_blockers(
         if len(indices) < minimum:
             blockers.append(f"{name}: {len(indices)} rows; at least {minimum} required")
         counts = Counter(rows[i].target for i in indices)
-        for label in () if allow_demo else CLASSES:
+        if historical and name == "train" and len(counts) < 2:
+            blockers.append("train: at least two outcome classes required")
+        for label in () if allow_demo or historical else CLASSES:
             if counts[label] < 20:
                 blockers.append(
                     f"{name}: class {label} has {counts[label]}; at least 20 required"
                 )
-        if indices and names and not allow_demo:
+        if indices and names and not allow_demo and not historical:
             covered = (matrix[indices, names.index("home_all_5_count")] >= 5) & (
                 matrix[indices, names.index("away_all_5_count")] >= 5
             )

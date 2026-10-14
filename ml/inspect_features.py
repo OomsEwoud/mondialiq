@@ -15,20 +15,25 @@ def main() -> None:
     parser.add_argument("fixture_id", type=int)
     parser.add_argument("--cutoff", type=instant, required=True)
     parser.add_argument("--allow-demo", action="store_true")
+    parser.add_argument(
+        "--mode", choices=("standard", "historical"), default="standard"
+    )
     args = parser.parse_args()
+    historical = args.mode == "historical"
+    metadata = mode_metadata(args.allow_demo, historical)
     header, fixtures = read_export(args.export)
     fixture = next((item for item in fixtures if item.id == args.fixture_id), None)
     if fixture is None or not fixture.admitted(args.allow_demo):
         parser.error("Fixture not found or not admitted in this mode")
     if args.cutoff > instant(header["exported_at"]):
         parser.error("Cannot inspect a cutoff after export time")
-    snapshot = FeatureBuilder(fixtures, allow_demo=args.allow_demo).snapshot(
-        fixture, args.cutoff
-    )
+    snapshot = FeatureBuilder(
+        fixtures, allow_demo=args.allow_demo, historical=historical
+    ).snapshot(fixture, args.cutoff)
     print(
         json.dumps(
             {
-                **mode_metadata(args.allow_demo),
+                **metadata,
                 "artifact_produced": False,
                 "purpose": "feature inspection only; no prediction",
                 **snapshot,

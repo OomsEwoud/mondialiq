@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from math import nan
 
 from ml.data import Fixture
+from ml.policy import available_at, result_exclusion, validate_mode
 
 WINDOWS = (5, 10)
 RATES = (
@@ -19,11 +20,19 @@ RATES = (
 
 
 class FeatureBuilder:
-    def __init__(self, fixtures: list[Fixture], allow_demo: bool = False):
+    def __init__(
+        self,
+        fixtures: list[Fixture],
+        allow_demo: bool = False,
+        historical: bool = False,
+    ):
+        validate_mode(allow_demo, historical)
+        self.historical = historical
+        self.fixtures = fixtures
         self.allow_demo = allow_demo
         self.history = defaultdict(list)
         for fixture in sorted(fixtures, key=lambda item: (item.kickoff, item.id)):
-            if fixture.available_for(allow_demo) is not None:
+            if available_at(fixture, allow_demo, historical) is not None:
                 for team in (fixture.home_team_id, fixture.away_team_id):
                     self.history[team].append(fixture)
 
@@ -85,7 +94,7 @@ class FeatureBuilder:
             for item in self.history[team]
             if item.id != fixture.id
             and item.kickoff < cutoff
-            and item.available_for(self.allow_demo) < cutoff
+            and available_at(item, self.allow_demo, self.historical) < cutoff
             and item.kickoff >= cutoff - timedelta(days=730)
         ]
 
@@ -104,8 +113,16 @@ class FeatureBuilder:
                     "home_goals": item.home_goals,
                     "away_goals": item.away_goals,
                     "kickoff": item.kickoff.isoformat(),
-                    "available_at": item.available_for(self.allow_demo).isoformat(),
+                    "available_at": available_at(
+                        item, self.allow_demo, self.historical
+                    ).isoformat(),
                     "venue": "home" if item.home_team_id == team else "away",
+                    "eligibility_reason": "earlier reliable FT result with completion buffer"
+                    if self.historical
+                    else "observed before cutoff",
+                    "observed_at": item.observed_at.isoformat()
+                    if item.observed_at
+                    else None,
                 }
                 for item in history
             ]
@@ -114,11 +131,44 @@ class FeatureBuilder:
             "kickoff": fixture.kickoff.isoformat(),
             "cutoff_time": cutoff.isoformat(),
             "source_history": sources,
+            "excluded_sources": self.excluded_sources(fixture, cutoff)
+            if self.historical
+            else {},
             "features": {
                 name: None if value != value else value
                 for name, value in self.build(fixture, cutoff).items()
             },
         }
+
+    def excluded_sources(self, fixture: Fixture, cutoff: datetime) -> dict:
+        excluded = {}
+        for side, team in (
+            ("home", fixture.home_team_id),
+            ("away", fixture.away_team_id),
+        ):
+            items = []
+            for item in self.fixtures:
+                if team not in (item.home_team_id, item.away_team_id):
+                    continue
+                reason = result_exclusion(item)
+                if item.id == fixture.id:
+                    reason = "current_fixture"
+                elif item.kickoff >= cutoff:
+                    reason = "same_or_later_kickoff"
+                elif reason is None and available_at(item, historical=True) >= cutoff:
+                    reason = "completion_buffer"
+                elif reason is None and item.kickoff < cutoff - timedelta(days=730):
+                    reason = "outside_730_day_window"
+                if reason:
+                    items.append(
+                        {
+                            "fixture_id": item.id,
+                            "kickoff": item.kickoff.isoformat(),
+                            "reason": reason,
+                        }
+                    )
+            excluded[side] = items
+        return excluded
 
     @staticmethod
     def _rolling(games: list[Fixture], team: int, prefix: str) -> dict[str, float]:

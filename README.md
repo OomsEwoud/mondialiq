@@ -21,6 +21,10 @@ It uses private Laravel exports of local data and never calls API-Football durin
 training. Python is optional for the existing application. No database migrations
 or production inference service are required for this phase.
 
+Retrospective provider backfills use explicit `--mode historical`, with separate
+result eligibility, warm-up coverage and offline replay. See the
+[historical backtest policy and commands](docs/ml/ml-historical-backtest.md).
+
 ## Tech Stack
 
 - PHP 8.5

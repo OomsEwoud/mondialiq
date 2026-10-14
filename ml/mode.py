@@ -1,5 +1,13 @@
 """Explicit demo admission and shared, fail-closed artifact metadata."""
 
+from ml.policy import validate_mode
+
+HISTORICAL_WARNING = (
+    "HISTORICAL BACKTEST ONLY: retrospectively imported FT results; "
+    "football chronology does not prove historical provider availability or "
+    "absence of later corrections. Not eligible for production or live inference."
+)
+
 DEMO_WARNING = (
     "WARNING: DEMO DATA MODE\n"
     "This model is trained on demo/synthetic data.\n"
@@ -8,7 +16,16 @@ DEMO_WARNING = (
 )
 
 
-def mode_metadata(allow_demo: bool) -> dict:
+def mode_metadata(allow_demo: bool, historical: bool = False) -> dict:
+    validate_mode(allow_demo, historical)
+    if historical:
+        return {
+            "model_version": "historical-baseline-1",
+            "training_mode": "historical_backtest",
+            "dataset_type": "historical_provider_data",
+            "production_eligible": False,
+            "warning": HISTORICAL_WARNING,
+        }
     return {
         "model_version": "demo-baseline-1" if allow_demo else "baseline-1",
         "training_mode": "demo" if allow_demo else "standard",
@@ -20,7 +37,25 @@ def mode_metadata(allow_demo: bool) -> dict:
     }
 
 
-def check_mode(metadata: dict, allow_demo: bool = False) -> bool:
+def check_mode(
+    metadata: dict, allow_demo: bool = False, historical: bool = False
+) -> bool:
+    validate_mode(allow_demo, historical)
+    expected = mode_metadata(False, True)
+    markers = (
+        metadata.get("training_mode") == expected["training_mode"],
+        metadata.get("dataset_type") == expected["dataset_type"],
+        str(metadata.get("model_version", "")).startswith("historical-"),
+        metadata.get("warning") == HISTORICAL_WARNING,
+    )
+    if any(markers):
+        if any(metadata.get(key) != value for key, value in expected.items()):
+            raise ValueError("Inconsistent historical metadata; artifact rejected")
+        if not historical:
+            raise ValueError("Historical artifact requires explicit historical mode")
+        return False
+    if historical:
+        raise ValueError("Historical mode requires a historical artifact")
     mode = metadata.get("training_mode")
     demo_markers = (
         mode == "demo",

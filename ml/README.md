@@ -12,6 +12,11 @@ availability filters, including label purging across split boundaries. The exist
 local demo dataset still cannot train: its results were recorded after the proposed
 training and validation periods. See [demo verification](../docs/ml/ml-demo-verification.md).
 
+Retrospectively imported real results now have an explicit `--mode historical`.
+Standard and demo timestamp guards remain unchanged. Read the
+[historical policy, quality report and commands](../docs/ml/ml-historical-backtest.md)
+before using backfilled data. Historical artifacts cannot predict future fixtures.
+
 ## Setup
 
 Python 3.12 was used for verification. From the repository root, on Windows:
@@ -33,8 +38,10 @@ ml/.venv/Scripts/python -m ml.training storage/app/private/ml/fixtures-TIMESTAMP
 ```
 
 Replace `fixtures-TIMESTAMP.jsonl` with the path printed by Artisan. Output directories
-must be new; existing runs are never overwritten. Audit-only/insufficient-data runs
-write `report.json`, return exit code 2 and never write `model.joblib`.
+must be new; existing runs are never overwritten. Insufficient-data runs write
+`report.json`, return exit code 2 and never write `model.joblib`. Historical
+`--audit-only` returns 0 when data passes the experimental checks, otherwise 2;
+it never fits a model.
 
 Verify stored kickoff timezone before export. The current API fixture endpoints
 request Europe/Brussels, the importer preserves the supplied local wall-clock time,
@@ -144,7 +151,7 @@ binary models are ignored. Do not put generated files elsewhere in the repositor
 ml/.venv/Scripts/python -m pytest ml/tests -q
 ml/.venv/Scripts/ruff check ml
 ml/.venv/Scripts/ruff format --check ml
-php artisan test --compact tests/Feature/ExportMlFixturesTest.php
+php artisan test --compact
 ```
 
 If sandbox temporary-directory permissions prevent pytest startup, use a **new**

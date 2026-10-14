@@ -1,4 +1,4 @@
-"""Offline reproducible training. No DB connection, network or automatic split."""
+"""Offline training with explicit mode admission and chronological partitions."""
 
 import argparse
 import hashlib
@@ -21,7 +21,9 @@ from sklearn.preprocessing import StandardScaler
 from ml.data import CLASSES, POLICY, instant, read_export
 from ml.dataset import audit, dataset, demo_boundaries, split, training_blockers
 from ml.evaluation import metrics, probabilities_for
-from ml.mode import DEMO_WARNING, mode_metadata
+from ml.mode import DEMO_WARNING, HISTORICAL_WARNING, mode_metadata
+from ml.policy import HISTORICAL_POLICY, fixture_fingerprint, validate_mode
+from ml.historical import historical_audit
 
 SEED = 20261013
 
@@ -85,19 +87,31 @@ def run(
     validation_start: datetime | None,
     test_start: datetime | None,
     allow_demo: bool = False,
+    historical: bool = False,
+    target_seasons: set[int] | None = None,
+    audit_only: bool = False,
 ) -> dict:
+    validate_mode(allow_demo, historical)
+    if audit_only and not historical:
+        raise ValueError("Audit-only requires historical mode")
+    if target_seasons and not historical:
+        raise ValueError("Target seasons require historical mode")
     output.mkdir(parents=True, exist_ok=False)
     header, fixtures = read_export(source)
     rows, names, matrix = dataset(
-        fixtures, instant(header["exported_at"]), allow_demo=allow_demo
+        fixtures,
+        instant(header["exported_at"]),
+        allow_demo=allow_demo,
+        historical=historical,
+        target_seasons=target_seasons,
     )
     report = {
-        **mode_metadata(allow_demo),
+        **mode_metadata(allow_demo, historical),
         "trained_at": datetime.now(timezone.utc).isoformat(),
         "seed": SEED,
         "export": header,
         "dataset_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-        "availability_policy": POLICY,
+        "availability_policy": HISTORICAL_POLICY if historical else POLICY,
         "features": names,
         "artifact_produced": False,
         "audit": audit(fixtures, rows, names, matrix, allow_demo=allow_demo),
@@ -112,6 +126,24 @@ def run(
         },
         "calibration": "Reliability reported; no fitted calibrator without independent chronological calibration and selection samples.",
     }
+    if historical:
+        report["historical_audit"] = historical_audit(
+            fixtures, rows, instant(header["exported_at"]), target_seasons
+        )
+        report["metric_interpretation"] = (
+            "Experimental retrospective evaluation; no demonstrated live performance."
+        )
+        report["calibration"] = (
+            "Skipped: no independent chronological calibration sample; reliability bins reported."
+        )
+        report["split_method"] = "explicit_dates"
+        if validation_start is None and test_start is None:
+            boundaries = demo_boundaries(rows)
+            report["split_method"] = (
+                "60/20/20 unique kickoff groups; ties kept together"
+            )
+            if boundaries:
+                validation_start, test_start = boundaries
     if allow_demo:
         report["calibration"] = (
             "Calibration skipped: insufficient validation samples in demo mode."
@@ -127,7 +159,7 @@ def run(
         blockers = [
             "Specify --validation-start and --test-start after reviewing real data coverage."
         ]
-        minimum = 3 if allow_demo else 500
+        minimum = 3 if allow_demo else (18 if historical else 500)
         if len(rows) < minimum:
             blockers.insert(
                 0,
@@ -136,7 +168,9 @@ def run(
         report.update(status="blocked", blockers=blockers)
         write_json(output / "report.json", report)
         return report
-    partitions = split(rows, validation_start, test_start, allow_demo=allow_demo)
+    partitions = split(
+        rows, validation_start, test_start, allow_demo=allow_demo, historical=historical
+    )
     report["boundaries"] = {
         "validation_start": validation_start.isoformat(),
         "test_start": test_start.isoformat(),
@@ -164,9 +198,21 @@ def run(
         for i, row in enumerate(rows)
         if not any(i in indices for indices in partitions.values())
     ]
-    blockers = training_blockers(rows, partitions, names, matrix, allow_demo=allow_demo)
+    blockers = training_blockers(
+        rows, partitions, names, matrix, allow_demo=allow_demo, historical=historical
+    )
     if blockers:
         report.update(status="blocked", blockers=blockers)
+        write_json(output / "report.json", report)
+        return report
+    if historical:
+        report["baseline_readiness_blockers"] = training_blockers(
+            rows, partitions, names, matrix
+        )
+        report["status"] = "ready_for_experimental_training"
+        write_json(output / "report.json", report)
+    if audit_only:
+        report["status"] = "audit_only"
         write_json(output / "report.json", report)
         return report
     labels = np.array([row.target for row in rows])
@@ -187,7 +233,7 @@ def run(
             del models[name]
             continue
         model.fit(matrix[train], labels[train])
-        if not allow_demo and tuple(model.classes_) != CLASSES:
+        if not allow_demo and not historical and tuple(model.classes_) != CLASSES:
             raise ValueError("Unexpected estimator class order")
         report["validation"][name] = metrics(
             labels[validation], probabilities_for(model, matrix[validation])
@@ -236,21 +282,36 @@ def run(
     report["test"] = {
         name: metrics(labels[test], values) for name, values in probabilities.items()
     }
-    report["status"] = "demo_only" if allow_demo else "experimental_candidate"
+    report["status"] = (
+        "EXPERIMENTAL_HISTORICAL"
+        if historical
+        else ("demo_only" if allow_demo else "experimental_candidate")
+    )
     report["beats_test_baselines"] = all(
         report["test"][selected]["log_loss"] < report["test"][name]["log_loss"]
         for name in ("majority", "home_bias")
     )
+    if historical:
+        report["baseline_candidate"] = (
+            not report["baseline_readiness_blockers"]
+            and report["beats_validation_baselines"]
+            and report["beats_test_baselines"]
+        )
+        report["performance_conclusion"] = (
+            "Meets sample, coverage and baseline comparisons; independent review still required."
+            if report["baseline_candidate"]
+            else "Experimental only: sample/coverage or baseline comparison requirements not met."
+        )
     artifact = {
         "estimator": models[selected],
         "features": names,
-        **mode_metadata(allow_demo),
+        **mode_metadata(allow_demo, historical),
         "model_type": selected,
         "trained_at": report["trained_at"],
         "fixture_count": len(rows),
         "partitions": report["partitions"],
         "metrics": {"validation": report["validation"], "test": report["test"]},
-        "availability_policy": POLICY,
+        "availability_policy": HISTORICAL_POLICY if historical else POLICY,
         "trained_through": validation_start.isoformat(),
         "selected_through": test_start.isoformat(),
         "dataset_sha256": report["dataset_sha256"],
@@ -258,12 +319,33 @@ def run(
         "source_sha256": report["source_sha256"],
         "status": report["status"],
     }
+    if historical:
+        artifact["fixture_fingerprint"] = fixture_fingerprint(fixtures)
+        artifact.update(
+            {
+                key: report[key]
+                for key in (
+                    "historical_audit",
+                    "hyperparameters",
+                    "export",
+                    "seed",
+                    "python",
+                    "boundaries",
+                    "split_method",
+                    "baseline_candidate",
+                    "performance_conclusion",
+                    "beats_validation_baselines",
+                    "beats_test_baselines",
+                    "calibration",
+                )
+            }
+        )
     joblib.dump(artifact, output / "model.joblib")
     report["artifact_produced"] = True
     write_json(
         output / "test-predictions.json",
         {
-            **mode_metadata(allow_demo),
+            **mode_metadata(allow_demo, historical),
             "fixture_ids": [rows[i].id for i in test],
             "labels": labels[test].tolist(),
             "probabilities": {
@@ -288,7 +370,19 @@ def main() -> None:
         action="store_true",
         help="Explicit demo-only mode; retains all timestamp availability checks",
     )
+    parser.add_argument(
+        "--mode", choices=("standard", "historical"), default="standard"
+    )
+    parser.add_argument("--target-season", type=int, action="append")
+    parser.add_argument(
+        "--audit-only",
+        action="store_true",
+        help="Historical data report without fitting models",
+    )
     args = parser.parse_args()
+    historical = args.mode == "historical"
+    if historical:
+        print(HISTORICAL_WARNING)
     if args.allow_demo:
         print(DEMO_WARNING)
     report = run(
@@ -297,13 +391,16 @@ def main() -> None:
         args.validation_start,
         args.test_start,
         allow_demo=args.allow_demo,
+        historical=historical,
+        target_seasons=set(args.target_season) if args.target_season else None,
+        audit_only=args.audit_only,
     )
     print(
         json.dumps(
             {
                 "status": report["status"],
-                **mode_metadata(args.allow_demo),
-                "audit": report["audit"],
+                **mode_metadata(args.allow_demo, historical),
+                "audit": report.get("historical_audit", report["audit"]),
                 "blockers": report.get("blockers", []),
                 "skipped_models": report.get("skipped_models", {}),
             },

@@ -92,9 +92,12 @@ def main() -> None:
     )
     parser.add_argument("predictions", type=Path)
     parser.add_argument("--allow-demo", action="store_true")
+    parser.add_argument(
+        "--mode", choices=("standard", "historical"), default="standard"
+    )
     args = parser.parse_args()
     payload = json.loads(args.predictions.read_text(encoding="utf-8"))
-    check_mode(payload, args.allow_demo)
+    check_mode(payload, args.allow_demo, historical=args.mode == "historical")
     print(
         json.dumps(
             {
