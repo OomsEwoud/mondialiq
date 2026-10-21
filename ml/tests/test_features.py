@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from math import isnan
 
 import pytest
+import numpy as np
 
 from ml.data import Fixture
 from ml.features import FeatureBuilder
@@ -116,8 +117,12 @@ def test_same_builder_historical_future_and_mutated_target():
     builder = FeatureBuilder([game(), game(2), current])
     historical = builder.build(current, current.kickoff)
     future = replace(current, status_short="NS", home_goals=None, away_goals=None)
-    assert historical == builder.build(future, future.kickoff)
-    assert historical == builder.build(replace(current, home_goals=99), current.kickoff)
+    for changed in (future, replace(current, home_goals=99)):
+        actual = builder.build(changed, changed.kickoff)
+        assert historical.keys() == actual.keys()
+        np.testing.assert_allclose(
+            list(historical.values()), list(actual.values()), equal_nan=True
+        )
 
 
 def test_result_must_be_available_strictly_before_cutoff():

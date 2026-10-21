@@ -9,6 +9,7 @@ from sklearn.metrics import (
     accuracy_score,
     classification_report,
     confusion_matrix,
+    f1_score,
     log_loss,
 )
 
@@ -46,6 +47,10 @@ def validate_probabilities(probabilities: np.ndarray) -> None:
 
 def metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict:
     validate_probabilities(probabilities)
+    if labels.ndim != 1 or len(labels) == 0 or len(labels) != len(probabilities):
+        raise ValueError("Expected nonempty aligned labels and probabilities")
+    if not np.isin(labels, CLASSES).all():
+        raise ValueError("Unknown outcome label")
     predicted = np.array(CLASSES)[probabilities.argmax(axis=1)]
     actual = np.column_stack([labels == label for label in CLASSES])
     reliability = {}
@@ -67,6 +72,15 @@ def metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict:
     return {
         "missing_classes": [label for label in CLASSES if not np.any(labels == label)],
         "accuracy": float(accuracy_score(labels, predicted)),
+        "macro_f1": float(
+            f1_score(
+                labels,
+                predicted,
+                labels=list(CLASSES),
+                average="macro",
+                zero_division=0,
+            )
+        ),
         "log_loss": float(log_loss(labels, probabilities, labels=list(CLASSES))),
         "brier": float(np.mean(np.sum((probabilities - actual) ** 2, axis=1))),
         "confusion_matrix": confusion_matrix(
@@ -83,6 +97,25 @@ def metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict:
         },
         "mean_probabilities": dict(zip(CLASSES, probabilities.mean(axis=0).tolist())),
         "reliability": reliability,
+    }
+
+
+SCALAR_METRICS = ("accuracy", "macro_f1", "log_loss", "brier")
+
+
+def aggregate_metrics(fold_metrics: list[dict]) -> dict:
+    """Equal fold weighting; spread is descriptive, not a confidence interval."""
+    if not fold_metrics:
+        raise ValueError("Cannot aggregate zero folds")
+    return {
+        name: {
+            "mean": float(np.mean([fold[name] for fold in fold_metrics])),
+            "std": float(np.std([fold[name] for fold in fold_metrics], ddof=0)),
+            "min": float(min(fold[name] for fold in fold_metrics)),
+            "max": float(max(fold[name] for fold in fold_metrics)),
+            "fold_count": len(fold_metrics),
+        }
+        for name in SCALAR_METRICS
     }
 
 

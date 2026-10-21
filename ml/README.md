@@ -2,7 +2,7 @@
 
 Offline 1X2 probabilities for regulation time. Laravel remains the application and
 the only database reader. Python consumes a local, private JSONL export. There are
-no API calls, notebooks, web routes, scheduled jobs or database writes in this pipeline.
+no API calls, notebooks, web routes, scheduled jobs or database writes in the Python pipeline.
 
 The local audit on 2026-10-13 found 45 demo fixtures and **zero usable real fixtures**.
 No football model has been trained or approved. See [the report](../docs/ml/ml-baseline-report.md).
@@ -16,6 +16,27 @@ Retrospectively imported real results now have an explicit `--mode historical`.
 Standard and demo timestamp guards remain unchanged. Read the
 [historical policy, quality report and commands](../docs/ml/ml-historical-backtest.md)
 before using backfilled data. Historical artifacts cannot predict future fixtures.
+
+The shared builder now uses **feature-set v2**: all 85 original features remain,
+with 378 default result/context features and configurable groups. See the
+[v2 audit and feature report](../docs/ml/ml-feature-engineering-v2.md) and
+`feature-config.example.json`. Old artifacts require retraining; inference rejects
+missing or incompatible feature metadata. Statistics are optional and unavailable
+without verified observations; xG/player families remain disabled.
+
+Use `python -m ml.evaluate` for expanding-window experiments. The
+[evaluation guide](../docs/ml/ml-walk-forward-evaluation.md) covers shared folds,
+feature-group ablations, separate sigmoid calibration, final-test isolation and
+`--dry-run`. Start from `experiments.example.json` and review the dates before use.
+Evaluation artifacts remain offline-only and are refused by normal inference.
+
+Historical dataset collection now has a separate manual Laravel workflow:
+`php artisan ml:data plan`, `ml:data import` and `ml:data audit` with explicit
+`--league`/`--season` selection. Read the
+[data infrastructure audit and exact commands](../docs/ml/ml-historical-data-pipeline.md)
+before importing; the checkpoint table requires `php artisan migrate`.
+`python -m ml.coverage EXPORT` audits existing features without fitting models.
+`ml:export` also writes a `.summary.json` with counts, hashes and batch provenance.
 
 ## Setup
 
@@ -131,7 +152,7 @@ Logistic Regression and gradient boosting are skipped for fewer than two trainin
 classes; Random Forest and trivial baselines can still operate on a single class.
 All demo metrics are statistically meaningless. Calibration is not fitted.
 
-Inspect actual source history and all 85 features even when training is blocked:
+Inspect actual source history and all selected v2 features even when training is blocked:
 
 ```powershell
 ml/.venv/Scripts/python -m ml.inspect_features $export 27 --cutoff 2026-10-13T18:00:00Z --allow-demo

@@ -13,6 +13,7 @@ import pytest
 from ml.data import instant, read_export
 from ml.dataset import dataset, split, training_blockers
 from ml.features import FeatureBuilder
+from ml.feature_registry import FeatureConfig, active_definitions
 from ml.historical import historical_audit
 from ml.inference import predict
 from ml.mode import check_mode, mode_metadata
@@ -176,7 +177,7 @@ def test_postmatch_snapshots_and_odds_never_enter_feature_contract(tmp_path):
     assert polluted == original
     _, names, expected = dataset(original, EXPORTED, historical=True)
     _, _, actual = dataset(polluted, EXPORTED, historical=True)
-    assert len(names) == 85
+    assert names == list(active_definitions(FeatureConfig()))
     np.testing.assert_allclose(actual, expected, equal_nan=True)
 
 

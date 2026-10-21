@@ -14,6 +14,7 @@ from ml.data import POLICY, Fixture, instant, read_export
 from ml.evaluation import probabilities_for
 from ml.features import FeatureBuilder
 from ml.mode import check_mode
+from ml.feature_registry import config_from_artifact, feature_metadata
 from ml.policy import HISTORICAL_POLICY, fixture_fingerprint
 
 
@@ -26,6 +27,8 @@ def predict(
     replay: bool = False,
     historical_replay: bool = False,
 ) -> dict:
+    if artifact.get("artifact_kind") == "walk_forward_evaluation":
+        raise ValueError("Evaluation artifacts are offline-only; not inference models")
     demo = check_mode(artifact, allow_demo, historical=historical_replay)
     if historical_replay:
         if replay or fixture_id not in artifact["partitions"]["test"]["fixture_ids"]:
@@ -34,6 +37,7 @@ def predict(
             )
         if fixture_fingerprint(fixtures) != artifact.get("fixture_fingerprint"):
             raise ValueError("Historical replay requires the unchanged training export")
+    feature_config = config_from_artifact(artifact)
     fixture = next((item for item in fixtures if item.id == fixture_id), None)
     if replay and (
         not demo or fixture_id not in artifact["partitions"]["test"]["fixture_ids"]
@@ -66,14 +70,20 @@ def predict(
         if version(name) != expected:
             raise ValueError(f"Dependency mismatch: {name}")
     for name in (
-        ("data.py", "features.py", "mode.py", "policy.py")
-        if historical_replay
-        else ("data.py", "features.py", "mode.py")
+        "data.py",
+        "features.py",
+        "mode.py",
+        "policy.py",
+        "feature_registry.py",
+        "football_context.py",
+        "feature_sources.py",
     ):
         digest = hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
         if artifact["source_sha256"][name] != digest:
             raise ValueError("Feature builder changed; retrain model")
-    builder = FeatureBuilder(fixtures, allow_demo=demo, historical=historical_replay)
+    builder = FeatureBuilder(
+        fixtures, allow_demo=demo, historical=historical_replay, config=feature_config
+    )
     values = builder.build(fixture, cutoff)
     if sorted(values) != artifact["features"]:
         raise ValueError("Feature or class schema mismatch")
@@ -83,6 +93,7 @@ def predict(
     )
     mapped = dict(zip(("A", "D", "H"), probabilities[0].tolist()))
     result = {
+        **feature_metadata(feature_config),
         "model_version": artifact["model_version"],
         "training_mode": artifact["training_mode"],
         "dataset_type": artifact["dataset_type"],

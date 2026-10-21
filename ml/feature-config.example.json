@@ -1,0 +1,23 @@
+{
+    "groups": [
+        "result_form",
+        "goals",
+        "venue_form",
+        "streaks",
+        "elo",
+        "league_context",
+        "rest",
+        "congestion",
+        "h2h",
+        "season",
+        "history_quality",
+        "reconstructed_standings",
+        "ratios"
+    ],
+    "elo_initial": 1500.0,
+    "elo_k": 20.0,
+    "elo_home_advantage": 60.0,
+    "elo_season_retention": 0.75,
+    "league_min_matches": 10,
+    "streak_cap": 20
+}

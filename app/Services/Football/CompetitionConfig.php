@@ -15,9 +15,9 @@ final readonly class CompetitionConfig
     }
 
     /** @return list<self> */
-    public static function configured(): array
+    public static function configured(?string $explicitPairs = null): array
     {
-        $value = config('api-football.competitions');
+        $value = $explicitPairs ?? config('api-football.competitions');
         if ($value === null || $value === '') {
             return [new self((int) config('services.api_football.league_id'), (int) config('services.api_football.season'))];
         }

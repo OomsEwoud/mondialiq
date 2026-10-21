@@ -13,6 +13,7 @@ from ml.dataset import dataset, split, training_blockers
 from ml.evaluation import metrics, validate_probabilities
 from ml.inference import predict
 from ml.mode import mode_metadata
+from ml.feature_registry import FeatureConfig, feature_metadata
 from ml.tests.test_features import START, game
 from ml.training import candidates, run
 
@@ -116,6 +117,7 @@ def test_estimators_and_inference_share_builder_and_preserve_probabilities(tmp_p
     future = game(50, status_short="NS", home_goals=None, away_goals=None)
     artifact = {
         **mode_metadata(False),
+        **feature_metadata(FeatureConfig()),
         "estimator": model,
         "features": names,
         "model_version": "test-only",
@@ -126,7 +128,15 @@ def test_estimators_and_inference_share_builder_and_preserve_probabilities(tmp_p
         "status": "test-only",
         "source_sha256": {
             name: hashlib.sha256((Path("ml") / name).read_bytes()).hexdigest()
-            for name in ("data.py", "features.py", "mode.py")
+            for name in (
+                "data.py",
+                "features.py",
+                "mode.py",
+                "policy.py",
+                "feature_registry.py",
+                "football_context.py",
+                "feature_sources.py",
+            )
         },
     }
     target = tmp_path / "model.joblib"
@@ -166,7 +176,12 @@ def test_training_end_to_end_and_selection(tmp_path):
     train = split(rows, game(351).kickoff, game(476).kickoff)["train"]
     np.testing.assert_allclose(
         artifact["estimator"].named_steps["simpleimputer"].statistics_,
-        np.nanmedian(matrix[train], axis=0),
+        np.array(
+            [
+                np.median(column[~np.isnan(column)]) if np.any(~np.isnan(column)) else 0
+                for column in matrix[train].T
+            ]
+        ),
     )
     saved = json.loads((output / "test-predictions.json").read_text())
     for name, values in saved["probabilities"].items():

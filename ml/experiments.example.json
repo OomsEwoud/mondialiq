@@ -1,0 +1,98 @@
+{
+    "schema_version": 1,
+    "feature_set_version": "v2",
+    "strategy": "expanding-window",
+    "target_seasons": [2022],
+    "experiments": [
+        {
+            "name": "A",
+            "groups": ["result_form", "goals"]
+        },
+        {
+            "name": "B",
+            "groups": ["result_form", "goals", "venue_form"]
+        },
+        {
+            "name": "C",
+            "groups": ["result_form", "goals", "venue_form", "elo"]
+        },
+        {
+            "name": "D",
+            "groups": [
+                "result_form",
+                "goals",
+                "venue_form",
+                "elo",
+                "league_context"
+            ]
+        },
+        {
+            "name": "E",
+            "groups": [
+                "result_form",
+                "goals",
+                "venue_form",
+                "elo",
+                "league_context",
+                "reconstructed_standings"
+            ]
+        },
+        {
+            "name": "F",
+            "groups": [
+                "result_form",
+                "goals",
+                "venue_form",
+                "elo",
+                "league_context",
+                "reconstructed_standings",
+                "rest",
+                "congestion"
+            ]
+        },
+        {
+            "name": "G",
+            "groups": [
+                "result_form",
+                "goals",
+                "venue_form",
+                "elo",
+                "league_context",
+                "reconstructed_standings",
+                "rest",
+                "congestion",
+                "h2h",
+                "streaks"
+            ]
+        },
+        {
+            "name": "H"
+        }
+    ],
+    "models": [
+        "majority",
+        "home_bias",
+        "logistic_regression",
+        "random_forest",
+        "gradient_boosting"
+    ],
+    "calibration": {
+        "method": "none",
+        "min_samples": 30,
+        "min_per_class": 2
+    },
+    "folds": [
+        {
+            "validation_start": "2022-10-01T00:00:00Z",
+            "validation_end": "2022-11-01T00:00:00Z"
+        },
+        {
+            "validation_start": "2023-01-01T00:00:00Z",
+            "validation_end": "2023-02-01T00:00:00Z"
+        },
+        {
+            "validation_start": "2023-03-01T00:00:00Z",
+            "validation_end": "2023-04-01T00:00:00Z"
+        }
+    ]
+}

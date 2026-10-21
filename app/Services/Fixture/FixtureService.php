@@ -19,14 +19,34 @@ class FixtureService
         private readonly UserPredictionScoringService $userPredictionScoringService,
     ) {}
 
-    public function storeFixtures(array $fixtures): array
+    public function storeFixtures(array $fixtures, bool $protectHistoricalResults = false): array
     {
         $leagueIds = League::query()->pluck('id', 'external_id');
         $stats = ['imported' => 0, 'skipped' => 0, 'lazy_teams_created' => 0];
 
         foreach ($fixtures as $fixture) {
-            DB::transaction(function () use ($fixture, $leagueIds, &$stats): void {
+            DB::transaction(function () use ($fixture, $leagueIds, &$stats, $protectHistoricalResults): void {
                 $existing = Fixture::query()->where('external_id', data_get($fixture, 'fixture.id'))->lockForUpdate()->first();
+                if ($protectHistoricalResults && $existing !== null) {
+                    $sameIdentity = $existing->league_id === ($leagueIds[data_get($fixture, 'league.id')] ?? null)
+                        && $existing->season === data_get($fixture, 'league.season')
+                        && $existing->homeTeam->external_id == data_get($fixture, 'teams.home.id')
+                        && $existing->awayTeam->external_id == data_get($fixture, 'teams.away.id');
+                    if (! $sameIdentity) {
+                        throw new \RuntimeException('Historical fixture identity conflict: '.$existing->external_id);
+                    }
+                    if (in_array($existing->status_short, ['FT', 'AET', 'PEN'], true)) {
+                        if ($existing->status_short !== data_get($fixture, 'fixture.status.short')
+                            || $existing->fulltime_home_goals !== data_get($fixture, 'score.fulltime.home')
+                            || $existing->fulltime_away_goals !== data_get($fixture, 'score.fulltime.away')
+                            || $existing->match_date->format('Y-m-d H:i:s') !== Carbon::parse(data_get($fixture, 'fixture.date'))->format('Y-m-d H:i:s')) {
+                            throw new \RuntimeException('Historical final result conflict: '.$existing->external_id);
+                        }
+                        $stats['skipped']++;
+
+                        return;
+                    }
+                }
                 if ($existing?->isFinished() && $existing->final_data_synced_at !== null) {
                     $stats['skipped']++;
 

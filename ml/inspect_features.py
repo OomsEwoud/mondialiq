@@ -7,6 +7,7 @@ from pathlib import Path
 from ml.data import instant, read_export
 from ml.features import FeatureBuilder
 from ml.mode import mode_metadata
+from ml.feature_registry import add_feature_arguments, config_from_arguments
 
 
 def main() -> None:
@@ -18,6 +19,7 @@ def main() -> None:
     parser.add_argument(
         "--mode", choices=("standard", "historical"), default="standard"
     )
+    add_feature_arguments(parser)
     args = parser.parse_args()
     historical = args.mode == "historical"
     metadata = mode_metadata(args.allow_demo, historical)
@@ -28,7 +30,10 @@ def main() -> None:
     if args.cutoff > instant(header["exported_at"]):
         parser.error("Cannot inspect a cutoff after export time")
     snapshot = FeatureBuilder(
-        fixtures, allow_demo=args.allow_demo, historical=historical
+        fixtures,
+        allow_demo=args.allow_demo,
+        historical=historical,
+        config=config_from_arguments(args),
     ).snapshot(fixture, args.cutoff)
     print(
         json.dumps(

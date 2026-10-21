@@ -24,17 +24,24 @@ from ml.evaluation import metrics, probabilities_for
 from ml.mode import DEMO_WARNING, HISTORICAL_WARNING, mode_metadata
 from ml.policy import HISTORICAL_POLICY, fixture_fingerprint, validate_mode
 from ml.historical import historical_audit
+from ml.features import FeatureBuilder
+from ml.feature_registry import (
+    FeatureConfig,
+    feature_metadata,
+    add_feature_arguments,
+    config_from_arguments,
+)
 
 SEED = 20261013
 
 
 def candidates() -> dict:
-    def pipeline(model):
+    def pipeline(model, scale=False):
         return make_pipeline(
             SimpleImputer(
                 strategy="median", add_indicator=True, keep_empty_features=True
             ),
-            StandardScaler(),
+            *([StandardScaler()] if scale else []),
             model,
         )
 
@@ -42,7 +49,8 @@ def candidates() -> dict:
         "majority": DummyClassifier(strategy="most_frequent"),
         "home_bias": DummyClassifier(strategy="prior"),
         "logistic_regression": pipeline(
-            LogisticRegression(solver="lbfgs", max_iter=2000, C=1.0, random_state=SEED)
+            LogisticRegression(solver="lbfgs", max_iter=2000, C=1.0, random_state=SEED),
+            scale=True,
         ),
         "random_forest": pipeline(
             RandomForestClassifier(
@@ -90,8 +98,10 @@ def run(
     historical: bool = False,
     target_seasons: set[int] | None = None,
     audit_only: bool = False,
+    feature_config: FeatureConfig | None = None,
 ) -> dict:
     validate_mode(allow_demo, historical)
+    feature_config = feature_config or FeatureConfig()
     if audit_only and not historical:
         raise ValueError("Audit-only requires historical mode")
     if target_seasons and not historical:
@@ -104,8 +114,10 @@ def run(
         allow_demo=allow_demo,
         historical=historical,
         target_seasons=target_seasons,
+        feature_config=feature_config,
     )
     report = {
+        **feature_metadata(feature_config),
         **mode_metadata(allow_demo, historical),
         "trained_at": datetime.now(timezone.utc).isoformat(),
         "seed": SEED,
@@ -198,8 +210,26 @@ def run(
         for i, row in enumerate(rows)
         if not any(i in indices for indices in partitions.values())
     ]
+    coverage_builder = FeatureBuilder(
+        fixtures, allow_demo=allow_demo, historical=historical
+    )
+    coverage_names = ["home_all_5_count", "away_all_5_count"]
+    coverage_matrix = np.array(
+        [
+            [
+                min(5, len(coverage_builder.source_history(row, team, row.kickoff)))
+                for team in (row.home_team_id, row.away_team_id)
+            ]
+            for row in rows
+        ]
+    ).reshape(len(rows), 2)
     blockers = training_blockers(
-        rows, partitions, names, matrix, allow_demo=allow_demo, historical=historical
+        rows,
+        partitions,
+        coverage_names,
+        coverage_matrix,
+        allow_demo=allow_demo,
+        historical=historical,
     )
     if blockers:
         report.update(status="blocked", blockers=blockers)
@@ -207,7 +237,7 @@ def run(
         return report
     if historical:
         report["baseline_readiness_blockers"] = training_blockers(
-            rows, partitions, names, matrix
+            rows, partitions, coverage_names, coverage_matrix
         )
         report["status"] = "ready_for_experimental_training"
         write_json(output / "report.json", report)
@@ -303,6 +333,7 @@ def run(
             else "Experimental only: sample/coverage or baseline comparison requirements not met."
         )
     artifact = {
+        **feature_metadata(feature_config),
         "estimator": models[selected],
         "features": names,
         **mode_metadata(allow_demo, historical),
@@ -346,6 +377,8 @@ def run(
         output / "test-predictions.json",
         {
             **mode_metadata(allow_demo, historical),
+            **feature_metadata(feature_config),
+            "features": names,
             "fixture_ids": [rows[i].id for i in test],
             "labels": labels[test].tolist(),
             "probabilities": {
@@ -379,6 +412,7 @@ def main() -> None:
         action="store_true",
         help="Historical data report without fitting models",
     )
+    add_feature_arguments(parser)
     args = parser.parse_args()
     historical = args.mode == "historical"
     if historical:
@@ -394,6 +428,7 @@ def main() -> None:
         historical=historical,
         target_seasons=set(args.target_season) if args.target_season else None,
         audit_only=args.audit_only,
+        feature_config=config_from_arguments(args),
     )
     print(
         json.dumps(

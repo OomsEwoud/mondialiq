@@ -4,6 +4,17 @@ namespace App\Concerns\FootballApi;
 
 trait FixtureEndpoints
 {
+    public function getHistoricalFixtures(int $leagueId, int $season): array
+    {
+        $json = $this->rawCall('/fixtures', ['league' => $leagueId, 'season' => $season, 'timezone' => 'UTC']);
+        if (($json['paging']['current'] ?? null) !== 1 || ($json['paging']['total'] ?? null) !== 1
+            || ($json['results'] ?? null) !== count($json['response'])) {
+            throw new \RuntimeException('Historical fixtures response is incomplete; no completion marker saved.');
+        }
+
+        return $json['response'];
+    }
+
     public function getFixturesInWindow(int $leagueId, int $season, string $from, string $to): array
     {
         return $this->call('/fixtures', [

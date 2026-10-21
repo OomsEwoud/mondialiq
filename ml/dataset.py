@@ -7,6 +7,7 @@ import numpy as np
 
 from ml.data import CLASSES, Fixture
 from ml.features import FeatureBuilder
+from ml.feature_registry import FeatureConfig
 from ml.policy import available_at
 
 
@@ -16,8 +17,11 @@ def dataset(
     allow_demo: bool = False,
     historical: bool = False,
     target_seasons: set[int] | None = None,
+    feature_config: FeatureConfig | None = None,
 ) -> tuple[list[Fixture], list[str], np.ndarray]:
-    builder = FeatureBuilder(fixtures, allow_demo=allow_demo, historical=historical)
+    builder = FeatureBuilder(
+        fixtures, allow_demo=allow_demo, historical=historical, config=feature_config
+    )
     if target_seasons and not historical:
         raise ValueError("Target seasons require historical mode")
     rows = [
@@ -71,8 +75,8 @@ def audit(
                 | (matrix[:, names.index("away_all_5_count")] == 0)
             )
         )
-        if names
-        else 0,
+        if "home_all_5_count" in names and "away_all_5_count" in names
+        else None,
     }
 
 
@@ -120,24 +124,22 @@ def training_blockers(
     )
     for name, minimum in minimums:
         indices = partitions[name]
-        if len(indices) < minimum:
-            blockers.append(f"{name}: {len(indices)} rows; at least {minimum} required")
-        counts = Counter(rows[i].target for i in indices)
-        if historical and name == "train" and len(counts) < 2:
-            blockers.append("train: at least two outcome classes required")
-        for label in () if allow_demo or historical else CLASSES:
-            if counts[label] < 20:
-                blockers.append(
-                    f"{name}: class {label} has {counts[label]}; at least 20 required"
-                )
+        coverage = None
         if indices and names and not allow_demo and not historical:
-            covered = (matrix[indices, names.index("home_all_5_count")] >= 5) & (
+            coverage = (matrix[indices, names.index("home_all_5_count")] >= 5) & (
                 matrix[indices, names.index("away_all_5_count")] >= 5
             )
-            if covered.mean() < 0.8:
-                blockers.append(
-                    f"{name}: fewer than 80% of rows have five prior results for both teams"
-                )
+        blockers.extend(
+            sample_blockers(
+                rows,
+                indices,
+                name,
+                minimum,
+                class_minimum=0 if allow_demo or historical else 20,
+                diversity=2 if historical and name == "train" else 0,
+                coverage=coverage,
+            )
+        )
     return blockers
 
 
@@ -148,3 +150,31 @@ def demo_boundaries(rows: list[Fixture]) -> tuple[datetime, datetime] | None:
     return dates[min(max(1, int(len(dates) * 0.6)), len(dates) - 2)], dates[
         min(max(2, int(len(dates) * 0.8)), len(dates) - 1)
     ]
+
+
+def sample_blockers(
+    rows: list[Fixture],
+    indices: list[int],
+    name: str,
+    minimum: int,
+    class_minimum: int = 0,
+    diversity: int = 0,
+    coverage: np.ndarray | None = None,
+) -> list[str]:
+    blockers = []
+    if len(indices) < minimum:
+        blockers.append(f"{name}: {len(indices)} rows; at least {minimum} required")
+    counts = Counter(rows[i].target for i in indices)
+    if diversity and len(counts) < diversity:
+        blockers.append(f"{name}: at least two outcome classes required")
+    if class_minimum:
+        for label in CLASSES:
+            if counts[label] < class_minimum:
+                blockers.append(
+                    f"{name}: class {label} has {counts[label]}; at least {class_minimum} required"
+                )
+    if coverage is not None and len(coverage) and coverage.mean() < 0.8:
+        blockers.append(
+            f"{name}: fewer than 80% of rows have five prior results for both teams"
+        )
+    return blockers

@@ -24,6 +24,7 @@ class ExportMlFixtures extends Command
 
         $path = $exporter->export($timezone);
         $this->info("ML-export opgeslagen: {$path}");
+        $this->line(file_get_contents($path.'.summary.json'));
 
         return self::SUCCESS;
     }

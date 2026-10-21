@@ -18,12 +18,26 @@ MondialIQ is a football prediction platform built with Laravel, Inertia, React, 
 The offline 1X2 baseline lives in `ml/`. See [ML setup and commands](ml/README.md)
 and the [data audit and baseline report](docs/ml/ml-baseline-report.md).
 It uses private Laravel exports of local data and never calls API-Football during
-training. Python is optional for the existing application. No database migrations
-or production inference service are required for this phase.
+training. Python is optional for the existing application. Offline training does
+not require a production inference service.
 
 Retrospective provider backfills use explicit `--mode historical`, with separate
 result eligibility, warm-up coverage and offline replay. See the
 [historical backtest policy and commands](docs/ml/ml-historical-backtest.md).
+
+Feature engineering v2 adds a configurable registry, chronological Elo, reconstructed
+standings and result-based context. See the [feature report](docs/ml/ml-feature-engineering-v2.md)
+for the audit, source requirements and intentionally disabled families.
+
+The [walk-forward evaluation framework](docs/ml/ml-walk-forward-evaluation.md)
+compares predefined feature groups on shared chronological folds, with optional
+separate calibration and an explicitly reserved final test.
+
+The [historical data workflow](docs/ml/ml-historical-data-pipeline.md) adds manual,
+quota-aware imports with durable checkpoints, data audits and feature coverage.
+Review `php artisan ml:data plan --league=39 --season=2022` first. Run
+`php artisan migrate` before the first import to create its provenance/checkpoint
+table. Imports never start model training. No historical import is scheduled.
 
 ## Tech Stack
 
